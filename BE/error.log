@@ -1,0 +1,1698 @@
+{
+  message: 'Model error (Generate PDF): user is not defined',
+  level: 'error',
+  timestamp: '2022-03-06T16:09:37.881Z'
+}
+{
+  message: 'Model error (Products getAll): user is not defined',
+  level: 'error',
+  timestamp: '2022-03-06T16:17:47.679Z'
+}
+{
+  message: 'Model error (Products getAll): user is not defined',
+  level: 'error',
+  timestamp: '2022-03-06T16:18:46.308Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'role_id')",
+  level: 'error',
+  timestamp: '2022-03-07T09:25:07.231Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:21:36.147Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:27:48.430Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:28:07.100Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:31:00.622Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:31:00.762Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:31:00.919Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:31:00.919Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:31:00.921Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:34:05.147Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-10T14:34:05.303Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-11T08:08:35.607Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-11T08:11:25.061Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-11T08:12:48.227Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-11T08:22:08.989Z'
+}
+{
+  message: 'Model error (Products getAll): invalid input syntax for type numeric: ""',
+  level: 'error',
+  timestamp: '2022-03-11T08:32:23.859Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "undefined day"',
+  level: 'error',
+  timestamp: '2022-03-11T19:32:32.952Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "undefined day"',
+  level: 'error',
+  timestamp: '2022-03-13T19:03:51.507Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "undefined day"',
+  level: 'error',
+  timestamp: '2022-03-13T19:04:45.743Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "undefined day"',
+  level: 'error',
+  timestamp: '2022-03-13T19:04:54.118Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "undefined day"',
+  level: 'error',
+  timestamp: '2022-03-13T19:05:37.179Z'
+}
+{
+  message: 'Model error: syntax error at or near "=!"',
+  level: 'error',
+  timestamp: '2022-03-13T19:17:56.222Z'
+}
+{
+  message: 'Model error: syntax error at or near "=!"',
+  level: 'error',
+  timestamp: '2022-03-13T19:18:47.279Z'
+}
+{
+  message: 'DB connection error: Error: Connection terminated unexpectedly',
+  level: 'error',
+  timestamp: '2022-03-15T07:08:52.430Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "undefined hour"',
+  level: 'error',
+  timestamp: '2022-03-16T09:24:32.167Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "undefined hour"',
+  level: 'error',
+  timestamp: '2022-03-16T09:26:05.029Z'
+}
+{
+  message: 'Model error (Dashboard getAll): missing FROM-clause entry for table "orders"',
+  level: 'error',
+  timestamp: '2022-03-16T13:48:53.797Z'
+}
+{
+  message: 'Model error (Dashboard getAll): missing FROM-clause entry for table "orders"',
+  level: 'error',
+  timestamp: '2022-03-16T13:49:08.532Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading '0')",
+  level: 'error',
+  timestamp: '2022-03-18T12:32:00.748Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading '0')",
+  level: 'error',
+  timestamp: '2022-03-18T12:33:03.142Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading '0')",
+  level: 'error',
+  timestamp: '2022-03-18T12:33:48.881Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading '0')",
+  level: 'error',
+  timestamp: '2022-03-18T12:34:28.189Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'status')",
+  level: 'error',
+  timestamp: '2022-03-18T12:39:27.123Z'
+}
+{
+  message: "Model error: Cannot set properties of undefined (setting 'subscription_expired')",
+  level: 'error',
+  timestamp: '2022-03-18T12:40:38.060Z'
+}
+{
+  message: "Model error: Cannot set properties of undefined (setting 'subscription_expired')",
+  level: 'error',
+  timestamp: '2022-03-18T12:41:35.031Z'
+}
+{
+  message: 'Model error: Cannot convert undefined or null to object',
+  level: 'error',
+  timestamp: '2022-03-18T12:55:01.445Z'
+}
+{
+  message: "Model error: Cannot set properties of undefined (setting 'subscription_expired')",
+  level: 'error',
+  timestamp: '2022-03-18T13:13:31.942Z'
+}
+{
+  message: "Model error: Cannot set properties of undefined (setting 'subscription_expired')",
+  level: 'error',
+  timestamp: '2022-03-18T13:18:48.392Z'
+}
+{
+  message: "Model error: No such plan: 'prod_LJxk2nWsHvt13X'",
+  level: 'error',
+  timestamp: '2022-03-18T14:54:09.993Z'
+}
+{
+  message: "Model error: No such plan: 'prod_LJxk2nWsHvt13X'",
+  level: 'error',
+  timestamp: '2022-03-18T14:58:00.576Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T13:22:56.264Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T13:23:23.997Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T13:24:33.092Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T13:25:03.191Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T13:26:04.843Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T13:26:33.805Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T13:26:48.527Z'
+}
+{
+  message: 'Model error: stripe is not defined',
+  level: 'error',
+  timestamp: '2022-03-20T13:27:46.678Z'
+}
+{
+  message: 'Model error: stripe is not defined',
+  level: 'error',
+  timestamp: '2022-03-20T13:28:03.005Z'
+}
+{
+  message: 'Model error: stripe is not defined',
+  level: 'error',
+  timestamp: '2022-03-20T13:28:38.350Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "undefined"',
+  level: 'error',
+  timestamp: '2022-03-20T14:55:02.158Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "undefined"',
+  level: 'error',
+  timestamp: '2022-03-20T14:57:16.501Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "undefined"',
+  level: 'error',
+  timestamp: '2022-03-20T14:58:02.278Z'
+}
+{
+  message: 'Model error: res is not defined',
+  level: 'error',
+  timestamp: '2022-03-20T15:21:49.352Z'
+}
+{
+  message: 'Model error: res is not defined',
+  level: 'error',
+  timestamp: '2022-03-20T15:22:14.823Z'
+}
+{
+  message: 'Model error: Missing required param: customer.',
+  level: 'error',
+  timestamp: '2022-03-20T16:24:16.874Z'
+}
+{
+  message: 'Model error: Missing required param: customer.',
+  level: 'error',
+  timestamp: '2022-03-20T16:24:27.518Z'
+}
+{
+  message: 'Model error: Missing required param: customer.',
+  level: 'error',
+  timestamp: '2022-03-20T16:25:37.676Z'
+}
+{
+  message: 'Model error: Missing required param: customer.',
+  level: 'error',
+  timestamp: '2022-03-20T17:07:51.987Z'
+}
+{
+  message: 'Model error: Missing required param: customer.',
+  level: 'error',
+  timestamp: '2022-03-20T17:11:21.116Z'
+}
+{
+  message: "Model error: Cannot read properties of null (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T18:37:49.638Z'
+}
+{
+  message: "Model error: Cannot read properties of null (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T18:38:59.986Z'
+}
+{
+  message: "Model error: Cannot read properties of null (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T18:39:11.572Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T18:40:50.471Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T18:47:49.369Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T19:57:40.979Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T19:57:55.100Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T19:59:21.085Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T20:02:51.461Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T20:14:00.363Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T20:14:38.833Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T20:16:22.365Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T20:20:19.356Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2022-03-20T20:27:25.247Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:21:31.749Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:25:01.316Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:25:32.923Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:26:15.273Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:26:15.898Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:34:08.220Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:35:49.466Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:35:49.656Z'
+}
+{
+  message: 'Model error: You passed a string that looks like a client secret as the PaymentIntent ID, but you must provide a valid PaymentIntent ID. Please use the value in the `id` field of the PaymentIntent.',
+  level: 'error',
+  timestamp: '2022-03-20T21:36:22.042Z'
+}
+{
+  message: 'Model error: relation "data.suvscriptions" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T21:40:21.323Z'
+}
+{
+  message: 'Model error: column "customet_id" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T21:40:40.710Z'
+}
+{
+  message: 'Model error: column "customet_id" does not exist',
+  level: 'error',
+  timestamp: '2022-03-20T21:41:02.788Z'
+}
+{
+  message: 'Model error: syntax error at or near "data"',
+  level: 'error',
+  timestamp: '2022-03-20T21:44:35.745Z'
+}
+{
+  message: 'Model error: res is not defined',
+  level: 'error',
+  timestamp: '2022-03-20T22:17:27.425Z'
+}
+{
+  message: 'Model error: res is not defined',
+  level: 'error',
+  timestamp: '2022-03-20T22:18:24.792Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:24:52.785Z'
+}
+{
+  message: "Model error: Cannot access 'querySubscription' before initialization",
+  level: 'error',
+  timestamp: '2022-03-20T22:29:23.889Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:30:24.569Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:32:21.648Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:33:22.303Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:33:57.934Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:35:01.623Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:35:33.470Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-20T22:36:21.871Z'
+}
+{
+  message: 'Model error: null value in column "customer_id" of relation "subscriptions" violates not-null constraint',
+  level: 'error',
+  timestamp: '2022-03-22T14:18:48.987Z'
+}
+{
+  message: 'Model error: Received unknown parameter: pending_if_incomplete. Did you mean pending_invoice_item_interval?',
+  level: 'error',
+  timestamp: '2022-03-22T14:34:28.075Z'
+}
+{
+  message: 'Model error: Received unknown parameter: pending_if_incomplete. Did you mean pending_invoice_item_interval?',
+  level: 'error',
+  timestamp: '2022-03-22T14:35:34.689Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-22T14:55:19.402Z'
+}
+{
+  message: 'Model error: prices is not defined',
+  level: 'error',
+  timestamp: '2022-03-23T20:54:36.044Z'
+}
+{
+  message: 'Model error: prices is not defined',
+  level: 'error',
+  timestamp: '2022-03-23T20:54:56.009Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-03-23T21:13:55.146Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:10:18.715Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:11:01.987Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:21:26.506Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:21:48.891Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:23:39.384Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:24:51.764Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:39:04.591Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:40:33.512Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:42:27.980Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-23T23:43:22.140Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-24T06:20:06.682Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-03-24T10:15:32.742Z'
+}
+{
+  message: 'Model error: MSPClient is not a constructor',
+  level: 'error',
+  timestamp: '2022-03-24T10:25:42.909Z'
+}
+{
+  message: "Model error: Cannot access 'data' before initialization",
+  level: 'error',
+  timestamp: '2022-03-25T16:10:31.793Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-25T16:11:43.565Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-25T16:12:44.109Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-25T16:16:41.307Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-25T16:20:04.757Z'
+}
+{
+  message: `Model error (Products getAll): unterminated quoted string at or near "'2.5'')\n` +
+    '                                    ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET\n' +
+    '                                        transaction_percent = EXCLUDED.transaction_percent\n' +
+    '                                    ;"',
+  level: 'error',
+  timestamp: '2022-03-27T13:07:40.475Z'
+}
+{
+  message: 'Model error: relation "data.sustem_settings" does not exist',
+  level: 'error',
+  timestamp: '2022-03-27T16:26:33.516Z'
+}
+{
+  message: 'Model error: relation "data.sustem_settings" does not exist',
+  level: 'error',
+  timestamp: '2022-03-27T16:27:12.539Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-27T18:47:07.923Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-27T18:50:04.038Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-27T18:53:25.922Z'
+}
+{
+  message: 'Model error: dataMerchant is not defined',
+  level: 'error',
+  timestamp: '2022-03-27T18:58:12.705Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'redirectUrl')",
+  level: 'error',
+  timestamp: '2022-03-27T19:02:25.195Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'redirectUrl')",
+  level: 'error',
+  timestamp: '2022-03-27T19:07:35.989Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'redirectUrl')",
+  level: 'error',
+  timestamp: '2022-03-27T19:10:33.882Z'
+}
+{
+  message: 'Model error: orderNumber is not defined',
+  level: 'error',
+  timestamp: '2022-03-27T19:34:47.237Z'
+}
+{
+  message: 'Model error: orderNumber is not defined',
+  level: 'error',
+  timestamp: '2022-03-27T19:35:20.875Z'
+}
+{
+  message: 'Model error: missing FROM-clause entry for table "data"',
+  level: 'error',
+  timestamp: '2022-03-27T19:36:23.695Z'
+}
+{
+  message: 'Model error: syntax error at or near "city"',
+  level: 'error',
+  timestamp: '2022-03-27T19:50:26.216Z'
+}
+{
+  message: 'Model error: multiple assignments to same column "city"',
+  level: 'error',
+  timestamp: '2022-03-27T19:50:55.981Z'
+}
+{
+  message: 'Model error: column "phone" of relation "orders" does not exist',
+  level: 'error',
+  timestamp: '2022-03-27T19:54:31.753Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:18:16.759Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:24:46.813Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:25:28.406Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:25:31.987Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:26:17.161Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:27:45.351Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:28:34.662Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:28:56.674Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:30:49.728Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:31:04.702Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:31:37.862Z'
+}
+{
+  message: "Model User (fetchUserSettings) error: Cannot read properties of null (reading 'hours')",
+  level: 'error',
+  timestamp: '2022-03-28T13:32:18.407Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type boolean: "null"',
+  level: 'error',
+  timestamp: '2022-03-28T13:47:18.975Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: " hour"',
+  level: 'error',
+  timestamp: '2022-03-28T13:48:50.164Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: " hour"',
+  level: 'error',
+  timestamp: '2022-03-28T13:50:26.146Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: free_shipping_status is not defined',
+  level: 'error',
+  timestamp: '2022-03-28T13:50:47.845Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: " hour"',
+  level: 'error',
+  timestamp: '2022-03-28T13:51:16.273Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type interval: "null"',
+  level: 'error',
+  timestamp: '2022-03-28T13:51:56.798Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type boolean: "null"',
+  level: 'error',
+  timestamp: '2022-03-28T14:00:24.895Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: invalid input syntax for type boolean: "null"',
+  level: 'error',
+  timestamp: '2022-03-28T14:01:29.483Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: A query must have either text or a name. Supplying neither is unsupported.',
+  level: 'error',
+  timestamp: '2022-03-28T14:11:18.513Z'
+}
+{
+  message: 'Model error: column "hasg" does not exist',
+  level: 'error',
+  timestamp: '2022-03-29T07:29:41.924Z'
+}
+{
+  message: 'Model error: column "hasg" does not exist',
+  level: 'error',
+  timestamp: '2022-03-29T07:31:03.805Z'
+}
+{
+  message: 'Model error: column "hasg" does not exist',
+  level: 'error',
+  timestamp: '2022-03-29T07:31:34.787Z'
+}
+{
+  message: 'Model error: error is not defined',
+  level: 'error',
+  timestamp: '2022-03-29T07:40:41.533Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subsriptions" does not exist',
+  level: 'error',
+  timestamp: '2022-03-31T05:59:50.625Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading '0')",
+  level: 'error',
+  timestamp: '2022-03-31T06:00:59.828Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading '0')",
+  level: 'error',
+  timestamp: '2022-03-31T06:01:20.202Z'
+}
+{
+  message: 'Model error: The plan price_1KdJooDBSh7ykoyWJXgRdjeq is marked as inactive and thus no new subscriptions can be created to this plan.',
+  level: 'error',
+  timestamp: '2022-03-31T07:36:37.725Z'
+}
+{
+  message: "Model error: Cannot read properties of null (reading 'id')",
+  level: 'error',
+  timestamp: '2022-03-31T07:50:15.132Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:25:21.140Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:25:50.143Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:25:53.101Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:26:25.248Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:26:28.148Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:26:50.874Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:26:53.883Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:28:52.948Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:29:49.810Z'
+}
+{
+  message: "Model error (Products getAll): Cannot read properties of undefined (reading 'toLowerCase')",
+  level: 'error',
+  timestamp: '2022-04-01T08:29:51.263Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Invalid API Key provided: cus_LMAd******Lx69',
+  level: 'error',
+  timestamp: '2022-04-03T15:57:00.084Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'data')",
+  level: 'error',
+  timestamp: '2022-04-03T16:31:08.562Z'
+}
+{
+  message: 'Model error: orderRes is not defined',
+  level: 'error',
+  timestamp: '2022-04-04T18:54:23.309Z'
+}
+{
+  message: 'Model error: orderRes is not defined',
+  level: 'error',
+  timestamp: '2022-04-04T18:56:17.121Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: undefined (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-04T21:56:15.095Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: undefined (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-04T21:57:06.858Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: undefined (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-04T21:58:25.477Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: undefined (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-04T21:59:20.695Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-04-05T04:07:27.240Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-04-05T04:07:35.044Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-04-05T04:09:42.957Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-04-05T04:09:52.422Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-04-05T04:10:01.290Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-04-05T04:10:07.104Z'
+}
+{
+  message: "Model error (Generate PDF): Cannot read properties of undefined (reading 'order_number')",
+  level: 'error',
+  timestamp: '2022-04-05T04:12:07.775Z'
+}
+{
+  message: 'DB connection error: Error: Connection terminated unexpectedly',
+  level: 'error',
+  timestamp: '2022-04-05T04:56:25.323Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: Nothing to invoice for customer',
+  level: 'error',
+  timestamp: '2022-04-05T05:29:56.960Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: Nothing to invoice for customer',
+  level: 'error',
+  timestamp: '2022-04-05T05:32:07.077Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: Nothing to invoice for customer',
+  level: 'error',
+  timestamp: '2022-04-05T05:35:27.009Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: Nothing to invoice for customer',
+  level: 'error',
+  timestamp: '2022-04-05T05:42:45.697Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: Nothing to invoice for customer',
+  level: 'error',
+  timestamp: '2022-04-05T05:50:43.737Z'
+}
+{
+  message: 'Model User (updateUserSettings) error: Nothing to invoice for customer',
+  level: 'error',
+  timestamp: '2022-04-05T05:56:06.322Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such customer: 'cus_LNg5GVPRLi8PXQ'",
+  level: 'error',
+  timestamp: '2022-04-05T05:59:24.608Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'name')",
+  level: 'error',
+  timestamp: '2022-04-05T06:10:17.380Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, stat './public/uploads/orders/4/09022022-39.pdf'",
+  level: 'error',
+  timestamp: '2022-04-06T06:58:51.040Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, stat './public/uploads/orders/4/09022022-39.pdf'",
+  level: 'error',
+  timestamp: '2022-04-06T07:46:22.932Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, stat './public/uploads/orders/4/09022022-39.pdf'",
+  level: 'error',
+  timestamp: '2022-04-06T07:48:39.002Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-04-06T14:54:41.955Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2022-04-06T14:54:51.033Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2022-04-06T15:05:33.586Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2022-04-06T15:05:41.865Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-18T15:25:44.302Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-18T16:00:55.175Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-18T16:06:31.435Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-18T16:10:22.839Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-18T16:13:00.036Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-18T16:33:32.874Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-18T17:13:25.889Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-19T10:12:08.595Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-19T12:05:49.179Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-19T12:16:59.413Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-19T12:23:00.850Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-19T12:46:31.816Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-19T12:52:51.700Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-04-19T12:56:16.116Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-02T06:42:23.844Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-02T20:44:33.090Z'
+}
+{
+  message: 'Model error: This value must be greater than or equal to 1.',
+  level: 'error',
+  timestamp: '2022-05-02T20:45:37.986Z'
+}
+{
+  message: 'Model error: This value must be greater than or equal to 1.',
+  level: 'error',
+  timestamp: '2022-05-02T20:46:09.243Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2022-05-02T21:57:12.886Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-02T22:01:15.051Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2022-05-02T22:01:46.704Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'retrieve')",
+  level: 'error',
+  timestamp: '2022-05-03T05:18:22.602Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'retrieve')",
+  level: 'error',
+  timestamp: '2022-05-03T05:23:21.344Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'retrieve')",
+  level: 'error',
+  timestamp: '2022-05-03T05:26:29.979Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'retrieve')",
+  level: 'error',
+  timestamp: '2022-05-03T05:27:15.154Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1KvE7SDBSh7ykoyWjlH2htuz'",
+  level: 'error',
+  timestamp: '2022-05-03T05:33:23.186Z'
+}
+{
+  message: 'Model error: paymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2022-05-03T05:35:05.593Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2022-05-04T20:13:48.347Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2022-05-04T20:15:42.052Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2022-05-04T20:17:20.179Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-05-04T20:19:09.480Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-05-04T20:30:50.210Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'id')",
+  level: 'error',
+  timestamp: '2022-05-04T20:31:12.838Z'
+}
+{
+  message: 'Model error: userData is not defined',
+  level: 'error',
+  timestamp: '2022-05-04T20:31:45.095Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-04T20:41:07.686Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-04T20:45:09.944Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-04T21:26:09.027Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-04T21:33:43.265Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-05T06:24:42.299Z'
+}
+{
+  message: 'Model error: resSettings is not defined',
+  level: 'error',
+  timestamp: '2022-05-05T06:25:03.888Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-05T06:30:55.256Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2022-05-05T14:32:27.959Z'
+}
+{
+  message: 'Model error (runWaitWorkflow): column "qty" of relation "product_configurations" does not exist',
+  level: 'error',
+  timestamp: '2022-05-10T05:55:02.963Z'
+}
+{
+  message: 'Model error (runWaitWorkflow): column "qty" of relation "product_configurations" does not exist',
+  level: 'error',
+  timestamp: '2022-05-10T05:56:23.370Z'
+}
+{
+  message: 'Model error (runWaitWorkflow): column "qty" of relation "product_configurations" does not exist',
+  level: 'error',
+  timestamp: '2022-05-10T05:57:16.826Z'
+}
+{
+  message: 'Model error (runWaitWorkflow): column "qty" of relation "product_configurations" does not exist',
+  level: 'error',
+  timestamp: '2022-05-10T05:58:21.930Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-03-09T20:22:09.257Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-03-09T20:22:37.710Z'
+}
+{
+  message: 'Query: UPDATE data.users SET\n' +
+    "                        auth_provider_name='facebook', auth_provider_id='undefined',\n" +
+    "                        auth_provider_access_token='undefined',\n" +
+    '                        auth_provider_expiration_time=to_timestamp(undefined)\n' +
+    '                       WHERE id=1\n' +
+    '                        ',
+  level: 'error',
+  timestamp: '2023-03-09T20:26:24.148Z'
+}
+{
+  message: 'Model error (User activateByHash): column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-03-09T20:26:24.149Z'
+}
+{
+  message: 'Query: UPDATE data.users SET\n' +
+    "                        auth_provider_name='facebook', auth_provider_id='undefined',\n" +
+    "                        auth_provider_access_token='undefined',\n" +
+    '                        auth_provider_expiration_time=to_timestamp(undefined)\n' +
+    '                       WHERE id=1\n' +
+    '                        ',
+  level: 'error',
+  timestamp: '2023-03-14T20:17:11.610Z'
+}
+{
+  message: 'Model error (User activateByHash): column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-03-14T20:17:11.623Z'
+}
+{
+  message: 'Query: UPDATE data.users SET\n' +
+    "                        auth_provider_name='facebook', auth_provider_id='undefined',\n" +
+    "                        auth_provider_access_token='undefined',\n" +
+    '                        auth_provider_expiration_time=to_timestamp(undefined)\n' +
+    '                       WHERE id=1\n' +
+    '                        ',
+  level: 'error',
+  timestamp: '2023-03-14T20:28:24.787Z'
+}
+{
+  message: 'Model error (User activateByHash): column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-03-14T20:28:24.799Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-03-14T20:54:04.359Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-03-15T17:48:01.659Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-03-15T17:48:12.097Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-03-15T17:49:30.235Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-03-15T17:49:52.837Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-03-15T17:54:13.903Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-03-15T17:54:52.031Z'
+}
+{
+  message: "Model error: No such plan: 'price_1KdAFYDBSh7ykoyWoVGAWJyw'; a similar object exists in live mode, but a test mode key was used to make this request.",
+  level: 'error',
+  timestamp: '2023-03-15T17:57:09.006Z'
+}
+{
+  message: 'Model error: The plan price_1Kgsd1DBSh7ykoyWvMklftyq is marked as inactive and thus no new subscriptions can be created to this plan.',
+  level: 'error',
+  timestamp: '2023-03-15T18:08:05.130Z'
+}
+{
+  message: 'Query: UPDATE data.users SET\n' +
+    "                        auth_provider_name='facebook', auth_provider_id='undefined',\n" +
+    "                        auth_provider_access_token='undefined',\n" +
+    '                        auth_provider_expiration_time=to_timestamp(undefined)\n' +
+    '                       WHERE id=6\n' +
+    '                        ',
+  level: 'error',
+  timestamp: '2023-03-15T18:21:05.262Z'
+}
+{
+  message: 'Model error (User activateByHash): column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-03-15T18:21:05.269Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-03-28T10:37:57.542Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:18:50.500Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:20:29.324Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:20:45.219Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:22:37.130Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:30:37.532Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:31:29.308Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:31:48.310Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:33:46.903Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:38:10.083Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:39:23.430Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:56:59.219Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:58:22.556Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T17:59:15.543Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:00:09.008Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:01:47.447Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:04:25.075Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:05:14.147Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:06:13.392Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:08:23.389Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:09:32.733Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:22:41.642Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:23:28.511Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:29:55.718Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:30:32.039Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:31:15.278Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:32:53.886Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:33:34.525Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:34:27.768Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:40:24.640Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:43:06.508Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:44:19.375Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T18:45:59.030Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T18:46:29.522Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T18:46:40.983Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T18:47:31.587Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:49:14.626Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:49:49.239Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:50:56.295Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:51:54.327Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:53:19.246Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:54:13.838Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:57:07.557Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:58:19.654Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T18:59:30.277Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:00:28.446Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:01:24.969Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:03:38.576Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:13:18.275Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:14:27.635Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:15:42.099Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:17:32.364Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:22:28.350Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:25:08.637Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T19:25:08.641Z'
+}
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T19:48:19.861Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T19:48:19.865Z'
+}

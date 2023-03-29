@@ -1,0 +1,17 @@
+product_name,description,hashtag,style_value,material_value,photos,publish,size,color,price,quantity,sku
+Sport T-shirt,Great t-shirt for sport events,"#man,#sport","casual, sports",Cotton,"https://assets.myntassets.com/h_1440,q_100,w_1080/v1/assets/images/3084788/2018/3/9/11520586464109-Campus-Sutra-Men-Black-Printed-Polo-Collar-T-shirt-7631520586463832-1.jpg",TRUE,,,,,
+,,,,,,,S,Blue,100,1,23hdh
+,,,,,,,M,Blue,110,3,24dgf
+,,,,,,,L,Blue,120,3,25ff
+Skirt,Skirt for daily use,"#women,#casual",casual,velour,https://assets.burberry.com/is/image/Burberryltd/5e5a890eefb110347b257cb88967877720f28447.jpg?$BBY_V2_SL_1x1$&wid=2800&hei=2800,TRUE,,,,,
+,,,,,,,S,Green,50,2,
+,,,,,,,M,Green,50,2,
+,,,,,,,L,Green,60,2,
+,,,,,,,XL,Green,70,2,
+,,,,,,,S,Blue,50,2,
+Skirt 2,Skirt for daily use,"#women,#casual",casual,velour,,FALSE,,,,,
+,,,,,,,S,Green,50,2,
+Sport T-shirt,Great t-shirt for sport events,"#man,#sport","casual, sports",Cotton,https://5.imimg.com/data5/KX/JB/MY-4183638/sports-t-shirt-500x500.jpg,TRUE,,,,,
+,,,,,,,S,Blue,100,1,
+,,,,,,,M,Blue,110,3,
+,,,,,,,L,Blue,120,3,

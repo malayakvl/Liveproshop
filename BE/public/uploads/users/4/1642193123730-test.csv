@@ -1,0 +1,13 @@
+product_name,description,hashtag,style_value,material_value,photos,publish,size,color,price,quantity
+Sport T-shirt,Great t-shirt for sport events,"#man, #sport","casual, sports",Cotton,"1, 2, 3",TRUE,,,,
+,,,,,,,S,Blue,100,1
+,,,,,,,M,Blue,110,3
+,,,,,,,L,Blue,120,3
+Skirt,Skirt for daily use,"#women, #casual",casual,velour,"4, 5, 6",TRUE,,,,
+,,,,,,,S,Green,50,2
+,,,,,,,M,Green,50,2
+,,,,,,,L,Green,60,2
+,,,,,,,XL,Green,70,2
+,,,,,,,S,Blue,50,2
+Skirt 2,Skirt for daily use,"#women, #casual",casual,velour,,FALSE,,,,
+,,,,,,,S,Green,50,2
