@@ -1,0 +1,124 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600&display=swap");
+
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+@import "tailwindcss/screens";
+
+@layer utilities {
+  .red-yellow-gradient {
+    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+  }
+  .red-yellow-gradient-text {
+    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .block-white-4 {
+    @apply flex-row w-full bg-white rounded-lg p-4;
+  }
+  .block-white-8 {
+    @apply ml-4 mr-4 flex-row md:w-full bg-white rounded-lg p-8 md:mr-10 md:ml-0;
+  }
+  .white-shadow-big {
+    box-shadow: 0 10px 20px rgba(170, 177, 180, 0.5);
+  }
+  .white-shadow-medium {
+    box-shadow: 0 5px 10px rgba(189, 201, 206, 0.5);
+  }
+  .h-144 {
+    height: 144px;
+  }
+  .h-370 {
+    height: 370px;
+  }
+  .w-360 {
+    width: 360px;
+  }
+  .line-height-105percent {
+    line-height: 105%;
+  }
+  .dark-blue-header {
+    @apply text-gray-350 font-bold text-[18px];
+  }
+  .loader {
+    @apply w-full h-full bg-black fixed z-50 opacity-75;
+  }
+  .shadow-border {
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
+    @apply bg-gray-100 rounded-lg border border-gray-200 p-2.5 text-muted-400 font-bold text-sm;
+  }
+  .border-gradient {
+    border-image:linear-gradient(to top right, #354D9E 4%, #AB44C1 21%, #E96597 37%, #FF9384 55%, #FFC16C 71%, #F9F871 90%, #F9F871 90%) 1;
+  }
+  .background-gradient {
+    background-image:linear-gradient(to top right, #354D9E 4%, #AB44C1 21%, #E96597 37%, #FF9384 55%, #FFC16C 71%, #F9F871 90%, #F9F871 90%);
+  }
+}
+
+@layer components {
+  .icon {
+    @apply hidden xl:inline-flex p-2 h-10 w-10 bg-gray-200 rounded-full text-gray-700
+    cursor-pointer hover:bg-gray-300;
+  }
+
+  .inputIcon {
+    @apply flex items-center space-x-1 hover:bg-gray-100
+    flex-grow justify-center rounded-xl cursor-pointer;
+  }
+
+  .image-btn {
+    @apply w-full mb-2.5 px-11 py-2 rounded-lg flex items-center font-bold
+  }
+
+  .basic-btn {
+    @apply font-bold text-sm rounded-lg py-3 px-4 text-center;
+  }
+}
+
+.app{
+  display: table;
+  margin: 0 auto;
+}
+.StripeElement .p-FieldLabel {
+  display: none !important;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(153, 171, 206, 1) transparent;
+}
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-blue-350 rounded;
+}
+.transparent-scrollbar-thumb::-webkit-scrollbar-thumb {
+  @apply bg-transparent;
+}
+.transparent-scrollbar-thumb:hover::-webkit-scrollbar-thumb {
+  @apply bg-blue-350;
+}
+.rtl {
+  direction: rtl;
+}
+.ltr {
+  direction: ltr;
+}
+
+@import "components/buttons";
+@import "components/alerts";
+@import "components/sidebar";
+@import "components/form";
+@import "components/sidebar-header";
+@import "components/page-titles";
+@import "components/tables";
+@import "components/tabs";
+@import "components/notices";
+@import "components/icons";
+@import "components/pagination";
+@import "components/input-tags";
+@import "components/filters";
+@import "components/dropdown";
+@import "components/popup";

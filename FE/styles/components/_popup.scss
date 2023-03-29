@@ -1,0 +1,23 @@
+.modal-schedule {
+  .rc-slider-rail {
+    background: #F8F8F8;
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    height: 20px;
+  }
+
+  .rc-slider-track {
+    height: 20px;
+  }
+
+  .rc-slider-handle {
+    margin-top: 3px;
+    margin-left: 10px;
+  }
+
+  .rc-time-picker-input {
+    box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
+    @apply bg-white w-full rounded-lg p-2.5 text-xs text-gray-350
+      font-medium border-gray-180 border placeholder-gray-180 h-[40px];
+  }
+}

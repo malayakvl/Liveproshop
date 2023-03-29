@@ -1,0 +1,170 @@
+.gradient-btn {
+  box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+  @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2.5
+}
+.gradient-btn-small {
+  box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+  @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-2 py-1.5
+}
+.disabled-btn-small {
+  @apply basic-btn border border-gray-300 text-gray-300 px-2 py-1.5
+}
+
+
+.disabled-btn {
+  @apply basic-btn border border-gray-300 text-gray-300 py-2
+}
+
+.btn-big {
+  @apply red-yellow-gradient text-white text-2xl font-bold px-3 md:px-7 py-3 rounded-lg whitespace-nowrap;
+}
+.view-all {
+  @apply red-yellow-gradient-text text-xs font-bold relative;
+
+  &:after {
+    content: "";
+    background-image: url("../../public/images/arrow-right.svg");
+    width: 25px;
+    height: 25px;
+    @apply absolute -top-1;
+  }
+}
+.cancel {
+  @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5;
+}
+
+.action {
+  @apply border rounded-lg border-gray-180 p-2.5 font-bold uppercase relative text-[10px];
+
+  span {
+    @apply relative;
+  }
+}
+.action-dublicate {
+  span {
+    @apply pl-5;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      background: url("../../public/images/icon-replace-inventory-values.svg");
+      background-repeat: no-repeat;
+      background-position: left center;
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      left:0;
+      top: -1px
+    }
+  }
+}
+
+.btn-export, .btn-add-product {
+  @apply rounded-lg text-white text-base font-bold bg-green-250 p-2.5 mb-4 md:mb-2;
+  box-shadow: 0 10px 20px rgba(0, 200, 104, 0.25);
+
+  span {
+    @apply relative pl-7;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      background: url("../../public/images/export-csv.svg");
+      width: 18px;
+      height: 20px;
+      background-repeat: no-repeat;
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+
+.btn-add-product span {
+  @apply pl-0;
+
+  &:before  {
+    background: none;
+  }
+}
+
+.btn-sync-fb {
+  border: solid 1px #3680FB;
+  color: #3680FB;
+  @apply rounded-lg text-[9px] font-bold p-1.5 mt-3 ml-2 md:ml-4;
+  //box-shadow: 0 10px 20px rgba(153, 171, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+
+  span {
+    @apply relative pl-6;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      background: url("../../public/images/icon-fb-circle.svg");
+      width: 17px;
+      height: 16px;
+      background-repeat: no-repeat;
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+.btn-schedule {
+  border: 1.5px solid #E2E4E9;
+  box-shadow: inset 0px -5px 0px rgba(0, 0, 0, 0.05);
+  color: #A8AFBD;
+  @apply rounded-lg text-base font-bold px-1.5 py-2;
+  //box-shadow: 0 10px 20px rgba(153, 171, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+
+  span {
+    @apply relative pl-6 whitespace-nowrap;
+
+    &:before {
+      content: " ";
+      display: inline-block;
+      background: url("../../public/images/icon-calendar.svg");
+      width: 18px;
+      height: 20px;
+      background-repeat: no-repeat;
+      position: absolute;
+      left: 0;
+    }
+  }
+}
+.btn_sort {
+  //@apply bg-gray-100 w-[24px] h-[24px] inline-block cursor-pointer border;
+  display: inline;
+  content: "";
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center;
+  //border: 6px solid transparent;
+  cursor: pointer;
+}
+.btn_sort.top.active, .btn_sort.top:hover {
+  background: url("../../public/images/sort-up-active.svg");
+  //border-bottom-color: #343a40;
+}
+.btn_sort.down.active, .btn_sort.down:hover {
+  background: url("../../public/images/sort-down-active.svg");
+  //border-top-color: #343a40;
+}
+.btn_sort.top {
+  background: url("../../public/images/sort-up.svg");
+  background-repeat: no-repeat;
+  height: 5px;
+  width: 8px;
+  background-position: center;
+  //border-bottom: 10px solid #999;
+  top: calc(50% - 6px);
+  right: 10px;
+}
+.btn_sort.down {
+  //border-top: 10px solid #999;
+  height: 5px;
+  width: 8px;
+  background-position: center;
+  background: url("../../public/images/sort-down.svg");
+  background-repeat: no-repeat;
+  bottom: calc(50% - 6px);
+  right: 10px;
+}

@@ -1,3 +1,5 @@
 BE/node_modules
 BE/.env
 .DS_Store
+FE/node_modules
+FE/.env

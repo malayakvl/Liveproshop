@@ -1,0 +1,76 @@
+.dropdown {
+  @apply rounded-lg p-2.5 text-xs text-gray-350
+    font-medium placeholder-gray-180 relative;
+
+  .dropdown-toggler {
+    @apply font-bold relative pr-4;
+
+    &:after {
+      content: " ";
+      background-image: url("../../public/images/dropdown-arrow.svg");
+      background-repeat: no-repeat;
+      @apply absolute inline-block w-[14px] h-[8px] -right-0.5 top-1.5;
+    }
+  }
+  .dropdown-toggler-action {
+    @apply font-bold relative pr-4 float-left;
+
+    &:after {
+      content: " ";
+      background-image: url("../../public/images/action-arrow.svg");
+      background-repeat: no-repeat;
+      top: -10px;
+      @apply absolute inline-block w-[10px] h-[11px] -right-0.5;
+    }
+  }
+
+  .dropdown-menu {
+    min-width: 200px;
+    @apply absolute bg-white rounded-lg w-full border-gray-180 border
+      top-0 left-0 text-xs z-50 top-[35px];
+
+    .dropdown-menu-item {
+      @apply pt-1.5 pb-1.5 cursor-pointer pl-2 pr-2 font-bold;
+    }
+  }
+}
+.toggler-action {
+ padding-left: 10px !important;
+}
+.dropdown-action, .toggler-action {
+  @apply rounded-lg text-xs text-gray-350
+  font-medium placeholder-gray-180 relative;
+
+  .dropdown-toggler {
+    @apply font-bold relative pr-4 float-left;
+
+    &:after {
+      content: " ";
+      top: 0;
+      background-image: url("../../public/images/icon-tbl-triangle.svg");
+      background-repeat: no-repeat;
+      @apply absolute inline-block w-[16px] h-[14px] -right-0.5;
+
+      //background-image: url("../../public/images/action-arrow.svg");
+      //background-repeat: no-repeat;
+      //@apply absolute inline-block w-[10px] h-[11px] -right-0.5;
+    }
+  }
+
+  .dropdown-menu {
+    min-width: 200px;
+    @apply absolute bg-white rounded-lg w-full border-gray-180 border
+    top-4 left-0 text-xs z-50 top-[5px];
+
+    .dropdown-menu-item {
+      @apply pt-1.5 pb-1.5 cursor-pointer pl-2 pr-2 font-bold text-left;
+    }
+  }
+}
+.notice-item-size {
+  @apply float-left ml-3 w-[90px] mb-2;
+
+  label {
+    @apply ml-2;
+  }
+}

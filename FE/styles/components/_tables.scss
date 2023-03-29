@@ -1,0 +1,253 @@
+.float-table {
+  .float-checkbox {
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: #00c868;
+    width: 1.5em;
+    height: 1.5em;
+    border: 0.15em solid #00c868;
+    border-radius: 4px;
+    transform: translateY(-0.075em);
+  }
+
+  .copied-row {
+    @apply bg-gray-100;
+  }
+
+  th {
+    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-blue-350 align-top relative;
+
+    .toggle-bg {
+      width: 20px;
+      height: 12px;
+    }
+    .toggle-bg::after {
+      width: 10px !important;
+      height: 10px !important;
+      top: 1px !important;
+    }
+
+    &:first-child {
+      @apply px-0;
+    }
+    .check-all {
+      width: 13px;
+      height: 13px;
+      border: 0.15em solid #99abce;
+      color: #99abce;
+      border-radius: 4px;
+    }
+  }
+  th.actions {
+    @apply text-right;
+  }
+  td {
+    @apply md:min-w-0 px-3 py-1 text-sm font-bold text-left text-gray-350 align-top;
+
+    .toggle-bg {
+      width: 20px;
+      height: 12px;
+    }
+    .toggle-bg::after {
+      width: 10px !important;
+      height: 10px !important;
+      top: 1px !important;
+      left: -2px !important;
+    }
+
+    &:first-child {
+      @apply px-0;
+    }
+    .form-switch {
+      padding-left: 2.5em;
+    }
+
+    .form-check-input {
+      width: 20px;
+      height: 12px;
+    }
+    .form-check-input:checked {
+      background-size: inherit;
+    }
+
+    .user-photo {
+      @apply w-[24px] h-[24px];
+    }
+  }
+
+  .plan-status {
+    @apply w-full flex justify-center cursor-pointer;
+  }
+
+  .button_table_action {
+    text-indent: -99999px;
+    white-space: nowrap;
+    background-repeat: no-repeat;
+    @apply mr-1 w-[24px] h-[24px] border-0 bg-transparent inline-block cursor-pointer float-right;
+  }
+  .btn-edit {
+    background-image: url("../../public/images/btn-edit.svg");
+  }
+  .btn-copy {
+    background-image: url("../../public/images/btn-copy.svg");
+  }
+  .btn-delete {
+    background-image: url("../../public/images/btn-delete.svg");
+  }
+}
+
+.table-configuration td {
+  font-size: 16px !important;
+  font-weight: bold !important;
+  color: #4f5b84 !important;
+}
+
+.inventory-color {
+  width: 25px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/inventory-color.svg");
+}
+.inventory-size {
+  width: 70px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/inventory-size.svg");
+}
+.inventory-qty {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/inventory-qty.svg");
+}
+.inventory-price {
+  width: 100px;
+}
+
+//CHATBOT TABLE
+.system-message .option-switcher label,
+.system-message .actions,
+.system-message .ids,
+.system-message .product,
+.system-message td:nth-child(5),
+.system-message th:nth-child(5),
+.system-message td:nth-child(6),
+.system-message th:nth-child(6) {
+  @apply hidden;
+}
+
+th.chat-eye {
+  .eye {
+    @apply float-right;
+  }
+}
+.translations-msg {
+  width: calc(100% - 60px);
+}
+
+td.chat-eye {
+  .eye {
+    background-image: url("../../public/images/green-eye.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    @apply inline-block w-[20px] h-[14px] float-right;
+  }
+  .eye-cross {
+    background-image: url("../../public/images/eye-cross.svg");
+    background-repeat: no-repeat;
+    @apply inline-block w-[20px] h-[20px] mr-1.5 mt-0.5 float-right;
+  }
+}
+td.translations {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  @apply border-l pl-4 border-red-500 pt-4 pb-4;
+}
+.table-dropdown {
+  min-width: 14px;
+  width: 50px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-image: url("../../public/images/action-arrow.svg");
+}
+
+.table-phone {
+  width: 200px;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+  background-image: url("../../public/images/input-phone.svg");
+}
+
+.table-number {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/input-company-id.svg");
+}
+
+.shipping-logo {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/icon-shipping.svg");
+}
+
+.shipping-countries {
+  width: 100px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url("../../public/images/lang-icon.svg");
+}
+
+//table orders
+td.order-number {
+  @apply font-normal red-yellow-gradient-text;
+}
+td.order-date {
+  @apply font-normal;
+}
+td.order-status {
+  @apply font-normal text-[10px];
+
+  .new {
+    @apply rounded-lg p-1.5 text-green-250 bg-green-100 border-green-250;
+  }
+}
+
+span.closed {
+  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-gray-200;
+}
+span.live {
+  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-green-200 cursor-pointer;
+}
+span.scheduled {
+  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-yellow-200 cursor-pointer;
+}
+span.active-subscription {
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;
+}
+
+span.new {
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
+}
+span.payed {
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;
+}
+span.shipped {
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-green-600 bg-green-100 border-green-600;
+}
+span.canceled {
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-red-600 bg-red-100 border-red-600;
+}
+
+// start description class of table data for mobile version
+.tbl-icon {
+  @apply md:mr-1.5;
+}
+.ids {
+  @apply flex w-[30px];
+}
+.sortable-block {
+  @apply float-right ml-8 min-w-[15px];
+}

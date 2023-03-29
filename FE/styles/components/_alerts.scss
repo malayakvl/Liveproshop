@@ -1,0 +1,20 @@
+.alert-info {
+  @apply bg-gradient-to-r from-indigo-50 to-indigo-300 border-t-4 px-4 py-3 shadow-md
+    text-indigo-700 border-indigo-500
+    w-full
+}
+.alert-success {
+  @apply bg-gradient-to-r from-green-50 to-green-300 border-t-4 px-4 py-3 shadow-md
+    text-green-700 border-green-500
+    w-full
+}
+.alert-danger {
+  @apply bg-gradient-to-r from-red-50 to-red-300 border-t-4 px-4 py-3 shadow-md
+  text-red-700 border-red-500
+  w-full
+}
+.alert-warning {
+  @apply bg-gradient-to-r from-yellow-50 to-yellow-300 border-t-4 px-4 py-3 shadow-md
+  text-yellow-700 border-yellow-500
+  w-full
+}

@@ -1,0 +1,177 @@
+.shadow-bottom {
+  box-shadow: 0 5px 5px -5px #333;
+
+  @media (min-width: 641px) {
+    box-shadow: none;
+  }
+}
+.divider {
+  height: 24px;
+  border: 1px solid #CFD8DC;
+  @apply ml-5 mr-5;
+}
+
+.counter {
+  //@apply absolute top-1.5 right-0.5 inline-flex items-center justify-center
+  //  px-1.5 py-1.5 text-xs font-bold leading-none
+  //  red-yellow-gradient transform translate-x-1/2 -translate-y-1/2
+  //  rounded-full text-white;
+  @apply absolute top-1.5 -right-5 items-center justify-center px-1 py-0.5 text-white not-italic
+  mr-2 text-[10px] font-bold leading-none red-yellow-gradient rounded-full;
+}
+
+.profile-block {
+  @apply mt-2 md:mt-0;
+
+  .profile-name {
+    @apply hidden text-sm font-bold text-gray-350 pl-3 md:inline-block;
+
+    em {
+      @apply block not-italic text-blue-350 -mt-1 text-xs;
+    }
+  }
+}
+
+.corner {
+  background-image: url("../../public/images/trianlge.svg");
+  top: -8px;
+  width: 21px;
+  height: 21px;
+  @apply absolute;
+}
+
+.profile-menu {
+  @apply absolute bg-white rounded-lg max-w-[145px] w-[145px] top-10 -left-3 p-4 text-xs z-30;
+
+  li {
+    @apply mb-3;
+
+    a {
+      @apply  relative flex flex-row items-center;
+
+      .s-caption {
+        @apply text-blue-350 ml-2 text-xs font-bold tracking-wide truncate cursor-pointer;
+      }
+    }
+
+    i {
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 20px;
+      height: 20px;
+      @apply inline-flex justify-center items-center cursor-pointer;
+    }
+    .profile {
+      background-image: url("../../public/images/icon-profile.svg");
+    }
+    .plan {
+      background-image: url("../../public/images/icon-plan.svg");
+    }
+    .bell {
+      background-image: url("../../public/images/icon-bell.svg");
+    }
+    .help {
+      background-image: url("../../public/images/icon-help.svg");
+    }
+    .exit {
+      background-image: url("../../public/images/icon-logout.svg");
+    }
+    .settings-pay {
+      width: 32px;
+      background-image: url("../../public/images/settings-pay.svg");
+    }
+    &:hover {
+      .s-caption {
+        @apply red-yellow-gradient-text;
+      }
+      .profile {
+        background-image: url("../../public/images/icon-hover-profile.svg");
+      }
+      .plan {
+        background-image: url("../../public/images/icon-hover-plan.svg");
+      }
+      .bell {
+        background-image: url("../../public/images/icon-hover-bell.svg");
+      }
+      .help {
+        background-image: url("../../public/images/icon-hover-help.svg");
+      }
+      .exit {
+        background-image: url("../../public/images/icon-hover-logout.svg");
+      }
+    }
+    &:last-child {
+      @apply mb-0;
+    }
+  }
+}
+
+.notice-menu {
+  @apply absolute bg-white rounded-lg max-w-[245px] w-[245px] top-9 -left-5 p-4 text-xs z-50;
+
+  .notice-item {
+    @apply w-full bg-white flex flex-shrink-0 relative;
+
+    .notice-photo {
+      @apply w-6 h-6 rounded-full border-gray-200 flex flex-shrink-0 items-center justify-center;
+    }
+    .notice-text {
+      @apply pl-3 pr-4 w-full text-left pb-4;
+
+      .notice-row {
+        border-bottom: solid 1px #F8F8F8;
+        @apply flex items-center justify-between w-full pb-3;
+
+        span {
+          @apply block;
+        }
+
+        .subject {
+          font-size: 9px;
+          @apply block text-green-250 uppercase font-bold;
+        }
+      }
+    }
+  }
+}
+
+.btn-langs {
+  @apply border-0 relative text-base font-bold uppercase text-gray-350;
+
+  span {
+    padding-left:40px;
+    padding-right: 25px;
+    @apply relative;
+
+    &:before {
+      content: '';
+      top:0;
+      left:5px;
+      position: absolute;
+      background-image: url("../../public/images/lang-icon.svg");
+      background-repeat: no-repeat;
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
+    &:after {
+      content: '';
+      right:-5px;
+      top:6px;
+      position: absolute;
+      background-image: url("../../public/images/lang-arrow.svg");
+      background-repeat: no-repeat;
+      display: block;
+      width: 14px;
+      height: 8px;
+    }
+  }
+}
+
+.lang-menu {
+  @apply absolute bg-white rounded-lg max-w-[105px] w-[105px] top-9 left-5 p-4 text-xs;
+
+  li {
+    @apply text-base uppercase text-left font-bold cursor-pointer text-gray-350;
+  }
+}

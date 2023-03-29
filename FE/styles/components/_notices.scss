@@ -1,0 +1,24 @@
+.notice-item {
+  @apply w-full bg-white flex flex-shrink-0 relative;
+
+  .notice-photo {
+    @apply w-6 h-6 rounded-full border-gray-200 flex flex-shrink-0 items-center justify-center;
+  }
+  .notice-text {
+    @apply pl-3 pr-4 w-full text-left pb-4;
+
+    .notice-row {
+      border-bottom: solid 1px #F8F8F8;
+      @apply flex items-center justify-between w-full pb-3;
+
+      span {
+        @apply block;
+      }
+
+      .subject {
+        font-size: 9px;
+        @apply block text-green-250 uppercase font-bold;
+      }
+    }
+  }
+}

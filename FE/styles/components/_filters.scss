@@ -1,0 +1,133 @@
+.filters-caption {
+  @apply mt-7 mb-7 font-bold text-[18px] text-gray-350;
+}
+
+.filters-calendar {
+  @apply bg-white shadow-xl border border-gray-100;
+  //@apply absolute shadow-xl rounded-3xl md:right-9 bg-white;
+  //right: 19rem;
+  //z-index: 20;
+  //
+  //@media (max-width: 641px) {
+  //  right: -6rem;
+  //  transform: scale(0.8);
+  //  z-index: 999;
+  //}
+}
+
+.filters {
+  z-index: 99;
+  transition: 0.3s;
+
+  input[type="checkbox"] {
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: #00C868;
+    width: 1.25em;
+    height: 1.25em;
+    border: 0.15em solid #00C868;
+    border-radius: 4px;
+    transform: translateY(-0.075em);
+  }
+
+  .dropdown-menu {
+    @apply absolute bg-white rounded-lg max-w-[245px] w-[245px] top-9 -left-2.5 p-4 text-xs z-50 border;
+
+    .notice-item {
+      @apply w-full bg-white flex flex-shrink-0 relative pb-1.5;
+
+      label {
+        @apply pl-2 text-xs text-gray-350 cursor-pointer;
+      }
+    }
+  }
+
+  .arrow {
+    background-image: url("../../public/images/dropdown-arrow.svg");
+    background-repeat: no-repeat;
+    display: inline-block;
+    width: 14px;
+    height: 8px;
+    float: right;
+    margin-top: 5px;
+  }
+
+  .filter-label {
+    @apply block text-xs text-gray-350 font-bold;
+
+    em {
+      @apply text-[10px] text-gray-180 font-bold not-italic inline-block min-w-[30px] text-right;
+    }
+  }
+
+  .filter-close {
+    background-image: url("../../public/images/close.svg");
+    display: inline-block;
+    background-repeat: no-repeat;
+    z-index: 10;
+    @apply absolute right-1.5 top-1.5 w-[24px] h-[24px] cursor-pointer;
+  }
+
+  //.rc-slider-rail {
+  //  //background-color: #F76D6D !important;
+  //  height: 1px !important;
+  //  top: 7px !important;
+  //}
+  //.rc-slider-track {
+  //  height: 2px !important;
+  //  top: 7px !important;
+  //  background-color: #F76D6D !important;
+  //}
+  //.rc-slider-handle {
+  //  border: solid 1px #F76D6D !important;
+  //  background-color: #F76D6D !important;
+  //  width: 10px !important;
+  //  height: 10px !important;
+  //  margin-top: -3px !important;
+  //}
+  //.rc-slider-handle:active {
+  //  box-shadow: none !important;
+  //}
+  //.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
+  //  border: none !important;
+  //  box-shadow: none !important;
+  //}
+}
+
+.filter-value {
+  @apply rounded-lg bg-gray-100 border p-1.5 text-[9px] font-bold text-gray-450 uppercase relative pr-6 mr-1 mb-2;
+
+  em {
+    background-image: url("../../public/images/remove-filter.svg");
+    background-repeat: no-repeat;
+    @apply absolute right-0.5 inline-block w-[16px] h-[16px] top-[5px] cursor-pointer;
+  }
+}
+
+.filter-close-desktop {
+  position: fixed;
+  top: 31px;
+  right: 305px;
+  box-shadow: rgba(9, 30, 66, 0.08) 0 0 0 1px, rgba(9, 30, 66, 0.08) 0px 2px 4px 1px;
+  color: #141A3C;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.rdrDateDisplayWrapper {
+  width: 270px !important;
+}
+.rdrDateRangePickerWrapper {
+  display: flex !important;
+  flex-direction: column;
+}
+.rdrMonthPicker {
+  select {
+    padding: 0px !important;
+    font-size: 12px !important;
+  }
+}
+.rdrDefinedRangesWrapper {
+  width: 269px !important;
+}

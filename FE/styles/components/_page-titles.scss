@@ -1,0 +1,28 @@
+.page-title {
+  @apply mb-8 w-full border border-t-0 border-l-0 border-r-0 pb-1;
+
+  h1 {
+    @apply inline-block text-3xl font-bold text-gray-350;
+
+    span {
+      @apply text-blue-350 font-medium;
+    }
+
+    em {
+      @apply border w-0.5 mr-2 border-blue-350;
+    }
+  }
+
+  .dashboard {
+    @apply ml-4 md:ml-0 inline-block text-3xl font-bold text-blue-350;
+
+    span {
+      @apply block text-gray-350 font-bold text-5xl -mt-4;
+    }
+  }
+}
+
+.page-subtitle {
+  @apply text-base font-medium text-gray-350 pr-2 w-full font-bold
+    border border-gray-180 border-t-0 border-r-0 border-l-0 pb-4 mb-4;
+}

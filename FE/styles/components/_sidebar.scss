@@ -1,0 +1,249 @@
+.sidebar {
+  background: #141A3C;
+  border-radius: 0 24px 0 0;
+  z-index: 999;
+  @apply hidden absolute max-w-[240px] xl:min-w-[240px]
+    md:fixed md:flex flex-col h-full top-0 left-0 text-white transition-all duration-300 border-none;
+
+  .go-back {
+    @apply text-white text-base font-bold tracking-wide truncate cursor-pointer w-full text-right relative;
+
+    a {
+      @apply inline-block;
+    }
+
+    span {
+      @apply relative pl-3;
+
+      &:before {
+        content: "";
+        background-image: url("../../public/images/arrow-menu.svg");
+        position: absolute;
+        width: 13px;
+        height: 8px;
+        top: 7px;
+        left: -10px;
+      }
+    }
+  }
+
+  .brand {
+    background-image: url("../../public/images/logo.svg");
+    background-size: 200px auto;
+    width: 200px;
+    height: 32px;
+    min-height: 32px;
+    text-indent: -99999px;
+    white-space: nowrap;
+    @apply block mx-4 mt-6 mb-10;
+  }
+
+  ul {
+    @apply flex flex-col;
+
+    li {
+      @apply mt-5 mb-5 pl-8 pr-8;
+
+      a {
+        @apply  relative flex flex-row items-center;
+
+        .s-caption {
+          @apply text-blue-350 ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
+        }
+      }
+
+      em {
+        @apply inline-flex items-center justify-center px-1 py-0.5 text-white not-italic
+        mr-2 text-xs font-bold leading-none red-yellow-gradient rounded-full absolute right-0;
+      }
+
+      i {
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 20px;
+        height: 20px;
+        @apply inline-flex justify-center items-center cursor-pointer;
+      }
+      .chatbot {
+        background-image: url("../../public/images/icon-chatbot.svg");
+      }
+      .dashboard {
+        background-image: url("../../public/images/icon-dashboard.svg");
+      }
+      .selling {
+        background-image: url("../../public/images/icon-selling.svg");
+      }
+      .inventory {
+        background-image: url("../../public/images/icon-inventory.svg");
+      }
+      .order {
+        background-image: url("../../public/images/icon-order.svg");
+      }
+      .waiting-list {
+        background-image: url("../../public/images/icon-waiting-list.svg");
+      }
+      .shipping {
+        background-image: url("../../public/images/icon-shipping.svg");
+      }
+      .shipping {
+        background-image: url("../../public/images/icon-shipping.svg");
+      }
+      .buyers {
+        background-image: url("../../public/images/icon-buyers.svg");
+      }
+      .payments {
+        background-image: url("../../public/images/icon-payments.svg");
+      }
+      .support {
+        background-image: url("../../public/images/icon-help.svg");
+      }
+      .payment-plans {
+        background-image: url("../../public/images/icon-plan-sidebar.svg");
+      }
+      .separator {
+        height: 1px;
+        background: #99ABCE;
+      }
+    }
+
+    li.active, li:hover {
+      .s-caption {
+        @apply text-white;
+      }
+      .dashboard {
+        background-image: url("../../public/images/icon-active-dashboard.svg");
+      }
+      .selling {
+        background-image: url("../../public/images/icon-active-selling.svg");
+      }
+      .inventory {
+        background-image: url("../../public/images/icon-active-inventory.svg");
+      }
+      .order {
+        background-image: url("../../public/images/icon-active-order.svg");
+      }
+      .waiting-list {
+        background-image: url("../../public/images/icon-active-waiting-list.svg");
+      }
+      .shipping {
+        background-image: url("../../public/images/icon-active-shipping.svg");
+      }
+      .buyers {
+        background-image: url("../../public/images/icon-active-buyers.svg");
+      }
+      .payments {
+        background-image: url("../../public/images/icon-active-payments.svg");
+      }
+    }
+  }
+
+  li.submenu {
+    text-align: right;
+  }
+
+  .nav-footer {
+    @apply items-center;
+
+    li {
+      @apply mt-0 mb-0 pl-0 pr-0 text-center items-center;
+
+      a {
+        font-size: 9px;
+        @apply text-blue-350 uppercase font-bold;
+      }
+    }
+  }
+  .copyright {
+    font-size: 9px;
+    @apply block uppercase font-bold;
+  }
+}
+
+.sidebar-close-desktop {
+  position: absolute;
+  top: 59px;
+  right: -25px;
+  width: 24px;
+  height: 24px;
+  outline: 0px;
+  padding: 0px;
+  border: 0px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: rgba(9, 30, 66, 0.08) 0px 0px 0px 1px, rgba(9, 30, 66, 0.08) 0px 2px 4px 1px;
+  color: #141A3C; //rgb(107, 119, 140);
+  background-color: rgb(255, 255, 255);
+  transform: translateX(-50%);
+  transition: background-color 100ms linear 0s, color 100ms linear 0s, opacity 350ms cubic-bezier(0.2, 0, 0, 1) 0s;
+  text-decoration-skip-ink: auto;
+  font-family: inherit;
+  opacity: 1;
+}
+
+.sidebar-close-desktop:hover {
+  @apply bg-blue-350;
+  color: rgb(255, 255, 255);
+  opacity: 1;
+}
+
+
+.sb-minimize {
+  @apply max-w-[20px] min-w-[20px];
+
+  .brand {
+    @apply hidden;
+  }
+
+  ul {
+    @apply hidden;
+    
+    li {
+      @apply pl-2.5 pr-2.5;
+
+      .s-caption {
+        @apply hidden;
+      }
+
+      span {
+        color: transparent;
+
+        &:before {
+          left: 12px !important;
+        }
+      }
+
+
+
+      .inventory-sub {
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 20px;
+        height: 20px;
+        @apply inline-flex justify-center items-center cursor-pointer pl-0 text-center;
+        background-image: url("../../public/images/icon-inventory.svg");
+      }
+
+      .inventory-add {
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 20px;
+        height: 20px;
+        @apply inline-flex justify-center items-center cursor-pointer pl-0 text-center;
+        background-image: url("../../public/images/icon-plus.svg");
+      }
+    }
+    .submenu {
+      @apply text-center;
+    }
+  }
+
+  .copyright {
+    @apply hidden;
+  }
+
+}
+
+.mobile-open {
+  display: flex !important;
+  transition: margin-left .3s ease-in-out, width .3s ease-in-out;
+}

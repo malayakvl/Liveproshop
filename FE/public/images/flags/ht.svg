@@ -1,0 +1,26 @@
+<svg width="35" height="24" viewBox="0 0 35 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect y="0.000976562" width="35" height="24" rx="2" fill="white"/>
+<mask id="mask0_636_25753" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="35" height="25">
+<rect y="0.000976562" width="35" height="24" rx="2" fill="white"/>
+</mask>
+<g mask="url(#mask0_636_25753)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 11.201H35V0.000976562H0V11.201Z" fill="#112EBC"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 24.0012H35V11.2012H0V24.0012Z" fill="#E3264A"/>
+<rect x="11.667" y="8.00098" width="11.6667" height="9.6" rx="0.666667" fill="url(#paint0_linear_636_25753)"/>
+<mask id="mask1_636_25753" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="11" y="8" width="13" height="10">
+<rect x="11.667" y="8.00098" width="11.6667" height="9.6" rx="0.666667" fill="white"/>
+</mask>
+<g mask="url(#mask1_636_25753)">
+<path d="M12.0003 17.2675V16.2106L14.5975 14.964C14.9126 14.8127 15.2577 14.7342 15.6072 14.7342H19.3935C19.743 14.7342 20.0881 14.8127 20.4032 14.964L23.0003 16.2106V17.2675H12.0003Z" fill="#AABCAE" stroke="#366C14" stroke-width="0.666667"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M17.5 14.4011C18.8807 14.4011 20 13.3266 20 12.0011C20 10.6756 18.8807 9.60107 17.5 9.60107C16.1193 9.60107 15 10.6756 15 12.0011C15 13.3266 16.1193 14.4011 17.5 14.4011Z" fill="#D4B872"/>
+<path d="M13.6673 13.3535C13.6673 13.077 13.9844 12.9207 14.2037 13.0891L16.8916 15.1534C17.2508 15.4292 17.7505 15.4292 18.1097 15.1534L20.7976 13.0891C21.0169 12.9207 21.334 13.077 21.334 13.3535V15.3342C21.334 15.5183 21.1847 15.6675 21.0007 15.6675H14.0007C13.8166 15.6675 13.6673 15.5183 13.6673 15.3342V13.3535Z" fill="#C28321" stroke="#0D3488" stroke-width="0.666667"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M15.5977 10.1749C15.3811 9.96693 15.5283 9.60107 15.8285 9.60107H19.1715C19.4717 9.60107 19.6189 9.96693 19.4023 10.1749L17.7308 11.7795C17.6019 11.9033 17.3981 11.9033 17.2692 11.7795L15.5977 10.1749Z" fill="#216C30"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_636_25753" x1="11.667" y1="8.00098" x2="11.667" y2="17.601" gradientUnits="userSpaceOnUse">
+<stop stop-color="white"/>
+<stop offset="1" stop-color="#F0F0F0"/>
+</linearGradient>
+</defs>
+</svg>

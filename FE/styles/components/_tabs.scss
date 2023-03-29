@@ -1,0 +1,20 @@
+.float-tabs {
+  @apply flex flex-col sm:flex-row border-b;
+
+  .tabs {
+    @apply mb-4 md:mb-0 text-sm font-bold text-blue-350 mr-4 pb-4;
+  }
+  .tabs.active {
+    //border-bottom:solid 3px;
+    @apply text-gray-350 font-bold relative;
+
+    &:after {
+      content: " ";
+      height: 3px;
+      @apply red-yellow-gradient w-full block absolute -bottom-0.5;
+    }
+  }
+}
+.tabs-content {
+  @apply flex flex-col sm:flex-row;
+}
