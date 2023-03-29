@@ -3,3 +3,10 @@ BE/.env
 .DS_Store
 FE/node_modules
 FE/.env
+/BE/public/uploads/orders/
+/BE/public/uploads/products/
+/BE/public/uploads/shipping/
+/BE/public/uploads/tmp/
+/BE/public/uploads/users/
+/BE/combined.log
+.idea
