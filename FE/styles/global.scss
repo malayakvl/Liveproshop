@@ -6,11 +6,21 @@
 @import "tailwindcss/screens";
 
 @layer utilities {
+  .rainbow-gradient-text {
+    background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    //background-clip: text;
+    //text-fill-color: transparent;
+  }
+
   .red-yellow-gradient {
-    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    //background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);
   }
   .red-yellow-gradient-text {
-    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    //background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -107,6 +117,7 @@
   direction: ltr;
 }
 
+@import "components/header";
 @import "components/buttons";
 @import "components/alerts";
 @import "components/sidebar";

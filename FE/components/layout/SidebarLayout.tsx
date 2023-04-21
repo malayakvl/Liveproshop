@@ -49,20 +49,33 @@ export default function SidebarLayout({ children }: { children: any }) {
                         className="outline-none mobile-menu-button"
                         onClick={() => dispatch(toggleSidebarAction())}>
                         <svg
-                            className="w-6 h-6 text-gray-500"
+                            width="24"
+                            height="40"
+                            viewBox="0 0 24 40"
                             fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path d="M4 6h16M4 12h16M4 18h16" />
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M3 15C3 14.4477 3.44772 14 4 14H20C20.5523 14 21 14.4477 21 15C21 15.5523 20.5523 16 20 16H4C3.44772 16 3 15.5523 3 15ZM3 20C3 19.4477 3.44772 19 4 19H14C14.5523 19 15 19.4477 15 20C15 20.5523 14.5523 21 14 21H4C3.44772 21 3 20.5523 3 20ZM4 24C3.44772 24 3 24.4477 3 25C3 25.5523 3.44772 26 4 26H8C8.55228 26 9 25.5523 9 25C9 24.4477 8.55228 24 8 24H4Z"
+                                fill="#4F5B84"
+                            />
                         </svg>
+                        {/*<svg*/}
+                        {/*    className="w-6 h-6 text-gray-500"*/}
+                        {/*    fill="none"*/}
+                        {/*    strokeLinecap="round"*/}
+                        {/*    strokeLinejoin="round"*/}
+                        {/*    strokeWidth="2"*/}
+                        {/*    viewBox="0 0 24 24"*/}
+                        {/*    stroke="currentColor">*/}
+                        {/*    <path d="M4 6h16M4 12h16M4 18h16" />*/}
+                        {/*</svg>*/}
                     </button>
                 </div>
 
                 <SidebarHeader />
-                <div className="mt-10">{children}</div>
+                <div className="mt-6">{children}</div>
             </div>
         </div>
     );

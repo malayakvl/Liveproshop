@@ -207,7 +207,7 @@ export default function Pricing({ locale }: { locale: any }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Pricing</title>
+                <title>LiveProshop - Pricing</title>
             </Head>
 
             <div className="text-gray-350 font-medium max-w-[1440px] mx-auto px-5 my-12 lg:my-16">

@@ -25,7 +25,7 @@ export default function AddMethod() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - {t('Add new shipping method')}</title>
+                <title>LiveProshop - {t('Add new shipping method')}</title>
             </Head>
 
             <div className="mb-6 font-bold text-gray-350 text-lg border-gray-200">

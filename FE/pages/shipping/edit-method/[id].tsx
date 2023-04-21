@@ -58,7 +58,7 @@ export default function EditMethod() {
         <>
             <Head>
                 <title>
-                    Amadeo CRM - {t('Edit Shipping Method')} - {shipping.name}
+                    LiveProshop - {t('Edit Shipping Method')} - {shipping.name}
                 </title>
             </Head>
 

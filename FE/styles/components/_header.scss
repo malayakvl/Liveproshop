@@ -1,0 +1,15 @@
+.app-logo {
+  background-image: url("../../public/images/logo.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  @apply w-[200px] h-[35px] inline-block ml-[50px] lg:ml-0;
+}
+
+.language-block {
+  @apply absolute top-[-40px] md:sticky;
+}
+.drop-top-menu-item {
+  border-color: transparent;
+  --tw-divide-opacity: 0 !important;
+}

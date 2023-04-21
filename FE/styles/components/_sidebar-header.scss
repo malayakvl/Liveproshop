@@ -146,7 +146,7 @@
     &:before {
       content: '';
       top:0;
-      left:5px;
+      left:10px;
       position: absolute;
       background-image: url("../../public/images/lang-icon.svg");
       background-repeat: no-repeat;
@@ -156,7 +156,7 @@
     }
     &:after {
       content: '';
-      right:-5px;
+      right:0px;
       top:6px;
       position: absolute;
       background-image: url("../../public/images/lang-arrow.svg");

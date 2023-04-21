@@ -79,7 +79,7 @@ export default function Index() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Order {orderNumber}</title>
+                <title>LiveProshop - Order {orderNumber}</title>
             </Head>
 
             {orderFetched && (

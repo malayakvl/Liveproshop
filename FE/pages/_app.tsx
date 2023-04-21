@@ -69,7 +69,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     <MainLayout>
                         <div id="fb-root" />
                         <Head>
-                            <title>Amadeo CRM</title>
+                            <title>LiveProshop</title>
                             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                             <script
                                 async

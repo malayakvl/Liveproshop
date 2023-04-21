@@ -47,7 +47,7 @@ export default function Index() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Settings - Cart duration</title>
+                <title>LiveProshop - Settings - Cart duration</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

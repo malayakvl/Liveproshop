@@ -189,7 +189,7 @@ class User {
         }
     }
 
-    async createExistUserSubscription(userData, user) {
+    async createExistUserSubscription(userData) {
         const client = await pool.connect();
         try {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
@@ -405,7 +405,6 @@ class User {
             // const paymentIntentResult = await stripe.paymentIntents.retrieve(
             //     paymentIntent
             // );
-            console.log('TYPE', type);
 
             // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
@@ -610,10 +609,8 @@ class User {
         const client = await pool.connect();
         try {
             const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${userId});`;
-            console.log('here we are', query);
             await client.query(query);
             // const query1 = `// UPDATE data.users SET photo='${userData.photo}' WHERE id=${userId};`;
-            console.log('here');
             // await client.query(query1);
             if (user) {
                 return { user: userData, error: null };
@@ -1018,7 +1015,7 @@ class User {
         }
     }
 
-    async unsubscribe(email) {
+    async unsubscribe() {
         const client = await pool.connect();
         try {
             const userRes = await client.query(`SELECT subscription_id FROM data.users
@@ -1030,7 +1027,7 @@ class User {
                 }
                 return { success: true, error: null };
             } else {
-                return { success: false, error: 'No subscription on DB' };
+                return { success: false, error: 'No subscription on _DB' };
             }
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -1130,8 +1127,6 @@ class User {
      * @returns {boolean}
      */
     validatePassword(password, salt, hash) {
-        console.log('HASH', hash);
-        console.log('HASH CHECK', crypto.pbkdf2Sync(password, salt, 10000, 256, 'sha256').toString('hex'))
         const hashCheck = crypto.pbkdf2Sync(password, salt, 10000, 256, 'sha256').toString('hex');
         return hash === hashCheck;
     }

@@ -36,7 +36,7 @@ export default function LangSwitcher() {
 
     return (
         <div className="relative min-w-max">
-            <div className="language-block inline-block text-right dropdown">
+            <div className="language-block inline-block text-right">
                 <button
                     className="btn-langs"
                     onClick={() => {

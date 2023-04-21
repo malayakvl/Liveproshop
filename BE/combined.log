@@ -22570,3 +22570,473 @@
   level: 'info',
   timestamp: '2023-03-29T21:25:05.850Z'
 }
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T21:44:38.583Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T21:44:38.595Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-01T13:46:17.953Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:00:34.256Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-03T20:03:12.401Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-03T20:03:12.402Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:07:53.016Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:08:43.307Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:09:28.854Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:10:09.363Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:11:00.049Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:14:08.179Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:15:53.241Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:16:41.306Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T20:35:22.897Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:11:24.913Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:12:35.039Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:13:29.964Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:15:22.482Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:18:03.100Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-03T21:25:47.792Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-03T21:25:47.794Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:34:39.193Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-03T21:44:24.099Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-03T21:44:24.100Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:48:34.628Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-03T21:55:09.703Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:04:08.297Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:05:55.380Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:12:58.150Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:13:08.729Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:13:18.820Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:14:33.866Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:15:48.274Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:19:37.384Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:19:55.275Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:34:12.256Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:34:37.462Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T04:35:30.756Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:09:57.808Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:10:38.971Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:11:20.926Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:12:29.792Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:13:09.574Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:17:09.008Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:17:44.353Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:18:34.831Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-04T05:20:12.253Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-10T09:27:14.333Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-10T09:29:24.620Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-10T09:29:24.620Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-10T09:36:05.712Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-10T09:36:05.720Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-10T09:37:45.926Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-10T09:37:45.957Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-13T06:07:32.371Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-13T06:09:05.168Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-13T06:09:05.169Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-13T14:21:47.356Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-14T06:46:54.853Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-14T13:07:08.172Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-14T13:07:08.173Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T09:14:13.848Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T09:14:13.851Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T09:15:16.904Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T09:15:16.905Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T10:37:45.479Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T10:37:45.482Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T10:41:06.761Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T10:41:06.762Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T10:46:52.858Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T10:46:52.860Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:48:21.531Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:49:16.325Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:50:14.120Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:53:31.168Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:55:58.319Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-04-17T14:38:45.967Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2023-04-17T14:38:46.031Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T14:38:46.129Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T14:38:46.129Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-04-17T15:13:19.732Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2023-04-17T15:13:19.802Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T15:13:19.908Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-17T15:13:19.908Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-04-17T15:24:14.865Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-17T16:04:00.249Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-17T16:05:05.270Z'
+}
+{
+  message: 'DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-04-20T14:54:48.956Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-21T05:33:03.559Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-21T05:33:03.561Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-04-21T06:03:51.497Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-21T06:47:26.748Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-04-21T06:47:26.752Z'
+}

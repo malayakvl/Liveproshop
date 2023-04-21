@@ -47,7 +47,7 @@ export default function PaymentSetting() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Payment Settings</title>
+                <title>LiveProshop - Payment Settings</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

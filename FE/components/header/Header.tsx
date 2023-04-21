@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import LangSwitcher from '../lang/Switcher';
 import { useRouter } from 'next/router';
+import { useTranslations } from 'next-intl';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -12,34 +13,36 @@ const userProfileImg =
 const Header: React.FC = () => {
     const [session] = useSession();
     const router = useRouter();
+    const t = useTranslations();
 
     return (
         <header>
-            <nav className="px-4 bg-white flex flex-wrap items-center justify-between md:px-32 py-10">
+            <nav className="px-4 py-5 bg-white flex flex-wrap items-center justify-between md:px-32">
                 <div className="cursor-pointer">
                     <Link href={'/'}>
-                        <a>
-                            <Image src="/images/logo.svg" width="250" height="40" alt="" />
+                        <a className="app-logo">
+                            {/*<Image src="/images/logo-mobile.svg" width="238" height="40" alt="" />*/}
                         </a>
                     </Link>
                 </div>
 
-                <Menu as="div" className="relative lg:hidden z-10">
-                    <Menu.Button>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            id="menu-button"
-                            className="h-6 w-6 cursor-pointer block"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M4 6h16M4 12h16M4 18h16"
-                            />
-                        </svg>
+                <Menu as="div" className="relative w-full lg:hidden z-10">
+                    <Menu.Button className="absolute top-[-47px]">
+                        <Image src="/images/menu.svg" width="24" height="40" alt="" />
+                        {/*<svg*/}
+                        {/*    xmlns="http://www.w3.org/2000/svg"*/}
+                        {/*    id="menu-button"*/}
+                        {/*    className="h-6 w-6 cursor-pointer block"*/}
+                        {/*    fill="none"*/}
+                        {/*    viewBox="0 0 24 24"*/}
+                        {/*    stroke="currentColor">*/}
+                        {/*    <path*/}
+                        {/*        strokeLinecap="round"*/}
+                        {/*        strokeLinejoin="round"*/}
+                        {/*        strokeWidth="2"*/}
+                        {/*        d="M4 6h16M4 12h16M4 18h16"*/}
+                        {/*    />*/}
+                        {/*</svg>*/}
                     </Menu.Button>
                     <Transition
                         as={Fragment}
@@ -49,49 +52,49 @@ const Header: React.FC = () => {
                         leave="transition ease-in duration-75"
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95">
-                        <Menu.Items className="absolute right-0 w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-1 flex flex-col font-bold text-sm">
+                        <Menu.Items className="absolute left-0 top-[-10px] w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-1 flex flex-col font-bold text-sm">
                             <Link href={'/'}>
                                 <Menu.Item
                                     as="a"
-                                    className="m-2 cursor-pointer hover:text-purple-400">
-                                    Features
+                                    className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                    {t('Features')}
                                 </Menu.Item>
                             </Link>
                             <Link href={'/pricing'}>
                                 <Menu.Item
                                     as="a"
-                                    className={`m-2 cursor-pointer ${
+                                    className={`m-2 cursor-pointer drop-top-menu-item ${
                                         router.pathname == '/pricing'
                                             ? 'text-purple-400'
                                             : 'hover:text-purple-400'
                                     }`}>
-                                    Pricing
+                                    {t('Pricing')}
                                 </Menu.Item>
                             </Link>
                             <Link href={'/'}>
                                 <Menu.Item
                                     as="a"
-                                    className="m-2 cursor-pointer hover:text-purple-400 uppercase">
+                                    className="drop-top-menu-item m-2 cursor-pointer hover:text-purple-400 uppercase">
                                     Faq
                                 </Menu.Item>
                             </Link>
                             <Link href={'/'}>
                                 <Menu.Item
                                     as="a"
-                                    className="m-2 cursor-pointer hover:text-purple-400">
-                                    Case Studies
+                                    className="drop-top-menu-item m-2 cursor-pointer hover:text-purple-400">
+                                    {t('Case Studies')}
                                 </Menu.Item>
                             </Link>
 
                             <Link href={'/contact-us'}>
                                 <Menu.Item
                                     as="a"
-                                    className={`m-2 cursor-pointer ${
+                                    className={`drop-top-menu-item m-2 cursor-pointer ${
                                         router.pathname == '/contact-us'
                                             ? 'text-purple-400'
                                             : 'hover:text-purple-400'
                                     }`}>
-                                    Contact Us
+                                    {t('Contact Us')}
                                 </Menu.Item>
                             </Link>
                         </Menu.Items>
@@ -139,12 +142,12 @@ const Header: React.FC = () => {
                     {!session?.user ? (
                         <>
                             <Link href={'/auth/signup'}>
-                                <button className="gradient-btn">
-                                    <a>Try for free</a>
+                                <button className="gradient-btn max-h-[40px] pt-[7px]">
+                                    <a>{t('Try for free')}</a>
                                 </button>
                             </Link>
                             <Link href={'/auth/signin'}>
-                                <button className="disabled-btn">
+                                <button className="disabled-btn max-h-[40px]">
                                     <a className="">Login</a>
                                 </button>
                             </Link>

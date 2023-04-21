@@ -49,10 +49,10 @@ export default function Signup() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Sign Up</title>
+                <title>LiveProshop - Sign Up</title>
             </Head>
 
-            <div className="flex justify-center md:h-[580px]">
+            <div className="flex justify-center md:h-[600px]">
                 <Formik
                     enableReinitialize
                     initialValues={{ email: '', acceptTerms: false, role_id: '2' }}
@@ -61,22 +61,22 @@ export default function Signup() {
                     {(props) => (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="flex-col w-full px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-20 py-14 md:mr-0 md:ml-0">
-                            <div className="w-full font-bold mt-8 md:pr-12 md:w-2/4">
-                                <div className="text-5xl line-height-105percent mb-9">
-                                    {t('Sing up today!')}
+                            className="w-96 mb-5 flex-col w-full px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-20 py-14 md:mr-0 md:ml-0">
+                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-12 md:w-2/4">
+                                <div className="text-5xl line-height-105percent mb-9 text-gray-600">
+                                    {t('Sign up today!')}
                                 </div>
 
-                                <div className="mb-4 text-2xl line-height-105percent w-72">
+                                <div className="mb-6 text-2xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>
 
-                                <div className="font-normal mb-10 text-blue-350 w-60">
+                                <div className="font-normal mb-6 text-blue-350">
                                     {t('registr_descr_small')}
                                 </div>
 
                                 <Link href={'/auth/signin'}>
-                                    <a className="font-bold text-orange-450">
+                                    <a className="font-bold red-yellow-gradient-text mb-8 block">
                                         {t('have_account_descr')}
                                     </a>
                                 </Link>
@@ -86,7 +86,7 @@ export default function Signup() {
                                 {!hideForm && (
                                     <>
                                         <div className="flex mb-14">
-                                            <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                            <div className="w-12 leading-10 text-gray-200 font-bold text-4xl">
                                                 1.
                                             </div>
                                             <div>
@@ -102,7 +102,9 @@ export default function Signup() {
                                                         name="role_id"
                                                         value="1"
                                                     />
-                                                    <label htmlFor="buyer-radio">
+                                                    <label
+                                                        htmlFor="buyer-radio"
+                                                        className="text-blue-350 font-bold">
                                                         {t('Shopper')}
                                                     </label>
                                                 </div>
@@ -115,14 +117,16 @@ export default function Signup() {
                                                         name="role_id"
                                                         value="2"
                                                     />
-                                                    <label htmlFor="seller-radio">
+                                                    <label
+                                                        htmlFor="seller-radio"
+                                                        className="text-blue-350 font-bold">
                                                         {t('Seller')}
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex">
-                                            <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                            <div className="w-12 leading-10 text-gray-200 font-bold text-4xl">
                                                 2.
                                             </div>
                                             <div className="flex flex-col">
@@ -192,7 +196,7 @@ export default function Signup() {
                                                         htmlFor="acceptTerms"
                                                         className="text-xs font-medium">
                                                         {t('I have read and accept the')}{' '}
-                                                        <span className="text-orange-450">
+                                                        <span className="rainbow-gradient-text">
                                                             <a
                                                                 href="https://www.liveproshop.com/terms-and-conditions"
                                                                 target="_blank"
@@ -219,8 +223,8 @@ export default function Signup() {
                                     </>
                                 )}
                                 {hideForm && (
-                                    <div className="grid content-center min-h-[400px]">
-                                        <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                                    <div className="grid content-center md:min-h-[400px]">
+                                        <div className="mb-4 font-bold text-2xl line-height-105percent text-green-500">
                                             {t(
                                                 'We send you confirmation link, please check your mailbox'
                                             )}

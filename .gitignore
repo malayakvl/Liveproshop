@@ -10,3 +10,4 @@ FE/.env
 /BE/public/uploads/users/
 /BE/combined.log
 .idea
+/_DB/

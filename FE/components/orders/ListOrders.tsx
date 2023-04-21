@@ -165,7 +165,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 )}
                             </td>
                             <td className="order-status">
-                                <span className={item.status}>{item.status}</span>
+                                <span className={item.status}>{t(item.status)}</span>
                             </td>
                             <td className="order-date">
                                 {moment(item.created_at).format('DD/MM/YYYY')}
@@ -190,6 +190,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                             </td>
                             <td>{parseTranslation(item.country_json, 'name', locale)}</td>
                             <td>
+                                {/*{baseApiUrl + item.shipping_image}*/}
                                 {item.shipping_image && (
                                     <Image
                                         src={baseApiUrl + item.shipping_image}

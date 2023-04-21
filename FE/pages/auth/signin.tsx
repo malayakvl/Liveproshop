@@ -23,13 +23,13 @@ function Signin({ locale }: { locale: string }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Sign In</title>
+                <title>LiveProshop - Sign In</title>
             </Head>
 
             <div className="flex justify-center">
-                <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-24">
+                <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-14">
                     <div className="mb-2 font-sm">{t('Welcome back!')}</div>
-                    <div className="mb-8 font-bold text-3xl line-height-105percent">
+                    <div className="mb-8 font-bold text-3xl line-height-105percent text-gray-600">
                         {t('Please sign into your account')}
                     </div>
 
@@ -85,7 +85,7 @@ function Signin({ locale }: { locale: string }) {
                                     />
                                     <div className="text-xs">{t('Remember me')}</div>
                                     <Link href={'/auth/restore'}>
-                                        <a className="ml-auto text-xs text-orange-450">
+                                        <a className="ml-auto text-xs font-bold red-yellow-gradient-text">
                                             {t('Forgot password?')}
                                         </a>
                                     </Link>
@@ -127,9 +127,10 @@ function Signin({ locale }: { locale: string }) {
 
                     <div className="mt-3 border-t text-center text-sm">
                         <div className="mb-2 pt-1">
-                            {t('Don’t have an account?')}{' '}
                             <Link href={'/auth/signup'}>
-                                <a className="text-orange-450 font-bold">{t('Sign up here!')}</a>
+                                <a className="red-yellow-gradient-text font-bold">
+                                    {t('Don’t have an account?')} {t('Sign up here!')}
+                                </a>
                             </Link>
                         </div>
                         <div className="text-gray-450">
@@ -138,7 +139,7 @@ function Signin({ locale }: { locale: string }) {
                                 href="https://www.liveproshop.com/terms-and-conditions"
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-orange-450">
+                                className="rainbow-gradient-text">
                                 {t('terms of use')}
                             </a>
                         </div>

@@ -20,7 +20,7 @@ async function startProcess() {
                 for (let i=0; i<results.length;i++) {
                     await axios.get(`${apiUrl}/api/update-session-status?sessionId=${sessionsData[1]}&videoId=${results[i].id}`)
                         .then(function (_response) {
-                            // start process for getting messages and put it to DB
+                            // start process for getting messages and put it to _DB
                             shell.exec(`pm2 start sessionFBcomments.js --name "FB session commentsAPI ${sessionsData[1]}" -- sessionId=${sessionsData[1]} accessToken=${tokenData[1]} providerId=${providerData[1]}`, function(code, output) {
                             });
                             // kill process

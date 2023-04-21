@@ -57,7 +57,7 @@ const SidebarHeader: React.FC = () => {
     };
 
     return (
-        <div className="shadow-bottom pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle">
+        <div className="pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle">
             <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center">
                 {/* <form>
                     <div className="relative">
@@ -153,12 +153,15 @@ const SidebarHeader: React.FC = () => {
                                 </li> */}
                                 <li>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        role="presentation"
-                                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                        <i className="help" />
-                                        <span className="s-caption">{t('Help')}</span>
-                                    </a>
+                                    <Link href="/support">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="help" />
+                                            <span className="s-caption">{t('Help')}</span>
+                                        </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a

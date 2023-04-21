@@ -231,7 +231,7 @@ span.active-subscription {
 span.new {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
 }
-span.payed {
+span.payed, span.paid {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;
 }
 span.shipped {

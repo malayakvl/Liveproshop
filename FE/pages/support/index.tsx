@@ -31,7 +31,7 @@ export default function Support({ locale }: { locale: string }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - {t('Support')}</title>
+                <title>LiveProshop - {t('Support')}</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

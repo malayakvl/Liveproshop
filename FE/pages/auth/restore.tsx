@@ -35,7 +35,7 @@ function Restore({ locale }: { locale: string }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Restore Password</title>
+                <title>LiveProshop - Restore Password</title>
             </Head>
 
             <div className="flex justify-center">
@@ -63,11 +63,12 @@ function Restore({ locale }: { locale: string }) {
                         initialValues={{ email: '' }}
                         validationSchema={SubmitSchema}
                         onSubmit={(values) => {
+                            console.log('here we are');
                             dispatch(restorePasswordAction(values, locale));
                         }}>
                         {(props) =>
                             validEmail === 'yes' ? (
-                                <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                                <div className="mb-4 font-bold text-2xl line-height-105percent text-green-500">
                                     {t('We send you recovery link, please check your mailbox')}
                                 </div>
                             ) : (

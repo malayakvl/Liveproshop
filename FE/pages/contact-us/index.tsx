@@ -35,7 +35,7 @@ function ContactUs({ locale }: { locale: string }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - {t('Contact Us')}</title>
+                <title>LiveProshop - {t('Contact Us')}</title>
             </Head>
 
             <div className="flex justify-center">

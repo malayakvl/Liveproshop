@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactTags from 'react-tag-autocomplete';
 import Select, { StylesConfig } from 'react-select';
 import chroma from 'chroma-js';
-// import dynamic from 'next/dynamic';
 import { prepareAdditionalDropdown } from '../../lib/functions';
 import { prepareConfigValues, prepareAdditionalColorDropdown } from '../../lib/inventoryServices';
 import {
@@ -21,10 +20,6 @@ import {
 import { findTagAction, setIdentAction, updateProductAction } from '../../redux/products/actions';
 import 'suneditor/dist/css/suneditor.min.css';
 import { InventoryPhotos, RenderSizes, RenderVariant } from './index';
-
-// const SunEditor = dynamic(() => import('suneditor-react'), {
-//     ssr: false
-// });
 
 export interface ColourOption {
     readonly value: string;
@@ -171,6 +166,9 @@ function ProductForm({
     const removeSizeHandler = (id: number) => {
         setSelectedSizes(selectedSizes.filter((v: any) => v.value !== id));
     };
+    const clearSizeHandler = () => {
+        setSelectedSizes([]);
+    };
     const showSizeHandler = () => {
         setShowSizeTable(!showSizeTable);
     };
@@ -205,7 +203,6 @@ function ProductForm({
                     : Yup.string()
         })
     });
-    console.log('Add size table', additionalProps.sizesTable);
     return (
         <Formik
             enableReinitialize
@@ -382,6 +379,7 @@ function ProductForm({
                                         <em className="input-tips">{t('Select one')}</em>
                                         <Select
                                             isMulti={props.values.configured}
+                                            isClearable={true}
                                             className={'form-control-dropdown'}
                                             classNamePrefix={'inventory-color'}
                                             options={prepareAdditionalColorDropdown(
@@ -405,9 +403,10 @@ function ProductForm({
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
                                         <em
-                                            className="input-tips cursor-pointer underline"
+                                            className="input-tips underline"
                                             role="presentation"
-                                            onClick={() => setShowSizeTable(!showSizeTable)}>
+                                            // onClick={() => setShowSizeTable(!showSizeTable)}
+                                        >
                                             {t('Select one')}
                                         </em>
                                         {
@@ -415,16 +414,17 @@ function ProductForm({
                                                 sizes={selectedSizes}
                                                 configured={props.values.configured}
                                                 removeSizeHandler={removeSizeHandler}
-                                                // showSizeHandler={showSizeHandler}
+                                                showSizeHandler={showSizeHandler}
+                                                clearSizeHandler={clearSizeHandler}
                                             />
                                         }
                                         {showSizeTable && (
-                                            <table className="text-[10px] absolute bg-white right-0 top-0 z-50">
+                                            <table className="text-[10px] absolute bg-white left-0 top-[40px] z-50">
                                                 <tbody>
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3, 4, 5, 6, 7].map(
+                                                                {[1, 2, 3, 4, 5].map(
                                                                     (num: number) => (
                                                                         <Fragment
                                                                             key={`${size.id}_${num}`}>
@@ -459,7 +459,7 @@ function ProductForm({
                                                                             {!size[
                                                                                 `name_${num}`
                                                                             ] && (
-                                                                                <td className="border p-2 cursor-pointer" />
+                                                                                <td className="border p-2" />
                                                                             )}
                                                                         </Fragment>
                                                                     )

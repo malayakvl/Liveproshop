@@ -25,7 +25,7 @@ export default function Buyers({ session, locale }: { session: any; locale: any 
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Shoppers</title>
+                <title>LiveProshop - Shoppers</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big mb-8">

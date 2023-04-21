@@ -40,7 +40,7 @@ export default function Index({ session }: { session: any }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Training section</title>
+                <title>LiveProshop - Training section</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

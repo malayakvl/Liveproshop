@@ -5,7 +5,7 @@ const appRoute = Router();
 appRoute.get(/.*$/, function (req, res, next) {
     pool.query('SELECT 1 + 1  AS solution', (error) => {
         if (error) {
-            res.render('pages/db-connect', { title: 'No DB connection' });
+            res.render('pages/db-connect', { title: 'No _DB connection' });
         } else {
             next();
         }

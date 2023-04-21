@@ -82,7 +82,7 @@ const FilterStatus: React.FC<any> = () => {
                                 <label
                                     className="text-xs text-blue-350 ml-3 font-bold"
                                     htmlFor={`status_${status}`}>
-                                    {status}
+                                    {t(status)}
                                 </label>
                             </span>
                         ))}

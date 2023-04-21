@@ -1696,3 +1696,68 @@
   level: 'error',
   timestamp: '2023-03-29T19:48:19.865Z'
 }
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-03-29T21:44:38.583Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-03-29T21:44:38.595Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:48:21.531Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:49:16.325Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:50:14.120Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:53:31.168Z'
+}
+{
+  message: "Model error: No such customer: '1'",
+  level: 'error',
+  timestamp: '2023-04-17T10:55:58.319Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-04-17T14:38:45.967Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2023-04-17T14:38:46.031Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-04-17T15:13:19.732Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2023-04-17T15:13:19.802Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-04-17T15:24:14.865Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-04-21T06:03:51.497Z'
+}

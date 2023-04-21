@@ -36,7 +36,7 @@ export default function Password({ hash, locale }: { hash: string; locale: strin
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Restore Password</title>
+                <title>LiveProshop - Restore Password</title>
             </Head>
 
             <div className="flex justify-center">

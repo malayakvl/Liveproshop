@@ -153,5 +153,5 @@ pm2 start sessionsStart.js --name="Check started session"
 Custom starting parse process without FB for test mode only
 
 ```bash
-pm2 start sessionLaunche.js --name "Launch session [DB:sessionId]" -- sessionId=[DB:sessionId]
+pm2 start sessionLaunche.js --name "Launch session [DB:sessionId]" -- sessionId=[_DB:sessionId]
 ```

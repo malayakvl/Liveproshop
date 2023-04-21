@@ -8,7 +8,7 @@ export default function Index({ session }: { session: any }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Test</title>
+                <title>LiveProshop - Test</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

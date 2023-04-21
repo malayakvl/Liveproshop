@@ -10,7 +10,7 @@ export default function Index() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Guide pour commerçant - Section Vente en Live</title>
+                <title>LiveProshop - Guide pour commerçant - Section Vente en Live</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-medium mt-10 text-xl max-w-4xl text-gray-350">
