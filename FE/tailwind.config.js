@@ -10,6 +10,13 @@ module.exports = {
             sans: ['"Montserrat"']
         },
         fontSize: {
+            xsd: [
+                '13px',
+                {
+                    lineHeight: '14px',
+                    letterSpacing: '0.004em'
+                }
+            ],
             xs: [
                 '12px',
                 {

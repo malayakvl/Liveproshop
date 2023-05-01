@@ -23,7 +23,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     <h1>{t('Orders')}</h1>
                 </div>
                 <div
-                    className="text-gray-400"
+                    className="text-gray-400 hidden"
                     dangerouslySetInnerHTML={{
                         __html: t('orders_descr')
                     }}

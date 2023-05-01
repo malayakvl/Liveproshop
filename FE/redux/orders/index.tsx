@@ -9,7 +9,8 @@ import {
     showDateSelectorAction,
     findSellersAction,
     showCancelConfirmationModalAction,
-    clearBase64Action
+    clearBase64Action,
+    setAchiveNameAction
 } from './actions';
 
 const initialState: {
@@ -26,6 +27,7 @@ const initialState: {
     base64Data: string | null;
     tagSellersSuggestions: any[];
     showCancelPopup: boolean;
+    achiveName: string | null;
 } = {
     isFetched: false,
     loading: false,
@@ -44,7 +46,8 @@ const initialState: {
     fileName: '',
     base64Data: null,
     tagSellersSuggestions: [],
-    showCancelPopup: false
+    showCancelPopup: false,
+    achiveName: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -94,6 +97,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             loading: false,
             isFetched: true
+        })
+    },
+    [setAchiveNameAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            achiveName: action.payload
         })
     },
     [findSellersAction]: {

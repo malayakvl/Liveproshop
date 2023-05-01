@@ -13,6 +13,7 @@ declare namespace Orders {
         base64Data: string | null;
         tagSellersSuggestions: any[];
         showCancelPopup: boolean;
+        achiveName: null | string;
     }
 
     interface DataItem {

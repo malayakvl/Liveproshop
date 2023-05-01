@@ -12,7 +12,7 @@ import { inviteUserAction } from '../../redux/user/actions';
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector } from '../../redux/user/selectors';
 
-export default function Signup() {
+export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const hideFormSelector = useSelector(hideRegisterFormSelector);
     type FormData = {
@@ -41,7 +41,7 @@ export default function Signup() {
         if (isFbClicked) {
             accountService.registerFB(roleId);
         } else {
-            dispatch(inviteUserAction(values));
+            dispatch(inviteUserAction(values, locale));
             actions.resetForm();
         }
     };

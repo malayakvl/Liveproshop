@@ -317,7 +317,7 @@
   "Free Shipping": "Free Shipping",
   "Free Shipping Hour(s)": "Free Shipping Hour(s)",
   "support_descr": "Support section allows merchants contact to Proshop admin in case of issue or questions",
-  "settings_descr": "Settings section allows merchants contact to Proshop admin in case of issue or questions",
+  "settings_descr": "Cart duration is a time period during which a shopper can finalize a purchase. Once a cart reaches its expiration, all products contained in the cart are returned to your available inventory. The adding of each new item restarts the timer.\nExample: The cart duration is 2 hours. The live session is about to close in 5 minutes. A shopper writes a comment and an item is added to the cart. This means that the shopper will have 2 hours and not 5 minutes to pay for the order.",
   "Payment Plans": "Payment Plans",
   "payed": "paid",
   "shipped": "shipped",
@@ -442,5 +442,15 @@
   "Features":  "Features",
   "Pricing": "Pricing",
   "Faq": "FAQ",
-  "Case Studies": "Case Studies"
+  "Case Studies": "Case Studies",
+  "canceled": "canceled",
+  "download_pdf": "download PDF",
+  "Orders has been downloaded": "Orders has been downloaded",
+  "how_to_use_chatbot":"Here we will place clear instructions on how to use the chatbot in case merchant would need to add more scenarios",
+  "How can I help you ?": "How can I help you ?",
+  "Your request should have at least 50 characters": "Your request should have at least 50 characters",
+  "Subscribe your issue": "Something happend",
+  "user@domain.com": "user@domain.com",
+  "setting_page_description": "Cart duration is a time period during which a shopper can finalize a purchase. Once a cart reaches its expiration, all products contained in the cart are returned to your available inventory. The adding of each new item restarts the timer.\n",
+  "setting_page_description1": "Example: The cart duration is 2 hours. The live session is about to close in 5 minutes. A shopper writes a comment and an item is added to the cart. This means that the shopper will have 2 hours and not 5 minutes to pay for the order. "
 }

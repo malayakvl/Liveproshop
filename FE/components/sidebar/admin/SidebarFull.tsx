@@ -11,14 +11,36 @@ const SidebarFull: React.FC = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const currRoute = router.route.substring(1);
+    // const node = useRef<HTMLDivElement>(null);
     const { isMobile } = useWindowSize();
+
+    // const closeMenu = () => {
+    //     if (isMobile) {
+    //         dispatch(sidebarCloseAction());
+    //     }
+    // };
+    // useEffect(() => {
+    //     document.addEventListener('mousedown', handleClick);
+    //
+    //     return () => {
+    //         document.removeEventListener('mousedown', handleClick);
+    //     };
+    // }, []);
+
+    // const handleClick = (e: any) => {
+    //     if (node?.current?.contains(e.target) || node?.current === null) {
+    //         return;
+    //     }
+    //     if (isMobile) {
+    //         dispatch(sidebarCloseAction());
+    //     }
+    // };
 
     const closeMenu = () => {
         if (isMobile) {
             dispatch(sidebarCloseAction());
         }
     };
-    console.log('AAAAAA');
 
     return (
         <Fragment>

@@ -27,7 +27,14 @@ const initialState: State.Layouts = {
         [PaginationType.NOTIFICATIONS]: { ...initPagination },
         [PaginationType.PRODUCTS]: {
             ...initPagination,
-            filters: { product_name: '', color_id: [], size_id: [], price: [], quantity: [] }
+            filters: {
+                product_name: '',
+                color_id: [],
+                size_id: [],
+                price: [],
+                quantity: [],
+                material_id: []
+            }
         },
         [PaginationType.CHATBOT]: { ...initPagination },
         [PaginationType.SHIPPING]: { ...initPagination },
@@ -110,7 +117,8 @@ const initialState: State.Layouts = {
             }
         }
     },
-    isSidebarOpen: true,
+    isSidebarOpen: false,
+    isMobileDevice: false,
     isDataLoading: false,
     toasts: [],
     checkedIds: [],

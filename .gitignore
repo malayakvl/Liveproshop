@@ -11,3 +11,4 @@ FE/.env
 /BE/combined.log
 .idea
 /_DB/
+/BE/public/uploads/achives/

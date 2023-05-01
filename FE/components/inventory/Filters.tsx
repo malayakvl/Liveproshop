@@ -1,7 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch } from 'react-redux';
-import { FilterSearch, FilterColor, FilterSize, FilterPrice, FilterQuantity } from './index';
+import {
+    FilterSearch,
+    FilterColor,
+    FilterSize,
+    FilterPrice,
+    FilterQuantity,
+    FilterMaterial
+} from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { setPaginationAction } from '../../redux/layouts';
 import { PaginationType } from '../../constants';
@@ -35,6 +42,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, filterOpen }) => {
                         product_name: '',
                         color_id: [],
                         size_id: [],
+                        material_id: [],
                         price: [],
                         quantity: []
                     },
@@ -85,6 +93,8 @@ const Filters: React.FC<Props> = ({ handleHideFilter, filterOpen }) => {
                 <FilterQuantity />
 
                 <FilterColor />
+
+                <FilterMaterial />
 
                 <FilterSize />
             </div>

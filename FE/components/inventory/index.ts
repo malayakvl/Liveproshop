@@ -9,6 +9,7 @@ export { default as FilterValues } from './FilterValues';
 export { default as SyncProduct } from './Sync';
 export { default as FilterSearch } from './filters/FilterSearch';
 export { default as FilterColor } from './filters/FilterColor';
+export { default as FilterMaterial } from './filters/FilterMaterial';
 export { default as FilterSize } from './filters/FilterSize';
 export { default as FilterPrice } from './filters/FilterPrice';
 export { default as FilterQuantity } from './filters/FilterQuantity';

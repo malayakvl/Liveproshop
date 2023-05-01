@@ -9,14 +9,15 @@ import {
     setTimeout,
 } from 'timers/promises';
 import axios from "axios";
+import * as zipLib from "zip-a-folder";
 
-async function createInvoice (invoice, path) {
+async function createInvoice (invoice, path, locale) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
-        await generateHeader(doc, invoice.seller.data);
-        await generateCustomerInformation(doc, invoice);
-        await generateInvoiceTable(doc, invoice);
-        await generateFooter(doc);
+        await generateHeader(doc, invoice.seller.data, locale);
+        await generateCustomerInformation(doc, invoice, locale);
+        await generateInvoiceTable(doc, invoice, locale);
+        await generateFooter(doc, locale);
 
         doc.end();
         doc.pipe(fs.createWriteStream(path));
@@ -28,25 +29,27 @@ async function createInvoice (invoice, path) {
 }
 
 
-async function generateHeader(doc, seller) {
-    // console.log(seller);
+async function generateHeader(doc, seller, locale) {
+    const { default: t } = await import(`../sender/order-${locale}.js`);
+
     doc
-        .image("./public/images/logo.png", 90, 45, { width: 90 })
+        .image("./public/images/logo.png", 40, 45, { width: 160 })
         .fillColor("#444444")
         .fontSize(20)
         .text("", 170, 0)
         .fontSize(10)
-        .text(seller.company_name, 300, 50, { align: "right" })
-        .text(seller.address_line_1, 300, 65, { align: "right" })
-        .text(`${seller.post_code}, ${seller.city}`, 300, 80, { align: "right" })
-        .text(seller.phone, 300, 95, { align: "right" })
+        .text(t['address_line_1'], 300, 50, { align: "right" })
+        .text(t['address_line_2'], 300, 65, { align: "right" })
+        .text(t['address_line_3'], 300, 80, { align: "right" })
+        // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
-async function generateCustomerInformation(doc, invoice) {
+async function generateCustomerInformation(doc, invoice, locale) {
+    const { default: t } = await import(`../sender/order-${locale}.js`);
     doc
         .fillColor("#444444")
         .fontSize(20)
-        .text("Invoice", 50, 160);
+        .text(t["Invoice"], 50, 160);
 
     generateHr(doc, 185);
 
@@ -54,13 +57,13 @@ async function generateCustomerInformation(doc, invoice) {
 
     doc
         .fontSize(10)
-        .text("Numéro de facture:", 50, customerInformationTop)
+        .text(t["Invoice number:"], 50, customerInformationTop)
         .font("Helvetica-Bold")
         .text(invoice.invoice_nr, 150, customerInformationTop)
         .font("Helvetica")
-        .text("Invoice Date:", 50, customerInformationTop + 15)
+        .text(t["Invoice Date:"], 50, customerInformationTop + 15)
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
-        .text("Balance Due:", 50, customerInformationTop + 30)
+        .text(t["Balance Due:"], 50, customerInformationTop + 30)
         .text(
             formatCurrency(invoice.paid),
             150,
@@ -85,19 +88,20 @@ async function generateCustomerInformation(doc, invoice) {
     generateHr(doc, 252);
 }
 
-function generateInvoiceTable(doc, invoice) {
+async function generateInvoiceTable(doc, invoice, locale) {
     let i;
     const invoiceTableTop = 330;
+    const { default: t } = await import(`../sender/order-${locale}.js`);
 
     doc.font("Helvetica-Bold");
     generateTableRow(
         doc,
         invoiceTableTop,
-        "Item",
-        "Description",
-        "Unit Cost",
-        "Quantity",
-        "Line Total"
+        t["Item"],
+        t["Description"],
+        t["Unit Cost"],
+        t["Quantity"],
+        t["Line Total"]
     );
     generateHr(doc, invoiceTableTop + 20);
     doc.font("Helvetica");
@@ -124,7 +128,7 @@ function generateInvoiceTable(doc, invoice) {
             subtotalPosition,
             "",
             "",
-            "Subtotal",
+            t["Subtotal"],
             "",
             formatCurrency(invoice.subtotal)
         );
@@ -135,7 +139,7 @@ function generateInvoiceTable(doc, invoice) {
             paidToDatePosition,
             "",
             "",
-            "Shipping Amount",
+            t["Shipping Amount"],
             "",
             formatCurrency(invoice.shipping_amount)
         );
@@ -146,7 +150,7 @@ function generateInvoiceTable(doc, invoice) {
             vatToDatePosition,
             "",
             "",
-            "VAT",
+            t["VAT"],
             "",
             formatCurrency((invoice.subtotal*15/100))
         );
@@ -159,7 +163,7 @@ function generateInvoiceTable(doc, invoice) {
             duePosition,
             "",
             "",
-            "Total Payment",
+            t["Total Payment"],
             "",
             formatCurrency(invoice.paid)
         );
@@ -167,11 +171,12 @@ function generateInvoiceTable(doc, invoice) {
     }
 }
 
-function generateFooter(doc) {
+async function generateFooter(doc, locale) {
+    const { default: t } = await import(`../sender/order-${locale}.js`);
     doc
         .fontSize(10)
         .text(
-            "Payment is due within 15 days. Thank you for your business.",
+            t["Payment is due within 15 days. Thank you for your business."],
             50,
             780,
             { align: "center", width: 500 }
@@ -514,9 +519,10 @@ class Order {
 
 
 
-    async generatePdf (orderNumber, userId, user) {
+    async generatePdf (orderNumber, userId, user, locale, type='') {
         const client = await pool.connect();
-
+        const selectedLocale = !locale ? locale = 'fr' : locale;
+        const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
 
         try {
@@ -533,16 +539,17 @@ class Order {
                 case UserRole.BUYER:
                     _filters.buyer_id = userId;
             }
-
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
-
-            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
+            const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
+            if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
+                fs.mkdirSync(dirArchiveFolder);
+            }
+            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)) {
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -554,7 +561,7 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     error: null
                 }
@@ -588,9 +595,7 @@ class Order {
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
                 };
 
-
-
-                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`);
+                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`, locale);
 
                 await setTimeout(4000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
@@ -675,6 +680,44 @@ class Order {
                 return {success: false, error: 'No record find'};
             }
 
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async bulkDownload(ids, user, locale) {
+        const client = await pool.connect();
+        try {
+            const promisesQueries = [];
+            ids.forEach(async (id) => {
+                const order = await client.query(`SELECT * FROM data.orders WHERE id=${id};`);
+                promisesQueries.push(this.generatePdf(order.rows[0].order_number, user.id, user, locale, 'download'));
+            });
+            if (promisesQueries.length) {
+                await Promise.all(promisesQueries);
+            }
+            await setTimeout(4000);
+            const tmpTime = Date.now();
+            try {
+                await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
+            } catch (e) {
+               console.log(e.message)
+            }
+            await setTimeout(4000);
+            return {
+                success: true,
+                error: null,
+                achive: `${process.env.API_URL}${process.env.DB_DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`
+            };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

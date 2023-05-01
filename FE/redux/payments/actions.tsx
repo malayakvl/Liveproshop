@@ -149,3 +149,7 @@ export const fetchFilerItems: any = createAction(
 export const showPopupAction: any = createAction('payments/SHOW_POPUP');
 export const setEmptyFormAction: any = createAction('payments/EMPTY_FORM');
 export const showDateSelectorAction: any = createAction('payments/SHOW_DATE_POPUP');
+export const initIdsAction: any = createAction('payments/INIT_IDS');
+export const checkIdsAction: any = createAction('payments/CHECK_IDS');
+export const checkAllIdsAction: any = createAction('payments/CHECK_ALL_IDS');
+export const uncheckAllIdsAction: any = createAction('payments/UNCHECK_ALL_IDS');

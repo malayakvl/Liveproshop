@@ -18,6 +18,19 @@
 .btn-big {
   @apply red-yellow-gradient text-white text-2xl font-bold px-3 md:px-7 py-3 rounded-lg whitespace-nowrap;
 }
+.view-back {
+  @apply red-yellow-gradient-text text-xs font-bold relative pl-[25px];
+
+  &:before {
+    content: "";
+    background-image: url("../../public/images/arrow-right.svg");
+    width: 25px;
+    height: 25px;
+    transform: rotate(180deg);
+    @apply absolute -top-1 left-0;
+  }
+}
+
 .view-all {
   @apply red-yellow-gradient-text text-xs font-bold relative;
 
@@ -31,6 +44,9 @@
 }
 .cancel {
   @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5;
+}
+.danger {
+  @apply bg-red-400 font-bold text-sm text-white rounded-lg px-4 py-2.5;
 }
 
 .action {

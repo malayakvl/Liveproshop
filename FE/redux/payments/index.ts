@@ -6,7 +6,11 @@ import {
     setEmptyFormAction,
     showPopupAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    checkIdsAction,
+    initIdsAction,
+    checkAllIdsAction,
+    uncheckAllIdsAction
 } from './actions';
 
 const initialState: {
@@ -19,11 +23,13 @@ const initialState: {
     showPopup: boolean;
     fileterData: any;
     showDateSelector: boolean;
+    checkedIds: any;
 } = {
     isFetched: false,
     loading: false,
     count: 0,
     items: [],
+    checkedIds: [],
     item: null,
     methods: [],
     showPopup: false,
@@ -130,6 +136,42 @@ const ACTION_HANDLERS: any = {
             ...state,
             showDateSelector: action.payload
         })
+    },
+    [initIdsAction]: (
+        state: State.Payments,
+        action: Type.ReduxAction<State.Payments>
+    ): State.Payments => {
+        return <Payments.Root>(<unknown>{
+            ...state,
+            checkedIds: action.payload
+        });
+    },
+    [checkIdsAction]: (
+        state: State.Payments,
+        action: Type.ReduxAction<State.Payments>
+    ): State.Payments => {
+        return <Payments.Root>{
+            ...state,
+            checkedIds: state.checkedIds.map((data) =>
+                (data as any).id === action.payload ? { ...data, checked: !data.checked } : data
+            )
+        };
+    },
+    [checkAllIdsAction]: (state: State.Payments): State.Payments => {
+        return <Payments.Root>{
+            ...state,
+            checkedIds: state.checkedIds.map((data) =>
+                (data as any).id ? { ...data, checked: true } : data
+            )
+        };
+    },
+    [uncheckAllIdsAction]: (state: State.Layouts): State.Layouts => {
+        return <Layouts.Root>{
+            ...state,
+            checkedIds: state.checkedIds.map((data) =>
+                (data as any).id ? { ...data, checked: false } : data
+            )
+        };
     }
 };
 
@@ -140,7 +182,11 @@ export {
     showPopupAction,
     setEmptyFormAction,
     fetchFilerItems,
-    showDateSelectorAction
+    showDateSelectorAction,
+    initIdsAction,
+    checkAllIdsAction,
+    uncheckAllIdsAction,
+    checkIdsAction
 };
 
 // ------------------------------------

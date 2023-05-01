@@ -9,7 +9,6 @@ interface State {
 
 export default function useWindowSize() {
     const MaxMobileWidth = 991;
-
     const [windowSize, setWindowSize] = React.useState<State>({
         width: window.innerWidth,
         height: window.innerHeight,

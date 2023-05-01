@@ -9,6 +9,7 @@ import { showLoaderAction } from '../../../redux/layouts/actions';
 import Head from 'next/head';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import Link from 'next/link';
 
 const base64toBlob = (data: string) => {
     // Cut the prefix `data:application/pdf;base64` from the raw base 64
@@ -25,7 +26,7 @@ const base64toBlob = (data: string) => {
     return new Blob([out], { type: 'application/pdf' });
 };
 
-export default function Index() {
+export default function Index({ locale }: { locale: string }) {
     // const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const dispatch = useDispatch();
     const orderFetched: boolean = useSelector(orderFetchedSelector);
@@ -41,7 +42,8 @@ export default function Index() {
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
-        dispatch(fetchOrderPdfAction(orderNumber));
+        console.log(123, locale);
+        dispatch(fetchOrderPdfAction(orderNumber, locale));
     }, []);
 
     useEffect(() => {
@@ -69,14 +71,19 @@ export default function Index() {
             </Head>
 
             {base64Data && (
-                <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
-                    <div style={{ height: '750px' }}>
-                        <Viewer
-                            fileUrl={url}
-                            // plugins={[defaultLayoutPluginInstance]}
-                        />
-                    </div>
-                </Worker>
+                <div>
+                    <Link href={'/orders'}>
+                        <a className="view-back">Back</a>
+                    </Link>
+                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
+                        <div style={{ height: '750px' }}>
+                            <Viewer
+                                fileUrl={url}
+                                // plugins={[defaultLayoutPluginInstance]}
+                            />
+                        </div>
+                    </Worker>
+                </div>
             )}
         </>
     );

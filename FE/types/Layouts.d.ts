@@ -14,9 +14,10 @@ declare namespace Layouts {
             dashboard: Pagination;
         };
         isSidebarOpen: boolean;
+        isMobileDevice: boolean | null;
         isDataLoading: boolean;
         toasts: Toast[];
-        checkedIds: CheckedIds[];
+        checkedIds: checkedIds[];
         modalConfirmationMeta: ModalConfirmationMeta | null;
         switchHeader: boolean;
         switchToggled: boolean;
@@ -38,7 +39,7 @@ declare namespace Layouts {
         filters?: any;
         meta?: Meta;
     }
-    interface CheckedIds {
+    interface checkedIds {
         id: number;
         checked: boolean;
     }

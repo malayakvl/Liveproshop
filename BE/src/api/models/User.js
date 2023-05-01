@@ -919,15 +919,16 @@ class User {
         try {
             const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
             const res = await client.query(query, [userId]);
+            console.log(res.rows[0]);
 
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
-                    res.rows[0].type = res.rows[0].order_timer.days ? 'd' : 'h';
-                    res.rows[0].order_timer = res.rows[0].order_timer.hours ?? res.rows[0].order_timer.days ?? '';
+                    res.rows[0].type = res.rows[0].order_timer.days ? 'd' : res.rows[0].order_timer.hours ? 'h' : 'm';
+                    res.rows[0].order_timer = res.rows[0].order_timer.hours ?? res.rows[0].order_timer.days ?? res.rows[0].order_timer.minutes;
                 }
 
                 if (res.rows[0].free_shipping_timer) {
-                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? '';
+                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? res.rows[0].free_shipping_timer.minutes;
                 }
             }
 
@@ -1052,8 +1053,7 @@ class User {
                 free_shipping_timer = `${data.free_shipping_timer || 0} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
 
-            const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : 'day'}${data.order_timer > 1 ? 's' : ''}`;
-
+            const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : data.type === 'd' ? 'day' : 'minute'}${data.order_timer > 1 ? 's' : ''}`;
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
                 VALUES ($1, $2, $3, $4, $5) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                     order_timer = EXCLUDED.order_timer,

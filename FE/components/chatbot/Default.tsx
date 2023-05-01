@@ -25,7 +25,7 @@ const DefaultMessages: React.FC<any> = ({ user }) => {
     return (
         <>
             <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10">
-                <h2 className="dark-blue-header">
+                <h2 className="dark-blue-header w-full">
                     {t('System Replies')}
                     <span className="text-gray-180 font-normal text-sm"> ({t('Mandatory')})</span>
                 </h2>

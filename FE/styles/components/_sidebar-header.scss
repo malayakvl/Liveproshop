@@ -35,13 +35,14 @@
 .corner {
   background-image: url("../../public/images/trianlge.svg");
   top: -8px;
+  right:10px;
   width: 21px;
   height: 21px;
   @apply absolute;
 }
 
 .profile-menu {
-  @apply absolute bg-white rounded-lg max-w-[145px] w-[145px] top-10 -left-3 p-4 text-xs z-30;
+  @apply -left-6 absolute bg-white rounded-lg max-w-[145px] w-[145px] top-10 md:-left-3 p-4 text-xs z-30;
 
   li {
     @apply mb-3;
@@ -146,17 +147,20 @@
     &:before {
       content: '';
       top:0;
-      left:10px;
+      left:15px;
       position: absolute;
       background-image: url("../../public/images/lang-icon.svg");
       background-repeat: no-repeat;
-      display: block;
-      width: 20px;
-      height: 20px;
+      background-size: contain;
+      display: none;
+      width: 18px;
+      height: 18px;
+
+      @apply md:block;
     }
     &:after {
       content: '';
-      right:0px;
+      right:0;
       top:6px;
       position: absolute;
       background-image: url("../../public/images/lang-arrow.svg");

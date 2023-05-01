@@ -12,8 +12,7 @@ export default function SidebarLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
-    // const { isMobile } = useWindowSize();
-
+    // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
         if (user.subscription_expired) {
             if (user.status === 'incomplete') {
@@ -41,13 +40,15 @@ export default function SidebarLayout({ children }: { children: any }) {
             {user.role_id === 2 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
             <div
-                className={`relative h-full mt-4 md:mt-8 md:mb-10 ${
-                    !isSidebarOpen ? 'md:ml-8' : 'md:ml-64'
-                } md:pl-4 md:mr-8`}>
-                <div className="absolute top-3 left-4 md:hidden flex items-center">
+                className={`relative h-full mt-4 md:mt-8 md:mb-10 ml-[40px] md:ml-4 md:pl-4 md:mr-8 ${
+                    !isSidebarOpen ? 'side-margin' : 'side-with-sidebar'
+                }`}>
+                <div className="absolute md:hidden flex items-center">
                     <button
                         className="outline-none mobile-menu-button"
-                        onClick={() => dispatch(toggleSidebarAction())}>
+                        onClick={() => {
+                            dispatch(toggleSidebarAction());
+                        }}>
                         <svg
                             width="24"
                             height="40"

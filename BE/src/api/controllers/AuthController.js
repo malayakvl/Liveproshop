@@ -196,7 +196,6 @@ class AuthController {
 
     async authInvite(req, res) {
         const data = req.body;
-
         const user = await userModel.findUserByEmail(data.email);
 
         if (user) {

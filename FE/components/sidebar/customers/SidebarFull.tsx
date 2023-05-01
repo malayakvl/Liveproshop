@@ -20,6 +20,7 @@ const SidebarFull: React.FC = () => {
             dispatch(sidebarCloseAction());
         }
     };
+    console.log('isMobile', isMobile);
 
     return (
         <Fragment>
@@ -121,6 +122,9 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
+            <li role="presentation" className="separator-line">
+                <div className="separator" />
+            </li>
             <li
                 role="presentation"
                 className={currRoute === 'support' ? 'active' : ''}
@@ -138,7 +142,7 @@ const SidebarFull: React.FC = () => {
                 onClick={() => closeMenu()}>
                 <Link href={'/guides/liveselling'}>
                     <a>
-                        <i className="support" />
+                        <i className="guides" />
                         <span className="s-caption">{t('Guides')}</span>
                     </a>
                 </Link>

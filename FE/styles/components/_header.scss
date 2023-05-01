@@ -7,9 +7,24 @@
 }
 
 .language-block {
-  @apply absolute top-[-40px] md:sticky;
+  @apply absolute top-[-35px] right-[-65px] md:right-0 md:sticky;
 }
 .drop-top-menu-item {
   border-color: transparent;
   --tw-divide-opacity: 0 !important;
+}
+
+.mobile-menu-button {
+  @apply ml-[15px] mt-[-5px] md:ml-0 md:mt-0;
+}
+
+.brand-mobile {
+  background-image: url("../../public/images/logo.svg");
+  background-size: 180px auto;
+  width: 180px;
+  height: 32px;
+  min-height: 32px;
+  text-indent: -99999px;
+  white-space: nowrap;
+  @apply block mx-4 mt-[3px] mb-10 ml-[45px] md:hidden;
 }

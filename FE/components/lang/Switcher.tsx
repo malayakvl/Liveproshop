@@ -45,7 +45,7 @@ export default function LangSwitcher() {
                     <span>{locale}</span>
                 </button>
                 {showLangMenu && (
-                    <div className="lang-menu" ref={node}>
+                    <div className="lang-menu shadow-2xl" ref={node}>
                         <div className="corner" />
                         <ul>
                             {locales.map((locale: string) => (

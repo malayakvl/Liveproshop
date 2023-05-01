@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { itemsCountSelector, paginatedItemsSelector } from '../../redux/payments/selectors';
@@ -9,6 +9,10 @@ import moment from 'moment';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatCurrency } from '../../lib/functions';
+import { checkIdsAction, initIdsAction } from '../../redux/layouts';
+import { checkedIdsSelector } from '../../redux/layouts/selectors';
+import { showCancelConfirmationModalAction } from '../../redux/orders';
+import { bulkDownloadAction, bulkShippingAction } from '../../redux/orders/actions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -19,7 +23,7 @@ const ListTransactions: React.FC = () => {
 
     const items: Payments.DataItem[] = useSelector(paginatedItemsSelector);
     const count: number = useSelector(itemsCountSelector);
-    // const checkedIds = useSelector(checkedIdsSelector);
+    const checkedIds = useSelector(checkedIdsSelector);
 
     // const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
     // const [filterOpen, setFilterOpen] = useState(false);
@@ -28,16 +32,37 @@ const ListTransactions: React.FC = () => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);
 
+    const sendStatusRequest = useCallback(
+        (status: string) => {
+            if (status === 'shipped') {
+                return dispatch(bulkShippingAction());
+            } else if (status === 'cancel') {
+                return dispatch(showCancelConfirmationModalAction(true));
+            } else {
+                return dispatch(bulkDownloadAction());
+            }
+        },
+        [dispatch]
+    );
+
+    useEffect(() => {
+        const setupChecked: any = [];
+        items.forEach((item: any) => {
+            setupChecked.push({ id: item.id, checked: false });
+        });
+        dispatch(initIdsAction(setupChecked));
+    }, [items]);
+
     return (
         <div className="mt-7">
             <DataTable
-                hideBulk
                 paginationType={PaginationType.PAYMENTS}
                 totalAmount={count}
+                sendStatusRequest={sendStatusRequest}
                 sendRequest={sendRequest}>
                 {items?.map((item) => (
                     <tr key={item.id}>
-                        {/* <td>
+                        <td>
                             <input
                                 className="float-checkbox cursor-pointer"
                                 type="checkbox"
@@ -48,7 +73,7 @@ const ListTransactions: React.FC = () => {
                                     false
                                 }
                             />
-                        </td> */}
+                        </td>
                         <td>
                             <div className="text-orange-450">{item.order_number}</div>
                         </td>

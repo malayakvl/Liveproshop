@@ -15,6 +15,7 @@ const FilterValues: React.FC<any> = (locale: string) => {
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.PRODUCTS)
     );
+    console.log('Filters', filters);
 
     const [dataFetched, setDataFetched] = useState(false);
     const [filterAdditionals, setFilterAdditionals] = useState({});
@@ -103,7 +104,6 @@ const FilterValues: React.FC<any> = (locale: string) => {
             })
         );
     };
-
     return (
         <>
             {dataFetched && (

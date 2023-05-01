@@ -100,7 +100,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                 <div className="flex flex-row flex-wrap w-full">
                     <Totals totals={data.totals} roleId={user.role_id} />
 
-                    <div className="w-1/2 flex flex-col md:w-full lg:w-1/4 xl:w-2/5 justify-center align-middle pl-4 border-l">
+                    <div className="w-full flex flex-col md:w-full lg:w-1/4 xl:w-2/5 justify-center align-middle md:pl-4 md:border-l">
                         <span className="font-bold text-sm text-blue-350">{t('Period')}</span>
                         <div className="p-3 flex">
                             <Image src="/images/calendar.svg" width={20} height={18} />
