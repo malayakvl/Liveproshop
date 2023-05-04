@@ -32,16 +32,16 @@ type PriceProps = {
 };
 
 const Price = ({
-                   planId,
-                   name,
-                   price,
-                   desc,
-                   sale,
-                   buttonText,
-                   imageSrc,
-                   disabled,
-                   selected
-               }: PriceProps) => {
+    planId,
+    name,
+    price,
+    desc,
+    sale,
+    buttonText,
+    imageSrc,
+    disabled,
+    selected
+}: PriceProps) => {
     const t = useTranslations();
     const user = useSelector(userSelector);
     return (
@@ -80,7 +80,6 @@ const Price = ({
                 } w-full mt-7 justify-self-end`}>
                 {buttonText}
             </button>
-
         </div>
     );
 };
@@ -131,10 +130,10 @@ export default function PricingOld({ locale }: { locale: any }) {
     }, [stripeClientSecret]);
 
     const Tick = ({
-                      disabled,
-                      className,
-                      selected
-                  }: {
+        disabled,
+        className,
+        selected
+    }: {
         disabled?: boolean;
         className?: string;
         selected?: boolean;

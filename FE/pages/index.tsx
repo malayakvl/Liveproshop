@@ -2,11 +2,8 @@ import Head from 'next/head';
 import FullLayout from '../components/layout/FullLayout';
 import { getSession } from 'next-auth/client';
 import Main from '../components/main/index';
-import { useRouter } from 'next/router';
 
 export default function Home() {
-    const router = useRouter();
-
     return (
         <div className="main-bg container xl:max-w-[1400px] mx-auto">
             <Head>

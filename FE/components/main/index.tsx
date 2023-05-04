@@ -1,11 +1,9 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import React, { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 function Main() {
     const t = useTranslations();
-    const dispatch = useDispatch();
 
     return (
         <>

@@ -3,15 +3,13 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
-// import ProviderBtns from '../../components/auth/ProviderBtns';
 import { InputText, InputPassword } from '../../components/_form';
 import { signIn } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import { Formik, Field } from 'formik';
 import Head from 'next/head';
-import Image from 'next/image';
 import { accountService } from '../../_services';
-import React from "react";
+import React from 'react';
 
 function Signin({ locale }: { locale: string }) {
     const t = useTranslations();

@@ -18,7 +18,9 @@ const Header: React.FC = () => {
     return (
         <header
             className={`w-full ${
-                router.pathname == '/' || router.pathname == '/faq' || router.pathname == '/features'
+                router.pathname == '/' ||
+                router.pathname == '/faq' ||
+                router.pathname == '/features'
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
             }`}>
