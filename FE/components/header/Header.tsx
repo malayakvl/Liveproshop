@@ -102,7 +102,9 @@ const Header: React.FC = () => {
                             2xl:mx-7 my-4 lg:my-0 font-bold text-sm"
                         id="menu">
                         <Link href={'/'}>
-                            <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">{t('Features')}</a>
+                            <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">
+                                {t('Features')}
+                            </a>
                         </Link>
 
                         <Link href={'/pricing'}>
@@ -117,7 +119,9 @@ const Header: React.FC = () => {
                         </Link>
 
                         <Link href={'/'}>
-                            <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">{t('Case Studies')}</a>
+                            <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">
+                                {t('Case Studies')}
+                            </a>
                         </Link>
 
                         <Link href={'/faq'}>

@@ -374,7 +374,9 @@ function Main() {
                 </Link>
                 <Link href={'/'}>
                     <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                        <span className="text-[20px] inline-block min-w-[220px]">{t('I want to know more!')}</span>
+                        <span className="text-[20px] inline-block min-w-[220px]">
+                            {t('I want to know more!')}
+                        </span>
                     </a>
                 </Link>
             </div>
