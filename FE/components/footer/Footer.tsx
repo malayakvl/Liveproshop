@@ -100,7 +100,9 @@ export default function Footer() {
                                     Terms
                                 </a>
                             </div>
-                            <div className="text-white">@ {moment().format('YYYY')} Liveproshop</div>
+                            <div className="text-white">
+                                @ {moment().format('YYYY')} Liveproshop
+                            </div>
                         </div>
                     </div>
                 </div>

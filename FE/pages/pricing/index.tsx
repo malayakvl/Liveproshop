@@ -62,7 +62,8 @@ const Price = ({
             </div>
             <div className="min-h-[150px] text-sm text-center">{desc}</div>
             <div className=" text-base lg:text-4xl font-bold min-h-[6rem]">
-                {formatCurrency(price)}<span className="text-sm md:text-base"> /month</span>
+                {formatCurrency(price)}
+                <span className="text-sm md:text-base"> /month</span>
 
                 {sale > 0 && <div className="sm:block text-xs font-bold">{sale}% of sale</div>}
             </div>
