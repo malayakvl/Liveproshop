@@ -1,11 +1,9 @@
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
-import _ from 'lodash';
 import Link from 'next/link';
 
 function Features() {
     const t = useTranslations();
-    const [showMoreAnswer, setShowMoreAnswer] = useState<any>({});
 
     return (
         <>
@@ -81,13 +79,15 @@ function Features() {
                                 <div className="w-1/2">
                                     <h4 className="text-[24px] text-gray-350 font-bold">
                                         {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                        Maximize the average cart value with "Pay only one shipping fee"
+                                        Maximize the average cart value with "Pay only one shipping
+                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                        fee"
                                     </h4>
                                     <div className="text-blue-350 text-[16px] leading-[24px] mt-[16px] mr-[20px]">
                                         You first charge the shipping fees along with checkout, but
-                                        still enable them to add articles to the cart for a while. This
-                                        encourages them to add additional articles from your shop and
-                                        raise average cart value.
+                                        still enable them to add articles to the cart for a while.
+                                        This encourages them to add additional articles from shop
+                                        shop and raise average cart value.
                                     </div>
                                 </div>
                             </div>
@@ -138,7 +138,9 @@ function Features() {
                         </Link>
                         <Link href={'/'}>
                             <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">{t('I want to know more!')}</span>
+                                <span className="text-[20px] inline-block min-w-[220px]">
+                                    {t('I want to know more!')}
+                                </span>
                             </a>
                         </Link>
                     </div>

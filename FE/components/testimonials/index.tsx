@@ -1,12 +1,9 @@
 import { useTranslations } from 'next-intl';
-import React, { useState } from 'react';
-import _ from 'lodash';
-import Link from "next/link";
-
+import React from 'react';
+import Link from 'next/link';
 
 function Testimonials() {
     const t = useTranslations();
-    const [showMoreAnswer, setShowMoreAnswer] = useState<any>({});
 
     return (
         <>
@@ -79,9 +76,7 @@ function Testimonials() {
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
                             <div>
-                                <div className="blue-message">
-                                    How was the beginning?
-                                </div>
+                                <div className="blue-message">How was the beginning?</div>
                             </div>
                         </div>
                         <div className="flex items-end mt-20">
@@ -184,7 +179,6 @@ function Testimonials() {
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
                         </div>
-
                     </div>
 
                     {/*=======================================================*/}
@@ -207,7 +201,9 @@ function Testimonials() {
                         </Link>
                         <Link href={'/'}>
                             <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">{t('I want to know more!')}</span>
+                                <span className="text-[20px] inline-block min-w-[220px]">
+                                    {t('I want to know more!')}
+                                </span>
                             </a>
                         </Link>
                     </div>
@@ -218,5 +214,3 @@ function Testimonials() {
 }
 
 export default Testimonials;
-
-
