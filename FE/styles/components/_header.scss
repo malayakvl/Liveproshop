@@ -3,11 +3,14 @@
   background-repeat: no-repeat;
   background-size: contain;
 
-  @apply w-[200px] h-[35px] inline-block ml-[50px] lg:ml-0;
+  height: 35px;
+  width: 230px;
+
+  @apply ml-[30px] w-[230px] h-[35px] md:ml-[50px] md:w-[250px] md:h-[40px] inline-block xl:ml-0;
 }
 
 .language-block {
-  @apply absolute top-[-35px] right-[-65px] md:right-0 md:sticky;
+  @apply absolute top-[-80px] right-0 md:mt-[5px] md:right-0 md:sticky;
 }
 .drop-top-menu-item {
   border-color: transparent;

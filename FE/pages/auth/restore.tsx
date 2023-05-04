@@ -63,7 +63,6 @@ function Restore({ locale }: { locale: string }) {
                         initialValues={{ email: '' }}
                         validationSchema={SubmitSchema}
                         onSubmit={(values) => {
-                            console.log('here we are');
                             dispatch(restorePasswordAction(values, locale));
                         }}>
                         {(props) =>

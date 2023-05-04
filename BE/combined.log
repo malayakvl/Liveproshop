@@ -24525,3 +24525,173 @@
   level: 'info',
   timestamp: '2023-04-30T15:19:49.723Z'
 }
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-01T06:14:22.405Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T11:38:12.690Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T11:38:12.692Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T11:39:37.148Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T11:39:37.148Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T14:33:16.903Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T14:33:16.906Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-01T14:40:49.784Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-01T15:19:30.672Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-01T15:30:02.143Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T16:41:29.903Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-01T16:41:29.903Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-03T10:13:39.920Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-03T11:50:07.306Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-03T16:57:30.301Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-03T19:46:23.718Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-03T19:46:23.718Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T05:58:20.030Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T05:58:20.033Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-04T06:12:54.491Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T06:23:05.997Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T06:23:05.999Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T06:45:39.732Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T06:45:39.733Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T06:53:58.255Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T06:53:58.256Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:00:14.392Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:00:14.393Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:04:58.910Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:04:58.912Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:09:57.814Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:09:57.815Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:15:20.520Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-05-04T07:15:20.521Z'
+}

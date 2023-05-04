@@ -5,6 +5,13 @@ module.exports = {
     purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
     darkMode: 'class', // or 'media' or 'class'
     theme: {
+        screens: {
+            sm: '640px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+            '2xl': '1536px'
+        },
         fontFamily: {
             montserrat: ['Montserrat'],
             sans: ['"Montserrat"']
@@ -61,6 +68,7 @@ module.exports = {
                     350: '#99ABCE'
                 },
                 gray: {
+                    50: '#A8AFBD',
                     100: '#F8F8F8',
                     200: '#C5CAD3',
                     150: '#ECEFF1',

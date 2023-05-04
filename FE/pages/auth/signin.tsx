@@ -11,6 +11,7 @@ import { Formik, Field } from 'formik';
 import Head from 'next/head';
 import Image from 'next/image';
 import { accountService } from '../../_services';
+import React from "react";
 
 function Signin({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -27,7 +28,7 @@ function Signin({ locale }: { locale: string }) {
             </Head>
 
             <div className="flex justify-center">
-                <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-14">
+                <div className="w-80 p-8 mt-10 rounded-lg bg-white md:w-96 md:p-10 pb-14">
                     <div className="mb-2 font-sm">{t('Welcome back!')}</div>
                     <div className="mb-8 font-bold text-3xl line-height-105percent text-gray-600">
                         {t('Please sign into your account')}
@@ -115,14 +116,17 @@ function Signin({ locale }: { locale: string }) {
                     <button
                         className="image-btn bg-social-facebook text-white"
                         onClick={() => accountService.loginFB()}>
-                        <Image
-                            width={24}
-                            height={24}
-                            src="/images/social/facebook-solid.svg"
-                            layout="fixed"
-                            alt=""
-                        />
-                        <div className="text-sm ml-2.5">{t('Continue with Facebook')}</div>
+                        {/*<Image*/}
+                        {/*    width={24}*/}
+                        {/*    height={24}*/}
+                        {/*    src="/images/social/facebook-solid.svg"*/}
+                        {/*    layout="fixed"*/}
+                        {/*    alt=""*/}
+                        {/*/>*/}
+                        <div className="text-[12px] md:text-sm w-full text-center bg-facebook-btn">
+                            {t('Continue with Facebook')}
+                        </div>
+                        {/*<div className="text-sm bg-facebook-btn">{t('Continue with Facebook')}</div>*/}
                     </button>
 
                     <div className="mt-3 border-t text-center text-sm">

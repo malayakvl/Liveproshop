@@ -1,14 +1,22 @@
 import Head from 'next/head';
 import FullLayout from '../components/layout/FullLayout';
 import { getSession } from 'next-auth/client';
+import Main from '../components/main/index';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+    const router = useRouter();
+
     return (
-        <div>
+        <div className="main-bg container xl:max-w-[1400px] mx-auto">
             <Head>
                 <title>LiveProshop</title>
                 <meta name="description" content="LiveProshop portal" />
             </Head>
+
+            <div className="main-layout">
+                <Main />
+            </div>
         </div>
     );
 }
@@ -18,13 +26,28 @@ export async function getServerSideProps(context: any) {
     const { req, locale } = context;
     const session = await getSession({ req });
 
-    if (!session) {
-        return {
-            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
-        };
-    } else {
+    if (session) {
         return {
             redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}dashboard` }
         };
+    } else {
+        return {
+            props: {
+                messages: {
+                    ...require(`../messages/main/${locale}.json`),
+                    ...require(`../messages/${locale}.json`)
+                }
+            }
+        };
     }
+
+    // if (!session) {
+    //     return {
+    //         redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+    //     };
+    // } else {
+    //     return {
+    //         redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}dashboard` }
+    //     };
+    // }
 }

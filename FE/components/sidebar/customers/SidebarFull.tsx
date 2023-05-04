@@ -20,7 +20,6 @@ const SidebarFull: React.FC = () => {
             dispatch(sidebarCloseAction());
         }
     };
-    console.log('isMobile', isMobile);
 
     return (
         <Fragment>

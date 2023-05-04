@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { providers, getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import * as Yup from 'yup';
 import { Field, Formik, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -52,7 +51,7 @@ export default function Signup({ locale }: { locale: string }) {
                 <title>LiveProshop - Sign Up</title>
             </Head>
 
-            <div className="flex justify-center md:h-[600px]">
+            <div className="flex justify-center md:h-[620px]">
                 <Formik
                     enableReinitialize
                     initialValues={{ email: '', acceptTerms: false, role_id: '2' }}
@@ -61,13 +60,13 @@ export default function Signup({ locale }: { locale: string }) {
                     {(props) => (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="w-96 mb-5 flex-col w-full px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-20 py-14 md:mr-0 md:ml-0">
-                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-12 md:w-2/4">
-                                <div className="text-5xl line-height-105percent mb-9 text-gray-600">
+                            className="w-80 mb-5 p-8 flex-col w-full md:px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[900px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
+                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-10 md:w-2/4 md:flex md:flex-col md:justify-center">
+                                <div className="text-3xl md:text-5xl line-height-105percent mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
 
-                                <div className="mb-6 text-2xl line-height-105percent text-gray-600">
+                                <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>
 
@@ -85,7 +84,7 @@ export default function Signup({ locale }: { locale: string }) {
                             <div className="w-full md:pl-12 md:border-l md:w-2/4">
                                 {!hideForm && (
                                     <>
-                                        <div className="flex mb-14">
+                                        <div className="flex mb-10">
                                             <div className="w-12 leading-10 text-gray-200 font-bold text-4xl">
                                                 1.
                                             </div>
@@ -93,7 +92,7 @@ export default function Signup({ locale }: { locale: string }) {
                                                 <div className="font-bold mb-2.5">
                                                     {t('How would you like to Sign up as?')} :
                                                 </div>
-                                                <div className="text-gray-180 text-xs mb-4">
+                                                <div className="text-gray-180 text-xs mb-2">
                                                     <Field
                                                         onClick={() => setRoleId(2)}
                                                         id="buyer-radio"
@@ -135,14 +134,7 @@ export default function Signup({ locale }: { locale: string }) {
                                                         setIsFbClicked(true);
                                                     }}
                                                     className="image-btn bg-social-facebook text-white">
-                                                    <Image
-                                                        width={24}
-                                                        height={24}
-                                                        src="/images/social/facebook-solid.svg"
-                                                        layout="fixed"
-                                                        alt=""
-                                                    />
-                                                    <div className="text-[12px] md:text-sm  ml-2.5">
+                                                    <div className="text-[12px] md:text-sm w-full text-center bg-facebook-btn">
                                                         {t('Continue with Facebook')}
                                                     </div>
                                                 </button>

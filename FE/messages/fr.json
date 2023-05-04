@@ -394,7 +394,6 @@
   "Confirm password": "Confirmer le mot de passe",
   "Continue": "Continuer",
   "Please create a Password": "Créer un mot de passe",
-  "Contact Us": "Contactez-nous",
   "Column": "Colonne",
   "Rule": "Règle",
   "Example": "Exemple",
@@ -422,10 +421,12 @@
   "M/green that costs $60 and 3 items are available in stock": "M/vert qui coûte 60€ et 3 articles sont disponibles en stock",
   "L/green that costs $70 and 4 items are available in stock": "L/vert qui coûte 70€ et 4 articles sont disponibles en stock",
   "Try for free": "Essayer gratuitement",
-  "Case Studies": "Essayer gratuitement",
+  "Case Studies": "Études de cas",
   "canceled": "annulé",
   "Features":  "Fonctionnalités",
   "Pricing": "Tarifs",
+  "Contact Us": "Contactez nous",
+  "Faq": "FAQ",
   "download_pdf": "télécharger le PDF",
   "Orders has been downloaded": "Les commandes ont été téléchargées",
   "how_to_use_chatbot":"Nous plaçons ici des instructions claires sur la façon d'utiliser le chatbot, au cas où vous avez besoin d'ajouter d'autres scénarios.",
@@ -435,5 +436,6 @@
   "Subscribe your issue": "Quelque chose s'est passé",
   "user@domain.com": "user@domain.com",
   "setting_page_description": "La durée du panier est la période pendant laquelle un acheteur peut finaliser un achat. Lorsqu'un panier arrive à expiration, tous les produits qu'il contient sont remis dans votre stock. L'ajout de chaque nouvel article redémarre le compte à rebours.\n",
-  "setting_page_description1": "Exemple : La durée du panier est de 2 heures. Le live est sur le point de se terminer dans 5 minutes. Un acheteur écrit un commentaire et un article est ajouté au panier. Cela signifie que l'acheteur disposera de 2 heures et non de 5 minutes pour payer sa commande."
+  "setting_page_description1": "Exemple : La durée du panier est de 2 heures. Le live est sur le point de se terminer dans 5 minutes. Un acheteur écrit un commentaire et un article est ajouté au panier. Cela signifie que l'acheteur disposera de 2 heures et non de 5 minutes pour payer sa commande.",
+  "Enter contact email": "Entrez l'e-mail de contact"
 }
