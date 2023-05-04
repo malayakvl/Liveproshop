@@ -3,13 +3,13 @@ import Head from 'next/head';
 // import Image from 'next/image';
 // import Router from 'next/router';
 import { getSession } from 'next-auth/client';
-import { useTranslations } from 'next-intl';
+// import { useTranslations } from 'next-intl';
 import FullLayout from '../../components/layout/FullLayout';
 import React from 'react';
 import Faq from '../../components/faq';
 
-export default function Index({ locale }: { locale: string }) {
-    const t = useTranslations();
+export default function Index() {
+    // const t = useTranslations();
 
     return (
         <div className="main-bg container xl:max-w-[1400px] mx-auto">
