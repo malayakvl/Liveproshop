@@ -436,7 +436,7 @@
   "Change qty": "Change qty",
   "Run": "Run",
   "Most popular": "Most popular",
-  "It only takes 30 second to get started` in messages.": "It only takes 30 second to get started` in messages.",
+  "It only takes 30 second to get started": "It only takes 30 second to get started",
   "Try for free": "Try for free",
   "Features":  "Features",
   "Pricing": "Pricing",
@@ -452,5 +452,19 @@
   "Subscribe your issue": "Something happend",
   "user@domain.com": "user@domain.com",
   "setting_page_description": "Cart duration is a time period during which a shopper can finalize a purchase. Once a cart reaches its expiration, all products contained in the cart are returned to your available inventory. The adding of each new item restarts the timer.\n",
-  "setting_page_description1": "Example: The cart duration is 2 hours. The live session is about to close in 5 minutes. A shopper writes a comment and an item is added to the cart. This means that the shopper will have 2 hours and not 5 minutes to pay for the order. "
+  "setting_page_description1": "Example: The cart duration is 2 hours. The live session is about to close in 5 minutes. A shopper writes a comment and an item is added to the cart. This means that the shopper will have 2 hours and not 5 minutes to pay for the order. ",
+  "Testimonials": "Testimonials",
+  "Contact us": "Contact us",
+  "Customer stories": "Customer stories",
+  "Support Center": "Support Center",
+  "Try it for free today!": "Try it for free today!",
+  "only_30_sec": "It only takes 30 seconds to get started",
+  "Pricing that fits your size": "Pricing that fits your size",
+  "Basic": "Basic",
+  "Business": "Business",
+  "Platinum": "Platinum",
+  "What is the differens between plans": "What is the differens between plans",
+  "Frequently asked questions": "Frequently asked questions",
+  "question_before_started": "Have some questions before you get started? Check out our FAQ below. If you still have questions, book a call with one of our experts"
+
 }

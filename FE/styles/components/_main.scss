@@ -119,10 +119,12 @@
     border: 2px solid #EAECF0;
     box-shadow: 0px 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     border-radius: 36px;
-    @apply p-[15px] lg:p-[25px] min-h-[230px];
+    @apply p-[15px] lg:p-[25px] min-h-[256px];
   }
   .no-shadowed-block-tip {
     border: 2px solid transparent;
+    box-shadow: none;
+    background-color: transparent;
     //box-shadow: 0px 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     //border-radius: 36px;
     @apply mb-[20px] p-[25px] min-h-[200px] md:mb-auto;
@@ -137,7 +139,7 @@
       position: absolute;
       background-image: url(../../public/images/main/arrow-btn.svg);
 
-      @apply w-[12px] h-[22px] right-[-30px] top-[2px];
+      @apply w-[12px] h-[22px] right-[-20px] top-[2px];
     }
   }
 
@@ -233,8 +235,9 @@
     min-width: 340px;
     display: block;
     margin-bottom: 16px;
+    cursor: pointer;
 
-    @apply md:max-w-[300px] md:min-w-[300px];
+    @apply mx-auto md:max-w-[300px] md:min-w-[300px] lg:mx-0;
 
     &:hover {
       box-shadow: 0 10px 20px rgba(170, 177, 180, 0.5);
@@ -280,7 +283,7 @@
   }
 
   .testim-descript {
-    @apply md:max-w-[400px] md:ml-[20px] lg:ml-[60px] float-left lg:max-w-[600px];
+    @apply mt-[20px] md:max-w-[400px] md:ml-[20px] lg:mt-0 lg:ml-[60px] float-left lg:max-w-[600px];
 
     .header {
       @apply font-bold text-[24px] leading-[32px] text-gray-350;
@@ -305,6 +308,6 @@
   }
 
   .full-features {
-    @apply ml-[-30px] md:ml-0;
+    @apply ml-[-30px] md:ml-0 lg:ml-[-10px];
   }
 }

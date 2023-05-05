@@ -1,10 +1,14 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import _ from 'lodash';
 
 function Main() {
     const t = useTranslations();
-
+    const [activeNumber, setActiveNumber] = useState(0);
+    const changeFeedback = (num: number) => {
+        setActiveNumber(num);
+    };
     return (
         <>
             <div className="flex">
@@ -20,7 +24,8 @@ function Main() {
                     <span className="text-[14px] leading-[22px] mt-[20px] lg:mt-[40px] block text-gray-350 lg:text-[20px] lg:leading-[30px]">
                         <b>{t('100+ people')}</b> {t('started a free trial in the last 30 days')}
                     </span>
-                    <span className="text-[25px] mt-[30px] lg:mt-[50px] lg:text-[30px] font-medium block lg:mt-[60px] xl:mt-[90px] text-gray-350">
+                    {/*<span className="text-[25px] mt-[30px] lg:mt-[50px] lg:text-[30px] font-medium block lg:mt-[60px] xl:mt-[90px] text-gray-350">*/}
+                    <span className="text-[25px] mt-[30px] font-medium block lg:mt-[60px] xl:mt-[90px] text-gray-350">
                         {t('It only takes 30 seconds to get started')}
                     </span>
                     <div className="mt-[20px] lg:mt-[28px] flex flex-col md:flex-row">
@@ -48,19 +53,18 @@ function Main() {
                     <div className="screen-example"></div>
                 </div>
                 <div className="w-full md:w-2/3 xl:w-1/2">
-                    Quick features view
+                    {t('Quick features view')}
                     <div className="md:pr-[135px] lg:pr-[315px] hand-big-bg">
                         <h1 className="red-yellow-gradient-text text-[24px] leading-[32px] font-bold lg:text-[60px] lg:leading-[72px]">
-                            Make order placement smoother
+                            {t('Make order placement smoother')}
                         </h1>
                         <span className="text-blue-350 font-[18px] leading-[28px] font-medium block mt-[30px]">
-                            With Live Pro shop, a mere comment is enough for a client to place an
-                            order and live a great shopping experience
+                            {t('place_order_descr')}
                         </span>
                         <div className="clear-both" />
                         <Link href={'/'}>
                             <button className="white-shadow md:mt-[28px] lg:mt-[48px] md:w-auto disabled-btn max-h-[40px]">
-                                <a className="">See full list of features</a>
+                                <a className="">{t('See full list of features')}</a>
                             </button>
                         </Link>
                     </div>
@@ -72,12 +76,10 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-1">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Leave behind cart abandonment
+                                {t('tip_caption_1')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                If clients do not proceed to checkout on time, the order is not
-                                processed and the products are iimmediately available again for
-                                other users.
+                                {t('tip_caption_1')}
                             </span>
                         </div>
                     </div>
@@ -87,10 +89,10 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-2">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Decide how long the cart remains valid
+                                {t('tip_caption_2')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                Set an expiration time and maximixe customer impulse-buying.
+                                {t('tips_2')}
                             </span>
                         </div>
                     </div>
@@ -100,11 +102,10 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-3">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Set the free shipping threshold
+                                {t('tip_caption_3')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                Establish the amount users have to reach in order to qualify for
-                                free shipping.
+                                {t('tips_3')}
                             </span>
                         </div>
                     </div>
@@ -114,11 +115,10 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-4">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Pay only once shipping fees
+                                {t('tip_caption_4')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                And enable them to add more articles with no extra shipping costs
-                                until the shipping starts.
+                                {t('tips_4')}
                             </span>
                         </div>
                     </div>
@@ -128,11 +128,10 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-5">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Automatic invoicing
+                                {t('tip_caption_5')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                No more hours spent after an exhausting live to manually generate
-                                numerous invoices.
+                                {t('tips_5')}
                             </span>
                         </div>
                     </div>
@@ -142,11 +141,10 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-6">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Real-time inventory and stock management
+                                {t('tip_caption_6')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                No more hours spent after an exhausting live to manually generate
-                                numerous invoices.
+                                {t('tips_6')}
                             </span>
                         </div>
                     </div>
@@ -156,11 +154,10 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-7">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Shipping and payment methods flexibility
+                                {t('tip_caption_7')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                Adapt yourself to different shipping and payment methods according
-                                to client needs.
+                                {t('tips_7')}
                             </span>
                         </div>
                     </div>
@@ -170,24 +167,23 @@ function Main() {
                     <div className="shadowed-block-tip tip tip-8">
                         <div className="pl-[90px]">
                             <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                Create a waiting list
+                                {t('tip_caption_8')}
                             </h4>
                             <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                Stop losing orders from ghost carts and assign them to the waiting
-                                list.
+                                {t('tips_8')}
                             </span>
                         </div>
                     </div>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip">
+                    <div className="no-shadowed-block-tip tip">
                         <div className="pl-[0px]">
                             <Link href={'/'}>
-                                <button className="white-shadow md:w-auto disabled-btn max-h-[40px] bg-white min-h-[60px] min-w-[300px] lg:mt-[70px]">
+                                <button className="white-shadow md:w-auto disabled-btn max-h-[40px] bg-white min-h-[60px] min-w-[300px] lg:mt-[50px] lg:ml-[50px]">
                                     <a className="text-[20px] text-gray-50 see-full-link ">
                                         <span className="full-features md:ml-0 inline-b">
-                                            See full list of features
+                                            {t('See full list of features')}
                                         </span>
                                     </a>
                                 </button>
@@ -197,35 +193,34 @@ function Main() {
                 </div>
             </div>
             <h3 className="red-yellow-gradient-text text-[24px] leading-[32px] md:text-[60px] font-bold md:leading-[72px] mt-[60px] mb-[60px] text-center w-full">
-                Discover our platform`s advantages
+                {t('platform_advantage')}
             </h3>
 
             <div className="grid gap-[32px] sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-3  mt-[80px]">
                 <div className="text-center d-tip-1">
                     <h5 className="text-[20px] w-full text-center font-bold text-gray-350 md:text-[24px]">
-                        Increase sales 300+%
+                        {t('increase_sales')}
                     </h5>
                     <span className="text-sm text-blue-350 md:text-base md:pl-20 md:pr-20 text-center mt-3 block">
-                        With a sales system as intuitive as Live Pro Shop, it`s possible!
+                        {t('increase_sales_descr')}
                     </span>
                 </div>
 
                 <div className="text-center d-tip-2">
                     <h5 className="text-[20px] w-full text-center font-bold text-gray-350 md:text-[24px]">
-                        Save up to 3 hours
+                        {t('save_up')}
                     </h5>
                     <span className="text-sm text-blue-350 md:text-base md:pl-20 md:pr-20 text-center mt-3 block">
-                        An intense live with many sales involves hours of repitive administrative
-                        management. Automate the process and forget about those long hours.
+                        {t('save_up_descr')}
                     </span>
                 </div>
 
                 <div className="text-center d-tip-3">
                     <h5 className="text-[20px] w-full text-center font-bold text-gray-350 md:text-[24px]">
-                        70% or the users could dedicate more time to their community
+                        {t('dedicate_cap')}
                     </h5>
                     <span className="text-sm text-blue-350 md:text-base md:pl-20 md:pr-20 text-center mt-3 block">
-                        And the other 30% spent the whole time for themselves and their family.
+                        {t('dedicate_cap_descr')}
                     </span>
                 </div>
             </div>
@@ -236,11 +231,10 @@ function Main() {
             <div className="main-big-round-white mt-[80px] lg:mt-[160px] p-[40px] bg-white rocked-lady">
                 <div className="lg:pl-[385px] xl:pl-[585px]">
                     <h2 className="red-yellow-gradient-text font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] md:mt-[50px]">
-                        Best of all, Live Pro Shop works with all your favorite sites!
+                        {t('best_caption')}
                     </h2>
                     <span className="font-medium text-[16px] leading-[24px] block mt-[20px] text-blue-350">
-                        Live pro shop gathers the best partners to increase revenue and strengthen
-                        customer loyalty through live video sales.
+                        {t('best_descr')}
                     </span>
                     <div className="grid gap-[36px] grid-cols-2 xl:grid-cols-8 mt-[40px]">
                         <div>
@@ -299,58 +293,52 @@ function Main() {
             {/*=================== CUSTOMER STORIES ==================*/}
             {/*=======================================================*/}
             <span className="w-full text-center block font-bold text-blue-350">
-                Customer stories
+                {t('Customer stories')}
             </span>
             <h3 className="red-yellow-gradient-text font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center">
-                You too, be like our clients
+                {t('you_to_client')}
             </h3>
 
             <div className="mt-[40px] w-full block">
                 <div className="thumb float-left"></div>
-                <div className="float-left">
-                    <div className="testimon-block user-1 active">
-                        <div className="photo photo-1"></div>
-                        <div className="user-info">
-                            <span className="user-name">Sabrina M.</span>
-                            <span className="text">Lalylook Boutique</span>
+                <div className="lg:float-left">
+                    {_.times(3, (i) => (
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                        <div
+                            key={i}
+                            className={`testimon-block user-1 ${i == activeNumber ? 'active' : ''}`}
+                            onClick={() => changeFeedback(i)}>
+                            <div className={`photo photo-${i + 1}`}></div>
+                            <div className="user-info">
+                                <span className="user-name">{t(`arrayOfObjects.${i}.person`)}</span>
+                                <span className="text">{t(`arrayOfObjects.${i}.boutique`)}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div className="testimon-block user-1">
-                        <div className="photo photo-2"></div>
-                        <div className="user-info">
-                            <span className="user-name">Sabrina M.</span>
-                            <span className="text">Lalylook Boutique</span>
-                        </div>
-                    </div>
-                    <div className="testimon-block user-1">
-                        <div className="photo photo-3"></div>
-                        <div className="user-info">
-                            <span className="user-name">Sabrina M.</span>
-                            <span className="text">Lalylook Boutique</span>
-                        </div>
-                    </div>
+                    ))}
                 </div>
                 <div className="testim-descript">
-                    <div className="header">
-                        Perfect tool for business owner that utilizes live streaming for retail
-                        sales
-                    </div>
-                    <div className="raiting"></div>
-                    <div className="descr">
-                        <p>
-                            I love all the features of LiveProShop, but my favorite is that my
-                            customers have access and control to their cart. They can see what
-                            they`ve ordered.
-                        </p>
-                        <p>
-                            Being able to up load products quickly, check customers purchase
-                            history, tracking my sales, inventory break down and so much more...
-                        </p>
-                        <p>
-                            It has completely revolutionized the way that we do are selling and it`s
-                            all very simple to use.
-                        </p>
-                    </div>
+                    {_.times(3, (i) => (
+                        <div className={` ${i == activeNumber ? '' : 'hidden'}`} key={i}>
+                            <div className="header">{t(`arrayOfObjects.${i}.title`)}</div>
+                            <div className="raiting"></div>
+                            <div
+                                className="descr"
+                                dangerouslySetInnerHTML={{
+                                    __html: t(`arrayOfObjects.${i}.text`)
+                                }}
+                            />
+                        </div>
+                    ))}
+                    {/*<div className="header">*/}
+                    {/*    Perfect tool for business owner that utilizes live streaming for retail*/}
+                    {/*    sales*/}
+                    {/*</div>*/}
+                    {/*<div className="raiting"></div>*/}
+                    {/*<div className="descr">*/}
+                    {/*    <p>*/}
+                    {/*        This software has transformed how I do Live Sales. Live Pro Shop tracks the customers' comments so I don't have to and my customers LOVE it!*/}
+                    {/*    </p>*/}
+                    {/*</div>*/}
                 </div>
             </div>
 

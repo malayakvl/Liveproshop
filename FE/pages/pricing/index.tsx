@@ -204,8 +204,8 @@ export default function Pricing({ locale }: { locale: any }) {
                         {t('Pricing that fits your size')}
                     </div>
                     <div>
-                        {t('Pricing built for businesses of all sizes.')}{' '}
-                        <b>{t("Always know what you'll pay.")}</b>
+                        {t('Pricing built for businesses of all sizes')}{' '}
+                        <b>{t("Always know what you'll pay")}</b>
                     </div>
                 </div>
 
@@ -383,11 +383,7 @@ export default function Pricing({ locale }: { locale: any }) {
                 <div className="mt-16 lg:mt-28 text-center">
                     <div className="text-xs font-bold">{t('Support')}</div>
                     <div className="mb-3 font-bold text-4xl">{t('Frequently asked questions')}</div>
-                    <div>
-                        {t(
-                            'Have some questions before you get started? Check out our FAQ below. If you still have questions, book a call with one of our experts'
-                        )}
-                    </div>
+                    <div>{t('question_before_started')}</div>
                 </div>
 
                 <div className="w-full mt-12 lg:mt-16 mb-20 lg:mb-28 grid grid-cols-1 gap-x-2 gap-y-12 md:grid-cols-2 lg:gap-x-16 lg:gap-y-16 lg:grid-cols-3 ">
@@ -555,7 +551,8 @@ export async function getServerSideProps(context: any) {
             // session,
             locale,
             messages: {
-                ...require(`../../messages/${locale}.json`)
+                ...require(`../../messages/${locale}.json`),
+                ...require(`../../messages/pricing/${locale}.json`)
             }
         }
     };
