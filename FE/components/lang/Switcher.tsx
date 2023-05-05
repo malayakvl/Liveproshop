@@ -35,8 +35,8 @@ export default function LangSwitcher() {
     };
 
     return (
-        <div className="relative min-w-max">
-            <div className="language-block inline-block text-right dropdown">
+        <div className="relative w-full bordered md:w-auto">
+            <div className="language-block inline-block text-right">
                 <button
                     className="btn-langs"
                     onClick={() => {
@@ -45,7 +45,7 @@ export default function LangSwitcher() {
                     <span>{locale}</span>
                 </button>
                 {showLangMenu && (
-                    <div className="lang-menu" ref={node}>
+                    <div className="lang-menu shadow-2xl" ref={node}>
                         <div className="corner" />
                         <ul>
                             {locales.map((locale: string) => (

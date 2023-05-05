@@ -31,7 +31,7 @@ export default function Support({ locale }: { locale: string }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - {t('Support')}</title>
+                <title>LiveProshop - {t('Support')}</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">
@@ -69,7 +69,7 @@ export default function Support({ locale }: { locale: string }) {
                             <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
                                 <InputText
                                     icon={null}
-                                    placeholder="user@domain.com"
+                                    placeholder=""
                                     props={props}
                                     label={t('Email to respond')}
                                     tips={null}
@@ -81,7 +81,7 @@ export default function Support({ locale }: { locale: string }) {
                                     props={props}
                                     label={t('Describe the issue')}
                                     icon={null}
-                                    placeholder={'Something happend...'}
+                                    placeholder=""
                                     name="message"
                                     style=""
                                 />

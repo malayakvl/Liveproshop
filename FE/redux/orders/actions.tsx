@@ -122,6 +122,34 @@ export const bulkShippingAction: any = createAction(
                 });
         }
 );
+export const bulkDownloadAction: any = createAction(
+    'products/BULK_DOWNLOAD',
+    async () =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/orders/bulk-download`,
+                    { data: JSON.stringify(state.layouts.checkedIds) },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async (result) => {
+                    dispatch(setAchiveNameAction(result.data.achive));
+                    dispatch(showLoaderAction(false));
+                    dispatch(setSuccessToastAction('Orders has been downloaded'));
+                    dispatch(fetchItemsAction());
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.message));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 export const bulkCancelAction: any = createAction(
     'orders/BULK_CANCEL',
     async () =>
@@ -178,14 +206,14 @@ export const fetchItemAction: any = createAction(
 
 export const fetchOrderPdfAction: any = createAction(
     'orders/FETCH_ORDER_PDF',
-    async (id: string) =>
+    async (id: string, locale: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ orderFetched: boolean; fileName: string; base64Data: string }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/create-order/${id}`, {
+            const res = await axios.get(`${baseUrl}/create-order/${id}/${locale}`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
@@ -223,3 +251,4 @@ export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');
 export const showCancelConfirmationModalAction: any = createAction(
     'orders/CANCEL_CONFIRMATION_ORDER'
 );
+export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');

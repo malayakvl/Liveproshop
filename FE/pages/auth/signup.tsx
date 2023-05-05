@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { providers, getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import * as Yup from 'yup';
 import { Field, Formik, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +11,7 @@ import { inviteUserAction } from '../../redux/user/actions';
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector } from '../../redux/user/selectors';
 
-export default function Signup() {
+export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const hideFormSelector = useSelector(hideRegisterFormSelector);
     type FormData = {
@@ -41,7 +40,7 @@ export default function Signup() {
         if (isFbClicked) {
             accountService.registerFB(roleId);
         } else {
-            dispatch(inviteUserAction(values));
+            dispatch(inviteUserAction(values, locale));
             actions.resetForm();
         }
     };
@@ -49,10 +48,10 @@ export default function Signup() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Sign Up</title>
+                <title>LiveProshop - Sign Up</title>
             </Head>
 
-            <div className="flex justify-center md:h-[580px]">
+            <div className="flex justify-center md:h-[620px]">
                 <Formik
                     enableReinitialize
                     initialValues={{ email: '', acceptTerms: false, role_id: '2' }}
@@ -61,22 +60,22 @@ export default function Signup() {
                     {(props) => (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="flex-col w-full px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-20 py-14 md:mr-0 md:ml-0">
-                            <div className="w-full font-bold mt-8 md:pr-12 md:w-2/4">
-                                <div className="text-5xl line-height-105percent mb-9">
-                                    {t('Sing up today!')}
+                            className="w-80 mb-5 p-8 flex-col w-full md:px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[900px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
+                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-10 md:w-2/4 md:flex md:flex-col md:justify-center">
+                                <div className="text-3xl md:text-5xl line-height-105percent mb-9 text-gray-600">
+                                    {t('Sign up today!')}
                                 </div>
 
-                                <div className="mb-4 text-2xl line-height-105percent w-72">
+                                <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>
 
-                                <div className="font-normal mb-10 text-blue-350 w-60">
+                                <div className="font-normal mb-6 text-blue-350">
                                     {t('registr_descr_small')}
                                 </div>
 
                                 <Link href={'/auth/signin'}>
-                                    <a className="font-bold text-orange-450">
+                                    <a className="font-bold red-yellow-gradient-text mb-8 block">
                                         {t('have_account_descr')}
                                     </a>
                                 </Link>
@@ -85,15 +84,15 @@ export default function Signup() {
                             <div className="w-full md:pl-12 md:border-l md:w-2/4">
                                 {!hideForm && (
                                     <>
-                                        <div className="flex mb-14">
-                                            <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                        <div className="flex mb-10">
+                                            <div className="w-12 leading-10 text-gray-200 font-bold text-4xl">
                                                 1.
                                             </div>
                                             <div>
                                                 <div className="font-bold mb-2.5">
                                                     {t('How would you like to Sign up as?')} :
                                                 </div>
-                                                <div className="text-gray-180 text-xs mb-4">
+                                                <div className="text-gray-180 text-xs mb-2">
                                                     <Field
                                                         onClick={() => setRoleId(2)}
                                                         id="buyer-radio"
@@ -102,7 +101,9 @@ export default function Signup() {
                                                         name="role_id"
                                                         value="1"
                                                     />
-                                                    <label htmlFor="buyer-radio">
+                                                    <label
+                                                        htmlFor="buyer-radio"
+                                                        className="text-blue-350 font-bold">
                                                         {t('Shopper')}
                                                     </label>
                                                 </div>
@@ -115,14 +116,16 @@ export default function Signup() {
                                                         name="role_id"
                                                         value="2"
                                                     />
-                                                    <label htmlFor="seller-radio">
+                                                    <label
+                                                        htmlFor="seller-radio"
+                                                        className="text-blue-350 font-bold">
                                                         {t('Seller')}
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="flex">
-                                            <div className="w-16 leading-10 text-gray-200 font-bold text-5xl">
+                                            <div className="w-12 leading-10 text-gray-200 font-bold text-4xl">
                                                 2.
                                             </div>
                                             <div className="flex flex-col">
@@ -131,14 +134,7 @@ export default function Signup() {
                                                         setIsFbClicked(true);
                                                     }}
                                                     className="image-btn bg-social-facebook text-white">
-                                                    <Image
-                                                        width={24}
-                                                        height={24}
-                                                        src="/images/social/facebook-solid.svg"
-                                                        layout="fixed"
-                                                        alt=""
-                                                    />
-                                                    <div className="text-[12px] md:text-sm  ml-2.5">
+                                                    <div className="text-[12px] md:text-sm w-full text-center bg-facebook-btn">
                                                         {t('Continue with Facebook')}
                                                     </div>
                                                 </button>
@@ -192,7 +188,7 @@ export default function Signup() {
                                                         htmlFor="acceptTerms"
                                                         className="text-xs font-medium">
                                                         {t('I have read and accept the')}{' '}
-                                                        <span className="text-orange-450">
+                                                        <span className="rainbow-gradient-text">
                                                             <a
                                                                 href="https://www.liveproshop.com/terms-and-conditions"
                                                                 target="_blank"
@@ -219,8 +215,8 @@ export default function Signup() {
                                     </>
                                 )}
                                 {hideForm && (
-                                    <div className="grid content-center min-h-[400px]">
-                                        <div className="mb-4 font-bold text-2xl line-height-105percent w-72 text-green-500">
+                                    <div className="grid content-center md:min-h-[400px]">
+                                        <div className="mb-4 font-bold text-2xl line-height-105percent text-green-500">
                                             {t(
                                                 'We send you confirmation link, please check your mailbox'
                                             )}

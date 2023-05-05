@@ -68,9 +68,12 @@ const DataTable: React.FC<Props> = ({
     }
 
     if (paginationType === PaginationType.ORDERS && user.role_id === 2) {
-        dropdownOptions = ['shipped', 'cancel'];
+        dropdownOptions = ['shipped', 'cancel', 'download_pdf'];
     }
 
+    if (paginationType === PaginationType.PAYMENTS && user.role_id === 2) {
+        dropdownOptions = ['download_pdf'];
+    }
     const dispatch = useDispatch();
     const { limit, sort, column, offset, query, filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(paginationType)
@@ -127,7 +130,10 @@ const DataTable: React.FC<Props> = ({
             if (action === 'copy' && sendCopyRequest) {
                 sendCopyRequest();
             }
-            if ((action === 'shipped' || action === 'cancel') && sendStatusRequest) {
+            if (
+                (action === 'shipped' || action === 'cancel' || action === 'download_pdf') &&
+                sendStatusRequest
+            ) {
                 sendStatusRequest(action);
             }
             // setSelectBulkAction(null);

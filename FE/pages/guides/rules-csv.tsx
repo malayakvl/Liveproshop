@@ -10,7 +10,7 @@ export default function Index() {
         <>
             <Head>
                 <title>
-                    Amadeo CRM - {t('Guides')} - {t('rules_csv')}
+                    LiveProshop - {t('Guides')} - {t('rules_csv')}
                 </title>
             </Head>
 

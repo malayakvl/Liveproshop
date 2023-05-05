@@ -13,7 +13,7 @@ const config = {
 if (process.env.NODE_ENV === 'development') {
     logger.log(
         'info',
-        'DB connection settings:',
+        '_DB connection settings:',
         { message: JSON.stringify(config) }
     );
 }
@@ -24,7 +24,7 @@ pool.on('error', (err) => {
     if (process.env.NODE_ENV === 'development') {
         logger.log(
             'error',
-            'DB connection error:',
+            '_DB connection error:',
             { message: err }
         );
     }

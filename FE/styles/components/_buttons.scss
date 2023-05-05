@@ -1,6 +1,6 @@
 .gradient-btn {
   box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
-  @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2.5
+  @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-4 py-2
 }
 .gradient-btn-small {
   box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
@@ -16,8 +16,21 @@
 }
 
 .btn-big {
-  @apply red-yellow-gradient text-white text-2xl font-bold px-3 md:px-7 py-3 rounded-lg whitespace-nowrap;
+  @apply red-yellow-gradient text-white md:text-2xl font-bold px-3 md:px-7 py-3 rounded-lg whitespace-nowrap;
 }
+.view-back {
+  @apply red-yellow-gradient-text text-xs font-bold relative pl-[25px];
+
+  &:before {
+    content: "";
+    background-image: url("../../public/images/arrow-right.svg");
+    width: 25px;
+    height: 25px;
+    transform: rotate(180deg);
+    @apply absolute -top-1 left-0;
+  }
+}
+
 .view-all {
   @apply red-yellow-gradient-text text-xs font-bold relative;
 
@@ -31,6 +44,9 @@
 }
 .cancel {
   @apply bg-gray-180 font-bold text-sm text-white rounded-lg px-4 py-2.5;
+}
+.danger {
+  @apply bg-red-400 font-bold text-sm text-white rounded-lg px-4 py-2.5;
 }
 
 .action {
@@ -167,4 +183,35 @@
   background-repeat: no-repeat;
   bottom: calc(50% - 6px);
   right: 10px;
+}
+.bg-social-facebook {
+  @apply pl-0.5 pr-0.5 md:pl-1.5 md:pr-1.5 text-center w-full relative;
+
+
+
+  .bg-facebook-btn {
+    position: relative;
+    padding-left:24px;
+
+    @apply md:pl-[5px];
+  }
+  .bg-facebook-btn::before {
+    content: "";
+    background: url("../../public/images/facebook.svg");
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left:12px;
+
+    @apply md:w-[20px] md:h-[20px];
+  }
+}
+.white-shadow {
+  background: #fff;
+  box-shadow: inset 0px -5px 0px rgba(0, 0, 0, 0.05);
+}
+
+.burger-btn {
+  @apply top-[-45px] md:top-[-25px] left-0;
 }

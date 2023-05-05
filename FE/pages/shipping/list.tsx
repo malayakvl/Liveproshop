@@ -103,7 +103,7 @@ export default function List({ locale }: { locale: string }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Settings - Shipping methods</title>
+                <title>LiveProshop - Settings - Shipping methods</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

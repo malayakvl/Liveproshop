@@ -47,14 +47,17 @@ export default function Index() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Settings - Cart duration</title>
+                <title>LiveProshop - Settings - Cart duration</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>
                 </div>
-                <div className="text-gray-400">{t('settings_descr')}</div>
+                <div className="text-gray-400">{t('setting_page_description')}</div>
+                <div className="text-gray-400 block italic mt-3">
+                    {t('setting_page_description1')}
+                </div>
             </div>
             {showForm && (
                 <div className="mt-10 block-white-8 white-shadow-big">
@@ -81,7 +84,7 @@ export default function Index() {
                                         {t('Cart duration')}
                                     </div>
                                     <div className="flex">
-                                        <div className="max-w-[100px]">
+                                        <div className="max-w-[120px]">
                                             <InputText
                                                 icon={null}
                                                 label={'Duration Cart'}
@@ -92,9 +95,10 @@ export default function Index() {
                                                 tips={null}
                                             />
                                         </div>
-                                        <div className="ml-2">
+                                        <div className="ml-2 min-w-[200px]">
                                             <InputSelect
                                                 options={[
+                                                    { id: 'm', name: 'Minute(s)' },
                                                     { id: 'h', name: 'Hour(s)' },
                                                     { id: 'd', name: 'Day(s)' }
                                                 ]}

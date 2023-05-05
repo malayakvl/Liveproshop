@@ -1,0 +1,64 @@
+.dotted-bg {
+  background-image: url(../../public/images/testimonials/dotted-bg.svg);
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+
+.user-photo {
+  background-image: url(../../public/images/testimonials/user.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  @apply sm:mt-10 w-[382px] h-[371px] float-left lg:ml-[100px];
+}
+
+.header-t-block {
+  @apply float-left lg:max-w-[890px];
+}
+
+.testimonial-container {
+  margin: 40px auto;
+  border: 2px solid #EAECF0;
+  box-shadow: 0px 5px 100px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 36px;
+
+  @apply p-[20px] xl:min-w-[1120px] xl:p-[48px];
+
+  .big-boy-profile {
+    background-image: url(../../public/images/testimonials/boy.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    @apply w-[52px] h-[52px] md:w-[128px] md:h-[128px];
+
+  }
+  .big-girl-profile {
+    background-image: url(../../public/images/testimonials/girl.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    @apply w-[52px] h-[52px] md:w-[128px] md:h-[128px];
+  }
+
+  .small-profile {
+    @apply w-[52px] h-[52px];
+  }
+
+  .blue-message {
+    background: #3680FB;
+    box-shadow: 0px 10px 20px rgba(153, 171, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 16px 16px 16px 0;
+    color:#fff;
+
+    @apply lg:text-[24px] px-[16px] py-[10px];
+  }
+
+  .gray-message {
+    background: #F8F8F8;
+    border-radius: 20px 20px 0px 20px;
+
+    @apply lg:text-[24px] px-[16px] py-[10px] text-gray-350;
+  }
+
+  p {
+    @apply pb-[10px];
+  }
+}

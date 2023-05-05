@@ -32,7 +32,7 @@ class OrderController {
             return res.status(401).json('Access deny');
         } else {
             // check if file exist, than return true
-            const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user);
+            const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale);
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
         }
     }
@@ -97,6 +97,18 @@ class OrderController {
             JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
             const data = await orderModel.bulkCancel(ids, req.user);
             return res.status(200).json({ data: data.success });
+        }
+    }
+
+    async bulkDownload (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const ids = [];
+            JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+
+            const data = await orderModel.bulkDownload(ids, req.user);
+            return res.status(200).json({ data: data.success, achive: data.achive });
         }
     }
 

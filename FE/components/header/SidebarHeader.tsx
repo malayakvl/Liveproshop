@@ -9,6 +9,7 @@ import { userSelector } from '../../redux/user/selectors';
 import { useTranslations } from 'next-intl';
 import { baseApiUrl } from '../../constants';
 import LangSwitcher from '../lang/Switcher';
+import BrandMobile from '../sidebar/BrandMobile';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -20,6 +21,7 @@ const SidebarHeader: React.FC = () => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [userPhoto, setUserPhoto] = useState(userProfileImg);
     const node = useRef<HTMLDivElement>(null);
+    // const { isMobile } = useWindowSize();
 
     useEffect(
         function () {
@@ -41,15 +43,27 @@ const SidebarHeader: React.FC = () => {
         };
     }, []);
 
+    // const handleClick = (e: any) => {
+    //     console.log(e.target);
+    //     if (node?.current?.contains(e.target) || node?.current === null) {
+    //         console.log('here profile menu 2');
+    //         setShowProfileMenu(false);
+    //         return;
+    //     }
+    //     if (
+    //         e.target.parentNode.classList.contains('profile-block') ||
+    //         e.target.parentNode.classList.contains('profile-name') ||
+    //         node?.current?.contains(e.target)
+    //     ) {
+    //         console.log('here profile menu 1');
+    //         return;
+    //     }
+    //     setShowProfileMenu(false);
+    // };
     const handleClick = (e: any) => {
-        // if (node?.current?.contains(e.target) || node?.current === null) {
-        //     console.log('here');
-        //     return;
-        // }
         if (
-            e.target.parentNode.classList.contains('profile-block') ||
-            e.target.parentNode.classList.contains('profile-name') ||
-            node?.current?.contains(e.target)
+            e.target.classList.contains('profile-img') ||
+            e.target.classList.contains('s-caption')
         ) {
             return;
         }
@@ -57,22 +71,15 @@ const SidebarHeader: React.FC = () => {
     };
 
     return (
-        <div className="shadow-bottom pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle">
-            <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center">
-                {/* <form>
-                    <div className="relative">
-                        <input className="form-control" placeholder="Click to Search" />
-                        <i className="input-close" />
-                    </div>
-                </form> */}
-            </div>
-            <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-end">
+        <div className="shadow-lg max-h-[50px] md:pb-0 md:pr-0 md:shadow-none md:flex md:pr-4 items-center align-middle">
+            <div className="w-full flex items-center lg:justify-end lg:pr-[40px]">
                 {/* <NoticeCounter delay={120000} /> */}
-
+                <BrandMobile />
                 {/*<span className="divider" />*/}
-                <div className="relative ml-7">
+                <div className="mt-[-43px] md:mt-0 relative md:mr-[30px] md:mt-auto">
                     <div
-                        className="profile-block inline-block cursor-pointer"
+                        ref={node}
+                        className="absolute top-[-20px] min-w-[30px] right-[-120px] md:static profile-block inline-block cursor-pointer"
                         role="presentation"
                         onClick={() => {
                             setShowProfileMenu(!showProfileMenu);
@@ -81,7 +88,7 @@ const SidebarHeader: React.FC = () => {
                             src={userPhoto}
                             width={24}
                             height={24}
-                            className="rounded-full cursor-pointer"
+                            className="rounded-full cursor-pointer profile-img"
                             alt=""
                         />
 
@@ -95,7 +102,7 @@ const SidebarHeader: React.FC = () => {
                     </div>
                     {/* Profile dropdown */}
                     {showProfileMenu && (
-                        <div className="profile-menu" ref={node}>
+                        <div className="profile-menu drop-shadow-2xl" ref={node}>
                             <div className="corner" />
                             <ul>
                                 <li>
@@ -153,12 +160,15 @@ const SidebarHeader: React.FC = () => {
                                 </li> */}
                                 <li>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        role="presentation"
-                                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                        <i className="help" />
-                                        <span className="s-caption">{t('Help')}</span>
-                                    </a>
+                                    <Link href="/support">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="help" />
+                                            <span className="s-caption">{t('Help')}</span>
+                                        </a>
+                                    </Link>
                                 </li>
                                 <li>
                                     <a
@@ -178,7 +188,7 @@ const SidebarHeader: React.FC = () => {
                 </div>
                 <LangSwitcher />
                 {/*<span className="divider" />*/}
-                <span className="mt-1 ml-3 min-w-max">
+                <span className="hidden mt-[8px] absolute top-[0px] right-[10px] ms:ml-3 min-w-max md:right-0 md:inline-block">
                     <a
                         href="/api/auth/signout"
                         title={t('Logout')}

@@ -14,10 +14,10 @@
   }
 
   .dashboard {
-    @apply ml-4 md:ml-0 inline-block text-3xl font-bold text-blue-350;
+    @apply text-2xl ml-4 md:ml-0 inline-block md:text-3xl font-bold text-blue-350;
 
     span {
-      @apply block text-gray-350 font-bold text-5xl -mt-4;
+      @apply text-3xl block text-gray-350 font-bold md:text-5xl -mt-4;
     }
   }
 }

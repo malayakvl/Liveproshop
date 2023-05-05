@@ -5,11 +5,25 @@ module.exports = {
     purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
     darkMode: 'class', // or 'media' or 'class'
     theme: {
+        screens: {
+            sm: '640px',
+            md: '768px',
+            lg: '1024px',
+            xl: '1280px',
+            '2xl': '1536px'
+        },
         fontFamily: {
             montserrat: ['Montserrat'],
             sans: ['"Montserrat"']
         },
         fontSize: {
+            xsd: [
+                '13px',
+                {
+                    lineHeight: '14px',
+                    letterSpacing: '0.004em'
+                }
+            ],
             xs: [
                 '12px',
                 {
@@ -45,7 +59,7 @@ module.exports = {
         extend: {
             colors: {
                 social: {
-                    facebook: '#3B5998',
+                    facebook: '#3680FB',
                     twitter: '#00ACEE'
                 },
                 blue: {
@@ -54,6 +68,7 @@ module.exports = {
                     350: '#99ABCE'
                 },
                 gray: {
+                    50: '#A8AFBD',
                     100: '#F8F8F8',
                     200: '#C5CAD3',
                     150: '#ECEFF1',
@@ -61,7 +76,8 @@ module.exports = {
                     250: '#FAFAFA',
                     350: '#4F5B84',
                     450: '#90A4AE',
-                    500: '#8C94A6'
+                    500: '#8C94A6',
+                    600: '#4F5B84'
                 },
                 orange: {
                     450: '#EE5342'

@@ -10,7 +10,7 @@ export default function Index({ session }: { session: any }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Checkout Complete</title>
+                <title>LiveProshop - Checkout Complete</title>
             </Head>
 
             <div className="max-w-screen-xl min-h-[calc(100vh-10rem)] lg:white-shadow-medium bg-white rounded-lg p-4 pb-4 lg:p-8 lg:pb-8 lg:mr-4 mt-10">

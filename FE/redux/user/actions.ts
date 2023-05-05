@@ -20,11 +20,11 @@ export const fetchUserAction: any = createAction('profile/FETCH_USER', async (em
 });
 export const inviteUserAction: any = createAction(
     'user/INVITE_USER',
-    async (data: any) =>
+    async (data: any, locale: string) =>
         (dispatch: Type.Dispatch): Promise<void> => {
             dispatch(showLoaderAction(true));
             return axios
-                .post(`${authUrl}/invite`, data)
+                .post(`${authUrl}/invite?locale=${locale}`, data)
                 .then(async () => {
                     dispatch(setSuccessToastAction(`Check confirmation link in your mailbox`));
                     dispatch(showLoaderAction(false));

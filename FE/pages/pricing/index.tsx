@@ -52,19 +52,20 @@ const Price = ({
             <div className="w-full h-32 lg:h-64 relative mx-auto">
                 <Image src={imageSrc} layout="fill" className="object-contain object-center" />
             </div>
-            <div className="font-bold text-xl mb-2 flex flex-wrap items-center justify-center lg:justify-between">
+            <div className="min-h-[70px] sm:align-top font-bold text-xl mb-2 flex flex-wrap lg:items-center  justify-center lg:justify-center">
                 {name}
                 {name === 'Business' && (
-                    <div className="text-[10px] border border-orange-450 rounded-lg p-1 text-orange-450">
+                    <div className="p-[10px] text-[10px] border border-orange-450 rounded-lg lg:p-1 text-orange-450">
                         {t('Most popular')}
                     </div>
                 )}
             </div>
-            <div className="h-full text-sm">{desc}</div>
-            <div className="text-2xl lg:text-4xl font-bold min-h-[6rem]">
+            <div className="min-h-[150px] text-sm text-center">{desc}</div>
+            <div className=" text-base lg:text-4xl font-bold min-h-[6rem]">
                 {formatCurrency(price)}
-                <span className="text-base"> /month</span>
-                {sale > 0 && <div className="text-xs font-bold">{sale}% of sale</div>}
+                <span className="text-sm md:text-base"> /month</span>
+
+                {sale > 0 && <div className="sm:block text-xs font-bold">{sale}% of sale</div>}
             </div>
 
             <button
@@ -80,20 +81,6 @@ const Price = ({
                 } w-full mt-7 justify-self-end`}>
                 {buttonText}
             </button>
-
-            {/*<button*/}
-            {/*    onClick={() => {*/}
-            {/*        if (user?.email) {*/}
-            {/*            Router.push(`/subscription?planId=${planId}&type=trial`);*/}
-            {/*        } else {*/}
-            {/*            Router.push(`/auth/subscription?planId=${planId}&type=trial`);*/}
-            {/*        }*/}
-            {/*    }}*/}
-            {/*    className={`${*/}
-            {/*        disabled ? 'disabled-btn' : 'gradient-btn'*/}
-            {/*    } w-full mt-7 justify-self-end`}>*/}
-            {/*    {t('Select Trial')}*/}
-            {/*</button>*/}
         </div>
     );
 };
@@ -189,7 +176,7 @@ export default function Pricing({ locale }: { locale: any }) {
                 {data.map((data: any) => (
                     <Fragment key={data.option.id}>
                         <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                            <div className="flex-grow mb-4">
+                            <div className="flex-grow mb-4 text-right">
                                 {parseTranslation(data.option, 'name', locale)}
                             </div>
                             {parsePlanValues(
@@ -205,12 +192,12 @@ export default function Pricing({ locale }: { locale: any }) {
     };
 
     return (
-        <>
+        <div className="main-bg container xl:max-w-[1400px] mx-auto">
             <Head>
-                <title>Amadeo CRM - Pricing</title>
+                <title>LiveProshop - Pricing</title>
             </Head>
-
-            <div className="text-gray-350 font-medium max-w-[1440px] mx-auto px-5 my-12 lg:my-16">
+            <div className="main-layout">
+                {/*<div className="text-gray-350 font-medium max-w-[1440px] mx-auto px-5 my-12 lg:my-16">*/}
                 <div className="text-center">
                     <div className="text-xs font-bold">{t('Pricing_And_Plans')}</div>
                     <div className="mb-3 font-bold text-4xl">
@@ -249,7 +236,7 @@ export default function Pricing({ locale }: { locale: any }) {
                     )}
                 </div>
 
-                <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left mt-8 lg:mt-10">
+                <div className="lg:space-x-10 flex justify-end items-stretch text-center lg:text-left mt-8 lg:mt-10 xl:max-w-[1200px] xl:mx-auto">
                     <Price
                         planId={1}
                         onClick={() => setSelected('basic')}
@@ -289,11 +276,11 @@ export default function Pricing({ locale }: { locale: any }) {
                     />
                 </div>
 
-                <div className="text-xs lg:text-sm">
+                <div className="text-xs lg:text-sm xl:max-w-[1200px] xl:mx-auto">
                     {plans.values.map((values: any) => (
                         <Fragment key={values.group.id}>
                             <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                                <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">
+                                <div className="text-base flex-grow font-bold md:text-2xl my-6 sm:mt-4 text-right">
                                     {parseTranslation(values.group, 'name', locale)}
                                 </div>
                                 <div
@@ -403,7 +390,7 @@ export default function Pricing({ locale }: { locale: any }) {
                     </div>
                 </div>
 
-                <div className="w-full mt-12 lg:mt-16 mb-20 lg:mb-28 grid grid-cols-1 gap-x-2 gap-y-12 md:grid-cols-2 lg:gap-x-4 lg:gap-y-16 lg:grid-cols-3">
+                <div className="w-full mt-12 lg:mt-16 mb-20 lg:mb-28 grid grid-cols-1 gap-x-2 gap-y-12 md:grid-cols-2 lg:gap-x-16 lg:gap-y-16 lg:grid-cols-3 ">
                     <div>
                         <div className="font-bold mb-6 text-lg">
                             {t('What is the differens between plans ?')}
@@ -536,7 +523,7 @@ export default function Pricing({ locale }: { locale: any }) {
                     </Formik>
                 )}
             </div>
-        </>
+        </div>
     );
 }
 

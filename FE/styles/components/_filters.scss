@@ -109,14 +109,14 @@
   position: fixed;
   top: 31px;
   right: 305px;
-  box-shadow: rgba(9, 30, 66, 0.08) 0 0 0 1px, rgba(9, 30, 66, 0.08) 0px 2px 4px 1px;
+  box-shadow: rgba(9, 30, 66, 0.08) 0 0 0 1px, rgba(9, 30, 66, 0.08) 0 2px 4px 1px;
   color: #141A3C;
   background-color: white;
   border-radius: 50%;
 }
 
 .rdrDateDisplayWrapper {
-  width: 270px !important;
+  //width: 270px !important;
 }
 .rdrDateRangePickerWrapper {
   display: flex !important;
@@ -124,10 +124,17 @@
 }
 .rdrMonthPicker {
   select {
-    padding: 0px !important;
+    padding: 0 !important;
     font-size: 12px !important;
   }
 }
+.rdrDateRangePickerWrapper {
+  border: solid 1px #eaeaeb;
+}
 .rdrDefinedRangesWrapper {
-  width: 269px !important;
+  width: 333px !important;
+}
+
+.dashbord-filter {
+  @apply right-0 md:right-[50px];
 }

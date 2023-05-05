@@ -35,12 +35,10 @@ function Profile() {
         e.preventDefault();
         if (!filePickerRef.current?.files?.length) return;
         setImagePost(filePickerRef.current.files[0]);
-        console.log('1111', filePickerRef.current.files[0]);
         setIsNewPhoto(true);
     };
 
     useEffect(() => {
-        console.log('changes file photo', imagePost);
         dispatch(setPhotoAction(imagePost));
     }, [imagePost]);
 

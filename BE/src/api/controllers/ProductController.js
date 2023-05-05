@@ -25,8 +25,6 @@ class ProductController {
         if (!fs.existsSync(dirUpload)) {
             fs.mkdirSync(dirUpload);
         }
-        // console.log('Getting files', req.files);
-        // console.log('Getting file', req.file);
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
                 cb(null, `public/uploads/users/${req.user.id}`);
@@ -175,8 +173,6 @@ class ProductController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
-        // console.log(req.query.searchStr);
-        // console.log(re)
         const data = await productModel.find(req.query.searchStr, req.user.id);
 
         return res.status(200).json({ result: data});

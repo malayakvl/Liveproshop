@@ -117,9 +117,11 @@ apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllAct
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-waiting-items').get(OrderController.fetchWaitingList);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
-apiRoutes.route('/create-order/:id').get(OrderController.generateInvoice);
+apiRoutes.route('/create-order/:id/').get(OrderController.generateInvoice);
+apiRoutes.route('/create-order/:id/:locale').get(OrderController.generateInvoice);
 apiRoutes.route('/orders/bulk-shipping').post(OrderController.setupShipped);
 apiRoutes.route('/orders/bulk-cancel').post(OrderController.bulkCancel);
+apiRoutes.route('/orders/bulk-download').post(OrderController.bulkDownload);
 apiRoutes.route('/order/run-wait-workflow').post(OrderController.runWaitWorkflow);
 apiRoutes.route('/order/update-config-qty').post(OrderController.updateProductConfigQty);
 

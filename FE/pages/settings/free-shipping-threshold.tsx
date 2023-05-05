@@ -39,7 +39,7 @@ export default function ShippingThreshold() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Settings - Free shipping threshold</title>
+                <title>LiveProshop - Settings - Free shipping threshold</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

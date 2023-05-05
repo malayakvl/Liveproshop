@@ -9,6 +9,12 @@ declare namespace Payments {
         showPopup: boolean;
         fileterData: any;
         showDateSelector: boolean;
+        checkedIds: checkedIds[];
+    }
+
+    interface checkedIds {
+        id: number;
+        checked: boolean;
     }
 
     interface DataItem {
@@ -52,7 +58,6 @@ declare namespace Payments {
         // shipping_id: number | null;
         // country_id: number | null;
         payment_id: number | null;
-        payment_name: string;
         payment_short_name: string;
         order_amount: number;
         // discount_amount: number;

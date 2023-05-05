@@ -3,9 +3,12 @@ import React from 'react';
 import Footer from '../footer/Footer';
 import { useSelector } from 'react-redux';
 import { isDataLoadingSelector } from '../../redux/layouts/selectors';
+import { useRouter } from 'next/router';
 
 export default function FullLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
+    const router = useRouter();
+
     return (
         <>
             {showLoader && (
@@ -20,7 +23,18 @@ export default function FullLayout({ children }: { children: any }) {
                 </div>
             )}
             <Header />
-            <div className="min-h-[776px] bg-gray-150 text-black dark:text-white">{children}</div>
+            <div
+                className={`min-h-[750px] ${
+                    router.pathname == '/' ||
+                    router.pathname == '/pricing' ||
+                    router.pathname == '/testimonials' ||
+                    router.pathname == '/features' ||
+                    router.pathname == '/faq'
+                        ? 'bg-white'
+                        : 'bg-gray-150'
+                } text-black dark:text-white`}>
+                {children}
+            </div>
             <Footer />
         </>
     );

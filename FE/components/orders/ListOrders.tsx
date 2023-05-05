@@ -1,7 +1,11 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsCountSelector, paginatedItemsSelector } from '../../redux/orders/selectors';
+import {
+    achiveNameSelector,
+    itemsCountSelector,
+    paginatedItemsSelector
+} from '../../redux/orders/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import {
@@ -22,7 +26,7 @@ import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layou
 // import 'react-date-range/dist/theme/default.css';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
-import { bulkShippingAction } from '../../redux/orders/actions';
+import { bulkShippingAction, bulkDownloadAction } from '../../redux/orders/actions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -41,6 +45,8 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         paginationSelectorFactory(PaginationType.ORDERS)
     );
     const user = useSelector(userSelector);
+    const achiveName = useSelector(achiveNameSelector);
+    const achiveRefname = useRef(null);
 
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
     const [filterOpen, setFilterOpen] = useState(false);
@@ -58,13 +64,22 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         dispatch(clearBase64Action(null));
     }, [items]);
 
+    useEffect(() => {
+        if (achiveName) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            achiveRefname?.current.click();
+        }
+    }, [achiveName]);
+
     const sendStatusRequest = useCallback(
         (status: string) => {
             if (status === 'shipped') {
                 return dispatch(bulkShippingAction());
-            } else {
+            } else if (status === 'cancel') {
                 return dispatch(showCancelConfirmationModalAction(true));
-                // return dispatch(bulkCancelAction())
+            } else {
+                return dispatch(bulkDownloadAction());
             }
         },
         [dispatch]
@@ -149,7 +164,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                             </td>
                             <td className="order-number">
                                 {user.role_id === 2 && (
-                                    <Link href={`/orders/${item.order_number}`}>
+                                    <Link href={`/orders/${item.order_number}?locale=${locale}`}>
                                         <a>{item.order_number}</a>
                                     </Link>
                                 )}
@@ -165,7 +180,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 )}
                             </td>
                             <td className="order-status">
-                                <span className={item.status}>{item.status}</span>
+                                <span className={item.status}>{t(item.status)}</span>
                             </td>
                             <td className="order-date">
                                 {moment(item.created_at).format('DD/MM/YYYY')}
@@ -190,6 +205,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                             </td>
                             <td>{parseTranslation(item.country_json, 'name', locale)}</td>
                             <td>
+                                {/*{baseApiUrl + item.shipping_image}*/}
                                 {item.shipping_image && (
                                     <Image
                                         src={baseApiUrl + item.shipping_image}
@@ -223,6 +239,15 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                 ))}
             </DataTable>
             <CancelConfirmation />
+            <a
+                href={achiveName}
+                className=""
+                target="_blank"
+                download
+                ref={achiveRefname}
+                rel="noreferrer">
+                Download achive
+            </a>
         </div>
     );
 };

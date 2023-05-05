@@ -89,7 +89,7 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - {t('Change Plan')}</title>
+                <title>LiveProshop - {t('Change Plan')}</title>
             </Head>
 
             <div className="modal modal-seller-change-subscription opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">

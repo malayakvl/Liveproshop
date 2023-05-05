@@ -28,7 +28,7 @@ const SchedulePopup: React.FC<any> = () => {
     // const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(moment().format('HH:mm'));
-    const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
+    // const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
 
     useEffect(() => {
         if (showModal) {

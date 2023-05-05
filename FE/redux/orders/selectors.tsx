@@ -52,3 +52,7 @@ export const cancelConfirmationModalSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.showCancelPopup
 );
+export const achiveNameSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.achiveName
+);

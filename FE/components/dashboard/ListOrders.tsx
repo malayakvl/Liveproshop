@@ -39,7 +39,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                     </Link>
                                 </td>
                                 <td>
-                                    <span className={item.status}>{item.status}</span>
+                                    <span className={item.status}>{t(item.status)}</span>
                                 </td>
                                 <td>{moment(item.created_at).format('DD/MM/YYYY')}</td>
                                 {/*<td>{item.buyer_first_name}</td>*/}

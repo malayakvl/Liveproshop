@@ -113,7 +113,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Subscription Plan</title>
+                <title>LiveProshop - Subscription Plan</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">

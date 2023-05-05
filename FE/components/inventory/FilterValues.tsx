@@ -103,7 +103,6 @@ const FilterValues: React.FC<any> = (locale: string) => {
             })
         );
     };
-
     return (
         <>
             {dataFetched && (

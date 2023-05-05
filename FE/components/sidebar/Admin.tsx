@@ -14,7 +14,6 @@ const SidebarCustomers: React.FC = () => {
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     const node = useRef<HTMLDivElement>(null);
     const { isMobile } = useWindowSize();
-
     let CurrentSidebar = SidebarFull;
 
     if (router.route.startsWith('/shipping')) {
@@ -33,7 +32,9 @@ const SidebarCustomers: React.FC = () => {
         if (node?.current?.contains(e.target) || node?.current === null) {
             return;
         }
-        dispatch(sidebarCloseAction());
+        if (isMobile) {
+            dispatch(sidebarCloseAction());
+        }
     };
 
     return (

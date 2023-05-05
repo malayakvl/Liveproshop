@@ -47,14 +47,17 @@ export default function PaymentSetting() {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Payment Settings</title>
+                <title>LiveProshop - Payment Settings</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>
                 </div>
-                <div className="text-gray-400">{t('settings_descr')}</div>
+                <div className="text-gray-400">{t('setting_page_description')}</div>
+                <div className="text-gray-400 block italic mt-3">
+                    {t('setting_page_description1')}
+                </div>
             </div>
             {showForm && (
                 <div className="mt-10 block-white-8 white-shadow-big">

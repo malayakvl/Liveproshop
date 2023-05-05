@@ -130,6 +130,7 @@ class Checkout {
                 // const sellerSettingsRes = await client.query(`SELECT multisafe_api_key FROM data.get_seller_settings(${orderRes.rows[0].id});`);
                 const systemSettingsRes = await client.query('SELECT multisafe_account FROM data.system_settings WHERE id=1;');
                 const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
+                console.log(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
                 if (sellerSettingsRes.rows.length === 0) {
                     return {redirectUrl: null, error: 'No key for payment'}
                 }
@@ -158,8 +159,10 @@ class Checkout {
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
                 // return {redirectUrl: null, error: 'No find order'}
                 const dataOrder = {
+                    // site_id: '31313',
                     type: 'redirect',
-                    order_id: `amadeo-order-id-${orderRes.rows[0].id}`,
+                    // email: 'malaya.kvl@gmail.com',
+                    order_id: `LiveProshop-id-${orderRes.rows[0].id}`,
                     gateway: '',
                     currency: 'EUR',
                     amount: (totalPayment)*100,
@@ -185,17 +188,18 @@ class Checkout {
                         ]
                     }
                 }
-                // redirect url after payment
                 const multiSafePayClientRes = await axios
                     .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
+                        console.log("Res Data", res.data);
                         return {redirectUrl: res.data.data.payment_url, error: null}
+                        // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
                     }).catch(error => {
-                        console.log(error.message);
                         return {redirectUrl: null, error: error.message}
                     });
+                console.log('here we are', multiSafePayClientRes);
                 return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}
             } else {
                 return {redirectUrl: null, error: 'No find order'}

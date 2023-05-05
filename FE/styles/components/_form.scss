@@ -56,7 +56,7 @@
   .inventory__single-value {
     @apply text-xs text-gray-350 font-medium;
   }
-  .inventory__indicator svg {
+  .inventory__indicator svg, .inventory-color__indicator svg {
     fill: #CFD8DC !important;
   }
   //.inventory__clear-indicator {
@@ -93,7 +93,7 @@
     @apply text-xs text-gray-350 font-medium;
   }
   .inventory-color__clear-indicator {
-    @apply hidden;
+    //@apply hidden;
   }
   .inventory-color__menu {
     @apply text-sm text-gray-350;
@@ -106,9 +106,19 @@
   }
 }
 
+.sizes-input {
+  @apply relative;
+
+  .clear-sizes {
+    @apply w-[48px] h-[40px] absolute top-[-1px] right-[-5px] z-50 cursor-pointer;
+    background: url(../../public/images/close.svg) no-repeat center;
+  }
+}
+
+
 .form-control-icon {
   @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350
-    font-medium border-gray-180 border placeholder-gray-180;
+    font-medium border-gray-180 border placeholder-gray-180 pr-[35px];
 
   &:active,
   &:focus,
@@ -125,7 +135,7 @@
   background-repeat: no-repeat;
   width: 24px;
   height: 24px;
-  @apply absolute top-2 right-2;
+  @apply absolute top-[12px] right-2;
 }
 
 .input-eye {

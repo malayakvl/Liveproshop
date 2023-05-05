@@ -189,7 +189,7 @@ class User {
         }
     }
 
-    async createExistUserSubscription(userData, user) {
+    async createExistUserSubscription(userData) {
         const client = await pool.connect();
         try {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
@@ -405,7 +405,6 @@ class User {
             // const paymentIntentResult = await stripe.paymentIntents.retrieve(
             //     paymentIntent
             // );
-            console.log('TYPE', type);
 
             // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
@@ -610,10 +609,8 @@ class User {
         const client = await pool.connect();
         try {
             const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${userId});`;
-            console.log('here we are', query);
             await client.query(query);
             // const query1 = `// UPDATE data.users SET photo='${userData.photo}' WHERE id=${userId};`;
-            console.log('here');
             // await client.query(query1);
             if (user) {
                 return { user: userData, error: null };
@@ -922,15 +919,16 @@ class User {
         try {
             const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
             const res = await client.query(query, [userId]);
+            console.log(res.rows[0]);
 
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
-                    res.rows[0].type = res.rows[0].order_timer.days ? 'd' : 'h';
-                    res.rows[0].order_timer = res.rows[0].order_timer.hours ?? res.rows[0].order_timer.days ?? '';
+                    res.rows[0].type = res.rows[0].order_timer.days ? 'd' : res.rows[0].order_timer.hours ? 'h' : 'm';
+                    res.rows[0].order_timer = res.rows[0].order_timer.hours ?? res.rows[0].order_timer.days ?? res.rows[0].order_timer.minutes;
                 }
 
                 if (res.rows[0].free_shipping_timer) {
-                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? '';
+                    res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? res.rows[0].free_shipping_timer.minutes;
                 }
             }
 
@@ -1018,7 +1016,7 @@ class User {
         }
     }
 
-    async unsubscribe(email) {
+    async unsubscribe() {
         const client = await pool.connect();
         try {
             const userRes = await client.query(`SELECT subscription_id FROM data.users
@@ -1030,7 +1028,7 @@ class User {
                 }
                 return { success: true, error: null };
             } else {
-                return { success: false, error: 'No subscription on DB' };
+                return { success: false, error: 'No subscription on _DB' };
             }
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -1055,8 +1053,7 @@ class User {
                 free_shipping_timer = `${data.free_shipping_timer || 0} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
 
-            const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : 'day'}${data.order_timer > 1 ? 's' : ''}`;
-
+            const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : data.type === 'd' ? 'day' : 'minute'}${data.order_timer > 1 ? 's' : ''}`;
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
                 VALUES ($1, $2, $3, $4, $5) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                     order_timer = EXCLUDED.order_timer,
@@ -1130,8 +1127,6 @@ class User {
      * @returns {boolean}
      */
     validatePassword(password, salt, hash) {
-        console.log('HASH', hash);
-        console.log('HASH CHECK', crypto.pbkdf2Sync(password, salt, 10000, 256, 'sha256').toString('hex'))
         const hashCheck = crypto.pbkdf2Sync(password, salt, 10000, 256, 'sha256').toString('hex');
         return hash === hashCheck;
     }

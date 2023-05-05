@@ -35,14 +35,14 @@
     min-height: 32px;
     text-indent: -99999px;
     white-space: nowrap;
-    @apply block mx-4 mt-6 mb-10;
+    @apply block mx-4 mt-6 mb-6;
   }
 
   ul {
     @apply flex flex-col;
 
     li {
-      @apply mt-5 mb-5 pl-8 pr-8;
+      @apply mt-5 mb-1.5 pl-8 pr-8;
 
       a {
         @apply  relative flex flex-row items-center;
@@ -60,7 +60,7 @@
       i {
         background-repeat: no-repeat;
         background-position: center;
-        width: 20px;
+        width: 24px;
         height: 20px;
         @apply inline-flex justify-center items-center cursor-pointer;
       }
@@ -96,6 +96,9 @@
       }
       .support {
         background-image: url("../../public/images/icon-help.svg");
+      }
+      .guides {
+        background-image: url("../../public/images/icon-guide.svg");
       }
       .payment-plans {
         background-image: url("../../public/images/icon-plan-sidebar.svg");
@@ -165,12 +168,12 @@
   right: -25px;
   width: 24px;
   height: 24px;
-  outline: 0px;
-  padding: 0px;
-  border: 0px;
+  outline: 0;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: rgba(9, 30, 66, 0.08) 0px 0px 0px 1px, rgba(9, 30, 66, 0.08) 0px 2px 4px 1px;
+  box-shadow: rgba(9, 30, 66, 0.08) 0 0 0 1px, rgba(9, 30, 66, 0.08) 0px 2px 4px 1px;
   color: #141A3C; //rgb(107, 119, 140);
   background-color: rgb(255, 255, 255);
   transform: translateX(-50%);
@@ -188,14 +191,19 @@
 
 
 .sb-minimize {
-  @apply max-w-[20px] min-w-[20px];
+  @apply max-w-[20px] min-w-[60px];
 
   .brand {
-    @apply hidden;
+    //@apply hidden;
+    background-image: url("../../public/images/logo-small.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 32px;
+    margin-left: auto;
   }
 
   ul {
-    @apply hidden;
+    //@apply hidden;
     
     li {
       @apply pl-2.5 pr-2.5;
@@ -246,4 +254,10 @@
 .mobile-open {
   display: flex !important;
   transition: margin-left .3s ease-in-out, width .3s ease-in-out;
+}
+.side-margin {
+  margin-left:80px;
+}
+.side-with-sidebar {
+  margin-left:260px;
 }

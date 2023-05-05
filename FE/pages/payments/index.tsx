@@ -33,7 +33,7 @@ export default function Payments({ session }: { session: any }) {
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Payments</title>
+                <title>LiveProshop - Payments</title>
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big max-w-screen-2xl">

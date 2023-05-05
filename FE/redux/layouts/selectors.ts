@@ -18,6 +18,10 @@ export const isSidebarOpenSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): boolean => layouts.isSidebarOpen
 );
+export const isMobileDeviceSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean | null => layouts.isMobileDevice
+);
 
 export const isDataLoadingSelector = createSelector(
     rootSelector,
@@ -36,7 +40,7 @@ export const switchToggledSelector = createSelector(
 
 export const checkedIdsSelector = createSelector(
     rootSelector,
-    (layouts: State.Layouts): Layouts.CheckedIds[] => layouts.checkedIds
+    (layouts: State.Layouts): Layouts.checkedIds[] => layouts.checkedIds
 );
 
 export const toastsSelector = createSelector(

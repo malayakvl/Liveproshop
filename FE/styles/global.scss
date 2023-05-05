@@ -6,11 +6,23 @@
 @import "tailwindcss/screens";
 
 @layer utilities {
+  .rainbow-gradient-text {
+    background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    //background-clip: text;
+    //text-fill-color: transparent;
+  }
+
   .red-yellow-gradient {
-    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    //background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    background: linear-gradient(50.53deg, #AB44C1 14.13%, #E96597 51.45%, #FF9384 64.45%, #FFC16C 80.86%, #F9F871 99.95%, #F9F871 99.96%);
+    //background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);
   }
   .red-yellow-gradient-text {
-    background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    //background: linear-gradient(45deg, #ca4573 0%, #ee5342 49.48%, #efbb58 100%);
+    background: linear-gradient(50.53deg, #AB44C1 14.13%, #E96597 51.45%, #FF9384 64.45%, #FFC16C 80.86%, #F9F871 99.95%, #F9F871 99.96%);
+    //background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -53,6 +65,10 @@
   }
   .background-gradient {
     background-image:linear-gradient(to top right, #354D9E 4%, #AB44C1 21%, #E96597 37%, #FF9384 55%, #FFC16C 71%, #F9F871 90%, #F9F871 90%);
+  }
+  .container {
+    //background: #b7cfe0;
+    @apply xl:max-w-[1400px];
   }
 }
 
@@ -107,6 +123,8 @@
   direction: ltr;
 }
 
+@import "components/header";
+@import "components/main";
 @import "components/buttons";
 @import "components/alerts";
 @import "components/sidebar";
@@ -122,3 +140,6 @@
 @import "components/filters";
 @import "components/dropdown";
 @import "components/popup";
+@import "components/faq";
+@import "components/testimonials";
+@import "components/features";

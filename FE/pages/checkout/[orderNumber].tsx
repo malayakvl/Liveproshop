@@ -115,7 +115,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Checkout {orderNumber}</title>
+                <title>LiveProshop - Checkout {orderNumber}</title>
             </Head>
 
             <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10">

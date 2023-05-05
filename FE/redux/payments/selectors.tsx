@@ -36,3 +36,7 @@ export const showDatePopupSelector = createSelector(
     rootSelector,
     (payments: State.Payments): boolean => payments.showDateSelector
 );
+export const checkedIdsSelector = createSelector(
+    rootSelector,
+    (layouts: State.Payments): Payments.checkedIds[] => layouts.checkedIds
+);

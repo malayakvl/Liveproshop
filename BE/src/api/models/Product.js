@@ -239,6 +239,7 @@ class Product {
         try {
             const _resProd = await client.query(`SELECT * FROM data.products WHERE id=${dataProduct.id} AND user_id=${userId}`);
             let photos = [];
+            const tags = await this.prepareTags(dataProduct.tags);
             const copyPhotos = [];
             if (_resProd.rows.length) {
                 if (_resProd.rows[0].photos) photos = _resProd.rows[0].photos;
@@ -261,11 +262,7 @@ class Product {
                 }
                 const productPhotos = photos.concat(copyPhotos);
                 
-                // prepare tags
-                // const tags = [];
-                const tags = await this.prepareTags(dataProduct.tags);
-                const productTags = _resProd.rows[0].tags ? _resProd.rows[0].tags.concat(tags) : tags;
-                
+                const productTags = tags;
                 const queryUpdate = `
                     UPDATE data.products
                     SET
@@ -313,8 +310,7 @@ class Product {
         try {
             // prepare tags
             const tags = await this.prepareTags(dataProduct.tags);
-            // const tags = [];
-    
+
             const queryInsert = `
                 INSERT INTO data.products
                     (name, description, tags, photos, publish, configured, material_id, user_id )

@@ -83,7 +83,7 @@ export default function Subscription({
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Subscription</title>
+                <title>LiveProshop - Subscription</title>
             </Head>
 
             {clientSecret && (

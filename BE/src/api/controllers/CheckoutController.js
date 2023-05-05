@@ -11,7 +11,7 @@ class CheckoutController {
 
     async fetch(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
-        
+        console.log("Checkout");
         const { orderNumber } = req.query;
 
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
@@ -40,7 +40,6 @@ class CheckoutController {
     
     async chechoutSubmit(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
-
         const data = await checkoutModel.checkoutSubmit(req.body, req.user);
         
         if (data.redirectUrl) {

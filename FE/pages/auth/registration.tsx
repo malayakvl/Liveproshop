@@ -21,7 +21,7 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
     return (
         <>
             <Head>
-                <title>Amadeo CRM - Registration</title>
+                <title>LiveProshop - Registration</title>
             </Head>
 
             <div className="flex justify-center">{Form}</div>
