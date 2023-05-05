@@ -303,7 +303,7 @@ function Main() {
                 <div className="thumb float-left"></div>
                 <div className="lg:float-left">
                     {_.times(3, (i) => (
-                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
                         <div
                             key={i}
                             className={`testimon-block user-1 ${i == activeNumber ? 'active' : ''}`}
