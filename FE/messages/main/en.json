@@ -9,6 +9,56 @@
   "Quick features view": "Quick features view",
   "Try it for free today!": "Essai gratuit pendant 30 jours",
   "Register now!": "Register now!",
-  "I want to know more!": "I want to know more!"
-
+  "I want to know more!": "I want to know more!",
+  "tip_caption_1": "Leave behind cart abandonment ",
+  "tips_1": "If clients do not proceed to checkout on time, the order is not processed and the products are iimmediately available again for other users",
+  "tip_caption_2": "Decide how long the cart remains valid",
+  "tips_2": "Set an expiration time and maximixe customer impulse-buying",
+  "tip_caption_3": "Set the free shipping threshold",
+  "tips_3": "Establish the amount users have to reach in order to qualify for free shipping",
+  "tip_caption_4": "Pay only once shipping fees",
+  "tips_4": "And enable them to add more articles with no extra shipping costs until the shipping starts",
+  "tip_caption_5": "Automatic invoicing",
+  "tips_5": "No more hours spent after an exhausting live to manually generate numerous invoices",
+  "tip_caption_6": "Real-time inventory and stock management",
+  "tips_6": "Avoid any risk of overselling and the problems that result from it",
+  "tip_caption_7": "Shipping and payment methods flexibility",
+  "tips_7": "Adapt yourself to different shipping and payment methods according to client needs",
+  "tip_caption_8": "Create a waiting list",
+  "tips_8": "Stop losing orders from ghost carts and assign them to the waiting list",
+  "See full list of features": "See full list of features",
+  "Make order placement smoother": "Make order placement smoother",
+  "place_order_descr": "With Live Pro shop, a mere comment is enough for a client to place an order and live a great shopping experience",
+  "platform_advantage": "Discover our platform`s advantages",
+  "increase_sales": "Increase sales 300+%",
+  "increase_sales_descr": "With a sales system as intuitive as Live Pro Shop, it`s possible!",
+  "save_up": "Save up to 3 hours",
+  "save_up_descr": "With a sales system as intuitive as Live Pro Shop, it`s possible!",
+  "dedicate_cap": "70% or the users could dedicate more time to their community ",
+  "dedicate_cap_descr": "And the other 30% spent the whole time for themselves and their family",
+  "best_caption": "Best of all, Live Pro Shop works with all your favorite sites!",
+  "best_descr": "Live pro shop gathers the best partners to increase revenue and strengthen customer loyaulty through live video sales",
+  "Customer stories": "Customer stories",
+  "you_to_client": "You too, be like our clients",
+  "perfect_tool_text": "Perfect tool for business owner that utilizes live streaming for retail sales",
+  "arrayOfObjects": [
+    {
+      "person": "Sabrina M.",
+      "boutique": "Lalylook Boutique",
+      "title": "Perfect tool for business owner that utilizes live streaming for retail sales",
+      "text": "This software has transformed how I do Live Sales. Live Pro Shop tracks the customers' comments so I don't have to and my customers LOVE it!"
+    },
+    {
+      "person": "Sophie B.",
+      "boutique": "Azura Fashion",
+      "title": "It has completely revolutionized the way that we do are selling",
+      "text": "Live Pro Shop has saved me hours of work and headache. Now, everything is in the same place - upload products quickly, check customers purchase history, tracking my sales, inventory break down and so much more..."
+    },
+    {
+      "person": "Fred G.",
+      "boutique": "Princess Bikini France",
+      "title": "It's all very simple to use!",
+      "text": "I love all the features of LiveProShop, but my favorite is that my customers have access and control to their cart. They can see what they've ordered."
+    }
+  ]
 }

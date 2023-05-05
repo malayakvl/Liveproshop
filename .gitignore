@@ -12,3 +12,4 @@ FE/.env
 .idea
 /_DB/
 /BE/public/uploads/achives/
+/FE/DELETE/

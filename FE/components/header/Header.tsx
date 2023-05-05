@@ -20,7 +20,8 @@ const Header: React.FC = () => {
             className={`w-full ${
                 router.pathname == '/' ||
                 router.pathname == '/faq' ||
-                router.pathname == '/features'
+                router.pathname == '/features' ||
+                router.pathname == '/testimonials'
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
             }`}>
@@ -41,7 +42,14 @@ const Header: React.FC = () => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95">
                             <Menu.Items className="absolute left-0 top-[-10px] w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-1 flex flex-col font-bold text-sm">
-                                <Link href={'/'}>
+                                <Link href={'/testimonials'}>
+                                    <Menu.Item
+                                        as="a"
+                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                        {t('Testimonials')}
+                                    </Menu.Item>
+                                </Link>
+                                <Link href={'/features'}>
                                     <Menu.Item
                                         as="a"
                                         className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
@@ -59,7 +67,7 @@ const Header: React.FC = () => {
                                         {t('Pricing')}
                                     </Menu.Item>
                                 </Link>
-                                <Link href={'/'}>
+                                <Link href={'/faq'}>
                                     <Menu.Item
                                         as="a"
                                         className="drop-top-menu-item m-2 cursor-pointer hover:text-purple-400 uppercase">
@@ -101,15 +109,20 @@ const Header: React.FC = () => {
                             flex-auto mx-2 xl:mx-4
                             2xl:mx-7 my-4 lg:my-0 font-bold text-sm"
                         id="menu">
-                        <Link href={'/'}>
-                            <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">
+                        <Link href={'/testimonials'}>
+                            <a className="m-2 xl:mx-4.5 2xl:mx-7 hover:text-purple-400">
+                                {t('Testimonials')}
+                            </a>
+                        </Link>
+                        <Link href={'/features'}>
+                            <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400">
                                 {t('Features')}
                             </a>
                         </Link>
 
                         <Link href={'/pricing'}>
                             <a
-                                className={`m-2 xl:mx-4 2xl:mx-7 ${
+                                className={`m-2 xl:mx-3.5 2xl:mx-7 ${
                                     router.pathname == '/pricing'
                                         ? 'text-purple-400'
                                         : 'hover:text-purple-400'
@@ -119,20 +132,20 @@ const Header: React.FC = () => {
                         </Link>
 
                         <Link href={'/'}>
-                            <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400">
+                            <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400">
                                 {t('Case Studies')}
                             </a>
                         </Link>
 
                         <Link href={'/faq'}>
-                            <a className="m-2 xl:mx-4 2xl:mx-7 hover:text-purple-400 uppercase">
+                            <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400 uppercase">
                                 {t('Faq')}
                             </a>
                         </Link>
 
                         <Link href={'/contact-us'}>
                             <a
-                                className={`m-2 xl:mx-4 2xl:mx-7 ${
+                                className={`m-2 xl:mx-3.5 2xl:mx-7 ${
                                     router.pathname == '/contact-us'
                                         ? 'text-purple-400'
                                         : 'hover:text-purple-400'
