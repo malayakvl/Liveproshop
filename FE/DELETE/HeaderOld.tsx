@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/client';
 import { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import LangSwitcher from '../lang/Switcher';
+import LangSwitcher from '../components/lang/Switcher';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
 
@@ -56,7 +56,7 @@ const HeaderOld: React.FC = () => {
                                     <Menu.Item
                                         as="a"
                                         className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('Features')}
+                                        {t('Features1')}
                                     </Menu.Item>
                                 </Link>
                                 <Link href={'/pricing'}>

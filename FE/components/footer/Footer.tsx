@@ -1,8 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import moment from 'moment';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
+    const t = useTranslations();
+
     return (
         <footer className="w-full bg-blue-550 pt-[50px]">
             <div className="container mx-auto">
@@ -20,29 +23,29 @@ export default function Footer() {
                                 </a>
                             </Link>
                         </div>
-                        <div className="mb-4 flex flex-com md:flex-row md:mb-0">
+                        <div className="mb-4 justify-end flex flex-com md:justify-self-stretch md:flex-row md:mb-0">
                             <div className="mr-9">
-                                <div className="mb-2 font-bold text-white">Get started</div>
+                                <div className="mb-2 font-bold text-white">{t('Get started')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/pricing'}>Pricing</Link>
+                                    <Link href={'/pricing'}>{t('Pricing')}</Link>
                                 </div>
                                 <div>
-                                    <Link href={'/'}>Start your free trial</Link>
+                                    <Link href={'/'}>{t('Start your free trial')}</Link>
                                 </div>
                             </div>
                             <div>
-                                <div className="mb-2 font-bold text-white">Resources</div>
+                                <div className="mb-2 font-bold text-white">{t('Resources')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/'}>Customer Stories</Link>
+                                    <Link href={'/testimonials'}>{t('Customer stories')}</Link>
                                 </div>
                                 <div className="uppercase mb-0.5">
-                                    <Link href={'/'}>Faq</Link>
+                                    <Link href={'/faq'}>{t('Faq')}</Link>
                                 </div>
                                 <div className="mb-0.5">
-                                    <Link href={'/'}>Support Center</Link>
+                                    <Link href={'/'}>{t('Support Center')}</Link>
                                 </div>
                                 <div>
-                                    <Link href={'/'}>Contact us</Link>
+                                    <Link href={'/contact-us'}>{t('Contact Us')}</Link>
                                 </div>
                             </div>
                         </div>

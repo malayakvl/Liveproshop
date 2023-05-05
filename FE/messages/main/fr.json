@@ -8,5 +8,57 @@
   "Request a seles call": "Demandez une demo",
   "Try it for free today!": "Essai gratuit pendant 30 jours",
   "Register now!": "Inscrivez vous!",
-  "I want to know more!": "Demandez une demo!"
+  "I want to know more!": "Demandez une demo!",
+  "tip_caption_1": "Dites \"Adieu\" aux paniers fantômes...",
+  "tips_1": "Désormais, vos clients doivent valider leur commande dans le temps imparti. Sinon, les articles sont immédiatement remis en vente!",
+  "tip_caption_2": "...Et dites \"Bonjour\" aux achats spontanés!",
+  "tips_2": "Vous choisissez de combien de temps le client dispose pour valider l'achat. À vous de voir si vous souhaitez lui laisser du temps, ou au contraire, le pousser à se décider vite!",
+  "tip_caption_3": "Fixez le seuil pour offrir les frais de port",
+  "tips_3": "La gratuité des frais de port est un trés bon levier pour pousser le client à augmenter son panier moyen",
+  "tip_caption_4": "Encouragez vos clients à toujours commander plus",
+  "tips_4": "Évitez les frais de ports supplémentaires à vos clients s'ils ajoutent rapidement des articles à leur commande déjà en cours",
+  "tip_caption_5": "Facturation automatique",
+  "tips_5": "Oubliez les innombrables heures de saisie administrative après une vente live",
+  "tip_caption_6": "Gestion en temps réel de votre inventaire et votre stock",
+  "tips_6": "Évitez tout risque de survente et les problèmes qui en découlent",
+  "tip_caption_7": "Grande flexibilité de paiement et d'envoi",
+  "tips_7": "Toutes les combinaisons sont possibles pour satisfaire les besoins de vos clients",
+  "tip_caption_8": "Créez une liste d'attente",
+  "tips_8": "Ne perdez plus les commandes des paniers fantômes et attribuez-les à la liste d'attente",
+  "See full list of features": "Voir la liste complète des fonctionnalités",
+  "Quick features view": "Aperçu des fonctionnalités",
+  "Make order placement smoother": "Simplifiez le processus de commande!",
+  "place_order_descr": "Avec Live Pro shop, vos clients passent commande avec un simple commentaire pour une expérience shopping interactive et fluide",
+  "platform_advantage": "Découvrez les avantages de notre plateforme",
+  "increase_sales": "Faites jusque +300% de ventes",
+  "increase_sales_descr": "Avec un système de vente aussi intuitif que Live pro shop, c'est possible!",
+  "save_up": "Jusque 3h de temps liberé",
+  "save_up_descr": "Un live intense avec des nombreuses ventes implique de nombreuses heures de gestion administrative répétitive. Automatisez le processus et oubliez ces longues heures ingrates",
+  "dedicate_cap": "70% des utilisateurs de Live Pro shop ont pu dédier plus de temps à leur communauté",
+  "dedicate_cap_descr": "Et les 30% restants se le sont dediés à eux-même ou à leurs proches",
+  "best_caption": "Live Pro Shop vous connecte à ces partenaires!",
+  "best_descr": "Nous avons rassembler les meilleurs partenaires pour augmenter vos revenus et renforcer la fidélité de vos clients",
+  "Customer stories": "Témoignages clients",
+  "you_to_client": "Vous aussi, faites comme eux",
+  "perfect_tool_text": "Outil parfait pour les entreprises qui utilisent les lives pour leurs ventes en ligne",
+  "arrayOfObjects": [
+    {
+      "person": "Sabrina M.",
+      "boutique": "Lalylook Boutique",
+      "title": "Outil parfait pour les entreprises qui utilisent les lives pour leurs ventes en ligne",
+      "text": "Ce logiciel a transformé la façon dont je fais les lives. Live Pro Shop suit les commentaires pour que je n'aie pas à le faire et mes clients l'adorent!"
+    },
+    {
+      "person": "Sophie B.",
+      "boutique": "Azura Fashion",
+      "title": "Cela a complètement révolutionné la façon dont nous vendons nos produits",
+      "text": "Live Pro Shop m'épargne des heures de travail.  Maintenant, tout est au même endroit - mettre en ligne les produits rapidement, vérifier l'historique des achats clients, suivre mes ventes, la répartition des stocks et bien plus encore..."
+    },
+    {
+      "person": "Fred G.",
+      "boutique": "Princess Bikini France",
+      "title": "C'est très simple à utiliser!",
+      "text": "J'aime toutes les fonctionnalités de LiveProShop, mais ce que je préfère, c'est que mes clients ont accès à leur panier et le contrôlent. Ils peuvent voir ce qu'ils ont commandé."
+    }
+  ]
 }
