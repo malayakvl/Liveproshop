@@ -179,7 +179,7 @@ const SchedulePopup: React.FC<any> = () => {
                             ) : (
                                 <div>
                                     <p className="mb-4">{t('liveselling_warning')}</p>
-                                    <Link href="/pricing">Pricing & Plans</Link>
+                                    <Link href="/FE/DELETE/pricing">Pricing & Plans</Link>
                                 </div>
                             )}
                         </div>

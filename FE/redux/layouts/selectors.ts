@@ -60,5 +60,10 @@ export const modalConfirmationMetaSelector = createSelector(
     (layouts: State.Layouts): Layouts.ModalConfirmationMeta | null => layouts.modalConfirmationMeta
 );
 
+export const modalCalendlyMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalCalendlyMeta | null => layouts.modalCalendlyMeta
+);
+
 export const activeTabSelectorFactory = (type: string) =>
     createSelector(rootSelector, (formula: State.Layouts): any => (formula.activeTab as any)[type]);

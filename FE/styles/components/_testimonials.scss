@@ -9,11 +9,11 @@
   background-repeat: no-repeat;
   background-size: contain;
 
-  @apply sm:mt-10 w-[382px] h-[371px] float-left lg:ml-[100px];
+  @apply sm:mt-10 md:w-[382px] lg:h-[371px] float-left lg:ml-[100px];
 }
 
 .header-t-block {
-  @apply float-left lg:max-w-[890px];
+  @apply md:max-w-[400px] float-left xl:max-w-[890px];
 }
 
 .testimonial-container {

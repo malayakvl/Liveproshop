@@ -37,14 +37,4 @@ export async function getServerSideProps(context: any) {
             }
         };
     }
-
-    // if (!session) {
-    //     return {
-    //         redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
-    //     };
-    // } else {
-    //     return {
-    //         redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}dashboard` }
-    //     };
-    // }
 }

@@ -27,7 +27,8 @@ export default function FullLayout({ children }: { children: any }) {
                 className={`min-h-[750px] ${
                     router.pathname == '/' ||
                     router.pathname == '/pricing' ||
-                    router.pathname == '/testimonials' ||
+                    router.pathname == '/plans' ||
+                    router.pathname == '/customer-story' ||
                     router.pathname == '/features' ||
                     router.pathname == '/faq'
                         ? 'bg-white'

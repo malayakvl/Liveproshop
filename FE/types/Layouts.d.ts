@@ -19,6 +19,7 @@ declare namespace Layouts {
         toasts: Toast[];
         checkedIds: checkedIds[];
         modalConfirmationMeta: ModalConfirmationMeta | null;
+        modalCalendlyMeta: ModalCalendlyMeta | null;
         switchHeader: boolean;
         switchToggled: boolean;
         activeTab: {
@@ -67,6 +68,11 @@ declare namespace Layouts {
     }
 
     interface ModalConfirmationMeta {
+        titleKey?: string;
+        onConfirm: () => void;
+        onCancel?: () => void;
+    }
+    interface ModalCalendlyMeta {
         titleKey?: string;
         onConfirm: () => void;
         onCancel?: () => void;

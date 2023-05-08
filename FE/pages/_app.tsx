@@ -10,7 +10,7 @@ import store from '../app/store';
 import MainLayout from '../components/layout/MainLayout';
 import SidebarLayout from '../components/layout/SidebarLayout';
 import { Toasts, ConfirmationModal } from '../components/_common';
-// import { ConfirmationModal } from '../components/_common';
+import { CalendlyModal } from '../components/_common';
 import React from 'react';
 
 type NextPageWithLayout = NextPage & {
@@ -78,6 +78,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                                 src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v12.0&appId=3046697902325160&autoLogAppEvents=1"
                                 nonce="qpTXeSyr"
                             />
+                            <link
+                                href="https://assets.calendly.com/assets/external/widget.css"
+                                rel="stylesheet"
+                            />
+                            <script
+                                src="https://assets.calendly.com/assets/external/widget.js"
+                                type="text/javascript"
+                                async
+                            />
                         </Head>
                         <Layout>
                             <Toasts />
@@ -85,6 +94,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                         </Layout>
                     </MainLayout>
                     <ConfirmationModal />
+                    <CalendlyModal />
                 </NextIntlProvider>
             </Provider>
         </ReduxProvider>

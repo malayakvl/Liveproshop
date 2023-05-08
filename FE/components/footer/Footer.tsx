@@ -2,9 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
+import { setModalCalendlyMetaAction } from '../../redux/layouts';
+import { useDispatch } from 'react-redux';
 
 export default function Footer() {
     const t = useTranslations();
+    const dispatch = useDispatch();
 
     return (
         <footer className="w-full bg-blue-550 pt-[50px]">
@@ -27,26 +30,29 @@ export default function Footer() {
                             <div className="mr-9">
                                 <div className="mb-2 font-bold text-white">{t('Get started')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/pricing'}>{t('Pricing')}</Link>
+                                    <Link href={'/plans'}>{t('Pricing')}</Link>
                                 </div>
                                 <div>
-                                    <Link href={'/'}>{t('Start your free trial')}</Link>
+                                    <Link href={'/contact-us'}>{t('Contact Us')}</Link>
                                 </div>
                             </div>
                             <div>
                                 <div className="mb-2 font-bold text-white">{t('Resources')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/testimonials'}>{t('Customer stories')}</Link>
+                                    <Link href={'/customer-story'}>{t('Customer stories')}</Link>
                                 </div>
                                 <div className="uppercase mb-0.5">
                                     <Link href={'/faq'}>{t('Faq')}</Link>
                                 </div>
-                                <div className="mb-0.5">
-                                    <Link href={'/'}>{t('Support Center')}</Link>
-                                </div>
-                                <div>
-                                    <Link href={'/contact-us'}>{t('Contact Us')}</Link>
-                                </div>
+                                {/*<div>*/}
+                                {/*    <InlineWidget url="https://calendly.com/victoriya-korogod/test" />*/}
+                                {/*</div>*/}
+                                {/*<div className="mb-0.5">*/}
+                                {/*    <Link href={'/'}>{t('Support Center')}</Link>*/}
+                                {/*</div>*/}
+                                {/*<div>*/}
+                                {/*    <Link href={'/contact-us'}>{t('Contact Us')}</Link>*/}
+                                {/*</div>*/}
                             </div>
                         </div>
                     </div>
@@ -87,10 +93,17 @@ export default function Footer() {
 
                         <div className="flex flex-col float-right md:flex-row md:justify-end">
                             <div className="mr-0 text-right md:mr-5">
-                                <Link href={'/'}>About Liveproshop</Link>
-                            </div>
-                            <div className="mr-0 text-right md:mr-5">
-                                <Link href={'/'}>Cookies</Link>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <Link href="javascript:;">
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                    <a
+                                        onClick={() => {
+                                            console.log(123);
+                                            dispatch(setModalCalendlyMetaAction(true));
+                                        }}>
+                                        {t('About Liveproshop')}
+                                    </a>
+                                </Link>
                             </div>
                             <div className="mr-0 text-right md:mr-5">
                                 <Link href={'/pages/privacy'}>Privacy</Link>

@@ -12,6 +12,7 @@ import {
     checkAllIdsAction,
     uncheckAllIdsAction,
     setModalConfirmationMetaAction,
+    setModalCalendlyMetaAction,
     setSwitchHeaderAction,
     showLoaderAction,
     setActivePageAction,
@@ -125,6 +126,7 @@ const initialState: State.Layouts = {
     switchHeader: false,
     switchToggled: false,
     modalConfirmationMeta: null,
+    modalCalendlyMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
     }
@@ -267,6 +269,15 @@ const ACTION_HANDLERS: any = {
         modalConfirmationMeta: action.payload && {
             ...action.payload
         }
+    }),
+    [setModalCalendlyMetaAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<Layouts.ModalCalendlyMeta>
+    ): State.Layouts => ({
+        ...state,
+        modalCalendlyMeta: action.payload && {
+            ...action.payload
+        }
     })
 };
 
@@ -283,6 +294,7 @@ export {
     setInfoToastAction,
     deleteToastAction,
     setModalConfirmationMetaAction,
+    setModalCalendlyMetaAction,
     setSwitchToggleAction,
     sidebarCloseAction
 };
