@@ -3,7 +3,7 @@
   background-repeat: no-repeat;
   background-size: contain;
 
-  @apply mt-10 w-[559px] h-[701px] float-left lg:mt-0 lg:ml-[100px];
+  @apply mt-10 w-[300px] lg:w-[559px] lg:h-[701px] float-left lg:mt-0 lg:ml-[100px];
 }
 
 .feature-phone-photo {
@@ -11,7 +11,7 @@
   background-repeat: no-repeat;
   background-size: contain;
 
-  @apply mt-10 w-[427px] h-[861px] lg:mt-[-20px] float-left lg:ml-[100px];
+  @apply mt-10 w-[427px] xl:h-[861px] lg:mt-[-20px] float-left lg:ml-[100px];
 }
 
 .feature-comp {

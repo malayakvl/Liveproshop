@@ -21,7 +21,8 @@ const Header: React.FC = () => {
                 router.pathname == '/' ||
                 router.pathname == '/faq' ||
                 router.pathname == '/features' ||
-                router.pathname == '/testimonials'
+                router.pathname == '/plans' ||
+                router.pathname == '/customer-story'
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
             }`}>
@@ -42,7 +43,7 @@ const Header: React.FC = () => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95">
                             <Menu.Items className="absolute left-0 top-[-10px] w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-1 flex flex-col font-bold text-sm">
-                                <Link href={'/testimonials'}>
+                                <Link href={'/customer-story'}>
                                     <Menu.Item
                                         as="a"
                                         className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
@@ -56,11 +57,11 @@ const Header: React.FC = () => {
                                         {t('Features')}
                                     </Menu.Item>
                                 </Link>
-                                <Link href={'/pricing'}>
+                                <Link href={'/plans'}>
                                     <Menu.Item
                                         as="a"
                                         className={`m-2 cursor-pointer drop-top-menu-item ${
-                                            router.pathname == '/pricing'
+                                            router.pathname == '/plans'
                                                 ? 'text-purple-400'
                                                 : 'hover:text-purple-400'
                                         }`}>
@@ -109,18 +110,13 @@ const Header: React.FC = () => {
                             flex-auto mx-2 xl:mx-4
                             2xl:mx-7 my-4 lg:my-0 font-bold text-sm"
                         id="menu">
-                        <Link href={'/testimonials'}>
-                            <a className="m-2 xl:mx-4.5 2xl:mx-7 hover:text-purple-400">
-                                {t('Testimonials')}
-                            </a>
-                        </Link>
                         <Link href={'/features'}>
                             <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400">
                                 {t('Features')}
                             </a>
                         </Link>
 
-                        <Link href={'/pricing'}>
+                        <Link href={'/plans'}>
                             <a
                                 className={`m-2 xl:mx-3.5 2xl:mx-7 ${
                                     router.pathname == '/pricing'
@@ -131,9 +127,9 @@ const Header: React.FC = () => {
                             </a>
                         </Link>
 
-                        <Link href={'/'}>
+                        <Link href={'/customer-story'}>
                             <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400">
-                                {t('Case Studies')}
+                                {t('Customer Story')}
                             </a>
                         </Link>
 
