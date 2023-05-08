@@ -42,6 +42,4 @@ export const sidebarCloseAction: any = createAction('layouts/CLOSE_SIDEBAR');
 export const setModalConfirmationMetaAction: any = createAction(
     'layouts/SET_MODAL_DELETE_CONFIRMATION'
 );
-export const setModalCalendlyMetaAction: any = createAction(
-    'layouts/SET_MODAL_CALENDLY'
-);
+export const setModalCalendlyMetaAction: any = createAction('layouts/SET_MODAL_CALENDLY');

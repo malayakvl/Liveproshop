@@ -94,7 +94,7 @@ export default function Footer() {
                         <div className="flex flex-col float-right md:flex-row md:justify-end">
                             <div className="mr-0 text-right md:mr-5">
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link href="javascript:;">
+                                <Link href=":;">
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                     <a
                                         onClick={() => {
