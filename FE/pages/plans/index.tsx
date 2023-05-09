@@ -163,7 +163,7 @@ export default function Index({ locale }: { locale: any }) {
                                     </span>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
-                                        href=":;"
+                                        href="javascript:void(0)"
                                         onClick={() => {
                                             if (user?.email) {
                                                 Router.push(
