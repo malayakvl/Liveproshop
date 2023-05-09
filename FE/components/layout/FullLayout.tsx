@@ -30,7 +30,8 @@ export default function FullLayout({ children }: { children: any }) {
                     router.pathname == '/plans' ||
                     router.pathname == '/customer-story' ||
                     router.pathname == '/features' ||
-                    router.pathname == '/faq'
+                    router.pathname == '/faq' ||
+                    router.pathname == '/privacy'
                         ? 'bg-white'
                         : 'bg-gray-150'
                 } text-black dark:text-white`}>

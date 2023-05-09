@@ -2,12 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
-import { setModalCalendlyMetaAction } from '../../redux/layouts';
-import { useDispatch } from 'react-redux';
 
 export default function Footer() {
     const t = useTranslations();
-    const dispatch = useDispatch();
 
     return (
         <footer className="w-full bg-blue-550 pt-[50px]">
@@ -94,19 +91,13 @@ export default function Footer() {
                         <div className="flex flex-col float-right md:flex-row md:justify-end">
                             <div className="mr-0 text-right md:mr-5">
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link href=":;">
+                                <Link href={'/'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                                    <a
-                                        onClick={() => {
-                                            console.log(123);
-                                            dispatch(setModalCalendlyMetaAction(true));
-                                        }}>
-                                        {t('About Liveproshop')}
-                                    </a>
+                                    {t('About Liveproshop')}
                                 </Link>
                             </div>
                             <div className="mr-0 text-right md:mr-5">
-                                <Link href={'/pages/privacy'}>Privacy</Link>
+                                <Link href={'/privacy'}>Privacy</Link>
                             </div>
                             <div className="mr-0 text-right md:mr-5">
                                 <a

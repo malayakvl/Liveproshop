@@ -44,7 +44,7 @@ const ModalCalendly: React.FC<Props> = ({ ...props }) => {
                         </div>
                     </div>
                     {/*Body*/}
-                    <InlineWidget url="https://calendly.com/victoriya-korogod/test" />
+                    <InlineWidget url="https://calendly.com/liveproshop" />
                 </div>
             </div>
         </div>

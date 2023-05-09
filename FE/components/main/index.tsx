@@ -2,10 +2,13 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import _ from 'lodash';
+import { setModalCalendlyMetaAction } from '../../redux/layouts';
+import { useDispatch } from 'react-redux';
 
 function Main() {
     const t = useTranslations();
     const [activeNumber, setActiveNumber] = useState(0);
+    const dispatch = useDispatch();
     const changeFeedback = (num: number) => {
         setActiveNumber(num);
     };
@@ -353,20 +356,25 @@ function Main() {
                 {t('It only takes 30 seconds to get started')}.
             </h4>
             <div className="w-full mt-[40px] text-center mb-[100px]">
-                <Link href={'/'}>
+                <Link href={'/auth/signup'}>
                     <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
                         <span className="text-[20px] inline-block min-w-[220px]">
                             {t('Register now!')}
                         </span>
                     </a>
                 </Link>
-                <Link href={'/'}>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                <div
+                    className="md:inline-block cursor-pointer"
+                    onClick={() => {
+                        dispatch(setModalCalendlyMetaAction(true));
+                    }}>
                     <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
                         <span className="text-[20px] inline-block min-w-[220px]">
                             {t('I want to know more!')}
                         </span>
                     </a>
-                </Link>
+                </div>
             </div>
         </>
     );
