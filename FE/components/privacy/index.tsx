@@ -1,14 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 function Privacy() {
-    const [showMoreAnswer, setShowMoreAnswer] = useState<any>({});
-
-    const showAnswer = (num: number) => {
-        const nextCheckedItems = { ...showMoreAnswer };
-        nextCheckedItems[num] = !nextCheckedItems[num];
-        setShowMoreAnswer(nextCheckedItems);
-    };
-
     return (
         <>
             <div className="flex">
