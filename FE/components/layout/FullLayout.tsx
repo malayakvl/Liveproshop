@@ -31,6 +31,7 @@ export default function FullLayout({ children }: { children: any }) {
                     router.pathname == '/customer-story' ||
                     router.pathname == '/features' ||
                     router.pathname == '/faq' ||
+                    router.pathname == '/terms-and-conditions' ||
                     router.pathname == '/privacy'
                         ? 'bg-white'
                         : 'bg-gray-150'
