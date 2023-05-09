@@ -78,15 +78,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                                 src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v12.0&appId=3046697902325160&autoLogAppEvents=1"
                                 nonce="qpTXeSyr"
                             />
-                            {/*<link*/}
-                            {/*    href="https://assets.calendly.com/assets/external/widget.css"*/}
-                            {/*    rel="stylesheet"*/}
-                            {/*/>*/}
-                            {/*<script*/}
-                            {/*    src="https://assets.calendly.com/assets/external/widget.js"*/}
-                            {/*    type="text/javascript"*/}
-                            {/*    async*/}
-                            {/*/>*/}
                         </Head>
                         <Layout>
                             <Toasts />
