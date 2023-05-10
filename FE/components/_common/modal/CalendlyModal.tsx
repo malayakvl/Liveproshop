@@ -42,25 +42,7 @@ const CalendlyModal: React.FC = () => {
     //     [onConfirm, handleCancelBtnClick]
     // );
 
-    return (
-        <ModalCalendly
-            title={title}
-            titleKey={titleKey}
-            cancelButtonProps={{
-                disabled: isLoading,
-                onClick: onCancel
-                    ? () => onCancel().then(handleCancelBtnClick)
-                    : handleCancelBtnClick
-            }}
-            // submitButtonProps={{
-            //     isLoading,
-            //     iconClassName: submitButtonProps?.iconClassName || 'far fa-trash-alt',
-            //     localeKey: submitButtonProps?.localeKey || 'Delete',
-            //     className: submitButtonProps?.className || 'danger',
-            //     onClick: handleSubmitBtnClick
-            // }}
-        />
-    );
+    return <ModalCalendly />;
 };
 
 export default CalendlyModal;

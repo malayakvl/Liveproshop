@@ -7,7 +7,7 @@ export default function Footer() {
     const t = useTranslations();
 
     return (
-        <footer className="w-full bg-blue-550 pt-[50px]">
+        <footer className="w-full bg-blue-550 pt-[30px]">
             <div className="container mx-auto">
                 <div className="px-4 pb-4 tracking-wide text-sm text-blue-350 flex h-full justify-between flex-col">
                     <div className="flex flex-col md:flex-row justify-between md:pb-4">
@@ -91,7 +91,7 @@ export default function Footer() {
                         <div className="flex flex-col float-right md:flex-row md:justify-end">
                             <div className="mr-0 text-right md:mr-5">
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link href={'/'}>
+                                <Link href={'/about-us'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                     {t('About Liveproshop')}
                                 </Link>

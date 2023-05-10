@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSession } from 'next-auth/client';
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import LangSwitcher from '../lang/Switcher';
 import { useRouter } from 'next/router';
@@ -10,7 +10,11 @@ import { useTranslations } from 'next-intl';
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-const Header: React.FC = () => {
+interface Props {
+    isNonPage?: boolean | null;
+}
+
+const Header: React.FC<Props> = ({ isNonPage }) => {
     const [session] = useSession();
     const router = useRouter();
     const t = useTranslations();
@@ -22,7 +26,11 @@ const Header: React.FC = () => {
                 router.pathname == '/faq' ||
                 router.pathname == '/features' ||
                 router.pathname == '/plans' ||
-                router.pathname == '/customer-story'
+                router.pathname == '/privacy' ||
+                router.pathname == '/about-us' ||
+                router.pathname == '/terms-and-conditions' ||
+                router.pathname == '/customer-story' ||
+                isNonPage
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
             }`}>
