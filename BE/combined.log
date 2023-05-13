@@ -24720,3 +24720,8 @@
   level: 'info',
   timestamp: '2023-05-10T11:44:08.699Z'
 }
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-05-12T13:47:46.488Z'
+}

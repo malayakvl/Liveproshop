@@ -51,7 +51,7 @@ export default function Signup({ locale }: { locale: string }) {
                 <title>LiveProshop - Sign Up</title>
             </Head>
 
-            <div className="flex justify-center md:h-[620px]">
+            <div className="flex main-bg justify-center md:h-[620px]">
                 <Formik
                     enableReinitialize
                     initialValues={{ email: '', acceptTerms: false, role_id: '2' }}
@@ -60,7 +60,7 @@ export default function Signup({ locale }: { locale: string }) {
                     {(props) => (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="w-80 mb-5 p-8 flex-col w-full md:px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[900px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
+                            className="w-80 mb-5 p-8 flex-col rounded-lg border shadow-lg mt-10 flex md:flex-row md:w-[900px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
                             <div className="mt-0 w-full font-bold md:mt-8 md:pr-10 md:w-2/4 md:flex md:flex-col md:justify-center">
                                 <div className="text-3xl md:text-5xl line-height-105percent mb-9 text-gray-600">
                                     {t('Sign up today!')}

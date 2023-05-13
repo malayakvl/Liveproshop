@@ -38,8 +38,8 @@ function Restore({ locale }: { locale: string }) {
                 <title>LiveProshop - Restore Password</title>
             </Head>
 
-            <div className="flex justify-center">
-                <div className="rounded-lg border shadow-xl mt-10 bg-white w-96 p-10 pb-16">
+            <div className="flex main-bg  justify-center">
+                <div className="rounded-lg border obrder- mt-10 bg-white shadow-lg w-96 p-10 pb-16">
                     <div className="flex">
                         <div className="font-bold text-3xl line-height-105percent mb-2">
                             Forgot your Password?

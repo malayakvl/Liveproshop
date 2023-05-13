@@ -30,6 +30,9 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                 router.pathname == '/about-us' ||
                 router.pathname == '/terms-and-conditions' ||
                 router.pathname == '/customer-story' ||
+                router.pathname == '/auth/signin' ||
+                router.pathname == '/auth/restore' ||
+                router.pathname == '/auth/signup' ||
                 isNonPage
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
