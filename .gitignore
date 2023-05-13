@@ -15,3 +15,4 @@ FE/.env
 /FE/DELETE
 ./settings
 ./project
+/.settings/
