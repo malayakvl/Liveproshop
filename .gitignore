@@ -11,8 +11,9 @@ FE/.env
 /BE/combined.log
 .idea
 /_DB/
-/BE/public/uploads/achives/
+/BE/public/uploads/archives/
 /FE/DELETE
 ./settings
 .project
 /.settings/
+BE/error.log
