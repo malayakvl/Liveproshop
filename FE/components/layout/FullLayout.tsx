@@ -9,7 +9,7 @@ export default function FullLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const router = useRouter();
 
-    return (
+    return ( 
         <>
             {showLoader && (
                 <div className="loader">
