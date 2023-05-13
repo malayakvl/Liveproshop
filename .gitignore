@@ -14,5 +14,5 @@ FE/.env
 /BE/public/uploads/achives/
 /FE/DELETE
 ./settings
-./project
+.project
 /.settings/
