@@ -15,4 +15,5 @@ FE/.env
 /FE/DELETE
 ./settings
 ./project
-/.settings/
+BE/combined.log
+.project
