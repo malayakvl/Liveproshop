@@ -17,3 +17,4 @@ FE/.env
 .project
 /.settings/
 BE/error.log
+BE/_stepByStepMigration
