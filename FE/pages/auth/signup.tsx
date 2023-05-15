@@ -60,9 +60,9 @@ export default function Signup({ locale }: { locale: string }) {
                     {(props) => (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="w-80 mb-5 p-8 flex-col rounded-lg border shadow-lg mt-10 flex md:flex-row md:w-[900px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
-                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-10 md:w-2/4 md:flex md:flex-col md:justify-center">
-                                <div className="text-3xl md:text-5xl line-height-105percent mb-9 text-gray-600">
+                            className="w-80 mb-5 p-8 flex-col rounded-lg colored-shadow mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
+                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-8 md:w-2/4 md:flex md:flex-col md:justify-center">
+                                <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
 

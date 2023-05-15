@@ -24,7 +24,7 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
                 <title>LiveProshop - Registration</title>
             </Head>
 
-            <div className="flex justify-center">{Form}</div>
+            <div className="flex main-bg justify-center">{Form}</div>
         </>
     );
 }

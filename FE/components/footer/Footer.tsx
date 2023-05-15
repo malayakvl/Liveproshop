@@ -100,12 +100,13 @@ export default function Footer() {
                                 <Link href={'/privacy'}>Privacy</Link>
                             </div>
                             <div className="mr-0 text-right md:mr-5">
-                                <a
-                                    href="https://www.liveproshop.com/terms-and-conditions"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    Terms
-                                </a>
+                                {/*<a*/}
+                                {/*    href="https://www.liveproshop.com/terms-and-conditions"*/}
+                                {/*    target="_blank"*/}
+                                {/*    rel="noreferrer">*/}
+                                {/*    Terms*/}
+                                {/*</a>*/}
+                                <Link href={'/terms-and-conditions'}>Terms</Link>
                             </div>
                             <div className="text-white">
                                 @ {moment().format('YYYY')} Liveproshop

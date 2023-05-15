@@ -261,3 +261,21 @@ input:checked + .toggle-bg {
 .InputContainer .InputElement {
   border:solid 1px red;
 }
+.colored-shadow {
+    box-shadow: rgba(199, 102, 16, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px, rgba(212, 29, 200, 0.1) 0px 24px 80px
+}
+
+.text-checked {
+    @apply relative;
+
+    &:after {
+        background: url(../../public/images/tick.svg);
+        content:"";
+        width: 52px;
+        height: 39px;
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+}

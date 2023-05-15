@@ -9,7 +9,7 @@ export default function FullLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const router = useRouter();
 
-    return ( 
+    return (
         <>
             {showLoader && (
                 <div className="loader">
@@ -35,7 +35,10 @@ export default function FullLayout({ children }: { children: any }) {
                     router.pathname == '/terms-and-conditions' ||
                     router.pathname == '/auth/signin' ||
                     router.pathname == '/auth/restore' ||
+                    router.pathname == '/auth/restore/password' ||
                     router.pathname == '/auth/signup' ||
+                    router.pathname == '/auth/registration' ||
+                    router.pathname == '/contact-us' ||
                     router.pathname == '/privacy'
                         ? 'bg-white'
                         : 'bg-gray-150'
