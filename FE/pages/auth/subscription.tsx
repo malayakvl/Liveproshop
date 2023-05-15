@@ -87,8 +87,8 @@ export default function Signup({
     });
 
     return (
-        <div className="flex justify-center">
-            <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-24">
+        <div className="flex main-bg justify-center">
+            <div className="mt-10 rounded-lg colored-shadow bg-white w-96 p-10 pb-24">
                 {!hideForm && (
                     <>
                         <div className="mb-8 font-bold text-3xl line-height-105percent">
@@ -106,7 +106,6 @@ export default function Signup({
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(values) => {
-                                // console.log('DDDDDDDDDD');
                                 setLoginData({ email: values.email, password: values.password });
                                 dispatch(createUserFromSubscriptionAction(values, planId, type));
                             }}>

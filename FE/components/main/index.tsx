@@ -37,11 +37,14 @@ function Main() {
                                 <span className="text-[20px]">{t('Register for free')}</span>
                             </a>
                         </Link>
-                        <Link href={'/'}>
-                            <a className="btn-big text-center md:inline-block md:ml-[30px] lg:ml-[30px]">
-                                <span className="text-[20px]">{t('Request a seles call')}</span>
-                            </a>
-                        </Link>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <a
+                            onClick={() => {
+                                dispatch(setModalCalendlyMetaAction(true));
+                            }}
+                            className="cursor-pointer btn-big text-center md:inline-block md:ml-[30px] lg:ml-[30px]">
+                            <span className="text-[20px]">{t('Request a seles call')}</span>
+                        </a>
                     </div>
                 </div>
                 <div className="sm:hidden md:w-1/2 lg:w-1/3 md:inline-block">

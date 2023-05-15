@@ -39,7 +39,7 @@ function Restore({ locale }: { locale: string }) {
             </Head>
 
             <div className="flex main-bg  justify-center">
-                <div className="rounded-lg border obrder- mt-10 bg-white shadow-lg w-96 p-10 pb-16">
+                <div className="rounded-lg colored-shadow obrder- mt-10 bg-white shadow-lg w-96 p-10 pb-16">
                     <div className="flex">
                         <div className="font-bold text-3xl line-height-105percent mb-2">
                             Forgot your Password?
@@ -67,7 +67,7 @@ function Restore({ locale }: { locale: string }) {
                         }}>
                         {(props) =>
                             validEmail === 'yes' ? (
-                                <div className="mb-4 font-bold text-2xl line-height-105percent text-green-500">
+                                <div className="mb-4 font-bold text-xl line-height-105percent text-green-500">
                                     {t('We send you recovery link, please check your mailbox')}
                                 </div>
                             ) : (

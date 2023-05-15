@@ -26,9 +26,9 @@ function Signin({ locale }: { locale: string }) {
             </Head>
 
             <div className="flex main-bg justify-center">
-                <div className="w-80 p-8 mt-10 rounded-lg bg-white shadow-lg md:w-96 md:p-10 pb-14">
+                <div className="w-80 p-8 mt-10 rounded-lg bg-white colored-shadow md:w-96 md:p-10 pb-14">
                     <div className="mb-2 font-sm">{t('Welcome back!')}</div>
-                    <div className="mb-8 font-bold text-3xl line-height-105percent text-gray-600">
+                    <div className="mb-8 font-bold text-2xl line-height-105percent text-gray-600">
                         {t('Please sign into your account')}
                     </div>
 
