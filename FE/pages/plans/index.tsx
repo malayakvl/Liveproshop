@@ -188,6 +188,17 @@ export default function Index({ locale }: { locale: any }) {
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
                                     href="javascript:;"
+                                    onClick={() => {
+                                        if (user?.email) {
+                                            Router.push(
+                                                `/subscription?planId=${plans.header[0].id}`
+                                            );
+                                        } else {
+                                            Router.push(
+                                                `/auth/subscription?planId=${plans.header[0].id}`
+                                            );
+                                        }
+                                    }}
                                     className="flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn">
                                     {t('Choose Plan')}
                                     <img
@@ -241,7 +252,18 @@ export default function Index({ locale }: { locale: any }) {
                                             )}
                                         </span>
                                         <a
-                                            href="#/"
+                                            onClick={() => {
+                                                if (user?.email) {
+                                                    Router.push(
+                                                        `/subscription?planId=${plans.header[1].id}`
+                                                    );
+                                                } else {
+                                                    Router.push(
+                                                        `/auth/subscription?planId=${plans.header[1].id}`
+                                                    );
+                                                }
+                                            }}
+                                            href="javascript:void(0)"
                                             className="flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn mt-5 mb-5">
                                             {t('Choose Plan')}
                                             <img
@@ -254,7 +276,18 @@ export default function Index({ locale }: { locale: any }) {
                                     </div>
                                 </div>
                                 <a
-                                    href="#/"
+                                    href="javascript:void(0)"
+                                    onClick={() => {
+                                        if (user?.email) {
+                                            Router.push(
+                                                `/subscription?planId=${plans.header[1].id}`
+                                            );
+                                        } else {
+                                            Router.push(
+                                                `/auth/subscription?planId=${plans.header[1].id}`
+                                            );
+                                        }
+                                    }}
                                     className="flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn">
                                     {t('Choose Plan')}
                                     <img
@@ -301,7 +334,18 @@ export default function Index({ locale }: { locale: any }) {
                                             )}
                                         </span>
                                         <a
-                                            href="#/"
+                                            href="javascript:void(0)"
+                                            onClick={() => {
+                                                if (user?.email) {
+                                                    Router.push(
+                                                        `/subscription?planId=${plans.header[2].id}`
+                                                    );
+                                                } else {
+                                                    Router.push(
+                                                        `/auth/subscription?planId=${plans.header[2].id}`
+                                                    );
+                                                }
+                                            }}
                                             className="flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn mt-5 mb-5">
                                             {t('Choose Plan')}
                                             <img
@@ -312,7 +356,18 @@ export default function Index({ locale }: { locale: any }) {
                                         </a>
                                         {parsePlanValues(2, locale)}
                                         <a
-                                            href="#/"
+                                            href="javascript:void(0)"
+                                            onClick={() => {
+                                                if (user?.email) {
+                                                    Router.push(
+                                                        `/subscription?planId=${plans.header[2].id}`
+                                                    );
+                                                } else {
+                                                    Router.push(
+                                                        `/auth/subscription?planId=${plans.header[2].id}`
+                                                    );
+                                                }
+                                            }}
                                             className="flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn">
                                             {t('Choose Plan')}
                                             <img
