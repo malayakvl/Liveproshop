@@ -10,7 +10,7 @@
 }
 
 .language-block {
-  @apply absolute top-[-80px] right-0 md:mt-[5px] md:right-0 md:sticky;
+  @apply absolute top-[-16px] right-[50px] md:top-[-80px] md:mt-0 md:right-0 md:sticky;
 }
 .drop-top-menu-item {
   border-color: transparent;
@@ -18,16 +18,18 @@
 }
 
 .mobile-menu-button {
-  @apply ml-[15px] mt-[-5px] md:ml-0 md:mt-0;
+  @apply mt-[3px] ml-[12px] md:mt-[-5px] md:ml-0 md:mt-0;
 }
 
 .brand-mobile {
   background-image: url("../../public/images/logo.svg");
-  background-size: 180px auto;
-  width: 180px;
-  height: 32px;
+  // background-size: 180px auto;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 450px;
+  height: auto;
   min-height: 32px;
   text-indent: -99999px;
   white-space: nowrap;
-  @apply block mx-4 mt-[3px] mb-10 ml-[45px] md:hidden;
+  @apply block mx-4 mt-[3px] md:mb-10 ml-[45px] md:hidden md:w-[250px];
 }

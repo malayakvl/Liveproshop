@@ -21,7 +21,8 @@
 }
 
 .profile-block {
-  @apply mt-2 md:mt-0;
+  // @apply mt-2 md:mt-0;
+  @apply mt-[3px] md:mt-0 md:pt-[15px];
 
   .profile-name {
     @apply hidden text-sm font-bold text-gray-350 pl-3 md:inline-block;
@@ -35,14 +36,14 @@
 .corner {
   background-image: url("../../public/images/trianlge.svg");
   top: -8px;
-  right:10px;
+  left:30px;
   width: 21px;
   height: 21px;
   @apply absolute;
 }
 
 .profile-menu {
-  @apply -left-6 absolute bg-white rounded-lg max-w-[145px] w-[145px] top-10 md:-left-3 p-4 text-xs z-30;
+  @apply -left-2 absolute bg-white rounded-lg max-w-[145px] w-[145px] top-8 md:-left-3 p-4 text-xs z-30;
 
   li {
     @apply mb-3;
@@ -140,9 +141,9 @@
   @apply border-0 relative text-base font-bold uppercase text-gray-350;
 
   span {
-    padding-left:40px;
+    // padding-left:40px;
     padding-right: 25px;
-    @apply relative;
+    @apply relative md:pl-[40px];
 
     &:before {
       content: '';
@@ -173,9 +174,20 @@
 }
 
 .lang-menu {
-  @apply absolute bg-white rounded-lg max-w-[70px] w-[105px] top-9 left-5 p-4 text-xs;
+  @apply absolute bg-white rounded-lg max-w-[70px] w-[105px] left-[-15px] top-[45px] md:top-9 md:left-[25px] p-4 text-xs;
 
   li {
     @apply text-base uppercase text-left font-bold cursor-pointer text-gray-350;
   }
+
+  .corner {
+      @apply left-[15px];
+  }
+}
+
+.profile-img {
+    border: solid 1px red;
+}
+.profile-name {
+    vertical-align: middle;
 }
