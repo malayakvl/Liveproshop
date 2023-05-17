@@ -251,6 +251,7 @@ export default function Index({ locale }: { locale: any }) {
                                                 'Best for live retailers selling more than 5,000€ monthly'
                                             )}
                                         </span>
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
                                             onClick={() => {
                                                 if (user?.email) {
@@ -275,6 +276,7 @@ export default function Index({ locale }: { locale: any }) {
                                         {parsePlanValues(1, locale)}
                                     </div>
                                 </div>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
                                     href="javascript:void(0)"
                                     onClick={() => {
@@ -333,6 +335,7 @@ export default function Index({ locale }: { locale: any }) {
                                                 'Best for live retailers selling more than 5,000€ monthly'
                                             )}
                                         </span>
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
                                             href="javascript:void(0)"
                                             onClick={() => {
@@ -355,6 +358,7 @@ export default function Index({ locale }: { locale: any }) {
                                             />
                                         </a>
                                         {parsePlanValues(2, locale)}
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
                                             href="javascript:void(0)"
                                             onClick={() => {

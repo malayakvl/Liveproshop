@@ -72,27 +72,28 @@ const SidebarHeader: React.FC = () => {
 
     return (
         <div className="shadow-lg max-h-[50px] md:pb-0 md:pr-0 md:shadow-none md:flex md:pr-4 items-center align-middle">
-            <div className="w-full flex items-center lg:justify-end lg:pr-[40px]">
+            <div className="pt-[5px] pb-[10px] w-full flex items-center lg:justify-end lg:pr-[40px] border-1 border-red">
                 {/* <NoticeCounter delay={120000} /> */}
                 <BrandMobile />
                 {/*<span className="divider" />*/}
-                <div className="mt-[-43px] md:mt-0 relative md:mr-[30px] md:mt-auto">
+                <div className="relative md:mr-[30px]">
                     <div
                         ref={node}
-                        className="absolute top-[-20px] min-w-[30px] right-[-120px] md:static profile-block inline-block cursor-pointer"
+                        className="absolute top-[-20px] min-w-[32px] right-[-50px]  md:right-[-120px] md:static profile-block inline-block cursor-pointer"
                         role="presentation"
                         onClick={() => {
                             setShowProfileMenu(!showProfileMenu);
                         }}>
-                        <Image
-                            src={userPhoto}
-                            width={24}
-                            height={24}
-                            className="rounded-full cursor-pointer profile-img"
-                            alt=""
-                        />
-
-                        <span className="profile-name">
+                        <div className="float-left">
+                            <Image
+                                src={userPhoto}
+                                width={32}
+                                height={32}
+                                className="rounded-full cursor-pointer profile-img"
+                                alt=""
+                            />
+                        </div>
+                        <span className="profile-name mt-[-4px] float-left border-1 border-black">
                             {user.first_name || user.last_name ? user.first_name : user.email}
                             <span className="text-blue-350 pl-2 inline-block min-w-max">
                                 ID: {user.id}
@@ -188,7 +189,7 @@ const SidebarHeader: React.FC = () => {
                 </div>
                 <LangSwitcher />
                 {/*<span className="divider" />*/}
-                <span className="hidden mt-[8px] absolute top-[0px] right-[10px] ms:ml-3 min-w-max md:right-0 md:inline-block">
+                <span className="mt-[13px] absolute top-[-3px] right-[16px] md:mt-[17px] ms:ml-3 min-w-max md:right-0 md:inline-block">
                     <a
                         href="/api/auth/signout"
                         title={t('Logout')}

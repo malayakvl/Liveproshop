@@ -48,13 +48,14 @@ export default function LangSwitcher() {
                     <div className="lang-menu shadow-2xl" ref={node}>
                         <div className="corner" />
                         <ul>
-                            {locales.map((locale: string) => (
+                            {locales.map((_locale: string) => (
                                 <li
+                                    className={_locale == locale ? 'hidden' : ''}
                                     role="presentation"
-                                    key={locale}
-                                    data-lang={locale}
+                                    key={_locale}
+                                    data-lang={_locale}
                                     onClick={switchLang}>
-                                    {locale}
+                                    {_locale}
                                 </li>
                             ))}
                         </ul>

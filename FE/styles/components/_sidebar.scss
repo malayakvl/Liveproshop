@@ -204,7 +204,7 @@
 
   ul {
     //@apply hidden;
-    
+
     li {
       @apply pl-2.5 pr-2.5;
 
@@ -256,8 +256,9 @@
   transition: margin-left .3s ease-in-out, width .3s ease-in-out;
 }
 .side-margin {
-  margin-left:80px;
+  //margin-left:80px;
+  @apply md:ml-[80px];
 }
 .side-with-sidebar {
-  margin-left:260px;
+  @apply md:ml-[260px];
 }
