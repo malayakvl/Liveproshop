@@ -71,7 +71,7 @@ const SidebarHeader: React.FC = () => {
     };
 
     return (
-        <div className="shadow-lg max-h-[50px] md:pb-0 md:pr-0 md:shadow-none md:flex md:pr-4 items-center align-middle">
+        <div className="shadow-lg max-h-[50px] md:pb-0 md:pr-0 md:shadow-none md:flex md:pr-4 md:mt-2 items-center align-middle">
             <div className="pt-[5px] pb-[10px] w-full flex items-center lg:justify-end lg:pr-[40px] border-1 border-red">
                 {/* <NoticeCounter delay={120000} /> */}
                 <BrandMobile />
@@ -189,7 +189,7 @@ const SidebarHeader: React.FC = () => {
                 </div>
                 <LangSwitcher />
                 {/*<span className="divider" />*/}
-                <span className="mt-[13px] absolute top-[-3px] right-[16px] md:mt-[17px] ms:ml-3 min-w-max md:right-0 md:inline-block">
+                <span className="mt-[13px] absolute top-[-3px] right-[16px] md:mt-[17px] ms:ml-3 min-w-max md:right-0 md:inline-block md:mt-[15px]">
                     <a
                         href="/api/auth/signout"
                         title={t('Logout')}
