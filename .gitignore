@@ -3,6 +3,7 @@ BE/.env
 .DS_Store
 FE/node_modules
 FE/.env
+BE/combined.log
 /BE/public/uploads/orders/
 /BE/public/uploads/products/
 /BE/public/uploads/shipping/
