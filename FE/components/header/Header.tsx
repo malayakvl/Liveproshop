@@ -21,12 +21,12 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ isNonPage }) => {
-    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    // const [showProfileMenu, setShowProfileMenu] = useState(false);
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     // const node = useRef<HTMLDivElement>(null);
     const t = useTranslations();
-    const [session] = useSession();
+    // const [session] = useSession();
     const [userPhoto, setUserPhoto] = useState(userProfileImg);
     const router = useRouter();
 

@@ -185,9 +185,9 @@ export default function Index({ locale }: { locale: any }) {
                                     </a>
                                 </div>
                                 {parsePlanValues(0, locale)}
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                 <a
-                                    href="javascript:;"
+                                    href=";:"
                                     onClick={() => {
                                         if (user?.email) {
                                             Router.push(
@@ -199,7 +199,7 @@ export default function Index({ locale }: { locale: any }) {
                                             );
                                         }
                                     }}
-                                    className="flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn">
+                                    className="cursor-pointer flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn">
                                     {t('Choose Plan')}
                                     <img
                                         src="https://res.cloudinary.com/williamsondesign/arrow-right.svg"
