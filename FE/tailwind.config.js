@@ -82,6 +82,9 @@ module.exports = {
                 orange: {
                     450: '#EE5342'
                 },
+                purple: {
+                    250: '#cb55ac'
+                },
                 yellow: {
                     450: '#EFBB58'
                 },

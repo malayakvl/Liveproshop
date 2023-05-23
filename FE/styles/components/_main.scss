@@ -127,7 +127,7 @@
     background-color: transparent;
     //box-shadow: 0px 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     //border-radius: 36px;
-    @apply mb-[20px] p-[25px] min-h-[200px] md:mb-auto;
+    @apply mb-[20px] p-0 min-h-[200px] md:mb-auto;
   }
 
   .see-full-link {
@@ -139,7 +139,7 @@
       position: absolute;
       background-image: url(../../public/images/main/arrow-btn.svg);
 
-      @apply w-[12px] h-[22px] right-[-20px] top-[2px];
+      @apply w-[12px] h-[22px] right-[-20px] top-[1px];
     }
   }
 

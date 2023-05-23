@@ -450,7 +450,7 @@ export default function Index({ locale }: { locale: any }) {
 
                 <div className="text-center">
                     <div className="font-bold text-5xl">{t('Try it for free today!')}</div>
-                    <div className="font-semibold text-3xl">
+                    <div className="text-3xl font-bold">
                         {t('It only takes 30 second to get started')}
                     </div>
                 </div>

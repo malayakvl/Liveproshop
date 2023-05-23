@@ -1,11 +1,17 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSession } from 'next-auth/client';
-import React, { Fragment } from 'react';
-import { Menu, Transition } from '@headlessui/react';
+import { signOut, useSession } from 'next-auth/client';
+import React, { useEffect, useState } from 'react';
+// import { Menu, Transition } from '@headlessui/react';
 import LangSwitcher from '../lang/Switcher';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
+import { userSelector } from '../../redux/user/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { baseApiUrl } from '../../constants';
+import { fetchLatestAction } from '../../redux/notifications';
+// import BrandMobile from "../sidebar/BrandMobile";
+// import { toggleSidebarAction } from '../../redux/layouts';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -15,9 +21,28 @@ interface Props {
 }
 
 const Header: React.FC<Props> = ({ isNonPage }) => {
-    const [session] = useSession();
-    const router = useRouter();
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const user = useSelector(userSelector);
+    const dispatch = useDispatch();
+    // const node = useRef<HTMLDivElement>(null);
     const t = useTranslations();
+    const [session] = useSession();
+    const [userPhoto, setUserPhoto] = useState(userProfileImg);
+    const router = useRouter();
+
+    useEffect(
+        function () {
+            if (user?.photo) {
+                setUserPhoto(baseApiUrl + user?.photo);
+            }
+            if (user?.email !== undefined) {
+                dispatch(fetchLatestAction());
+            }
+        },
+        [user]
+    );
+
+    console.log(userPhoto);
 
     return (
         <header
@@ -40,172 +65,158 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
             }`}>
-            <div className="container mx-auto">
-                <nav className="bordered px-[20px] md:px-0 py-5 bg-white flex flex-wrap items-center justify-between">
-                    <Menu
-                        as="div"
-                        className="w-[60px] absolute sm:relative xl:hidden z-10 lg:w-auto">
-                        <Menu.Button className="burger-btn absolute sm:top-[-45px] top-[-25px] w-[24px]">
-                            <Image src="/images/menu.svg" width="24" height="40" alt="" />
-                        </Menu.Button>
-                        <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95">
-                            <Menu.Items className="absolute left-0 top-[-10px] w-48 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-1 flex flex-col font-bold text-sm">
+            <div className="container relative mx-auto layout-header">
+                <Link href={'/'}>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                    <a className="app-logo-f" />
+                </Link>
+
+                <div>
+                    <div className="mobile-menu-button">
+                        <svg
+                            width="24"
+                            height="40"
+                            viewBox="0 0 24 40"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M3 15C3 14.4477 3.44772 14 4 14H20C20.5523 14 21 14.4477 21 15C21 15.5523 20.5523 16 20 16H4C3.44772 16 3 15.5523 3 15ZM3 20C3 19.4477 3.44772 19 4 19H14C14.5523 19 15 19.4477 15 20C15 20.5523 14.5523 21 14 21H4C3.44772 21 3 20.5523 3 20ZM4 24C3.44772 24 3 24.4477 3 25C3 25.5523 3.44772 26 4 26H8C8.55228 26 9 25.5523 9 25C9 24.4477 8.55228 24 8 24H4Z"
+                                fill="#4F5B84"
+                            />
+                        </svg>
+                    </div>
+                    <div className="texting-menu">
+                        <ul>
+                            <li>
                                 <Link href={'/customer-story'}>
-                                    <Menu.Item
-                                        as="a"
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        href="javascript:void(0)"
                                         className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                         {t('Testimonials')}
-                                    </Menu.Item>
+                                    </a>
                                 </Link>
+                            </li>
+                            <li>
                                 <Link href={'/features'}>
-                                    <Menu.Item
-                                        as="a"
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        href="javascript:void(0)"
                                         className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                         {t('Features')}
-                                    </Menu.Item>
+                                    </a>
                                 </Link>
+                            </li>
+                            <li>
                                 <Link href={'/plans'}>
-                                    <Menu.Item
-                                        as="a"
-                                        className={`m-2 cursor-pointer drop-top-menu-item ${
-                                            router.pathname == '/plans'
-                                                ? 'text-purple-400'
-                                                : 'hover:text-purple-400'
-                                        }`}>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                         {t('Pricing')}
-                                    </Menu.Item>
+                                    </a>
                                 </Link>
+                            </li>
+                            <li>
                                 <Link href={'/faq'}>
-                                    <Menu.Item
-                                        as="a"
-                                        className="drop-top-menu-item m-2 cursor-pointer hover:text-purple-400 uppercase">
-                                        Faq
-                                    </Menu.Item>
-                                </Link>
-                                <Link href={'/'}>
-                                    <Menu.Item
-                                        as="a"
-                                        className="drop-top-menu-item m-2 cursor-pointer hover:text-purple-400">
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                         {t('Case Studies')}
-                                    </Menu.Item>
+                                    </a>
                                 </Link>
-
+                            </li>
+                            <li>
                                 <Link href={'/contact-us'}>
-                                    <Menu.Item
-                                        as="a"
-                                        className={`drop-top-menu-item m-2 cursor-pointer ${
-                                            router.pathname == '/contact-us'
-                                                ? 'text-purple-400'
-                                                : 'hover:text-purple-400'
-                                        }`}>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                         {t('Contact Us')}
-                                    </Menu.Item>
+                                    </a>
                                 </Link>
-                            </Menu.Items>
-                        </Transition>
-                    </Menu>
-
-                    <div className="cursor-pointer md:absolute lg:inherit">
-                        <Link href={'/'}>
-                            {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
-                            <a className="app-logo" />
-                        </Link>
+                            </li>
+                        </ul>
                     </div>
+                </div>
 
-                    <div
-                        className="hidden xl:flex flex-wrap justify-end
-                            flex-auto mx-2 xl:mx-4
-                            2xl:mx-7 my-4 lg:my-0 font-bold text-sm"
-                        id="menu">
-                        <Link href={'/features'}>
-                            <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400">
-                                {t('Features')}
-                            </a>
-                        </Link>
-
-                        <Link href={'/plans'}>
-                            <a
-                                className={`m-2 xl:mx-3.5 2xl:mx-7 ${
-                                    router.pathname == '/pricing'
-                                        ? 'text-purple-400'
-                                        : 'hover:text-purple-400'
-                                }`}>
-                                {t('Pricing')}
-                            </a>
-                        </Link>
-
-                        <Link href={'/customer-story'}>
-                            <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400">
-                                {t('Customer Story')}
-                            </a>
-                        </Link>
-
-                        <Link href={'/faq'}>
-                            <a className="m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-400 uppercase">
-                                {t('Faq')}
-                            </a>
-                        </Link>
-
-                        <Link href={'/contact-us'}>
-                            <a
-                                className={`m-2 xl:mx-3.5 2xl:mx-7 ${
-                                    router.pathname == '/contact-us'
-                                        ? 'text-purple-400'
-                                        : 'hover:text-purple-400'
-                                }`}>
-                                {t('Contact Us')}
-                            </a>
-                        </Link>
-                    </div>
-                    <div className="w-full md:w-auto font-bold text-sm flex flex-wrap flex-none space-x-4 md:justify-end">
-                        {!session?.user ? (
-                            <>
-                                <Link href={'/auth/signup'}>
-                                    <button className="sm:pl-0.5 sm:pr-0.5 w-[60%] md:w-auto gradient-btn max-h-[40px] pt-[7px]">
-                                        <span className="inline-block">{t('Try for free')}!</span>
-                                    </button>
-                                </Link>
-                                <Link href={'/auth/signin'}>
-                                    <button className="white-shadow w-[35%] md:w-auto disabled-btn max-h-[40px]">
-                                        <span className="inline-block">Login</span>
-                                    </button>
-                                </Link>
-                            </>
-                        ) : (
-                            <div className="hidden md:block">
-                                <div className="ml-4 flex items-center md:ml-6 md:mt-3">
-                                    {/* Profile dropdown */}
-                                    <Menu as="div" className="ml-5 relative -mt-2">
-                                        <div>
-                                            <Menu.Button
-                                                className="max-w-xs bg-gray-800 rounded-full flex
-                                            items-center text-sm focus:outline-none focus:ring-2
-                                            focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-                                                <span className="sr-only">Open user menu</span>
-                                                <Image
-                                                    src={userProfileImg}
-                                                    width={35}
-                                                    height={35}
-                                                    className="rounded-full"
-                                                    alt=""
-                                                />
-                                            </Menu.Button>
-                                        </div>
-                                    </Menu>
-                                </div>
+                <div className="right-header-block">
+                    {user?.email ? (
+                        <div
+                            className="profile-block profile-block-layout"
+                            style={{ border: 'solid 1px red' }}>
+                            <div className="float-left h-[32px]">
+                                <Image
+                                    src={userPhoto}
+                                    width={32}
+                                    height={32}
+                                    className="rounded-full cursor-pointer profile-img"
+                                    alt=""
+                                />
                             </div>
-                        )}
-
-                        <LangSwitcher />
-                    </div>
-                </nav>
+                            <span className="profile-name mt-[-4px] float-left border-1 border-black">
+                                {user ? user.first_name : ''}
+                                <span className="text-blue-350 pl-2 inline-block min-w-max">
+                                    ID: {user?.id}
+                                </span>
+                                <em>{user?.company_name || t('No Company Name')}</em>
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="layout-action-btns-block">
+                            <Link href={'/auth/signup'}>
+                                <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px]">
+                                    <span className="inline-block">{t('Try for free')}!</span>
+                                </button>
+                            </Link>
+                            {/*<Link href={'/auth/signin'}>*/}
+                            {/*    <button className="white-shadow md:w-auto disabled-btn max-h-[40px]">*/}
+                            {/*        <span className="inline-block">Login</span>*/}
+                            {/*    </button>*/}
+                            {/*</Link>*/}
+                        </div>
+                    )}
+                    <LangSwitcher type="layout" />
+                    {user?.email ? (
+                        <span className="logout-btn logout-btn-layout">
+                            <a
+                                href="/api/auth/signout"
+                                title={t('Logout')}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    window.localStorage.removeItem('user');
+                                    signOut();
+                                }}>
+                                <Image
+                                    className="mr-5"
+                                    src="/images/icon-logout.svg"
+                                    width={14}
+                                    height={20}
+                                    alt={t('Logout')}
+                                />
+                            </a>
+                        </span>
+                    ) : (
+                        <span className="logout-btn login-btn-layout">
+                            <Link href={'/auth/signin'}>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a href="javascript:void(0)" title={t('Login')}>
+                                    <Image
+                                        className="mr-5"
+                                        src="/images/login-icon.svg"
+                                        width={24}
+                                        height={40}
+                                        alt={t('Logout')}
+                                    />
+                                </a>
+                            </Link>
+                        </span>
+                    )}
+                </div>
+                <div className="clear-both" />
             </div>
         </header>
     );

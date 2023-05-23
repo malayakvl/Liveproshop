@@ -123,13 +123,13 @@
   direction: ltr;
 }
 
+@import "components/sidebar-header";
 @import "components/header";
 @import "components/main";
 @import "components/buttons";
 @import "components/alerts";
 @import "components/sidebar";
 @import "components/form";
-@import "components/sidebar-header";
 @import "components/page-titles";
 @import "components/tables";
 @import "components/tabs";
@@ -140,6 +140,7 @@
 @import "components/filters";
 @import "components/dropdown";
 @import "components/popup";
+@import "components/home";
 @import "components/faq";
 @import "components/testimonials";
 @import "components/features";

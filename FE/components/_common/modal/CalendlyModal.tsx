@@ -9,7 +9,7 @@ const CalendlyModal: React.FC = () => {
     // const [isLoading, setIsLoading] = useState<boolean>(false);
     // const dispatch = useDispatch();
     const inputMeta = useSelector(modalCalendlyMetaSelector);
-    const [meta, setMeta] = useState<Layouts.ModalConfirmationMeta | null>(null);
+    const [_, setMeta] = useState<Layouts.ModalConfirmationMeta | null>(null);
     // const { title = '', titleKey = 'Do you want to delete', onCancel } = meta || ({} as any);
 
     useEffect(() => {

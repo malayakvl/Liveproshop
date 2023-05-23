@@ -8,6 +8,17 @@
 
   @apply ml-[30px] w-[230px] h-[35px] md:ml-[50px] md:w-[250px] md:h-[40px] inline-block xl:ml-0;
 }
+.app-logo-f {
+  background-image: url("../../public/images/logo.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  //height: 35px;
+  //width: 230px;
+  //left: 45px;
+  //top: 11px;
+
+  @apply absolute top-[12px] h-[32px] w-[180px] left-[45px] md:top-[18px] md:left-0 md:w-[230px] md:h-[35px];
+}
 
 .language-block {
   @apply absolute top-[-16px] right-[50px] md:top-[-80px] md:mt-0 md:right-0 md:sticky;
@@ -18,7 +29,7 @@
 }
 
 .mobile-menu-button {
-  @apply mt-[3px] ml-[12px] md:mt-[-5px] md:ml-0 md:mt-0;
+  @apply mt-[3px] ml-[12px] md:ml-0 md:mt-0 md:hidden;
 }
 
 .brand-mobile {
@@ -32,4 +43,70 @@
   text-indent: -99999px;
   white-space: nowrap;
   @apply block mx-4 mt-[3px] md:mb-10 ml-[45px] md:hidden md:w-[250px];
+}
+
+.logout-btn {
+  @apply absolute right-[16px] md:right-0 md:mt-[4px];
+}
+
+.text-menu {
+  right: calc(50% - 265px);
+  @apply hidden absolute top-[25px] md:block;
+
+  li {
+    @apply inline-block;
+
+    a {
+      @apply m-2 xl:mx-3.5 2xl:mx-7 hover:text-purple-250 font-bold text-tiny;
+    }
+    a.selected {
+      @apply text-purple-250;
+    }
+  }
+}
+.mobile-menu-button-f {
+  @apply mt-[15px] ml-[12px] md:hidden;
+}
+.language-block-content {
+  //border: solid 1px darkslategray;
+
+  @apply absolute top-[10px]  right-[50px] md:top-[20px] md:right-[40px];
+}
+.right-header-block {
+  @apply md:float-right md:w-auto;
+}
+
+.profile-block-layout {
+  @apply float-right mr-[120px] md:mr-[150px] md:inline-block;
+}
+
+.logout-btn-layout {
+  @apply absolute top-[16px] md:top-[20px];
+}
+.login-btn-layout {
+  @apply absolute top-[5px] md:top-[10px];
+}
+
+.layout-header {
+  @apply min-h-[50px] md:min-h-[70px];
+}
+.layout-action-btns-block {
+  //border:solid 1px blue;
+
+  @apply w-full text-center pb-[20px] pt-[55px] md:pt-0 md:mt-[14px] md:mr-[140px] md:text-left md:pb-0;
+}
+
+.texting-menu {
+  @apply absolute top-[23px] left-[260px];
+
+  ul {
+    @apply hidden md:inline-block;
+    li {
+      @apply md:inline-block;
+
+      a {
+        @apply text-sm font-bold;
+      }
+    }
+  }
 }

@@ -21,8 +21,7 @@
 }
 
 .profile-block {
-  // @apply mt-2 md:mt-0;
-  @apply mt-[3px] md:mt-0 md:pt-[15px];
+  @apply mt-[9px] md:mt-[19px];
 
   .profile-name {
     @apply hidden text-sm font-bold text-gray-350 pl-3 md:inline-block;
@@ -143,12 +142,12 @@
   span {
     // padding-left:40px;
     padding-right: 25px;
-    @apply relative md:pl-[40px];
+    @apply relative md:pl-[30px];
 
     &:before {
       content: '';
       top:0;
-      left:15px;
+      left:0px;
       position: absolute;
       background-image: url("../../public/images/lang-icon.svg");
       background-repeat: no-repeat;

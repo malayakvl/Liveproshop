@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function LangSwitcher() {
+export default function LangSwitcher({ type }: { type: string | null }) {
     const { locale, locales, defaultLocale }: any = useRouter();
     const router = useRouter();
     const node = useRef<HTMLDivElement>(null);
@@ -35,8 +35,11 @@ export default function LangSwitcher() {
     };
 
     return (
-        <div className="relative w-full bordered md:w-auto">
-            <div className="language-block inline-block text-right">
+        <div className="w-full bordered md:w-auto">
+            <div
+                className={`language-block inline-block text-right ${
+                    type ? 'language-block-content' : ''
+                }`}>
                 <button
                     className="btn-langs"
                     onClick={() => {

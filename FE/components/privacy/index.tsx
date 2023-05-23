@@ -15,7 +15,7 @@ function Privacy() {
                                             Privacy Policy
                                         </h3>
                                         <h5 className="mb-7 block font-bold">
-                                            Last updated: January 21, 2022
+                                            Last updated: March 13, 2023
                                         </h5>
                                         <p>
                                             This Privacy Policy describes Our policies and

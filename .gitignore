@@ -19,3 +19,5 @@ BE/combined.log
 /.settings/
 BE/error.log
 BE/_stepByStepMigration
+/DELETETE_SERVER/SidebarHeaderOld.tsx
+/DELETETE_SERVER/SidebarLayoutOld.tsx

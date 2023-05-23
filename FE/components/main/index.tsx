@@ -28,11 +28,11 @@ function Main() {
                         <b>{t('100+ people')}</b> {t('started a free trial in the last 30 days')}
                     </span>
                     {/*<span className="text-[25px] mt-[30px] lg:mt-[50px] lg:text-[30px] font-medium block lg:mt-[60px] xl:mt-[90px] text-gray-350">*/}
-                    <span className="text-[25px] mt-[30px] font-medium block lg:mt-[60px] xl:mt-[90px] text-gray-350">
+                    <span className="text-[25px] mt-[30px] font-medium block lg:mt-[60px] xl:mt-[90px] text-gray-350 font-bold">
                         {t('It only takes 30 seconds to get started')}
                     </span>
                     <div className="mt-[20px] lg:mt-[28px] flex flex-col md:flex-row">
-                        <Link href={'/'}>
+                        <Link href={'/auth/signup'}>
                             <a className="mb-[20px] md:mb-0 btn-big text-center md:inline-block">
                                 <span className="text-[20px]">{t('Register for free')}</span>
                             </a>
@@ -60,7 +60,7 @@ function Main() {
                 </div>
                 <div className="w-full md:w-2/3 xl:w-1/2">
                     {t('Quick features view')}
-                    <div className="md:pr-[135px] lg:pr-[315px] hand-big-bg">
+                    <div className="md:pr-[135px] lg:pr-[280px] hand-big-bg">
                         <h1 className="red-yellow-gradient-text text-[24px] leading-[32px] font-bold lg:text-[60px] lg:leading-[72px]">
                             {t('Make order placement smoother')}
                         </h1>
@@ -68,7 +68,7 @@ function Main() {
                             {t('place_order_descr')}
                         </span>
                         <div className="clear-both" />
-                        <Link href={'/'}>
+                        <Link href={'/features'}>
                             <button className="white-shadow md:mt-[28px] lg:mt-[48px] md:w-auto disabled-btn max-h-[40px]">
                                 <a className="">{t('See full list of features')}</a>
                             </button>
@@ -79,115 +79,131 @@ function Main() {
 
             <div className="grid gap-[32px] sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3  mt-[80px]">
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-1">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_1')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tip_caption_1')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-1 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_1')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_1')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-2">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_2')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tips_2')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-2 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_2')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_2')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-3">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_3')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tips_3')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-3 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_3')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_3')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-4">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_4')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tips_4')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-4 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_4')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_4')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-5">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_5')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tips_5')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-5 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_5')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_5')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-6">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_6')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tips_6')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-6 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_6')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_6')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-7">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_7')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tips_7')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-7 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_7')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_7')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="shadowed-block-tip tip tip-8">
-                        <div className="pl-[90px]">
-                            <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
-                                {t('tip_caption_8')}
-                            </h4>
-                            <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
-                                {t('tips_8')}
-                            </span>
+                    <Link href={'/features'}>
+                        <div className="shadowed-block-tip tip tip-8 cursor-pointer">
+                            <div className="pl-[90px]">
+                                <h4 className="text-gray-350 text-[18px] lg:text-[24px] font-bold">
+                                    {t('tip_caption_8')}
+                                </h4>
+                                <span className="block mt-[10px] text-[16px] text-gray-350 leading-[24px]">
+                                    {t('tips_8')}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="">
-                    <div className="no-shadowed-block-tip tip">
+                    <div className="no-shadowed-block-tip tip p-0">
                         <div className="pl-[0px]">
-                            <Link href={'/'}>
-                                <button className="white-shadow md:w-auto disabled-btn max-h-[40px] bg-white min-h-[60px] min-w-[300px] lg:mt-[50px] lg:ml-[50px]">
-                                    <a className="text-[20px] text-gray-50 see-full-link ">
+                            <Link href={'/features'}>
+                                <button className="white-shadow md:w-auto disabled-btn max-h-[40px] bg-white min-h-[60px] min-w-[300px] lg:mt-[50px] lg:ml-0 lg:w-full">
+                                    <a className="text-[18px] text-gray-50 see-full-link ">
                                         <span className="full-features md:ml-0 inline-b">
                                             {t('See full list of features')}
                                         </span>
@@ -243,49 +259,49 @@ function Main() {
                         {t('best_descr')}
                     </span>
                     <div className="grid gap-[36px] grid-cols-2 xl:grid-cols-8 mt-[40px]">
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-facebook block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Facebook
                             </span>
                         </div>
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-insta block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Instagram
                             </span>
                         </div>
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-fb-mess block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Messenger
                             </span>
                         </div>
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-multisafe block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Multisafe Pay
                             </span>
                         </div>
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-presta block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Prestashop
                             </span>
                         </div>
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-shopify block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Shopify
                             </span>
                         </div>
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-stripe block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Stripe
                             </span>
                         </div>
-                        <div>
+                        <div className="lg:min-w-[100px]">
                             <span className="icon-socail-line icon-paypal block" />
                             <span className="block text-[12px] text-gray-350 font-bold text-center whitespace-nowrap">
                                 Paypal

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-// import NoticeCounter from './NoticeCounter';
 import { fetchLatestAction } from '../../redux/notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'next-auth/client';
@@ -43,23 +42,6 @@ const SidebarHeader: React.FC = () => {
         };
     }, []);
 
-    // const handleClick = (e: any) => {
-    //     console.log(e.target);
-    //     if (node?.current?.contains(e.target) || node?.current === null) {
-    //         console.log('here profile menu 2');
-    //         setShowProfileMenu(false);
-    //         return;
-    //     }
-    //     if (
-    //         e.target.parentNode.classList.contains('profile-block') ||
-    //         e.target.parentNode.classList.contains('profile-name') ||
-    //         node?.current?.contains(e.target)
-    //     ) {
-    //         console.log('here profile menu 1');
-    //         return;
-    //     }
-    //     setShowProfileMenu(false);
-    // };
     const handleClick = (e: any) => {
         if (
             e.target.classList.contains('profile-img') ||
@@ -71,8 +53,8 @@ const SidebarHeader: React.FC = () => {
     };
 
     return (
-        <div className="shadow-lg max-h-[50px] md:pb-0 md:pr-0 md:shadow-none md:flex md:pr-4 md:mt-2 items-center align-middle">
-            <div className="pt-[5px] pb-[10px] w-full flex items-center lg:justify-end lg:pr-[40px] border-1 border-red">
+        <div className="shadow-lg max-h-[50px] md:pb-0  md:shadow-none md:flex md:pr-4 md:mt-2 items-center align-middle">
+            <div className="pt-[5px] pb-[10px] w-full flex items-center lg:justify-end lg:pr-[30px]">
                 {/* <NoticeCounter delay={120000} /> */}
                 <BrandMobile />
                 {/*<span className="divider" />*/}
@@ -187,9 +169,9 @@ const SidebarHeader: React.FC = () => {
                         </div>
                     )}
                 </div>
-                <LangSwitcher />
+                <LangSwitcher type={null} />
                 {/*<span className="divider" />*/}
-                <span className="mt-[13px] absolute top-[-3px] right-[16px] md:mt-[17px] ms:ml-3 min-w-max md:right-0 md:inline-block md:mt-[15px]">
+                <span className="mt-[13px] absolute top-[-3px] right-[16px] ms:ml-3 min-w-max md:right-0 md:inline-block md:mt-[15px]">
                     <a
                         href="/api/auth/signout"
                         title={t('Logout')}
