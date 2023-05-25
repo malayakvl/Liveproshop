@@ -9,7 +9,7 @@ function Faq() {
     const t = useTranslations();
     const [showMoreAnswer, setShowMoreAnswer] = useState<any>({});
     const dispatch = useDispatch();
-    const node = useRef<HTMLDivElement>(null);
+    // const node = useRef<HTMLDivElement>(null);
     const showAnswer = (num: number) => {
         const nextCheckedItems = { ...showMoreAnswer };
         nextCheckedItems[num] = !nextCheckedItems[num];

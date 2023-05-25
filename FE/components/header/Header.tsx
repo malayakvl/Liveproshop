@@ -143,8 +143,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
 
                 <div className="right-header-block">
                     {user?.email ? (
-                        <div
-                            className="profile-block profile-block-layout">
+                        <div className="profile-block profile-block-layout">
                             <div className="float-left h-[32px]">
                                 <Image
                                     src={userPhoto}
