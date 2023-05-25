@@ -10,7 +10,7 @@
 
   .page-heading {
     @apply text-[24px] leading-[32px] red-yellow-gradient-text font-bold
-      md:text-[40px] md:leading-[48px] lg:text-[60px] lg:leading-[72px]
+      md:text-[40px] md:leading-[48px] lg:text-[58px] lg:leading-[72px]
   }
 
   .msg-block {
@@ -18,15 +18,17 @@
     background-position: top right;
     background-size: contain;
     background-repeat: no-repeat;
+    //background-position-x: 35px;
     //element {
     //  width: 340px;
     //  height: 530px;
     //  background-size: contain;
-    //  background-position-x: 20px;
+      background-position-x: 20px;
     @apply float-right
       md:w-[360px] md:h-[520px]
-      lg:w-[365px] lg:h-[763px] lg:mr-[-20px]
-      xl:w-[490px] xl:h-[763px] xl:mr-[-30px];
+      lg:w-[365px] lg:h-[763px]
+      xl:w-[490px] xl:h-[763px]
+      xl:mt-[-45px];
   }
 
   .sitting-girl-block {
@@ -42,7 +44,7 @@
     background-image: url(../../public/images/main/screen.svg);
     background-size: contain;
     background-repeat: no-repeat;
-    @apply w-full h-[280px] mb-[50px] md:w-[225px] md:h-[193px] xl:w-[587px] xl:h-[473px] md:mb-0;
+    @apply w-full h-[280px] mb-[50px] md:w-[225px] md:h-[193px] lg:w-[587px] xl:h-[473px] md:mb-0;
   }
 
   .hand-big-bg {
@@ -54,7 +56,10 @@
       background-image: url(../../public/images/main/hand-main.svg);
       background-repeat: no-repeat;
       background-size: contain;
-      @apply absolute md:w-[205px] md:h-[265px] md:top-[-20px] md:right-[-48px] lg:w-[305px] lg:h-[430px] lg:top-[-10px] lg:right-[-20px] xl:right-[-30px];
+      @apply absolute md:w-[205px] md:h-[265px]
+        md:top-[-20px] md:right-[-48px] lg:w-[205px]
+        xl:w-[305px] 2xl:w-[305px] lg:h-[430px]
+        lg:top-[-10px] lg:right-[-20px] xl:right-0;
     }
     //position: absolute;
     //top: -70px;
@@ -119,7 +124,7 @@
     border: 2px solid #EAECF0;
     box-shadow: 0 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     border-radius: 36px;
-    @apply p-[15px] lg:p-[25px] min-h-[256px];
+    @apply p-[15px] lg:p-[25px] min-h-[315px] 2xl:min-h-[280px];
   }
   .no-shadowed-block-tip {
     border: 2px solid transparent;
@@ -127,7 +132,7 @@
     background-color: transparent;
     //box-shadow: 0px 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     //border-radius: 36px;
-    @apply mb-[20px] p-0 min-h-[200px] md:mb-auto;
+    @apply mb-[20px] p-0 min-h-[200px] md:mb-auto 2xl:min-h-[280px];
   }
 
   .see-full-link {
@@ -142,6 +147,26 @@
       @apply w-[12px] h-[22px] right-[-20px] top-[1px];
     }
   }
+
+  .see-full-link-med {
+    position: relative;
+    color:#A8AFBD;
+    padding-right: 20px;
+
+
+    &:after {
+      content: "";
+      position: absolute;
+      background-image: url(../../public/images/main/arrow-btn.svg);
+      width: 8px;
+      height: 14px;
+      padding-right: 12px;
+      background-size: contain;
+
+      @apply w-[12px] h-[22px] right-[-5px] top-[-1px];
+    }
+  }
+
 
   h5 {
 
@@ -180,7 +205,8 @@
     &:before {
       content: "";
       position: absolute;
-      background-image: url(../../public/images/main/rocket-lady.svg);
+      //background-image: url(../../public/images/main/rocket-lady.svg);
+      background-image: url(../../public/images/main/rocket_lady.png);
       background-repeat: no-repeat;
       background-size: contain;
 

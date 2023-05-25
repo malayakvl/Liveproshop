@@ -4,13 +4,12 @@ import Footer from '../footer/Footer';
 import { useSelector } from 'react-redux';
 import { isDataLoadingSelector } from '../../redux/layouts/selectors';
 import { useRouter } from 'next/router';
-import { userSelector } from '../../redux/user/selectors';
+// import { userSelector } from '../../redux/user/selectors';
 
 export default function FullLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const router = useRouter();
-    const user = useSelector(userSelector);
-    console.log('User', user);
+    // const user = useSelector(userSelector);
 
     return (
         <>

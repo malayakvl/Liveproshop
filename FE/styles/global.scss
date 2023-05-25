@@ -68,7 +68,7 @@
   }
   .container {
     //background: #b7cfe0;
-    @apply xl:max-w-[1400px];
+    @apply 2xl:max-w-[1400px] xl:px-4 relative;
   }
 }
 

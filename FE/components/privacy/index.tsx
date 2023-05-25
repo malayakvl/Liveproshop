@@ -30,7 +30,10 @@ function Privacy() {
                                             collection and use of information in accordance with
                                             this Privacy Policy.
                                         </p>
-                                        <p>Interpretation and Definitions Interpretation</p>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Interpretation and Definitions
+                                        </h3>
+                                        <b>Interpretation</b>
                                         <p>
                                             The words of which the initial letter is capitalized
                                             have meanings defined under the following conditions.
@@ -38,7 +41,7 @@ function Privacy() {
                                             regardless of whether they appear in singular or in
                                             plural.
                                         </p>
-                                        <p>Definitions</p>
+                                        <h3 className="font-bold text-[18px] py-2">Definitions</h3>
                                         <p>
                                             <b>For the purposes of this Privacy Policy:</b>
                                         </p>
@@ -66,10 +69,10 @@ function Privacy() {
                                                 {/* eslint-disable-next-line react/no-unescaped-entities */}
                                                 "Us" or
                                                 {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                                "Us" or "Our" in this Agreement) refers to Amedeo
+                                                "Us" or "Our" in this Agreement) refers to &nbsp;
                                                 {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                                Amedeo Digital Solutions OÜ, Tatari 25-4, Tallinn,
-                                                Estonia
+                                                <b>Amedeo Digital Solutions OÜ</b>, Tatari 25-4,
+                                                Tallinn, Estonia
                                                 <p>
                                                     For the purpose of the GDPR, the Company is the
                                                     Data Controller.
@@ -114,7 +117,8 @@ function Privacy() {
                                                 refers to third-party companies or individuals by
                                                 the Company to facilitate the Service, to provide
                                                 the Service on behalf of the Company, to perform
-                                                services related to the
+                                                services related to the Service refers to the
+                                                Application or the Website or both
                                             </li>
                                         </ul>
                                     </div>
@@ -126,11 +130,11 @@ function Privacy() {
                             <div className="section">
                                 <div className="layoutArea privacy-text">
                                     <div className="column">
-                                        <p>
-                                            Service or to assist the Company in analyzing how the
-                                            Service is used. For the purpose of the GDPR, Service
-                                            Providers are considered Data Processors.
-                                        </p>
+                                        {/*<p>*/}
+                                        {/*    Service or to assist the Company in analyzing how the*/}
+                                        {/*    Service is used. For the purpose of the GDPR, Service*/}
+                                        {/*    Providers are considered Data Processors.*/}
+                                        {/*</p>*/}
                                         <ul>
                                             <li>
                                                 Third-party Social Media Service refers to any
@@ -157,14 +161,23 @@ function Privacy() {
                                                 Under GDPR (General Data Protection Regulation), You
                                                 can be referred to as the Data Subject or as the
                                                 User as you are the individual using the Service.
-                                                Collecting and Using Your Personal Data Types of
-                                                Data Collected Personal Data While using Our
-                                                Service, We may ask You to provide Us with certain
-                                                personally identifiable information that can be used
-                                                to contact or identify You. Personally identifiable
-                                                information may include, but is not limited to:
                                             </li>
                                         </ul>
+                                        <h3 className="font-bold text-[20px] py-2">
+                                            Collecting and Using Your Personal Data
+                                        </h3>
+                                        <p className="font-bold text-[18px] py-2">
+                                            Types of Data Collected
+                                        </p>
+                                        <p>
+                                            <b>Personal Data</b>
+                                        </p>
+                                        <p>
+                                            Service, We may ask You to provide Us with certain
+                                            personally identifiable information that can be used to
+                                            to contact or identify You. Personally identifiable
+                                            information may include, but is not limited to:
+                                        </p>
                                         <ul>
                                             <li>Email address</li>
                                             <li>First name and last name</li>
@@ -223,16 +236,21 @@ function Privacy() {
                                         </p>
                                         <p>
                                             You visit our Service or when You access the Service by
-                                            or through a mobile Information from Third-Party Social
-                                            Media Services The Company allows You to create an
-                                            account and log in to use the Service through the
-                                            following Third-party Social Media Services:
-                                            <ul>
-                                                <li>Google</li>
-                                                <li>Facebook</li>
-                                                <li>Twitter</li>
-                                            </ul>
+                                            or through a mobile
                                         </p>
+                                        <h2 className="font-bold text-[18px] py-2">
+                                            Information from Third-Party Social Media Services
+                                        </h2>
+                                        <p>
+                                            The Company allows You to create an account and log in
+                                            to use the Service through the following Third-party
+                                            Social Media Services:
+                                        </p>
+                                        <ul>
+                                            <li>Google</li>
+                                            <li>Facebook</li>
+                                            <li>Twitter</li>
+                                        </ul>
                                         <p>
                                             If You decide to register through or otherwise grant us
                                             access to a Third-Party Social Media Service, We may
@@ -268,51 +286,43 @@ function Privacy() {
                                                         on Your device.
                                                     </span>
                                                 </li>
+                                            </ul>
+                                            <b>Tracking Technologies and Cookies</b>
+                                            <p>
+                                                We use Cookies and similar tracking technologies to
+                                                track the activity on Our Service and store certain
+                                                information. Tracking technologies used are beacons,
+                                                tags, and scripts to collect and track information
+                                                and to improve and analyze Our Service. The
+                                                technologies We use may include:
+                                            </p>
+                                            <ul>
                                                 <li>
-                                                    Tracking Technologies and Cookies
-                                                    <span>
-                                                        We use Cookies and similar tracking
-                                                        technologies to track the activity on Our
-                                                        Service and store certain information.
-                                                        Tracking technologies used are beacons,
-                                                        tags, and scripts to collect and track
-                                                        information and to improve and analyze Our
-                                                        Service. The technologies We use may
-                                                        include:
-                                                    </span>
-                                                    <ol>
-                                                        <li>
-                                                            Cookies or Browser Cookies. A cookie is
-                                                            a small file placed on Your Device. You
-                                                            can instruct Your browser to refuse all
-                                                            Cookies or to indicate when a Cookie is
-                                                            being sent. However, if You do not
-                                                            accept Cookies, You may not be able to
-                                                            use some parts of our Service. Unless
-                                                            you have adjusted Your browser setting
-                                                            so that it will refuse Cookies, our
-                                                            Service may use Cookies.
-                                                        </li>
-                                                        <li>
-                                                            Flash Cookies. Certain features of our
-                                                            Service may use local stored objects (or
-                                                            Flash Cookies) to collect and store
-                                                            information about Your preferences or
-                                                            Your activity on our Service. Flash
-                                                            Cookies are not managed by the same
-                                                            browser settings as those used for
-                                                            Browser Cookies. For more information on
-                                                            how You can delete Flash Cookies, please
-                                                            read `Where can I change the settings
-                                                            for disabling, or deleting local shared
-                                                            objects?` available at{' '}
-                                                            <a
-                                                                className="text-red-500"
-                                                                href="https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can _I_change_the_settings_for_disabling__or_deleting_local_shared_objects_">
-                                                                link
-                                                            </a>
-                                                        </li>
-                                                    </ol>
+                                                    Cookies or Browser Cookies. A cookie is a small
+                                                    file placed on Your Device. You can instruct
+                                                    Your browser to refuse all indicate when a
+                                                    Cookie is being sent. However, if You do not
+                                                    accept Cookies, You may not be able to use some
+                                                    parts of our Service. Unless you have adjusted
+                                                    Your browser setting so that it will refuse
+                                                    Cookies, our Service may use Cookies.
+                                                </li>
+                                                <li>
+                                                    Flash Cookies. Certain features of our Service
+                                                    may use local stored objects (or Flash Cookies)
+                                                    to collect and store information about Your
+                                                    preferences or Your activity on our Service.
+                                                    Flash Cookies are not managed by the same
+                                                    browser settings as those used for Browser
+                                                    Cookies. For more information on how You can
+                                                    delete Flash Cookies, please read `Where can I
+                                                    change the settings for disabling, or deleting
+                                                    local shared objects?` available at{' '}
+                                                    <a
+                                                        className="text-red-500"
+                                                        href="https://helpx.adobe.com/flash-player/kb/disable-local-shared-objects-flash.html#main_Where_can _I_change_the_settings_for_disabling__or_deleting_local_shared_objects_">
+                                                        link
+                                                    </a>
                                                 </li>
                                                 <li>
                                                     Web Beacons. Certain sections of our Service and
@@ -331,91 +341,80 @@ function Privacy() {
                                                     close Your web browser. You can learn more about
                                                     Cookies by TermsFeed Generator.
                                                 </li>
+                                            </ul>
+                                            <p>
+                                                We use both Session and Persistent Cookies for the
+                                                purposes set out below:
+                                            </p>
+                                            <ul>
                                                 <li>
-                                                    We use both Session and Persistent Cookies for
-                                                    the purposes set out below:
-                                                    <ol>
-                                                        <li>
-                                                            <p>
-                                                                Necessary / Essential Cookies
-                                                                <br />
-                                                                Type: Session Cookies
-                                                                <br />
-                                                                Administered by: Us
-                                                                <br />
-                                                                Purpose: These Cookies are essential
-                                                                to provide You with services
-                                                                available through the Website and to
-                                                                enable You to use some of its
-                                                                features. They help to authenticate
-                                                                users and prevent fraudulent use of
-                                                                user accounts. Without these
-                                                                Cookies, the services that You have
-                                                                asked for cannot be provided, and We
-                                                                only use these Cookies to provide
-                                                                You with those services.
-                                                            </p>
-                                                        </li>
-                                                        <li>
-                                                            <p>
-                                                                Cookies Policy / Notice Acceptance
-                                                                Cookies
-                                                                <br />
-                                                                Type: Persistent Cookies
-                                                                <br />
-                                                                Administered by: Us
-                                                                <br />
-                                                                Purpose: These Cookies identify if
-                                                                users have accepted the use of
-                                                                cookies on the Website.
-                                                            </p>
-                                                        </li>
-                                                        <li>
-                                                            <p>
-                                                                Functionality Cookies
-                                                                <br />
-                                                                Type: Persistent Cookies
-                                                                <br />
-                                                                Administered by: Us
-                                                                <br />
-                                                                Purpose: These Cookies allow us to
-                                                                remember choices You make when You
-                                                                use the Website, such as remembering
-                                                                your login details or language
-                                                                preference. The purpose of these
-                                                                Cookies is to provide You with a
-                                                                more personal experience and to
-                                                                avoid You having to re-enter your
-                                                                preferences every time You use the
-                                                                Website.
-                                                            </p>
-                                                        </li>
-                                                        <li>
-                                                            <p>
-                                                                Tracking and Performance Cookies
-                                                                <br />
-                                                                Type: Persistent Cookies
-                                                                <br />
-                                                                Administered by: Third-Parties
-                                                                <br />
-                                                                Purpose: These Cookies are used to
-                                                                track information about traffic to
-                                                                the Website and how users use the
-                                                                Website. The information gathered
-                                                                via these Cookies may directly or
-                                                                indirectly identify you as an
-                                                                individual visitor. This is because
-                                                                the information collected is
-                                                                typically linked to a pseudonymous
-                                                                identifier associated with the
-                                                                device you use to access the
-                                                                Website. We may also use these
-                                                                Cookies to test new pages, features
-                                                                or new functionality of the Website
-                                                                to see how our users react to them.
-                                                            </p>
-                                                        </li>
-                                                    </ol>
+                                                    <p>
+                                                        Necessary / Essential Cookies Type: Session
+                                                        Type: Session Cookies
+                                                        <br />
+                                                        Administered by: Us Purpose: These Cookies
+                                                        are essential to provide You with services
+                                                        available through the Website and to enable
+                                                        You to use some of its features. They help
+                                                        users and prevent fraudulent use of user
+                                                        accounts. Without these Cookies, the
+                                                        services that You have asked for cannot be
+                                                        provided, and We only use these Cookies to
+                                                        provide You with those services.
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        Cookies Policy / Notice Acceptance Cookies
+                                                        <br />
+                                                        Type: Persistent Cookies
+                                                        <br />
+                                                        Administered by: Us
+                                                        <br />
+                                                        Purpose: These Cookies identify if users
+                                                        have accepted the use of cookies on the
+                                                        Website.
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        Functionality Cookies
+                                                        <br />
+                                                        Type: Persistent Cookies
+                                                        <br />
+                                                        Administered by: Us
+                                                        <br />
+                                                        Purpose: These Cookies allow us to remember
+                                                        choices You make when You use the Website,
+                                                        such as remembering your login details or
+                                                        language preference. The purpose of these
+                                                        Cookies is to provide You with a more
+                                                        personal experience and to avoid You having
+                                                        to re-enter your preferences every time You
+                                                        use the Website.
+                                                    </p>
+                                                </li>
+                                                <li>
+                                                    <p>
+                                                        Tracking and Performance Cookies
+                                                        <br />
+                                                        Type: Persistent Cookies
+                                                        <br />
+                                                        Administered by: Third-Parties
+                                                        <br />
+                                                        Purpose: These Cookies are used to track
+                                                        information about traffic to the Website and
+                                                        how users use the Website. The information
+                                                        gathered via these Cookies may directly or
+                                                        indirectly identify you as an individual
+                                                        visitor. This is because the information
+                                                        collected is typically linked to a
+                                                        pseudonymous identifier associated with the
+                                                        device you use to access the Website. We may
+                                                        also use these Cookies to test new pages,
+                                                        features or new functionality of the Website
+                                                        to see how our users react to them.
+                                                    </p>
                                                 </li>
                                             </ul>
                                         </p>
@@ -578,27 +577,17 @@ function Privacy() {
                                                     Service, or We are legally obligated to retain
                                                     this data for longer time periods.
                                                 </p>
-                                                <p>Transfer of Your Personal Data</p>
-                                                <p>
-                                                    Your information, including Personal Data, is
-                                                    processed at the Company`s operating offices and
-                                                    in any other places where the parties involved
-                                                    in the processing are located. It means that
-                                                    this information may
-                                                </p>
                                             </li>
                                         </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="page" title="Page 6">
-                            <div className="section privacy-text">
-                                <div className="layoutArea">
-                                    <div className="column">
+                                        <h2 className="font-bold text-[18px] py-2">
+                                            Transfer of Your Personal Data
+                                        </h2>
                                         <p>
-                                            be transferred to &mdash; and maintained on &mdash;
+                                            Your information, including Personal Data, is processed
+                                            at the Company`s operating offices and in any other
+                                            places where the parties involved in the processing are
+                                            located. It means that this information may be
+                                            transferred to &mdash; and maintained on &mdash;
                                             computers located outside of Your state, province,
                                             country or other governmental jurisdiction where the
                                             data protection laws may differ from those in Your
@@ -864,7 +853,7 @@ function Privacy() {
                                                 to You on third-party websites or apps
                                             </li>
                                             <li>
-                                                easure and analyze the performance of Our
+                                                Measure and analyze the performance of Our
                                                 advertising campaigns
                                                 <p>
                                                     Some of these third-party vendors may use
@@ -1069,10 +1058,12 @@ function Privacy() {
                                                 Facebook`s Data Policy
                                             </a>
                                         </p>
+                                        <h3 className="font-bold text-[18px] py-2">GDPR Privacy</h3>
                                         <p>
-                                            <b>GDPR Privacy</b>
+                                            <b>
+                                                Legal Basis for Processing Personal Data under GDPR
+                                            </b>
                                         </p>
-                                        <p>Legal Basis for Processing Personal Data under GDPR</p>
                                         <p>
                                             We may process Personal Data under the following
                                             conditions:
@@ -1117,7 +1108,9 @@ function Privacy() {
                                                     contractual requirement, or a requirement
                                                     necessary to enter into a contract.
                                                 </p>
-                                                <p>Your Rights under the GDPR</p>
+                                                <h3 className="font-bold text-[18px] py-2">
+                                                    Your Rights under the GDPR
+                                                </h3>
                                                 <p>
                                                     The Company undertakes to respect the
                                                     confidentiality of Your Personal Data and to
@@ -1183,24 +1176,16 @@ function Privacy() {
                                                     to perform a contract with You.
                                                 </p>
                                             </li>
+                                            <li>
+                                                Withdraw Your consent. You have the right to
+                                                withdraw Your consent on using your Personal Data.
+                                                If You withdraw Your consent, We may not be able to
+                                                provide You with access to certain specific Service.
+                                            </li>
                                         </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="page" title="Page 10">
-                            <div className="section privacy-text">
-                                <div className="layoutArea">
-                                    <div className="column">
-                                        <p>
-                                            Withdraw Your consent. You have the right to withdraw
-                                            Your consent on using your Personal Data. If You
-                                            withdraw Your consent, We may not be able to provide You
-                                            with access to certain specific functionalities of the
-                                            Service.
-                                        </p>
-                                        <p>Exercising of Your GDPR Data Protection Rights</p>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Exercising of Your GDPR Data Protection Rights
+                                        </h3>
                                         <p>
                                             You may exercise Your rights of access, rectification,
                                             cancellation and opposition by contacting Us. Please
@@ -1235,7 +1220,9 @@ function Privacy() {
                                             consent from a parent, We may require Your parent`s
                                             consent before We collect and use that information.
                                         </p>
-                                        <p>Links to Other Websites</p>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Links to Other Websites
+                                        </h3>
                                         <p>
                                             Our Service may contain links to other websites that are
                                             not operated by Us. If You click on a third party link,

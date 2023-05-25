@@ -48,17 +48,33 @@
     border-radius: 16px 16px 16px 0;
     color:#fff;
 
-    @apply lg:text-[24px] px-[16px] py-[10px];
+    @apply lg:text-[24px] px-[16px] py-[10px] font-bold;
   }
 
   .gray-message {
     background: #F8F8F8;
     border-radius: 20px 20px 0 20px;
 
-    @apply lg:text-[24px] px-[16px] py-[10px] text-gray-350;
+    @apply lg:text-[20px] px-[16px] py-[10px] text-gray-350;
   }
 
   p {
     @apply pb-[10px];
+  }
+}
+
+.hand-msg {
+  position: relative;
+  padding-left: 40px;
+
+  &:before {
+    content: "";
+    position: absolute;
+    background: url(../../public/images/testimonials/hand.svg);
+    background-repeat: no-repeat;
+    width: 28px;
+    height: 31px;
+    top: 0;
+    left: 0;
   }
 }

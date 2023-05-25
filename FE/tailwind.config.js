@@ -1,17 +1,19 @@
 require('tailwindcss/colors');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     mode: 'jit',
     purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
     darkMode: 'class', // or 'media' or 'class'
     theme: {
-        screens: {
-            sm: '640px',
-            md: '768px',
-            lg: '1024px',
-            xl: '1280px',
-            '2xl': '1536px'
-        },
+        // screens: {
+        //     sm: '640px',
+        //     md: '768px',
+        //     lg: '1024px',
+        //     xl: '1280px',
+        //     ...defaultTheme.screens
+        // },
         fontFamily: {
             montserrat: ['Montserrat'],
             sans: ['"Montserrat"']

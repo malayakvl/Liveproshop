@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/client';
+import { signOut } from 'next-auth/client';
 import React, { useEffect, useState } from 'react';
 // import { Menu, Transition } from '@headlessui/react';
 import LangSwitcher from '../lang/Switcher';
@@ -42,8 +42,6 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
         [user]
     );
 
-    console.log(userPhoto);
-
     return (
         <header
             className={`w-full ${
@@ -65,7 +63,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
             }`}>
-            <div className="container relative mx-auto layout-header">
+            <div className="container relative mx-auto layout-header xl:max-w-[1400px]">
                 <Link href={'/'}>
                     {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
                     <a className="app-logo-f" />
@@ -146,8 +144,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                 <div className="right-header-block">
                     {user?.email ? (
                         <div
-                            className="profile-block profile-block-layout"
-                            style={{ border: 'solid 1px red' }}>
+                            className="profile-block profile-block-layout">
                             <div className="float-left h-[32px]">
                                 <Image
                                     src={userPhoto}

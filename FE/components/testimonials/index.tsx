@@ -1,19 +1,30 @@
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { setModalCalendlyMetaAction } from '../../redux/layouts';
 
 function Testimonials() {
     const t = useTranslations();
-
+    const dispatch = useDispatch();
     return (
         <>
             <div className="flex">
                 <div className="w-full">
                     <div className="dotted-bg md:flex">
                         <div className="header-t-block">
+                            <span className="text-gray-350 font-bold text-[14px]">
+                                {t('Customer stories')}
+                            </span>
                             <h1 className="page-heading text-left">Sabrina</h1>
                             <span className="block text-gray-350 text-[36px] leading-[44px] font-bold mt-[16px]">
-                                Lalylook Boutique
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    href="https://www.facebook.com/LALYLOOKBOUTIQUE"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    Lalylook Boutique
+                                </a>
                             </span>
                             <span className="mb-[15px] mt-[24px] text-[14px] leading-[24px] block text-gray-350 md:text-[30px] md:leading-[38px] mdd:mt-[48px]">
                                 “The more money I make, the more articles I can buy and thus obtain
@@ -30,11 +41,13 @@ function Testimonials() {
                             </div>
                             <div>
                                 <div className="blue-message">
-                                    Sabrina, can you tell us about your activity?
+                                    <span className="hand-msg">
+                                        Sabrina, can you tell us about your activity?
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="gray-message">
                                 <p>
                                     My name is Sabrina, I have been an entrepreneur for 7 years. I
@@ -51,7 +64,7 @@ function Testimonials() {
                             </div>
                         </div>
 
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="">
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
@@ -61,7 +74,7 @@ function Testimonials() {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="gray-message">
                                 Things were getting tougher and tougher each year. We were looking
                                 for a side income and started doing Facebook lives in April 2019.
@@ -71,7 +84,7 @@ function Testimonials() {
                             </div>
                         </div>
 
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="">
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
@@ -79,7 +92,7 @@ function Testimonials() {
                                 <div className="blue-message">How was the beginning?</div>
                             </div>
                         </div>
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="gray-message">
                                 <p>
                                     In winter 2019 / early 2020, the pandemic and lock-down made our
@@ -97,7 +110,7 @@ function Testimonials() {
                             </div>
                         </div>
 
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="">
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
@@ -105,7 +118,7 @@ function Testimonials() {
                                 <div className="blue-message">What happened?</div>
                             </div>
                         </div>
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="gray-message">
                                 We realized that all the small process accumulation was
                                 time-consuming. I had very little time to rest, see my friends or
@@ -116,7 +129,7 @@ function Testimonials() {
                             </div>
                         </div>
 
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="">
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
@@ -124,7 +137,7 @@ function Testimonials() {
                                 <div className="blue-message">How did you got to that point?</div>
                             </div>
                         </div>
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="gray-message">
                                 <p>
                                     Well, we had no dedicated software nor any computer knowledge…
@@ -144,7 +157,7 @@ function Testimonials() {
                             </div>
                         </div>
 
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="">
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
@@ -152,7 +165,7 @@ function Testimonials() {
                                 <div className="blue-message">How did the experience go?</div>
                             </div>
                         </div>
-                        <div className="flex items-end mt-20">
+                        <div className="flex items-end mt-10">
                             <div className="gray-message">
                                 <p>We have been using Live Pro Shop for a few months now.</p>
                                 <p>I was amazed by the changes it provided:</p>
@@ -185,28 +198,55 @@ function Testimonials() {
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
                     <div className="clear-both" />
-                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
+                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[48px] md:leading-[72px] text-center md:mt-[120px]">
                         {t('Try it for free today!')}
                     </h3>
-                    <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
+                    <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[0px]">
                         {t('It only takes 30 seconds to get started')}.
                     </h4>
                     <div className="w-full mt-[40px] text-center mb-[100px]">
-                        <Link href={'/'}>
+                        <Link href={'/auth/signup'}>
                             <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
                                 <span className="text-[20px] inline-block min-w-[220px]">
                                     {t('Register now!')}
                                 </span>
                             </a>
                         </Link>
-                        <Link href={'/'}>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <div
+                            className="md:inline-block cursor-pointer"
+                            onClick={() => {
+                                dispatch(setModalCalendlyMetaAction(true));
+                            }}>
                             <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
                                 <span className="text-[20px] inline-block min-w-[220px]">
                                     {t('I want to know more!')}
                                 </span>
                             </a>
-                        </Link>
+                        </div>
                     </div>
+                    {/*<h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">*/}
+                    {/*    {t('Try it for free today!')}*/}
+                    {/*</h3>*/}
+                    {/*<h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">*/}
+                    {/*    {t('It only takes 30 seconds to get started')}.*/}
+                    {/*</h4>*/}
+                    {/*<div className="w-full mt-[40px] text-center mb-[100px]">*/}
+                    {/*    <Link href={'/'}>*/}
+                    {/*        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">*/}
+                    {/*            <span className="text-[20px] inline-block min-w-[220px]">*/}
+                    {/*                {t('Register now!')}*/}
+                    {/*            </span>*/}
+                    {/*        </a>*/}
+                    {/*    </Link>*/}
+                    {/*    <Link href={'/'}>*/}
+                    {/*        <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">*/}
+                    {/*            <span className="text-[20px] inline-block min-w-[220px]">*/}
+                    {/*                {t('I want to know more!')}*/}
+                    {/*            </span>*/}
+                    {/*        </a>*/}
+                    {/*    </Link>*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </>

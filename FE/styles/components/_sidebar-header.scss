@@ -173,7 +173,7 @@
 }
 
 .lang-menu {
-  @apply absolute bg-white rounded-lg max-w-[70px] w-[105px] left-[-15px] top-[45px] md:top-9 md:left-[25px] p-4 text-xs;
+  @apply absolute bg-white rounded-lg max-w-[70px] w-[105px] left-[-15px] top-[45px] md:top-9 md:left-[15px] px-4 py-[5px] text-xs;
 
   li {
     @apply text-base uppercase text-left font-bold cursor-pointer text-gray-350;

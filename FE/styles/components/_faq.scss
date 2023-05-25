@@ -1,17 +1,36 @@
 .faq-block {
-  @apply mt-10;
+  @apply mt-[100px] px-[40px];
+}
+.faq-bg {
+  position: relative;
+
+  &:after {
+    content: "";
+    background: url(../../public/images/faq/fag-bg.svg);
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 295px;
+    height: 295px;
+    top:0;
+    right: 0;
+  }
+
+  //background: url(../../public/images/faq/fag-bg.svg);
+  //background-repeat: no-repeat;
+  //background-position: top right;
+
 }
 
 .faq-question-answer {
   border-color: #E2E4E9;
-  @apply w-full border-b pt-3.5 pb-2 inline-block relative;
+  @apply w-full border-b pt-[32px] pb-[28px] inline-block relative;
 
   .question {
-    @apply w-full text-gray-350 text-base font-bold block mb-2 pr-[25px];
+    @apply w-full text-gray-350 text-[18px] font-bold block mb-2 pr-[25px];
   }
 
   .answer {
-    @apply text-blue-350 text-[14px] leading-[24px];
+    @apply text-blue-350 text-[16px] leading-[24px];
   }
 
   .toggle-icon {
@@ -19,7 +38,7 @@
     background-repeat: no-repeat;
     position: absolute;
     right: 0;
-    top: 18px;
+    top: 32px;
     cursor:pointer;
 
     @apply w-[20px] h-[20px];

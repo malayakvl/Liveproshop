@@ -1,11 +1,15 @@
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import _ from 'lodash';
+import { useDispatch } from 'react-redux';
+import { useRef } from 'react';
+import { setModalCalendlyMetaAction } from '../../redux/layouts';
 
 function Faq() {
     const t = useTranslations();
     const [showMoreAnswer, setShowMoreAnswer] = useState<any>({});
-
+    const dispatch = useDispatch();
+    const node = useRef<HTMLDivElement>(null);
     const showAnswer = (num: number) => {
         const nextCheckedItems = { ...showMoreAnswer };
         nextCheckedItems[num] = !nextCheckedItems[num];
@@ -16,37 +20,64 @@ function Faq() {
         <>
             <div className="flex">
                 <div className="w-full">
-                    <h1 className="page-heading text-center">{t('Frequently asked questions')}</h1>
-                    <div className="block text-center mt-[20px] text-[14px] leading-[24px] text-gray-350 lg:text-[20px] lg:leading-[30px]">
-                        {t('Have some questions before you get started?')}
+                    <div className="faq-bg">
+                        <span className="text-gray-350 font-semibold">{t('Support')}</span>
+                        <h1 className="page-heading text-left">
+                            {t('Frequently asked questions')}
+                        </h1>
+                        <div className="block text-left mt-[20px] text-[20px] leading-[24px] text-gray-350 lg:text-[30px] lg:leading-[25px]">
+                            {t('Have some questions before you get started?')}
+                        </div>
                     </div>
-                    <div className="block text-center mt-[20px] text-[12px] leading-[24px] text-gray-350 lg:text-[18px] lg:leading-[24px]">
+                    <div className="block text-left mt-[15px] text-[12px] leading-[24px] text-gray-350 lg:text-[20px] lg:leading-[24px] max-w-[800px]">
                         {t('mes_1')}
                     </div>
                     <div className="faq-block">
-                        {_.times(13, (i) => (
+                        {_.times(14, (i) => (
                             // <li key={i}>repeated 3 times</li>
                             <div className="faq-question-answer relative" key={i}>
-                                <h4 className="question">{t(`arrayOfObjects.${i}.question`)}</h4>
+                                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
+                                <h4
+                                    className="question cursor-pointer"
+                                    onClick={() => showAnswer(i)}>
+                                    {t(`arrayOfObjects.${i}.question`)}
+                                </h4>
                                 <span
                                     className={`answer ${
                                         showMoreAnswer[i] ? 'inline-block' : 'hidden'
-                                    }`}
-                                    dangerouslySetInnerHTML={{
-                                        __html: t(`arrayOfObjects.${i}.answer`, {
-                                            linkTariffs:
-                                                "<a class='text-red-800' target='_blank' href='" +
-                                                process.env.API_SITE_URL +
-                                                "/pricing'>",
-                                            endLinkTariffs: '</a>',
-                                            linkSignup:
-                                                "<a class='text-red-800' target='_blank' href='" +
-                                                process.env.API_SITE_URL +
-                                                "/auth/signup'>",
-                                            endLinkSignup: '</a>'
-                                        })
-                                    }}
-                                />
+                                    }`}>
+                                    <span
+                                        dangerouslySetInnerHTML={{
+                                            __html: t(`arrayOfObjects.${i}.answer`, {
+                                                linkTariffs:
+                                                    "<a class='text-red-800' target='_blank' href='" +
+                                                    process.env.API_SITE_URL +
+                                                    "/pricing'>",
+                                                endLinkTariffs: '</a>',
+                                                linkSignup:
+                                                    "<a class='text-red-800' target='_blank' href='" +
+                                                    process.env.API_SITE_URL +
+                                                    "/auth/signup'>",
+                                                endLinkSignup: '</a>'
+                                            })
+                                        }}
+                                    />
+                                    {i === 8 && (
+                                        <>
+                                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                            <span
+                                                className="text-red-800 cursor-pointer"
+                                                onClick={() => {
+                                                    dispatch(setModalCalendlyMetaAction(true));
+                                                }}>
+                                                {' '}
+                                                {t('link_meeting')}
+                                            </span>
+                                            <span>{t('text_after_link_meet')}</span>
+                                        </>
+                                    )}
+                                </span>
+
                                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                 <span
                                     onClick={() => showAnswer(i)}

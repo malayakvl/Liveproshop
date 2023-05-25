@@ -13,6 +13,7 @@ import { parseTranslation } from '../../lib/functions';
 import { Form, Formik } from 'formik';
 import { InputText } from '../../components/_form';
 import Router from 'next/router';
+import Link from 'next/link';
 
 export default function Index({ locale }: { locale: any }) {
     const t = useTranslations();
@@ -386,77 +387,32 @@ export default function Index({ locale }: { locale: any }) {
                         </div>
                     </div>
                 </div>
-
-                {/*<div className="hidden mt-16 lg:mt-8 text-center">*/}
-                {/*    <div className="text-xs font-bold">{t('Support')}</div>*/}
-                {/*    <div className="mb-3 font-bold text-4xl">{t('Frequently asked questions')}</div>*/}
-                {/*    <div>{t('question_before_started')}</div>*/}
-                {/*</div>*/}
-
-                {/*<div className="hidden w-full mt-12 lg:mt-16 mb-20 lg:mb-28 grid grid-cols-1 gap-x-2 gap-y-12 md:grid-cols-2 lg:gap-x-16 lg:gap-y-16 lg:grid-cols-3 ">*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">*/}
-                {/*            {t('What is the differens between plans?')}*/}
-                {/*        </div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_1')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">*/}
-                {/*            {t(*/}
-                {/*                'Does CommentSold integrate with Shopify/How does the Shopify integration work?'*/}
-                {/*            )}*/}
-                {/*        </div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_2')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">*/}
-                {/*            {t('How do I cancel my account')}*/}
-                {/*        </div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_3')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">*/}
-                {/*            {t('How does the free trial work?')}*/}
-                {/*        </div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_4')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">{t('Which plan should I get')}</div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_5')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">{t('Do integrate')}</div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_6')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">*/}
-                {/*            {t('Is CommentSold available in Canada?')}*/}
-                {/*        </div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_7')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">*/}
-                {/*            {t('Do you integrate with a POS system?')}*/}
-                {/*        </div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_8')}</div>*/}
-                {/*    </div>*/}
-                {/*    <div>*/}
-                {/*        <div className="font-bold mb-6 text-lg">*/}
-                {/*            {t('How does the Facebook integration work?')}*/}
-                {/*        </div>*/}
-                {/*        <div className="text-gray-350 text-sm">{t('tips_text_9')}</div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-
-                <div className="text-center">
-                    <div className="font-bold text-5xl">{t('Try it for free today!')}</div>
-                    <div className="text-3xl font-bold">
-                        {t('It only takes 30 second to get started')}
-                    </div>
+                <div className="clear-both" />
+                <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
+                    {t('Try it for free today!')}
+                </h3>
+                <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
+                    {t('It only takes 30 seconds to get started')}.
+                </h4>
+                <div className="w-full mt-[40px] text-center mb-[100px]">
+                    <Link href={'/'}>
+                        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
+                            <span className="text-[20px] inline-block min-w-[220px]">
+                                {t('Register now!')}
+                            </span>
+                        </a>
+                    </Link>
+                    <Link href={'/'}>
+                        <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
+                            <span className="text-[20px] inline-block min-w-[220px]">
+                                {t('I want to know more!')}
+                            </span>
+                        </a>
+                    </Link>
                 </div>
 
                 {success ? (
-                    <div className="mt-8 mb-16 font-bold text-2xl text-center text-green-500">
+                    <div className="mt-8 mb-16 font-bold text-2xl text-center text-green-500 hidden">
                         {t('Your request has been sent')}
                     </div>
                 ) : (
@@ -465,7 +421,7 @@ export default function Index({ locale }: { locale: any }) {
                         validationSchema={validationSchema}
                         onSubmit={handlerSubmit}>
                         {(props) => (
-                            <Form className="flex flex-wrap justify-center align-middle lg:flex-nowrap lg:max-w-2xl mt-8 mb-16 mx-auto">
+                            <Form className="flex flex-wrap justify-center align-middle lg:flex-nowrap lg:max-w-2xl mt-8 mb-16 mx-auto hidden">
                                 <InputText
                                     style={'h-14 text-lg w-full'}
                                     icon={'f-email'}
@@ -500,6 +456,7 @@ export async function getServerSideProps(context: any) {
             messages: {
                 ...require(`../../messages/${locale}.json`),
                 ...require(`../../messages/pricing/${locale}.json`),
+                ...require(`../../messages/main/${locale}.json`),
                 ...require(`../../messages/textpricing/${locale}.json`)
             }
         }

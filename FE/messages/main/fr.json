@@ -29,7 +29,7 @@
   "Quick features view": "Aperçu des fonctionnalités",
   "Make order placement smoother": "Simplifiez le processus de commande!",
   "place_order_descr": "Avec Live Pro shop, vos clients passent commande avec un simple commentaire pour une expérience shopping interactive et fluide",
-  "platform_advantage": "Découvrez les avantages de notre plateforme",
+  "platform_advantage": "Découvrez les avantages de notre outil",
   "increase_sales": "Faites jusque +300% de ventes",
   "increase_sales_descr": "Avec un système de vente aussi intuitif que Live pro shop, c'est possible!",
   "save_up": "Jusque 3h de temps liberé",
@@ -41,6 +41,11 @@
   "Customer stories": "Témoignages clients",
   "you_to_client": "Vous aussi, faites comme eux",
   "perfect_tool_text": "Outil parfait pour les entreprises qui utilisent les lives pour leurs ventes en ligne",
+  "Welcome to": "Bienvenue sur",
+  "Advantages": "Avantages",
+  "Integration": "Intégrations",
+  "text_rocket_sub": "Découvrez ce que disent nos clients ",
+  "Support": "Support",
   "arrayOfObjects": [
     {
       "person": "Sabrina M.",

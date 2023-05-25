@@ -33,7 +33,7 @@
   "increase_sales": "Increase sales 300+%",
   "increase_sales_descr": "With a sales system as intuitive as Live Pro Shop, it`s possible!",
   "save_up": "Save up to 3 hours",
-  "save_up_descr": "With a sales system as intuitive as Live Pro Shop, it`s possible!",
+  "save_up_descr": "An intense live with many sales involves hours of repitive administrative management. Automate the process and forget about those long hours.",
   "dedicate_cap": "70% or the users could dedicate more time to their community ",
   "dedicate_cap_descr": "And the other 30% spent the whole time for themselves and their family",
   "best_caption": "Best of all, Live Pro Shop works with all your favorite sites!",
@@ -41,6 +41,11 @@
   "Customer stories": "Customer stories",
   "you_to_client": "You too, be like our clients",
   "perfect_tool_text": "Perfect tool for business owner that utilizes live streaming for retail sales",
+  "Welcome to": "Welcome to",
+  "Advantages": "Advantages",
+  "Integration": "Integration",
+  "text_rocket_sub": "See how Live Pro Shop tools help companies run their business",
+  "Support": "Support",
   "arrayOfObjects": [
     {
       "person": "Sabrina M.",
