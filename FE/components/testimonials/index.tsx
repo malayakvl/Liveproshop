@@ -142,9 +142,9 @@ function Testimonials() {
                     <div className="w-full mt-[20px] md:mt-[40px] text-center mb-[100px]">
                         <Link href={'/auth/signup'}>
                             <a className="btn-big md:mr-[20px] block mb-[15px] md:mb-auto md:inline-block  lg:mr-[84px]">
-                        <span className="text-[20px] inline-block min-w-[220px]">
-                            {t('Register now!')}
-                        </span>
+                                <span className="text-[20px] inline-block min-w-[220px]">
+                                    {t('Register now!')}
+                                </span>
                             </a>
                         </Link>
                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
@@ -154,9 +154,9 @@ function Testimonials() {
                                 dispatch(setModalCalendlyMetaAction(true));
                             }}>
                             <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                        <span className="text-[20px] inline-block min-w-[220px]">
-                            {t('I want to know more!')}
-                        </span>
+                                <span className="text-[20px] inline-block min-w-[220px]">
+                                    {t('I want to know more!')}
+                                </span>
                             </a>
                         </div>
                     </div>
