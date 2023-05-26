@@ -93,7 +93,7 @@
 .layout-action-btns-block {
   //border:solid 1px blue;
 
-  @apply w-full pt-[10px] text-right pr-[16px] pb-[20px] md:pt-[55px] md:mt-[14px] md:mr-[140px] md:text-left md:pb-0;
+  @apply w-full pt-[10px] text-right pr-[16px] pb-[20px] md:pt-[55px] md:mt-[14px] lg:mt-[0px] lg:pt-[14px] md:mr-[140px] md:text-left md:pb-0;
 }
 
 .texting-menu {

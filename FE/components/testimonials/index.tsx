@@ -13,11 +13,13 @@ function Testimonials() {
                 <div className="w-full">
                     <div className="dotted-bg md:flex">
                         <div className="header-t-block">
-                            <span className="text-gray-350 font-bold text-[14px]">
+                            <span className="text-gray-350 text-[16px] font-bold md:text-[14px]">
                                 {t('Customer stories')}
                             </span>
-                            <h1 className="page-heading text-left">Sabrina</h1>
-                            <span className="block text-gray-350 text-[36px] leading-[44px] font-bold mt-[16px]">
+                            <h1 className="page-heading text-[28px] md:text-[58px] text-left">
+                                Sabrina
+                            </h1>
+                            <span className="block text-gray-350 text-[16px] mt-[0px] md:text-[36px] leading-[44px] font-bold md:mt-[16px]">
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
                                     href="https://www.facebook.com/LALYLOOKBOUTIQUE"
@@ -27,8 +29,7 @@ function Testimonials() {
                                 </a>
                             </span>
                             <span className="mb-[15px] mt-[24px] text-[14px] leading-[24px] block text-gray-350 md:text-[30px] md:leading-[38px] mdd:mt-[48px]">
-                                “The more money I make, the more articles I can buy and thus obtain
-                                better prices from my providers.”
+                                {t('testim_subtitle')}
                             </span>
                         </div>
                         <div className="user-photo"></div>
@@ -41,23 +42,13 @@ function Testimonials() {
                             </div>
                             <div>
                                 <div className="blue-message">
-                                    <span className="hand-msg">
-                                        Sabrina, can you tell us about your activity?
-                                    </span>
+                                    <span className="hand-msg">{t('testimq_1')}</span>
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
                             <div className="gray-message">
-                                <p>
-                                    My name is Sabrina, I have been an entrepreneur for 7 years. I
-                                    retook the family shop “Lalylook boutique” where I work with my
-                                    mother.
-                                </p>
-                                <p>
-                                    Our company used to be opened only 6 months a year due to
-                                    saisonality as our shop is on sea side.
-                                </p>
+                                {t('testima_1')}
                             </div>
                             <div className="">
                                 <div className="big-girl-profile"></div>
@@ -69,15 +60,27 @@ function Testimonials() {
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
                             <div>
-                                <div className="blue-message">
-                                    When and why did you start doing Facebook lives?
-                                </div>
+                                <div className="blue-message">{t('testimq_2')}</div>
+                            </div>
+                        </div>
+                        <div className="flex items-end mt-10">
+                            <div className="gray-message">{t('testima_2')}</div>
+                            <div className="">
+                                <div className="big-girl-profile small-profile"></div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-end mt-10">
+                            <div className="">
+                                <div className="big-boy-profile small-profile"></div>
+                            </div>
+                            <div>
+                                <div className="blue-message">{t('testimq_3')}</div>
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
                             <div className="gray-message">
-                                Things were getting tougher and tougher each year. We were looking
-                                for a side income and started doing Facebook lives in April 2019.
+                                {t('testima_3')}
                             </div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
@@ -89,21 +92,12 @@ function Testimonials() {
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
                             <div>
-                                <div className="blue-message">How was the beginning?</div>
+                                <div className="blue-message">{t('testimq_4')}</div>
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
                             <div className="gray-message">
-                                <p>
-                                    In winter 2019 / early 2020, the pandemic and lock-down made our
-                                    business skyrocket. Our clients, and people in general quickly
-                                    adopted new buying habits.
-                                </p>
-                                <p>
-                                    Even after the lockdown was over, we still could maintain our
-                                    still could maintain our rhythm.
-                                </p>
-                                <p>But eventually you only have 7 days a week and 24h a day.</p>
+                                {t('testima_4')}
                             </div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
@@ -115,14 +109,12 @@ function Testimonials() {
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
                             <div>
-                                <div className="blue-message">What happened?</div>
+                                <div className="blue-message">{t('testimq_5')}</div>
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
                             <div className="gray-message">
-                                We realized that all the small process accumulation was
-                                time-consuming. I had very little time to rest, see my friends or
-                                take care of my family. I was exhausted.
+                                !{t('testima_5')}
                             </div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
@@ -134,59 +126,12 @@ function Testimonials() {
                                 <div className="big-boy-profile small-profile"></div>
                             </div>
                             <div>
-                                <div className="blue-message">How did you got to that point?</div>
+                                <div className="blue-message">{t('testimq_6')}</div>
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
                             <div className="gray-message">
-                                <p>
-                                    Well, we had no dedicated software nor any computer knowledge…
-                                </p>
-                                <p>
-                                    So we started looking for a simple and intuitive solution that
-                                    would fit our need and activity. And this is when we discovered
-                                    Live Pro Shop.
-                                </p>
-                                <p>
-                                    To be honest, I was skeptical at first, but, upon insistence
-                                    from my mother, still accepted to give it a try.
-                                </p>
-                            </div>
-                            <div className="">
-                                <div className="big-girl-profile small-profile"></div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-end mt-10">
-                            <div className="">
-                                <div className="big-boy-profile small-profile"></div>
-                            </div>
-                            <div>
-                                <div className="blue-message">How did the experience go?</div>
-                            </div>
-                        </div>
-                        <div className="flex items-end mt-10">
-                            <div className="gray-message">
-                                <p>We have been using Live Pro Shop for a few months now.</p>
-                                <p>I was amazed by the changes it provided:</p>
-                                <p>Signing up is simple</p>
-                                <p>
-                                    No more time wasted making modifications, generating invoices or
-                                    follow-ups
-                                </p>
-                                <p>I sell much more</p>
-                                <p>I keep selling even when I am not on camera</p>
-                                <p>
-                                    The saved time was invested in tying bonds with my community and
-                                    working on social media
-                                </p>
-                                <p>
-                                    The more money I make, the more articles I can buy and thus
-                                    obtain better prices from my providers. That means best prices
-                                    for my clients.
-                                </p>
-                                <p>And happy clients are the key to a successful business.</p>
-                                <p>It has been a game changer.</p>
+                                {t('testima_6')}
                             </div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
@@ -198,18 +143,18 @@ function Testimonials() {
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
                     <div className="clear-both" />
-                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[48px] md:leading-[72px] text-center md:mt-[120px]">
+                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[28px] leading-[32px] md:text-[48px] md:leading-[72px] text-center md:mt-[50px]">
                         {t('Try it for free today!')}
                     </h3>
-                    <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[0px]">
+                    <h4 className="text-gray-350 mt-[10px] text-[14px] leading-[38px] md:text-[30px] w-full text-center font-medium md:mt-[0px]">
                         {t('It only takes 30 seconds to get started')}.
                     </h4>
-                    <div className="w-full mt-[40px] text-center mb-[100px]">
+                    <div className="w-full mt-[20px] md:mt-[40px] text-center mb-[100px]">
                         <Link href={'/auth/signup'}>
-                            <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
-                                    {t('Register now!')}
-                                </span>
+                            <a className="btn-big md:mr-[20px] block mb-[15px] md:mb-auto md:inline-block  lg:mr-[84px]">
+                        <span className="text-[20px] inline-block min-w-[220px]">
+                            {t('Register now!')}
+                        </span>
                             </a>
                         </Link>
                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
@@ -219,34 +164,12 @@ function Testimonials() {
                                 dispatch(setModalCalendlyMetaAction(true));
                             }}>
                             <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
-                                    {t('I want to know more!')}
-                                </span>
+                        <span className="text-[20px] inline-block min-w-[220px]">
+                            {t('I want to know more!')}
+                        </span>
                             </a>
                         </div>
                     </div>
-                    {/*<h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">*/}
-                    {/*    {t('Try it for free today!')}*/}
-                    {/*</h3>*/}
-                    {/*<h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">*/}
-                    {/*    {t('It only takes 30 seconds to get started')}.*/}
-                    {/*</h4>*/}
-                    {/*<div className="w-full mt-[40px] text-center mb-[100px]">*/}
-                    {/*    <Link href={'/'}>*/}
-                    {/*        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">*/}
-                    {/*            <span className="text-[20px] inline-block min-w-[220px]">*/}
-                    {/*                {t('Register now!')}*/}
-                    {/*            </span>*/}
-                    {/*        </a>*/}
-                    {/*    </Link>*/}
-                    {/*    <Link href={'/'}>*/}
-                    {/*        <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">*/}
-                    {/*            <span className="text-[20px] inline-block min-w-[220px]">*/}
-                    {/*                {t('I want to know more!')}*/}
-                    {/*            </span>*/}
-                    {/*        </a>*/}
-                    {/*    </Link>*/}
-                    {/*</div>*/}
                 </div>
             </div>
         </>

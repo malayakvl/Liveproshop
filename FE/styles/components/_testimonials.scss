@@ -9,7 +9,7 @@
   background-repeat: no-repeat;
   background-size: contain;
 
-  @apply sm:mt-10 md:w-[382px] lg:h-[371px] float-left lg:ml-[100px];
+  @apply sm:mt-10 h-[370px] w-full mx-auto md:w-[382px] lg:h-[371px] float-left lg:ml-[100px];
 }
 
 .header-t-block {
@@ -48,14 +48,14 @@
     border-radius: 16px 16px 16px 0;
     color:#fff;
 
-    @apply lg:text-[24px] px-[16px] py-[10px] font-bold;
+    @apply text-[14px] lg:text-[24px] px-[16px] py-[10px] font-bold;
   }
 
   .gray-message {
     background: #F8F8F8;
     border-radius: 20px 20px 0 20px;
 
-    @apply lg:text-[20px] px-[16px] py-[10px] text-gray-350;
+    @apply text-[14px] lg:text-[20px] px-[16px] py-[10px] text-gray-350;
   }
 
   p {
@@ -66,6 +66,8 @@
 .hand-msg {
   position: relative;
   padding-left: 40px;
+
+  @apply inline-block;
 
   &:before {
     content: "";
