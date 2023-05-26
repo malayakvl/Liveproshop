@@ -367,11 +367,15 @@ function Terms() {
                                                     for any delay or non-delivery of Your Order.
                                                 </p>
                                             </li>
+                                        </ul>
+                                        <h3 className="red-yellow-gradient-text text-[22px] mb-[15px] font-bold">
+                                            Subscriptions
+                                        </h3>
+                                        <h5 className="red-yellow-gradient-text text-[18px] font-bold">
+                                            Subscription period
+                                        </h5>
+                                        <ul>
                                             <li>
-                                                <b>Subscriptions</b>
-                                            </li>
-                                            <li>
-                                                <b>Subscription period</b>
                                                 <p>
                                                     The Service or some parts of the Service are
                                                     available only with a paid Subscription. You
@@ -973,9 +977,9 @@ function Terms() {
                                             damages and even if the remedy fails of its essential
                                             purpose.
                                         </p>
-                                        <h5 className="red-yellow-gradient-text text-[18px] font-bold">
+                                        <h3 className="red-yellow-gradient-text text-[24px] mb-[15px] font-bold">
                                             Severability and Waiver
-                                        </h5>
+                                        </h3>
                                         <h5 className="red-yellow-gradient-text text-[18px] font-bold">
                                             Severability
                                         </h5>
