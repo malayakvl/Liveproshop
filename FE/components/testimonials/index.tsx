@@ -47,9 +47,7 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">
-                                {t('testima_1')}
-                            </div>
+                            <div className="gray-message">{t('testima_1')}</div>
                             <div className="">
                                 <div className="big-girl-profile"></div>
                             </div>
@@ -79,9 +77,7 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">
-                                {t('testima_3')}
-                            </div>
+                            <div className="gray-message">{t('testima_3')}</div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
@@ -96,9 +92,7 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">
-                                {t('testima_4')}
-                            </div>
+                            <div className="gray-message">{t('testima_4')}</div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
@@ -113,9 +107,7 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">
-                                !{t('testima_5')}
-                            </div>
+                            <div className="gray-message">!{t('testima_5')}</div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
@@ -130,9 +122,7 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">
-                                {t('testima_6')}
-                            </div>
+                            <div className="gray-message">{t('testima_6')}</div>
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
