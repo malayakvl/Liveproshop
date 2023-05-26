@@ -423,9 +423,9 @@ function Privacy() {
                                             choices regarding cookies, please visit our Cookies
                                             Policy or the Cookies section of our Privacy Policy.
                                         </p>
-                                        <p>
-                                            <b>Use of Your Personal Data</b>
-                                        </p>
+                                        <h2 className="font-bold text-[18px] py-2">
+                                            Use of Your Personal Data
+                                        </h2>
                                         <p>
                                             The Company may use Personal Data for the following
                                             purposes:
@@ -607,9 +607,12 @@ function Privacy() {
                                             including the security of Your data and other personal
                                             information.
                                         </p>
-                                        <p>
-                                            Disclosure of Your Personal Data Business Transactions
-                                        </p>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Disclosure of Your Personal Data
+                                        </h3>
+                                        <h3 className="font-bold text-[16px] py-2">
+                                            Business Transactions
+                                        </h3>
                                         <p>
                                             If the Company is involved in a merger, acquisition or
                                             asset sale, Your Personal Data may be transferred. We
@@ -626,7 +629,9 @@ function Privacy() {
                                             law or in response to valid requests by public
                                             authorities (e.g. a court or a government agency).
                                         </p>
-                                        <p>Other legal requirements</p>
+                                        <h3 className="font-bold text-[16px] py-2">
+                                            Other legal requirements
+                                        </h3>
                                         <p>
                                             The Company may disclose Your Personal Data in the good
                                             faith belief that such action is necessary to:
@@ -650,36 +655,35 @@ function Privacy() {
                                                 Protect the personal safety of Users of the Service
                                                 or the public
                                             </li>
-                                            <li>
-                                                Protect against legal liability
-                                                <p>Security of Your Personal Data</p>
-                                                <p>
-                                                    The security of Your Personal Data is important
-                                                    to Us, but remember that no method of
-                                                    transmission over the Internet, or method of
-                                                    electronic storage is 100% secure. While We
-                                                    strive to use commercially acceptable means to
-                                                    protect Your Personal Data, We cannot guarantee
-                                                    its absolute security.
-                                                </p>
-                                                <p>
-                                                    Detailed Information on the Processing of Your
-                                                    Personal Data
-                                                </p>
-                                                <p>
-                                                    The Service Providers We use may have access to
-                                                    Your Personal Data. These third-party vendors
-                                                    collect, store, use, process and transfer
-                                                    information about Your activity on Our Service
-                                                    in accordance with their Privacy Policies.
-                                                </p>
-                                                <p>Analytics</p>
-                                                <p>
-                                                    We may use third-party Service providers to
-                                                    monitor and analyze the use of our Service.
-                                                </p>
-                                            </li>
+                                            <li>Protect against legal liability</li>
                                         </ul>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Security of Your Personal Data
+                                        </h3>
+                                        <p>
+                                            The security of Your Personal Data is important to Us,
+                                            but remember that no method of transmission over the
+                                            Internet, or method of electronic storage is 100%
+                                            secure. While We strive to use commercially acceptable
+                                            means to protect Your Personal Data, We cannot guarantee
+                                            its absolute security.
+                                        </p>
+                                        <h2 className="font-bold text-[18px] py-2">
+                                            Detailed Information on the Processing of Your Personal
+                                            Data
+                                        </h2>
+                                        <p>
+                                            The Service Providers We use may have access to Your
+                                            Personal Data. These third-party vendors collect, store,
+                                            use, process and transfer information about Your
+                                            activity on Our Service in accordance with their Privacy
+                                            in accordance with their Privacy Policies.
+                                        </p>
+                                        <h2 className="font-bold text-[18px] py-2">Analytics</h2>
+                                        <p>
+                                            We may use third-party Service providers to monitor and
+                                            analyze the use of our Service.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -731,8 +735,12 @@ function Privacy() {
                                                     </a>
                                                 </p>
                                             </li>
+                                        </ul>
+                                        <h2 className="font-bold text-[18px] py-2">
+                                            Email Marketing
+                                        </h2>
+                                        <ul>
                                             <li>
-                                                Email Marketing
                                                 <p>
                                                     We may use Your Personal Data to contact You
                                                     with newsletters, marketing or promotional
@@ -764,8 +772,10 @@ function Privacy() {
                                                     </a>
                                                 </p>
                                             </li>
+                                        </ul>
+                                        <h3 className="font-bold text-[18px] py-2">Payments</h3>
+                                        <ul>
                                             <li>
-                                                Payments
                                                 <p>
                                                     We may provide paid products and/or services
                                                     within the Service. In that case, we may use
@@ -815,9 +825,9 @@ function Privacy() {
                                             to facilitate this transaction and to verify Your
                                             identity.
                                         </p>
-                                        <p>
-                                            <b>Behavioral Remarketing</b>
-                                        </p>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Behavioral Remarketing
+                                        </h3>
                                         <p>
                                             The Company uses remarketing services to advertise to
                                             You after You accessed or visited our Service. We and
@@ -1108,19 +1118,21 @@ function Privacy() {
                                                     contractual requirement, or a requirement
                                                     necessary to enter into a contract.
                                                 </p>
-                                                <h3 className="font-bold text-[18px] py-2">
-                                                    Your Rights under the GDPR
-                                                </h3>
-                                                <p>
-                                                    The Company undertakes to respect the
-                                                    confidentiality of Your Personal Data and to
-                                                    guarantee You can exercise Your rights.
-                                                </p>
-                                                <p>
-                                                    You have the right under this Privacy Policy,
-                                                    and by law if You are within the EU, to:
-                                                </p>
                                             </li>
+                                        </ul>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Your Rights under the GDPR
+                                        </h3>
+                                        <p>
+                                            The Company undertakes to respect the confidentiality of
+                                            Your Personal Data and to guarantee You can exercise
+                                            Your rights.
+                                        </p>
+                                        <p>
+                                            You have the right under this Privacy Policy, and by law
+                                            if You are within the EU, to:
+                                        </p>
+                                        <ul>
                                             <li>
                                                 <p>
                                                     Request access to Your Personal Data. The right
@@ -1200,9 +1212,9 @@ function Privacy() {
                                             Economic Area (EEA), please contact Your local data
                                             protection authority in the EEA.
                                         </p>
-                                        <p>
-                                            <b>Children`s Privacy</b>
-                                        </p>
+                                        <h3 className="font-bold text-[18px] py-2">
+                                            Children`s Privacy
+                                        </h3>
                                         <p>
                                             Our Service does not address anyone under the age of 13.
                                             We do not knowingly collect personally identifiable
@@ -1235,9 +1247,9 @@ function Privacy() {
                                             the content, privacy policies or practices of any third
                                             party sites or services.
                                         </p>
-                                        <p>
-                                            <b>Changes to this Privacy Policy</b>
-                                        </p>
+                                        <h2 className="font-bold text-[18px] py-2">
+                                            Changes to this Privacy Policy
+                                        </h2>
                                         <p>
                                             We may update Our Privacy Policy from time to time. We
                                             will notify You of any changes by posting the new
@@ -1254,9 +1266,7 @@ function Privacy() {
                                             periodically for any changes. Changes to this Privacy
                                             Policy are effective when they are posted on this page.
                                         </p>
-                                        <p>
-                                            <b>Contact Us</b>
-                                        </p>
+                                        <h2 className="font-bold text-[18px] py-2">Contact Us</h2>
                                         <p>
                                             If you have any questions about this Privacy Policy, You
                                             can contact us:
