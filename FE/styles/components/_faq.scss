@@ -1,5 +1,5 @@
 .faq-block {
-  @apply mt-[100px] px-[40px];
+  @apply mt-[50px] md:mt-[100px] md:px-[40px];
 }
 .faq-bg {
   position: relative;
@@ -9,10 +9,12 @@
     background: url(../../public/images/faq/fag-bg.svg);
     background-repeat: no-repeat;
     position: absolute;
-    width: 295px;
-    height: 295px;
+    //width: 295px;
+    //height: 295px;
     top:0;
     right: 0;
+
+    @apply md:w-[295px] md:h-[295px]
   }
 
   //background: url(../../public/images/faq/fag-bg.svg);
@@ -26,7 +28,7 @@
   @apply w-full border-b pt-[32px] pb-[28px] inline-block relative;
 
   .question {
-    @apply w-full text-gray-350 text-[18px] font-bold block mb-2 pr-[25px];
+    @apply w-full text-gray-350 text-[16px] md:text-[18px] font-bold block mb-2 pr-[25px];
   }
 
   .answer {

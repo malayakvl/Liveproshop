@@ -9,7 +9,7 @@
   }
 
   .page-heading {
-    @apply text-[24px] leading-[32px] red-yellow-gradient-text font-bold
+    @apply text-[28px] leading-[32px] red-yellow-gradient-text font-bold
       md:text-[40px] md:leading-[48px] lg:text-[58px] lg:leading-[72px]
   }
 
@@ -124,7 +124,7 @@
     border: 2px solid #EAECF0;
     box-shadow: 0 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     border-radius: 36px;
-    @apply p-[15px] lg:p-[25px] min-h-[315px] 2xl:min-h-[280px];
+    @apply p-[15px] lg:p-[25px] min-h-[240px] md:min-h-[315px] 2xl:min-h-[280px];
   }
   .no-shadowed-block-tip {
     border: 2px solid transparent;
@@ -132,7 +132,7 @@
     background-color: transparent;
     //box-shadow: 0px 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     //border-radius: 36px;
-    @apply mb-[20px] p-0 min-h-[200px] md:mb-auto 2xl:min-h-[280px];
+    @apply mb-[20px] p-0 md:min-h-[200px] md:mb-auto 2xl:min-h-[280px];
   }
 
   .see-full-link {
@@ -202,6 +202,8 @@
   .rocked-lady {
     position: relative;
 
+    //@apply mb-[200px] md:mb-auto;
+
     &:before {
       content: "";
       position: absolute;
@@ -210,7 +212,7 @@
       background-repeat: no-repeat;
       background-size: contain;
 
-      @apply lg:w-[335px] lg:h-[332px] xl:w-[535px] xl:h-[532px];
+      @apply w-full h-[250px] lg:w-[335px] lg:h-[332px] xl:w-[535px] xl:h-[532px];
     }
   }
 
@@ -299,7 +301,7 @@
       margin-left: 24px;
 
       .user-name {
-        @apply text-[18px] text-gray-350 font-bold block;
+        @apply text-[16px] md:text-[18px] text-gray-350 font-bold block;
       }
 
       .text {
@@ -312,7 +314,7 @@
     @apply mt-[20px] md:max-w-[400px] md:ml-[20px] lg:mt-0 lg:ml-[60px] float-left lg:max-w-[600px];
 
     .header {
-      @apply font-bold text-[24px] leading-[32px] text-gray-350;
+      @apply font-bold text-[16px] md:text-[24px] leading-[32px] text-gray-350;
     }
 
     .raiting {
