@@ -2,7 +2,6 @@ import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import _ from 'lodash';
 import { useDispatch } from 'react-redux';
-import { useRef } from 'react';
 import { setModalCalendlyMetaAction } from '../../redux/layouts';
 
 function Faq() {
