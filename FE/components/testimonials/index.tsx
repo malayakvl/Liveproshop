@@ -42,7 +42,7 @@ function Testimonials() {
                             </div>
                             <div>
                                 <div className="blue-message">
-                                    <span className="hand-msg">{t('testimq_1')}</span>
+                                    <span className="hand-msg">!!!{t('testimq_1')}</span>
                                 </div>
                             </div>
                         </div>
@@ -137,12 +137,12 @@ function Testimonials() {
                         {t('Try it for free today!')}
                     </h3>
                     <h4 className="text-gray-350 mt-[10px] text-[14px] leading-[38px] md:text-[30px] w-full text-center font-medium md:mt-[0px]">
-                        {t('It only takes 30 seconds to get started')}.
+                        {t('It only takes 30 seconds to get started')}
                     </h4>
                     <div className="w-full mt-[20px] md:mt-[40px] text-center mb-[100px]">
                         <Link href={'/auth/signup'}>
                             <a className="btn-big md:mr-[20px] block mb-[15px] md:mb-auto md:inline-block  lg:mr-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
+                                <span className="text-[16px] inline-block min-w-[220px] md:text-[20px] ">
                                     {t('Register now!')}
                                 </span>
                             </a>
@@ -154,7 +154,7 @@ function Testimonials() {
                                 dispatch(setModalCalendlyMetaAction(true));
                             }}>
                             <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
+                                <span className="text-[16px] inline-block min-w-[220px] md:text-[20px] ">
                                     {t('I want to know more!')}
                                 </span>
                             </a>
