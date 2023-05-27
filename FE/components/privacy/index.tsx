@@ -672,8 +672,11 @@ function Privacy() {
                                             Detailed Information on the Processing of Your Personal
                                             Data
                                         </h2>
+                                        <h2 className="font-bold text-[16px] py-2">
+                                            The Service Providers
+                                        </h2>
                                         <p>
-                                            The Service Providers We use may have access to Your
+                                            We use may have access to Your Personal Data. These
                                             Personal Data. These third-party vendors collect, store,
                                             use, process and transfer information about Your
                                             activity on Our Service in accordance with their Privacy
@@ -942,9 +945,15 @@ function Privacy() {
                                                         Google
                                                     </a>{' '}
                                                     also recommends installing the Google Analytics
-                                                    Opt-out Browser Add-on -
-                                                    https://tools.google.com/dlpage/gaoptout - for
-                                                    your web browser. Google Analytics Opt-out
+                                                    Opt-out &nbsp;
+                                                    <a
+                                                        href="https://tools.google.com/dlpage/gaoptout"
+                                                        className="text-red-500"
+                                                        target="_blank"
+                                                        rel="noreferrer">
+                                                        Browser Add-on
+                                                    </a>
+                                                    - for your web browser. Google Analytics Opt-out
                                                     Browser Add-on provides visitors with the
                                                     ability to prevent their data from being
                                                     collected and used by Google Analytics.
