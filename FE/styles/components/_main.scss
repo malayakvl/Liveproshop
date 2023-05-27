@@ -124,7 +124,7 @@
     border: 2px solid #EAECF0;
     box-shadow: 0 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     border-radius: 36px;
-    @apply p-[15px] lg:p-[25px] min-h-[240px] md:min-h-[315px] 2xl:min-h-[280px];
+    @apply p-[15px] lg:p-[25px] min-h-[220px] md:min-h-[315px] 2xl:min-h-[280px];
   }
   .no-shadowed-block-tip {
     border: 2px solid transparent;

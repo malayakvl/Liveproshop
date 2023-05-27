@@ -20,7 +20,9 @@ function Faq() {
             <div className="flex">
                 <div className="w-full">
                     <div className="faq-bg">
-                        <span className="text-gray-350 font-semibold">{t('Support')}</span>
+                        <span className="text-[16px] text-gray-350 font-semibold md:ml-[5px]">
+                            {t('Support')}
+                        </span>
                         <h1 className="page-heading text-left">
                             {t('Frequently asked questions')}
                         </h1>

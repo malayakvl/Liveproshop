@@ -17,7 +17,7 @@
 
 .btn-big {
   box-shadow: 0 10px 20px rgba(247, 109, 109, 0.2), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
-  @apply red-yellow-gradient text-[16px] text-white md:text-2xl font-bold px-3 md:px-8 py-1.5 rounded-lg whitespace-nowrap;
+  @apply red-yellow-gradient text-[16px] text-white py-[12px] md:text-2xl font-bold px-3 md:px-8 rounded-lg whitespace-nowrap;
 }
 .view-back {
   @apply red-yellow-gradient-text text-xs font-bold relative pl-[25px];
