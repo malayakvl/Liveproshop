@@ -13,7 +13,7 @@ function Testimonials() {
                 <div className="w-full">
                     <div className="dotted-bg md:flex">
                         <div className="header-t-block">
-                            <span className="text-gray-350 text-[16px] font-bold md:text-[14px]">
+                            <span className="text-[16px] text-gray-350 font-semibold md:ml-[5px]">
                                 {t('Customer stories')}
                             </span>
                             <h1 className="page-heading text-[28px] md:text-[58px] text-left">
