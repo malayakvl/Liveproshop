@@ -339,3 +339,10 @@
     @apply ml-[-30px] md:ml-0 lg:ml-[-10px];
   }
 }
+
+.main-hand-sub-1 {
+  @apply md:leading-[68px] md:max-w-[420px];
+}
+.main-hand-sub-2 {
+  @apply leading-[28px] max-w-[430px];
+}
