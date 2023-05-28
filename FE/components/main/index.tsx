@@ -50,7 +50,7 @@ function Main() {
                             onClick={() => {
                                 dispatch(setModalCalendlyMetaAction(true));
                             }}
-                            className="cursor-pointer btn-big text-center md:inline-block md:ml-[30px] lg:ml-[30px]">
+                            className="cursor-pointer btn-big text-center md:inline-block md:ml-[75px]">
                             <span className="text-[16px] md:text-[20px]">
                                 {t('Request a seles call')}
                             </span>
@@ -273,7 +273,7 @@ function Main() {
                     <h2 className="red-yellow-gradient-text font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] md:mt-[10px]">
                         {t('best_caption')}
                     </h2>
-                    <span className="text-[16px] leading-[24px] block mt-[20px] text-blue-350 font-medium">
+                    <span className="text-[16px] leading-[24px] block mt-[20px] text-blue-350 font-medium md:max-w-[640px] text-sys">
                         {t('best_descr')}
                     </span>
                     <div className="grid gap-[36px] grid-cols-2 xl:grid-cols-8 mt-[40px]">

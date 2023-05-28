@@ -13,12 +13,10 @@ function Testimonials() {
                 <div className="w-full">
                     <div className="dotted-bg md:flex">
                         <div className="header-t-block">
-                            <span className="text-[16px] text-gray-350 font-semibold md:ml-[5px]">
-                                {t('Customer stories')}
+                            <span className="text-[14px] text-gray-350 font-semibold md:ml-[5px]">
+                                {t('Customer story')}
                             </span>
-                            <h1 className="page-heading text-[28px] md:text-[58px] text-left">
-                                Sabrina
-                            </h1>
+                            <h1 className="text-left text-[28px] page-heading-story">Sabrina</h1>
                             <span className="block text-gray-350 text-[16px] mt-[0px] md:text-[36px] leading-[44px] font-bold md:mt-[16px]">
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
@@ -42,12 +40,17 @@ function Testimonials() {
                             </div>
                             <div>
                                 <div className="blue-message">
-                                    <span className="hand-msg">!!!{t('testimq_1')}</span>
+                                    <span className="hand-msg">{t('testimq_1')}</span>
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">{t('testima_1')}</div>
+                            <div
+                                className="gray-message"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('testima_1')
+                                }}
+                            />
                             <div className="">
                                 <div className="big-girl-profile"></div>
                             </div>
@@ -62,7 +65,12 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">{t('testima_2')}</div>
+                            <div
+                                className="gray-message"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('testima_2')
+                                }}
+                            />
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
@@ -77,7 +85,12 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">{t('testima_3')}</div>
+                            <div
+                                className="gray-message"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('testima_3')
+                                }}
+                            />
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
@@ -92,7 +105,12 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">{t('testima_4')}</div>
+                            <div
+                                className="gray-message"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('testima_4')
+                                }}
+                            />
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
@@ -107,7 +125,12 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">!{t('testima_5')}</div>
+                            <div
+                                className="gray-message"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('testima_5')
+                                }}
+                            />
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>
@@ -122,7 +145,12 @@ function Testimonials() {
                             </div>
                         </div>
                         <div className="flex items-end mt-10">
-                            <div className="gray-message">{t('testima_6')}</div>
+                            <div
+                                className="gray-message"
+                                dangerouslySetInnerHTML={{
+                                    __html: t('testima_6')
+                                }}
+                            />
                             <div className="">
                                 <div className="big-girl-profile small-profile"></div>
                             </div>

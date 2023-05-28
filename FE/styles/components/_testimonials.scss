@@ -22,7 +22,7 @@
   box-shadow: 0 5px 100px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
   border-radius: 36px;
 
-  @apply p-[20px] xl:min-w-[1120px] xl:p-[48px];
+  @apply p-[20px] xl:min-w-[1120px] xl:p-[48px] max-w-[1120px];
 
   .big-boy-profile {
     background-image: url(../../public/images/testimonials/boy.svg);
@@ -54,8 +54,13 @@
   .gray-message {
     background: #F8F8F8;
     border-radius: 20px 20px 0 20px;
+    font-weight: 500;
 
     @apply text-[14px] lg:text-[20px] px-[16px] py-[10px] text-gray-350;
+
+    br {
+      margin-bottom: 10px;
+    }
   }
 
   p {
@@ -79,4 +84,9 @@
     top: 0;
     left: 0;
   }
+}
+
+.page-heading-story {
+  @apply text-[28px] leading-[32px] red-yellow-gradient-text font-bold
+  md:text-[40px] md:leading-[48px] lg:text-[72px] lg:leading-[72px]
 }

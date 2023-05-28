@@ -20,7 +20,7 @@ function Faq() {
             <div className="flex">
                 <div className="w-full">
                     <div className="faq-bg">
-                        <span className="text-[16px] text-gray-350 font-semibold md:ml-[5px]">
+                        <span className="text-[14px] text-gray-350 font-semibold md:ml-[5px]">
                             {t('Support')}
                         </span>
                         <h1 className="page-heading text-left">

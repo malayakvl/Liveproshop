@@ -13,7 +13,7 @@ function Features() {
                 <div className="w-full">
                     <div className="dotted-bg md:flex">
                         <div className="header-t-block">
-                            <span className="text-[16px] text-gray-350 font-semibold md:ml-[5px]">
+                            <span className="text-[14px] text-gray-350 font-semibold md:ml-[5px]">
                                 {t('Learn more about our')}
                             </span>
                             <h1 className="page-heading text-left">{t('Key Features')}</h1>
