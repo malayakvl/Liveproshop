@@ -145,7 +145,7 @@
       position: absolute;
       background-image: url(../../public/images/main/arrow-btn.svg);
 
-      @apply w-[12px] h-[22px] right-[-20px] top-[1px];
+      @apply w-[12px] h-[22px] top-[10px] right-[-30px] md:right-[-20px] md:top-[1px];
     }
   }
 
@@ -164,7 +164,7 @@
       padding-right: 12px;
       background-size: contain;
 
-      @apply w-[12px] h-[22px] right-[-5px] top-[-1px];
+      @apply top-[10px] right-[-35px] w-[12px] h-[22px] md:right-[-5px] md:top-[-1px];
     }
   }
 
@@ -346,4 +346,12 @@
 }
 .main-hand-sub-2 {
   @apply leading-[28px] max-w-[430px];
+}
+
+.main-white-shadow {
+  @apply h-[65px] md:h-auto;
+
+  a:after {
+    @apply top-[10px];
+  }
 }
