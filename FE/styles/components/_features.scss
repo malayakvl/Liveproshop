@@ -3,21 +3,36 @@
   background-repeat: no-repeat;
   background-size: contain;
 
-  @apply mt-10 w-[300px] lg:w-[559px] lg:h-[701px] float-left lg:mt-0 lg:ml-[100px];
+  @apply sm:bg-none hidden w-[559px] h-[701px];
 }
 
 .feature-phone-photo {
-  background-image: url(../../public/images/features/phone.svg);
+  background-image: url(../../public/images/features/hand-phone.png);
   background-repeat: no-repeat;
   background-size: contain;
 
-  @apply mt-10 w-[427px] xl:h-[861px] lg:mt-[-20px] float-left lg:ml-[100px];
+  @apply hidden md:inline-block w-[559px] xl:h-[701px] md:float-right;
+}
+
+.dotted-bg {
+  @media screen and (max-width: 640px) {
+    background-image: none;
+  }
 }
 
 .feature-comp {
   background-image: url(../../public/images/features/comp.svg);
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
 
-  @apply sm:mt-10 w-[518px] h-[495px] float-left lg:pr-[520px];
+  @apply w-full h-[290px] sm:mt-10 md:w-[518px] md:h-[495px] float-left lg:pr-[520px] lg:mt-[-90px];
+}
+
+.feature-screen-photo {
+  background-image: url(../../public/images/features/mobile-screen.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position-x: right;
+
+  @apply h-[784px] lg:float-right md:order-2;
 }

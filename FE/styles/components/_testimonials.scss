@@ -2,6 +2,7 @@
   background-image: url(../../public/images/testimonials/dotted-bg.svg);
   background-repeat: no-repeat;
   background-position: top right;
+  background-position-y: 200px;
 }
 
 .user-photo {
@@ -13,7 +14,12 @@
 }
 
 .header-t-block {
-  @apply md:max-w-[400px] float-left xl:max-w-[890px];
+  //@apply md:max-w-[400px] float-left xl:max-w-[675px];
+  @apply float-left ;
+
+  .page-heading {
+    @apply md:text-[72px];
+  }
 }
 
 .testimonial-container {

@@ -14,9 +14,9 @@
   "text_5": "8% des paniers fantômes sont dûs à des modes de paiement pas assez flexibles. Proposez un grand nombre de modes de paiements ou d'envoi afin que votre client y trouve la formule qui lui aille",
   "Waiting list": "Crééz une liste d'attente",
   "text_6": "Lorsque quelqu'un abandonne un panier, automatiquement, les articles liberés seront attribués à la première personne de la file d'attente. Ainsi, la vente n'est pas perdue et vos clients sont contents",
-  "Learn more about our": "En savoir plus sur nos"
-
-
-
-
+  "Learn more about our": "En savoir plus sur nos",
+  "Choose the free shipping fees threshold": "Offrez les frais de port à partir d'un certain montant ",
+  "Automatic invoicing": "Facturation fluide et automatique",
+  "text_7": "43% des français annulent un achat pour cause de frais de ports élevés. A l'inverse, si la limite est bien choisie, vous pouvez amener les clients à commander plus d'articles.",
+  "text_8": "Live pro shop génère automatiquement les factures! Cela vous libère du temps pour votre dévelopement (ou pour vous), vous évite les erreurs et vous dispense de devoir payer quelqu'un pour le faire."
 }

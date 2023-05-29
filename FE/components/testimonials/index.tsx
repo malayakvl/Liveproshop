@@ -1,20 +1,17 @@
 import { useTranslations } from 'next-intl';
 import React from 'react';
-import Link from 'next/link';
-import { useDispatch } from 'react-redux';
-import { setModalCalendlyMetaAction } from '../../redux/layouts';
+import Try from '../try';
 
 function Testimonials() {
     const t = useTranslations();
-    const dispatch = useDispatch();
     return (
         <>
-            <div className="flex">
+            <div className="flex mt-[-30px]">
                 <div className="w-full">
                     <div className="dotted-bg md:flex">
                         <div className="header-t-block">
-                            <span className="text-[14px] text-gray-350 font-semibold md:ml-[5px]">
-                                {t('Customer story')}
+                            <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
+                                {t('Customer stories')}
                             </span>
                             <h1 className="text-left text-[28px] page-heading-story">Sabrina</h1>
                             <span className="block text-gray-350 text-[16px] mt-[0px] md:text-[36px] leading-[44px] font-bold md:mt-[16px]">
@@ -26,7 +23,7 @@ function Testimonials() {
                                     Lalylook Boutique
                                 </a>
                             </span>
-                            <span className="mb-[15px] mt-[24px] text-[14px] leading-[24px] block text-gray-350 md:text-[30px] md:leading-[38px] mdd:mt-[48px]">
+                            <span className="mb-[15px] mt-[24px] text-[14px] leading-[24px] block text-gray-350 md:text-[30px] md:leading-[38px] md:mt-[48px]">
                                 {t('testim_subtitle')}
                             </span>
                         </div>
@@ -160,34 +157,7 @@ function Testimonials() {
                     {/*=======================================================*/}
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
-                    <div className="clear-both" />
-                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[28px] leading-[32px] md:text-[48px] md:leading-[72px] text-center md:mt-[50px]">
-                        {t('Try it for free today!')}
-                    </h3>
-                    <h4 className="text-gray-350 mt-[10px] text-[14px] leading-[38px] md:text-[30px] w-full text-center font-medium md:mt-[0px]">
-                        {t('It only takes 30 seconds to get started')}
-                    </h4>
-                    <div className="w-full mt-[20px] md:mt-[40px] text-center mb-[100px]">
-                        <Link href={'/auth/signup'}>
-                            <a className="btn-big md:mr-[20px] block mb-[15px] md:mb-auto md:inline-block  lg:mr-[84px]">
-                                <span className="text-[16px] inline-block min-w-[220px] md:text-[20px] ">
-                                    {t('Register now!')}
-                                </span>
-                            </a>
-                        </Link>
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                        <div
-                            className="md:inline-block cursor-pointer"
-                            onClick={() => {
-                                dispatch(setModalCalendlyMetaAction(true));
-                            }}>
-                            <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                                <span className="text-[16px] inline-block min-w-[220px] md:text-[20px] ">
-                                    {t('I want to know more!')}
-                                </span>
-                            </a>
-                        </div>
-                    </div>
+                    <Try />
                 </div>
             </div>
         </>

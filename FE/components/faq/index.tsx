@@ -17,10 +17,10 @@ function Faq() {
 
     return (
         <>
-            <div className="flex">
+            <div className="flex mt-[-30px]">
                 <div className="w-full">
                     <div className="faq-bg">
-                        <span className="text-[14px] text-gray-350 font-semibold md:ml-[5px]">
+                        <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
                             {t('Support')}
                         </span>
                         <h1 className="page-heading text-left">
