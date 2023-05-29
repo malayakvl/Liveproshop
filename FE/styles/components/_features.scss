@@ -56,7 +56,7 @@
   background-size: contain;
   background-position-x: center;
 
-  @apply min-h-[300px] lg:min-h-[495px];
+  @apply min-h-[300px] lg:min-h-[495px] md:mt-[-50px] lg:mt-[-80px];
 }
 
 .feature-screen-photo-new {
@@ -66,4 +66,8 @@
   background-position-x: center;
 
   @apply h-[384px] lg:h-[784px] lg:float-right md:order-2 w-full;
+}
+
+.try-features {
+  @apply mt-[-70px] lg:mt-[-120px];
 }

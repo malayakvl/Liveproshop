@@ -7,7 +7,7 @@ function Features() {
     const t = useTranslations();
     return (
         <>
-            <div className="flex mb-[-90px] md:mb-auto mt-[50px]">
+            <div className="flex mb-[-90px] md:mb-auto md:mt-[50px]">
                 <div className="w-full dotted-bg">
                     <div className="w-full flex">
                         <div className="md:float-left w-2/3">
@@ -77,10 +77,10 @@ function Features() {
                             </div>
                         </div>
                     </div>
-                    <div className="clear-both" />
+                    <div className="clear-both md:h-[100px] lg:h-0" />
                     <div className="flex flex-col md:flex-row second-dotted-bg">
                         <div className="w-full md:w-3/5 lg:mt-[100px]">
-                            <div className="flex flex-col xl:flex-row md:mb-[40px]">
+                            <div className="flex flex-col xl:flex-row lg:mb-[40px]">
                                 <div className="w-full mb-[20px]">
                                     <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
                                         {t('Live Inventory management')}
@@ -124,10 +124,10 @@ function Features() {
                     {/*=======================================================*/}
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
-                    <div className="md:mt-[-100px]">
+                    <div className="try-features lg:mt-[-100px]">
                         <Try />
                     </div>
-                    <div className="clear-both h-[70px] md:hidden"></div>
+                    <div className="clear-both h-[30px] md:hidden"></div>
                 </div>
             </div>
         </>
