@@ -50,7 +50,7 @@
     background-image: url(../../public/images/main/screen.svg);
     background-size: contain;
     background-repeat: no-repeat;
-    @apply w-full h-[280px] mb-[50px] md:w-[225px] md:h-[193px] lg:w-[587px] xl:h-[473px] md:mb-0;
+    @apply w-full h-[280px] mb-[50px] md:w-[225px] md:h-[350px] lg:w-[587px] xl:h-[473px] md:mb-0;
   }
 
   .hand-big-bg {
@@ -130,7 +130,7 @@
     border: 2px solid #EAECF0;
     box-shadow: 0 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     border-radius: 36px;
-    @apply p-[15px] lg:p-[25px] min-h-[240px] md:min-h-[315px] 2xl:min-h-[280px];
+    @apply p-[15px] lg:p-[25px] min-h-[240px] md:min-h-[275px] lg:min-h-[315px] 2xl:min-h-[280px];
   }
   .no-shadowed-block-tip {
     border: 2px solid transparent;
@@ -138,7 +138,7 @@
     background-color: transparent;
     //box-shadow: 0px 5px 50px rgba(189, 201, 206, 0.35), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     //border-radius: 36px;
-    @apply mb-[20px] p-0 md:min-h-[200px] md:mb-auto 2xl:min-h-[280px];
+    @apply mb-[20px] p-0 lg:min-h-[60px] md:mb-auto 2xl:min-h-[280px];
   }
 
   .see-full-link {
@@ -159,6 +159,24 @@
     color:#A8AFBD;
     padding-right: 20px;
 
+    &:after {
+      content: "";
+      position: absolute;
+      background-image: url(../../public/images/main/arrow-btn.svg);
+      width: 8px;
+      height: 14px;
+      padding-right: 12px;
+      background-size: contain;
+
+      @apply top-[25%] md:top-0 xl:top-[25%] 2xl:top-0 right-[-5px] w-[12px] h-[22px];
+    }
+  }
+  .see-full-link-med-first {
+    position: relative;
+    color:#A8AFBD;
+    padding-right: 20px;
+
+    @apply text-[16px];
 
     &:after {
       content: "";
@@ -169,7 +187,7 @@
       padding-right: 12px;
       background-size: contain;
 
-      @apply top-[10px] right-[20px] w-[12px] h-[22px] md:right-[-5px] md:top-[-1px];
+      @apply top-[25%] md:top-0 xl:top-[0] 2xl:top-0 right-[-5px] w-[12px] h-[22px];
     }
   }
 
@@ -350,13 +368,13 @@
   @apply md:leading-[68px] md:max-w-[420px];
 }
 .main-hand-sub-2 {
-  @apply leading-[28px] max-w-[430px];
+  @apply leading-[28px] max-w-[415px];
 }
 
 .main-white-shadow {
-  @apply h-[65px] md:h-auto;
+  @apply min-h-[65px] md:min-h-[45px];
 
   a:after {
-    @apply top-[10px];
+    //@apply top-[10px];
   }
 }

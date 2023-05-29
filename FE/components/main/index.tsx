@@ -16,7 +16,7 @@ function Main() {
     return (
         <>
             <div className="flex">
-                <div className="w-full mt-[-20px] md:mt-auto md:w-1/2 lg:w-2/3 lg:pr-[65px] xl:pr-[190px]">
+                <div className="w-full mt-[-20px] md:mt-auto md:w-1/2 lg:w-2/3 lg:pr-[65px] xl:pr-[155px]">
                     <span className="block mb-[20px] md:mb-auto text-gray-350">
                         {t('Welcome to')} <b>LiveProShop!</b>
                     </span>
@@ -73,19 +73,19 @@ function Main() {
                     <span className="text-[14px] font-bold text-blue-350 lg:ml-[-55px]">
                         {t('Quick features view')}
                     </span>
-                    <div className="md:pr-[135px] lg:pr-[280px] xl:pr-0 hand-big-bg lg:ml-[-55px]">
-                        <h1 className="red-yellow-gradient-text text-[24px] leading-[32px] font-bold md:text-[60px] main-hand-sub-1">
+                    <div className="md:pr-[135px] xl:pr-[220px] 2xl:pr-[280px] 2xl::pr-0 hand-big-bg lg:ml-[-55px]">
+                        <h1 className="red-yellow-gradient-text text-[24px] leading-[32px] font-bold md:text-[48px] lg:text-[60px] main-hand-sub-1">
                             {t('Make order placement smoother')}
                         </h1>
-                        <span className="text-blue-350 text-[16px] mt-[20px] block md:text-[18px] bg-none md:mt-[40px] font-medium main-hand-sub-2">
+                        <span className="text-blue-350 text-[16px] mt-[20px] mb-[20px] md:mb-auto block md:text-[18px] bg-none md:mt-[40px] font-medium main-hand-sub-2">
                             {t('place_order_descr')}
                         </span>
                         <div className="clear-both" />
                         <Link href={'/features'}>
-                            <button className="main-white-shadow white-shadow w-full mt-[15px] md:mt-[28px] lg:mt-[43px] md:w-auto disabled-btn h-[50px]">
-                                <a className="text-[16px] see-full-link-med inline-block">
+                            <button className="white-shadow main-white-shadow w-full mt-[15px] md:mt-[28px] lg:mt-[43px] md:w-auto disabled-btn h-[50px]">
+                                <span className="see-full-link-med-first inline-block">
                                     {t('See full list of features')}
-                                </a>
+                                </span>
                             </button>
                         </Link>
                     </div>
@@ -100,7 +100,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_1')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_1')}
                                 </span>
                             </div>
@@ -115,7 +115,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_2')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_2')}
                                 </span>
                             </div>
@@ -130,7 +130,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_3')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_3')}
                                 </span>
                             </div>
@@ -145,7 +145,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_4')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_4')}
                                 </span>
                             </div>
@@ -160,7 +160,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_5')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_5')}
                                 </span>
                             </div>
@@ -175,7 +175,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_6')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_6')}
                                 </span>
                             </div>
@@ -190,7 +190,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_7')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_7')}
                                 </span>
                             </div>
@@ -205,7 +205,7 @@ function Main() {
                                 <h4 className="text-gray-350 text-[16px] lg:text-[24px] font-bold">
                                     {t('tip_caption_8')}
                                 </h4>
-                                <span className="block mt-[10px] text-[12px] text-blue-350 leading-[24px] md:text-[16px]">
+                                <span className="block mt-[10px] text-[14px] text-blue-350 leading-[24px] md:text-[16px]">
                                     {t('tips_8')}
                                 </span>
                             </div>
@@ -215,7 +215,7 @@ function Main() {
 
                 <div className="">
                     <div className="no-shadowed-block-tip tip p-0">
-                        <div className="pl-[0px] mt-[12%] text-center">
+                        <div className="pl-[0px] xl:mt-[17%] text-center">
                             <Link href={'/features'}>
                                 <button className="white-shadow md:w-auto disabled-btn min-h-[75px] md:max-h-[40px] md:min-h-[60px] bg-white min-w-[300px] lg:mt-[50px] lg:ml-0 lg:w-full">
                                     <a className="text-[18px] text-gray-50 see-full-link-1">
@@ -278,49 +278,49 @@ function Main() {
                         {t('best_descr')}
                     </span>
                     <div className="grid gap-[36px] grid-cols-2 xl:grid-cols-8 mt-[40px]">
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-facebook block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Facebook
                             </span>
                         </div>
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-insta block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Instagram
                             </span>
                         </div>
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-fb-mess block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Messenger
                             </span>
                         </div>
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-multisafe block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Multisafe Pay
                             </span>
                         </div>
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-shopify block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Shopify
                             </span>
                         </div>
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-presta block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Prestashop
                             </span>
                         </div>
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-stripe block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Stripe
                             </span>
                         </div>
-                        <div className="mx-auto">
+                        <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-paypal block" />
                             <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
                                 Paypal
