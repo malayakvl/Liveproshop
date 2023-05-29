@@ -7,10 +7,10 @@ function Features() {
     const t = useTranslations();
     return (
         <>
-            <div className="flex mb-[-90px] md:mb-auto mt-[-30px]">
+            <div className="flex mb-[-90px] md:mb-auto mt-[50px]">
                 <div className="w-full dotted-bg">
-                    <div>
-                        <div className="md:float-left">
+                    <div className="w-full flex">
+                        <div className="md:float-left w-2/3">
                             <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
                                 {t('Learn more about our')}
                             </span>
@@ -31,103 +31,103 @@ function Features() {
                                 </Link>
                             </div>
                         </div>
-                        <div className="feature-phone-photo" />
+                        <div className="feature-phone-photo flex w-1/3" />
                     </div>
                     <div className="clear-both" />
-                    <div className="mt-0 md:mt-[70px]">
-                        <div className="feature-comp"></div>
-                        <div>
-                            <div className="flex-row md:flex md:flex-col">
-                                <div className="md:flex md:flex-row">
-                                    <div className="w-full mb-[30px] md:w-1/2 lg:mr-[30px]">
-                                        <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold md:pr-[20px]">
-                                            {t('Forget about cart abandonement')}
-                                        </h4>
-                                        <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px]">
-                                            {t('text_1')}
-                                        </div>
-                                    </div>
-                                    <div className="w-full md:w-1/2">
-                                        <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
-                                            {t('Customize cart expiration')}
-                                        </h4>
-                                        <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
-                                            {t('text_2')}
-                                        </div>
+                    <div className="flex flex-col md:flex-row md:mt-[120px]">
+                        <div className="w-full md:w-2/5">
+                            <div className="feature-comp-new"></div>
+                        </div>
+                        <div className="w-full md:w-3/5">
+                            <div className="flex flex-col xl:flex-row md:mb-[40px]">
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold md:pr-[20px]">
+                                        {t('Forget about cart abandonement')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] lg:pr-[20px]">
+                                        {t('text_1')}
                                     </div>
                                 </div>
-                                <div className="md:flex md:flex-row mt-[40px]">
-                                    <div className="w-full mb-[30px] md:w-1/2 lg:mr-[30px]">
-                                        <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold md:pr-[20px]">
-                                            {t('Choose the free shipping fees threshold')}
-                                        </h4>
-                                        <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px]">
-                                            {t('text_7')}
-                                        </div>
-                                    </div>
-                                    <div className="w-full md:w-1/2">
-                                        <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
-                                            {t('Automatic invoicing')}
-                                        </h4>
-                                        <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
-                                            {t('text_8')}
-                                        </div>
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Customize cart expiration')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                        {t('text_2')}
                                     </div>
                                 </div>
-                                <div className="clear-both" />
+                            </div>
+                            <div className="flex flex-col xl:flex-row">
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold md:pr-[20px]">
+                                        {t('Choose the free shipping fees threshold')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] lg:pr-[20px]">
+                                        {t('text_7')}
+                                    </div>
+                                </div>
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Automatic invoicing')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                        {t('text_8')}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className="clear-both" />
-                    <div className="mt-[70px] flex flex-col md:mt-[140px] md:flex-row">
-                        <div className="order-2 mt-[-100px] w-full md:order-1 md:mt-[-10px] md:w-3/5">
-                            {/*<div className="w-full mb-[30px] md:w-1/2 lg:mr-[30px]">*/}
-                            <div className="md:flex md:flex-row mt-[40px]">
-                                <div className="w-full mb-[30px] md:w-1/2 lg:mr-[30px]">
+                    <div className="flex flex-col md:flex-row second-dotted-bg">
+                        <div className="w-full md:w-3/5 lg:mt-[100px]">
+                            <div className="flex flex-col xl:flex-row md:mb-[40px]">
+                                <div className="w-full mb-[20px]">
                                     <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
                                         {t('Live Inventory management')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px] lg:pr-[20px]">
                                         {t('text_3')}
                                     </div>
                                 </div>
-                                <div className="w-full mb-[30px] md:w-1/2 lg:mr-[30px]">
+                                <div className="w-full mb-[20px]">
                                     <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
                                         {t('Maximize the average')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
                                         {t('text_4')}
                                     </div>
                                 </div>
                             </div>
-                            <div className="md:flex md:flex-row mt-[40px]">
-                                {/*<div className="flex flex-row mt-[40px]">*/}
-                                <div className="w-full mb-[30px] md:w-1/2 lg:mr-[30px]">
+                            <div className="flex flex-col xl:flex-row">
+                                <div className="w-full mb-[20px]">
                                     <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
                                         {t('Extended shipping and payment methods')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] lg:pr-[20px]">
                                         {t('text_5')}
                                     </div>
                                 </div>
-                                <div className="w-full mb-[30px] md:w-1/2 lg:mr-[30px]">
+                                <div className="w-full mb-[20px]">
                                     <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
                                         {t('Waiting list')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px]">
                                         {t('text_6')}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="order-1 w-full md:order-2 md:w-2/5 feature-screen-photo"></div>
+                        <div className="w-full md:w-2/5 lg:mt-[100px]">
+                            <div className="feature-screen-photo-new"></div>
+                        </div>
                     </div>
                     {/*=======================================================*/}
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
-                    <div className="">
+                    <div className="md:mt-[-100px]">
                         <Try />
                     </div>
+                    <div className="clear-both h-[70px] md:hidden"></div>
                 </div>
             </div>
         </>
