@@ -23,11 +23,13 @@ function Faq() {
                         <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
                             {t('Support')}
                         </span>
-                        <h1 className="page-heading text-left md:mr-[300px] 2xl:mr-auto">
-                            {t('Frequently asked questions')}
-                        </h1>
-                        <div className="block text-left mt-[20px] text-[20px] leading-[24px] text-gray-350 md:mr-[300px]  2xl:mr-auto lg:text-[30px] lg:leading-[25px]">
-                            {t('Have some questions before you get started?')}
+                        <div className="faq-content">
+                            <h1 className="page-heading text-left">
+                                {t('Frequently asked questions')}
+                            </h1>
+                            <div className="block text-left mt-[20px] text-[20px] leading-[24px] text-gray-350 lg:text-[30px] lg:leading-[25px]">
+                                {t('Have some questions before you get started?')}
+                            </div>
                         </div>
                     </div>
                     <div className="block text-left mt-[15px] text-[14px] leading-[24px] text-gray-350 md:mr-[300px] lg:text-[20px] lg:leading-[24px] max-w-[800px]">

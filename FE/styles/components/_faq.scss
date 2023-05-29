@@ -50,3 +50,7 @@
     background: url(../../public/images/faq/minus.svg);
   }
 }
+
+.faq-content {
+  @apply md:mr-[300px] lg:mr-auto;
+}
