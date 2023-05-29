@@ -39,7 +39,7 @@ function Features() {
                             <div className="feature-comp-new"></div>
                         </div>
                         <div className="w-full md:w-3/5">
-                            <div className="flex flex-col xl:flex-row md:mb-[40px]">
+                            <div className="flex flex-col xl:flex-row lg:mb-[40px]">
                                 <div className="w-full mb-[20px]">
                                     <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold md:pr-[20px]">
                                         {t('Forget about cart abandonement')}
