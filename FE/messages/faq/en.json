@@ -16,7 +16,7 @@
     {"question":  "Do I need a website to start working with Live pro shop?", "answer":  "No need. You can use Live Pro Shop even if you don't have a website. And if you do, you can synchronize it to have real time access to information such as stocks, orders, articles, prices, etc."},
     {"question":  "How does the shopify and prestashop integration work?", "answer":  "You can connect Live Pro Shop to Wordpress, Shopify, Prestashop, Magento, etc... It's easy and you don't need to have any kind of computer knowledge. Once linked to your shop, you have real time access to orders, stocks, prices, etc... All the information in one single place. Just make sure you at least have the business formula."},
     {"question":  "Do you integrate with other website providers (like Wix, Square, etc)?", "answer":  "You can already integrate Prestashop or Shopify. In case you want to integrate other softwares, it's possible! Contact us here : info@liveproshop.com"},
-    {"question":  "How does The Facebook integration work?", "answer":  "It's easy, just click HERE [LINK GUIDE FOR FACEBOOK] and simply follow the steps"},
+    {"question":  "How does The Facebook integration work?", "answer":  "It's easy, just click {linkGuide}HERE{endLinkGuide} and simply follow the steps"},
     {"question":  "I have no computer knowledge whatsoever, can I still use Live Pro Shop?", "answer":  "No worries! The setup is automatic and there is no need to be a computer crack to use Live Pro Shop. Our expert team assists and guides you throughout the process. You also have free access to all our documentation for a simple use of our platform."}
   ],
   "link_meeting": "Contact us",

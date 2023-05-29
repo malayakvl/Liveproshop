@@ -32,7 +32,7 @@
   }
 
   .answer {
-    @apply text-blue-350 text-[16px] leading-[24px];
+    @apply text-blue-350 text-[14px] md:text-[16px] leading-[24px];
   }
 
   .toggle-icon {
