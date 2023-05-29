@@ -82,7 +82,7 @@ function Main() {
                         </span>
                         <div className="clear-both" />
                         <Link href={'/features'}>
-                            <button className="white-shadow main-white-shadow w-full mt-[15px] md:mt-[28px] lg:mt-[43px] md:w-auto disabled-btn h-[50px]">
+                            <button className="white-shadow main-white-shadow w-full mt-[15px] md:mt-[28px] lg:mt-[43px] md:w-auto disabled-btn">
                                 <span className="see-full-link-med-first inline-block">
                                     {t('See full list of features')}
                                 </span>
@@ -217,7 +217,7 @@ function Main() {
                     <div className="no-shadowed-block-tip tip p-0">
                         <div className="pl-[0px] xl:mt-[17%] text-center">
                             <Link href={'/features'}>
-                                <button className="white-shadow md:w-auto disabled-btn min-h-[75px] md:max-h-[40px] md:min-h-[60px] bg-white min-w-[300px] lg:mt-[50px] lg:ml-0 lg:w-full">
+                                <button className="white-shadow md:w-auto disabled-btn min-h-[75px] md:min-h-[60px] bg-white min-w-[300px] lg:mt-[50px] lg:ml-0 lg:w-full">
                                     <a className="text-[18px] text-gray-50 see-full-link-1">
                                         <span className="see-full-link-med inline-block">
                                             {t('See full list of features')}
