@@ -27,7 +27,7 @@ function Faq() {
                             <h1 className="page-heading text-left">
                                 {t('Frequently asked questions')}
                             </h1>
-                            <div className="block text-left mt-[20px] text-[20px] leading-[24px] text-gray-350 lg:text-[30px] lg:leading-[25px]">
+                            <div className="block text-left mt-[20px] text-[16px] leading-[24px] text-gray-350 lg:text-[30px] lg:leading-[25px]">
                                 {t('Have some questions before you get started?')}
                             </div>
                         </div>
