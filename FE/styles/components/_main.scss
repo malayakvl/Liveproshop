@@ -13,6 +13,11 @@
     @apply text-[28px] leading-[32px] red-yellow-gradient-text font-bold
       md:text-[40px] md:leading-[48px] lg:text-[58px] lg:leading-[72px]
   }
+  .page-heading-features {
+    @apply text-[28px] leading-[32px] red-yellow-gradient-text font-bold
+    md:text-[40px] md:leading-[48px] lg:text-[72px] lg:leading-[72px]
+  }
+
 
   .msg-block {
     background-image: url(../../public/images/main/fb-chat.svg);
@@ -164,7 +169,7 @@
       padding-right: 12px;
       background-size: contain;
 
-      @apply top-[10px] right-[-35px] w-[12px] h-[22px] md:right-[-5px] md:top-[-1px];
+      @apply top-[10px] right-[20px] w-[12px] h-[22px] md:right-[-5px] md:top-[-1px];
     }
   }
 
@@ -213,7 +218,7 @@
       background-repeat: no-repeat;
       background-size: contain;
 
-      @apply w-full h-[250px] lg:w-[335px] lg:h-[332px] xl:w-[535px] xl:h-[532px];
+      @apply w-[90%] h-[250px] md:w-full md:h-[532px] lg:w-[335px] lg:h-[332px] xl:w-[535px] xl:h-[532px];
     }
   }
 

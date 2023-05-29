@@ -83,7 +83,7 @@ function Main() {
                         <div className="clear-both" />
                         <Link href={'/features'}>
                             <button className="main-white-shadow white-shadow w-full mt-[15px] md:mt-[28px] lg:mt-[43px] md:w-auto disabled-btn h-[50px]">
-                                <a className="text-[16px] see-full-link-med">
+                                <a className="text-[16px] see-full-link-med inline-block">
                                     {t('See full list of features')}
                                 </a>
                             </button>
@@ -218,8 +218,8 @@ function Main() {
                         <div className="pl-[0px] mt-[12%] text-center">
                             <Link href={'/features'}>
                                 <button className="white-shadow md:w-auto disabled-btn min-h-[75px] md:max-h-[40px] md:min-h-[60px] bg-white min-w-[300px] lg:mt-[50px] lg:ml-0 lg:w-full">
-                                    <a className="text-[18px] text-gray-50 see-full-link ">
-                                        <span className="full-features md:ml-0 inline-b">
+                                    <a className="text-[18px] text-gray-50 see-full-link-1">
+                                        <span className="see-full-link-med inline-block">
                                             {t('See full list of features')}
                                         </span>
                                     </a>
@@ -269,7 +269,7 @@ function Main() {
             {/*=================== ROCKET BLOCK ======================*/}
             {/*=======================================================*/}
             <div className="main-big-round-white mt-[80px] lg:mt-[160px] p-[40px] bg-white rocked-lady">
-                <div className="mt-[240px] md:mt-auto lg:pl-[385px] xl:pl-[535px]">
+                <div className="mt-[240px] md:mt-[550px] lg:mt-auto lg:pl-[385px] xl:pl-[535px]">
                     <span className="font-bold text-blue-350 text-[14px]">{t('Integration')}</span>
                     <h2 className="red-yellow-gradient-text font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] md:mt-[10px]">
                         {t('best_caption')}

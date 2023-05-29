@@ -7,14 +7,14 @@ function Features() {
     const t = useTranslations();
     return (
         <>
-            <div className="flex mt-[-30px]">
+            <div className="flex mb-[-90px] md:mb-auto mt-[-30px]">
                 <div className="w-full dotted-bg">
                     <div>
                         <div className="md:float-left">
                             <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
                                 {t('Learn more about our')}
                             </span>
-                            <h1 className="page-heading text-left">{t('Key Features')}</h1>
+                            <h1 className="page-heading-features text-left">{t('Key Features')}</h1>
                             <span className="block text-gray-350 text-16px leading-[24px] md:text-[36px] md:leading-[44px] font-bold mt-[16px] md:max-w-[675px]">
                                 {t('title_feature')}
                             </span>
@@ -24,7 +24,9 @@ function Features() {
                             <div className="mt-[45px]">
                                 <Link href={'/auth/signup'}>
                                     <button className="w-full md:w-auto btn-big md:mr-[20px] block mb-[15px] md:mb-auto md:inline-block lg:mr-[84px]">
-                                        <span className="inline-block">{t('Try for free')}!</span>
+                                        <span className="inline-block md:text-[20px]">
+                                            {t('Try for free')}!
+                                        </span>
                                     </button>
                                 </Link>
                             </div>
@@ -123,7 +125,9 @@ function Features() {
                     {/*=======================================================*/}
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
-                    <Try />
+                    <div className="">
+                        <Try />
+                    </div>
                 </div>
             </div>
         </>
