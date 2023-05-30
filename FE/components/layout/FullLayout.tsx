@@ -29,6 +29,10 @@ export default function FullLayout({ children }: { children: any }) {
             <div
                 className={`min-h-[750px] ${
                     router.pathname == '/' ||
+                    router.pathname == '/full-guide' ||
+                    router.pathname == '/full-guide/livesession' ||
+                    router.pathname == '/full-guide/scenario' ||
+                    router.pathname == '/full-guide/rules' ||
                     router.pathname == '/pricing' ||
                     router.pathname == '/plans' ||
                     router.pathname == '/customer-story' ||

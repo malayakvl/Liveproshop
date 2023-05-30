@@ -21,10 +21,10 @@
 }
 
 .profile-block {
-  @apply mt-[9px] md:mt-[19px];
+  //@apply mt-[9px] md:mt-[19px];
 
   .profile-name {
-    @apply hidden text-sm font-bold text-gray-350 pl-3 md:inline-block;
+    @apply text-sm font-bold text-gray-350 pl-3 md:inline-block;
 
     em {
       @apply block not-italic text-blue-350 -mt-1 text-xs;

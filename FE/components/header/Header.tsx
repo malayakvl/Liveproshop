@@ -29,6 +29,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
     // const [session] = useSession();
     const [userPhoto, setUserPhoto] = useState(userProfileImg);
     const router = useRouter();
+    const [showTextingMenu, setShowTestingMenu] = useState(false);
 
     useEffect(
         function () {
@@ -44,9 +45,13 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
 
     return (
         <header
-            className={`w-full ${
+            className={`w-full ${user?.email ? 'auth-header' : ''} ${
                 router.pathname == '/' ||
                 router.pathname == '/faq' ||
+                router.pathname == '/full-guide' ||
+                router.pathname == '/full-guide/livesession' ||
+                router.pathname == '/full-guide/scenario' ||
+                router.pathname == '/full-guide/rules' ||
                 router.pathname == '/features' ||
                 router.pathname == '/plans' ||
                 router.pathname == '/privacy' ||
@@ -70,7 +75,10 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                 </Link>
 
                 <div>
-                    <div className="mobile-menu-button">
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                    <div
+                        className="mobile-menu-button cursor-pointer"
+                        onClick={() => setShowTestingMenu(!showTextingMenu)}>
                         <svg
                             width="24"
                             height="40"
@@ -85,18 +93,10 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             />
                         </svg>
                     </div>
-                    <div className="texting-menu">
+                    <div
+                        className="texting-menu"
+                        style={{ display: showTextingMenu ? 'block' : 'none' }}>
                         <ul>
-                            <li>
-                                <Link href={'/customer-story'}>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('Testimonials')}
-                                    </a>
-                                </Link>
-                            </li>
                             <li>
                                 <Link href={'/features'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -128,6 +128,26 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                 </Link>
                             </li>
                             <li>
+                                <Link href={'/faq'}>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                        {t('FAQ')}
+                                    </a>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href={'/customer-story'}>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a
+                                        href="javascript:void(0)"
+                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                        {t('Testimonials')}
+                                    </a>
+                                </Link>
+                            </li>
+                            <li>
                                 <Link href={'/contact-us'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
@@ -140,6 +160,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                         </ul>
                     </div>
                 </div>
+                {/*<div style={{border: 'solid 1px'}}><LangSwitcher type="layout" /></div>*/}
 
                 <div className="right-header-block">
                     {user?.email ? (
@@ -164,10 +185,11 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                     ) : (
                         <div className="layout-action-btns-block">
                             <Link href={'/auth/signup'}>
-                                <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px]">
+                                <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] mr-[20px]">
                                     <span className="inline-block">{t('Try for free')}!</span>
                                 </button>
                             </Link>
+                            <LangSwitcher type="layout" />
                             {/*<Link href={'/auth/signin'}>*/}
                             {/*    <button className="white-shadow md:w-auto disabled-btn max-h-[40px]">*/}
                             {/*        <span className="inline-block">Login</span>*/}
@@ -175,7 +197,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             {/*</Link>*/}
                         </div>
                     )}
-                    <LangSwitcher type="layout" />
+
                     {user?.email ? (
                         <span className="logout-btn logout-btn-layout">
                             <a

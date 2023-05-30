@@ -61,7 +61,7 @@ const SchedulePopup: React.FC<any> = () => {
                     className="modal-content py-4 text-left px-6 overflow-auto"
                     style={{ maxHeight: '90vh' }}>
                     <div className="flex justify-between items-center pb-3">
-                        <p className="text-2xl font-bold">{t('New Live Session')}</p>
+                        <p className="text-2xl font-bold">{t('New Live Livesession')}</p>
                         <div
                             className="modal-close cursor-pointer z-50"
                             role="presentation"

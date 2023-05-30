@@ -7,7 +7,6 @@ export default function LangSwitcher({ type }: { type: string | null }) {
     const node = useRef<HTMLDivElement>(null);
 
     const [showLangMenu, setShowLangMenu] = useState(false);
-
     const switchLang = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         const { pathname, asPath, query } = router;
         const target = event.target as HTMLSpanElement;
@@ -35,36 +34,37 @@ export default function LangSwitcher({ type }: { type: string | null }) {
     };
 
     return (
-        <div className="w-full bordered md:w-auto">
-            <div
-                className={`language-block inline-block text-right ${
-                    type ? 'language-block-content' : ''
-                }`}>
-                <button
-                    className="btn-langs"
-                    onClick={() => {
-                        setShowLangMenu(!showLangMenu);
-                    }}>
-                    <span>{locale}</span>
-                </button>
-                {showLangMenu && (
-                    <div className="lang-menu shadow-2xl" ref={node}>
-                        <div className="corner" />
-                        <ul>
-                            {locales.map((_locale: string) => (
-                                <li
-                                    className={_locale == locale ? 'hidden' : ''}
-                                    role="presentation"
-                                    key={_locale}
-                                    data-lang={_locale}
-                                    onClick={switchLang}>
-                                    {_locale}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+        <div
+            onClick={() => console.log(13)}
+            className={`language-block inline-block text-right ${
+                type ? 'language-block-content-1' : ''
+            }`}>
+            <button
+                className="btn-langs z-50"
+                onClick={() => {
+                    console.log('here we are');
+                    setShowLangMenu(!showLangMenu);
+                }}>
+                <span>{locale}</span>
+            </button>
+            {showLangMenu && (
+                <div className="lang-menu shadow-2xl" ref={node}>
+                    <div className="corner" />
+                    <ul>
+                        {locales.map((_locale: string) => (
+                            <li
+                                className={_locale == locale ? 'hidden' : ''}
+                                role="presentation"
+                                key={_locale}
+                                data-lang={_locale}
+                                onClick={switchLang}>
+                                {_locale}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 }

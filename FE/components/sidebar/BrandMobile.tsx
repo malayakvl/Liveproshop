@@ -4,7 +4,8 @@ import Link from 'next/link';
 export default function BrandMobile() {
     return (
         <Link href={'/'}>
-            <a className="brand-mobile">Proshop</a>
+            {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+            <a className="brand-mobile" />
         </Link>
     );
 }

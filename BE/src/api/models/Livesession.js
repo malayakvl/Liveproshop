@@ -341,7 +341,7 @@ class Livesession {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Session fetch one):',
+                    'Model error (Livesession fetch one):',
                     { message: e.message }
                 );
             }

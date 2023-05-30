@@ -41,6 +41,9 @@ export default function Footer() {
                                 <div className="uppercase mb-0.5">
                                     <Link href={'/faq'}>{t('Faq')}</Link>
                                 </div>
+                                <div className="mb-0.5">
+                                    <Link href={'/full-guide/livesession'}>{t('Guide')}</Link>
+                                </div>
                                 {/*<div>*/}
                                 {/*    <InlineWidget url="https://calendly.com/victoriya-korogod/test" />*/}
                                 {/*</div>*/}

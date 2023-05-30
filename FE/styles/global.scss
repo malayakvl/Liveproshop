@@ -51,7 +51,7 @@
     line-height: 105%;
   }
   .dark-blue-header {
-    @apply text-gray-350 font-bold text-[18px];
+    @apply text-gray-350 font-bold text-[30px];
   }
   .loader {
     @apply w-full h-full bg-black fixed z-50 opacity-75;
@@ -146,4 +146,5 @@
 @import "components/features";
 @import "components/plans";
 @import "components/privacy";
+@import "components/guide";
 @import "components/404";
