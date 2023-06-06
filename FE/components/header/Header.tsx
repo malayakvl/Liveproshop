@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { signOut } from 'next-auth/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 // import { Menu, Transition } from '@headlessui/react';
 import LangSwitcher from '../lang/Switcher';
 import { useRouter } from 'next/router';
@@ -10,6 +10,9 @@ import { userSelector } from '../../redux/user/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { baseApiUrl } from '../../constants';
 import { fetchLatestAction } from '../../redux/notifications';
+import LoggedRight from './LoggedRight';
+import LoggedRightMobile from './LoggedRightMobile';
+import TextLeftMobile from './TextLeftMobile';
 // import BrandMobile from "../sidebar/BrandMobile";
 // import { toggleSidebarAction } from '../../redux/layouts';
 
@@ -30,6 +33,9 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
     const [userPhoto, setUserPhoto] = useState(userProfileImg);
     const router = useRouter();
     const [showTextingMenu, setShowTestingMenu] = useState(false);
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const node = useRef<HTMLDivElement>(null);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(
         function () {
@@ -39,9 +45,50 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
             if (user?.email !== undefined) {
                 dispatch(fetchLatestAction());
             }
+            if (window) {
+                console.log(window.innerWidth);
+                if (window.innerWidth < 768) {
+                    setIsMobile(true);
+                }
+                const handleWindowResize = () => {
+                    if (window.innerWidth < 768) {
+                        setIsMobile(true);
+                    } else {
+                        setIsMobile(false);
+                    }
+                    console.log('Resize event', window.innerWidth);
+                };
+                window.addEventListener('resize', handleWindowResize);
+                return () => {
+                    window.removeEventListener('resize', handleWindowResize);
+                };
+            }
         },
         [user]
     );
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClick);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClick);
+        };
+    }, []);
+
+    const handleClick = (e: any) => {
+        // if (node?.current?.contains(e.target) || node?.current === null) {
+        //     console.log('here');
+        //     return;
+        // }
+        if (
+            e.target.parentNode.classList.contains('profile-block') ||
+            e.target.parentNode.classList.contains('profile-name') ||
+            node?.current?.contains(e.target)
+        ) {
+            return;
+        }
+        setShowProfileMenu(false);
+    };
 
     return (
         <header
@@ -71,14 +118,17 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
             <div className="container relative mx-auto layout-header xl:max-w-[1400px]">
                 <Link href={'/'}>
                     {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
-                    <a className="app-logo-f" />
+                    <a className={`app-logo-f ${!user?.email ? 'app-logo-unreg' : ''}`} />
                 </Link>
 
                 <div>
                     {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                     <div
                         className="mobile-menu-button cursor-pointer"
-                        onClick={() => setShowTestingMenu(!showTextingMenu)}>
+                        onClick={() => {
+                            setShowTestingMenu(!showTextingMenu);
+                            // console.log('bla bla');
+                        }}>
                         <svg
                             width="24"
                             height="40"
@@ -93,76 +143,116 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             />
                         </svg>
                     </div>
-                    <div
-                        className="texting-menu"
-                        style={{ display: showTextingMenu ? 'block' : 'none' }}>
-                        <ul>
-                            <li>
-                                <Link href={'/features'}>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('Features')}
-                                    </a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'/plans'}>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('Pricing')}
-                                    </a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'/faq'}>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('Case Studies')}
-                                    </a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'/faq'}>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('FAQ')}
-                                    </a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'/customer-story'}>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('Testimonials')}
-                                    </a>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href={'/contact-us'}>
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        href="javascript:void(0)"
-                                        className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                        {t('Contact Us')}
-                                    </a>
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
+                    {!isMobile ? (
+                        <>
+                            <div
+                                className="texting-menu"
+                                style={{ display: showTextingMenu ? 'block' : 'none' }}>
+                                <ul>
+                                    <li>
+                                        <Link href={'/features'}>
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                {t('Features')}
+                                            </a>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href={'/plans'}>
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                {t('Pricing')}
+                                            </a>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href={'/faq'}>
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                {t('Case Studies')}
+                                            </a>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href={'/faq'}>
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                {t('FAQ')}
+                                            </a>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href={'/customer-story'}>
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                {t('Testimonials')}
+                                            </a>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href={'/contact-us'}>
+                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                            <a
+                                                href="javascript:void(0)"
+                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                {t('Contact Us')}
+                                            </a>
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </>
+                    ) : (
+                        <TextLeftMobile type={null} visible={showTextingMenu} />
+                    )}
                 </div>
                 {/*<div style={{border: 'solid 1px'}}><LangSwitcher type="layout" /></div>*/}
-
-                <div className="right-header-block">
+                <div className="mt-[10px] right-header-block md:mt-auto">
+                    {user?.email ? (
+                        <>
+                            {isMobile && <LoggedRightMobile type={'full'} />}
+                            <div className={`${isMobile ? 'hidden' : ''} mt-4`}>
+                                <LoggedRight />
+                            </div>
+                        </>
+                    ) : (
+                        <div className="unlogged-block">
+                            <div className="hidden float:right layout-action-btns-block md:float-left md:inline-block">
+                                <Link href={'/auth/signup'}>
+                                    <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] mr-[20px]">
+                                        <span className="inline-block">{t('Try for free')}!</span>
+                                    </button>
+                                </Link>
+                            </div>
+                            {!isMobile && <LangSwitcher type={null} />}
+                            <span className="logout-btn login-btn-layout">
+                                <Link href={'/auth/signin'}>
+                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                    <a href="javascript:void(0)" title={t('Login')}>
+                                        <Image
+                                            className="mr-5"
+                                            src="/images/login-icon.svg"
+                                            width={24}
+                                            height={40}
+                                            alt={t('Logout')}
+                                        />
+                                    </a>
+                                </Link>
+                            </span>
+                        </div>
+                    )}
+                </div>
+                <div className="hidden right-header-block">
                     {user?.email ? (
                         <div className="profile-block profile-block-layout">
                             <div className="float-left h-[32px]">
@@ -189,7 +279,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                     <span className="inline-block">{t('Try for free')}!</span>
                                 </button>
                             </Link>
-                            <LangSwitcher type="layout" />
+                            {/*<LangSwitcher type="layout" />*/}
                             {/*<Link href={'/auth/signin'}>*/}
                             {/*    <button className="white-shadow md:w-auto disabled-btn max-h-[40px]">*/}
                             {/*        <span className="inline-block">Login</span>*/}
@@ -197,7 +287,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             {/*</Link>*/}
                         </div>
                     )}
-
+                    <LangSwitcher type="layout" />
                     {user?.email ? (
                         <span className="logout-btn logout-btn-layout">
                             <a

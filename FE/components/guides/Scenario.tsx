@@ -94,9 +94,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                         <h2 className="dark-blue-header mb-4 text-[18px] mt-[40px]">
                             {t(`Rules for populating the fields correctly`)}
                         </h2>
-                        <div>
+                        <div className="overflow-x-scroll">
                             <table
-                                className="table-auto guide-table text-[14px] w-full"
+                                className="table-auto guide-table text-[14px] w-full min-w-[1026px]"
                                 style={{ lineHeight: '20px' }}>
                                 <thead>
                                     <tr

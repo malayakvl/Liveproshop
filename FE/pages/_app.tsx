@@ -70,6 +70,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                         <div id="fb-root" />
                         <Head>
                             <title>LiveProshop</title>
+                            <link rel="icon" href="/images/logo-1.svg" />
                             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                             <script
                                 async

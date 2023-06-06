@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function LangSwitcher({ type }: { type: string | null }) {
+export default function LangSwitcher({ type }: { type: string | null | boolean }) {
     const { locale, locales, defaultLocale }: any = useRouter();
     const router = useRouter();
     const node = useRef<HTMLDivElement>(null);
+    // const [isMobile, setIsMobile] = useState(false);
 
     const [showLangMenu, setShowLangMenu] = useState(false);
     const switchLang = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
@@ -17,6 +18,9 @@ export default function LangSwitcher({ type }: { type: string | null }) {
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClick);
+        // if (window.innerWidth < 991) {
+        //     setIsMobile(true);
+        // }
 
         return () => {
             document.removeEventListener('mousedown', handleClick);
@@ -36,17 +40,15 @@ export default function LangSwitcher({ type }: { type: string | null }) {
     return (
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
         <div
-            onClick={() => console.log(13)}
-            className={`language-block inline-block text-right ${
+            className={`language-block inline-block text-right  ${
                 type ? 'language-block-content-1' : ''
             }`}>
             <button
                 className="btn-langs z-50"
                 onClick={() => {
-                    console.log('here we are');
                     setShowLangMenu(!showLangMenu);
                 }}>
-                <span>{locale}</span>
+                <span className="active-lang">{locale}</span>
             </button>
             {showLangMenu && (
                 <div className="lang-menu shadow-2xl" ref={node}>

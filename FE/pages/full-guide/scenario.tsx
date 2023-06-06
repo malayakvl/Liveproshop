@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import FullLayout from '../../components/layout/FullLayout';
-import React, { useState } from 'react';
-import { LeftMenu, TextRules } from '../../components/guides';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/router';
+import React from 'react';
+import { LeftMenu, ScenarioRules } from '../../components/guides';
+// import { useTranslations } from 'next-intl';
+// import { useRouter } from 'next/router';
 
-export default function Rules({ locale }: { locale: string }) {
+export default function Scenario({ locale }: { locale: string }) {
     // const t = useTranslations();
+    // const [layoutActive, setLayoutActive] = useState('session');
     // const router = useRouter();
 
     return (
@@ -17,10 +18,10 @@ export default function Rules({ locale }: { locale: string }) {
             </Head>
 
             <div className="main-layout">
-                <div className="md:flex">
+                <div className="lg:flex">
                     <LeftMenu />
                     <div className="guide-right">
-                        <TextRules locale={locale} />
+                        <ScenarioRules locale={locale} />
                     </div>
                 </div>
                 <div className="clear-both" />
@@ -28,7 +29,7 @@ export default function Rules({ locale }: { locale: string }) {
         </div>
     );
 }
-Rules.Layout = FullLayout;
+Scenario.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {
     const { locale } = context;

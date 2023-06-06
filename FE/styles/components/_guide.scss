@@ -1,21 +1,23 @@
 .guide-left {
-  @apply w-[25%];
+  @apply w-full lg:w-[25%];
   //background: #D1D1D1;
 
   .guide-menu {
     background: #FFFFFF;
     //height: 265px;
-    width: 270px;
+    //width: 270px;
     text-align: center;
     padding: 24px;
 
-    box-shadow: 0px 5px 10px rgba(189, 201, 206, 0.5), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 10px rgba(189, 201, 206, 0.5), inset 0px -4px 0px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+
+    @apply w-full mb-5 lg:w-[270px];
   }
 }
 .guide-right {
   //background: aqua;
-  @apply w-[75%];
+  @apply w-full px-[20px] md:px-0 lg:w-[75%];
 }
 
 .guide-menu ul {

@@ -35,7 +35,7 @@ export default NextAuth({
                 if (res.ok && resp.user) {
                     return resp.user;
                 }
-                // console.log(resp.user);
+                console.log(resp.user);
 
                 throw `/auth/signin?message=${resp.message}`;
                 // return null

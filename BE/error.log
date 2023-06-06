@@ -2341,3 +2341,18 @@
   level: 'error',
   timestamp: '2023-04-30T07:40:39.380Z'
 }
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-06-03T07:43:55.745Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-06-03T07:46:34.325Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '2'",
+  level: 'error',
+  timestamp: '2023-06-03T07:47:30.043Z'
+}

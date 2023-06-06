@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import FullLayout from '../../components/layout/FullLayout';
 import React, { useState } from 'react';
-import { LeftMenu, TextRules } from '../../components/guides';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/router';
+import { LeftMenu, LivesessionRules, ScenarioRules } from '../../components/guides';
+// import { useTranslations } from 'next-intl';
+// import { useRouter } from 'next/router';
 
-export default function Rules({ locale }: { locale: string }) {
+export default function Livesession({ locale }: { locale: string }) {
     // const t = useTranslations();
+    const [layoutActive, setLayoutActive] = useState('session');
     // const router = useRouter();
 
     return (
@@ -20,7 +21,7 @@ export default function Rules({ locale }: { locale: string }) {
                 <div className="md:flex">
                     <LeftMenu />
                     <div className="guide-right">
-                        <TextRules locale={locale} />
+                        <LivesessionRules />
                     </div>
                 </div>
                 <div className="clear-both" />
@@ -28,7 +29,7 @@ export default function Rules({ locale }: { locale: string }) {
         </div>
     );
 }
-Rules.Layout = FullLayout;
+Livesession.Layout = FullLayout;
 
 export async function getServerSideProps(context: any) {
     const { locale } = context;
