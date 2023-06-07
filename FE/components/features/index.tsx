@@ -10,7 +10,7 @@ function Features() {
             <div className="flex mb-[-90px] md:mb-auto md:mt-[50px]">
                 <div className="w-full dotted-bg">
                     <div className="w-full flex">
-                        <div className="md:float-left w-2/3">
+                        <div className="w-full md:float-left md:w-2/3">
                             <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
                                 {t('Learn more about our')}
                             </span>
@@ -31,7 +31,7 @@ function Features() {
                                 </Link>
                             </div>
                         </div>
-                        <div className="feature-phone-photo flex w-1/3" />
+                        <div className="hidden feature-phone-photo md:flex w-1/3" />
                     </div>
                     <div className="clear-both" />
                     <div className="flex flex-col md:flex-row md:mt-[120px]">
