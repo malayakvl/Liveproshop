@@ -130,7 +130,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                             </Link>
                         </li>
                         <li>
-                            <Link href={'/faq'}>
+                            <Link href={'/customer-story'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
                                     href="javascript:void(0)"
@@ -149,16 +149,16 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                                 </a>
                             </Link>
                         </li>
-                        <li>
-                            <Link href={'/customer-story'}>
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a
-                                    href="javascript:void(0)"
-                                    className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                    {t('Testimonials')}
-                                </a>
-                            </Link>
-                        </li>
+                        {/*<li>*/}
+                        {/*    <Link href={'/customer-story'}>*/}
+                        {/*        /!* eslint-disable-next-line jsx-a11y/anchor-is-valid *!/*/}
+                        {/*        <a*/}
+                        {/*            href="javascript:void(0)"*/}
+                        {/*            className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">*/}
+                        {/*            {t('Testimonials')}*/}
+                        {/*        </a>*/}
+                        {/*    </Link>*/}
+                        {/*</li>*/}
                         <li>
                             <Link href={'/contact-us'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { getSession } from 'next-auth/client';
 // import { useTranslations } from 'next-intl';
 
-export default function Index() {
+export default function Index({ locale }: { locale: string }) {
     // const t = useTranslations();
 
     return (
@@ -21,7 +21,7 @@ export default function Index() {
                 </div>
                 La section consacrée à la vente en Live vous permet de programmer et de gérer vos
                 diffusions en direct.
-                <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-500">
+                <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-550">
                     <h2 className="dark-blue-header mb-4">Remarque !</h2>
                     {`Avant de créer une nouvelle session de Live, vous devez aller dans "Paramètres".
                     Vous y trouverez deux onglets, "Paramètres" et "Livraison", qui vous permettront
@@ -60,21 +60,35 @@ export default function Index() {
                 <div className="my-12 mb-24 text-center">
                     <Image src="/images/guides/liveselling5.png" width={795} height={517} />
                 </div>
-                <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-500">
-                    <h2 className="dark-blue-header mb-4">Note!:</h2>
-                    The session will not stop by itself. You need to do it manually. If you don’t
-                    stop the session the system will continue to parse viewers comment even if the
-                    session is over! If you leave a record of your session and enable commenting,
-                    viewers will be able to comment and the system will parse their comments and
-                    create orders. So make sure you stoped the session
-                </div>
-                <h1 className="text-gray-350 font-bold text-3xl mb-2">Remarque!</h1>
-                {`Le live ne s'arrêtera pas automatiquement. Vous devez le faire manuellement. Si vous
-                n'arrêtez pas le live, le système continuera à analyser les commentaires des
-                internautes même si votre live est terminé ! Si vous laissez votre live “en replay”
-                et que vous activez les commentaires, les internautes pourront commenter et le
-                système analysera leurs commentaires et créera des commandes. Assurez-vous donc
-                d'avoir arrêté la session si vous ne souhaitez plus recevoir de commandes.`}
+                {locale == 'en' && (
+                    <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-550">
+                        <h2 className="dark-blue-header mb-4">Note!</h2>
+                        The session will not stop by itself. You need to do it manually. If you
+                        don’t stop the session the system will continue to parse viewers comment
+                        even if the session is over! If you leave a record of your session and
+                        enable commenting, viewers will be able to comment and the system will parse
+                        their comments and create orders. So make sure you stoped the session
+                    </div>
+                )}
+                {locale == 'fr' && (
+                    <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-550">
+                        <h2 className="dark-blue-header mb-4">Remarque!</h2>
+                        Le live ne s`arrêtera pas automatiquement. Vous devez le faire manuellement.
+                        Si vous n`arrêtez pas le live, le système continuera à analyser les
+                        commentaires des internautes même si votre live est terminé ! Si vous
+                        laissez votre live “en replay” et que vous activez les commentaires, les
+                        internautes pourront commenter et le système analysera leurs commentaires et
+                        créera des commandes. Assurez-vous donc d`avoir arrêté la session si vous ne
+                        souhaitez plus recevoir de commandes.
+                    </div>
+                )}
+                {/*<h1 className="text-gray-350 font-bold text-3xl mb-2">Remarque!</h1>*/}
+                {/*{`Le live ne s'arrêtera pas automatiquement. Vous devez le faire manuellement. Si vous*/}
+                {/*n'arrêtez pas le live, le système continuera à analyser les commentaires des*/}
+                {/*internautes même si votre live est terminé ! Si vous laissez votre live “en replay”*/}
+                {/*et que vous activez les commentaires, les internautes pourront commenter et le*/}
+                {/*système analysera leurs commentaires et créera des commandes. Assurez-vous donc*/}
+                {/*d'avoir arrêté la session si vous ne souhaitez plus recevoir de commandes.`}*/}
             </div>
         </>
     );

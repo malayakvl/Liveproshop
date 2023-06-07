@@ -1,5 +1,5 @@
 .guide-left {
-  @apply w-full lg:w-[25%];
+  @apply mb-[40px] w-full lg:w-[25%] ;
   //background: #D1D1D1;
 
   .guide-menu {
@@ -27,8 +27,8 @@
 .text-link {
   background: #EEF1F7;
   border-radius: 0 8px 8px 0;
-  font-size: 16px;
-  line-height: 24px;
+  //font-size: 16px;
+  //line-height: 24px;
   text-align: left;
   //padding-left: 12px;
   font-weight: bold;
@@ -36,13 +36,15 @@
   position: relative;
   min-height: 38px;
   display: block;
+
+  @apply text-[14px] md:text-[16px] leading-[24px] text-gray-350;
 }
 
 .text-link-active {
   background: #EEF1F7;
   border-radius: 0 8px 8px 0;
-  font-size: 16px;
-  line-height: 24px;
+  //font-size: 16px;
+  //line-height: 24px;
   text-align: left;
   //padding-left: 12px;
   font-weight: bold;
@@ -51,6 +53,7 @@
   min-height: 38px;
   display: block;
 
+  @apply text-[14px] md:text-[16px] leading-[24px] text-gray-350;
 
   &:before {
     content: "";
@@ -73,9 +76,11 @@
   margin-top: 10px !important;
   margin-left: 15px !important;
   text-align: left;
-  font-size: 16px;
+  //font-size: 16px;
   font-weight: bold;
   color: #8C94A6;
+
+  @apply text-[14px] md:text-[16px];
 
   li {
     margin-top: 10px;
@@ -89,7 +94,7 @@
   margin-top:20px;
 
   .dark-blue-header {
-    font-size: 18px;
+    @apply text-[16px] md:text-[18px];
   }
 }
 
@@ -115,5 +120,23 @@
   //  @apply shadow-2xl;
   //}
 
+}
+.smile-text {
+  display: inline-block;
+  position: relative;
+  //padding-left: 20px;
+  //background-image: url('../../public/images/guides/smile.svg');
+  //background-repeat: no-repeat;
+  //background-position: top right;
+
+  &:after {
+    content: "";
+    background: url(../../public/images/guides/smile.svg );
+    width: 40px;
+    height: 35px;
+    position: absolute;
+    right: 0;
+    top:0;
+  }
 }
 

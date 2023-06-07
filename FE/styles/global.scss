@@ -51,7 +51,7 @@
     line-height: 105%;
   }
   .dark-blue-header {
-    @apply text-gray-350 font-bold text-[30px];
+    @apply text-[24px] text-gray-350 font-bold md:text-[30px];
   }
   .loader {
     @apply w-full h-full bg-black fixed z-50 opacity-75;

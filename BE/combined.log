@@ -25375,3 +25375,18 @@
   level: 'info',
   timestamp: '2023-06-07T13:31:03.068Z'
 }
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-06-07T16:29:21.124Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-06-07T18:42:13.275Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-06-07T18:42:13.277Z'
+}

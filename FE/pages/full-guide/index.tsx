@@ -4,7 +4,7 @@ import Head from 'next/head';
 // import { getSession } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import React, { useState } from 'react';
-// import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 // import { LivesessionRules, ScenarioRules } from '../../components/guides';
 // import { history } from 'react-router';
 // import { history } from '../../_helpers/history';
@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { LeftMenu, LivesessionRules, ScenarioRules, TextRules } from '../../components/guides';
 
 export default function Index({ locale }: { locale: string }) {
-    // const t = useTranslations();
+    const t = useTranslations();
     const [layoutActive, setLayoutActive] = useState('session');
     // const router = useRouter();
 
@@ -24,6 +24,9 @@ export default function Index({ locale }: { locale: string }) {
             </Head>
 
             <div className="main-layout">
+                <div className="block mb-[40px] text-[18px] font-bold text-gray-350">
+                    {t('guide_heading')}
+                </div>
                 <div className="md:flex">
                     <LeftMenu />
                     <div className="guide-right">

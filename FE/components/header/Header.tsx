@@ -154,7 +154,12 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 href="javascript:void(0)"
-                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                // className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                className={`m-2 ${
+                                                    router.pathname === '/features'
+                                                        ? 'text-purple-400'
+                                                        : ''
+                                                } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>
                                                 {t('Features')}
                                             </a>
                                         </Link>
@@ -164,17 +169,25 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 href="javascript:void(0)"
-                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                className={`m-2 ${
+                                                    router.pathname === '/plans'
+                                                        ? 'text-purple-400'
+                                                        : ''
+                                                } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>
                                                 {t('Pricing')}
                                             </a>
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href={'/faq'}>
+                                        <Link href={'/#'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 href="javascript:void(0)"
-                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                className={`m-2 ${
+                                                    router.pathname === '/case'
+                                                        ? 'text-purple-400'
+                                                        : ''
+                                                } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>
                                                 {t('Case Studies')}
                                             </a>
                                         </Link>
@@ -184,27 +197,35 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 href="javascript:void(0)"
-                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                className={`m-2 ${
+                                                    router.pathname === '/faq'
+                                                        ? 'text-purple-400'
+                                                        : ''
+                                                } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>
                                                 {t('FAQ')}
                                             </a>
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link href={'/customer-story'}>
-                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                            <a
-                                                href="javascript:void(0)"
-                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
-                                                {t('Testimonials')}
-                                            </a>
-                                        </Link>
-                                    </li>
+                                    {/*<li>*/}
+                                    {/*    <Link href={'/customer-story'}>*/}
+                                    {/*        /!* eslint-disable-next-line jsx-a11y/anchor-is-valid *!/*/}
+                                    {/*        <a*/}
+                                    {/*            href="javascript:void(0)"*/}
+                                    {/*            className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">*/}
+                                    {/*            {t('Testimonials')}*/}
+                                    {/*        </a>*/}
+                                    {/*    </Link>*/}
+                                    {/*</li>*/}
                                     <li>
                                         <Link href={'/contact-us'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 href="javascript:void(0)"
-                                                className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
+                                                className={`m-2 ${
+                                                    router.pathname === '/contact-us'
+                                                        ? 'text-purple-400'
+                                                        : ''
+                                                } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>
                                                 {t('Contact Us')}
                                             </a>
                                         </Link>
@@ -230,7 +251,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             <div className="hidden float:right layout-action-btns-block md:float-left md:inline-block">
                                 <Link href={'/auth/signup'}>
                                     {/*<button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] mr-[20px]">*/}
-                                    <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px]">
+                                    <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] md:min-w-[195px]">
                                         <span className="inline-block">{t('Try for free')}!</span>
                                     </button>
                                 </Link>

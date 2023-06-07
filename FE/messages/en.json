@@ -481,7 +481,7 @@
   "What is a Scenario?": "What is a Scenario?",
   "remarque_text": "Before you create a new streaming session you need to go to “Settings”. There you have two tabs “Settings” and “Shipping” which allow you to select shipping methods that will be available for your viewers, define cart duration, set free shipping threshold and define free shipping window. It is very crucial to check and adjust these settings before you start a stream in order to avoid missunderstandings. You can read more information about each setting here:",
   "Comment programmer une nouvelle session": "How to schedule a new live session",
-  "guide_1": "In order to schedule a new streaming session, you need to connect your LiveProshop account with Facebook account using this button",
+  "guide_1": "1. In order to schedule a new streaming session, you need to connect your LiveProshop account with Facebook account using this button",
   "guide_2": "2. When your account was successfully synchronized, you need to click on the “Schedule new session” button",
   "guide_3": "3. In the opened modal window you need to select date and time of the planning session",
   "guide_4": "4. Now you can see your new scheduled session in the list of sessions below",

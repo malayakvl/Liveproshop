@@ -11,7 +11,7 @@ export default function LeftMenu() {
         <div className="guide-left">
             <div className="guide-menu">
                 <div className="">
-                    <span className="block text-gray-350 text-[20px] font-bold mb-[10px]">
+                    <span className="block text-left text-[18px] text-gray-350 md:text-[20px] font-bold mb-[10px] md:text-center">
                         {t('Table of contents')}
                     </span>
                     <ul className="">
@@ -56,7 +56,7 @@ export default function LeftMenu() {
                                     prefix === '/scenario' ? 'block' : 'hide-submenu'
                                 }`}>
                                 <li>
-                                    <a href="#default-scenario">{t('Default Scenario')}</a>
+                                    <a href="#default-scenario">{t('Default Scenarios')}</a>
                                 </li>
                                 <li>
                                     <a href="#custom-scenario">{t('Custom Scenarios')}</a>

@@ -13,12 +13,14 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                 <>
                     <h2 className="dark-blue-header block mb-[10px]">
                         <div className="float-left mb-4">
-                            <span className="inline-block">Alors, qu`est-ce qu`un scénario?</span>
-                            <img src="/images/guides/smile.svg" className="float-right" alt="" />
+                            <span className="inline-block smile-text">
+                                Aloes, qu`est-ce qu`un scénario?
+                            </span>
+                            {/*<img src="/images/guides/smile.svg" className="float-right" alt="" />*/}
                         </div>
                     </h2>
                     <div className="clear-both" />
-                    <div className="text-gray-350 text-[20px] leading-[30px]">
+                    <div className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                         <span>
                             Easy, a <b>Scenario</b> - is a tool that helps you to interact with your
                             audience.
@@ -33,7 +35,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                         <h2 id="default-scenario" className="dark-blue-header block mb-[10px]">
                             {t(`Default scenarios`)}
                         </h2>
-                        <span className="text-gray-350 text-[20px] leading-[30px]">
+                        <span className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                             Default Scenarios can not be <b>edited or deleted</b>, they are for view
                             only. You can find them under the <b>“System replies”</b> title.
                         </span>
@@ -50,7 +52,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                             <h2 className="dark-blue-header mb-4 text-[18px]">
                                 There are 6 main system scenarios:
                             </h2>
-                            <ul className="pl-[0px] text-[16px]">
+                            <ul className="pl-[0px] text-[14px] md:text-[16px]">
                                 <li>
                                     1. Buyer successfully added wanted item to his cart *for the
                                     first time/ first item of the live
@@ -87,13 +89,13 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                 </b>
                             </p>
                         </div>
-                        <div className="text-gray-350 text-[20px] leading-[30px] font-bold">
+                        <div className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] font-bold">
                             1. In order to add new scenario click on the “Add new reply” button here
                         </div>
                         <div className="my-12 mb-8 text-center">
                             <Image src="/images/guides/scenario2.png" width={994} height={425} />
                         </div>
-                        <div className="text-gray-350 text-[20px] leading-[30px] font-bold">
+                        <div className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] font-bold">
                             2. You will see the following form
                         </div>
                         <div className="my-12 mb-8 text-center">
@@ -353,7 +355,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                         </div>
                     </h2>
                     <div className="clear-both" />
-                    <div className="text-gray-350 text-[20px] leading-[30px]">
+                    <div className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                         <span>
                             Easy, a <b>Scenario</b> - is a tool that helps you to interact with your
                             audience.
@@ -368,7 +370,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                         <h2 className="dark-blue-header block mb-[10px]">
                             {t(`Default scenarios`)}
                         </h2>
-                        <span className="text-gray-350 text-[20px] leading-[30px]">
+                        <span className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                             Default Scenarios <b>can not be edited or deleted</b>, they are for view
                             only.You can find them under the <b>“System replies”</b> title.
                         </span>
@@ -420,7 +422,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                 </b>
                             </p>
                         </div>
-                        <div className="text-gray-350 text-[20px] leading-[30px] font-bold">
+                        <div className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] font-bold">
                             1. In order to add new scenario click on the “Add new reply” button here
                         </div>
                         <div className="my-12 mb-8 text-center">
@@ -432,7 +434,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                 />
                             </div>
                         </div>
-                        <div className="text-gray-350 text-[20px] leading-[30px] font-bold">
+                        <div className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] font-bold">
                             2. You will see the following form
                         </div>
                         <div className="my-12 mb-8 text-center">
