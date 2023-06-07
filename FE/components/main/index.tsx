@@ -16,7 +16,7 @@ function Main() {
     return (
         <>
             <div className="flex">
-                <div className="w-full mt-[-20px] md:mt-auto md:w-1/2 lg:w-2/3 lg:pr-[65px] xl:pr-[155px]">
+                <div className="w-full mt-[-20px] md:mt-auto md:w-1/2 lg:w-2/3  lg:pr-[65px] xl:pr-[125px]">
                     <span className="block mb-[20px] md:mb-auto text-gray-350">
                         {t('Welcome to')} <b>LiveProShop!</b>
                     </span>

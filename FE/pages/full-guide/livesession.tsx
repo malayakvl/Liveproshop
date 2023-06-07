@@ -1,13 +1,13 @@
 import Head from 'next/head';
 import FullLayout from '../../components/layout/FullLayout';
 import React, { useState } from 'react';
-import { LeftMenu, LivesessionRules, ScenarioRules } from '../../components/guides';
-// import { useTranslations } from 'next-intl';
+import { LeftMenu, LivesessionRules } from '../../components/guides';
+import { useTranslations } from 'next-intl';
 // import { useRouter } from 'next/router';
 
-export default function Livesession({ locale }: { locale: string }) {
-    // const t = useTranslations();
-    const [layoutActive, setLayoutActive] = useState('session');
+export default function Livesession() {
+    const t = useTranslations();
+    // const [layoutActive, setLayoutActive] = useState('session');
     // const router = useRouter();
 
     return (
@@ -18,6 +18,9 @@ export default function Livesession({ locale }: { locale: string }) {
             </Head>
 
             <div className="main-layout">
+                <div className="block mb-[40px] text-[18px] font-bold text-gray-350">
+                    {t('guide_heading')}
+                </div>
                 <div className="md:flex">
                     <LeftMenu />
                     <div className="guide-right">

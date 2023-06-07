@@ -2,11 +2,11 @@ import Head from 'next/head';
 import FullLayout from '../../components/layout/FullLayout';
 import React from 'react';
 import { LeftMenu, ScenarioRules } from '../../components/guides';
-// import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 // import { useRouter } from 'next/router';
 
 export default function Scenario({ locale }: { locale: string }) {
-    // const t = useTranslations();
+    const t = useTranslations();
     // const [layoutActive, setLayoutActive] = useState('session');
     // const router = useRouter();
 
@@ -18,6 +18,9 @@ export default function Scenario({ locale }: { locale: string }) {
             </Head>
 
             <div className="main-layout">
+                <div className="block mb-[40px] text-[18px] font-bold text-gray-350">
+                    {t('Chatbot rules')}
+                </div>
                 <div className="lg:flex">
                     <LeftMenu />
                     <div className="guide-right">

@@ -6,8 +6,8 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
 
 export default function Rules({ locale }: { locale: string }) {
-    // const t = useTranslations();
-    // const router = useRouter();
+    const t = useTranslations();
+    const router = useRouter();
 
     return (
         <div className="main-bg container xl:max-w-[1400px] mx-auto">
@@ -17,6 +17,9 @@ export default function Rules({ locale }: { locale: string }) {
             </Head>
 
             <div className="main-layout">
+                <div className="block mb-[40px] text-[18px] font-bold text-gray-350">
+                    {t('csv_head_guide')}
+                </div>
                 <div className="md:flex">
                     <LeftMenu />
                     <div className="guide-right">

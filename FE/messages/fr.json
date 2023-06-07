@@ -468,5 +468,33 @@
   "about_text_4": "Adresse: Tatari tn 25-4",
   "about_text_5": "Tallinn, Estonia 10116",
   "FAQ": "FAQ",
-  "Guide": "Guide"
+  "Guide": "Guide",
+  "Remarque!": "Remarque !",
+  "Trigger words": "Mots déclencheurs",
+  "Table of contents": "Table des matières",
+  "How to schedule a new live session?": "Comment programmer une nouvelle session live ?",
+  "What is a Scenario?": "Qu'est-ce qu'un scénario ?",
+  "remarque_text": "Avant de créer une nouvelle session de Live, vous devez aller dans “Paramètres“. Vous y trouverez deux onglets, “Paramètres“ et “Livraison“, qui vous permettront de sélectionner les méthodes d'expédition qui seront disponibles pour vos spectateurs, de définir la durée du panier, de fixer le seuil de livraison gratuite et de définir la fenêtre de livraison gratuite. Il est essentiel de vérifier et de régler ces paramètres avant de lancer un flux afin d'éviter tout malentendu. Vous pouvez lire plus d'informations sur chaque paramètre ici:",
+  "Comment programmer une nouvelle session": "Comment programmer une nouvelle session",
+  "guide_1": "1. Afin de programmer une nouvelle session de Live, vous devez connecter votre compte LiveProshop à votre compte Facebook en utilisant ce bouton.",
+  "guide_2": "2. Lorsque votre compte a été synchronisé avec succès, vous devez cliquer sur le bouton “Programmer un Live”!",
+  "guide_3": "3. Dans la fenêtre ouverte, vous devez sélectionner la date et l'heure de votre Live",
+  "guide_4": "4. Vous pouvez maintenant voir votre live programmé dans la liste des lives ci-dessous.",
+  "Comment arrêter le live?": "Comment arrêter le live?",
+  "text_stop": "Pour arrêter votre session Live, vous devez le faire manuellement dans la liste de vos live en cliquant sur le bouton “Arrêter le Live“.",
+  "text_remarque_stop": "Le live ne s'arrêtera pas automatiquement. Vous devez le faire manuellement. Si vous n'arrêtez pas le live, le système continuera à analyser les commentaires des internautes même si votre live est terminé ! Si vous laissez votre live “en replay” et que vous activez les commentaires, les internautes pourront commenter et le système analysera leurs commentaires et créera des commandes. Assurez-vous donc d'avoir arrêté la session si vous ne souhaitez plus recevoir de commandes. ",
+  "inportant_note": "Remaque !",
+  "guide_heading": "Guide pour commerçant - Section Vente en Live",
+  "guide_head_text": "La section consacrée à la vente en Live vous permet de programmer et de  gérer vos vos diffusions en direct.",
+  "Default Scenario": "Default Scenario",
+  "Rules": "Rules",
+  "Custom Scenarios": "Custom Scenarios",
+  "Chatbot rules": "Chatbot rules",
+  "Guide for sellers - Live selling section": "Guide for sellers - Live selling section",
+  "csv_head_guide": "Guides - Règles de remplissage des fichiers CSV!"
+
+
+
+
+
 }

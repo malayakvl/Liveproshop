@@ -7,8 +7,6 @@ export default function LeftMenu() {
     const router = useRouter();
     const prefix = router.pathname.replace('full-guide/', '');
 
-    console.log(prefix);
-
     return (
         <div className="guide-left">
             <div className="guide-menu">
@@ -33,16 +31,19 @@ export default function LeftMenu() {
                                 className={`submenu none ${
                                     prefix === '/livesession' ? 'block' : 'hide-submenu'
                                 }`}>
-                                <li>{t('Default Scenario')}</li>
-                                <li>{t('Custom Scenarios')}</li>
-                                <li>{t('Rules')}</li>
+                                <li>
+                                    <a href="#session-comment">{t('Comment arrêter le live?')}</a>
+                                </li>
+                                <li>
+                                    <a href="#session-remarque">{t('Remarque!')}</a>
+                                </li>
                             </ul>
                         </li>
                         <li className="mb-[10px]">
                             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                             <span
                                 onClick={() => {
-                                    router.push('scenario');
+                                    router.push('/full-guide/scenario');
                                     // setLayoutActive('scenario');
                                 }}
                                 className={`cursor-pointer text-link${
@@ -54,9 +55,15 @@ export default function LeftMenu() {
                                 className={`submenu none ${
                                     prefix === '/scenario' ? 'block' : 'hide-submenu'
                                 }`}>
-                                <li>{t('Default Scenario')}</li>
-                                <li>{t('Custom Scenarios')}</li>
-                                <li>{t('Rules')}</li>
+                                <li>
+                                    <a href="#default-scenario">{t('Default Scenario')}</a>
+                                </li>
+                                <li>
+                                    <a href="#custom-scenario">{t('Custom Scenarios')}</a>
+                                </li>
+                                <li>
+                                    <a href="#rule-scenario">{t('Rules')}</a>
+                                </li>
                             </ul>
                         </li>
                         <li className="mb-[10px]">

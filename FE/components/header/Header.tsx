@@ -229,7 +229,8 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                         <div className="unlogged-block">
                             <div className="hidden float:right layout-action-btns-block md:float-left md:inline-block">
                                 <Link href={'/auth/signup'}>
-                                    <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] mr-[20px]">
+                                    {/*<button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] mr-[20px]">*/}
+                                    <button className="sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px]">
                                         <span className="inline-block">{t('Try for free')}!</span>
                                     </button>
                                 </Link>

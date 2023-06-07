@@ -55,7 +55,8 @@
   &:before {
     content: "";
     width: 4px;
-    height: 38px;
+    min-height: 38px;
+    height: 100%;
     position: absolute;
     left: 0;
     top:0;
@@ -98,5 +99,21 @@
 
 .hide-submenu {
   display: none !important;
+}
+
+.img-shadow {
+  @apply inline-block;
+  //-webkit-box-shadow: 0px 23px 53px -3px rgb(234, 233, 234) !important;
+  //-moz-box-shadow: 0px 23px 53px -3px rgba(234, 233, 234,0.5) !important;;
+  //box-shadow: 0px 23px 53px -3px rgba(234, 233, 234,0.5) !important;;
+  //border: solid 1px !important;
+  //
+  //&:before {
+  //  @apply shadow-2xl;
+  //}
+  //&:after {
+  //  @apply shadow-2xl;
+  //}
+
 }
 

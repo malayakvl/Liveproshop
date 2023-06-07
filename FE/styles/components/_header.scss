@@ -19,14 +19,14 @@
 
   //@apply absolute top-[12px] h-[32px] w-[180px] left-[45px] md:top-[18px] 2xl:left-0 lg:left-[12px] md:w-[230px] md:h-[35px];
   @apply hidden absolute top-[13px] md:top-[17px] h-[32px] w-[180px] left-[45px] md:w-[230px] md:h-[35px]
-    xl:left-0 md:block;
+    md:ml-[60px] lg:ml-0 xl:left-0 md:block;
 }
 .app-logo-unreg {
   display: inherit;
   top: 6px;
   left: calc(50% - 90px);
 
-  @apply md:top-[15px] md:left-auto;
+  @apply md:top-[15px] md:left-auto md:ml-[40px] xl:ml-0;
 }
 
 .drop-top-menu-item {
@@ -36,7 +36,7 @@
 
 .mobile-menu-button {
   //@apply pt-[7px] ml-[12px] md:ml-0 md:mt-0 xl:hidden;
-  @apply absolute top-0 md:top-[7px] left-[12px] md:left-0 xl:hidden;
+  @apply absolute top-0 md:top-[11px] left-[12px] md:left-0 xl:hidden;
 }
 
 .brand-mobile {
@@ -107,8 +107,10 @@
   @apply absolute top-[12px] right-[70px] md:right-[50px] md:top-[-80px] md:mt-0 md:sticky;
 }
 .unlogged-block {
+  @apply md:w-[380px] md:float-right md:mt-0;
+
   .language-block {
-    @apply top-[5px];
+    @apply top-[5px] md:top-0 md:left-auto md:float-right md:right-0 md:mr-[60px] md:mt-[20px];
   }
 
   .btn-langs {
@@ -125,12 +127,13 @@
   //border:solid 1px blue;
   //background: #f7d2ff;
   text-align: right;
+  position: relative;
   //margin-top: 15px;
   //margin-right: 40px;
 
   //@apply w-full pt-[10px] text-right pr-[16px] pb-[20px] md:pt-[55px] md:mt-[14px] lg:mt-[0px] lg:pt-[14px] md:pb-0;
   @apply pt-[50px] mr-0 pb-[10px]
-    md:pt-0 md:pb-0 md:mr-[40px] md:mt-[17px] text-right;
+    md:pt-0 md:pb-0 md:mr-[40px] md:mt-[17px] text-right md:bg-purple-50;
 }
 
 .texting-menu {
@@ -138,7 +141,7 @@
   border-radius: 10px;
   padding: 10px;
   
-  @media (min-width: 1024px) {
+  @media (min-width: 1280px) {
     display: block !important;
   }
   //@apply absolute z-50 bg-white shadow-2xl lg:shadow-none
@@ -262,9 +265,11 @@
 }
 
 .unlogged-block {
-  .language-block {
-    @apply md:mt-[22px] md:right-[90px];
-  }
+  //@apply md:relative bg-purple-200;
+
+  //.language-block {
+  //  @apply md:mt-[22px] md:right-[55px];
+  //}
 }
 
 .profile-name-mobile em{

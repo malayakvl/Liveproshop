@@ -473,5 +473,30 @@
   "about_text_2": "The services are operated by the company Amedeo Digital Solutions OÜ",
   "about_text_3": "Register code: 16211227",
   "about_text_4": "Adress: Tatari tn 25-4",
-  "about_text_5": "Tallinn, Estonia 10116"
+  "about_text_5": "Tallinn, Estonia 10116",
+  "Remarque!": "Note!",
+  "Trigger words": "Trigger words",
+  "Table of contents": "Table of contents",
+  "How to schedule a new live session?": "How to schedule a new live session?",
+  "What is a Scenario?": "What is a Scenario?",
+  "remarque_text": "Before you create a new streaming session you need to go to “Settings”. There you have two tabs “Settings” and “Shipping” which allow you to select shipping methods that will be available for your viewers, define cart duration, set free shipping threshold and define free shipping window. It is very crucial to check and adjust these settings before you start a stream in order to avoid missunderstandings. You can read more information about each setting here:",
+  "Comment programmer une nouvelle session": "How to schedule a new live session",
+  "guide_1": "In order to schedule a new streaming session, you need to connect your LiveProshop account with Facebook account using this button",
+  "guide_2": "2. When your account was successfully synchronized, you need to click on the “Schedule new session” button",
+  "guide_3": "3. In the opened modal window you need to select date and time of the planning session",
+  "guide_4": "4. Now you can see your new scheduled session in the list of sessions below",
+  "Comment arrêter le live?": "How to stop the session",
+  "text_stop": "In order to stop the live session, you need to do it manually in the list of your session by clicking on the “Stop Session” button",
+  "text_remarque_stop": "The session will not stop by itself. You need to do it manually. If you don’t stop the session the system will continue to parse viewers comment session is over! If you leave a record of your session and enable commenting, viewers will be able to comment and the system will parse their create orders. So make sure you stoped the session",
+  "inportant_note": "Important note!",
+  "guide_heading": "Merchant Guide - Live Sales Section",
+  "guide_head_text": "The section dedicated to live sales allows you to schedule and manage your live broadcasts",
+  "Default Scenario": "Default Scenario",
+  "Default scenarios": "Default scenarios",
+  "Rules": "Rules",
+  "Custom Scenarios": "Custom Scenarios",
+  "Chatbot rules": "Chatbot rules",
+  "csv_head_guide": "CSV file Population rules"
+
+
 }
