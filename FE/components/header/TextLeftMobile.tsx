@@ -29,7 +29,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
     const node = useRef<HTMLDivElement>(null);
     // const [windowWidth, setWindowWidth] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
-    const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
+    // const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
 
     console.log('Type', type.type);
 

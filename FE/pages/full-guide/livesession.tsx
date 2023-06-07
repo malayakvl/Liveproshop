@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import FullLayout from '../../components/layout/FullLayout';
-import React, { useState } from 'react';
+import React from 'react';
 import { LeftMenu, LivesessionRules } from '../../components/guides';
 import { useTranslations } from 'next-intl';
 // import { useRouter } from 'next/router';
