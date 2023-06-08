@@ -28,7 +28,7 @@ const Livesession: React.FC = () => {
                 {t('Comment programmer une nouvelle session')}
             </h2>
             {/*How to Facebook and Livesession*/}
-            <span className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] md">
+            <span className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                 {t(`guide_1`)}
             </span>
             <div className="my-12 mb-24 text-center">

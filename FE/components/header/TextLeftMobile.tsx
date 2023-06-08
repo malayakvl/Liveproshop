@@ -31,8 +31,6 @@ const TextLeftMobile: React.FC<Props> = (type) => {
     const [isMobile, setIsMobile] = useState(false);
     // const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
 
-    console.log('Type', type.type);
-
     useEffect(
         function () {
             if (user.photo) {
