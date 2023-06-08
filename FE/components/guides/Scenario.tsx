@@ -114,13 +114,23 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                             <div className="float-left mb-4">
                                 <span className="inline-block">
                                     Rules for populating the fields correctly
+                                    <img
+                                        src="/images/guides/thumb.svg"
+                                        className="inline-block ml-[10px]"
+                                        alt=""
+                                    />
                                 </span>
-                                <img
-                                    src="/images/guides/thumb.svg"
-                                    className="float-right ml-[10px] mt-[-5px]"
-                                    alt=""
-                                />
                             </div>
+                            {/*<div className="float-left mb-4">*/}
+                            {/*    <span className="inline-block">*/}
+                            {/*        Rules for populating the fields correctly*/}
+                            {/*    </span>*/}
+                            {/*    <img*/}
+                            {/*        src="/images/guides/thumb.svg"*/}
+                            {/*        className="float-right ml-[10px] mt-[-5px]"*/}
+                            {/*        alt=""*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                         </h2>
                         <div className="clear-both" />
                         <div className="overflow-x-scroll">
@@ -463,12 +473,12 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                             <div className="float-left mb-4">
                                 <span className="inline-block">
                                     Rules for populating the fields correctly
+                                    <img
+                                        src="/images/guides/thumb.svg"
+                                        className="inline-block ml-[10px]"
+                                        alt=""
+                                    />
                                 </span>
-                                <img
-                                    src="/images/guides/thumb.svg"
-                                    className="float-right ml-[10px] mt-[-5px]"
-                                    alt=""
-                                />
                             </div>
                         </h2>
                         <div className="clear-both" />
