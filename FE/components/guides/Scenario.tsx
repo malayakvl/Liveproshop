@@ -13,10 +13,14 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                 <>
                     <h2 className="dark-blue-header block mb-[10px]">
                         <div className="float-left mb-4">
-                            <span className="inline-block smile-text">
+                            <span className="inline-block">
                                 Aloes, qu`est-ce qu`un scénario?
+                                <img
+                                    src="/images/guides/smile.svg"
+                                    className="inline-block ml-[10px]"
+                                    alt=""
+                                />
                             </span>
-                            {/*<img src="/images/guides/smile.svg" className="float-right" alt="" />*/}
                         </div>
                     </h2>
                     <div className="clear-both" />
@@ -350,8 +354,16 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                 <>
                     <h2 className="dark-blue-header block mb-[10px]">
                         <div className="float-left mb-4">
-                            <span className="inline-block">So, what is a Scenario?</span>
-                            <img src="/images/guides/smile.svg" className="float-right" alt="" />
+                            <span className="inline-block">
+                                So, what is a Scenario?
+                                <img
+                                    src="/images/guides/smile.svg"
+                                    className="inline-block ml-[10px]"
+                                    alt=""
+                                />
+                            </span>
+                            {/*<span className="inline-block">So, what is a Scenario?</span>*/}
+                            {/*<img src="/images/guides/smile.svg" alt="" />*/}
                         </div>
                     </h2>
                     <div className="clear-both" />
