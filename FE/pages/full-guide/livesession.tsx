@@ -18,7 +18,7 @@ export default function Livesession() {
             </Head>
 
             <div className="main-layout">
-                <div className="block mb-[40px] text-[18px] font-bold text-gray-350">
+                <div className="block mb-[40px] text-[16px] md:text-[18px] font-bold text-gray-350">
                     {t('guide_heading')}
                 </div>
                 <div className="md:flex">
