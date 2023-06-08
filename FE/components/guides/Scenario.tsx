@@ -387,7 +387,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                             <h2 className="dark-blue-header mb-4 text-[18px]">
                                 There are 6 main system scenarios:
                             </h2>
-                            <ul className="pl-[0px] text-[16px]">
+                            <ul className="pl-[0px] text-[14px] md:text-[16px]">
                                 <li>
                                     1. Buyer successfully added wanted item to his cart *for the
                                     first time/ first item of the live
