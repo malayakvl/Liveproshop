@@ -19,7 +19,7 @@ export default function Livesession() {
 
             <div className="main-layout">
                 <div className="block mb-[40px] text-[18px] font-bold text-gray-350">
-                    !!{t('guide_heading')}
+                    {t('guide_heading')}
                 </div>
                 <div className="md:flex">
                     <LeftMenu />
