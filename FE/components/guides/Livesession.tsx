@@ -15,7 +15,7 @@ const Livesession: React.FC = () => {
             </span>
             <div className="rounded-gray-block">
                 <h2 className="dark-blue-header mb-4 text-[18px]">{t('Remarque!')}</h2>
-                <div className="text-base text-gray-550">
+                <div className="text-base font-medium text-gray-550">
                     {t('remarque_text')}
                     &nbsp;
                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -70,7 +70,7 @@ const Livesession: React.FC = () => {
 
             <div id="session-remarque" className="rounded-gray-block">
                 <h2 className="dark-blue-header mb-4 text-[18px]">{t('inportant_note')}</h2>
-                <div className="text-base text-gray-350">{t('text_remarque_stop')}</div>
+                <div className="text-base font-medium text-gray-350">{t('text_remarque_stop')}</div>
             </div>
         </>
     );

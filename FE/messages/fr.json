@@ -491,10 +491,10 @@
   "Custom Scenarios": "Custom Scenarios",
   "Chatbot rules": "Chatbot rules",
   "Guide for sellers - Live selling section": "Guide for sellers - Live selling section",
-  "csv_head_guide": "Guides - Règles de remplissage des fichiers CSV!"
-
-
-
+  "csv_head_guide": "Guides - Règles de remplissage des fichiers CSV!",
+  "not_found_head": "Oops! Page non trouvée",
+  "not_found_text1": "La page que vous recherchez n`existe pas.",
+  "not_found_text2": "Il a peut-être été déplacé ou supprimé."
 
 
 }

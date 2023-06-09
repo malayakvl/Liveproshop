@@ -16,11 +16,15 @@ export default function Index() {
 
             <div className="block-white-8 mr-10 white-shadow-medium mt-10 text-xl max-w-4xl text-gray-350">
                 <div className="flex border border-l-0 border-r-0 border-t-0 pb-2.5 mb-10 ">
-                    <h2 className="dark-blue-header">{t('guide_heading')}</h2>
+                    <h2 className="text-[16px] dark-blue-header dark-logged">
+                        {t('guide_heading')}
+                    </h2>
                 </div>
                 <span className="text-[16px] leading-[24px]">{t('guide_head_text')}</span>
-                <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-550">
-                    <h2 className="dark-blue-header mb-4 md:text-[24px]">{t('Remarque!')}</h2>
+                <div className="p-4 my-12 font-medium bg-gray-100 rounded-lg text-[14px] md:text-base text-gray-550">
+                    <h2 className="dark-blue-header dark-logged-1 mb-4 md:text-[24px]">
+                        {t('Remarque!')}
+                    </h2>
                     {/*{`Avant de créer une nouvelle session de Live, vous devez aller dans "Paramètres".*/}
                     {/*Vous y trouverez deux onglets, "Paramètres" et "Livraison", qui vous permettront*/}
                     {/*de sélectionner les méthodes d'expédition qui seront disponibles pour vos*/}
@@ -29,14 +33,16 @@ export default function Index() {
                     {/*vérifier et de régler ces paramètres avant de lancer un flux afin d'éviter tout*/}
                     {/*malentendu. Vous pouvez lire plus d'informations sur chaque paramètre ici:`}*/}
                     {/*<Link href={'/settings'}>Settings</Link>.*/}
-                    {t('remarque_text')}
-                    &nbsp;
-                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                    <a target="_blank" href="https://liveproshop.com/settings" rel="noreferrer">
-                        https://liveproshop.com/settings
-                    </a>
+                    <span className="text-remarque">
+                        {t('remarque_text')}
+                        &nbsp;
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                        <a target="_blank" href="https://liveproshop.com/settings" rel="noreferrer">
+                            https://liveproshop.com/settings
+                        </a>
+                    </span>
                 </div>
-                <h1 className="text-gray-350 text-[16px] font-bold md:text-[24px] mb-2">
+                <h1 className="text-gray-350 text-[24px] font-bold md:text-[30px] mb-2">
                     {t('Comment programmer une nouvelle session')}
                 </h1>
                 <span className="text-[16px] leading-[24px]">{t('guide_1')}</span>
@@ -55,7 +61,7 @@ export default function Index() {
                 <div className="my-12 mb-24 text-center">
                     <Image src="/images/guides/liveselling4.png" width={795} height={400} />
                 </div>
-                <h1 className="text-gray-350 text-[16px] font-bold md:text-[24px] mb-2">
+                <h1 className="text-gray-350 text-[24px] font-bold md:text-[30px] mb-2">
                     {t('Comment arrêter le live?')}
                 </h1>
                 <span className="text-[16px] leading-[24px]">{t('text_stop')}</span>
@@ -64,10 +70,18 @@ export default function Index() {
                 <div className="my-12 mb-24 text-center">
                     <Image src="/images/guides/liveselling5.png" width={795} height={517} />
                 </div>
-                <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-550">
-                    <h2 className="dark-blue-header mb-4 md:text-[24px]">{t('inportant_note')}</h2>
-                    {t('text_remarque_stop')}
+                <div id="session-remarque" className="rounded-gray-block">
+                    <h2 className="dark-blue-header mb-4 text-[18px]">{t('inportant_note')}</h2>
+                    <div className="text-base text-gray-350 text-remarque">
+                        {t('text_remarque_stop')}
+                    </div>
                 </div>
+                {/*<div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-550">*/}
+                {/*    <h2 className="dark-blue-header dark-logged-1 mb-4 md:text-[24px]">*/}
+                {/*        {t('inportant_note')}*/}
+                {/*    </h2>*/}
+                {/*    {t('text_remarque_stop')}*/}
+                {/*</div>*/}
                 {/*{locale == 'en' && (*/}
                 {/*    <div className="p-4 my-12 bg-gray-100 rounded-lg text-base text-gray-550">*/}
                 {/*        <h2 className="dark-blue-header mb-4">Note!</h2>*/}
@@ -90,7 +104,7 @@ export default function Index() {
                 {/*        souhaitez plus recevoir de commandes.*/}
                 {/*    </div>*/}
                 {/*)}*/}
-                {/*<h1 className="text-gray-350 text-[16px] font-bold md:text-[24px] mb-2">Remarque!</h1>*/}
+                {/*<h1 className="text-gray-350 text-[24px] font-bold md:text-[30px] mb-2">Remarque!</h1>*/}
                 {/*{`Le live ne s'arrêtera pas automatiquement. Vous devez le faire manuellement. Si vous*/}
                 {/*n'arrêtez pas le live, le système continuera à analyser les commentaires des*/}
                 {/*internautes même si votre live est terminé ! Si vous laissez votre live “en replay”*/}

@@ -53,7 +53,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                             </div>
                         </div>
                         <div className="rounded-gray-block">
-                            <h2 className="dark-blue-header mb-4 text-[18px]">
+                            <h2 className="text-gray-350 font-bold text-[16px] mb-4 md:text-[18px]">
                                 There are 6 main system scenarios:
                             </h2>
                             <ul className="pl-[0px] text-[14px] md:text-[16px]">
@@ -151,7 +151,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">Name</td>
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
+                                            Name
+                                        </td>
                                         <td className="py-[8px] align-top">
                                             Type a unique name of your scenario
                                         </td>
@@ -163,8 +165,8 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] align-top">
-                                            <b>{t(`Trigger words`)}</b>
+                                        <td className="py-[8px] align-top font-bold text-gray-350">
+                                            {t(`Trigger words`)}
                                         </td>
                                         <td className="py-[8px] align-top w-[40%]">
                                             <p className="block my-[10px]">
@@ -250,7 +252,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
                                             Max answer count
                                         </td>
                                         <td className="py-[8px] align-top">
@@ -273,7 +275,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">Product</td>
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
+                                            Product
+                                        </td>
                                         <td className="py-[8px] align-top">
                                             <p className="block mb-[10px]">
                                                 Here you may choose a product that will be attached
@@ -307,7 +311,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">Discount</td>
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
+                                            Discount
+                                        </td>
                                         <td className="py-[8px] align-top">
                                             Here you may define a discount for your product
                                             manually. And this discount will be applied to the
@@ -332,7 +338,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
                                             French - English
                                             <br />
                                             message field
@@ -406,7 +412,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                             </div>
                         </div>
                         <div className="rounded-gray-block">
-                            <h2 className="dark-blue-header mb-4 text-[18px]">
+                            <h2 className="text-gray-350 font-bold text-[16px] mb-4 md:text-[18px]">
                                 There are 6 main system scenarios:
                             </h2>
                             <ul className="pl-[0px] text-[14px] md:text-[16px]">
@@ -500,7 +506,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">Name</td>
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
+                                            Name
+                                        </td>
                                         <td className="py-[8px] align-top">
                                             Type a unique name of your scenario
                                         </td>
@@ -512,8 +520,8 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] align-top">
-                                            <b>{t(`Trigger words`)}</b>
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
+                                            {t(`Trigger words`)}
                                         </td>
                                         <td className="py-[8px] align-top w-[40%]">
                                             <p className="block my-[10px]">
@@ -599,7 +607,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
                                             Max answer count
                                         </td>
                                         <td className="py-[8px] align-top">
@@ -622,7 +630,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">Product</td>
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
+                                            Product
+                                        </td>
                                         <td className="py-[8px] align-top">
                                             <p className="block mb-[10px]">
                                                 Here you may choose a product that will be attached
@@ -651,7 +661,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">Discount</td>
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
+                                            Discount
+                                        </td>
                                         <td className="py-[8px] align-top">
                                             Here you may define a discount for your product
                                             manually. And this discount will be applied to the
@@ -676,7 +688,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                         style={{
                                             borderBottom: 'solid 1px #EEF1F7'
                                         }}>
-                                        <td className="py-[8px] font-bold align-top">
+                                        <td className="py-[8px] font-bold align-top text-gray-350">
                                             French - English
                                             <br />
                                             message field

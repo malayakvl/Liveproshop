@@ -81,9 +81,15 @@
 }
 
 .cat-bg {
-  background: url(../../public/images/cat.svg);
+  //background: url(../../public/images/cat.svg);
   background-repeat: no-repeat;
   background-position: bottom right;
 
-  @apply lg:pr-[300px];
+  //@apply sm:pb-[400px] lg:pr-[300px];
 }
+
+//@media screen and (max-width: 400px) {
+//  .cat-bg {
+//    background-image: none;
+//  }
+//}

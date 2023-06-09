@@ -496,7 +496,10 @@
   "Rules": "Rules",
   "Custom Scenarios": "Custom Scenarios",
   "Chatbot rules": "Chatbot rules",
-  "csv_head_guide": "CSV file Population rules"
+  "csv_head_guide": "CSV file Population rules",
+  "not_found_head": "Oops! Page not found",
+  "not_found_text1": "The page you are looking for does not exist.",
+  "not_found_text2": "It may have been moved or deleted."
 
 
 }

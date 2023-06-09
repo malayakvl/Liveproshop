@@ -94,8 +94,14 @@
   margin-top:20px;
 
   .dark-blue-header {
-    @apply text-[16px] md:text-[18px];
+    @apply text-[18px];
   }
+}
+
+.text-remarque {
+  line-height: 24px;
+  font-weight: 500;
+  @apply text-[16px];
 }
 
 .guide-table td{

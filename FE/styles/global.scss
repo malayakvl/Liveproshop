@@ -123,6 +123,16 @@
   direction: ltr;
 }
 
+.dark-logged {
+  @apply text-[16px];
+}
+.dark-logged-1 {
+  @apply text-[18px];
+}
+.dark-blue-header-2 {
+  font-size: 16px !important;
+}
+
 @import "components/sidebar-header";
 @import "components/header";
 @import "components/main";
