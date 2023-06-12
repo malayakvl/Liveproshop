@@ -198,15 +198,15 @@ export default function Pricing({ locale }: { locale: any }) {
                                 {t('Pricing that fits your size')}
                             </h1>
                             <div className="text-pricing mt-[10px]">
-                                Pricing built for businesses of all sizes.
+                                {t('text_pricing_1')}
                                 <span className="font-bold block mt-[5px]">
-                                    Always know what you’ll pay.
+                                    {t('text_pricing_2')}
                                 </span>
                                 <span className="mt-[30px] block">
                                     <Link href={'/'}>
                                         <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px] text-center">
                                             <span className="text-[16px] inline-block min-w-[220px]">
-                                                {t('Try for free!')}
+                                                {t('text_free')}
                                             </span>
                                         </a>
                                     </Link>
