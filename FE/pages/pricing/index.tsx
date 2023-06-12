@@ -188,7 +188,7 @@ export default function Pricing({ locale }: { locale: any }) {
                 <title>LiveProshop - Pricing</title>
             </Head>
             <div className="main-layout">
-                <div className="relative mx-auto border-red-900">
+                <div className="relative mx-auto">
                     <div className="flex flex-col md:flex-row ">
                         <div className="w-full md:w-2/3">
                             <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
