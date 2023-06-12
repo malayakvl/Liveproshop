@@ -50,7 +50,6 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                     } else {
                         setIsMobile(false);
                     }
-                    console.log('Resize event', window.innerWidth);
                 };
                 window.addEventListener('resize', handleWindowResize);
                 return () => {

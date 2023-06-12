@@ -44,10 +44,6 @@ export default function MainLayout({ children }: { children: any }) {
 
     return (
         <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased text-black">
-            {/*<div className="container">*/}
-            {/*    hello*/}
-            {/*</div>*/}
-            {/*<div className="mx-auto xl:px-4">{children}</div>*/}
             {children}
         </div>
     );

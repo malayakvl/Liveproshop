@@ -85,11 +85,6 @@ function Profile() {
             .strict(true)
             .min(3, t('Must be at least 3 characters'))
             .required(t('You must enter your tax-ID')),
-        // full_address: Yup.string()
-        //     .required(t('You must enter your address'))
-        //     .strict(true)
-        //     .min(3, t('Must be at least 3 characters'))
-        //     .trim(t('Cannot include leading and trailing spaces')),
         company_name: Yup.string()
             .strict(true)
             .min(3, t('Must be at least 3 characters'))

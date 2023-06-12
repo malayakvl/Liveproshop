@@ -459,7 +459,7 @@
   "What is the differens between plans": "What is the differens between plans",
   "Frequently asked questions": "Foire aux questions",
   "question_before_started": "Have some questions before you get started? Check out our FAQ below. If you still have questions, book a call with one of our experts",
-  "Enter Email": "Entrez Email",
+  "Enter Email": "Entrez l`e-mail",
   "Customer Story": "Témoignage client",
   "About Liveproshop": "Qui sommes nous",
   "about_text_1": "Nous sommes composés d'une équipe d'experts ayant plus de 15 ans d'expérience dans la vente en ligne, les réseaux sociaux, la publicité numérique et la gestion d'entreprise. Vous trouverez dans nos approches un service client haut de gamme et une créativité stratégique. Nous nous attaquons aux objectifs spécifiques de votre entreprise.",
@@ -494,7 +494,14 @@
   "csv_head_guide": "Guides - Règles de remplissage des fichiers CSV!",
   "not_found_head": "Oops! Page non trouvée",
   "not_found_text1": "La page que vous recherchez n`existe pas.",
-  "not_found_text2": "Il a peut-être été déplacé ou supprimé."
-
-
+  "not_found_text2": "Il a peut-être été déplacé ou supprimé.",
+  "It only takes 30 seconds to get started": "Cela ne prend que 30 secondes pour commencer",
+  "Register now!": "S'inscrire maintenant!",
+  "I want to know more!": "Je veux en savoir plus",
+  "text_difference": "The differences between the two plans are:The monthly cost and commission rate. The Basic Plan is $49/month + 5% of sales, and the Business Plan is $149/month + 3% of sales.",
+  "text_experts": "Have some questions before you get started? Check out our FAQ below. If you still have questions, book a call with one of our experts",
+  "Try for free!": "Try for free!",
+  "Pricing & Plans": "Pricing & Plans",
+  "Most popular": "Le plus populaire",
+  "holder_email": "Enter Email"
 }

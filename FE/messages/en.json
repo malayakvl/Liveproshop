@@ -499,7 +499,13 @@
   "csv_head_guide": "CSV file Population rules",
   "not_found_head": "Oops! Page not found",
   "not_found_text1": "The page you are looking for does not exist.",
-  "not_found_text2": "It may have been moved or deleted."
-
+  "not_found_text2": "It may have been moved or deleted.",
+  "It only takes 30 seconds to get started": "It only takes 30 seconds to get started",
+  "I want to know more!": "I want to know more!",
+  "text_difference": "The differences between the two plans are:The monthly cost and commission rate. The Basic Plan is $49/month + 5% of sales, and the Business Plan is $149/month + 3% of sales.",
+  "text_experts": "Have some questions before you get started? Check out our FAQ below. If you still have questions, book a call with one of our experts",
+  "Try for free!": "Essayer gratuitement!",
+  "Pricing & Plans": "Pricing & Plans",
+  "holder_email": "Enter Email"
 
 }

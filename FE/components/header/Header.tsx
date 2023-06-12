@@ -2,7 +2,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { signOut } from 'next-auth/client';
 import React, { useEffect, useRef, useState } from 'react';
-// import { Menu, Transition } from '@headlessui/react';
 import LangSwitcher from '../lang/Switcher';
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
@@ -13,8 +12,6 @@ import { fetchLatestAction } from '../../redux/notifications';
 import LoggedRight from './LoggedRight';
 import LoggedRightMobile from './LoggedRightMobile';
 import TextLeftMobile from './TextLeftMobile';
-// import BrandMobile from "../sidebar/BrandMobile";
-// import { toggleSidebarAction } from '../../redux/layouts';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -46,7 +43,6 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                 dispatch(fetchLatestAction());
             }
             if (window) {
-                console.log(window.innerWidth);
                 if (window.innerWidth < 768) {
                     setIsMobile(true);
                 }
@@ -95,6 +91,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
             className={`w-full ${user?.email ? 'auth-header' : ''} ${
                 router.pathname == '/' ||
                 router.pathname == '/faq' ||
+                router.pathname == '/pricing' ||
                 router.pathname == '/full-guide' ||
                 router.pathname == '/full-guide/livesession' ||
                 router.pathname == '/full-guide/scenario' ||
@@ -153,7 +150,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                         <Link href={'/features'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
-                                                href="javascript:void(0)"
+                                                href=":;"
                                                 // className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                                 className={`m-2 ${
                                                     router.pathname === '/features'
