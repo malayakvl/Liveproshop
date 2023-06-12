@@ -158,7 +158,7 @@ export default function Pricing({ locale }: { locale: any }) {
             <>
                 <div className={`price-name-heading ${key > 0 ? 'price-name-heading-1 ' : ''}`}>
                     <span className="block pt-[9px] text-[16px] block-price-head md:hidden">
-                        {plans.values[key].group.name}
+                        {t(plans.values[key].group.name)}
                     </span>
                 </div>
                 {renderTickByValues(data, planId)}
@@ -173,7 +173,8 @@ export default function Pricing({ locale }: { locale: any }) {
                     <Fragment key={data.option.id}>
                         <div className="option-row">
                             <div className="option-value">
-                                {parseTranslation(data.option, 'name', locale)}
+                                {/*{parseTranslation(data.option, 'name', locale)}*/}
+                                {t(data.option.name)}
                             </div>
                         </div>
                     </Fragment>
@@ -232,7 +233,8 @@ export default function Pricing({ locale }: { locale: any }) {
                                                 className={`price-name-heading ${
                                                     key > 0 ? 'price-name-heading-1' : ''
                                                 } `}>
-                                                {parseTranslation(values.group, 'name', locale)}
+                                                {/*{parseTranslation(values.group, 'name', locale)}*/}
+                                                {t(values.group.name)}
                                             </div>
                                             {parseOptionsNew(values.values, locale)}
                                         </div>
@@ -391,7 +393,8 @@ export async function getServerSideProps(context: any) {
             // session,
             locale,
             messages: {
-                ...require(`../../messages/${locale}.json`)
+                ...require(`../../messages/${locale}.json`),
+                ...require(`../../messages/pricing/${locale}.json`)
             }
         }
     };
