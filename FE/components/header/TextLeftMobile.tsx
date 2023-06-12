@@ -117,7 +117,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                             </Link>
                         </li>
                         <li>
-                            <Link href={'/plans'}>
+                            <Link href={'/pricing'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
                                     href="javascript:void(0)"

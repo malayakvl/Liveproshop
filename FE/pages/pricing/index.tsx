@@ -45,7 +45,7 @@ const PriceHeading = ({
     const user = useSelector(userSelector);
     return (
         <div>
-            <div className="w-full h-32 lg:h-[90px] relative mx-auto">
+            <div className="w-full h-32 lg:h-[120px] relative mx-auto">
                 <div className="">
                     {/* eslint-disable-next-line jsx-a11y/alt-text */}
                     <img src={imageSrc} className="mx-auto plan-img" alt="" />
@@ -55,7 +55,7 @@ const PriceHeading = ({
                 {name}
                 {name === 'Business' && <div className="most-popular">{t('Most popular')}</div>}
             </div>
-            <div className="md:h-[100px] lg:h-[45px] price-description">{desc}</div>
+            <div className="md:h-[100px] lg:h-[55px] price-description">{desc}</div>
             <div className="flex md:h-[40px] text-center">
                 <div className="price-plan md:w-[40%]">{price}</div>
                 <div className="inline-block align-middle per-month">euros /month</div>
@@ -204,8 +204,8 @@ export default function Pricing({ locale }: { locale: any }) {
                                 </span>
                                 <span className="mt-[30px] block">
                                     <Link href={'/'}>
-                                        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px] text-center">
-                                            <span className="text-[16px] inline-block min-w-[220px]">
+                                        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block lg:mr-[84px] text-center">
+                                            <span className="text-[20px] inline-block min-w-[220px] text-center">
                                                 {t('text_free')}
                                             </span>
                                         </a>

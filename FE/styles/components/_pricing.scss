@@ -19,6 +19,8 @@
   font-size: 18px;
   line-height: 22px;
   color: #4F5B84;
+
+  @apply md:text-[30px] md:leading-[38px];
 }
 
 .border-gradient {
@@ -102,7 +104,7 @@
   text-align: left;
   //padding: 0 20px;
 
-  @apply text-[16px] md:text-[14px] md:px-[20px];
+  @apply text-[16px] md:px-[20px];
 }
 .block-fixed-height-heading {
   //background: #f5f5d2;
@@ -171,7 +173,7 @@
 }
 
 .price-plan-name {
-  @apply font-bold text-[24px] text-left md:text-center md:text-[16px] md:h-[55px] text-gray-350 mb-2 relative;
+  @apply font-bold text-[24px] text-left md:text-[24px] md:h-[55px] md:pl-[20px] text-gray-350 mb-2 relative;
 }
 .most-popular {
   position: absolute;
@@ -183,7 +185,7 @@
 }
 
 .plan-img {
-  @apply w-[120px] h-[120px] md:w-[70px] md:h-[70px]
+  @apply w-[120px] h-[120px]
 }
 
 
