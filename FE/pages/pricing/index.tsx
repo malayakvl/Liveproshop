@@ -53,16 +53,17 @@ const PriceHeading = ({
             </div>
             <div className="price-plan-name">
                 {name}
-                {name === 'Business' && <div className="most-popular">{t('Most popular')}</div>}
+                {planId === 2 && <div className="most-popular">{t('Most popular')}</div>}
             </div>
             <div className="md:h-[100px] lg:h-[55px] price-description">{desc}</div>
             <div className="flex md:h-[40px] text-center">
                 <div className="price-plan md:w-[40%]">{price}</div>
-                <div className="inline-block align-middle per-month">euros /month</div>
+                <div className="inline-block align-middle per-month">euros / month</div>
                 <div className="clear-both" />
             </div>
             <div className="block h-[15px]">
                 {sale > 0 && <div className="price-percent">{sale}% of sale</div>}
+                {sale == 0 && <div className="price-percent" />}
             </div>
             <div className="mt-[-40px] mb-[20px] md:mb-auto md:mt-auto md:mx-[12px]">
                 <button
@@ -76,7 +77,7 @@ const PriceHeading = ({
                     className={`${
                         disabled ? 'disabled-btn' : 'gradient-btn'
                     } w-full mt-7 justify-self-end`}>
-                    {buttonText}
+                    {t(buttonText)}
                 </button>
             </div>
         </div>
@@ -252,7 +253,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                         desc={t(
                                             'Best for live retailers that are small or starting out'
                                         )}
-                                        sale={0}
+                                        sale={3}
                                         session={session}
                                         buttonText="Select"
                                         imageSrc={'/images/plans/box.svg'}

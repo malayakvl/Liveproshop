@@ -74,7 +74,7 @@
   color: #4F5B84;
   //padding-top:10px;
 
-  @apply text-[48px] text-left md:text-[28px] md:text-right md:pt-[10px];
+  @apply text-[48px] text-left md:text-[48px] md:text-right md:pt-[10px];
 }
 .per-month {
   font-weight: 600;
@@ -85,7 +85,7 @@
   padding-left: 10px;
   text-align: left;
 
-  @apply mt-[15px] md:mt-auto md:pr-[15px] lg:pr-0;
+  @apply mt-[15px] md:mt-auto md:pr-[15px] lg:pr-0 md:pt-[40px];
 }
 .price-percent {
   font-weight: 700;
@@ -94,7 +94,7 @@
   text-align: center;
   color: #4F5B84;
 
-  @apply md:pt-[10px] lg:pt-0;
+  @apply md:pt-[15px] lg:pt-0 md:pl-[40px] md:text-[16px] md:mt-[35px];
 }
 .price-description {
   font-weight: 500;
@@ -108,7 +108,7 @@
 }
 .block-fixed-height-heading {
   //background: #f5f5d2;
-  @apply md:h-[440px] lg:h-[335px];
+  @apply md:h-[440px] lg:h-[425px];
 }
 .price-name-heading {
   font-weight: 700;
@@ -117,10 +117,14 @@
   color: #4F5B84;
   //margin-bottom: 20px;
   height: 40px;
+
+  @apply md:text-[30px];
 }
 .price-name-heading-1 {
   font-size: 16px;
   margin-top: 20px;
+
+  @apply md:text-[30px];
 }
 .option-row {
   font-weight: 600;
@@ -139,6 +143,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+
+  @apply md:text-[16px];
 }
 .tick-block {
   margin-top: 5px;
@@ -177,11 +183,11 @@
 }
 .most-popular {
   position: absolute;
-  top: 26px;
-  right: 10px;
-  max-width: 105px;
+  top: -16px;
+  right: -11px;
+  max-width: 135px;
 
-  @apply text-[10px] border border-orange-450 rounded-lg p-1 text-orange-450;
+  @apply text-[10px] border border-orange-450 rounded-lg p-1 text-orange-450 red-yellow-gradient-text;
 }
 
 .plan-img {
