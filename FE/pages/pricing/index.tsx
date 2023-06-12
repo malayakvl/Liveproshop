@@ -48,7 +48,7 @@ const PriceHeading = ({
             <div className="w-full h-32 lg:h-[90px] relative mx-auto">
                 <div className="">
                     {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                    <img src={imageSrc} className="mx-auto plan-img" />
+                    <img src={imageSrc} className="mx-auto plan-img" alt="" />
                 </div>
             </div>
             <div className="price-plan-name">
