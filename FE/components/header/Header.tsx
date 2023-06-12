@@ -162,12 +162,12 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href={'/plans'}>
+                                        <Link href={'/pricing'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 href="javascript:void(0)"
                                                 className={`m-2 ${
-                                                    router.pathname === '/plans'
+                                                    router.pathname === '/pricing'
                                                         ? 'text-purple-400'
                                                         : ''
                                                 } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>

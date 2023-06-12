@@ -154,7 +154,6 @@ export default function Pricing({ locale }: { locale: any }) {
     };
 
     const renderValuesTick = (data: any, key: number, planId: number, plans: any) => {
-        console.log(`PLANS OPTIONS ${planId}`, plans);
         return (
             <>
                 <div className={`price-name-heading ${key > 0 ? 'price-name-heading-1 ' : ''}`}>
