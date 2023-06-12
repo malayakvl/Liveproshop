@@ -39,8 +39,7 @@ const PriceHeading = ({
     sale,
     buttonText,
     imageSrc,
-    disabled,
-    selected
+    disabled
 }: PriceProps) => {
     const t = useTranslations();
     const user = useSelector(userSelector);
@@ -89,7 +88,7 @@ export default function Pricing({ locale }: { locale: any }) {
     const [selected, setSelected] = useState('business');
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
-    const user = useSelector(userSelector);
+    // const user = useSelector(userSelector);
     // const [showTrial, setShowTrial] = useState(true);
     const stripeClientSecret = useSelector(clientSecretSelector);
 
