@@ -2356,3 +2356,78 @@
   level: 'error',
   timestamp: '2023-06-03T07:47:30.043Z'
 }
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T14:58:53.476Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T14:59:08.593Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:01:04.762Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:01:36.476Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:15:59.108Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:22:51.694Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:23:57.646Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:25:49.628Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:26:22.557Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:27:48.930Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:28:53.885Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:29:24.064Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:30:07.857Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:30:58.346Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-05T15:44:57.196Z'
+}

@@ -11,7 +11,6 @@ class CheckoutController {
 
     async fetch(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
-        console.log("Checkout");
         const { orderNumber } = req.query;
 
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);

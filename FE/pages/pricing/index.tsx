@@ -123,11 +123,11 @@ export default function Pricing({ locale }: { locale: any }) {
     //     // }
     // }, [user?.email]);
 
-    useEffect(() => {
-        if (stripeClientSecret) {
-            Router.push(`/subscription?type=trial&planId=1`);
-        }
-    }, [stripeClientSecret]);
+    // useEffect(() => {
+    //     if (stripeClientSecret) {
+    //         Router.push(`/subscription?type=trial&planId=1`);
+    //     }
+    // }, [stripeClientSecret]);
 
     const renderTickByValues = (data: any, planId: number) => {
         return (
@@ -253,7 +253,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                         desc={t(
                                             'Best for live retailers that are small or starting out'
                                         )}
-                                        sale={3}
+                                        sale={5}
                                         session={session}
                                         buttonText="Select"
                                         imageSrc={'/images/plans/box.svg'}
@@ -279,7 +279,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                         desc={t(
                                             'Best for live retailers selling more than 5,000€ monthly'
                                         )}
-                                        sale={5}
+                                        sale={3}
                                         session={session}
                                         buttonText="Select"
                                         imageSrc={'/images/plans/store.svg'}
@@ -305,7 +305,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                         desc={t(
                                             'Best for retailers with sales over 50,000€ monthly'
                                         )}
-                                        sale={0}
+                                        sale={3}
                                         session={session}
                                         buttonText="Select"
                                         imageSrc={'/images/plans/bag.svg'}

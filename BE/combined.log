@@ -25450,3 +25450,218 @@
   level: 'info',
   timestamp: '2023-06-12T09:56:55.766Z'
 }
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-06-15T14:14:12.424Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T14:31:53.250Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T14:57:49.465Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T14:57:49.466Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T14:58:53.476Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T14:59:08.593Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:01:04.762Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:01:36.476Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:15:36.181Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:15:59.108Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:21:53.021Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:22:51.694Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:23:57.646Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:25:45.280Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:25:49.628Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:26:20.000Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:26:22.557Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:27:45.238Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:27:48.930Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:28:50.497Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:28:53.885Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:29:21.497Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:29:24.064Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:30:05.149Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:30:07.857Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:30:54.049Z'
+}
+{
+  message: "Model error: No such customer: 'cus_NX2w4rk0w86ifV'",
+  level: 'error',
+  timestamp: '2023-07-05T15:30:58.346Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:41:42.078Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T15:44:56.107Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T15:44:56.107Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-05T15:44:57.196Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-05T15:59:23.659Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T16:00:07.152Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T16:00:07.152Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T16:17:59.420Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T16:17:59.421Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T16:49:45.748Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T16:49:45.749Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T18:44:27.950Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-05T18:44:27.953Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-06T18:19:13.773Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-06T19:05:52.515Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-06T19:05:52.528Z'
+}

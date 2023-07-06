@@ -27,7 +27,7 @@ export const restoreEmail = async (email = '', link = '', locale = localeDefault
 
 export const welcomeEmail = async (email = '', link = '', locale = localeDefault) => {
   const { default: t } = await import(`../sender/${locale}.js`);
-
+  console.log("Verification link", link);
   return {
     subject: t['Account Activation Required'],
     body: emailHtml(t, `

@@ -287,7 +287,6 @@ class UserController {
             const data = await userModel.createExistUserSubscription(req.body, req.user);
             const user = await userModel.findUserByEmail(req.user.email);
             if (data.subscription) {
-                // console.log(data.subscription);
                 return res.status(200).json({
                     user: user,
                     subscription: data.subscription,

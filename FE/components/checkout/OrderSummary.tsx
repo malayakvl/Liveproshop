@@ -27,6 +27,8 @@ const OrderSummary = () => {
         [shippingMethodId]
     );
 
+    console.log('Order items', order.order_items);
+
     return (
         <>
             <div className="text-gray-350 font-normal text-lg">
@@ -48,9 +50,12 @@ const OrderSummary = () => {
                         className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5 flex-none"
                     />
                     <div className="flex-auto">
-                        <span className="text-gray-350 text-sm font-bold">Ref.</span>{' '}
+                        <span className="text-gray-350 text-sm font-bold">Ref. {product.sku}</span>{' '}
                         <span className="text-blue-350 text-sm">{product.product_id}</span>
                         <div className="text-gray-350 my-1 font-normal text-lg">{product.name}</div>
+                        <div className="product-size">
+                            {product.color_name}, {product.size_name}
+                        </div>
                         {product.description && (
                             <div
                                 className="text-gray-350 font-normal text-sm"
