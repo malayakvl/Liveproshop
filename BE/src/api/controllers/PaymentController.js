@@ -19,12 +19,6 @@ class PaymentController {
             const data = await paymentModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
             return res.status(200).json({ count: data.size, items: data.items});
         }
-        // const data = await chatbotMessageModel.addMessages(req.query.sessionId, req.body);
-        // if (!data.error) {
-        //     return res.status(200).json({success: true});
-        // } else {
-        //     return res.status(401).json({success: false, error: 'Something wend wrong'});
-        // }
     }
 
     async fetchItem(req, res) {
@@ -73,10 +67,9 @@ class PaymentController {
         } else {
             const filePath = resolve(process.env.DOWNLOAD_FOLDER, 'orders', String(req.user.id), req.body.data.orderNumber + '_' +req.body.data.locale + '.pdf');
             const filePathDownload = `${process.env.API_URL}/${process.env.DB_DOWNLOAD_FOLDER}/orders/${req.user.id}/${req.body.data.orderNumber}_${req.body.data.locale}.pdf`;
-            console.log(filePath);
 
             if (!existsSync(filePath)) {
-                const order = await orderModel.generatePdf(req.params.orderNumber, req.user.id, req.user, req.body.data.locale);
+                const order = await orderModel.generatePdf(req.body.data.orderNumber, req.user.id, req.user, req.body.data.locale);
                 if (order.error) {
                     return res.status(500).json(order.error);
                 }
@@ -85,5 +78,4 @@ class PaymentController {
         }
     }
 }
-
 export default new PaymentController();

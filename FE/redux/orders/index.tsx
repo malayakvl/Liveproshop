@@ -174,8 +174,8 @@ const ACTION_HANDLERS: any = {
         next: (state: State.Orders, action: Action<string>): State.Orders => ({
             ...state,
             downloadFileName: action.payload
-    })
-}
+        })
+    }
 };
 
 export {

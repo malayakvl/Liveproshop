@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -62,6 +62,7 @@ export default function Payments({ session, locale }: { session: any; locale: st
                         {/*    <Image width="20" height="18" src={'/images/download.svg'} />*/}
                         {/*    <span className="pl-4 pt-px">{t('Download Invoice')}</span>*/}
                         {/*</a>*/}
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                         <a
                             onClick={() => dispatch(singleDownloadAction(orderNumber, locale))}
                             href="javascript:;"

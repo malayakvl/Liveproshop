@@ -1,15 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-// import Image from 'next/image';
-// import Link from 'next/link';
-// import NoticeCounter from './NoticeCounter';
 import { fetchLatestAction } from '../../redux/notifications';
 import { useDispatch, useSelector } from 'react-redux';
-// import { signOut } from 'next-auth/client';
 import { userSelector } from '../../redux/user/selectors';
-// import { useTranslations } from 'next-intl';
 import { baseApiUrl } from '../../constants';
-// import LangSwitcherInline from '../lang/SwitcherInline';
-// import LangSwitcher from '../lang/Switcher';
 import LoggedRight from './LoggedRight';
 import LoggedRightMobile from './LoggedRightMobile';
 

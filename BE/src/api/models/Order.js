@@ -518,13 +518,11 @@ class Order {
 
 
 
-
     async generatePdf (orderNumber, userId, user, locale, type='') {
         const client = await pool.connect();
         const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
-
         try {
             const _filters = {
                 // status: [OrderStatus.PAYED],

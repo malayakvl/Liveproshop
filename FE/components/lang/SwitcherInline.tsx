@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 export default function LangSwitcherInline() {
     const { locale, locales, defaultLocale }: any = useRouter();

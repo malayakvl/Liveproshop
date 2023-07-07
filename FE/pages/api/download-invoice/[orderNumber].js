@@ -2,7 +2,6 @@ import { getSession } from 'next-auth/client';
 import { authHeader } from '../../../lib/functions';
 import axios from 'axios';
 import getConfig from 'next/config';
-import { useRouter } from 'next/router';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 
