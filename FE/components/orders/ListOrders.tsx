@@ -109,13 +109,21 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     filterOpen={filterOpen}
                 />
                 <button
+                    style={{ right: '145px' }}
+                    className={`gradient-btn absolute top-0 right-[145px] p-[5px]`}
+                    onClick={() => dispatch(bulkDownloadAction())}>
+                    <div className="font-medium text-white ml-2 font-bold">
+                        {t('Download Orders')}
+                    </div>
+                </button>
+                <button
                     onClick={() => {
                         if (filterOpen) {
                             dispatch(showDateSelectorAction(false));
                         }
                         setFilterOpen(!filterOpen);
                     }}
-                    className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
+                    className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
                     <Image width={16} height={16} src={'/images/filter.svg'} />
                     <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
                     <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">

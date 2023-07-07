@@ -2431,3 +2431,18 @@
   level: 'error',
   timestamp: '2023-07-05T15:44:57.196Z'
 }
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, mkdir './public/uploads/users/1/orders/invoices'",
+  level: 'error',
+  timestamp: '2023-07-06T20:42:45.393Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, mkdir './public/uploads/users/1/orders/invoices'",
+  level: 'error',
+  timestamp: '2023-07-06T20:49:19.528Z'
+}
+{
+  message: 'Model error Product Configuration: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-07T08:03:28.222Z'
+}
