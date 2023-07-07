@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useRef} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -12,11 +12,15 @@ import {
 } from '../../../components/payments';
 import { fetchItemAction } from '../../../redux/payments';
 import { itemSelector } from '../../../redux/payments/selectors';
+import { singleDownloadAction } from '../../../redux/orders/actions';
+import { singleDowloadFileSelector } from '../../../redux/orders/selectors';
 
-export default function Payments({ session }: { session: any }) {
+export default function Payments({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
+    const fileDownload = useSelector(singleDowloadFileSelector);
+    const achiveRefname = useRef(null);
 
     const item: Payments.DataItemDetailed = useSelector(itemSelector);
 
@@ -27,6 +31,14 @@ export default function Payments({ session }: { session: any }) {
     useEffect(() => {
         dispatch(fetchItemAction(orderNumber));
     }, []);
+
+    useEffect(() => {
+        if (fileDownload) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            achiveRefname?.current.click();
+        }
+    }, [fileDownload]);
 
     return (
         <>
@@ -43,12 +55,20 @@ export default function Payments({ session }: { session: any }) {
                     <div className="md:flex justify-between mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
                         {t('Transaction details')}
 
+                        {/*<a*/}
+                        {/*    href={`/api/download-invoice/${orderNumber}?lang=${locale}`}*/}
+                        {/*    className="gradient-btn mt-4 md:mt-0 flex px-5 py-3 rounded-lg text-base max-w-max align-middle border shadow-lg"*/}
+                        {/*    rel="noreferrer">*/}
+                        {/*    <Image width="20" height="18" src={'/images/download.svg'} />*/}
+                        {/*    <span className="pl-4 pt-px">{t('Download Invoice')}</span>*/}
+                        {/*</a>*/}
                         <a
-                            href={`/api/download-invoice/${orderNumber}`}
-                            className="mt-4 md:mt-0 flex px-5 py-3 rounded-lg text-base max-w-max align-middle border shadow-lg"
+                            onClick={() => dispatch(singleDownloadAction(orderNumber, locale))}
+                            href="javascript:;"
+                            className="gradient-btn"
                             rel="noreferrer">
-                            <Image width="20" height="18" src={'/images/download.svg'} />
-                            <span className="pl-4 pt-px">{t('Download Invoice from emmisor')}</span>
+                            {/*<Image width="20" height="18" src={'/images/download.svg'} />*/}
+                            <span className="   pt-px">{t('Download Invoice')}</span>
                         </a>
                     </div>
 
@@ -69,6 +89,15 @@ export default function Payments({ session }: { session: any }) {
 
                     <ListProductsBought item={item} />
                 </div>
+                <a
+                    href={fileDownload}
+                    className="hidden"
+                    target="_blank"
+                    download
+                    ref={achiveRefname}
+                    rel="noreferrer">
+                    Download file
+                </a>
             </div>
         </>
     );

@@ -48,7 +48,8 @@
         @apply  relative flex flex-row items-center;
 
         .s-caption {
-          @apply text-blue-350 ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
+          //@apply text-blue-350 ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
+          @apply text-blue-350 ml-2 text-base font-bold tracking-wide cursor-pointer w-full;
         }
       }
 

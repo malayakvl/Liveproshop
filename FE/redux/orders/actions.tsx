@@ -150,6 +150,35 @@ export const bulkDownloadAction: any = createAction(
                 });
         }
 );
+export const singleDownloadAction: any = createAction(
+    'products/SINGLE_DOWNLOAD',
+    async (orderNumber: any, locale: string) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/orders/single-download`,
+                    { data: { orderNumber: orderNumber, locale: locale } },
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async (result) => {
+                    console.log('Result', result);
+                    dispatch(setSingleFileNameAction(result.data.fileDownload));
+                    dispatch(showLoaderAction(false));
+                    dispatch(setSuccessToastAction('Orders has been downloaded'));
+                    // dispatch(fetchItemsAction());
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.message));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 export const bulkCancelAction: any = createAction(
     'orders/BULK_CANCEL',
     async () =>
@@ -252,3 +281,4 @@ export const showCancelConfirmationModalAction: any = createAction(
     'orders/CANCEL_CONFIRMATION_ORDER'
 );
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
+export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');

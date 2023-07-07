@@ -251,11 +251,16 @@ const ListProducts: React.FC<any> = () => {
                                 <br />
                                 {item.description && (
                                     <div
-                                        className="text-blue-350 mt-4 block font-normal text-sm"
-                                        dangerouslySetInnerHTML={{
-                                            __html: `${item.description.substring(0, 250)} ...`
-                                        }}
-                                    />
+                                        className={`${
+                                            !showMoreConfigs[item.id] ? 'hidden' : 'block'
+                                        }`}>
+                                        <div
+                                            className="text-blue-350 mt-4 block font-normal text-sm"
+                                            dangerouslySetInnerHTML={{
+                                                __html: `${item.description.substring(0, 250)} ...`
+                                            }}
+                                        />{' '}
+                                    </div>
                                 )}
                             </td>
                             <td className="w-[300px]" colSpan={4} style={{ padding: '0' }}>

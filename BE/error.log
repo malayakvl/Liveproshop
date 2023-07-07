@@ -2446,3 +2446,63 @@
   level: 'error',
   timestamp: '2023-07-07T08:03:28.222Z'
 }
+{
+  message: 'Model error Product Configuration: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-07T08:58:41.360Z'
+}
+{
+  message: 'Model error Product Configuration: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-07T08:58:41.365Z'
+}
+{
+  message: 'Model error Product Configuration: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-07T08:58:41.369Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, mkdir './public/uploads/users/1/orders/invoices'",
+  level: 'error',
+  timestamp: '2023-07-07T10:56:14.815Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, mkdir './public/uploads/users/1/orders/invoices'",
+  level: 'error',
+  timestamp: '2023-07-07T10:57:11.261Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, mkdir './public/uploads/users/1/orders/invoices'",
+  level: 'error',
+  timestamp: '2023-07-07T11:29:13.378Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, mkdir './public/uploads/users/1/orders/invoices'",
+  level: 'error',
+  timestamp: '2023-07-07T12:20:44.707Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, mkdir './public/uploads/users/1/orders/invoices'",
+  level: 'error',
+  timestamp: '2023-07-07T12:21:58.544Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, stat './public/uploads/orders/1/28032023-1_fr.pdf'",
+  level: 'error',
+  timestamp: '2023-07-07T14:31:19.484Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, stat './public/uploads/orders/1/28032023-1_fr.pdf'",
+  level: 'error',
+  timestamp: '2023-07-07T14:32:04.251Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, stat './public/uploads/orders/1/28032023-1_fr.pdf'",
+  level: 'error',
+  timestamp: '2023-07-07T14:33:07.012Z'
+}
+{
+  message: "Model error (Generate PDF): ENOENT: no such file or directory, stat './public/uploads/orders/1/28032023-1_fr.pdf'",
+  level: 'error',
+  timestamp: '2023-07-07T14:35:07.037Z'
+}

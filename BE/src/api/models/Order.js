@@ -595,13 +595,13 @@ class Order {
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
                 };
 
-                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`, locale);
+                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}_${locale}.pdf`, locale);
 
                 await setTimeout(4000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(4000);
                 }
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -613,7 +613,7 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     isCreated: true,
                     error: null

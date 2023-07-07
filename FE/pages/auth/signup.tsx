@@ -70,7 +70,7 @@ export default function Signup({ locale }: { locale: string }) {
                                     {t('registr_descr')}
                                 </div>
 
-                                <div className="font-normal mb-6 text-blue-350">
+                                <div className="font-normal mb-6 text-blue-350 hidden">
                                     {t('registr_descr_small')}
                                 </div>
 

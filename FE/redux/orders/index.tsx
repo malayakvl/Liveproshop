@@ -10,7 +10,8 @@ import {
     findSellersAction,
     showCancelConfirmationModalAction,
     clearBase64Action,
-    setAchiveNameAction
+    setAchiveNameAction,
+    setSingleFileNameAction
 } from './actions';
 
 const initialState: {
@@ -168,7 +169,13 @@ const ACTION_HANDLERS: any = {
             ...state,
             base64Data: action.payload
         })
-    }
+    },
+    [setSingleFileNameAction]: {
+        next: (state: State.Orders, action: Action<string>): State.Orders => ({
+            ...state,
+            downloadFileName: action.payload
+    })
+}
 };
 
 export {
@@ -181,7 +188,8 @@ export {
     fetchOrderPdfAction,
     findSellersAction,
     showCancelConfirmationModalAction,
-    clearBase64Action
+    clearBase64Action,
+    setSingleFileNameAction
 };
 
 // ------------------------------------

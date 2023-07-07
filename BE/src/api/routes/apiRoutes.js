@@ -122,6 +122,7 @@ apiRoutes.route('/create-order/:id/:locale').get(OrderController.generateInvoice
 apiRoutes.route('/orders/bulk-shipping').post(OrderController.setupShipped);
 apiRoutes.route('/orders/bulk-cancel').post(OrderController.bulkCancel);
 apiRoutes.route('/orders/bulk-download').post(OrderController.bulkDownload);
+apiRoutes.route('/orders/single-download').post(PaymentController.downloadInvoice);
 apiRoutes.route('/order/run-wait-workflow').post(OrderController.runWaitWorkflow);
 apiRoutes.route('/order/update-config-qty').post(OrderController.updateProductConfigQty);
 
@@ -130,7 +131,7 @@ apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);
 apiRoutes.route('/payments/fetch-methods').get(PaymentController.fetchMethods);
 apiRoutes.route('/payments/change-methods-statuses').patch(PaymentController.changeMethodsStatuses);
 apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);
-apiRoutes.route('/payments/download-invoice/:orderNumber').get(PaymentController.downloadInvoice);
+apiRoutes.route('/payments/download-invoice/:orderNumber/:locale').get(PaymentController.downloadInvoice);
 
 apiRoutes.route('/buyers/fetch-items').get(BuyerController.fetchItems);
 apiRoutes.route('/buyers/fetch-item').get(BuyerController.fetchItem);
