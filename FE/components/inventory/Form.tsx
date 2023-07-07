@@ -197,14 +197,14 @@ function ProductForm({
         color: Yup.string().when('configured', {
             is: true,
             then:
-                selectedSizes.length === 0 && selectedColors.length === 0
+                selectedSizes?.length === 0 && selectedColors?.length === 0
                     ? Yup.string().required(t('Select color or size'))
                     : Yup.string()
         }),
         size: Yup.string().when('configured', {
             is: true,
             then:
-                selectedSizes.length === 0 && selectedColors.length === 0
+                selectedSizes?.length === 0 && selectedColors?.length === 0
                     ? Yup.string().required(t('Select color or size'))
                     : Yup.string()
         })
