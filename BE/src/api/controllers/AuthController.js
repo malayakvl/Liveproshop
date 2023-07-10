@@ -212,9 +212,13 @@ class AuthController {
 
         invitation = await invitationModel.create(data);
 
-        let link = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=${invitation.hash}`;
+        let link = `${process.env.APPLICATION_BASE_URL}/${req.query.locale === 'en' ? 'en/' : ''}auth/registration?hash=${invitation.hash}`;
+        // console.log("LOCALE", req.query.locale);
+        // console.log("LINK", req.query.locale);
 
         const mail = await welcomeEmail(data.email, link, req.query.locale);
+
+        // console.log("MAIL BODY", mail.body)
 
         sendMail(
             data.email,

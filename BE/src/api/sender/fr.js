@@ -44,7 +44,8 @@ export default {
   "If you are having trouble logging into your account, contact us at": "Si vous rencontrez des difficultés pour vous connecter à votre compte, contactez-nous à",
 
   //welcome//
-  "Account Activation Required": "Activation du compte requise",
+  "Verification email": "Activation du compte requise",
+  "Account Activation Required": "Activation de compte requise",
   "Verify yourself below to sign in to your Liveproshop.com account for": "Vous venez de créer un compte sur  Liveproshop.com avec",
   "Here’s the verification link": "Cliquez ci-dessous pour confirmer votre adresse e-mail",
   "If you didn't request this verification link, you can safely ignore this email": "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité",
@@ -53,7 +54,7 @@ export default {
   "User want unsubscribe from plan": "User want unsubscribe from plan",
   "Unsubscribe message from":"Unsubscribe message from",
 
-  "Click here": "Click here",
+  "Click here": "Cliquez ici",
 
   //contactUsFromEmail
   "Contact Us message from": "Contact Us message from",

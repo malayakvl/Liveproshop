@@ -29,7 +29,7 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
   const { default: t } = await import(`../sender/${locale}.js`);
   console.log("Verification link", link);
   return {
-    subject: t['Account Activation Required'],
+    subject: t['Verification email'],
     body: emailHtml(t, `
     <p>${t['Hi']}</p>
     <p>
