@@ -15,7 +15,7 @@ function Terms() {
                                             Terms and Conditions for Live Pro Shop
                                         </h3>
                                         <h5 className="mb-7 block font-bold">
-                                            Last updated: January 19, 2022
+                                            Last updated: March 13, 2023
                                         </h5>
                                         <p>
                                             Please read these terms and conditions carefully before

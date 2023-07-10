@@ -367,7 +367,7 @@ export default function Pricing({ locale }: { locale: any }) {
                             onClick={() => {
                                 dispatch(setModalCalendlyMetaAction(true));
                             }}
-                            className="cursor-pointer btn-big text-center md:inline-block md:ml-[75px]">
+                            className="w-full inline-block cursor-pointer btn-big text-center md:w-auto md:inline-block md:ml-[75px]">
                             <span className="text-[16px] md:text-[20px]">
                                 {t('Request a seles call')}
                             </span>
