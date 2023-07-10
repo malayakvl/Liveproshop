@@ -135,8 +135,8 @@
   "Product details": "Product details",
   "Product Price": "Product Price",
   "Hashtag": "Hashtag",
-  "Color": "Couleur",
-  "Size": "Taille",
+  "Color": "Color",
+  "Size": "Size",
   "Quantity": "Quantity",
   "Price": "Price",
   "Publish": "Publish",
@@ -522,5 +522,4 @@
   "Knowlage Center": "Knowlage Center",
   "We send you confirmation link, please check your mailbox": "We send you confirmation link, please check your mailbox",
   "You can cancel at any time before to avoid the charge": "You can cancel at any time before to avoid the charge"
-
 }
