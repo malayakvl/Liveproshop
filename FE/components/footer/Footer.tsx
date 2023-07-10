@@ -62,34 +62,50 @@ export default function Footer() {
                     <div className="pt-4 flex-col md:flex-row justify-between border-t border-blue-450">
                         <div className="flex justify-end">
                             <div className="mr-10">
-                                <Image
-                                    src="/images/social/facebook.svg"
-                                    width={15}
-                                    height={15}
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    href="https://www.facebook.com/liveproshop"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    <Image
+                                        src="/images/social/facebook.svg"
+                                        width={15}
+                                        height={15}
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </a>
                             </div>
 
                             <div className="mr-10">
-                                <Image
-                                    src="/images/social/instagram.svg"
-                                    width={15}
-                                    height={15}
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                <a
+                                    href="https://www.instagram.com/liveproshop/"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    <Image
+                                        src="/images/social/instagram.svg"
+                                        width={15}
+                                        height={15}
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </a>
                             </div>
 
                             <div>
-                                <Image
-                                    className=""
-                                    src="/images/social/linkedin.svg"
-                                    width={15}
-                                    height={15}
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                <a
+                                    href="https://www.linkedin.com/company/liveproshop/"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    <Image
+                                        className=""
+                                        src="/images/social/linkedin.svg"
+                                        width={15}
+                                        height={15}
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </a>
                             </div>
                         </div>
 
