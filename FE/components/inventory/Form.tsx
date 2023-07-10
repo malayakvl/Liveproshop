@@ -183,7 +183,7 @@ function ProductForm({
         name: Yup.string()
             .max(140, t('Must be less characters', { charNumber: 140 }))
             .required(t('Required field')),
-        // description: Yup.string().required(t('Required field')),
+        description: Yup.string().required(t('Required field')),
         price: Yup.number().when('configured', {
             is: false,
             then: Yup.number().required(t('Required field')).min(0)
@@ -292,6 +292,11 @@ function ProductForm({
                                         setOptions={{ height: '250' }}
                                         onChange={handleChangeEditor}
                                     />
+                                    {props.errors['description'] && (
+                                        <div className="error-el">
+                                            {props.errors['description']}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <InputSwitcher
