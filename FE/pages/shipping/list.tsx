@@ -111,9 +111,9 @@ export default function List({ locale }: { locale: string }) {
                     <h1>{t('Shipping')}</h1>
                 </div>
                 <div className="text-gray-400">
-                    {t(
-                        'Shipping section allows merchant to manage shipping methods and prices for his shoppers'
-                    )}
+                    {t('setting_shipping')}
+                    <div className="clear-both" />
+                    <span className="italic block mt-2">{t('shipping_contact_us')}</span>
                 </div>
             </div>
 

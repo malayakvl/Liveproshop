@@ -55,7 +55,7 @@ export default function Index() {
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>
                 </div>
-                <div className="text-gray-400">{t('settings_descr')}</div>
+                <div className="text-gray-400">{t('setting_window')}</div>
             </div>
             {showForm && (
                 <div className="mt-10 block-white-8 white-shadow-big">

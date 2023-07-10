@@ -511,5 +511,10 @@
   "text_pricing_2": "Always know what you’ll pay.",
   "text_free": "Try for free!",
   "Family Name": "Family Name",
-  "Download Orders": "Download Orders"
+  "Download Orders": "Download Orders",
+  "settings_theshold": "This is an order price or specific value you set. When the total order amount reaches this value or goes above it, the shipping will be free for the shopper",
+  "setting_window": "A time period during which the shoppers can make as many orders as they want. A shopper will need to pay only for the shipping of the first order. Shipping for all further orders will be free",
+  "setting_shipping": "Allows you to manage shipping methods and prices for your clients. You can manage the list of countries for each of the methods. In order to do this click on the three dots on the right side. You will be redirected to the method editing page where you can add or remove a country. Don't forget to click the  `Save` button.",
+  "shipping_contact_us": "If you need another shipping method, please contact us"
+
 }
