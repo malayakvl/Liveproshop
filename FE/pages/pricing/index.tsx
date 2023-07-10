@@ -43,6 +43,7 @@ const PriceHeading = ({
 }: PriceProps) => {
     const t = useTranslations();
     const user = useSelector(userSelector);
+    const dispatch = useDispatch();
     return (
         <div>
             <div className="w-full h-32 lg:h-[120px] relative mx-auto">
@@ -71,19 +72,45 @@ const PriceHeading = ({
             </div>
             <div className="clear-both" />
             <div className="mt-[0px] mb-[20px] md:mb-auto  md:mx-[12px] md:mt-[20px]">
-                <button
-                    onClick={() => {
-                        if (user?.email) {
-                            Router.push(`/subscription?planId=${planId}`);
-                        } else {
-                            Router.push(`/auth/subscription?planId=${planId}`);
-                        }
-                    }}
-                    className={`${
-                        disabled ? 'disabled-btn' : 'gradient-btn'
-                    } w-full mt-7 md:mt-[40px] justify-self-end gradient-selectur`}>
-                    {t(buttonText)}
-                </button>
+                {planId < 3 && (
+                    <button
+                        onClick={() => {
+                            if (user?.email) {
+                                Router.push(`/subscription?planId=${planId}`);
+                            } else {
+                                Router.push(`/auth/subscription?planId=${planId}`);
+                            }
+                        }}
+                        className={`${
+                            disabled ? 'disabled-btn' : 'gradient-btn'
+                        } w-full mt-7 md:mt-[40px] justify-self-end gradient-selectur`}>
+                        {planId !== 3 ? t(buttonText) : t('Talk to sales')}
+                    </button>
+                )}
+                {planId == 3 && (
+                    <button
+                        onClick={() => {
+                            dispatch(setModalCalendlyMetaAction(true));
+                        }}
+                        className={`${
+                            disabled ? 'disabled-btn' : 'gradient-btn'
+                        } w-full mt-7 md:mt-[40px] justify-self-end gradient-selectur`}>
+                        {planId !== 3 ? t(buttonText) : t('Talk to sales')}
+                    </button>
+                )}
+                {/*<button*/}
+                {/*    onClick={() => {*/}
+                {/*        if (user?.email) {*/}
+                {/*            Router.push(`/subscription?planId=${planId}`);*/}
+                {/*        } else {*/}
+                {/*            Router.push(`/auth/subscription?planId=${planId}`);*/}
+                {/*        }*/}
+                {/*    }}*/}
+                {/*    className={`${*/}
+                {/*        disabled ? 'disabled-btn' : 'gradient-btn'*/}
+                {/*    } w-full mt-7 md:mt-[40px] justify-self-end gradient-selectur`}>*/}
+                {/*    {planId !== 3 ? t(buttonText) : t('Talk to sales')}*/}
+                {/*</button>*/}
             </div>
         </div>
     );
