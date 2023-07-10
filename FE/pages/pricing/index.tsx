@@ -204,10 +204,28 @@ export default function Pricing({ locale }: { locale: any }) {
                                 {t('Pricing that fits your size')}
                             </h1>
                             <div className="text-pricing mt-[10px]">
-                                {t('text_pricing_1')}
-                                <span className="font-bold block mt-[5px]">
-                                    {t('text_pricing_2')}
-                                </span>
+                                {locale == 'fr' && (
+                                    <>
+                                        {t('text_pricing_1')}
+                                        <span className="font-bold">{t('text_pricing_1_1')}</span>
+                                        &nbsp;{t('text_pricing_1_2')}
+                                        <span className="block mt-[5px]">
+                                            {t('text_pricing_2_1')}{' '}
+                                            <span className="font-bold">
+                                                {t('text_pricing_2_2')}
+                                            </span>
+                                            <span>{t('text_pricing_2_3')}</span>
+                                        </span>
+                                    </>
+                                )}
+                                {locale == 'en' && (
+                                    <>
+                                        <span className="block">{t('text_pricing_1')}</span>
+                                        <span className="block font-bold">
+                                            {t('Always know what you’ll pay.')}
+                                        </span>
+                                    </>
+                                )}
                                 <span className="mt-[30px] block">
                                     <Link href={'/'}>
                                         <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block lg:mr-[84px] text-center">
@@ -258,7 +276,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                         desc={t(
                                             'Best for live retailers that are small or starting out'
                                         )}
-                                        sale={5}
+                                        sale={3}
                                         session={session}
                                         buttonText="Select"
                                         imageSrc={'/images/plans/box.svg'}

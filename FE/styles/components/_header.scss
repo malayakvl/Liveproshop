@@ -24,7 +24,7 @@
 .app-logo-unreg {
   display: inherit;
   top: 6px;
-  left: calc(50% - 90px);
+  left: calc(50% - 120px);
 
   @apply md:top-[15px] md:left-auto md:ml-[40px] xl:ml-0;
 }
@@ -57,7 +57,7 @@
 }
 
 .logout-btn {
-  @apply absolute right-[16px] md:right-0 md:mt-[4px];
+  @apply absolute right-[16px] top-0 md:right-0 md:mt-[0px] min-w-[100px];
 }
 
 .text-menu {
@@ -92,7 +92,7 @@
   @apply absolute top-[16px] md:top-[20px];
 }
 .login-btn-layout {
-  @apply absolute top-[0px] md:top-[14px] xl:right-[16px] w-[98px];
+  @apply absolute sm:top-[5px] md:top-[14px] xl:right-[16px] w-[98px];
 }
 
 .layout-header {

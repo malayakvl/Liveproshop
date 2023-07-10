@@ -258,7 +258,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                 <Link href={'/auth/signin'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
-                                        className="disabled-btn-small"
+                                        className="sm:float-right disabled-btn-small login-white-btn"
                                         href="javascript:void(0)"
                                         title={t('Login')}>
                                         {t('Login')}

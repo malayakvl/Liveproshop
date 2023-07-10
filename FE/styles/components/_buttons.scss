@@ -7,8 +7,12 @@
   @apply basic-btn red-yellow-gradient font-bold text-sm text-white rounded-lg px-2 py-1.5
 }
 .disabled-btn-small {
-  box-shadow: 0px 15px 10px -15px #9f9797;
-  @apply basic-btn border-2 border-gray-300 text-gray-600 px-2 py-1.5
+  box-shadow: 0 15px 10px -15px #9f9797;
+  @apply sm:float-right sm:pt-[4px] basic-btn border-2 border-gray-300 text-gray-600 px-2 py-1.5
+}
+.login-white-btn {
+  min-width: 100px;
+  display: inline-block;
 }
 
 
