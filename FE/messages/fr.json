@@ -514,7 +514,8 @@
   "setting_window": "Période pendant laquelle les acheteurs peuvent effectuer autant de commandes qu'ils le souhaitent. L'acheteur ne devra payer que les frais d'expédition de sa première commande. L'expédition de toutes les commandes suivantes sera gratuite",
   "setting_shipping": "Gérer les méthodes d'expédition et les prix pour vos clients pour chaque pays. Pour ce faire, cliquez sur les trois points situés à droite. Vous serez redirigé vers la page où vous pourrez ajouter ou supprimer un pays. N'oubliez pas de cliquer sur le bouton `Enregistrer`",
   "shipping_contact_us": "Si vous souhaitez ajouter une autre méthode d'expédition à votre business, veuillez nous contacter",
-  "month": "mois"
+  "month": "mois",
+  "of sale": "de vente"
 
 
 

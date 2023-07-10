@@ -62,7 +62,11 @@ const PriceHeading = ({
                 <div className="clear-both" />
             </div>
             <div className="block h-[15px] mt-[-20px] float-left discount-text">
-                {sale > 0 && <div className="price-percent">{sale}% of sale</div>}
+                {sale > 0 && (
+                    <div className="price-percent">
+                        {sale}% {t('of sale')}
+                    </div>
+                )}
                 {sale == 0 && <div className="price-percent" />}
             </div>
             <div className="clear-both" />
@@ -140,7 +144,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                 className={`w-full font-semibold text-[14px] pr-4 leading-[24px] text-left text-gray-[350] tick-bg ${
                                     _data.values[planId].value ? 'active' : ''
                                 }`}>
-                                {_data.option.name}
+                                {t(_data.option.name)}
                             </span>
                             {_data.values[planId].value && (
                                 <div className="tick-block">
@@ -175,7 +179,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         <div className="option-row">
                             <div className="option-value">
                                 {/*{parseTranslation(data.option, 'name', locale)}*/}
-                                {t(data.option.name)}
+                                {t(data.option.name)}!
                             </div>
                         </div>
                     </Fragment>
@@ -269,7 +273,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                 </Fragment>
                             </div>
                             {/*SECOND PLAN OPTIONS*/}
-                            <div className="md:w-[25%]  gradient-block">
+                            <div className="md:w-[25%]  gradient-block ">
                                 <div className="block-fixed-height-heading">
                                     <PriceHeading
                                         planId={2}

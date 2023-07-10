@@ -276,5 +276,12 @@
   font-size: 18px !important;
 }
 
+.menu-text-toogle {
+  @media only screen and (max-width: 360px) {
+    padding-top:100px;
+    text-align: right;
+  }
+}
+
 //document.getElementById('sidenav-2').classList.remove('left-slide-close');
 //document.getElementById('sidenav-2').classList.add('left-side-open');

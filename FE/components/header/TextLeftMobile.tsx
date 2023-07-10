@@ -104,7 +104,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                         </button>
                     </Link>
                 </div>
-                <div className="sm:text-[16px]">
+                <div className="menu-text-toogle sm:text-[16px]">
                     <ul>
                         <li>
                             <Link href={'/features'}>
