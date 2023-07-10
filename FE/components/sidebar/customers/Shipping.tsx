@@ -65,7 +65,7 @@ const SidebarShipping = function () {
                     <a>
                         <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
                         <span className="s-caption" style={{ whiteSpace: 'normal' }}>
-                            {t('Free shipping window')}
+                            {t('Free Shipping Window')}
                         </span>
                     </a>
                 </Link>

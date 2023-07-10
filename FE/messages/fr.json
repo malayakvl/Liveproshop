@@ -252,7 +252,7 @@
   "Period": "Période",
   "Shipping section allows merchant to manage shipping methods and prices for his shoppers": "La section `Livraison` vous permet de gérer les modes et les prix de livraison pour vos clients",
   "Free shipping": "Livraion gratuite",
-  "Shipping methods": "Modes de livraison",
+  "Shipping methods": "Méthode d’expédition",
   "Empty": "Vide",
   "Shipping Method": "Mode de livraison",
   "shipping_threshold": "Définissez un seuil de livraion gratuite. Si la commande a atteint ce montant, l'expédition est gratuite pour cet acheteur",
@@ -523,8 +523,4 @@
   "Knowlage Center": "Centre de connaissances",
   "We send you confirmation link, please check your mailbox": "Nous vous envoyons un lien de confirmation, veuillez vérifier votre boîte aux lettres",
   "You can cancel at any time before to avoid the charge": "Vous pouvez annuler à tout moment avant la date prévue"
-
-
-
-
 }
