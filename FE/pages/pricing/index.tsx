@@ -61,11 +61,12 @@ const PriceHeading = ({
                 <div className="inline-block align-middle per-month">euros / month</div>
                 <div className="clear-both" />
             </div>
-            <div className="block h-[15px]">
+            <div className="block h-[15px] mt-[-20px] float-left discount-text">
                 {sale > 0 && <div className="price-percent">{sale}% of sale</div>}
                 {sale == 0 && <div className="price-percent" />}
             </div>
-            <div className="mt-[-40px] mb-[20px] md:mb-auto md:mt-auto md:mx-[12px]">
+            <div className="clear-both" />
+            <div className="mt-[0px] mb-[20px] md:mb-auto  md:mx-[12px] md:mt-[20px]">
                 <button
                     onClick={() => {
                         if (user?.email) {
