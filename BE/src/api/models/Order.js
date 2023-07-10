@@ -387,6 +387,7 @@ class Order {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
+            console.log("BYERS", _filters.shopper_id)
 
             switch (user.role_id) {
                 case UserRole.ADMIN:
@@ -410,6 +411,8 @@ class Order {
                 }
             }
 
+            _filters.buyer_id = _filters.shopper_id;
+
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
@@ -425,7 +428,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            // console.log(ordersQuery);
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -487,6 +490,20 @@ class Order {
             const amounts = await client.query(`SELECT * FROM data.get_orders_total_amount_range('${JSON.stringify(_filters)}');`);
             res.amounts = amounts.rows[0].total_amount_range.max ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
             const error = null;
+            const _filterBuyers = {};
+            if (user.role_id === 2) {
+                // sellerIds.push(user.id);
+                _filterBuyers.seller_id = [user.id];
+                if (_filterBuyers.userIds) {
+                    _filterBuyers.buyer_id = _filters.userIds;
+                    delete _filterBuyers.userIds;
+                }
+            }
+            // const buyersQuery = `SELECT * FROM data.get_buyers(10000, 0, '${JSON.stringify(_filterBuyers)}', '${column} ${sort}');`;
+
+            const ordersQueryBuyers = await client.query(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`); // 'orders.created_at DESC'
+            res.buyers =  ordersQueryBuyers.rows;
+            // res.shoppers = await client.query(`SELECT * FROM data.orders WHERE ('${JSON.stringify(_filters)}');`);
 
             return {
                 res,
