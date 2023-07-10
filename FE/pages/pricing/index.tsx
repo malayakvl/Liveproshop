@@ -81,7 +81,7 @@ const PriceHeading = ({
                     }}
                     className={`${
                         disabled ? 'disabled-btn' : 'gradient-btn'
-                    } w-full mt-7 justify-self-end`}>
+                    } w-full mt-7 md:mt-[40px] justify-self-end gradient-selectur`}>
                     {t(buttonText)}
                 </button>
             </div>
@@ -273,7 +273,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                 </Fragment>
                             </div>
                             {/*SECOND PLAN OPTIONS*/}
-                            <div className="md:w-[25%]  gradient-block ">
+                            <div className="md:w-[25%]  gradient-block border-gradient-purple">
                                 <div className="block-fixed-height-heading">
                                     <PriceHeading
                                         planId={2}
