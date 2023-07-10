@@ -255,7 +255,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                     </>
                                 )}
                                 <span className="mt-[30px] block">
-                                    <Link href={'/'}>
+                                    <Link href={'/auth/signup'}>
                                         <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block lg:mr-[84px] text-center">
                                             <span className="text-[20px] inline-block min-w-[220px] text-center">
                                                 {t('text_free')}
