@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
     PaymentInfo,
     ListProductsBought,
@@ -53,7 +54,14 @@ export default function Payments({ session, locale }: { session: any; locale: st
             <div className="block-white-8 white-shadow-medium mt-8 flex max-w-screen-xl">
                 <div className="flex flex-col w-full">
                     <div className="md:flex justify-between mb-8 font-bold text-gray-350 text-lg py-4 border-b border-gray-200">
-                        {t('Transaction details')}
+                        <div>
+                            <div className="float-left mr-2">
+                                <Link href={`/payments`}>
+                                    <a className="view-back">{t('Back')}</a>
+                                </Link>
+                            </div>
+                            <div className="float-left">{t('Transaction details')}</div>
+                        </div>
 
                         {/*<a*/}
                         {/*    href={`/api/download-invoice/${orderNumber}?lang=${locale}`}*/}
