@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl';
 import { requestDemoAction } from '../../redux/paymentPlans';
 import { useDispatch } from 'react-redux';
 import { setModalCalendlyMetaAction } from '../../redux/layouts';
+import Try from '../../components/try';
 
 export default function Index({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -40,15 +41,24 @@ export default function Index({ locale }: { locale: string }) {
             <div className="main-layout">
                 <Faq locale={locale} />
                 {/*FORM BLOCK*/}
+                <div className="clear-both" />
                 <div className="text-gray-350 mx-auto border-red-900">
                     <div className="clear-both" />
-                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
-                        {t('Try it for free today!')}
-                    </h3>
-                    <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
-                        {t('It only takes 30 seconds to get started')}.
-                    </h4>
-                    <div className="w-full mt-[40px] text-center mb-[100px]">
+                    {/*<h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">*/}
+                    {/*    {t('Try it for free today!')}*/}
+                    {/*</h3>*/}
+                    {/*=======================================================*/}
+                    {/*====================== TRY FOR TODAY ==================*/}
+                    {/*=======================================================*/}
+
+                    <div className="mt-[100px] lg:mt-[50px]">
+                        <Try />
+                    </div>
+                    {/*<h4 className="hidden text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">*/}
+                    {/*    {t('It only takes 30 seconds to get started')}.*/}
+                    {/*</h4>*/}
+
+                    <div className="w-full mt-[40px] text-center mb-[100px] hidden">
                         <Link href={'/auth/signup'}>
                             <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
                                 <span className="text-[20px] inline-block min-w-[220px]">

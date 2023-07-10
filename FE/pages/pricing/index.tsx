@@ -16,6 +16,7 @@ import FullLayout from '../../components/layout/FullLayout';
 import { InputText } from '../../components/_form';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import Try from '../../components/try';
 
 type PriceProps = {
     planId: number;
@@ -381,25 +382,31 @@ export default function Pricing({ locale }: { locale: any }) {
                     <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
                         {t('It only takes 30 seconds to get started')}.
                     </h4>
-                    <div className="w-full mt-[40px] text-center mb-[100px]">
-                        <Link href={'/auth/signup'}>
-                            <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
-                                    {t('Register now!')}
-                                </span>
-                            </a>
-                        </Link>
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                        <a
-                            onClick={() => {
-                                dispatch(setModalCalendlyMetaAction(true));
-                            }}
-                            className="w-full inline-block cursor-pointer btn-big text-center md:w-auto md:inline-block md:ml-[75px]">
-                            <span className="text-[16px] md:text-[20px]">
-                                {t('Request a seles call')}
-                            </span>
-                        </a>
+                    {/*=======================================================*/}
+                    {/*====================== TRY FOR TODAY ==================*/}
+                    {/*=======================================================*/}
+                    <div className="try-features lg:mt-[-100px]">
+                        <Try />
                     </div>
+                    {/*<div className="w-full mt-[40px] text-center mb-[100px] hidden">*/}
+                    {/*    <Link href={'/auth/signup'}>*/}
+                    {/*        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">*/}
+                    {/*            <span className="text-[16px] inline-block min-w-[220px]">*/}
+                    {/*                {t('Register now!')}*/}
+                    {/*            </span>*/}
+                    {/*        </a>*/}
+                    {/*    </Link>*/}
+                    {/*    /!* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions *!/*/}
+                    {/*    <a*/}
+                    {/*        onClick={() => {*/}
+                    {/*            dispatch(setModalCalendlyMetaAction(true));*/}
+                    {/*        }}*/}
+                    {/*        className="w-full inline-block cursor-pointer btn-big text-center md:w-auto md:inline-block md:ml-[75px]">*/}
+                    {/*        <span className="text-[16px] md:text-[20px]">*/}
+                    {/*            {t('Request a seles call')}*/}
+                    {/*        </span>*/}
+                    {/*    </a>*/}
+                    {/*</div>*/}
 
                     {success ? (
                         <div className="mt-8 mb-16 font-bold text-2xl text-center text-green-500 hidden">
