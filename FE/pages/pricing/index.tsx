@@ -58,7 +58,7 @@ const PriceHeading = ({
             <div className="md:h-[100px] lg:h-[55px] price-description">{desc}</div>
             <div className="flex md:h-[40px] text-center">
                 <div className="price-plan md:w-[40%]">{price}</div>
-                <div className="inline-block align-middle per-month">euros / month</div>
+                <div className="inline-block align-middle per-month">euros / {t('month')}</div>
                 <div className="clear-both" />
             </div>
             <div className="block h-[15px] mt-[-20px] float-left discount-text">
@@ -137,7 +137,7 @@ export default function Pricing({ locale }: { locale: any }) {
                     <Fragment key={`tick_${Math.random()}`}>
                         <div className="option-row relative">
                             <span
-                                className={`w-full font-semibold text-[14px] leading-[24px] text-left text-gray-[350] tick-bg ${
+                                className={`w-full font-semibold text-[14px] pr-4 leading-[24px] text-left text-gray-[350] tick-bg ${
                                     _data.values[planId].value ? 'active' : ''
                                 }`}>
                                 {_data.option.name}
