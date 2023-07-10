@@ -376,16 +376,16 @@ export default function Pricing({ locale }: { locale: any }) {
                 {/*FORM BLOCK*/}
                 <div className="text-gray-350 mx-auto border-red-900">
                     <div className="clear-both" />
-                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
+                    <h3 className="hidden red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
                         {t('Try it for free today!')}
                     </h3>
-                    <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
+                    <h4 className="hidden text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
                         {t('It only takes 30 seconds to get started')}.
                     </h4>
                     {/*=======================================================*/}
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
-                    <div className="try-features lg:mt-[-100px]">
+                    <div className="lg:mt-[100px]">
                         <Try />
                     </div>
                     {/*<div className="w-full mt-[40px] text-center mb-[100px] hidden">*/}
