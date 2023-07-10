@@ -38,6 +38,7 @@ export default function FullLayout({ children }: { children: any }) {
                     router.pathname == '/plans' ||
                     router.pathname == '/customer-story' ||
                     router.pathname == '/features' ||
+                    router.pathname == '/case-studies' ||
                     router.pathname == '/faq' ||
                     router.pathname == '/about-us' ||
                     router.pathname == '/terms-and-conditions' ||

@@ -69,6 +69,9 @@ export default function Signup({ locale }: { locale: string }) {
                                 <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>
+                                <div className="mb-6 text-sm line-height-105percent text-gray-600 italic">
+                                    {t('You can cancel at any time before to avoid the charge')}
+                                </div>
 
                                 <div className="font-normal mb-6 text-blue-350 hidden">
                                     {t('registr_descr_small')}

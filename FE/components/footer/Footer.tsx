@@ -36,13 +36,15 @@ export default function Footer() {
                             <div>
                                 <div className="mb-2 font-bold text-white">{t('Resources')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/customer-story'}>{t('Customer stories')}</Link>
+                                    <Link href={'/case-studies'}>{t('Case Studies')}</Link>
                                 </div>
                                 <div className="uppercase mb-0.5">
                                     <Link href={'/faq'}>{t('Faq')}</Link>
                                 </div>
                                 <div className="mb-0.5">
-                                    <Link href={'/full-guide/livesession'}>{t('Guide')}</Link>
+                                    <Link href={'/full-guide/livesession'}>
+                                        {t('Knowlage Center')}
+                                    </Link>
                                 </div>
                                 {/*<div>*/}
                                 {/*    <InlineWidget url="https://calendly.com/victoriya-korogod/test" />*/}

@@ -176,12 +176,12 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link href={'/#'}>
+                                        <Link href={'/case-studies'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
                                                 href="javascript:void(0)"
                                                 className={`m-2 ${
-                                                    router.pathname === '/case'
+                                                    router.pathname === '/case-studies'
                                                         ? 'text-purple-400'
                                                         : ''
                                                 } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>
@@ -257,14 +257,18 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             <span className="logout-btn login-btn-layout">
                                 <Link href={'/auth/signin'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a href="javascript:void(0)" title={t('Login')}>
-                                        <Image
-                                            className="mr-5"
-                                            src="/images/login-icon.svg"
-                                            width={24}
-                                            height={40}
-                                            alt={t('Logout')}
-                                        />
+                                    <a
+                                        className="disabled-btn-small"
+                                        href="javascript:void(0)"
+                                        title={t('Login')}>
+                                        {t('Login')}
+                                        {/*<Image*/}
+                                        {/*    className="mr-5"*/}
+                                        {/*    src="/images/login-icon.svg"*/}
+                                        {/*    width={24}*/}
+                                        {/*    height={40}*/}
+                                        {/*    alt={t('Logout')}*/}
+                                        {/*/>*/}
                                     </a>
                                 </Link>
                             </span>

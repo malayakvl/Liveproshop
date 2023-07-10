@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { useDispatch } from 'react-redux';
 import { setModalCalendlyMetaAction } from '../../redux/layouts';
 
-function Faq() {
+function Faq({ locale }: { locale: string }) {
     const t = useTranslations();
     const [showMoreAnswer, setShowMoreAnswer] = useState<any>({});
     const dispatch = useDispatch();
@@ -14,7 +14,6 @@ function Faq() {
         nextCheckedItems[num] = !nextCheckedItems[num];
         setShowMoreAnswer(nextCheckedItems);
     };
-
     return (
         <>
             <div className="flex mt-[-30px]">
@@ -54,18 +53,24 @@ function Faq() {
                                             __html: t(`arrayOfObjects.${i}.answer`, {
                                                 linkTariffs:
                                                     "<a class='text-red-800' target='_blank' href='" +
-                                                    process.env.API_SITE_URL +
-                                                    "/pricing'>",
+                                                    (locale != 'fr'
+                                                        ? '/' + locale + '/pricing'
+                                                        : '/pricing') +
+                                                    "'>",
                                                 endLinkTariffs: '</a>',
                                                 linkSignup:
                                                     "<a class='text-red-800' target='_blank' href='" +
-                                                    process.env.API_SITE_URL +
-                                                    "/auth/signup'>",
+                                                    (locale != 'fr'
+                                                        ? '/' + locale + '/auth/signup'
+                                                        : '/auth/signup') +
+                                                    "'>",
                                                 endLinkSignup: '</a>',
                                                 linkGuide:
                                                     "<a class='text-red-800' target='_blank' href='" +
-                                                    process.env.API_SITE_URL +
-                                                    "/guide'>",
+                                                    (locale != 'fr'
+                                                        ? '/' + locale + '/full-guide'
+                                                        : '/full-guide') +
+                                                    "'>",
                                                 endLinkGuide: '</a>'
                                             })
                                         }}

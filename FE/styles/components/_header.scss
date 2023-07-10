@@ -92,7 +92,7 @@
   @apply absolute top-[16px] md:top-[20px];
 }
 .login-btn-layout {
-  @apply absolute top-[0px] md:top-[8px] xl:right-[16px];
+  @apply absolute top-[0px] md:top-[14px] xl:right-[16px] w-[98px];
 }
 
 .layout-header {
@@ -107,10 +107,10 @@
   @apply absolute top-[12px] right-[70px] md:right-[50px] md:top-[-80px] md:mt-0 md:sticky;
 }
 .unlogged-block {
-  @apply md:w-[380px] md:float-right md:mt-0;
+  @apply md:w-[435px] md:float-right md:mt-0;
 
   .language-block {
-    @apply top-[5px] md:top-0 md:left-auto md:float-right md:right-0 md:mr-[60px] md:mt-[20px];
+    @apply top-[5px] md:top-0 md:left-auto md:float-right md:right-0 md:mr-[117px] md:mt-[20px];
   }
 
   .btn-langs {

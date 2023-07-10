@@ -60,7 +60,7 @@
   "You must enter your address": "Vous devez entrer votre adresse",
   "You must enter your phone number": "Vous devez entrer votre téléphone",
   "Confirm terms": "Veuillez accepter les conditions",
-  "Email present": "Email present",
+  "Email present": "L'email existe déjà",
   "Page not found": "Page non trouvée",
   "we are sorry, but the page you requested was not found": "nous sommes désolés, mais la page demandée n'a pas été trouvée",
   "Go to Home": "Retour à l'accueil",
@@ -515,7 +515,10 @@
   "setting_shipping": "Gérer les méthodes d'expédition et les prix pour vos clients pour chaque pays. Pour ce faire, cliquez sur les trois points situés à droite. Vous serez redirigé vers la page où vous pourrez ajouter ou supprimer un pays. N'oubliez pas de cliquer sur le bouton `Enregistrer`",
   "shipping_contact_us": "Si vous souhaitez ajouter une autre méthode d'expédition à votre business, veuillez nous contacter",
   "month": "mois",
-  "of sale": "de vente"
+  "of sale": "de vente",
+  "Knowlage Center": "Centre de connaissances",
+  "We send you confirmation link, please check your mailbox": "Nous vous envoyons un lien de confirmation, veuillez vérifier votre boîte aux lettres",
+  "You can cancel at any time before to avoid the charge": "Vous pouvez annuler à tout moment avant la date prévue"
 
 
 

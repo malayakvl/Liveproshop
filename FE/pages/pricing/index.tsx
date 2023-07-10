@@ -7,7 +7,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clientSecretSelector, userSelector } from '../../redux/user/selectors';
 import { session } from 'next-auth/client';
-import { showLoaderAction } from '../../redux/layouts/actions';
+import { setModalCalendlyMetaAction, showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction, requestDemoAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 // import { formatCurrency, parseTranslation } from '../../lib/functions';
@@ -337,20 +337,23 @@ export default function Pricing({ locale }: { locale: any }) {
                         {t('It only takes 30 seconds to get started')}.
                     </h4>
                     <div className="w-full mt-[40px] text-center mb-[100px]">
-                        <Link href={'/'}>
+                        <Link href={'/auth/signup'}>
                             <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
                                 <span className="text-[20px] inline-block min-w-[220px]">
                                     {t('Register now!')}
                                 </span>
                             </a>
                         </Link>
-                        <Link href={'/'}>
-                            <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
-                                    {t('I want to know more!')}
-                                </span>
-                            </a>
-                        </Link>
+                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                        <a
+                            onClick={() => {
+                                dispatch(setModalCalendlyMetaAction(true));
+                            }}
+                            className="cursor-pointer btn-big text-center md:inline-block md:ml-[75px]">
+                            <span className="text-[16px] md:text-[20px]">
+                                {t('Request a seles call')}
+                            </span>
+                        </a>
                     </div>
 
                     {success ? (

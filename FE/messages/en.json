@@ -60,7 +60,7 @@
   "You must enter your address": "You must enter your address",
   "You must enter your phone number": "You must enter your phone number",
   "Confirm terms": "Confirm terms",
-  "Email present": "Email present",
+  "Email present": "Email already exists",
   "Page not found": "Page not found",
   "we are sorry, but the page you requested was not found": "we are sorry, but the page you requested was not found",
   "Go to Home": "Go to Home",
@@ -517,6 +517,9 @@
   "setting_shipping": "Allows you to manage shipping methods and prices for your clients. You can manage the list of countries for each of the methods. In order to do this click on the three dots on the right side. You will be redirected to the method editing page where you can add or remove a country. Don't forget to click the  `Save` button.",
   "shipping_contact_us": "If you need another shipping method, please contact us",
   "month": "month",
-  "of sale": "of sale"
+  "of sale": "of sale",
+  "Knowlage Center": "Knowlage Center",
+  "We send you confirmation link, please check your mailbox": "We send you confirmation link, please check your mailbox",
+  "You can cancel at any time before to avoid the charge": "You can cancel at any time before to avoid the charge"
 
 }
