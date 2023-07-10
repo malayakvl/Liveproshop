@@ -17,7 +17,8 @@ import {
     showLoaderAction,
     setActivePageAction,
     setSwitchToggleAction,
-    sidebarCloseAction
+    sidebarCloseAction,
+    toggleTextingMenuAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 
@@ -129,7 +130,8 @@ const initialState: State.Layouts = {
     modalCalendlyMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
-    }
+    },
+    showTextingMenu: false
 };
 
 // ------------------------------------
@@ -278,7 +280,14 @@ const ACTION_HANDLERS: any = {
         modalCalendlyMeta: action.payload && {
             ...action.payload
         }
-    })
+    }),
+    [toggleTextingMenuAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            showTextingMenu: action.payload
+        })
+    },
+
 };
 
 export {
@@ -296,7 +305,8 @@ export {
     setModalConfirmationMetaAction,
     setModalCalendlyMetaAction,
     setSwitchToggleAction,
-    sidebarCloseAction
+    sidebarCloseAction,
+    toggleTextingMenuAction
 };
 
 // ------------------------------------

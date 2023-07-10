@@ -25,6 +25,7 @@ declare namespace Layouts {
         activeTab: {
             inventory: TabTypes;
         };
+        showTextingMenu: boolean;
     }
 
     interface TabTypes {

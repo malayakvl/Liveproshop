@@ -9,6 +9,8 @@ import { userSelector } from '../../redux/user/selectors';
 import { useTranslations } from 'next-intl';
 import { baseApiUrl } from '../../constants';
 import LangSwitcherInline from '../lang/SwitcherInline';
+import { toggleTextingMenuAction } from '../../redux/layouts';
+import { isSTextingMenuOpenSelector } from '../../redux/layouts/selectors';
 // import LangSwitcher from '../lang/Switcher';
 // import LoggedRight from "./LoggedRight";
 
@@ -23,6 +25,7 @@ interface Props {
 const TextLeftMobile: React.FC<Props> = (type) => {
     const t = useTranslations();
     const user = useSelector(userSelector);
+    const isTextMenuOpen = useSelector(isSTextingMenuOpenSelector);
     const dispatch = useDispatch();
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const [userPhoto, setUserPhoto] = useState(userProfileImg);
@@ -94,7 +97,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
             <nav
                 id="sidenav-right"
                 className={`right-side ${
-                    type.visible ? 'right-side-open' : 'right-side-close'
+                    isTextMenuOpen ? 'right-side-open' : 'right-side-close'
                 } fixed left-0 top-0 z-[1035] h-screen overflow-hidden`}>
                 <div className="float-right">
                     <LangSwitcherInline />
@@ -110,6 +113,9 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                             <Link href={'/features'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
+                                    onClick={() => {
+                                        dispatch(toggleTextingMenuAction(false));
+                                    }}
                                     href="javascript:void(0)"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Features')}
@@ -120,6 +126,9 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                             <Link href={'/pricing'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
+                                    onClick={() => {
+                                        dispatch(toggleTextingMenuAction(false));
+                                    }}
                                     href="javascript:void(0)"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Pricing')}
@@ -130,6 +139,9 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                             <Link href={'/customer-story'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
+                                    onClick={() => {
+                                        dispatch(toggleTextingMenuAction(false));
+                                    }}
                                     href="javascript:void(0)"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Case Studies')}
@@ -140,6 +152,9 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                             <Link href={'/faq'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
+                                    onClick={() => {
+                                        dispatch(toggleTextingMenuAction(false));
+                                    }}
                                     href="javascript:void(0)"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('FAQ')}

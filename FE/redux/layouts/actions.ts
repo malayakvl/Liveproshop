@@ -43,3 +43,5 @@ export const setModalConfirmationMetaAction: any = createAction(
     'layouts/SET_MODAL_DELETE_CONFIRMATION'
 );
 export const setModalCalendlyMetaAction: any = createAction('layouts/SET_MODAL_CALENDLY');
+export const toggleTextingMenuAction: any = createAction('layouts/TOGGLE_TEXTING_MENU');
+
