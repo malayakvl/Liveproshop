@@ -26305,3 +26305,13 @@
   level: 'info',
   timestamp: '2023-07-10T22:59:53.587Z'
 }
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-10T23:44:28.864Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-10T23:44:28.867Z'
+}
