@@ -8,12 +8,15 @@ import { signIn } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import { Formik, Field } from 'formik';
 import Head from 'next/head';
+import { useDispatch, useSelector } from 'react-redux';
 import { accountService } from '../../_services';
 import React from 'react';
+import { hideRegisterFormAction } from '../../redux/user';
 
 function Signin({ locale }: { locale: string }) {
     const t = useTranslations();
     const { query } = useRouter();
+    const dispatch = useDispatch();
 
     const SubmitSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
@@ -130,7 +133,10 @@ function Signin({ locale }: { locale: string }) {
                     <div className="mt-3 border-t text-center text-sm">
                         <div className="mb-2 pt-1">
                             <Link href={'/auth/signup'}>
-                                <a className="red-yellow-gradient-text font-bold">
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                <a
+                                    onClick={() => dispatch(hideRegisterFormAction(false))}
+                                    className="red-yellow-gradient-text font-bold">
                                     {t('Don’t have an account?')} {t('Sign up here!')}
                                 </a>
                             </Link>
