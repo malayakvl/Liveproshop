@@ -223,7 +223,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                                         ? 'text-purple-400'
                                                         : ''
                                                 } cursor-pointer hover:text-purple-400 drop-top-menu-item`}>
-                                                {t('Contact Us')}
+                                                !!!{t('Contact Us')}
                                             </a>
                                         </Link>
                                     </li>

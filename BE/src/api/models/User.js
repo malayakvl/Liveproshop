@@ -3,10 +3,11 @@ import jwt from 'jsonwebtoken';
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
-import moment from "moment";
+// import moment, {now} from "moment";
 import paymentPlanModel from "./PaymentPlan.js";
 import { confirmSubscriptionEmail, confirmSubscriptionPaymentEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
+import moment from 'moment';
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -40,21 +41,71 @@ class User {
                             //                         '${JSON.stringify({subscription_id: subscription.id})}'
                             //                     );`);
                             if (subscription.current_period_end > moment().unix()) {
-                                res1.rows[0].fields_json.subscription_expired = true;
+                                // res1.rows[0].fields_json.subscription_expired = true;
+                                res1.rows[0].fields_json.subscription_expired = false;
                             }
                         } catch (e) {
-                            res1.rows[0].fields_json.subscription_expired = true;
+                            // res1.rows[0].fields_json.subscription_expired = true;
+                            res1.rows[0].fields_json.subscription_expired = false;
+                            if (!res1.rows[0].fields_json.is_trial) {
+                                // const dbSubscription = {
+                                //     user_id: res1.rows[0].fields_json.id,
+                                //     plan_id: 1,
+                                //     customer_id: paymentIntentResult.customer,
+                                //     subscription_id: subscription.id,
+                                //     status: 'trialing',
+                                //     period_start: Date.now(),
+                                //     period_end: Date.now(),
+                                //     is_trial: type === 'trial'
+                                // }
+                                // const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                                // await client.query(_querySubscription);
+
+//                                 await client.query(`INSERT INTO data.subscription (user_id, plan_id, customer_id, subscription_id, status, period_start) VALUES (${user.id}, 1, '${Date.now().toString()}', 'trialimg', now())`);
+// comsole.log(`INSERT INTO data.subscription (user_id, plan_id, customer_id, subscription_id, status, period_start) VALUES (${user.id}, 1, '${Date.now().toString()}', 'trialimg', Date.now())`);
+
+                                // const querySubscription = "INSERT INTO data.sucscription SET use"
+                            }
+                            res1.rows[0].fields_json.is_trial = true;
                         }
                     } else {
+                        const dateNow = Date.now();
+                        const date = new Date();
+                        const startPeriod = new Date(Date.now());
+                        // console.log(date.setMonth(date.getMonth() + 1));
+                        // console.log(dateNow.setMonth(dateNow.getMonth() + 1));
+                        // console.log(res1.rows[0].fields_json.id);
+                        const str = '2023-07-11';
+                        const date1 = new Date(str);
+                        const timestampStart = date.getTime();
+
+                        const dbSubscription = {
+                            user_id: res1.rows[0].fields_json.id,
+                            plan_id: 1,
+                            customer_id: Date.now().toString(),
+                            subscription_id: 1,
+                            status: 'trialing',
+                            // period_start: '2023-07-11 04:33:21.000000',
+                            // period_end: '2023-08-11 04:33:21.000000',
+                            period_start: timestampStart,
+                            period_end: timestampStart,
+                            is_trial: true
+                        }
+                        const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                        // await client.query(_querySubscription);
                         if (!['active', 'trialing', 'cancel_at_period_end'].includes(res1.rows[0].fields_json.status)) {
-                            res1.rows[0].fields_json.subscription_expired = true;
+                            // res1.rows[0].fields_json.subscription_expired = true;
+                            res1.rows[0].fields_json.subscription_expired = false;
                         }
                     }
                 } else {
+                    console.log("here");
                     res1.rows[0].fields_json.subscription_expired = false;
                 }
+                res1.rows[0].fields_json.is_trial = true;
                 delete res1.rows[0].fields_json.auth_provider_name;
                 delete res1.rows[0].fields_json.auth_provider_id;
+
                 return res1.rows[0].fields_json;
             } else {
                 return null;

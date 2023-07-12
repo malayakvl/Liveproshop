@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { toggleTextingMenuAction } from '../../redux/layouts';
+import { useDispatch } from 'react-redux';
 
 export default function LangSwitcherInline() {
     const { locale, locales, defaultLocale }: any = useRouter();
     const router = useRouter();
-    const node = useRef<HTMLDivElement>(null);
-
+    // const node = useRef<HTMLDivElement>(null);
+    const dispatch = useDispatch();
     const [showLangMenu, setShowLangMenu] = useState(false);
     const switchLang = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         const { pathname, asPath, query } = router;
@@ -13,6 +15,7 @@ export default function LangSwitcherInline() {
         const _locale: string = target.getAttribute('data-lang') || defaultLocale;
         router.push({ pathname, query }, asPath, { locale: _locale });
         setShowLangMenu(false);
+        dispatch(toggleTextingMenuAction(false));
     };
 
     return (
@@ -24,6 +27,9 @@ export default function LangSwitcherInline() {
                         className={`inline-block font-bold uppercase mr-4 ${
                             _locale == locale ? 'red-yellow-gradient-text' : ''
                         }`}
+                        // onClick={() => {
+                        //     dispatch(toggleTextingMenuAction(true));
+                        // }}
                         role="presentation"
                         key={_locale}
                         data-lang={_locale}

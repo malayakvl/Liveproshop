@@ -229,7 +229,7 @@ function Main() {
                     </div>
                 </div>
             </div>
-            <span className="mt-[120px] block text-[14px] text-blue-350 bg-none md:mt-[140px]  font-bold text-center">
+            <span className="mt-[120px] block text-[14px] md:max-w-[90px] bordered text-blue-350 bg-none md:mt-[140px]  font-bold text-center">
                 {t('Advantages')}
             </span>
             <h3 className="red-yellow-gradient-text text-[24px] leading-[32px] md:text-[60px] font-bold md:leading-[72px] mt-[0px]  mb-[60px] text-center w-full">
@@ -269,7 +269,7 @@ function Main() {
             {/*=================== ROCKET BLOCK ======================*/}
             {/*=======================================================*/}
             <div className="main-big-round-white mt-[80px] lg:mt-[160px] p-[40px] bg-white rocked-lady">
-                <div className="mt-[240px] md:mt-[550px] lg:mt-auto lg:pl-[385px] xl:pl-[535px]">
+                <div className="icon-social-block-content">
                     <span className="font-bold text-blue-350 text-[14px]">{t('Integration')}</span>
                     <h2 className="red-yellow-gradient-text font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] md:mt-[10px]">
                         {t('best_caption')}
@@ -280,51 +280,37 @@ function Main() {
                     <div className="grid gap-[36px] grid-cols-2 xl:grid-cols-8 mt-[40px]">
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-facebook block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
+                            <span className="block text-[14px] md:max-w-[90px] bordered md:text-[13px] text-gray-350 text-center xl:whitespace-nowrap mt-[14px] font-bold">
                                 Facebook
                             </span>
                         </div>
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-insta block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
-                                Instagram
-                            </span>
+                            <span className="social-caption-main">Instagram</span>
                         </div>
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-fb-mess block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
-                                Messenger
-                            </span>
+                            <span className="social-caption-main">Messenger</span>
                         </div>
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-multisafe block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
-                                Multisafe Pay
-                            </span>
+                            <span className="social-caption-main">Multisafe Pay</span>
                         </div>
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-shopify block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
-                                Shopify
-                            </span>
+                            <span className="social-caption-main">Shopify</span>
                         </div>
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-presta block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
-                                Prestashop
-                            </span>
+                            <span className="social-caption-main">Prestashop</span>
                         </div>
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-stripe block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
-                                Stripe
-                            </span>
+                            <span className="social-caption-main">Stripe</span>
                         </div>
                         <div className="mx-auto min-w-[95px]">
                             <span className="icon-socail-line icon-paypal block" />
-                            <span className="block text-[14px] md:text-[13px] text-gray-350 text-center whitespace-nowrap mt-[14px] font-bold">
-                                Paypal
-                            </span>
+                            <span className="social-caption-main">Paypal</span>
                         </div>
                     </div>
                 </div>

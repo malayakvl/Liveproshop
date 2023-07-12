@@ -1,11 +1,11 @@
 import { SidebarCustomer, SidebarBuyer, SidebarAdmin } from '../sidebar/index';
 import SidebarHeader from '../header/SidebarHeader';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
 import { toggleSidebarAction } from '../../redux/layouts';
-import Router from 'next/router';
+// import Router from 'next/router';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
@@ -13,15 +13,15 @@ export default function SidebarLayout({ children }: { children: any }) {
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
-    useEffect(() => {
-        if (user.subscription_expired) {
-            if (user.status === 'incomplete') {
-                Router.push(`/subscription?planId=${user.plan_id}`);
-            } else {
-                Router.push(`/pricing`);
-            }
-        }
-    }, [user?.email]);
+    // useEffect(() => {
+    //     if (user.subscription_expired) {
+    //         if (user.status === 'incomplete') {
+    //             Router.push(`/subscription?planId=${user.plan_id}`);
+    //         } else {
+    //             Router.push(`/pricing`);
+    //         }
+    //     }
+    // }, [user?.email]);
 
     return (
         <div className="relative min-h-screen">

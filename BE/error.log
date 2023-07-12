@@ -2541,3 +2541,148 @@
   level: 'error',
   timestamp: '2023-07-10T22:15:52.199Z'
 }
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-11T01:31:44.445Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-11T01:44:08.226Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: 'dsaddasd'",
+  level: 'error',
+  timestamp: '2023-07-11T02:12:07.999Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'sadsdasd'",
+  level: 'error',
+  timestamp: '2023-07-11T02:12:31.053Z'
+}
+{
+  message: 'Model error: comsole is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:50:24.607Z'
+}
+{
+  message: 'Model error: comsole is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:51:24.779Z'
+}
+{
+  message: 'Model error: comsole is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:52:00.826Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:53:25.098Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:54:03.765Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:56:31.407Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:57:25.321Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T02:58:23.354Z'
+}
+{
+  message: 'Model error: paymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T03:12:55.359Z'
+}
+{
+  message: 'Model error: paymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T03:13:42.949Z'
+}
+{
+  message: 'Model error: type is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T03:14:24.624Z'
+}
+{
+  message: 'Model error: type is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T03:16:10.604Z'
+}
+{
+  message: 'Model error: type is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T03:16:45.177Z'
+}
+{
+  message: 'Model error: type is not defined',
+  level: 'error',
+  timestamp: '2023-07-11T03:17:26.322Z'
+}
+{
+  message: 'Model error: dateNow.getMonth is not a function',
+  level: 'error',
+  timestamp: '2023-07-11T03:28:54.812Z'
+}
+{
+  message: 'Model error: dateNow.getMonth is not a function',
+  level: 'error',
+  timestamp: '2023-07-11T03:30:39.047Z'
+}
+{
+  message: 'Model error: invalid input syntax for type double precision: "2023-07-11 04:33:21.000000"',
+  level: 'error',
+  timestamp: '2023-07-11T03:36:33.582Z'
+}
+{
+  message: 'Model error: invalid input syntax for type double precision: "2023-07-11T03:40:49.377Z"',
+  level: 'error',
+  timestamp: '2023-07-11T03:40:49.400Z'
+}
+{
+  message: 'Model error: invalid input syntax for type double precision: "2023-07-11T03:41:20.184Z"',
+  level: 'error',
+  timestamp: '2023-07-11T03:41:20.187Z'
+}
+{
+  message: 'Model error: invalid input syntax for type double precision: "Tue Jul 11 2023 06:42:17 GMT+0300"',
+  level: 'error',
+  timestamp: '2023-07-11T03:42:17.641Z'
+}
+{
+  message: 'Model error: dateNow.getMonth is not a function',
+  level: 'error',
+  timestamp: '2023-07-11T03:50:36.155Z'
+}
+{
+  message: 'Model error: invalid input syntax for type double precision: "2023-07-11T03:56:21.524Z"',
+  level: 'error',
+  timestamp: '2023-07-11T03:56:21.528Z'
+}
+{
+  message: 'Model error: invalid input syntax for type double precision: "2023-07-11T00:00:00.000Z"',
+  level: 'error',
+  timestamp: '2023-07-11T04:00:41.644Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-11T04:08:30.476Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-11T04:33:06.934Z'
+}

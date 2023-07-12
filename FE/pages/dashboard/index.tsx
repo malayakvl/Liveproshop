@@ -85,7 +85,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         {user.first_name && user.first_name} {user.last_name && user.last_name}
                     </span>
                 </h1>
-                {user.role_id === 2 && (
+                {user.role_id === 2 && !user.is_trial && (
                     <button
                         className="mb-4 ml-4 md:mb-0 md:ml-0 btn-big md:float-right mt-4"
                         onClick={() => {

@@ -175,6 +175,9 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                             <Link href={'/contact-us'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
+                                    onClick={() => {
+                                        dispatch(toggleTextingMenuAction(false));
+                                    }}
                                     href="javascript:void(0)"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Contact Us')}
