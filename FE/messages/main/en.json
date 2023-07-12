@@ -47,6 +47,8 @@
   "text_rocket_sub": "See how Live Pro Shop tools help companies run their business",
   "Support": "Support",
   "Guide": "Guide",
+  "FAQ": "FAQ",
+  "Faq": "FAQ",
   "arrayOfObjects": [
     {
       "person": "Sabrina M.",
@@ -66,5 +68,7 @@
       "title": "It's all very simple to use!",
       "text": "I love all the features of LiveProShop, but my favorite is that my customers have access and control to their cart. They can see what they've ordered."
     }
-  ]
+  ],
+  "Resources": "Resources",
+  "Get started": "Get started"
 }

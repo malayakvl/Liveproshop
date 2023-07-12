@@ -74,19 +74,19 @@
   color: #4F5B84;
   //padding-top:10px;
 
-  @apply text-[48px] text-left md:text-[48px] md:text-right md:pt-[10px];
+  @apply text-[48px] text-center md:text-[48px] md:pt-[10px];
 }
 .per-month {
   font-weight: 600;
   font-size: 12px;
   line-height: 15px;
   color: #4F5B84;
-  padding-top:20px;
-  padding-left: 15px;
+  //padding-top:20px;
+  padding-left: 5px;
   text-align: left;
   white-space: nowrap;
 
-  @apply mt-[15px] md:mt-auto md:pr-[15px] md:pl-[20px] lg:pr-0 md:pt-[40px];
+  @apply md:pr-[15px] lg:pr-0 md:mt-[-27px];
 
 }
 
@@ -98,8 +98,8 @@
   color: #4F5B84;
   white-space: nowrap;
 
-  @apply md:pt-[15px] lg:pt-0 md:text-left md:mb-[30px] md:ml-[-30px]
-    xl:pl-[40px] md:text-[16px] md:mt-[35px] xl:pt-[10px];
+  @apply md:pt-[15px] lg:pt-0 md:mb-[30px]
+    md:text-[16px] md:mt-[35px] xl:pt-[10px];
 }
 .price-description {
   font-weight: 500;

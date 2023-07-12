@@ -18,7 +18,8 @@ import {
     setActivePageAction,
     setSwitchToggleAction,
     sidebarCloseAction,
-    toggleTextingMenuAction
+    toggleTextingMenuAction,
+    setLngAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 
@@ -131,7 +132,8 @@ const initialState: State.Layouts = {
     activeTab: {
         inventory: { tab: 'products' }
     },
-    showTextingMenu: false
+    showTextingMenu: false,
+    selectedLng: 'fr'
 };
 
 // ------------------------------------
@@ -287,7 +289,12 @@ const ACTION_HANDLERS: any = {
             showTextingMenu: action.payload
         })
     },
-
+    [setLngAction]: {
+        next: (state: State.Layouts, action: Action<string>): State.Layouts => ({
+            ...state,
+            selectedLng: action.payload
+        })
+    },
 };
 
 export {
@@ -306,7 +313,8 @@ export {
     setModalCalendlyMetaAction,
     setSwitchToggleAction,
     sidebarCloseAction,
-    toggleTextingMenuAction
+    toggleTextingMenuAction,
+    setLngAction
 };
 
 // ------------------------------------

@@ -229,7 +229,7 @@ function Main() {
                     </div>
                 </div>
             </div>
-            <span className="mt-[120px] block text-[14px] md:max-w-[90px] bordered text-blue-350 bg-none md:mt-[140px]  font-bold text-center">
+            <span className="mt-[120px] block text-[14px] md:w-full bordered text-blue-350 bg-none md:mt-[140px] font-bold text-center">
                 {t('Advantages')}
             </span>
             <h3 className="red-yellow-gradient-text text-[24px] leading-[32px] md:text-[60px] font-bold md:leading-[72px] mt-[0px]  mb-[60px] text-center w-full">

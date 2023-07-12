@@ -12,6 +12,8 @@ import SidebarLayout from '../components/layout/SidebarLayout';
 import { Toasts, ConfirmationModal } from '../components/_common';
 import { CalendlyModal } from '../components/_common';
 import React from 'react';
+import Script from 'next/script';
+import { initCookiesSdkFr } from '../_services';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -79,6 +81,33 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                                 src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v12.0&appId=3046697902325160&autoLogAppEvents=1"
                                 nonce="qpTXeSyr"
                             />
+
+                            {/*<script>*/}
+                            {/*    window.axeptioSettings = {*/}
+                            {/*        clientId: "5c11ff5ce95cd64112feab79",*/}
+                            {/*    };*/}
+
+                            {/*    (function(d, s) {*/}
+                            {/*        var t = d.getElementsByTagName(s)[0], e = d.createElement(s);*/}
+                            {/*        e.async = true; e.src = "//static.axept.io/sdk.js";*/}
+                            {/*        t.parentNode.insertBefore(e, t);*/}
+                            {/*    })(document, "script");*/}
+                            {/*</script>*/}
+                            {/*<Script*/}
+                            {/*    src="https://connect.facebook.net/en_US/sdk.js"*/}
+                            {/*    strategy="lazyOnload"*/}
+                            {/*    onLoad={() =>*/}
+                            {/*        console.log(`script loaded correctly, window.FB has been populated`)*/}
+                            {/*    }*/}
+                            {/*/>*/}
+                            {/*{initCookiesSdkFr()}*/}
+                            {/*<script>*/}
+                            {/*    window.axeptioSettings = {*/}
+                            {/*    clientId: "64ae6d6ce5df9529c865dfb0",*/}
+                            {/*    cookiesVersion: "liveproshop-fr",*/}
+                            {/*};*/}
+                            {/*</script>*/}
+                            {/*{initCookiesSdkFr()}*/}
                         </Head>
                         <Layout>
                             <Toasts />

@@ -34,7 +34,10 @@ async function syncFB() {
     store.dispatch(syncFbAction(authResponse));
 }
 
-async function registerFB(roleId) {
+async function registerFB(paramData) {
+    const infoParam = paramData.split('_');
+    const roleId = infoParam[0];
+    const locale = infoParam[1];
     // login with facebook then authenticate with the API to get a JWT auth token
     const { authResponse } = await new Promise(window.FB.login);
     // const authResponse = {
@@ -48,6 +51,7 @@ async function registerFB(roleId) {
     //     data_access_expiration_time: 1651002797
     // };
     authResponse.roleId = roleId;
+    authResponse.locale = locale;
     if (authResponse) {
         await getAccountData(authResponse);
     } else {
@@ -89,7 +93,9 @@ async function getAccountData(authResponse) {
             data.accessToken = authResponse.accessToken;
             // data.providerId = authResponse.userID,
             data.expirationTime = authResponse.data_access_expiration_time;
-            data.callbackUrl = `${window.location.origin}/dashboard`;
+            data.callbackUrl = `${window.location.origin}/${
+                authResponse.locale === 'fr' ? '' : 'en/'
+            }account`;
             data.roleId = authResponse.roleId;
             store.dispatch(showLoaderAction(true));
             signIn('credentials_sdkfacebook', data);

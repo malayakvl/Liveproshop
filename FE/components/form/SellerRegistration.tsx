@@ -103,7 +103,7 @@ export default function SellerRegistration({
                 signIn('credentials_login', {
                     email: values.email,
                     password: values.password,
-                    callbackUrl: `${window.location.origin}/account/plan`
+                    callbackUrl: `${window.location.origin}/${locale === 'en' ? 'en/' : ''}account`
                 });
             });
         });

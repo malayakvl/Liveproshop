@@ -26,6 +26,7 @@ declare namespace Layouts {
             inventory: TabTypes;
         };
         showTextingMenu: boolean;
+        selectedLng: string;
     }
 
     interface TabTypes {

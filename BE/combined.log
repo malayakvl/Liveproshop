@@ -27005,3 +27005,58 @@
   level: 'error',
   timestamp: '2023-07-11T04:33:06.934Z'
 }
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-12T16:48:49.948Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-12T17:10:06.491Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-12T17:47:59.030Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-12T19:33:39.181Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-12T19:39:10.030Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-12T20:48:35.519Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-12T20:48:35.520Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-12T20:48:37.126Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-12T20:50:10.928Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-12T20:52:57.604Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-12T20:52:57.605Z'
+}

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { toggleTextingMenuAction } from '../../redux/layouts';
+import { setLngAction, toggleTextingMenuAction } from '../../redux/layouts';
 import { useDispatch } from 'react-redux';
 
 export default function LangSwitcherInline() {
@@ -16,6 +16,7 @@ export default function LangSwitcherInline() {
         router.push({ pathname, query }, asPath, { locale: _locale });
         setShowLangMenu(false);
         dispatch(toggleTextingMenuAction(false));
+        dispatch(setLngAction(_locale));
     };
 
     return (

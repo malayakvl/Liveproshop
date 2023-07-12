@@ -38,7 +38,7 @@ export default function Signup({ locale }: { locale: string }) {
 
     const onSubmit = (values: FormData, actions: any) => {
         if (isFbClicked) {
-            accountService.registerFB(roleId);
+            accountService.registerFB(`${roleId}_${locale}`);
         } else {
             dispatch(inviteUserAction(values, locale));
             actions.resetForm();

@@ -57,13 +57,27 @@ const PriceHeading = ({
                 {name}
                 {planId === 2 && <div className="most-popular">{t('Most popular')}</div>}
             </div>
-            <div className="md:h-[100px] lg:h-[55px] price-description">{desc}</div>
-            <div className="flex md:h-[40px] text-center">
-                <div className="price-plan md:w-[40%]">{price}</div>
-                <div className="inline-block align-middle per-month">euros / {t('month')}</div>
+            <div className="md:h-[100px] lg:h-[55px] price-description mb-[15px]">{desc}</div>
+            <div className="inline-block text-center" style={{ justifyContent: 'center' }}>
+                <div>
+                    <div className="price-plan inline-block">{price}</div>
+                    <div className="inline-block align-middle per-month mt-[-15px]">
+                        euros / {t('month')}
+                    </div>
+                </div>
                 <div className="clear-both" />
+                <div
+                    className="mt-[-10px] md:h-[40px] inline-block"
+                    style={{ justifyContent: 'center' }}>
+                    {sale > 0 && (
+                        <div className="font-bold text-gray-350 text-sm">
+                            {sale}% {t('of sale')}
+                        </div>
+                    )}
+                </div>
             </div>
-            <div className="block h-[15px] mt-[-20px] float-left discount-text">
+
+            <div className=" h-[15px] mt-[-20px] discount-text hidden">
                 {sale > 0 && (
                     <div className="price-percent">
                         {sale}% {t('of sale')}
@@ -72,7 +86,7 @@ const PriceHeading = ({
                 {sale == 0 && <div className="price-percent" />}
             </div>
             <div className="clear-both" />
-            <div className="mt-[0px] mb-[20px] md:mb-auto  md:mx-[12px] md:mt-[20px]">
+            <div className="mt-[0px] mb-[20px] md:mb-auto  md:mx-[12px] md:mt-[-10px]">
                 {planId < 3 && (
                     <button
                         onClick={() => {

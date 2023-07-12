@@ -395,7 +395,7 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                 <li>{t(`Custom scenarios`)}</li>
                             </ul>
                         </div>
-                        <h2 className="dark-blue-header block mb-[10px]">
+                        <h2 id="default-scenario" className="dark-blue-header block mb-[10px]">
                             {t(`Default scenarios`)}
                         </h2>
                         <span className="text-gray-350 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
@@ -436,7 +436,9 @@ const Scenario: React.FC<PropsContent> = ({ locale }) => {
                                 <li>6. Live session is over</li>
                             </ul>
                         </div>
-                        <h2 className="dark-blue-header mb-4 text-[18px] mt-[40px]">
+                        <h2
+                            id="custom-scenario"
+                            className="dark-blue-header mb-4 text-[18px] mt-[40px]">
                             Custom scenarios
                         </h2>
                         <div>

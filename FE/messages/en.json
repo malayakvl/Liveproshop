@@ -441,6 +441,7 @@
   "Features":  "Features",
   "Pricing": "Pricing",
   "Contact Us": "Contact Us",
+  "FAQ": "FAQ",
   "Faq": "FAQ",
   "Case Studies": "Case Studies",
   "canceled": "canceled",
@@ -521,5 +522,7 @@
   "of sale": "of sale",
   "Knowlage Center": "Knowlage Center",
   "We send you confirmation link, please check your mailbox": "We send you confirmation link, please check your mailbox",
-  "You can cancel at any time before to avoid the charge": "You can cancel at any time before to avoid the charge"
+  "You can cancel at any time before to avoid the charge": "You can cancel at any time before to avoid the charge",
+  "Resources": "Resources",
+  "Get started": "Get started"
 }
