@@ -601,7 +601,6 @@ class User {
                 userData.full_address
             ]);
             const user = res ? await this.findUserByEmail(userData.email) : null;
-            console.log(user);
             if (user) {
                 // add to user default chatbot scenarios
                 // buy+item+color+size+quantity
@@ -614,7 +613,6 @@ class User {
                 // buy+item+size
                 // buy+item+quantity
                 // buy+item
-                console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+color+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty (1)', 'buy+item+size+color+quantity')`);
@@ -988,7 +986,6 @@ class User {
         try {
             const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
             const res = await client.query(query, [userId]);
-            console.log(res.rows[0]);
 
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
