@@ -102,12 +102,12 @@ class AuthController {
     async authRegister(req, res) {
         let formData = req.body;
         let email = formData.email
+        console.log("formData", formData)
 
         let invitation = await invitationModel.findByEmail(email);
 
         if (!invitation) {
             return res.status(403).json({ message: "You don't have invitation" });
-
         }
 
         if (!invitation.active) {
@@ -115,16 +115,12 @@ class AuthController {
         }
 
         const _user = await userModel.findUserByEmail(email);
-
         if (_user) {
             return res.status(403).json({ user: null, error: 'Email present' });
-
         }
 
         const { country_id, state, city, post_code, address_line_1, address_line_2, address_type } = formData;
-
         const countryName = (await countryModel.findById(country_id))?.nicename;
-
         const createUserData = {
             email,
             password: formData.password,
@@ -137,7 +133,7 @@ class AuthController {
             identification_number: formData.identification_number,
             vat: formData.vat
         }
-
+        // console.log("createUserData", createUserData);
         const { user, error } = await userModel.create(createUserData);
         // create trial subscription
         // const userData = {
@@ -154,8 +150,6 @@ class AuthController {
         if (error) {
             return res.status(error.code).json(error);
         }
-
-
         const createAddressData = {
             country_id,
             state,
@@ -165,17 +159,13 @@ class AuthController {
             address_line_2,
             address_type
         }
-
+        console.log("ADDRESS DATA", createAddressData);
         const { error: errorAddress } = await userModel.saveAddress(user.id, createAddressData);
 
         if (errorAddress) {
             return res.status(errorAddress.code).json(errorAddress);
-
         }
-
-
         invitationModel.deactivate(invitation.id)
-
         const mail = await registerEmail(user.email, req.query.locale);
 
         sendMail(

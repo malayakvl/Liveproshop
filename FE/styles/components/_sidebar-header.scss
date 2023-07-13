@@ -105,6 +105,9 @@
       .exit {
         background-image: url("../../public/images/icon-hover-logout.svg");
       }
+      .settings-pay {
+        background-image: url("../../public/images/icon-hover-cog.svg");
+      }
     }
     &:last-child {
       @apply mb-0;

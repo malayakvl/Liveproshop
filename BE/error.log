@@ -2696,3 +2696,48 @@
   level: 'error',
   timestamp: '2023-07-12T20:50:10.928Z'
 }
+{
+  message: 'Model error: column "period_left" of relation "users" does not exist',
+  level: 'error',
+  timestamp: '2023-07-13T14:08:12.780Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-13T14:08:12.783Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-13T14:16:38.741Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-13T14:16:38.743Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-13T14:52:40.765Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-13T14:52:40.766Z'
+}
+{
+  message: 'Model error: syntax error at or near "WHERE"',
+  level: 'error',
+  timestamp: '2023-07-13T14:55:16.326Z'
+}
+{
+  message: 'Model error: syntax error at or near "WHERE"',
+  level: 'error',
+  timestamp: '2023-07-13T14:55:28.810Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-13T14:55:28.818Z'
+}

@@ -45,22 +45,21 @@ function Profile() {
     const handlerSubmit = useCallback(
         (values: Profile.Profile, photo: any) => {
             const formData = new FormData();
-            let count = 0;
+            // let count = 0;
 
             Object.keys(values).forEach((key: string) => {
                 if ((values as any)[key] !== (profileData as any)[key]) {
                     formData.append(key, (values as any)[key]);
-                    count++;
+                    // count++;
                 }
             });
-            // console.log('photo from selector', photo);
 
-            // console.log('get image post', );
             if (imagePost || photo) {
                 formData.append('photo', imagePost || photo);
             }
 
-            if (count) dispatch(updateProfileAction(formData));
+            // if (count) dispatch(updateProfileAction(formData));
+            dispatch(updateProfileAction(formData));
         },
         [dispatch]
     );
@@ -121,6 +120,7 @@ function Profile() {
                         })
                     );
                 } else {
+                    console.log('handle submit');
                     handlerSubmit(values, photo);
                 }
             }}>
@@ -138,7 +138,7 @@ function Profile() {
                             {profileData.photo && !isNewPhoto && (
                                 <img
                                     alt=""
-                                    className="rounded-full w-[160px] h-[160px]"
+                                    className="rounded-full w-[160px] h-[160px] object-cover"
                                     src={baseApiUrl + profileData.photo}
                                 />
                             )}

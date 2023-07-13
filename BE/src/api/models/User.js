@@ -99,7 +99,6 @@ class User {
                         }
                     }
                 } else {
-                    console.log("here");
                     res1.rows[0].fields_json.subscription_expired = false;
                 }
                 res1.rows[0].fields_json.is_trial = true;
@@ -584,7 +583,25 @@ class User {
                 userData.identification_number,
                 userData.full_address
             ]);
+            console.log(`
+            INSERT INTO data.users (
+                email, password, salt, role_id, first_name, last_name, company_name,
+                phone, vat, identification_number, full_address
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
+                userData.email,
+                hash,
+                salt,
+                userData.role_id,
+                userData.first_name,
+                userData.last_name,
+                userData.company_name,
+                userData.phone,
+                userData.vat,
+                userData.identification_number,
+                userData.full_address
+            ]);
             const user = res ? await this.findUserByEmail(userData.email) : null;
+            console.log(user);
             if (user) {
                 // add to user default chatbot scenarios
                 // buy+item+color+size+quantity
@@ -597,6 +614,7 @@ class User {
                 // buy+item+size
                 // buy+item+quantity
                 // buy+item
+                console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+color+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty (1)', 'buy+item+size+color+quantity')`);

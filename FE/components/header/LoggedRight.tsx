@@ -16,11 +16,11 @@ import { fetchLatestAction } from '../../redux/notifications';
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-interface Props {
-    isNonPage?: boolean | null;
-}
+// interface Props {
+//     isNonPage?: boolean | null;
+// }
 
-const LoggedRight: React.FC<Props> = ({ isNonPage }) => {
+const LoggedRight: React.FC = () => {
     // const [showProfileMenu, setShowProfileMenu] = useState(false);
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
@@ -36,6 +36,7 @@ const LoggedRight: React.FC<Props> = ({ isNonPage }) => {
     useEffect(
         function () {
             if (user?.photo) {
+                console.log('PHOTO USER', baseApiUrl + user?.photo);
                 setUserPhoto(baseApiUrl + user?.photo);
             }
             if (user?.email !== undefined) {
