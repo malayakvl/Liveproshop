@@ -16,7 +16,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
     const t = useTranslations();
 
     return (
-        <div className="overflow-x-scroll">
+        <div className="overflow-x-scroll scroll-horizontal">
             <table className="min-w-full float-table text-left">
                 <thead>
                     <tr>

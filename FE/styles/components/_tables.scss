@@ -251,3 +251,8 @@ span.canceled {
 .sortable-block {
   @apply float-right ml-8 min-w-[15px];
 }
+
+.scroll-horizontal {
+  overflow-x: scroll !important;
+  -webkit-overflow-scrolling: touch;
+}

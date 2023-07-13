@@ -2686,3 +2686,13 @@
   level: 'error',
   timestamp: '2023-07-11T04:33:06.934Z'
 }
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-12T20:48:37.126Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: Stripe: Argument "subscriptionExposedId" must be a string, but got: null (on API request to `GET /subscriptions/{subscriptionExposedId}`)',
+  level: 'error',
+  timestamp: '2023-07-12T20:50:10.928Z'
+}

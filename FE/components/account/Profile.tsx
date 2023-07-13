@@ -126,12 +126,12 @@ function Profile() {
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
-                    <div className="flex mb-4 mt-4 lg:w-1/4">
-                        <div className="rounded-full w-[160px] h-[160px] w-360 bg-gray-180 flex relative">
+                    <div className="float-left mb-4 mt-4 lg:w-1/4 mr-[20px]">
+                        <div className="rounded-full w-[160px] h-[160px] bg-gray-180 relative">
                             {imagePost && (
                                 <img
                                     alt=""
-                                    className="rounded-full w-[160px] h-[160px]"
+                                    className="rounded-full w-[160px] h-[160px] object-cover"
                                     src={URL.createObjectURL(imagePost)}
                                 />
                             )}
@@ -166,85 +166,90 @@ function Profile() {
                             </span>
                         </div>
                     </div>
-                    <InputText
-                        disabled
-                        icon={'f-email'}
-                        label={null}
-                        name={'email'}
-                        placeholder={t('Email Address')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                    <div className="float-left ml-[20px] min-w-[300px]">
+                        <InputText
+                            disabled
+                            icon={'f-email'}
+                            label={null}
+                            name={'email'}
+                            placeholder={t('Email Address')}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                        />
 
-                    <InputText
-                        icon={'f-fname'}
-                        label={null}
-                        name={'first_name'}
-                        placeholder={t('Name')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-fname'}
+                            label={null}
+                            name={'first_name'}
+                            placeholder={t('Name')}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                        />
 
-                    <InputText
-                        icon={'f-lname'}
-                        label={null}
-                        name={'last_name'}
-                        placeholder={t('Surname')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-lname'}
+                            label={null}
+                            name={'last_name'}
+                            placeholder={t('Surname')}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                        />
 
-                    <InputText
-                        icon={'f-company'}
-                        label={null}
-                        name={'company_name'}
-                        placeholder={t('Company Name')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-company'}
+                            label={null}
+                            name={'company_name'}
+                            placeholder={t('Company Name')}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                        />
 
-                    <InputText
-                        icon={'f-company-id'}
-                        label={null}
-                        name={'identification_number'}
-                        placeholder={t('Company ID')}
-                        style={'lg:w-1/6'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-company-id'}
+                            label={null}
+                            name={'identification_number'}
+                            placeholder={t('Company ID')}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                        />
 
-                    <InputText
-                        icon={'f-vat'}
-                        label={null}
-                        name={'vat'}
-                        placeholder={t('VAT (If applicable)')}
-                        style={'lg:w-1/6'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-vat'}
+                            label={null}
+                            name={'vat'}
+                            placeholder={t('VAT (If applicable)')}
+                            style={'lg:w-1/2'}
+                            props={props}
+                            tips={null}
+                        />
 
-                    <InputText
-                        icon={'f-phone'}
-                        label={null}
-                        name={'phone'}
-                        placeholder={t('Phone Number')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                        onChange={(event) => {
-                            event.target.value = event.target.value.replace(/[^\s\d+()-]+/gm, '');
-                            props.handleChange(event);
-                        }}
-                    />
+                        <InputText
+                            icon={'f-phone'}
+                            label={null}
+                            name={'phone'}
+                            placeholder={t('Phone Number')}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                            onChange={(event) => {
+                                event.target.value = event.target.value.replace(
+                                    /[^\s\d+()-]+/gm,
+                                    ''
+                                );
+                                props.handleChange(event);
+                            }}
+                        />
 
-                    <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
-                    <button type="submit" className="gradient-btn">
-                        {t('Save')}
-                    </button>
+                        <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
+                        <button type="submit" className="gradient-btn">
+                            {t('Save')}
+                        </button>
+                    </div>
                 </form>
             )}
         </Formik>
