@@ -85,7 +85,7 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { sortKey: 'shipping.name', iconClass: 'icon-tbl-sh-cart' },
         { sortKey: 'payments.name', iconClass: 'icon-tbl-card' },
         { titleKey: 'Products' },
-        { sortKey: 'orders.order_amount', titleKey: 'Total' }
+        { iconClass: 'icon-tbl-total', sortKey: 'orders.order_amount', titleKey: 'Total' }
     ],
     [PaginationType.SELLERS]: [
         // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },

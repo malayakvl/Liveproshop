@@ -28955,3 +28955,58 @@
   level: 'error',
   timestamp: '2023-07-18T06:45:09.289Z'
 }
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-18T07:45:30.931Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-18T07:47:55.308Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-18T07:48:30.114Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-18T08:31:27.159Z'
+}
+{
+  message: 'Model error: syntax error at or near "WHERE"',
+  level: 'error',
+  timestamp: '2023-07-18T08:32:44.835Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-18T08:32:44.840Z'
+}
+{
+  message: 'Model error: syntax error at or near "WHERE"',
+  level: 'error',
+  timestamp: '2023-07-18T08:36:38.724Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-18T08:36:38.726Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-18T12:14:21.796Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T12:15:15.988Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T12:15:15.989Z'
+}

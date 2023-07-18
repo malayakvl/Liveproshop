@@ -189,30 +189,76 @@ const DataTable: React.FC<Props> = ({
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
                 )}
-                {item.iconClass && <i className={`tbl-icon ${item.iconClass}`} />}
-                {item.titleKey ? t(item.titleKey) : ''}
-                {item.sortKey && (
-                    <div className="sortable-block">
-                        <div
-                            role="presentation"
-                            data-name={item.sortKey}
-                            data-direction="ASC"
-                            onClick={setSort}
-                            className={classNames('btn_sort top', {
-                                active: column === item.sortKey && sort === 'ASC'
-                            })}
-                        />
-                        <div
-                            role="presentation"
-                            data-name={item.sortKey}
-                            data-direction="DESC"
-                            onClick={setSort}
-                            className={classNames('btn_sort down', {
-                                active: column === item.sortKey && sort === 'DESC'
-                            })}
-                        />
+                <div className="flex flex-row">
+                    {item.iconClass && (
+                        <div>
+                            <i className={`tbl-icon ${item.iconClass}`} />
+                        </div>
+                    )}
+                    <div>
+                        {item.sortKey && (
+                            <div className="sortable-block">
+                                <div
+                                    role="presentation"
+                                    data-name={item.sortKey}
+                                    data-direction="ASC"
+                                    onClick={setSort}
+                                    className={classNames('btn_sort top', {
+                                        active: column === item.sortKey && sort === 'ASC'
+                                    })}
+                                />
+                                <div
+                                    role="presentation"
+                                    data-name={item.sortKey}
+                                    data-direction="DESC"
+                                    onClick={setSort}
+                                    className={classNames('btn_sort down', {
+                                        active: column === item.sortKey && sort === 'DESC'
+                                    })}
+                                />
+                            </div>
+                        )}
                     </div>
-                )}
+                    {item.titleKey && (
+                        <div style={{ marginTop: '-5px' }}>
+                            {item.titleKey ? t(item.titleKey) : ''}
+                        </div>
+                    )}
+
+                    {/*</div>*/}
+                    {/*<div style={{ minWidth: '55px' }} className="sortable-icon-block">*/}
+                    {/*    {item.iconClass && <i className={`tbl-icon ${item.iconClass}`} />}*/}
+                    {/*    {item.sortKey && (*/}
+                    {/*        <div className="sortable-block">*/}
+                    {/*            <div*/}
+                    {/*                role="presentation"*/}
+                    {/*                data-name={item.sortKey}*/}
+                    {/*                data-direction="ASC"*/}
+                    {/*                onClick={setSort}*/}
+                    {/*                className={classNames('btn_sort top', {*/}
+                    {/*                    active: column === item.sortKey && sort === 'ASC'*/}
+                    {/*                })}*/}
+                    {/*            />*/}
+                    {/*            <div*/}
+                    {/*                role="presentation"*/}
+                    {/*                data-name={item.sortKey}*/}
+                    {/*                data-direction="DESC"*/}
+                    {/*                onClick={setSort}*/}
+                    {/*                className={classNames('btn_sort down', {*/}
+                    {/*                    active: column === item.sortKey && sort === 'DESC'*/}
+                    {/*                })}*/}
+                    {/*            />*/}
+                    {/*        </div>*/}
+                    {/*    )}*/}
+                    {/*</div>*/}
+                    {/*{item.titleKey && (*/}
+                    {/*    <div className="head-row-title">{item.titleKey ? t(item.titleKey) : ''}</div>*/}
+                    {/*)}*/}
+                </div>
+                {/*{item.titleKey && (*/}
+                {/*    <span className="head-row-title">{item.titleKey ? t(item.titleKey) : ''}</span>*/}
+                {/*)}*/}
+                {/*<span className="head-row-title">{item.titleKey ? t(item.titleKey) : ''}</span>*/}
             </th>
         );
 

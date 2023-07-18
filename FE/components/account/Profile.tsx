@@ -38,6 +38,7 @@ function Profile() {
     };
 
     useEffect(() => {
+        console.log('here we are');
         dispatch(setPhotoAction(imagePost));
     }, [imagePost]);
 
@@ -97,6 +98,8 @@ function Profile() {
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
     });
+
+    console.log('!!!!', t('Surname'));
 
     return (
         <Formik
@@ -190,7 +193,7 @@ function Profile() {
                             icon={'f-lname'}
                             label={null}
                             name={'last_name'}
-                            placeholder={t('Surname')}
+                            placeholder={'Surname'}
                             style={'lg:w-full'}
                             props={props}
                             tips={null}
@@ -200,7 +203,7 @@ function Profile() {
                             icon={'f-company'}
                             label={null}
                             name={'company_name'}
-                            placeholder={t('Company Name')}
+                            placeholder={'Company Name'}
                             style={'lg:w-full'}
                             props={props}
                             tips={null}
@@ -210,7 +213,7 @@ function Profile() {
                             icon={'f-company-id'}
                             label={null}
                             name={'identification_number'}
-                            placeholder={t('Company ID')}
+                            placeholder={'Company ID'}
                             style={'lg:w-full'}
                             props={props}
                             tips={null}
@@ -220,7 +223,7 @@ function Profile() {
                             icon={'f-vat'}
                             label={null}
                             name={'vat'}
-                            placeholder={t('VAT (If applicable)')}
+                            placeholder={'VAT (If applicable)'}
                             style={'lg:w-1/2'}
                             props={props}
                             tips={null}
@@ -230,7 +233,7 @@ function Profile() {
                             icon={'f-phone'}
                             label={null}
                             name={'phone'}
-                            placeholder={t('Phone Number')}
+                            placeholder={'Phone Number'}
                             style={'lg:w-full'}
                             props={props}
                             tips={null}

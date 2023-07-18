@@ -259,3 +259,15 @@ span.canceled {
   overflow-x: scroll !important;
   -webkit-overflow-scrolling: touch;
 }
+
+.sortable-icon-block {
+  float:left;
+  width: 55px;
+  background: pink;
+  padding-right: 20px;
+}
+.head-row-title {
+  float: left;
+  background: yellow;
+  //padding-left: 55px;
+}

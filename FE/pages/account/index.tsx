@@ -109,6 +109,7 @@ export async function getServerSideProps(context: any) {
             redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
         };
     }
+    console.log('LOCALE', locale);
 
     return {
         props: {
