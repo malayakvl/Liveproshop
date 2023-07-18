@@ -281,5 +281,6 @@ input:checked + .toggle-bg {
 }
 
 .btn-download-orders {
+  padding: 3px 0 2px 0;
   @apply absolute right-[0] top-[20px] md:top-0 md:right-[145px] p-[5px];
 }

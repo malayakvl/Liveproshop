@@ -113,7 +113,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                         // style={{ right: '0px', top: '20px' }}
                         className={`gradient-btn btn-download-orders`}
                         onClick={() => dispatch(bulkDownloadAction())}>
-                        <div className="font-medium text-white ml-2">{t('Download Orders')}</div>
+                        <div className="font-medium text-white ml-2 mr-2 py-[3px]">
+                            {t('Download Orders')}
+                        </div>
                     </button>
                     <button
                         onClick={() => {
