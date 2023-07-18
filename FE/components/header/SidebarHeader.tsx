@@ -29,7 +29,6 @@ const SidebarHeader: React.FC = () => {
                 dispatch(fetchLatestAction());
             }
             if (window) {
-                console.log(window.innerWidth);
                 if (window.innerWidth < 768) {
                     setIsMobile(true);
                 }

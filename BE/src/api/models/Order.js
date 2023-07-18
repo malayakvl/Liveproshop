@@ -17,7 +17,7 @@ async function createInvoice (invoice, path, locale) {
         await generateHeader(doc, invoice.seller.data, locale);
         await generateCustomerInformation(doc, invoice, locale);
         await generateInvoiceTable(doc, invoice, locale);
-        await generateFooter(doc, locale);
+        // await generateFooter(doc, locale);
 
         doc.end();
         doc.pipe(fs.createWriteStream(path));
@@ -387,7 +387,6 @@ class Order {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
-            console.log("BYERS", _filters.shopper_id)
 
             switch (user.role_id) {
                 case UserRole.ADMIN:
@@ -428,7 +427,6 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

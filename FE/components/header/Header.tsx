@@ -13,6 +13,7 @@ import LoggedRight from './LoggedRight';
 import LoggedRightMobile from './LoggedRightMobile';
 import TextLeftMobile from './TextLeftMobile';
 import { toggleTextingMenuAction } from '../../redux/layouts';
+import { isSTextingMenuOpenSelector } from '../../redux/layouts/selectors';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -30,7 +31,8 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
     // const [session] = useSession();
     const [userPhoto, setUserPhoto] = useState(userProfileImg);
     const router = useRouter();
-    const [showTextingMenu, setShowTestingMenu] = useState(false);
+    // const [showTextingMenu, setShowTestingMenu] = useState(false);
+    const showTextingMenu = useSelector(isSTextingMenuOpenSelector);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const node = useRef<HTMLDivElement>(null);
     const [isMobile, setIsMobile] = useState(false);
@@ -53,7 +55,6 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                     } else {
                         setIsMobile(false);
                     }
-                    console.log('Resize event', window.innerWidth);
                 };
                 window.addEventListener('resize', handleWindowResize);
                 return () => {
@@ -124,7 +125,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                     <div
                         className="mobile-menu-button cursor-pointer"
                         onClick={() => {
-                            dispatch(toggleTextingMenuAction(true));
+                            dispatch(toggleTextingMenuAction(!showTextingMenu));
                         }}>
                         <svg
                             width="24"

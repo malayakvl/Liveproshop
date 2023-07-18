@@ -19,7 +19,8 @@ import {
     setSwitchToggleAction,
     sidebarCloseAction,
     toggleTextingMenuAction,
-    setLngAction
+    setLngAction,
+    toggleProfileMenuAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 
@@ -133,6 +134,7 @@ const initialState: State.Layouts = {
         inventory: { tab: 'products' }
     },
     showTextingMenu: false,
+    showProfileMenu: false,
     selectedLng: 'fr'
 };
 
@@ -289,12 +291,18 @@ const ACTION_HANDLERS: any = {
             showTextingMenu: action.payload
         })
     },
+    [toggleProfileMenuAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            showTextingMenu: action.payload
+        })
+    },
     [setLngAction]: {
         next: (state: State.Layouts, action: Action<string>): State.Layouts => ({
             ...state,
             selectedLng: action.payload
         })
-    },
+    }
 };
 
 export {
@@ -314,7 +322,8 @@ export {
     setSwitchToggleAction,
     sidebarCloseAction,
     toggleTextingMenuAction,
-    setLngAction
+    setLngAction,
+    toggleProfileMenuAction
 };
 
 // ------------------------------------

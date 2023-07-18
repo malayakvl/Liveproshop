@@ -71,6 +71,10 @@ export const isSTextingMenuOpenSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): boolean => layouts.showTextingMenu
 );
+export const isProfileMenuOpenSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.showProfileMenu
+);
 export const siteLanguageSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): string => layouts.selectedLng

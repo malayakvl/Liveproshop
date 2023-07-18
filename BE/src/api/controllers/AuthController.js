@@ -102,7 +102,6 @@ class AuthController {
     async authRegister(req, res) {
         let formData = req.body;
         let email = formData.email
-        console.log("formData", formData)
 
         let invitation = await invitationModel.findByEmail(email);
 
@@ -133,7 +132,6 @@ class AuthController {
             identification_number: formData.identification_number,
             vat: formData.vat
         }
-        // console.log("createUserData", createUserData);
         const { user, error } = await userModel.create(createUserData);
         // create trial subscription
         // const userData = {
@@ -159,7 +157,6 @@ class AuthController {
             address_line_2,
             address_type
         }
-        console.log("ADDRESS DATA", createAddressData);
         const { error: errorAddress } = await userModel.saveAddress(user.id, createAddressData);
 
         if (errorAddress) {

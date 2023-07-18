@@ -27260,3 +27260,1698 @@
   level: 'info',
   timestamp: '2023-07-13T15:27:14.363Z'
 }
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T18:17:41.515Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T18:30:02.746Z'
+}
+{
+  message: 'Model error: duplicate key value violates unique constraint "subscriptions__subscription_id__ukey"',
+  level: 'error',
+  timestamp: '2023-07-13T18:30:13.485Z'
+}
+{
+  message: 'Model error: error: duplicate key value violates unique constraint "subscriptions__subscription_id__ukey"',
+  level: 'error',
+  timestamp: '2023-07-13T18:30:13.485Z'
+}
+{
+  message: 'Model error: duplicate key value violates unique constraint "subscriptions__subscription_id__ukey"',
+  level: 'error',
+  timestamp: '2023-07-13T18:30:13.722Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T18:45:08.408Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T18:46:43.848Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-13T18:46:51.673Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-13T18:46:51.674Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T19:01:46.380Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:06:12.554Z'
+}
+{
+  message: 'Model error: TypeError: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:06:12.561Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:06:12.654Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T19:09:07.067Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T19:13:23.969Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:15:59.847Z'
+}
+{
+  message: 'Model error: TypeError: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:15:59.854Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:16:00.048Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-13T19:26:04.927Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-13T19:27:28.089Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-13T19:27:28.090Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-13T19:41:35.870Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-13T19:42:22.674Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:44:00.537Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:45:35.266Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T05:48:07.743Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T05:48:07.745Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T05:49:58.823Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T05:49:58.824Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T05:50:11.092Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T05:51:21.893Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2023-07-14T05:51:21.986Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T05:51:22.050Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T05:51:22.050Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:53:00.987Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:56:16.496Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:58:47.754Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T05:59:58.587Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T06:01:15.792Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T06:02:57.212Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T06:03:57.804Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T06:04:05.943Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T06:06:06.203Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:35:00.940Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:35:21.874Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:35:43.504Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:35:48.081Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:38:10.787Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:38:19.885Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:38:39.589Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:38:49.168Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:40:19.755Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:40:30.401Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:46:41.483Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:46:49.783Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:47:34.271Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:47:40.303Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:48:01.498Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:48:05.670Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:48:48.061Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:48:54.618Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:49:07.220Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T07:49:12.104Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:50:34.586Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T07:52:02.620Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T08:49:41.485Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T08:54:15.575Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T09:34:38.543Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T09:41:19.286Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T09:41:42.514Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T10:11:03.285Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T10:24:48.234Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T10:24:48.235Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T11:20:43.440Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T14:07:22.445Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T14:42:53.820Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T14:58:47.943Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:00:06.527Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:00:10.705Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:02:31.630Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:02:38.083Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:04:16.923Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:04:58.363Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:05:03.988Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:06:11.217Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:06:16.262Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:07:52.098Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:07:56.591Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:15:19.267Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:15:24.802Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:17:43.757Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:17:48.983Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:18:15.803Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:18:20.186Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:35:46.141Z'
+}
+{
+  message: 'Model error: customerId is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:35:51.888Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:36:19.413Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:36:25.654Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:36:42.950Z'
+}
+{
+  message: 'Model error: customerId is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:36:45.552Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:37:31.932Z'
+}
+{
+  message: 'Model error: customerId is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:37:37.140Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T15:40:22.729Z'
+}
+{
+  message: 'Model error: customer is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:40:28.619Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T16:02:02.016Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T16:02:10.791Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T16:02:10.791Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T16:10:28.145Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T16:10:28.146Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:10:29.113Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:10:29.115Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:14:18.472Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:14:18.481Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T16:34:08.408Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T16:34:08.410Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:34:09.970Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:34:09.986Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:36:12.180Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:36:12.185Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:39:46.746Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:39:46.756Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:40:55.689Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:40:55.764Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:26.852Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:26.879Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:54.415Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:55.022Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:46:28.149Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:46:28.164Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:47:15.343Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:47:15.358Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T16:49:16.384Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:50:32.074Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:50:32.094Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:04.987Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:05.259Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:31.073Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:31.218Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:02.725Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:02.884Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:57.000Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:57.050Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:56:48.695Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:56:48.699Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:57:15.828Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:57:15.933Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:59:04.629Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:59:04.752Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:01:16.875Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:01:16.881Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:02:03.266Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:02:03.453Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T17:03:45.630Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:04:48.328Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:04:48.337Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T17:09:54.019Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T17:10:46.741Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T18:29:34.554Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T18:29:34.556Z'
+}
+{
+  message: 'Model error: syntax error at or near "WHERE"',
+  level: 'error',
+  timestamp: '2023-07-14T18:32:51.830Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T18:32:51.834Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T18:35:24.036Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-14T18:35:24.037Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T18:58:35.096Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-14T18:59:35.912Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T04:54:47.743Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T09:26:22.814Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T09:31:06.015Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T09:31:06.015Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T09:31:56.211Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T09:37:40.450Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T09:37:55.640Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T09:38:20.780Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T09:40:58.513Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T09:43:38.424Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T09:55:34.869Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:16:55.340Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T10:17:00.642Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:20:16.818Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T10:20:44.586Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:28:41.206Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: userData is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T10:29:04.622Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:29:33.409Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: userData is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T10:29:52.818Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:30:20.058Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: userData is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T10:30:23.752Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:30:47.711Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T10:30:54.118Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:37:34.469Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:37:50.483Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:40:29.908Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:40:47.880Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:45:16.730Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:48:56.876Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:52:25.016Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:56:45.571Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:56:54.187Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T10:58:16.707Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:58:23.911Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:01:32.272Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:02:20.114Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:07:54.778Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:08:05.241Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:09:37.313Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:10:36.617Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:13:21.084Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:13:32.700Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:15:26.063Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-17T11:16:05.161Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T11:33:12.115Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T11:33:12.116Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:33:48.272Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:34:48.576Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T11:34:54.013Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:35:18.067Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:36:10.152Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:37:20.237Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:38:09.052Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T11:38:47.431Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:40:29.713Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:42:51.916Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:46:23.062Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:46:56.424Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T11:54:56.394Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:56:40.644Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:02:09.868Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:03:20.051Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:03:35.389Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:06:04.891Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:07:57.846Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:10:15.069Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:10:21.706Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:11:36.024Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:39:17.223Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:40:38.324Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:41:36.786Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:42:35.823Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:43:07.154Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:53:31.972Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:54:00.619Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:55:18.501Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T12:55:24.329Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:56:18.868Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T12:59:26.916Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T13:01:30.133Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T13:02:09.355Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T13:14:40.133Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T13:53:19.021Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T13:54:57.566Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T13:56:29.590Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T13:58:52.839Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T14:02:27.966Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T14:03:20.457Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T14:04:55.371Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T14:06:27.198Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T14:25:50.815Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T14:30:23.996Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T15:02:36.509Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T15:03:20.041Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T15:06:54.547Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T15:07:42.825Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T15:13:56.132Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T15:53:32.299Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:53:48.450Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:55:04.569Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T15:55:49.661Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T15:55:49.662Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:55:56.414Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:56:27.515Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T15:56:54.173Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T15:56:54.174Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:57:00.891Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:58:33.923Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T15:59:12.540Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T15:59:12.541Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:59:35.399Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T16:01:02.979Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T16:01:02.979Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T16:01:55.684Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T16:02:02.301Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T16:02:32.478Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T16:05:33.907Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T16:06:40.331Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T16:06:40.332Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T16:13:09.509Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T17:57:46.010Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T17:59:07.554Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:00:18.151Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:32:09.204Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:32:19.120Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:34:08.622Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:34:16.991Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:35:51.525Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:36:00.661Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:37:51.194Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:38:02.390Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:43:02.249Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:43:14.053Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:43:52.822Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:44:01.187Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:46:14.318Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:46:22.819Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:51:06.874Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T18:51:15.116Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T18:51:15.117Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:52:26.492Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:54:39.710Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T18:59:21.476Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:59:37.372Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:00:32.837Z'
+}
+{
+  message: 'Model error: start.diff is not a function',
+  level: 'error',
+  timestamp: '2023-07-17T19:00:45.115Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:06:06.236Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T19:06:15.460Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:10:48.577Z'
+}
+{
+  message: 'Model error: start.diff is not a function',
+  level: 'error',
+  timestamp: '2023-07-17T19:10:57.292Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:11:16.506Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T19:11:30.395Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:12:08.601Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T19:12:17.035Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T19:12:17.036Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:21:28.645Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:21:40.825Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T19:21:50.255Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-17T19:24:14.041Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T19:24:25.644Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-17T19:24:25.644Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T05:17:16.362Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T05:17:16.366Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-18T05:17:35.764Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-18T05:18:59.174Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T05:19:27.812Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T05:19:27.812Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-18T05:22:17.185Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T05:22:47.972Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T05:22:47.972Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T06:03:36.684Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-18T06:03:36.684Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-18T06:26:22.114Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-18T06:45:09.289Z'
+}

@@ -162,33 +162,65 @@
   //border: 6px solid transparent;
   cursor: pointer;
 }
-.btn_sort.top.active, .btn_sort.top:hover {
-  background: url("../../public/images/sort-up-active.svg");
+.btn_sort.top.active, .btn_sort.top:hover, .btn_sort.active {
+  //background-color: linear-gradient(50.53deg, #AB44C1 14.13%, #E96597 51.45%, #FF9384 64.45%, #FFC16C 80.86%, #F9F871 99.95%, #F9F871 99.96%);
+  background-image: url("../../public/images/sort-up-new-white.svg");
+  background-color: coral;
   //border-bottom-color: #343a40;
 }
 .btn_sort.down.active, .btn_sort.down:hover {
-  background: url("../../public/images/sort-down-active.svg");
+  background-color: coral;
+  background-image: url("../../public/images/sort-down-new-white.svg");
+  //background: linear-gradient(50.53deg, #AB44C1 14.13%, #E96597 51.45%, #FF9384 64.45%, #FFC16C 80.86%, #F9F871 99.95%, #F9F871 99.96%);
+  //background: url("../../public/images/sort-down-active.svg");
   //border-top-color: #343a40;
 }
 .btn_sort.top {
-  background: url("../../public/images/sort-up.svg");
+  background-position: center !important;
+  background: url("../../public/images/sort-up-new.svg");
   background-repeat: no-repeat;
-  height: 5px;
-  width: 8px;
-  background-position: center;
+  border-radius: 5px;
+  border: solid 1px #E2E4E9;
+  display: inline-block;
+  padding: 5px;
+  width: 25px;
+  top: 5px;
+  right: 0px;
+  height: 25px;
+
+  //background: url("../../public/images/sort-up-new.svg");
+  //background-repeat: no-repeat;
+  //border-radius: 5px;
+  //border: solid 1px gray;
+  //display: inline-block;
+  //padding: 5px;
+  //width: 25px;
+  //height: 16px;
+  //width: 16px;
+  ////border: solid 1px;
+  //background-position: center;
   //border-bottom: 10px solid #999;
-  top: calc(50% - 6px);
-  right: 10px;
+  //top: calc(50% - 6px);
+  //right: 10px;
+  //display: none;
 }
 .btn_sort.down {
   //border-top: 10px solid #999;
-  height: 5px;
-  width: 8px;
-  background-position: center;
-  background: url("../../public/images/sort-down.svg");
+  //height: 16px;
+  //width: 16px;
+  background-position: center !important;
+  background: url("../../public/images/sort-down-new.svg");
   background-repeat: no-repeat;
-  bottom: calc(50% - 6px);
-  right: 10px;
+  border-radius: 5px;
+  border: solid 1px #E2E4E9;
+  display: inline-block;
+  padding: 5px;
+  width: 25px;
+  top: 5px;
+  right: 30px;
+  height: 25px;
+  //bottom: calc(50% - 6px);
+  //right: 10px;
 }
 .bg-social-facebook {
   @apply pl-0.5 pr-0.5 md:pl-1.5 md:pr-1.5 text-center w-full relative;

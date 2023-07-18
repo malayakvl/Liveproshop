@@ -64,6 +64,12 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
+                    <>
+                        {Object.values(props.errors).map((error) => (
+                            // eslint-disable-next-line react/jsx-key
+                            <div>{error}</div>
+                        ))}
+                    </>
                     <div className="mb-4 lg:w-1/4">
                         <Select
                             className={'form-control-dropdown'}

@@ -256,7 +256,8 @@ export default function List({ locale }: { locale: string }) {
                                                                 {/*/>*/}
                                                                 {country.iso}
                                                                 <div className="ml-auto">
-                                                                    {country.price}
+                                                                    {/*{country.price}*/}
+                                                                    {formatCurrency(country.price)}
                                                                 </div>
                                                             </div>
                                                         );

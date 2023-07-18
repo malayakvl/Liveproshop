@@ -12,8 +12,8 @@ import SidebarLayout from '../components/layout/SidebarLayout';
 import { Toasts, ConfirmationModal } from '../components/_common';
 import { CalendlyModal } from '../components/_common';
 import React from 'react';
-import Script from 'next/script';
-import { initCookiesSdkFr } from '../_services';
+// import Script from 'next/script';
+// import { initCookiesSdkFr } from '../_services';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;

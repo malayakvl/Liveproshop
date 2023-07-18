@@ -99,7 +99,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     return (
         <div className="mt-7">
             <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
-                <h2 className="dark-blue-header">
+                <h2 className="dark-blue-header mt-[75px] md:mt-auto">
                     {t('Orders')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
@@ -108,34 +108,34 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     locale={locale}
                     filterOpen={filterOpen}
                 />
-                <button
-                    style={{ right: '145px' }}
-                    className={`gradient-btn absolute top-0 right-[145px] p-[5px]`}
-                    onClick={() => dispatch(bulkDownloadAction())}>
-                    <div className="font-medium text-white ml-2 font-bold">
-                        {t('Download Orders')}
-                    </div>
-                </button>
-                <button
-                    onClick={() => {
-                        if (filterOpen) {
-                            dispatch(showDateSelectorAction(false));
-                        }
-                        setFilterOpen(!filterOpen);
-                    }}
-                    className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
-                    <Image width={16} height={16} src={'/images/filter.svg'} />
-                    <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
-                    <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                        {filters.country_id.length +
-                            filters.payment_id.length +
-                            filters.status.length +
-                            filters.seller_id.length +
-                            !!filters.total_amount.length +
-                            !!filters.created_at.length +
-                            filters.country_id.length}
-                    </div>
-                </button>
+                <div className="">
+                    <button
+                        // style={{ right: '0px', top: '20px' }}
+                        className={`gradient-btn btn-download-orders`}
+                        onClick={() => dispatch(bulkDownloadAction())}>
+                        <div className="font-medium text-white ml-2">{t('Download Orders')}</div>
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (filterOpen) {
+                                dispatch(showDateSelectorAction(false));
+                            }
+                            setFilterOpen(!filterOpen);
+                        }}
+                        className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
+                        <Image width={16} height={16} src={'/images/filter.svg'} />
+                        <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                        <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                            {filters.country_id.length +
+                                filters.payment_id.length +
+                                filters.status.length +
+                                filters.seller_id.length +
+                                !!filters.total_amount.length +
+                                !!filters.created_at.length +
+                                filters.country_id.length}
+                        </div>
+                    </button>
+                </div>
             </div>
             <div className="mb-5">
                 <FilterValues />
@@ -249,7 +249,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             <CancelConfirmation />
             <a
                 href={achiveName}
-                className=""
+                className="hidden"
                 target="_blank"
                 download
                 ref={achiveRefname}

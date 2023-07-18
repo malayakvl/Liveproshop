@@ -8,7 +8,6 @@ import React from 'react';
 const postsDirectory = path.join(process.cwd(), '/pages/pages/data');
 
 export default function Page({ pageData }) {
-    console.log(pageData[0].slug);
     return (
         <>
             <Head>

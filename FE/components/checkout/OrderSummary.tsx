@@ -27,8 +27,6 @@ const OrderSummary = () => {
         [shippingMethodId]
     );
 
-    console.log('Order items', order.order_items);
-
     return (
         <>
             <div className="text-gray-350 font-normal text-lg">

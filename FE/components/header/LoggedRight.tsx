@@ -36,7 +36,6 @@ const LoggedRight: React.FC = () => {
     useEffect(
         function () {
             if (user?.photo) {
-                console.log('PHOTO USER', baseApiUrl + user?.photo);
                 setUserPhoto(baseApiUrl + user?.photo);
             }
             if (user?.email !== undefined) {

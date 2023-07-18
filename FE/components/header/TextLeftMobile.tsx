@@ -43,7 +43,6 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                 dispatch(fetchLatestAction());
             }
             if (window) {
-                console.log(window.innerWidth);
                 if (window.innerWidth < 768) {
                     setIsMobile(true);
                 }

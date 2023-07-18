@@ -249,8 +249,8 @@ class Livesession {
         const query = await client.query(
             `SELECT data.live_sessions.*, u.auth_provider_access_token FROM data.live_sessions LEFT JOIN data.users u ON u.id = user_id WHERE video_id IS NOT NULL AND launched IS NULL`
         );
-        console.log(            `SELECT data.live_sessions.*, u.auth_provider_access_token FROM data.live_sessions LEFT JOIN data.users u ON u.id = user_id WHERE video_id IS NOT NULL AND launched IS NULL`
-        );
+        // console.log(            `SELECT data.live_sessions.*, u.auth_provider_access_token FROM data.live_sessions LEFT JOIN data.users u ON u.id = user_id WHERE video_id IS NOT NULL AND launched IS NULL`
+        // );
         try {
             const error = null;
             const result = query.rows.length > 0 ? query.rows : [];

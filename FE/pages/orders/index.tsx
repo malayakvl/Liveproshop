@@ -20,7 +20,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-big">
-                <div className="page-title">
+                <div className="page-title ">
                     <h1>{t('Orders')}</h1>
                 </div>
                 <div

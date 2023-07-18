@@ -3,8 +3,10 @@ declare namespace User {
         user: User;
         hideRegisterFrom: boolean;
         subscription: any;
+        paymentMethodsAllow: any;
         clientSecret: string;
         paymentIntent: any;
+        paymentMethodsNoSubscription: any;
         showChangeSubscription: boolean;
     }
 

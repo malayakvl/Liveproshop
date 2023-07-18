@@ -25,7 +25,7 @@ export default function LangSwitcherInline() {
             <ul>
                 {locales.map((_locale: string) => (
                     <li
-                        className={`inline-block font-bold uppercase mr-4 ${
+                        className={`cursor-pointer inline-block font-bold uppercase mr-4 ${
                             _locale == locale ? 'red-yellow-gradient-text' : ''
                         }`}
                         // onClick={() => {

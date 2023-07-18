@@ -130,7 +130,7 @@ class Checkout {
                 // const sellerSettingsRes = await client.query(`SELECT multisafe_api_key FROM data.get_seller_settings(${orderRes.rows[0].id});`);
                 const systemSettingsRes = await client.query('SELECT multisafe_account FROM data.system_settings WHERE id=1;');
                 const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
-                console.log(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
+                // console.log(`SELECT * FROM data.get_seller_settings(${orderRes.rows[0].id});`);
                 if (sellerSettingsRes.rows.length === 0) {
                     return {redirectUrl: null, error: 'No key for payment'}
                 }

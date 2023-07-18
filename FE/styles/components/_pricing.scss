@@ -115,6 +115,17 @@
   //background: #f5f5d2;
   @apply md:h-[440px] lg:h-[425px];
 }
+.block-fixed-height-heading {
+  @media only screen and (min-width: 768px) and (max-width: 1024px)  {
+   height: 550px;
+  }
+}
+.gradient-btn {
+  @media only screen and (min-width: 768px) and (max-width: 1024px)  {
+    font-size: 11px;
+  }
+}
+
 .price-name-heading {
   font-weight: 700;
   font-size: 18px;

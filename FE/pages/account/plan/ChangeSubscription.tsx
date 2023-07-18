@@ -116,6 +116,82 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                         </div>
 
                         {/*Body*/}
+                        {subscriptionInfo?.is_trial && (
+                            <div>
+                                {/*{subscriptionInfo.defaultPayment && (*/}
+                                {/*    <>Default Payment</>*/}
+                                {/*)}*/}
+                                {subscriptionInfo?.defaultPayment && (
+                                    <div className="max-w-[320px] flex">
+                                        <select
+                                            name="plan_id"
+                                            style={{ width: '250px' }}
+                                            value={subscriptionInfo.plan.stripe_id}
+                                            className="form-control w-full"
+                                            onChange={(e) => {
+                                                setPlanId(e.target.value);
+                                                const filteredPlan =
+                                                    subscriptionInfo.dbPlans.filter(
+                                                        (_plan: any) =>
+                                                            _plan.stripe_id === e.target.value
+                                                    );
+                                                if (filteredPlan.length) {
+                                                    setSelectedPlanDbId(filteredPlan[0].id);
+                                                } else {
+                                                    setSelectedPlanDbId(null);
+                                                }
+                                            }}>
+                                            <option>Select Plan</option>
+                                            {subscriptionInfo.dbPlans.map((plan: any) => (
+                                                // <Fragment key={plan.stripe_id}>
+                                                //     <option value={plan.stripe_id}>
+                                                //         {plan.name}
+                                                //     </option>
+                                                // </Fragment>
+                                                <Fragment key={plan.stripe_id}>
+                                                    {plan.stripe_id !==
+                                                        subscriptionInfo.plan.id && (
+                                                        <option value={plan.stripe_id}>
+                                                            {plan.name}
+                                                        </option>
+                                                    )}
+                                                </Fragment>
+                                            ))}
+                                        </select>
+                                        <button
+                                            className="gradient-btn ml-4"
+                                            onClick={() =>
+                                                dispatch(updateSubscriptionAction(planId))
+                                            }>
+                                            {t('Save')}
+                                        </button>
+                                    </div>
+                                )}
+                                {!subscriptionInfo?.defaultPayment && (
+                                    <p>{t('Add and setup default payment first')}</p>
+                                )}
+                                {subscriptionInfo?.paymentPlanList?.values && selectedPlanDbId && (
+                                    <Fragment>
+                                        {subscriptionInfo.paymentPlanList.values.map(
+                                            (values: any) => (
+                                                <Fragment key={values.group.id}>
+                                                    <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
+                                                        <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">
+                                                            {parseTranslation(
+                                                                values.group,
+                                                                'name',
+                                                                locale
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    {parseOptions(values.values, locale)}
+                                                </Fragment>
+                                            )
+                                        )}
+                                    </Fragment>
+                                )}
+                            </div>
+                        )}
                         {subscriptionInfo?.id && (
                             <div>
                                 <div className="flex flex-col">
@@ -176,11 +252,6 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                                                     locale
                                                                 )}
                                                             </div>
-                                                            <div />
-
-                                                            <div />
-
-                                                            <div />
                                                         </div>
                                                         {parseOptions(values.values, locale)}
                                                     </Fragment>

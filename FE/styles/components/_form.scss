@@ -279,3 +279,7 @@ input:checked + .toggle-bg {
         top: 0;
     }
 }
+
+.btn-download-orders {
+  @apply absolute right-[0] top-[20px] md:top-0 md:right-[145px] p-[5px];
+}

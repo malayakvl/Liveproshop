@@ -23,7 +23,6 @@ const { publicRuntimeConfig } = getConfig();
 const stripeKey = publicRuntimeConfig.stripeKey;
 
 const stripePromise = loadStripe(stripeKey);
-console.log('here we are');
 export default function Subscription({
     locale,
     planId,
@@ -38,7 +37,6 @@ export default function Subscription({
     const { query } = useRouter();
 
     const user = useSelector(userSelector);
-    console.log('here we are in continue subscription', user);
     const stripeClientSecret = useSelector(clientSecretSelector);
     const subscription = useSelector(userSubscriptionSelector);
     const planInfo = useSelector(planInfoSelector);

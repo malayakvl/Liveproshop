@@ -74,7 +74,6 @@ class LivesessionController {
      */
     async getActiveSessions (req, res) {
         const data = await livesessionModel.getAllActive();
-        console.log(data);
         if (!data.error) {
             return res.status(200).json({ result: data.result, error: data.error });
         } else {

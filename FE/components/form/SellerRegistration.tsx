@@ -94,7 +94,6 @@ export default function SellerRegistration({
 
     const onSubmit = (values: any) => {
         dispatch(showLoaderAction(true));
-        console.log('VALUES', values);
         fetch(`${baseUrl}/register?locale=${locale}`, {
             method: 'POST',
             body: JSON.stringify(values),

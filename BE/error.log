@@ -2741,3 +2741,728 @@
   level: 'error',
   timestamp: '2023-07-13T14:55:28.818Z'
 }
+{
+  message: 'Model error: duplicate key value violates unique constraint "subscriptions__subscription_id__ukey"',
+  level: 'error',
+  timestamp: '2023-07-13T18:30:13.485Z'
+}
+{
+  message: 'Model error: error: duplicate key value violates unique constraint "subscriptions__subscription_id__ukey"',
+  level: 'error',
+  timestamp: '2023-07-13T18:30:13.485Z'
+}
+{
+  message: 'Model error: duplicate key value violates unique constraint "subscriptions__subscription_id__ukey"',
+  level: 'error',
+  timestamp: '2023-07-13T18:30:13.722Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:06:12.554Z'
+}
+{
+  message: 'Model error: TypeError: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:06:12.561Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:06:12.654Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:15:59.847Z'
+}
+{
+  message: 'Model error: TypeError: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:15:59.854Z'
+}
+{
+  message: 'Model error: periodStart.addMonths is not a function',
+  level: 'error',
+  timestamp: '2023-07-13T19:16:00.048Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-13T19:41:35.870Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-13T19:42:22.674Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:44:00.537Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:45:35.266Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T05:49:58.823Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T05:49:58.824Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T05:50:11.092Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T05:51:21.893Z'
+}
+{
+  message: 'Model error: null value in column "country_id" of relation "addresses" violates not-null constraint',
+  level: 'error',
+  timestamp: '2023-07-14T05:51:21.986Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:53:00.987Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:56:16.496Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T05:58:47.754Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T06:04:05.943Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:35:21.874Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:35:48.081Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:38:19.885Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:38:49.168Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-14T07:40:30.401Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:46:49.783Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:47:40.303Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:48:05.670Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: relation "data.subscription" does not exist',
+  level: 'error',
+  timestamp: '2023-07-14T07:48:54.618Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T07:49:12.104Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T09:41:19.286Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T09:41:42.514Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T14:58:47.943Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:00:10.705Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:02:38.083Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:05:03.988Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:06:16.262Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:07:56.591Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:15:24.802Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:17:48.983Z'
+}
+{
+  message: "Model error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-14T15:18:20.186Z'
+}
+{
+  message: 'Model error: customerId is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:35:51.888Z'
+}
+{
+  message: 'Model error: customerId is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:36:45.552Z'
+}
+{
+  message: 'Model error: customerId is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:37:37.140Z'
+}
+{
+  message: 'Model error: customer is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T15:40:28.619Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:10:29.113Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:10:29.115Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:14:18.472Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of undefined (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:14:18.481Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:34:09.970Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:34:09.986Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:36:12.180Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:36:12.185Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:39:46.746Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:39:46.756Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:40:55.689Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:40:55.764Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:26.852Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:26.879Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:54.415Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:45:55.022Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:46:28.149Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:46:28.164Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:47:15.343Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:47:15.358Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:50:32.074Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:50:32.094Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:04.987Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:05.259Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:31.073Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:51:31.218Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:02.725Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:02.884Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:57.000Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:55:57.050Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:56:48.695Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:56:48.699Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:57:15.828Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:57:15.933Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:59:04.629Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T16:59:04.752Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:01:16.875Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:01:16.881Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:02:03.266Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:02:03.453Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:04:48.328Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-14T17:04:48.337Z'
+}
+{
+  message: 'Model error: syntax error at or near "WHERE"',
+  level: 'error',
+  timestamp: '2023-07-14T18:32:51.830Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-14T18:32:51.834Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T09:31:56.211Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T09:40:58.513Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T09:55:34.869Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T10:17:00.642Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T10:20:44.586Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: userData is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T10:29:04.622Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: userData is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T10:29:52.818Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: userData is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T10:30:23.752Z'
+}
+{
+  message: "Stripe Add Payment Method Error: No such customer: 'fake_subscription_33'",
+  level: 'error',
+  timestamp: '2023-07-17T10:30:54.118Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:37:50.483Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:40:47.880Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:52:25.016Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:56:54.187Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T10:58:23.911Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:08:05.241Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:10:36.617Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:13:32.700Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-17T11:16:05.161Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T11:34:54.013Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:37:20.237Z'
+}
+{
+  message: 'Stripe Add Payment Method Error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T11:38:47.431Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:42:51.916Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:46:56.424Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T11:56:40.644Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:03:20.051Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:03:35.389Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:06:04.891Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:07:57.846Z'
+}
+{
+  message: "User[getSubscriptionInfo]: No such subscription: '1'",
+  level: 'error',
+  timestamp: '2023-07-17T12:10:21.706Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T12:55:24.329Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:53:48.450Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:55:04.569Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:55:56.414Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:56:27.515Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:57:00.891Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:58:33.923Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T15:59:35.399Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T16:01:55.684Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T16:02:02.301Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot set properties of undefined (setting 'id')",
+  level: 'error',
+  timestamp: '2023-07-17T16:02:32.478Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:32:19.120Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:34:16.991Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:36:00.661Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:38:02.390Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:43:14.053Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:44:01.187Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:46:22.819Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T18:59:37.372Z'
+}
+{
+  message: 'Model error: start.diff is not a function',
+  level: 'error',
+  timestamp: '2023-07-17T19:00:45.115Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T19:06:15.460Z'
+}
+{
+  message: 'Model error: start.diff is not a function',
+  level: 'error',
+  timestamp: '2023-07-17T19:10:57.292Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T19:11:30.395Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-17T19:21:50.255Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-18T06:45:09.289Z'
+}

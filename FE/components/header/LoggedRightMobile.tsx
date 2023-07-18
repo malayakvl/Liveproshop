@@ -30,8 +30,6 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
     const [isMobile, setIsMobile] = useState(false);
     const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
 
-    console.log('Type', type.type);
-
     useEffect(
         function () {
             if (user.photo) {
@@ -51,7 +49,6 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                     } else {
                         setIsMobile(false);
                     }
-                    console.log('Resize event', window.innerWidth);
                 };
                 window.addEventListener('resize', handleWindowResize);
                 return () => {
@@ -86,6 +83,7 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
     };
 
     const toggleSidebar = () => {
+        console.log('here we are');
         setToggleSideClass(
             toggleSideClass !== 'left-side-open' ? 'left-side-open' : 'left-side-close'
         );
@@ -156,9 +154,10 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                 <a
                                                     role="presentation"
-                                                    onClick={() =>
-                                                        setShowProfileMenu(!showProfileMenu)
-                                                    }>
+                                                    onClick={() => {
+                                                        setShowProfileMenu(!showProfileMenu);
+                                                        toggleSidebar();
+                                                    }}>
                                                     <i className="profile" />
                                                     <span className="s-caption">
                                                         {t('Profile')}
@@ -172,9 +171,10 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                     <a
                                                         role="presentation"
-                                                        onClick={() =>
-                                                            setShowProfileMenu(!showProfileMenu)
-                                                        }>
+                                                        onClick={() => {
+                                                            setShowProfileMenu(!showProfileMenu);
+                                                            toggleSidebar();
+                                                        }}>
                                                         <i className="plan" />
                                                         <span className="s-caption">
                                                             {t('My Plan')}
@@ -188,9 +188,10 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                 <a
                                                     role="presentation"
-                                                    onClick={() =>
-                                                        setShowProfileMenu(!showProfileMenu)
-                                                    }>
+                                                    onClick={() => {
+                                                        setShowProfileMenu(!showProfileMenu);
+                                                        toggleSidebar();
+                                                    }}>
                                                     <i className="settings-pay" />
                                                     <span
                                                         className="s-caption"
@@ -206,9 +207,10 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                 <a
                                                     role="presentation"
-                                                    onClick={() =>
-                                                        setShowProfileMenu(!showProfileMenu)
-                                                    }>
+                                                    onClick={() => {
+                                                        setShowProfileMenu(!showProfileMenu);
+                                                        toggleSidebar();
+                                                    }}>
                                                     <i className="help" />
                                                     <span className="s-caption">{t('Help')}</span>
                                                 </a>

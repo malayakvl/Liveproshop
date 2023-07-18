@@ -23,10 +23,10 @@
 }
 .app-logo-unreg {
   display: inherit;
-  top: 6px;
+  top: 12px;
   left: calc(50% - 120px);
 
-  @apply md:top-[15px] md:left-auto md:ml-[40px] xl:ml-0;
+  @apply md:top-[22px] md:left-auto md:ml-[40px] xl:ml-0;
 }
 
 .drop-top-menu-item {

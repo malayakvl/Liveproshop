@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     const session = await getSession({ req });
     const headers = authHeader(session.user.email);
     // console.log(router);
-    console.log('QUERY params', req.query.locale);
+    // console.log('QUERY params', req.query.locale);
     try {
         const response = await axios.get(
             `${baseUrl}/payments/download-invoice/${req.query.orderNumber}?locale=fr`,

@@ -25,6 +25,26 @@ class UserController {
             return res.status(401).json({});
         }
 
+
+        if (!user.identification_number) {
+            user.identification_number = '';
+        }
+        if (!user.vat) {
+            user.vat = '';
+        }
+        if (!user.phone) {
+            user.phone = '';
+        }
+        if (!user.first_name) {
+            user.first_name = '';
+        }
+        if (!user.last_name) {
+            user.last_name = '';
+        }
+        if (!user.company_name) {
+            user.company_name = '';
+        }
+
         delete user.salt;
         delete user.password;
         delete user.hash;
@@ -37,6 +57,9 @@ class UserController {
         }
 
         const address = await userModel.findUserAddress(req.user.id);
+        if (!address.address_type) {
+            address.address_type = 'home address';
+        }
         if (address) {
             const country = await countryModel.findById(address.country_id)
 
@@ -201,7 +224,7 @@ class UserController {
 
     async getSubscription(req, res) {
         if (req.user) {
-            const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id);
+            const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id, req.user.is_trial);
             // console.log('DATA SUBSCRIPTION', data);
             if (data.subscription) {
                 return res.status(200).json({
@@ -284,8 +307,12 @@ class UserController {
 
     async createExistUserSubscription (req, res) {
         if (req.user) {
-            const data = await userModel.createExistUserSubscription(req.body, req.user);
-            const user = await userModel.findUserByEmail(req.user.email);
+            if (req.user.is_trial) {
+                const data = await userModel.createExistUserSubscriptionAfterTrial(req.body, req.user);
+            } else {
+                const data = await userModel.createExistUserSubscription(req.body, req.user);
+            }
+            const user = await userModel.findUserByEmail(req.user.email, true);
             if (data.subscription) {
                 return res.status(200).json({
                     user: user,

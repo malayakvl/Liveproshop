@@ -23,7 +23,6 @@ function Profile() {
     const filePickerRef = useRef<HTMLInputElement>(null);
     const [imagePost, setImagePost] = useState<File>();
     const [isNewPhoto, setIsNewPhoto] = useState(false);
-
     useEffect(() => {
         if (user.email) {
             dispatch(fetchProfileAction());

@@ -136,16 +136,18 @@ export default function Pricing({ locale }: { locale: any }) {
     const [selected, setSelected] = useState('business');
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
-    // const user = useSelector(userSelector);
+    const user = useSelector(userSelector);
     // const [showTrial, setShowTrial] = useState(true);
     const stripeClientSecret = useSelector(clientSecretSelector);
 
     const [success, setSuccess] = useState(false);
+    const [hideTrialBtn, setHideTrialBtn] = useState(false);
 
     const validationSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field'))
     });
 
+    // console.log(user);
     const handlerSubmit = (values: unknown) => {
         dispatch(
             requestDemoAction({
@@ -162,13 +164,13 @@ export default function Pricing({ locale }: { locale: any }) {
         dispatch(fetchFormAction());
     }, []);
 
-    // useEffect(() => {
-    //     // if (user.email) {
-    //     //     if (user.status) {
-    //     //         setShowTrial(false);
-    //     //     }
-    //     // }
-    // }, [user?.email]);
+    useEffect(() => {
+        if (user?.email) {
+            if (user.is_trial) {
+                setHideTrialBtn(true);
+            }
+        }
+    }, [user?.email]);
 
     // useEffect(() => {
     //     if (stripeClientSecret) {
@@ -263,12 +265,10 @@ export default function Pricing({ locale }: { locale: any }) {
                                 {locale == 'en' && (
                                     <>
                                         <span className="block">{t('text_pricing_1')}</span>
-                                        <span className="block font-bold">
-                                            {t('Always know what you’ll pay.')}
-                                        </span>
+                                        <span className="block font-bold">{t('text_always')}</span>
                                     </>
                                 )}
-                                <span className="mt-[30px] block">
+                                <span className={`mt-[30px] ${hideTrialBtn ? 'hidden' : 'block'}`}>
                                     <Link href={'/auth/signup'}>
                                         <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block lg:mr-[84px] text-center">
                                             <span className="text-[20px] inline-block min-w-[220px] text-center">

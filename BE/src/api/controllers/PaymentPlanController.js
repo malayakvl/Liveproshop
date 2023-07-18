@@ -20,6 +20,7 @@ class PaymentPlanController {
      */
     async fetchItems (req, res) {
         const items = await paymentPlanModel.fetchItems();
+        // console.log("HERE", items);
         const settings = await paymentPlanModel.fetchSettings();
         return res.status(200).json({ items: items, settings: settings });
     }
