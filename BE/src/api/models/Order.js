@@ -176,7 +176,7 @@ async function generateFooter(doc, locale) {
     doc
         .fontSize(10)
         .text(
-            t["Payment is due within 15 days. Thank you for your business."],
+            "",
             50,
             780,
             { align: "center", width: 500 }
