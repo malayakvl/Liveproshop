@@ -29,7 +29,7 @@ class User {
             if (res1.rows[0].fields_json) {
                 res1.rows[0].subscription_expired = false;
                 if (res1.rows[0].fields_json.role_id === 2) {
-                    console.log(res1.rows[0].fields_json);
+                    // console.log(res1.rows[0].fields_json);
                     if ((res1.rows[0].fields_json.customer_id || !res1.rows[0].fields_json.is_fake) && (res1.rows[0].fields_json.period_left === null || res1.rows[0].fields_json.period_left < 0)) {
                         try {
                             const subscription = await stripe.subscriptions.retrieve(res1.rows[0].fields_json.subscription_id);
@@ -71,7 +71,7 @@ class User {
                             res1.rows[0].fields_json.is_trial = true;
                         }
                     } else if (res1.rows[0].fields_json.customer_id && res1.rows[0].fields_json.is_trial) {
-                        console.log("PERIOD LEFT", res1.rows[0].fields_json.period_left);
+                        // console.log("PERIOD LEFT", res1.rows[0].fields_json.period_left);
                         if (res1.rows[0].fields_json.period_left > 0) {
                             res1.rows[0].fields_json.subscription_expired = false;
                         } else {
@@ -463,7 +463,7 @@ class User {
                     subscriptionFakeData.plan = resSubscription.rows[0];
 
                     // subscriptionFakeData.plan.id = "dsadasd";
-                    console.log("FAKE SUBSCRIPTION", subscriptionFakeData);
+                    // console.log("FAKE SUBSCRIPTION", subscriptionFakeData);
 
                 }
                 return { subscription: subscriptionFakeData };
@@ -482,7 +482,7 @@ class User {
                 const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionId}'`);
                 subscriptionFakeData.plan = resSubscription.rows[0];
                 // subscriptionFakeData.plan.id = "dsadasd";
-                console.log("FAKE SUBSCRIPTION WITH REAL STRIPE CUSTOMER", subscriptionFakeData);
+                // console.log("FAKE SUBSCRIPTION WITH REAL STRIPE CUSTOMER", subscriptionFakeData);
             }
             else {
                 const subscription = await stripe.subscriptions.retrieve(
@@ -634,7 +634,7 @@ class User {
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
                     LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
                     WHERE customer_id='${paymentIntentResult.customer}'`);
-                    console.log('[User.checkPayment]', subscriptionRes.rows[0]);
+                    // console.log('[User.checkPayment]', subscriptionRes.rows[0]);
 
                     if (subscriptionRes.rows.length) {
                         paymentIntentResult.email = subscriptionRes.rows[0].email;
@@ -689,7 +689,7 @@ class User {
             hash
         } = this.setPassword(userData.password);
         const client = await pool.connect();
-        console.log("USER DATA", userData);
+        // console.log("USER DATA", userData);
         try {
             const res = await client.query(`
             INSERT INTO data.users (

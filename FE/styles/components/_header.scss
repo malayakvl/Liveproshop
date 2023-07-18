@@ -283,5 +283,12 @@
   }
 }
 
+.profile-small-image {
+  background-size: contain;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
 //document.getElementById('sidenav-2').classList.remove('left-slide-close');
 //document.getElementById('sidenav-2').classList.add('left-side-open');

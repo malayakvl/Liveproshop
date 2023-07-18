@@ -12,7 +12,7 @@ import { countriesSelector } from '../../redux/countries/selectors';
 function Address({ locale, address }: { address: Profile.Address; locale: string }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-    console.log('CURRENT LOCALE', locale);
+    // console.log('CURRENT LOCALE', locale);
     const countries = useSelector(countriesSelector);
     const addressTypeData = [
         { value: 'home address', label: t('home address') },

@@ -38,7 +38,7 @@ function Profile() {
     };
 
     useEffect(() => {
-        console.log('here we are');
+        console.log('here we are update photo', imagePost);
         dispatch(setPhotoAction(imagePost));
     }, [imagePost]);
 
@@ -98,8 +98,6 @@ function Profile() {
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
     });
-
-    console.log('!!!!', t('Surname'));
 
     return (
         <Formik

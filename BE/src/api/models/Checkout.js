@@ -193,13 +193,13 @@ class Checkout {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
-                        console.log("Res Data", res.data);
+                        // console.log("Res Data", res.data);
                         return {redirectUrl: res.data.data.payment_url, error: null}
                         // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
                     }).catch(error => {
                         return {redirectUrl: null, error: error.message}
                     });
-                console.log('here we are', multiSafePayClientRes);
+                // console.log('here we are', multiSafePayClientRes);
                 return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}
             } else {
                 return {redirectUrl: null, error: 'No find order'}

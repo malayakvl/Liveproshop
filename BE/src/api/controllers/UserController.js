@@ -110,6 +110,8 @@ class UserController {
         if (!req.user) {
             return res.status(402).json('Something wend wrong');
         }
+        console.log("here we are update profile", req.user.id)
+        console.log("UPLOAD DIR", `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`)
         const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`;
         if (!fs.existsSync(dirUpload)) {
             fs.mkdirSync(dirUpload, { recursive: true });
