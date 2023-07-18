@@ -119,7 +119,6 @@ function Profile() {
                         })
                     );
                 } else {
-                    console.log('handle submit');
                     handlerSubmit(values, photo);
                 }
             }}>

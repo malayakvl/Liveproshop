@@ -9,6 +9,8 @@ import { userSelector } from '../../redux/user/selectors';
 import { useTranslations } from 'next-intl';
 import { baseApiUrl } from '../../constants';
 import LangSwitcherInline from '../lang/SwitcherInline';
+import { toggleProfileMenuAction } from '../../redux/layouts';
+import { isProfileMenuOpenSelector } from '../../redux/layouts/selectors';
 // import LangSwitcher from '../lang/Switcher';
 // import LoggedRight from "./LoggedRight";
 
@@ -29,6 +31,7 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
     // const [windowWidth, setWindowWidth] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
     const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
+    const toggleProfileSideClass = useSelector(isProfileMenuOpenSelector);
 
     useEffect(
         function () {
@@ -39,7 +42,6 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                 dispatch(fetchLatestAction());
             }
             if (window) {
-                console.log(window.innerWidth);
                 if (window.innerWidth < 768) {
                     setIsMobile(true);
                 }
@@ -67,6 +69,14 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
         };
     }, []);
 
+    useEffect(() => {
+        if (!toggleProfileSideClass) {
+            console.log('close profile menu');
+            dispatch(toggleProfileMenuAction(false));
+            setToggleSideClass('left-side-close');
+        }
+    }, [toggleProfileSideClass]);
+
     const handleClick = (e: any) => {
         // if (node?.current?.contains(e.target) || node?.current === null) {
         //     console.log('here');
@@ -83,17 +93,23 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
     };
 
     const toggleSidebar = () => {
-        console.log('here we are');
         setToggleSideClass(
             toggleSideClass !== 'left-side-open' ? 'left-side-open' : 'left-side-close'
         );
+        dispatch(toggleProfileMenuAction(toggleSideClass !== 'left-side-open'));
     };
 
     return (
         <>
             {isMobile && (
                 <div style={{ height: '30px' }}>
-                    <div className="app-logo app-logo-mob" />
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                    <div
+                        className="app-logo app-logo-mob cursor-pointer"
+                        onClick={() =>
+                            dispatch(toggleProfileMenuAction(toggleSideClass !== 'left-side-open'))
+                        }
+                    />
                     {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                     <div
                         className={`md:hidden dotted-menu cursor-pointer border-red-50 ${

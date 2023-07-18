@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
-import { toggleSidebarAction } from '../../redux/layouts';
+import { toggleProfileMenuAction, toggleSidebarAction } from '../../redux/layouts';
 // import Router from 'next/router';
 
 export default function SidebarLayout({ children }: { children: any }) {
@@ -48,6 +48,7 @@ export default function SidebarLayout({ children }: { children: any }) {
                         className="outline-none mobile-menu-button"
                         onClick={() => {
                             dispatch(toggleSidebarAction());
+                            dispatch(toggleProfileMenuAction(false));
                         }}>
                         <svg
                             width="24"

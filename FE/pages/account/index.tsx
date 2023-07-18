@@ -49,7 +49,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                 <link rel="icon" href="/images/logo-1.svg" />
             </Head>
 
-            <div className="page-title">
+            <div className="page-title ml-[15px] md:ml-auto">
                 <h1>{subTitle}</h1>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">

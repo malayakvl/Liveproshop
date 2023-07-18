@@ -294,7 +294,7 @@ const ACTION_HANDLERS: any = {
     [toggleProfileMenuAction]: {
         next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
             ...state,
-            showTextingMenu: action.payload
+            showProfileMenu: action.payload
         })
     },
     [setLngAction]: {

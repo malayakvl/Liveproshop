@@ -142,12 +142,17 @@
     top:10px;
     right: 12px;
 
+    .language-block {
+      @apply ml-[16px] md:ml-auto;
+    }
+
   }
 }
 
 .lang-mob {
-  right: 0 !important;
+  right: 16px !important;
   top: 0 !important;
+
 }
 
 .block-mobile {
