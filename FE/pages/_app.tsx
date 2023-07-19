@@ -74,13 +74,25 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                             <title>LiveProshop</title>
                             <link rel="icon" href="/images/logo-1.svg" />
                             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                            {/*<script*/}
+                            {/*    async*/}
+                            {/*    defer*/}
+                            {/*    crossOrigin="anonymous"*/}
+                            {/*    src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
+                            {/*    nonce="qpTXeSyr"*/}
+                            {/*/>*/}
                             <script
                                 async
                                 defer
                                 crossOrigin="anonymous"
-                                src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"
-                                nonce="qpTXeSyr"
-                            />
+                                src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"
+                                nonce="GGVdSmMO"></script>
+                            {/*<script*/}
+                            {/*    async*/}
+                            {/*    defer*/}
+                            {/*    crossOrigin="anonymous"*/}
+                            {/*    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
+                            {/*    nonce="GGVdSmMO"></script>*/}
                             <script
                                 async
                                 defer

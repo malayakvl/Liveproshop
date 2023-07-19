@@ -78,6 +78,7 @@ class AuthController {
     }
 
     async authProviderLogin(req, res) {
+        console.log(req.body);
         const { user, error } = await userModel.providerLogin(req.body);
         if (error) {
             return res.status(error.code).json(error);

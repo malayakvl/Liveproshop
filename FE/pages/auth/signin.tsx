@@ -1,4 +1,4 @@
-import {useRef, useState} from 'react';
+import { useRef, useState } from 'react';
 import { providers, getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';

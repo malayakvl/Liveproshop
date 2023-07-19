@@ -194,8 +194,26 @@ class User {
                     ;
                 `;
                 const res = await client.query(query);
+                // create row at address table
+            // await client.query(`INSERT INTO data.addresses
+            // (
+            //     user_id, country_id, state, post_code, address_type, city,
+            //     address_line_1, address_line_2
+            // )
+            // VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 )`, [
+            //         userData.id,
+            //         1,
+            //         null,
+            //         null,
+            //         'home address',
+            //         null,
+            //         null,
+            //         null
+            //     ]);
+
                 // user = res ? await this.findUserByEmail(userData.email) : null;
                 user = res ? await this.findUserByProviderId(userData.id) : null;
+                console.log("USER PROVIDER", user);
                 if (user) {
                     return { user: user, error: null };
                 } else {
@@ -228,6 +246,7 @@ class User {
         const client = await pool.connect();
         try {
             let user;
+            console.log("USER DATA", userData);
             user = await this.findUserByProviderId(userData.userID);
             if (!user) {
                 return { user: null, error: { code: 404, message: 'User Not found' } };
@@ -836,7 +855,13 @@ class User {
         try {
             const query = `SELECT * FROM data.addresses WHERE user_id='${userId}' ORDER BY id DESC;`;
             const res = await client.query(query);
-            return res.rows ? res.rows[0] : null;
+            if (res.rows.length === 0) {
+                await client.query(`INSERT INTO data.addresses (user_id, address_type, country_id) VALUES ${userId}, 'home address', 1)`);
+                const queryInstr = `SELECT * FROM data.addresses WHERE user_id='${userId}' ORDER BY id DESC;`;
+                const resInsrt = await client.query(queryInstr);
+            }
+            return res.rows ? res.rows[0] : resInsrt.rows[0];
+            // return res.rows ? res.rows[0] : null;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

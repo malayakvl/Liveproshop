@@ -15,8 +15,7 @@ export const accountService = {
     loginFB,
     logout,
     syncFB,
-    registerFB,
-    loginFBusiness
+    registerFB
 };
 
 async function syncFB() {
@@ -54,6 +53,7 @@ async function registerFB(paramData) {
     authResponse.roleId = roleId;
     authResponse.locale = locale;
     if (authResponse) {
+        console.log('AUTH RESPONCE AND GETTING ACCOUNT DATA', authResponse);
         await getAccountData(authResponse);
     } else {
         store.dispatch(setErrorToastAction('Could no autherntificate'));
@@ -112,6 +112,7 @@ async function loginFBusiness() {
 }
 
 async function getAccountData(authResponse) {
+    console.log('GETTING ACCOUNT DATA');
     axios
         .get(
             `https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${authResponse.accessToken}`

@@ -5,10 +5,11 @@ import { accountService } from '_services';
 export function initFacebookSdk() {
     return new Promise((resolve) => {
         // wait for facebook sdk to initialize before starting the react app
+        console.log('APP ID', '3046697902325160');
         window.fbAsyncInit = function () {
             FB.init({
-                appId: '3046697902325160',
-                // appId: '812820500482863',
+                // appId: '3046697902325160',
+                appId: '812820500482863',
                 cookie: true,
                 xfbml: true,
                 version: 'v17.0'
@@ -21,6 +22,7 @@ export function initFacebookSdk() {
 
             // auto authenticate with the api if already logged in with facebook
             window.FB.getLoginStatus(({ authResponse }) => {
+                console.log('LOGIN STATUS', authResponse.accessToken);
                 if (authResponse) {
                     accountService.apiAuthenticate(authResponse.accessToken).then(resolve);
                 } else {

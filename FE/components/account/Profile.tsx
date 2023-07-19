@@ -64,6 +64,15 @@ function Profile() {
         [dispatch]
     );
 
+    const validateEmail = (email: string) => {
+        const validEmail = String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        return !validEmail ? false : true;
+    };
+
     const SubmitSchema = Yup.object().shape({
         email: Yup.string()
             .trim(t('Cannot include leading and trailing spaces'))
@@ -167,7 +176,7 @@ function Profile() {
                     </div>
                     <div className="float-left ml-[20px] min-w-[300px]">
                         <InputText
-                            disabled
+                            disabled={validateEmail(props.values['email'])}
                             icon={'f-email'}
                             label={null}
                             name={'email'}

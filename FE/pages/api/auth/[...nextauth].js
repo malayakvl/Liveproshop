@@ -3,6 +3,11 @@ import FacebookProvider from 'next-auth/providers/facebook';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import getConfig from 'next/config';
+import axios from 'axios';
+import store from '../../../app/store';
+import { setErrorToastAction } from '../../../redux/layouts';
+import { showLoaderAction } from '../../../redux/layouts/actions';
+import { signIn } from 'next-auth/client';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
@@ -15,9 +20,13 @@ export default NextAuth({
     //     newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
     // },
     providers: [
+        // FacebookProvider({
+        //     clientId: process.env.FACEBOOK_CLIENT_ID,
+        //     clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+        // }),
         FacebookProvider({
-            clientId: process.env.FACEBOOK_CLIENT_ID,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+            clientId: '3046697902325160',
+            clientSecret: 'a99354090c107188b3a6ca136d20d06c'
         }),
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID,
@@ -92,6 +101,29 @@ export default NextAuth({
         CredentialsProvider({
             id: 'credentials_sdkfacebook',
             async authorize(credentials) {
+                console.log('CREDENTIALS', credentials);
+                console.log('TOKEN', credentials.accessToken);
+                // await axios
+                //     .get(
+                //         `https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${credentials.accessToken}`
+                //     )
+                //     .then((response) => {
+                //         console.log('PROFILE RESPONCE', response.data);
+                //         const { data } = response;
+                //         if (data.error) {
+                //             store.dispatch(setErrorToastAction('Could no autherntificate'));
+                //         }
+                //         data.accessToken = authResponse.accessToken;
+                //         // data.providerId = authResponse.userID,
+                //         data.expirationTime = authResponse.data_access_expiration_time;
+                //         data.callbackUrl = `${window.location.origin}/${
+                //             authResponse.locale === 'fr' ? '' : 'en/'
+                //         }account`;
+                //         data.roleId = authResponse.roleId;
+                //         store.dispatch(showLoaderAction(true));
+                //         // signIn('credentials_sdkfacebook', data);
+                //     });
+
                 const res = await fetch(`${baseUrl}/provider`, {
                     method: 'POST',
                     body: JSON.stringify(credentials),
@@ -101,7 +133,7 @@ export default NextAuth({
                 if (res.ok && resp.user) {
                     return resp.user;
                 }
-                throw `/auth/signup?message=your token expired`;
+                throw `/auth/signup?message=your token expired cred`;
                 // return null;
             }
         }),
@@ -117,7 +149,7 @@ export default NextAuth({
                 if (res.ok && resp.user) {
                     return resp.user;
                 }
-                throw `/auth/signin?message=your token expired`;
+                throw `/auth/signin?message=you are not registered yet`;
                 // return null;
             }
         })
