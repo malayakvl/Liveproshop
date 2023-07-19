@@ -72,7 +72,7 @@ const FilterShoppers: React.FC<Props> = ({ locale }) => {
                                 className={showBlock ? 'rotate-180' : ''}
                             />
                             <span className="ml-2 text-xs font-bold text-blue-350">
-                                {t('Shoppers')}
+                                {t('Sellers')}
                             </span>
                         </div>
                         <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">
