@@ -1,3 +1,4 @@
+import {useRef, useState} from 'react';
 import { providers, getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -8,7 +9,7 @@ import { signIn } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import { Formik, Field } from 'formik';
 import Head from 'next/head';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { accountService } from '../../_services';
 import React from 'react';
 import { hideRegisterFormAction } from '../../redux/user';
@@ -17,11 +18,24 @@ function Signin({ locale }: { locale: string }) {
     const t = useTranslations();
     const { query } = useRouter();
     const dispatch = useDispatch();
+    const fbBtnRef = useRef(null);
 
     const SubmitSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
         password: Yup.string().required(t('Required field'))
     });
+
+    // useState()
+
+    const getLoginBusinessButton = () => {
+        return `
+            <fb:login-button 
+                config_id="284098587534725"
+                onlogin="checkLoginState();">
+            </fb:login-button>
+            `;
+    };
+
     return (
         <>
             <Head>
@@ -114,6 +128,13 @@ function Signin({ locale }: { locale: string }) {
                     </Formik>
 
                     {/*<ProviderBtns Providers={providers} locale={locale} />*/}
+                    <div id="fb-block-btn" ref={fbBtnRef}></div>
+                    {/*<div>*/}
+                    {/*    <fb:login-button*/}
+                    {/*        config_id="{config_id}"*/}
+                    {/*        onlogin="checkLoginState();">*/}
+                    {/*    </fb:login-button>*/}
+                    {/*</div>*/}
                     <button
                         className="image-btn bg-social-facebook text-white"
                         onClick={() => accountService.loginFB()}>
@@ -129,6 +150,14 @@ function Signin({ locale }: { locale: string }) {
                         </div>
                         {/*<div className="text-sm bg-facebook-btn">{t('Continue with Facebook')}</div>*/}
                     </button>
+                    {/*<button*/}
+                    {/*    className="image-btn bg-social-facebook text-white"*/}
+                    {/*    onClick={() => accountService.loginFBusiness()}>*/}
+                    {/*    <div className="text-[12px] md:text-sm w-full text-center bg-facebook-btn">*/}
+                    {/*        {t('Continue with Facebook')}*/}
+                    {/*    </div>*/}
+                    {/*    /!*<div className="text-sm bg-facebook-btn">{t('Continue with Facebook')}</div>*!/*/}
+                    {/*</button>*/}
 
                     <div className="mt-3 border-t text-center text-sm">
                         <div className="mb-2 pt-1">

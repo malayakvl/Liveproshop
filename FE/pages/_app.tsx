@@ -78,9 +78,29 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                                 async
                                 defer
                                 crossOrigin="anonymous"
-                                src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v12.0&appId=3046697902325160&autoLogAppEvents=1"
+                                src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"
                                 nonce="qpTXeSyr"
                             />
+                            <script
+                                async
+                                defer
+                                crossOrigin="anonymous"
+                                src="https://connect.facebook.net/uk_UA/sdk.js#xfbml=1&version=v17.0&appId=812820500482863&autoLogAppEvents=1"
+                                nonce="3jJJdQcM"></script>
+                            {/*<script*/}
+                            {/*    async*/}
+                            {/*    defer*/}
+                            {/*    crossOrigin="anonymous"*/}
+                            {/*    src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
+                            {/*    nonce="T4qU7ZVO"*/}
+                            {/*/>*/}
+                            <div id="fb-root"></div>
+                            {/*<script*/}
+                            {/*    async*/}
+                            {/*    defer*/}
+                            {/*    crossOrigin="anonymous"*/}
+                            {/*    src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
+                            {/*        nonce="T4qU7ZVO"></script>*/}
 
                             {/*<script>*/}
                             {/*    window.axeptioSettings = {*/}

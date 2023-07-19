@@ -15,7 +15,8 @@ export const accountService = {
     loginFB,
     logout,
     syncFB,
-    registerFB
+    registerFB,
+    loginFBusiness
 };
 
 async function syncFB() {
@@ -61,6 +62,36 @@ async function registerFB(paramData) {
 
 async function loginFB() {
     // login with facebook then authenticate with the API to get a JWT auth token
+    const { authResponse } = await new Promise(window.FB.login);
+    // const authResponse = {
+    //     accessToken:
+    //         'EAArS9KI0vagBAGRrb0gSuSgMOfsuEZBM8InZCyVf0JcKCE2RVmRc5NZCfGs3zNR5zIrxMdzc7baTo2Gra9LLYKcZAZB40ZBpmWU1xpZB3kWJtBgRA7Ge1ZAqJx8wvZAGMidWimhyzHrtsz0pyNAjUxXhtOXLUJaFv7MGYyPf9QskObO5TCsBjbP6yxkJGHFbOxSXRwyoiSH3nCC8MZCEZB7tSzm',
+    //     userID: '2763630843946760',
+    //     expiresIn: 5541,
+    //     signedRequest:
+    //         'UVLZg3i-hV26oubUREkooPPLh97OGsyOubTKhBpOQPE.eyJ1c2VyX2lkIjoiMjc2MzYzMDg0Mzk0Njc2MCIsImNvZGUiOiJBUURUa0F3TVpuNjRtQlNzdXV6XzFsdmEtVlNKVGtwblVQNEcyTE5wNEhocGNNMUJidDR0ci1pZUNjVUpydWNwREZhWndDTnBEdFhjeHA0dnhUaGtjbEZjSkZZTGxwSG1QUF95TW9GQ2pHRThac0U1NlRlc0t6bnlwbDZxR0dmUW1STVF6U1hMVWRDZ0tMcTBlZmI5enRCVDNVWERYeXVCcFNFSnkzX3YxcXNyZnAwR2JLOUhMM0J0LVBFUl9ock1oQkRCUFRkNHZfUmFZcmZ3ZjlnbTdQNU5BamxhalRsajViTHVDY3Z0UWlpWU94QThyaFRyUkhaXzZPVkt4ZlFZeG15WENRVk5SMUNIczNuVEQydDZKRm0zRDZrSi1PczU5UEwzLUZCaFZ2WklsaFlOa0FRREd4LWpxMFBqUDdaTER0Rk5VWFd4MmQ4ZF8yWm81Q09EOUVpbCIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNjQzMjAzNjU5fQ',
+    //     graphDomain: 'facebook',
+    //     data_access_expiration_time: 1651004629
+    // };
+    if (authResponse) {
+        store.dispatch(showLoaderAction(true));
+        signIn('credentials_sdkfacebook_login', authResponse);
+    } else {
+        store.dispatch(setErrorToastAction('Could no autherntificate'));
+    }
+}
+
+async function loginFBusiness() {
+    // login with facebook then authenticate with the API to get a JWT auth token
+    FB.login(
+        function (response) {
+            console.log(response);
+        },
+        {
+            config_id: '6452252501537400' // right
+            // configId: '<CONFIG_ID>' // wrong
+        }
+    );
     const { authResponse } = await new Promise(window.FB.login);
     // const authResponse = {
     //     accessToken:

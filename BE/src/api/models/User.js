@@ -29,45 +29,17 @@ class User {
             if (res1.rows[0].fields_json) {
                 res1.rows[0].subscription_expired = false;
                 if (res1.rows[0].fields_json.role_id === 2) {
-                    // console.log(res1.rows[0].fields_json);
                     if ((res1.rows[0].fields_json.customer_id || !res1.rows[0].fields_json.is_fake) && (res1.rows[0].fields_json.period_left === null || res1.rows[0].fields_json.period_left < 0)) {
                         try {
                             const subscription = await stripe.subscriptions.retrieve(res1.rows[0].fields_json.subscription_id);
-                            // console.log(subscription);
-                            // update subscription period
-                            // await client.query(`SELECT
-                            //                         *
-                            //                     FROM data.set_subscriptions_period_end(
-                            //                         '${subscription.status}',
-                            //                         ${subscription.current_period_end},
-                            //                         '${JSON.stringify({subscription_id: subscription.id})}'
-                            //                     );`);
                             if (subscription.current_period_end > moment().unix()) {
-                                // res1.rows[0].fields_json.subscription_expired = true;
                                 res1.rows[0].fields_json.subscription_expired = false;
                             }
                         } catch (e) {
                             // res1.rows[0].fields_json.subscription_expired = true;
                             res1.rows[0].fields_json.subscription_expired = false;
-                            if (!res1.rows[0].fields_json.is_trial) {
-                                // const dbSubscription = {
-                                //     user_id: res1.rows[0].fields_json.id,
-                                //     plan_id: 1,
-                                //     customer_id: paymentIntentResult.customer,
-                                //     subscription_id: subscription.id,
-                                //     status: 'trialing',
-                                //     period_start: Date.now(),
-                                //     period_end: Date.now(),
-                                //     is_trial: type === 'trial'
-                                // }
-                                // const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                                // await client.query(_querySubscription);
-
-//                                 await client.query(`INSERT INTO data.subscription (user_id, plan_id, customer_id, subscription_id, status, period_start) VALUES (${user.id}, 1, '${Date.now().toString()}', 'trialimg', now())`);
-// comsole.log(`INSERT INTO data.subscription (user_id, plan_id, customer_id, subscription_id, status, period_start) VALUES (${user.id}, 1, '${Date.now().toString()}', 'trialimg', Date.now())`);
-
-                                // const querySubscription = "INSERT INTO data.sucscription SET use"
-                            }
+                            // if (!res1.rows[0].fields_json.is_trial) {
+                            // }
                             res1.rows[0].fields_json.is_trial = true;
                         }
                     } else if (res1.rows[0].fields_json.customer_id && res1.rows[0].fields_json.is_trial) {
@@ -97,16 +69,8 @@ class User {
                             }
                             const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
                             await client.query(_querySubscription);
-                        } else {
-                            // console.log("DATA SUBSCRIPTION22222", res1.rows[0].fields_json.customer_id)
-                            // const paymentMethods = await stripe.customers.listPaymentMethods(
-                            //     res1.rows[0].fields_json.customer_id,
-                            //     {type: 'card'}
-                            // );
-                            // res1.rows[0].fields_json.paymentMethodsNoSubscription = paymentMethods.data;
                         }
                         if (!['active', 'trialing', 'cancel_at_period_end'].includes(res1.rows[0].fields_json.status)) {
-                            // res1.rows[0].fields_json.subscription_expired = true;
                             res1.rows[0].fields_json.subscription_expired = false;
                         }
                     }
@@ -116,7 +80,6 @@ class User {
                 res1.rows[0].fields_json.is_trial = true;
                 delete res1.rows[0].fields_json.auth_provider_name;
                 delete res1.rows[0].fields_json.auth_provider_id;
-// console.log(res1.rows[0].fields_json);
                 return res1.rows[0].fields_json;
             } else {
                 return null;
@@ -127,6 +90,40 @@ class User {
                 logger.log(
                     'error',
                     'Model error:',
+                    { message: e.message }
+                );
+            }
+            throw new Error(e);
+        } finally {
+            client.release();
+        }
+    }
+
+    async createDbSubscription(userId) {
+        const client = await pool.connect();
+        try {
+            const periodStart =  new Date();
+            const periodEnd  = new Date();
+            periodEnd.setMonth(periodEnd.getMonth() + 1);
+            const timestampStart = periodStart.getTime();
+            const timestampEnd = periodEnd.getTime();
+            const dbSubscription = {
+                user_id: userId,
+                plan_id: 1,
+                customer_id: `fake_subscription_${userId}`,
+                subscription_id: 1,
+                status: 'trialing',
+                period_start: timestampStart/1000,
+                period_end: timestampEnd/1000,
+                is_trial: true
+            }
+            const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+            await client.query(_querySubscription);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Create Fake error:',
                     { message: e.message }
                 );
             }
@@ -692,23 +689,6 @@ class User {
         // console.log("USER DATA", userData);
         try {
             const res = await client.query(`
-            INSERT INTO data.users (
-                email, password, salt, role_id, first_name, last_name, company_name,
-                phone, vat, identification_number, full_address
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`, [
-                userData.email,
-                hash,
-                salt,
-                userData.role_id,
-                userData.first_name,
-                userData.last_name,
-                userData.company_name,
-                userData.phone,
-                userData.vat,
-                userData.identification_number,
-                userData.full_address
-            ]);
-            console.log(`
             INSERT INTO data.users (
                 email, password, salt, role_id, first_name, last_name, company_name,
                 phone, vat, identification_number, full_address

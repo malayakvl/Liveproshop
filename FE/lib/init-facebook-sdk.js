@@ -5,6 +5,7 @@ const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
 export function initFacebookSdk() {
     return new Promise((resolve) => {
         // wait for facebook sdk to initialize before starting the react app
+        console.log('here we are');
         window.fbAsyncInit = function () {
             window.FB.init({
                 appId: facebookAppId,

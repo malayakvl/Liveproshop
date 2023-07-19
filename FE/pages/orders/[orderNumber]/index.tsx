@@ -10,6 +10,7 @@ import Head from 'next/head';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const base64toBlob = (data: string) => {
     // Cut the prefix `data:application/pdf;base64` from the raw base 64
@@ -32,6 +33,7 @@ export default function Index({ locale }: { locale: string }) {
     const orderFetched: boolean = useSelector(orderFetchedSelector);
     // const fileName: string = useSelector(orderFileNameFetchedSelector);
     const base64Data: string | null = useSelector(orderBase64DataSelector);
+    const t = useTranslations();
 
     const [url, setUrl] = useState('');
     const [blobData, setBlobData] = useState<any>(null);
@@ -63,6 +65,8 @@ export default function Index({ locale }: { locale: string }) {
         }
     }, [blobData]);
 
+    console.log(locale);
+
     return (
         <>
             <Head>
@@ -72,7 +76,7 @@ export default function Index({ locale }: { locale: string }) {
             {base64Data && (
                 <div>
                     <Link href={'/orders'}>
-                        <a className="view-back">Back</a>
+                        <a className="view-back">{t('Go Back')}</a>
                     </Link>
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
                         <div style={{ height: '750px' }}>

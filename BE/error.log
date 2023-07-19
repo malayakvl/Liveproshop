@@ -3536,3 +3536,18 @@
   level: 'error',
   timestamp: '2023-07-18T16:17:51.299Z'
 }
+{
+  message: 'Model error: syntax error at or near "WHERE"',
+  level: 'error',
+  timestamp: '2023-07-19T05:30:30.827Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-19T05:30:30.831Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-19T05:33:06.900Z'
+}

@@ -284,9 +284,11 @@
 }
 
 .profile-small-image {
-  background-size: contain;
-  width: 24px;
-  height: 24px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
 }
 
