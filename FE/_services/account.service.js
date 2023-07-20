@@ -88,7 +88,7 @@ async function loginFBusiness() {
             console.log(response);
         },
         {
-            config_id: '6452252501537400' // right
+            config_id: '1255981128419485' // right
             // configId: '<CONFIG_ID>' // wrong
         }
     );

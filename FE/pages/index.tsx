@@ -7,7 +7,7 @@ export default function Home() {
     return (
         <div className="main-bg container xl:max-w-[1400px] mx-auto">
             <Head>
-                <title>LiveProshop</title>
+                <title>Live Pro Shop</title>
                 <meta name="description" content="LiveProshop portal" />
             </Head>
 

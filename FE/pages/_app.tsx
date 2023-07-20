@@ -12,8 +12,6 @@ import SidebarLayout from '../components/layout/SidebarLayout';
 import { Toasts, ConfirmationModal } from '../components/_common';
 import { CalendlyModal } from '../components/_common';
 import React from 'react';
-// import Script from 'next/script';
-// import { initCookiesSdkFr } from '../_services';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -71,75 +69,16 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     <MainLayout>
                         <div id="fb-root" />
                         <Head>
-                            <title>LiveProshop</title>
+                            <title>Live Pro Shop</title>
                             <link rel="icon" href="/images/logo-1.svg" />
                             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                            {/*<script*/}
-                            {/*    async*/}
-                            {/*    defer*/}
-                            {/*    crossOrigin="anonymous"*/}
-                            {/*    src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
-                            {/*    nonce="qpTXeSyr"*/}
-                            {/*/>*/}
                             <script
                                 async
                                 defer
                                 crossOrigin="anonymous"
                                 src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"
                                 nonce="GGVdSmMO"></script>
-                            {/*<script*/}
-                            {/*    async*/}
-                            {/*    defer*/}
-                            {/*    crossOrigin="anonymous"*/}
-                            {/*    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
-                            {/*    nonce="GGVdSmMO"></script>*/}
-                            <script
-                                async
-                                defer
-                                crossOrigin="anonymous"
-                                src="https://connect.facebook.net/uk_UA/sdk.js#xfbml=1&version=v17.0&appId=812820500482863&autoLogAppEvents=1"
-                                nonce="3jJJdQcM"></script>
-                            {/*<script*/}
-                            {/*    async*/}
-                            {/*    defer*/}
-                            {/*    crossOrigin="anonymous"*/}
-                            {/*    src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
-                            {/*    nonce="T4qU7ZVO"*/}
-                            {/*/>*/}
                             <div id="fb-root"></div>
-                            {/*<script*/}
-                            {/*    async*/}
-                            {/*    defer*/}
-                            {/*    crossOrigin="anonymous"*/}
-                            {/*    src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"*/}
-                            {/*        nonce="T4qU7ZVO"></script>*/}
-
-                            {/*<script>*/}
-                            {/*    window.axeptioSettings = {*/}
-                            {/*        clientId: "5c11ff5ce95cd64112feab79",*/}
-                            {/*    };*/}
-
-                            {/*    (function(d, s) {*/}
-                            {/*        var t = d.getElementsByTagName(s)[0], e = d.createElement(s);*/}
-                            {/*        e.async = true; e.src = "//static.axept.io/sdk.js";*/}
-                            {/*        t.parentNode.insertBefore(e, t);*/}
-                            {/*    })(document, "script");*/}
-                            {/*</script>*/}
-                            {/*<Script*/}
-                            {/*    src="https://connect.facebook.net/en_US/sdk.js"*/}
-                            {/*    strategy="lazyOnload"*/}
-                            {/*    onLoad={() =>*/}
-                            {/*        console.log(`script loaded correctly, window.FB has been populated`)*/}
-                            {/*    }*/}
-                            {/*/>*/}
-                            {/*{initCookiesSdkFr()}*/}
-                            {/*<script>*/}
-                            {/*    window.axeptioSettings = {*/}
-                            {/*    clientId: "64ae6d6ce5df9529c865dfb0",*/}
-                            {/*    cookiesVersion: "liveproshop-fr",*/}
-                            {/*};*/}
-                            {/*</script>*/}
-                            {/*{initCookiesSdkFr()}*/}
                         </Head>
                         <Layout>
                             <Toasts />

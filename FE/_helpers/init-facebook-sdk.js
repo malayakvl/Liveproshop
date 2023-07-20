@@ -1,23 +1,20 @@
 import { accountService } from '_services';
+// import getConfig from 'next/config';
 
-// const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
+const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
+console.log('FB CLIENT', process.env.FACEBOOK_CLIENT_ID);
 
 export function initFacebookSdk() {
     return new Promise((resolve) => {
         // wait for facebook sdk to initialize before starting the react app
-        console.log('APP ID', '3046697902325160');
         window.fbAsyncInit = function () {
             FB.init({
+                appId: facebookAppId,
                 // appId: '3046697902325160',
-                appId: '812820500482863',
                 cookie: true,
                 xfbml: true,
                 version: 'v17.0'
             });
-            // FB.init({
-            //     // appId: '3046697902325160',
-            //     config_id: '6452252501537400'
-            // });
             FB.AppEvents.logPageView();
 
             // auto authenticate with the api if already logged in with facebook
@@ -38,7 +35,7 @@ export function initFacebookSdk() {
         //     fjs.parentNode.insertBefore(js, fjs);
         // }(document, 'script', 'facebook-jssdk'));
 
-        (function (d, s, id) {
+        (function (d, s, id){
             var js,
                 fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {
@@ -49,6 +46,18 @@ export function initFacebookSdk() {
             js.src = 'https://connect.facebook.net/en_US/sdk.js';
             fjs.parentNode.insertBefore(js, fjs);
         })(document, 'script', 'facebook-jssdk');
+
+        // (function (d, s, id) {
+        //     var js,
+        //         fjs = d.getElementsByTagName(s)[0];
+        //     if (d.getElementById(id)) {
+        //         return;
+        //     }
+        //     js = d.createElement(s);
+        //     js.id = id;
+        //     js.src = 'https://connect.facebook.net/en_US/sdk.js';
+        //     fjs.parentNode.insertBefore(js, fjs);
+        // })(document, 'script', 'facebook-jssdk');
         // window.fbAsyncInit = function () {
         //     window.FB.init({
         //         appId: facebookAppId,

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import { providers, getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -36,6 +36,41 @@ function Signin({ locale }: { locale: string }) {
             `;
     };
 
+    useEffect(() => {
+        const descrDiv = document.getElementById('fb-root-facebook-btn');
+        // if (descrDiv) {
+        //     descrDiv.append(`<fb:login-button
+        //         config_id="284098587534725"
+        //         onlogin="checkLoginState();">
+        //     </fb:login-button>`);
+        // }
+        // console.log('ELEMENET', descrDiv);
+        // (descrDiv as any).scrollTop = 0;
+        // if (coordinatesInfo?.id) {
+        //     dispatch(
+        //         initFrameTypeAction(
+        //             coordinatesInfo.imgWidth > coordinatesInfo.imgHeight
+        //                 ? "horizontalTypeFrame"
+        //                 : "verticalTypeFrame"
+        //         )
+        //     );
+        //     dispatch(
+        //         setFrameTypeAction(
+        //             coordinatesInfo.imgWidth > coordinatesInfo.imgHeight
+        //                 ? "horizontalTypeFrame"
+        //                 : "verticalTypeFrame"
+        //         )
+        //     );
+        // }
+        // mapMain.flyTo({
+        //     center: [coordinatesInfo.lng, coordinatesInfo.lat],
+        //     speed: 0.5,
+        //     zoom: 5,
+        // });
+    }, []);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return (
         <>
             <Head>
@@ -129,6 +164,12 @@ function Signin({ locale }: { locale: string }) {
 
                     {/*<ProviderBtns Providers={providers} locale={locale} />*/}
                     <div id="fb-block-btn" ref={fbBtnRef}></div>
+
+                    {/*<fb:login-button*/}
+                    {/*    config_id="{config_id}"*/}
+                    {/*    throwIfNamespace={}false*/}
+                    {/*    onlogin="checkLoginState();">*/}
+                    {/*</fb:login-button>*/}
                     {/*<div>*/}
                     {/*    <fb:login-button*/}
                     {/*        config_id="{config_id}"*/}
