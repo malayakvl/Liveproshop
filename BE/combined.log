@@ -29165,3 +29165,293 @@
   level: 'info',
   timestamp: '2023-07-20T12:34:15.766Z'
 }
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:07:27.846Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:07:27.850Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:07:36.619Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:08:05.762Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:09:51.034Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:13:54.709Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:14:09.400Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:14:09.400Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:14:14.396Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:16:18.665Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:20:07.562Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:20:10.667Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:20:15.341Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:20:28.862Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:20:28.862Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:21:14.804Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:25:56.451Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:26:01.010Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:26:33.842Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:26:38.687Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:26:51.631Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:26:56.952Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:27:29.488Z'
+}
+{
+  message: 'Model error: column "subscription_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:27:33.315Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:27:53.643Z'
+}
+{
+  message: 'Model error: column "subscription_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:27:57.506Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:28:28.622Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:28:31.896Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:29:10.334Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:29:28.031Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:30:07.488Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:30:25.317Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:32:49.602Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:34:08.668Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:34:14.849Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:37:02.969Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:37:08.036Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:37:35.924Z'
+}
+{
+  message: 'Setup cookies: [object Object]',
+  level: 'info',
+  timestamp: '2023-07-21T07:37:35.924Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:37:59.287Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:38:35.386Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:38:41.117Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:39:02.837Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:39:06.295Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:39:10.445Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:40:55.368Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:41:02.019Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:41:28.494Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:41:35.053Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:42:29.863Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:42:47.505Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:43:14.986Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:43:19.546Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:43:39.244Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:43:44.468Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:44:18.365Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:44:23.230Z'
+}
+{
+  message: '_DB connection settings: {"user":"","database":"amadeo_restore","password":"","host":"localhost","port":"5432","max":"20","idleTimeoutMillis":"30000"}',
+  level: 'info',
+  timestamp: '2023-07-21T07:45:25.509Z'
+}

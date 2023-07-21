@@ -43,7 +43,8 @@ class User {
                             res1.rows[0].fields_json.is_trial = true;
                         }
                     } else if (res1.rows[0].fields_json.customer_id && res1.rows[0].fields_json.is_trial) {
-                        // console.log("PERIOD LEFT", res1.rows[0].fields_json.period_left);
+                        const resSubscription = await client.query(`SELECT * FROM data.subscriptions WHERE subscription_id='${res1.rows[0].fields_json.subscription_id}'`);
+                        res1.rows[0].fields_json.subscription = resSubscription.rows[0];
                         if (res1.rows[0].fields_json.period_left > 0) {
                             res1.rows[0].fields_json.subscription_expired = false;
                         } else {
@@ -481,12 +482,9 @@ class User {
                     subscriptionFakeData.dbPlans = dbPlansRes.rows;
                     subscriptionFakeData.paymentMethods = paymentMethods.data;
                     subscriptionFakeData.paymentPlanList = await paymentPlanModel.fetchItems();
-                    const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionId}'`);
+
+                    const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionFakeData.plan_id}'`);
                     subscriptionFakeData.plan = resSubscription.rows[0];
-
-                    // subscriptionFakeData.plan.id = "dsadasd";
-                    // console.log("FAKE SUBSCRIPTION", subscriptionFakeData);
-
                 }
                 return { subscription: subscriptionFakeData };
             } else if (isTrial && customerId.includes('cus_')) {

@@ -3551,3 +3551,138 @@
   level: 'error',
   timestamp: '2023-07-19T05:33:06.900Z'
 }
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:07:36.619Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:08:05.762Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:09:51.034Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:13:54.709Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:14:14.396Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:16:18.665Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:20:07.562Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:20:15.341Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:26:01.010Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:26:38.687Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:26:56.952Z'
+}
+{
+  message: 'Model error: column "subscription_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:27:33.315Z'
+}
+{
+  message: 'Model error: column "subscription_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:27:57.506Z'
+}
+{
+  message: 'Model error: column "customer_id" does not exist',
+  level: 'error',
+  timestamp: '2023-07-21T07:28:31.896Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:34:14.849Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:37:08.036Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:37:59.287Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:38:41.117Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:39:02.837Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:39:06.295Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:39:10.445Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:41:02.019Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:41:35.053Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:42:47.505Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:43:19.546Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:43:44.468Z'
+}
+{
+  message: 'User[getSubscriptionInfo]: invalid input syntax for type integer: "fake_sub_37"',
+  level: 'error',
+  timestamp: '2023-07-21T07:44:23.230Z'
+}

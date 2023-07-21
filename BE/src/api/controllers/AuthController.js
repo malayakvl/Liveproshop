@@ -81,7 +81,6 @@ class AuthController {
         const { user, error } = await userModel.providerLogin(req.body);
         // create trial fake subscription
         if (error) {
-            console.log(error);
             return res.status(error.code).json(error);
         }
         res.status(200).json({ user: user });
