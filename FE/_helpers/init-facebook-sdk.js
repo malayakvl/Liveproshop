@@ -1,16 +1,15 @@
 import { accountService } from '_services';
 // import getConfig from 'next/config';
 
-const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
-console.log('FB CLIENT', process.env.FACEBOOK_CLIENT_ID);
+// const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
 
 export function initFacebookSdk() {
     return new Promise((resolve) => {
         // wait for facebook sdk to initialize before starting the react app
         window.fbAsyncInit = function () {
             FB.init({
-                appId: facebookAppId,
-                // appId: '3046697902325160',
+                // appId: facebookAppId,
+                appId: '3046697902325160',
                 cookie: true,
                 xfbml: true,
                 version: 'v17.0'
@@ -19,7 +18,6 @@ export function initFacebookSdk() {
 
             // auto authenticate with the api if already logged in with facebook
             window.FB.getLoginStatus(({ authResponse }) => {
-                console.log('LOGIN STATUS', authResponse.accessToken);
                 if (authResponse) {
                     accountService.apiAuthenticate(authResponse.accessToken).then(resolve);
                 } else {

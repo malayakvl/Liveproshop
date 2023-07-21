@@ -61,7 +61,7 @@ class User {
                                 user_id: res1.rows[0].fields_json.id,
                                 plan_id: 1,
                                 customer_id: `fake_subscription_${res1.rows[0].fields_json.id}`,
-                                subscription_id: 1,
+                                subscription_id: `fake_sub_${res1.rows[0].fields_json.id}`,
                                 status: 'trialing',
                                 period_start: timestampStart/1000,
                                 period_end: timestampEnd/1000,
@@ -111,7 +111,7 @@ class User {
                 user_id: userId,
                 plan_id: 1,
                 customer_id: `fake_subscription_${userId}`,
-                subscription_id: 1,
+                subscription_id: `fake_sub_${userId}`,
                 status: 'trialing',
                 period_start: timestampStart/1000,
                 period_end: timestampEnd/1000,
@@ -140,11 +140,12 @@ class User {
      * @param isDeleted - boolean
      * @returns {Promise<any|null>}
      */
-    async findUserByProviderId(providerId, isDeleted = false) {
+    async findUserByProviderId(providerId, isDeleted = false, isFree = false) {
         const client = await pool.connect();
         try {
             const res = await client.query(`SELECT * FROM data.users WHERE auth_provider_id = '${providerId}'`);
             if (res.rows.length) {
+
                 delete res.rows[0].auth_provider_name;
                 delete res.rows[0].auth_provider_id;
                 return res.rows[0];
@@ -194,26 +195,31 @@ class User {
                     ;
                 `;
                 const res = await client.query(query);
-                // create row at address table
-            // await client.query(`INSERT INTO data.addresses
-            // (
-            //     user_id, country_id, state, post_code, address_type, city,
-            //     address_line_1, address_line_2
-            // )
-            // VALUES ( $1, $2, $3, $4, $5, $6, $7, $8 )`, [
-            //         userData.id,
-            //         1,
-            //         null,
-            //         null,
-            //         'home address',
-            //         null,
-            //         null,
-            //         null
-            //     ]);
-
-                // user = res ? await this.findUserByEmail(userData.email) : null;
                 user = res ? await this.findUserByProviderId(userData.id) : null;
-                console.log("USER PROVIDER", user);
+                if (userData.roleId === 2) {
+                    // check user subscription
+                    // if we register for free
+                    const periodStart =  new Date();
+                    const periodEnd  = new Date();
+                    periodEnd.setMonth(periodEnd.getMonth() + 1);
+                    const timestampStart = periodStart.getTime();
+                    const timestampEnd = periodEnd.getTime();
+                    const dbSubscription = {
+                        user_id: user.id,
+                        plan_id: 1,
+                        customer_id: `fake_subscription_${user.id}`,
+                        subscription_id: `fake_sub_${user.id}`,
+                        status: 'trialing',
+                        period_start: timestampStart/1000,
+                        period_end: timestampEnd/1000,
+                        is_trial: true
+                    }
+                    const _querySubscription = `SELECT * FROM 
+                    data.set_subscriptions
+                    ('${JSON.stringify(dbSubscription)}');`;
+                    await client.query(_querySubscription);
+                }
+
                 if (user) {
                     return { user: user, error: null };
                 } else {

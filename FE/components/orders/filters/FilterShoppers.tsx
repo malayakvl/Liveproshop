@@ -6,7 +6,7 @@ import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
 import { filterDataSelector } from '../../../redux/orders/selectors';
-import { parseTranslation } from '../../../lib/functions';
+// import { parseTranslation } from '../../../lib/functions';
 
 type Props = {
     locale: string;

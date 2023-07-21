@@ -70,7 +70,7 @@ class AuthController {
      * @returns {Promise<*>}
      */
     async authProvider(req, res) {
-        const { user, error } = await userModel.provider(req.body);
+        const { user, error } = await userModel.provider(req.body, false, true);
         if (error) {
             return res.status(error.code).json(error);
         }
@@ -78,9 +78,10 @@ class AuthController {
     }
 
     async authProviderLogin(req, res) {
-        console.log(req.body);
         const { user, error } = await userModel.providerLogin(req.body);
+        // create trial fake subscription
         if (error) {
+            console.log(error);
             return res.status(error.code).json(error);
         }
         res.status(200).json({ user: user });

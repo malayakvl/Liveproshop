@@ -6,9 +6,9 @@ const translateDefault = {
   "Amadeo Proshop": "Live Pro Shop"
 };
 const frontUrl = process.env.APPLICATION_BASE_URL;
-const logoUrl = `${frontUrl}/images/logo.svg`;
-// console.log(frontUrl);
-// console.log(logoUrl);
+const logoUrl = `${frontUrl}/images/logo.png`;
+console.log(frontUrl);
+console.log(logoUrl);
 export const emailHtml = (translate = translateDefault, content = '') => `<!doctype html>
 <html>
   <head>

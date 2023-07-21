@@ -37,3 +37,4 @@ yarn-error.log*
 *.tsbuildinfo
 /components/DELETE/
 /_helpers/FROM SERVER/
+/FROM_SERVER/

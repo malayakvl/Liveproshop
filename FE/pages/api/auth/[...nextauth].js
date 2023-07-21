@@ -3,11 +3,6 @@ import FacebookProvider from 'next-auth/providers/facebook';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import getConfig from 'next/config';
-import axios from 'axios';
-import store from '../../../app/store';
-import { setErrorToastAction } from '../../../redux/layouts';
-import { showLoaderAction } from '../../../redux/layouts/actions';
-import { signIn } from 'next-auth/client';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
@@ -101,29 +96,6 @@ export default NextAuth({
         CredentialsProvider({
             id: 'credentials_sdkfacebook',
             async authorize(credentials) {
-                console.log('CREDENTIALS', credentials);
-                console.log('TOKEN', credentials.accessToken);
-                // await axios
-                //     .get(
-                //         `https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${credentials.accessToken}`
-                //     )
-                //     .then((response) => {
-                //         console.log('PROFILE RESPONCE', response.data);
-                //         const { data } = response;
-                //         if (data.error) {
-                //             store.dispatch(setErrorToastAction('Could no autherntificate'));
-                //         }
-                //         data.accessToken = authResponse.accessToken;
-                //         // data.providerId = authResponse.userID,
-                //         data.expirationTime = authResponse.data_access_expiration_time;
-                //         data.callbackUrl = `${window.location.origin}/${
-                //             authResponse.locale === 'fr' ? '' : 'en/'
-                //         }account`;
-                //         data.roleId = authResponse.roleId;
-                //         store.dispatch(showLoaderAction(true));
-                //         // signIn('credentials_sdkfacebook', data);
-                //     });
-
                 const res = await fetch(`${baseUrl}/provider`, {
                     method: 'POST',
                     body: JSON.stringify(credentials),
