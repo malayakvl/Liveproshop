@@ -347,7 +347,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                             {preparePeriodFake()}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
-                                            !!!{prepareDayLeftFake()}
+                                           {prepareDayLeftFake()}
                                         </td>
                                         <td>
                                             <span

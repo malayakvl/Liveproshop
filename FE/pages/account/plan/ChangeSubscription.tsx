@@ -10,6 +10,7 @@ import { showChangeSubscriptionFormAction } from '../../../redux/user';
 import { updateSubscriptionAction } from '../../../redux/user/actions';
 import Image from 'next/image';
 import Head from 'next/head';
+import { setModalCalendlyMetaAction } from '../../../redux/layouts';
 
 const ChangeSubscription: React.FC<any> = ({ locale }) => {
     const t = useTranslations();
@@ -18,6 +19,8 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
     const subscriptionInfo = useSelector(userSubscriptionSelector);
     const [planId, setPlanId] = useState<any>('');
     const [selectedPlanDbId, setSelectedPlanDbId] = useState<any>(null);
+    const [dropdownPlanId, setDropdownPlanId] = useState<any>(null);
+    const [dropdownPlanName, setDropdownPlanName] = useState<any>(null);
 
     useEffect(() => {
         if (showModal) {
@@ -126,22 +129,27 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                         <select
                                             name="plan_id"
                                             style={{ width: '250px' }}
-                                            value={subscriptionInfo.plan.stripe_id}
+                                            value={3}
                                             className="form-control w-full"
                                             onChange={(e) => {
-                                                setPlanId(e.target.value);
                                                 const filteredPlan =
                                                     subscriptionInfo.dbPlans.filter(
                                                         (_plan: any) =>
                                                             _plan.stripe_id === e.target.value
                                                     );
+                                                setDropdownPlanId(filteredPlan[0].id);
+                                                setDropdownPlanName(t(filteredPlan[0].name));
                                                 if (filteredPlan.length) {
                                                     setSelectedPlanDbId(filteredPlan[0].id);
                                                 } else {
                                                     setSelectedPlanDbId(null);
                                                 }
                                             }}>
-                                            <option>Select Plan</option>
+                                            <option value="">
+                                                {dropdownPlanName
+                                                    ? dropdownPlanName
+                                                    : t('Select Plan')}
+                                            </option>
                                             {subscriptionInfo.dbPlans.map((plan: any) => (
                                                 // <Fragment key={plan.stripe_id}>
                                                 //     <option value={plan.stripe_id}>
@@ -149,9 +157,11 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                                 //     </option>
                                                 // </Fragment>
                                                 <Fragment key={plan.stripe_id}>
-                                                    {plan.stripe_id !==
-                                                        subscriptionInfo.plan.id && (
-                                                        <option value={plan.stripe_id}>
+                                                    {plan.id !== subscriptionInfo.plan_id && (
+                                                        <option
+                                                            value={plan.stripe_id}
+                                                            data-id={plan.id}
+                                                            selected={true}>
                                                             {plan.name}
                                                         </option>
                                                     )}
@@ -160,9 +170,16 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                         </select>
                                         <button
                                             className="gradient-btn ml-4"
-                                            onClick={() =>
-                                                dispatch(updateSubscriptionAction(planId))
-                                            }>
+                                            onClick={() => {
+                                                if (dropdownPlanId === 3) {
+                                                    dispatch(setModalCalendlyMetaAction(true));
+                                                    dispatch(
+                                                        showChangeSubscriptionFormAction(false)
+                                                    );
+                                                } else {
+                                                    dispatch(updateSubscriptionAction(planId));
+                                                }
+                                            }}>
                                             {t('Save')}
                                         </button>
                                     </div>
@@ -220,7 +237,9 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                                     <Fragment key={plan.stripe_id}>
                                                         {plan.stripe_id !==
                                                             subscriptionInfo.plan.id && (
-                                                            <option value={plan.stripe_id}>
+                                                            <option
+                                                                value={plan.stripe_id}
+                                                                data-id={plan.id}>
                                                                 {plan.name}
                                                             </option>
                                                         )}
