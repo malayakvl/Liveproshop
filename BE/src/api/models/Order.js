@@ -493,7 +493,7 @@ class Order {
                 // sellerIds.push(user.id);
                 _filterBuyers.seller_id = [user.id];
                 if (_filterBuyers.userIds) {
-                    _filterBuyers.buyer_id = _filters.userIds;
+                    _filterBuyers.seller_id = _filters.userIds;
                     delete _filterBuyers.userIds;
                 }
             }

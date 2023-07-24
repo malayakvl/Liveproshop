@@ -79,7 +79,7 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { sortKey: 'orders.order_number', iconClass: 'icon-tbl-order' },
         { sortKey: 'orders.status', iconClass: 'icon-tbl-status' },
         { sortKey: 'orders.created_at', iconClass: 'icon-tbl-date' },
-        { sortKey: 'users__buyer.first_name', titleKey: 'Sellers', iconClass: 'icon-tbl-users' },
+        { sortKey: 'users__buyer.first_name', titleKey: 'Shoppers', iconClass: 'icon-tbl-users' },
         { sortKey: 'countries.iso', iconClass: 'icon-tbl-country' },
         // { sortKey: 'orders.shipping_id', iconClass: 'icon-tbl-sh-cart' },
         { sortKey: 'shipping.name', iconClass: 'icon-tbl-sh-cart' },

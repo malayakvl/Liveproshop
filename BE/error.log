@@ -3686,3 +3686,13 @@
   level: 'error',
   timestamp: '2023-07-21T07:44:23.230Z'
 }
+{
+  message: 'Model error: syntax error at or near "3"',
+  level: 'error',
+  timestamp: '2023-07-24T15:45:27.818Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-24T15:45:27.820Z'
+}

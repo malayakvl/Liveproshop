@@ -318,7 +318,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                         desc={t(
                                             'Best for live retailers that are small or starting out'
                                         )}
-                                        sale={3}
+                                        sale={5}
                                         session={session}
                                         buttonText="Select"
                                         imageSrc={'/images/plans/box.svg'}

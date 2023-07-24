@@ -3,11 +3,14 @@ import { useSession } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserAction, setUserAction } from '../../redux/user';
 import { userSelector } from '../../redux/user/selectors';
+import CookieConsent from 'react-cookie-consent';
+import { useTranslations } from 'next-intl';
 
 export default function MainLayout({ children }: { children: any }) {
     const [session] = useSession();
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
+    const t = useTranslations();
 
     useEffect(
         function () {
@@ -45,6 +48,18 @@ export default function MainLayout({ children }: { children: any }) {
     return (
         <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased text-black">
             {children}
+            <CookieConsent
+                location="top"
+                buttonText={t('Accept')}
+                cookieName="myAwesomeCookieName2"
+                style={{ background: '#FFF', color: '#6F6C90', border: 'solid 1px' }}
+                buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
+                enableDeclineButton
+                expires={150}>
+                Our website use cookies. By continuing navigating, we assume your permission to
+                deploy cookies as detailed in our Privacy Policy.{' '}
+                {/*<span style={{ fontSize: '10px' }}>This bit of text is smaller :O</span>*/}
+            </CookieConsent>
         </div>
     );
 }
