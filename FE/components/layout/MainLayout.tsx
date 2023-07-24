@@ -50,14 +50,20 @@ export default function MainLayout({ children }: { children: any }) {
             {children}
             <CookieConsent
                 location="top"
-                buttonText={t('Accept')}
+                buttonText={t('Accept Cookies')}
+                declineButtonText={t('Decline Cookes')}
                 cookieName="myAwesomeCookieName2"
-                style={{ background: '#FFF', color: '#6F6C90', border: 'solid 1px' }}
+                style={{ background: '#FFF' }}
                 buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
+                buttonWrapperClasses={'cookies-btn-block'}
                 enableDeclineButton
                 expires={150}>
-                Our website use cookies. By continuing navigating, we assume your permission to
-                deploy cookies as detailed in our Privacy Policy.{' '}
+                <div className="cookie-text">
+                    <span>
+                        Our website use cookies. By continuing navigating, we assume your permission
+                        deploy cookies as detailed in our Privacy Policy.
+                    </span>
+                </div>
                 {/*<span style={{ fontSize: '10px' }}>This bit of text is smaller :O</span>*/}
             </CookieConsent>
         </div>
