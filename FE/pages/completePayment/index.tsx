@@ -24,7 +24,6 @@ export default function CompletePayment({
     const t = useTranslations();
     const { query } = useRouter();
     // const user = useSelector(userSelector);
-    console.log(query);
     const stripePaymentIntent = useSelector(paymentIntentSelector);
     // console.log('stripePaymentIntent from URL', query.payment_intent);
     // console.log('stripePaymentSecret from URL', query.payment_intent_client_secret);

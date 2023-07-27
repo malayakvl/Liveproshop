@@ -6,12 +6,16 @@ import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { createUserFromSubscriptionAction } from '../../redux/user';
-import { clientSecretSelector, userSubscriptionSelector } from '../../redux/user/selectors';
+import {
+    clientSecretSelector,
+    userForFreeSelector,
+    userSubscriptionSelector
+} from '../../redux/user/selectors';
 import { InputPassword, InputText } from '../../components/_form';
 import { useRouter } from 'next/router';
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { CheckoutForm } from '../../components/checkout';
+import { CheckoutRegisteredForm } from '../../components/checkout';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const stripeKey = publicRuntimeConfig.stripeKey;
@@ -32,6 +36,7 @@ export default function Signup({
     const stripeClientSecret = useSelector(clientSecretSelector);
     const subscription = useSelector(userSubscriptionSelector);
     const { query } = useRouter();
+    const forFree = useSelector(userForFreeSelector);
 
     const [clientSecret, setClientSecret] = useState('');
     const [loginData, setLoginData] = useState<{ email: string; password: string }>();
@@ -102,11 +107,14 @@ export default function Signup({
                                 password: '',
                                 password_confirmation: '',
                                 email: '',
-                                acceptTerms: false
+                                acceptTerms: false,
+                                forFree: forFree ? 'yes' : 'no',
+                                planId: planId
                             }}
                             validationSchema={validationSchema}
                             onSubmit={(values) => {
                                 setLoginData({ email: values.email, password: values.password });
+                                // values['forFree'] = forFree ? 'yes' : 'no';
                                 dispatch(createUserFromSubscriptionAction(values, planId, type));
                             }}>
                             {(props) => (
@@ -199,7 +207,7 @@ export default function Signup({
                 )}
                 {clientSecret !== '' && (
                     <Elements options={options} stripe={stripePromise}>
-                        <CheckoutForm />
+                        <CheckoutRegisteredForm />
                     </Elements>
                 )}
                 <div className="error-el">{query.message}</div>

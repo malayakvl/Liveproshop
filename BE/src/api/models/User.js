@@ -353,15 +353,20 @@ class User {
         try {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
+            console.log("!!!", resPlan.rows.length);
             if (resPlan.rows.length) {
                 if (resPlan.rows[0].stripe_id) {
                     let customerId;
+                    console.log("AAAA", userData);
                     // check if we have uncomplete subscription
+                    if (userData?.user?.id) {
+                        console.log("ADD USER BUT NO HAVE THEM ID");
+                    }
                     const uncompleteSubscr = await client.query(`SELECT * FROM data.subscriptions WHERE user_id=${userData.user.id} AND status='incomplete' ORDER BY updated_at DESC LIMIT 1`);
                     if (uncompleteSubscr.rows.length > 0) {
                         userData.user.customer_id = uncompleteSubscr.rows[0].customer_id;
                     }
-
+console.log("!!!", userData);
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
                         const customer = await stripe.customers.create({
@@ -433,6 +438,7 @@ class User {
             }
             return { subscription: null, error: { code: 404, message: 'User Not found' } };
         } catch (e) {
+            console.log(e.message)
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -589,7 +595,7 @@ class User {
         }
     }
 
-    async createUserFromSubscription(userData ,planId, type) {
+    async createUserFromSubscription(userData ,planId, type, forFree = '') {
         const {
             salt,
             hash
@@ -609,7 +615,8 @@ class User {
             if (!resUser.rows.length) {
                 return { subscription: {}, error: { code: 404, message: 'User Not found' } };
             } else {
-                return await this.createExistUserSubscription({ user: userData, type: type, planId:planId }, resUser.rows[0]);
+                return await this.createExistUserSubscription({ user: resUser.rows[0], type: type, planId:planId }, resUser.rows[0]);
+                // return await this.createExistUserSubscription({ user: userData, type: type, planId:planId }, resUser.rows[0]);
             }
         } catch (e) {
 
@@ -622,12 +629,16 @@ class User {
     async checkPayment(paymentIntent, paymentIntentSecret, planId, type, user = '') {
         const client = await pool.connect();
         try {
-            // const paymentIntentResult = await stripe.setupIntents.retrieve(
-            //     paymentIntent
-            // );
-            const paymentIntentResult = await stripe.paymentIntents.retrieve(
-                paymentIntent
-            );
+            let paymentIntentResult;
+            if (type === 'fromPricing') {
+                paymentIntentResult = await stripe.setupIntents.retrieve(
+                    paymentIntent
+                );
+            } else {
+                paymentIntentResult = await stripe.paymentIntents.retrieve(
+                    paymentIntent
+                );
+            }
             // console.log("[paymentIntentResult]", paymentIntentResult.client_secret);
             // console.log("[paymentIntentSecret]", paymentIntentSecret);
             // console.log("[paymentIntentResult.client_secret]", paymentIntentSecret);

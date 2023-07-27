@@ -63,7 +63,7 @@ export const syncFbAction: any = createAction(
 
 export const createUserFromSubscriptionAction: any = createAction(
     'user/SUBSCRIPTION',
-    async (data: any, planId: number, type: string | null) =>
+    async (data: any, planId: number, type: string | null, forFree: string | null) =>
         async (
             dispatch: Type.Dispatch
         ): Promise<{ subscription: any; clientSecret: string | null }> => {
@@ -72,7 +72,7 @@ export const createUserFromSubscriptionAction: any = createAction(
             try {
                 const res = await axios.post(
                     `${baseUrl}/subscription`,
-                    { userData: data, planId: planId, type: type },
+                    { userData: data, planId: planId, type: type, forFree: forFree },
                     {
                         headers: { 'Content-Type': 'application/json' }
                     }

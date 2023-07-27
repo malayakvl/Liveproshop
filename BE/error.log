@@ -4056,3 +4056,173 @@
   level: 'error',
   timestamp: '2023-07-26T18:55:27.190Z'
 }
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T07:42:32.736Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T07:49:40.042Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T07:53:20.718Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:44:19.123Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:44:35.342Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:48:18.900Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:49:47.266Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:51:21.858Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:53:22.566Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'planId')",
+  level: 'error',
+  timestamp: '2023-07-27T08:56:23.216Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:57:57.464Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T08:59:24.553Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T09:01:33.475Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T09:02:32.102Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T09:02:59.538Z'
+}
+{
+  message: 'Model error: column "undefined" does not exist',
+  level: 'error',
+  timestamp: '2023-07-27T09:05:03.736Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQQLDBSh7ykoyWVk34glPR'",
+  level: 'error',
+  timestamp: '2023-07-27T09:24:33.957Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQQLDBSh7ykoyWVk34glPR'",
+  level: 'error',
+  timestamp: '2023-07-27T09:29:12.818Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:32:01.712Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:32:33.251Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:33:02.402Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:33:10.578Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:33:35.362Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:33:58.387Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:35:58.530Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:36:19.169Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:36:38.008Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:36:39.765Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:37:05.198Z'
+}
+{
+  message: "Model error: No such payment_intent: 'seti_1NYQXMDBSh7ykoyWW1oUFoqe'",
+  level: 'error',
+  timestamp: '2023-07-27T09:41:07.391Z'
+}
+{
+  message: 'Model error: paymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-27T09:41:49.107Z'
+}
+{
+  message: 'Model error: paymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-27T09:42:30.106Z'
+}
+{
+  message: 'Model error: paymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-27T09:43:06.502Z'
+}
+{
+  message: 'Model error: paymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-27T09:44:06.249Z'
+}
