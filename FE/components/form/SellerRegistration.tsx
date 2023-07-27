@@ -146,7 +146,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'first_name'}
-                                placeholder={('Name')}
+                                placeholder={'Name'}
                                 props={props}
                                 tips={null}
                             />
@@ -155,7 +155,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'last_name'}
-                                placeholder={('Surname')}
+                                placeholder={'Surname'}
                                 props={props}
                                 tips={null}
                             />
@@ -164,7 +164,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'company_name'}
-                                placeholder={('Company Name')}
+                                placeholder={'Company Name'}
                                 props={props}
                                 tips={null}
                             />
@@ -173,7 +173,7 @@ export default function SellerRegistration({
                                 style={'w-1/2'}
                                 label={null}
                                 name={'identification_number'}
-                                placeholder={('Company ID')}
+                                placeholder={'Company ID'}
                                 props={props}
                                 tips={null}
                             />
@@ -182,7 +182,7 @@ export default function SellerRegistration({
                                 style={'w-1/2'}
                                 label={null}
                                 name={'vat'}
-                                placeholder={('Vat')}
+                                placeholder={'Vat'}
                                 props={props}
                                 tips={null}
                             />
@@ -190,7 +190,7 @@ export default function SellerRegistration({
                                 <Select
                                     className={'form-control-dropdown mb-0'}
                                     classNamePrefix={'inventory'}
-                                    placeholder={('Country')}
+                                    placeholder={'Country'}
                                     name="country_id"
                                     options={preparedCountriesDropdown}
                                     value={preparedCountriesDropdown?.find(
@@ -208,7 +208,7 @@ export default function SellerRegistration({
                                 name={'state'}
                                 label={null}
                                 icon={'f-location'}
-                                placeholder={('State')}
+                                placeholder={'State'}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -218,7 +218,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'city'}
-                                placeholder={('City')}
+                                placeholder={'City'}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -227,7 +227,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'post_code'}
-                                placeholder={('Post Code')}
+                                placeholder={'Post Code'}
                                 style={'w-1/2'}
                                 props={props}
                                 tips={null}
@@ -236,7 +236,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'address_line_1'}
-                                placeholder={('Address Line 1')}
+                                placeholder={'Address Line 1'}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -245,7 +245,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'address_line_2'}
-                                placeholder={('Address Line 2')}
+                                placeholder={'Address Line 2'}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -255,7 +255,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'phone'}
-                                placeholder={('Phone Number')}
+                                placeholder={'Phone Number'}
                                 props={props}
                                 tips={null}
                                 onChange={(event) => {
@@ -271,7 +271,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'password'}
-                                placeholder={('Password')}
+                                placeholder={'Password'}
                                 props={props}
                             />
                             <TogglePassword
@@ -279,7 +279,7 @@ export default function SellerRegistration({
                                 style={'mb-9'}
                                 label={null}
                                 name={'password_confirmation'}
-                                placeholder={('Confirm password')}
+                                placeholder={'Confirm password'}
                                 props={props}
                             />
                             <div className="border-t pt-9">

@@ -211,6 +211,7 @@ class AuthController {
 
         invitation = await invitationModel.create(data);
 
+
         let link = `${process.env.APPLICATION_BASE_URL}/${req.query.locale === 'en' ? 'en/' : ''}auth/registration?hash=${invitation.hash}&forFree=${data.forFree ? 'yes' : 'no'}`;
         // console.log("LOCALE", link);
         console.log("LINK", link);
