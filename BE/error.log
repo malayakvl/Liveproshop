@@ -3696,3 +3696,363 @@
   level: 'error',
   timestamp: '2023-07-24T15:45:27.820Z'
 }
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T08:46:29.955Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T08:48:14.328Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T08:48:41.250Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T08:50:48.039Z'
+}
+{
+  message: 'Model error: query is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T09:04:53.649Z'
+}
+{
+  message: 'Model error: query is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T09:11:40.181Z'
+}
+{
+  message: 'Model error: query is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T09:13:45.427Z'
+}
+{
+  message: 'Model error: query is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T09:42:15.949Z'
+}
+{
+  message: 'Model error: query is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T09:43:53.241Z'
+}
+{
+  message: 'Model error: query is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T09:45:41.491Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T09:50:21.026Z'
+}
+{
+  message: 'Model error: Client was passed a null or undefined query',
+  level: 'error',
+  timestamp: '2023-07-26T10:23:14.890Z'
+}
+{
+  message: 'Model error: Client was passed a null or undefined query',
+  level: 'error',
+  timestamp: '2023-07-26T10:27:45.400Z'
+}
+{
+  message: 'Model error: Client was passed a null or undefined query',
+  level: 'error',
+  timestamp: '2023-07-26T10:29:47.545Z'
+}
+{
+  message: 'Model error: Client was passed a null or undefined query',
+  level: 'error',
+  timestamp: '2023-07-26T10:30:59.588Z'
+}
+{
+  message: 'Model error: Client was passed a null or undefined query',
+  level: 'error',
+  timestamp: '2023-07-26T10:33:03.753Z'
+}
+{
+  message: 'Model error: Client was passed a null or undefined query',
+  level: 'error',
+  timestamp: '2023-07-26T10:35:35.250Z'
+}
+{
+  message: 'Model error: Client was passed a null or undefined query',
+  level: 'error',
+  timestamp: '2023-07-26T10:38:40.815Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T11:04:16.033Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T11:09:34.349Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T11:11:23.639Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T11:13:00.045Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T11:18:20.826Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T11:19:54.516Z'
+}
+{
+  message: 'Model error: user is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T11:21:30.844Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T12:01:36.431Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-26T12:04:29.220Z'
+}
+{
+  message: "User[getSubscriptionInfo]: Cannot read properties of null (reading 'includes')",
+  level: 'error',
+  timestamp: '2023-07-26T12:09:49.567Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T12:43:57.224Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T12:45:25.202Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T12:46:09.632Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T13:49:50.952Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T14:04:35.101Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:11:57.102Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:18:36.341Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:20:02.493Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /setup_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:21:44.771Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:23:45.767Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:25:20.660Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:27:29.292Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:28:13.565Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:29:50.660Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:30:40.198Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:31:17.867Z'
+}
+{
+  message: 'Model error: Stripe: Argument "intent" must be a string, but got: null (on API request to `GET /payment_intents/{intent}`)',
+  level: 'error',
+  timestamp: '2023-07-26T15:31:27.811Z'
+}
+{
+  message: "Model error: Cannot read properties of undefined (reading 'retrieve')",
+  level: 'error',
+  timestamp: '2023-07-26T17:50:16.001Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2023-07-26T18:19:32.979Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2023-07-26T18:20:58.290Z'
+}
+{
+  message: 'Model error: aymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:22:51.957Z'
+}
+{
+  message: 'Model error: aymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:25:05.087Z'
+}
+{
+  message: 'Model error: aymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:25:17.705Z'
+}
+{
+  message: 'Model error: aymentIntentResult is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:26:59.989Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2023-07-26T18:27:52.032Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2023-07-26T18:28:54.310Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2023-07-26T18:35:50.662Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2023-07-26T18:39:28.455Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "null"',
+  level: 'error',
+  timestamp: '2023-07-26T18:40:17.502Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:40:48.510Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:42:00.754Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:42:48.224Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "undefined"',
+  level: 'error',
+  timestamp: '2023-07-26T18:44:34.210Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "undefined"',
+  level: 'error',
+  timestamp: '2023-07-26T18:45:52.670Z'
+}
+{
+  message: 'Model error: invalid input syntax for type integer: "undefined"',
+  level: 'error',
+  timestamp: '2023-07-26T18:46:15.869Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:47:11.139Z'
+}
+{
+  message: 'Model error: subscription is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:49:28.167Z'
+}
+{
+  message: 'Model error: subscription is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:50:43.968Z'
+}
+{
+  message: 'Model error: subscription is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:51:22.861Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:52:05.140Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:53:00.116Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:53:41.270Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:54:03.066Z'
+}
+{
+  message: 'Model error: exit is not defined',
+  level: 'error',
+  timestamp: '2023-07-26T18:55:27.190Z'
+}

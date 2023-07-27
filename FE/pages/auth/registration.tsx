@@ -15,7 +15,13 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
     }
 
     if (invitation.role_id === 2) {
-        Form = <SellerRegistration email={invitation.email} locale={locale} />;
+        Form = (
+            <SellerRegistration
+                email={invitation.email}
+                locale={locale}
+                forFree={invitation.is_free === true ? 1 : 0}
+            />
+        );
     }
 
     return (

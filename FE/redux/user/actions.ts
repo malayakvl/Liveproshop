@@ -150,6 +150,7 @@ export const createExistUserSubscriptionAction: any = createAction(
             if (res.status) {
                 dispatch(showLoaderAction(false));
             }
+            console.log(res.data);
             if (res.data.subscription.status === 'trialing') {
                 window.localStorage.removeItem('user');
                 window.localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -382,3 +383,4 @@ export const generateInvoiceStripeAction: any = createAction(
 export const setUserAction: any = createAction('user/SET_USER');
 export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM');
 export const showChangeSubscriptionFormAction: any = createAction('user/CHANGE_SUBSCRIPTION_FORM');
+export const setupFreeSubscriptionAction: any = createAction('user/SETUP_FREE_SUBSCRIPTION');

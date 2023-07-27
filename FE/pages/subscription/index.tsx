@@ -53,6 +53,7 @@ export default function Subscription({
     useEffect(() => {
         // Create PaymentIntent and Plan Price as soon as the page loads
         if (user.email && !stripeClientSecret) {
+            console.log('BROKENN', user);
             dispatch(createExistUserSubscriptionAction(user, planId, query.type));
         }
     }, [planId, user?.email, type]);
@@ -98,7 +99,7 @@ export default function Subscription({
                                             {t('Selected plan Price')}:{' '}
                                             {formatCurrency(planInfo.stripeInfo.unit_amount / 100)}
                                         </span>
-                                        <span className="block mt-2 mb-4">{t('trial_notice')}</span>
+                                        {/*<span className="block mt-2 mb-4">{t('trial_notice')}</span>*/}
                                     </>
                                 )}
                                 {query.type === 'trial' && (

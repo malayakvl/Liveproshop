@@ -7,6 +7,7 @@ class Invitation {
         let email = userData.email;
         let role_id = userData.role_id;
         let hash = crypto.randomBytes(20).toString('hex');
+        let isFree = userData.forFree;
 
         const client = await pool.connect();
         try {
@@ -15,13 +16,15 @@ class Invitation {
                 (
                     email, 
                     role_id, 
-                    hash
+                    hash,
+                    is_free
                 )
                 VALUES
                 (
                     '${email}',
                     '${role_id}',
-                    '${hash}'
+                    '${hash}',
+                    ${isFree}
                 )
                 ;
             `);

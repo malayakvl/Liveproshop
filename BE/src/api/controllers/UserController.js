@@ -307,19 +307,41 @@ class UserController {
 
     async createExistUserSubscription (req, res) {
         if (req.user) {
+            let subscriptionData;
             if (req.user.is_trial) {
-                const data = await userModel.createExistUserSubscriptionAfterTrial(req.body, req.user);
+                subscriptionData = await userModel.createExistUserSubscriptionAfterTrial(req.body, req.user);
             } else {
-                const data = await userModel.createExistUserSubscription(req.body, req.user);
+                subscriptionData = await userModel.createExistUserSubscription(req.body, req.user);
+
             }
+            console.log("ZAEBALO", subscriptionData);
+            // console.log("SUBSCRIPTION", data.subscription);
+            // let data;
+            // if (!req.user.subscription) {
+            //     data = await userModel.createExistUserSubscription(req.body, req.user);
+            // } else {
+            //     data.subscription = req.user.subscription;
+            // }
+            // if (!req.user.subscription) {
+            //     data = await userModel.createExistUserSubscription(req.body, req.user);
+            // }
+            console.log("=========================")
+            console.log("=========================")
+            console.log("=========================")
+            console.log("=========================")
+
             const user = await userModel.findUserByEmail(req.user.email, true);
-            if (data.subscription) {
+            // console.log(user);
+
+            // if (data.subscription) {
+            if (subscriptionData?.subscription) {
                 return res.status(200).json({
                     user: user,
-                    subscription: data.subscription,
-                    planId: data.planId,
-                    // clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
-                    clientSecret: data.subscription.status === 'trialing' ? null : data.setupIntent.client_secret
+                    subscription: subscriptionData.subscription,
+                    planId: subscriptionData.planId,
+                    clientSecret: subscriptionData.subscription.status === 'trialing' ? null :
+                        subscriptionData.subscription.latest_invoice.payment_intent.client_secret
+                    // clientSecret: data.subscription.status === 'trialing' ? null : data.setupIntent.client_secret
                 });
             } else {
                 return res.status(402).json('Something wend wrong');
@@ -330,9 +352,10 @@ class UserController {
 
 
     async checkPaymentStatus (req, res) {
-        // console.log(req.body.paymentIntent);
-        // console.log(req.body.paymentIntentSecret);
+        console.log("INTENT", req.body.paymentIntent);
+        console.log("SECRET", req.body.paymentIntentSecret);
         const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret, req.body.planId, req.body.type);
+
         if (data.paymentIntent) {
             const user = await userModel.findUserByEmail(data.paymentIntent.email);
             delete user.salt;

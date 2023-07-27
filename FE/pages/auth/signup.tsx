@@ -9,15 +9,17 @@ import { Field, Formik, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { inviteUserAction } from '../../redux/user/actions';
 import { accountService } from '../../_services';
-import { hideRegisterFormSelector } from '../../redux/user/selectors';
+import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const hideFormSelector = useSelector(hideRegisterFormSelector);
+    const forFree = useSelector(userForFreeSelector);
     type FormData = {
         email: string;
         acceptTerms: boolean;
         role_id: '1' | '2';
+        forFree: boolean;
     };
 
     const t = useTranslations();
@@ -37,14 +39,17 @@ export default function Signup({ locale }: { locale: string }) {
     }, [hideFormSelector]);
 
     const onSubmit = (values: FormData, actions: any) => {
-        console.log('HERE FREE');
         if (isFbClicked) {
             accountService.registerFB(`${roleId}_${locale}`);
         } else {
+            // setup value from selector
+            values['forFree'] = forFree;
             dispatch(inviteUserAction(values, locale));
             actions.resetForm();
         }
     };
+
+    console.log('FOR FREE', forFree);
 
     return (
         <>
@@ -55,7 +60,7 @@ export default function Signup({ locale }: { locale: string }) {
             <div className="flex main-bg justify-center md:h-[620px]">
                 <Formik
                     enableReinitialize
-                    initialValues={{ email: '', acceptTerms: false, role_id: '2' }}
+                    initialValues={{ email: '', acceptTerms: false, role_id: '2', forFree: false }}
                     validationSchema={validationSchema}
                     onSubmit={onSubmit}>
                     {(props) => (
@@ -98,7 +103,7 @@ export default function Signup({ locale }: { locale: string }) {
                                                 </div>
                                                 <div className="text-gray-180 text-xs mb-2">
                                                     <Field
-                                                        onClick={() => setRoleId(2)}
+                                                        onClick={() => setRoleId(1)}
                                                         id="buyer-radio"
                                                         type="radio"
                                                         className="radio mr-2.5"

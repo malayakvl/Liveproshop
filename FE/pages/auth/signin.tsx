@@ -12,7 +12,7 @@ import Head from 'next/head';
 import { useDispatch } from 'react-redux';
 import { accountService } from '../../_services';
 import React from 'react';
-import { hideRegisterFormAction } from '../../redux/user';
+import { hideRegisterFormAction, setupFreeSubscriptionAction } from '../../redux/user';
 
 function Signin({ locale }: { locale: string }) {
     const t = useTranslations();
@@ -26,15 +26,6 @@ function Signin({ locale }: { locale: string }) {
     });
 
     // useState()
-
-    const getLoginBusinessButton = () => {
-        return `
-            <fb:login-button 
-                config_id="284098587534725"
-                onlogin="checkLoginState();">
-            </fb:login-button>
-            `;
-    };
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -172,7 +163,10 @@ function Signin({ locale }: { locale: string }) {
                             <Link href={'/auth/signup'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                 <a
-                                    onClick={() => dispatch(hideRegisterFormAction(false))}
+                                    onClick={() => {
+                                        dispatch(hideRegisterFormAction(false));
+                                        dispatch(setupFreeSubscriptionAction(false));
+                                    }}
                                     className="red-yellow-gradient-text font-bold">
                                     {t('Don’t have an account?')} {t('Sign up here!')}
                                 </a>

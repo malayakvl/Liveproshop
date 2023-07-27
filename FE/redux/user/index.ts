@@ -8,7 +8,8 @@ import {
     checkPaymentStatusAction,
     fetchUserSubscriptionAction,
     showChangeSubscriptionFormAction,
-    skipExistUserSubscriptionAction
+    skipExistUserSubscriptionAction,
+    setupFreeSubscriptionAction
 } from './actions';
 
 // const initialState: State.User = {
@@ -23,12 +24,14 @@ const initialState: {
     user: User.User;
     paymentIntent: null;
     showChangeSubscription: boolean;
+    forFree: boolean;
 } = {
     user: {} as User.User,
     clientSecret: null,
     subscription: null,
     paymentIntent: null,
-    showChangeSubscription: false
+    showChangeSubscription: false,
+    forFree: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -115,6 +118,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             showChangeSubscription: action.payload
         })
+    },
+    [setupFreeSubscriptionAction]: {
+        next: (state: State.User, action: Action<boolean>): State.User => ({
+            ...state,
+            forFree: action.payload
+        })
     }
 };
 
@@ -127,7 +136,8 @@ export {
     checkPaymentStatusAction,
     fetchUserSubscriptionAction,
     showChangeSubscriptionFormAction,
-    skipExistUserSubscriptionAction
+    skipExistUserSubscriptionAction,
+    setupFreeSubscriptionAction
 };
 
 // ------------------------------------

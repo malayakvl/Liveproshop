@@ -22,7 +22,10 @@ export const userSubscriptionSelector = createSelector(
     rootSelector,
     (user: State.User): any => user.subscription
 );
-
+export const userForFreeSelector = createSelector(
+    rootSelector,
+    (user: State.User): boolean => user.forFree
+);
 export const clientSecretSelector = createSelector(
     rootSelector,
     (user: State.User): any => user.clientSecret

@@ -119,8 +119,10 @@ class AuthController {
             return res.status(403).json({ user: null, error: 'Email present' });
         }
 
-        const { country_id, state, city, post_code, address_line_1, address_line_2, address_type } = formData;
+        const { country_id, state, city, post_code, address_line_1, address_line_2, address_type, forFree } = formData;
         const countryName = (await countryModel.findById(country_id))?.nicename;
+        // console.log("FOR FREE", forFree);
+        // exit;
         const createUserData = {
             email,
             password: formData.password,
@@ -134,8 +136,16 @@ class AuthController {
             vat: formData.vat
         }
         const { user, error } = await userModel.create(createUserData);
+        console.log(user);
         // create trial subscription
-        await userModel.createDbSubscription(user.id);
+        if (forFree === 0) {
+            user.subscription = null;
+            // await userModel.createDbSubscription(user.id);
+        } else {
+            // free subscription
+            // create fake subscription data and store them to db
+            await userModel.createDbSubscription(user.id);
+        }
 
         // const userData = {
         //     planId: 1,
@@ -187,7 +197,6 @@ class AuthController {
     async authInvite(req, res) {
         const data = req.body;
         const user = await userModel.findUserByEmail(data.email);
-
         if (user) {
             return res.status(403).json({ message: 'Email present' });
 
@@ -202,7 +211,7 @@ class AuthController {
 
         invitation = await invitationModel.create(data);
 
-        let link = `${process.env.APPLICATION_BASE_URL}/${req.query.locale === 'en' ? 'en/' : ''}auth/registration?hash=${invitation.hash}`;
+        let link = `${process.env.APPLICATION_BASE_URL}/${req.query.locale === 'en' ? 'en/' : ''}auth/registration?hash=${invitation.hash}&forFree=${data.forFree ? 'yes' : 'no'}`;
         // console.log("LOCALE", link);
         console.log("LINK", link);
 

@@ -8,6 +8,7 @@ import paymentPlanModel from "./PaymentPlan.js";
 import { confirmSubscriptionEmail, confirmSubscriptionPaymentEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 import moment from 'moment';
+// import {query} from "winston";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -36,11 +37,14 @@ class User {
                                 res1.rows[0].fields_json.subscription_expired = false;
                             }
                         } catch (e) {
-                            // res1.rows[0].fields_json.subscription_expired = true;
-                            res1.rows[0].fields_json.subscription_expired = false;
+                            res1.rows[0].fields_json.subscription_expired = true;
+                            // res1.rows[0].fields_json.subscription_expired = false;
+                            // console.log("INCOMING HERE")
+                            // const haveTrialSubscription = await client.query();
                             // if (!res1.rows[0].fields_json.is_trial) {
                             // }
-                            res1.rows[0].fields_json.is_trial = true;
+                            // res1.rows[0].fields_json.is_trial = true;
+                            // res1.rows[0].fields_json.is_trial = true;
                         }
                     } else if (res1.rows[0].fields_json.customer_id && res1.rows[0].fields_json.is_trial) {
                         const resSubscription = await client.query(`SELECT * FROM data.subscriptions WHERE subscription_id='${res1.rows[0].fields_json.subscription_id}'`);
@@ -68,8 +72,8 @@ class User {
                                 period_end: timestampEnd/1000,
                                 is_trial: true
                             }
-                            const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                            await client.query(_querySubscription);
+                            // const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                            // await client.query(_querySubscription);
                         }
                         if (!['active', 'trialing', 'cancel_at_period_end'].includes(res1.rows[0].fields_json.status)) {
                             res1.rows[0].fields_json.subscription_expired = false;
@@ -78,7 +82,7 @@ class User {
                 } else {
                     res1.rows[0].fields_json.subscription_expired = false;
                 }
-                res1.rows[0].fields_json.is_trial = true;
+                // res1.rows[0].fields_json.is_trial = true;
                 delete res1.rows[0].fields_json.auth_provider_name;
                 delete res1.rows[0].fields_json.auth_provider_id;
                 return res1.rows[0].fields_json;
@@ -118,6 +122,7 @@ class User {
                 period_end: timestampEnd/1000,
                 is_trial: true
             }
+            console.log(dbSubscription);
             const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
             await client.query(_querySubscription);
         } catch (e) {
@@ -351,17 +356,23 @@ class User {
             if (resPlan.rows.length) {
                 if (resPlan.rows[0].stripe_id) {
                     let customerId;
+                    // check if we have uncomplete subscription
+                    const uncompleteSubscr = await client.query(`SELECT * FROM data.subscriptions WHERE user_id=${userData.user.id} AND status='incomplete' ORDER BY updated_at DESC LIMIT 1`);
+                    if (uncompleteSubscr.rows.length > 0) {
+                        userData.user.customer_id = uncompleteSubscr.rows[0].customer_id;
+                    }
+
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
                         const customer = await stripe.customers.create({
                             email: userData.user.email,
                             name: `${userData.user.first_name} ${userData.user.last_name}`
                         });
-                        // console.log('CUSTOMER', customer);
                         customerId = customer.id;
                     } else {
                         customerId = userData.user.customer_id;
                     }
+                    console.log("CUSTOMER ID", customerId);
 
                     // create setup intent
                     const setupIntent = await stripe.setupIntents.create({
@@ -370,20 +381,38 @@ class User {
                     });
 
                     // generate subscription always new for receive secret key for payment form;
-                    // const subscriptionObject = {
-                    //     customer: customerId,
-                    //     items: [{
-                    //         plan: resPlan.rows[0].stripe_id
-                    //     }],
-                    //     payment_behavior: 'default_incomplete',
-                    //     expand: ['latest_invoice.payment_intent'],
-                    // };
+                    const subscriptionObject = {
+                        customer: customerId,
+                        items: [{
+                            plan: resPlan.rows[0].stripe_id
+                        }],
+                        payment_behavior: 'default_incomplete',
+                        expand: ['latest_invoice.payment_intent'],
+                    };
                     // if (userData.type === 'trial') {
                     //     subscriptionObject.trial_period_days = resSettings.rows[0].trial_period;
                     // } else {
                     //     subscriptionObject.coupon =  'free-period';
                     // }
-                    // const subscription = await stripe.subscriptions.create(subscriptionObject);
+                    const subscription = await stripe.subscriptions.create(subscriptionObject);
+                    console.log("STRIPE SUBSCRIPTION", subscription);
+
+                    // if subscription created add record to DB
+                    if (subscription?.id) {
+                        const subscriptionData = {
+                            user_id: userData.user.id,
+                            plan_id: userData.planId,
+                            customer_id: customerId,
+                            subscription_id: subscription.id,
+                            status: subscription.status,
+                            period_start: subscription.current_period_start,
+                            period_end: subscription.current_period_end,
+                            is_trial: false
+                        }
+                        const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(subscriptionData)}');`;
+                        await client.query(querySubscription);
+                    }
+                    // console.log("SUBSCRIPTION", subscription);
                     // const dbSubscription = {
                     //     user_id: user.id,
                     //     plan_id: userData.planId,
@@ -396,8 +425,8 @@ class User {
                     // }
                     // const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
                     // await client.query(querySubscription);
-                    // return { subscription: subscription, setupIntent: setupIntent, planId: userData.planId };
-                    return { subscription: {}, setupIntent: setupIntent, planId: userData.planId };
+                    return { subscription: subscription, setupIntent: setupIntent, planId: userData.planId };
+                    // return { subscription: {}, setupIntent: setupIntent, planId: userData.planId };
                 }
             } else {
                 return { subscription: null, error: { code: 404, message: 'User Not found' } };
@@ -590,17 +619,25 @@ class User {
     }
 
 
-    async checkPayment(paymentIntent, paymentIntentSecret, planId, type) {
+    async checkPayment(paymentIntent, paymentIntentSecret, planId, type, user = '') {
         const client = await pool.connect();
         try {
-            const paymentIntentResult = await stripe.setupIntents.retrieve(
-                paymentIntent
-            );
-            // const paymentIntentResult = await stripe.paymentIntents.retrieve(
+            // const paymentIntentResult = await stripe.setupIntents.retrieve(
             //     paymentIntent
             // );
+            const paymentIntentResult = await stripe.paymentIntents.retrieve(
+                paymentIntent
+            );
+            // console.log("[paymentIntentResult]", paymentIntentResult.client_secret);
+            // console.log("[paymentIntentSecret]", paymentIntentSecret);
+            // console.log("[paymentIntentResult.client_secret]", paymentIntentSecret);
+            // const subscription = await stripe.subscriptions.retrieve(
+            //     'sub_1NYBa5DBSh7ykoyW6Qu4fGS4'
+            // );
+            // console.log(paymentIntentResult.client_secret, paymentIntentSecret);
 
             // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
+            // if (paymentIntentResult.client_secret === paymentIntentSecret) {
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 // setup payment intent as default payment method
                 await stripe.customers.update(
@@ -614,38 +651,43 @@ class User {
                 const stripeCustomer = await stripe.customers.retrieve(paymentIntentResult.customer);
                 const dbUser = await this.findUserByEmail(stripeCustomer.email);
                 // create subscription here
-                const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${planId}'`);
+                // console.log(`SELECT * FROM data.subscription_plans WHERE id = '${planId}'`);
+                // exit;
+                // const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${planId}'`);
+                const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${dbUser.plan_id}'`);
                 const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
                 if (resPlan.rows.length) {
-                    const subscriptionObject = {
-                        customer: paymentIntentResult.customer,
-                        items: [{
-                            plan: resPlan.rows[0].stripe_id
-                        }],
-                        payment_behavior: 'default_incomplete',
-                        expand: ['latest_invoice.payment_intent'],
-                    };
+                    // const subscriptionObject = {
+                    //     customer: paymentIntentResult.customer,
+                    //     items: [{
+                    //         plan: resPlan.rows[0].stripe_id
+                    //     }],
+                    //     payment_behavior: 'default_incomplete',
+                    //     expand: ['latest_invoice.payment_intent'],
+                    // };
                     // subscriptionObject.coupon =  'free-period';
-                    if (type === 'trial') {
-                        subscriptionObject.trial_period_days = resSettings.rows[0].trial_period;
-                    } else {
-                        subscriptionObject.coupon =  'free-period';
-                    }
-                    const subscription = await stripe.subscriptions.create(subscriptionObject);
-                    const dbSubscription = {
-                        user_id: dbUser.id,
-                        plan_id: planId,
-                        customer_id: paymentIntentResult.customer,
-                        subscription_id: subscription.id,
-                        status: subscription.status,
-                        period_start: subscription.current_period_start,
-                        period_end: subscription.current_period_end,
-                        is_trial: type === 'trial'
-                    }
-                    const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                    await client.query(_querySubscription);
-
-                    const querySubscription = `UPDATE data.subscriptions SET status='${subscription.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
+                    // if (type === 'trial') {
+                    //     subscriptionObject.trial_period_days = resSettings.rows[0].trial_period;
+                    // } else {
+                    //     subscriptionObject.coupon =  'free-period';
+                    // }
+                    // const subscription = await stripe.subscriptions.create(subscriptionObject);
+                    // const dbSubscription = {
+                    //     user_id: dbUser.id,
+                    //     plan_id: planId,
+                    //     customer_id: paymentIntentResult.customer,
+                    //     subscription_id: subscription.id,
+                    //     status: subscription.status,
+                    //     period_start: subscription.current_period_start,
+                    //     period_end: subscription.current_period_end,
+                    //     is_trial: type === 'trial'
+                    // }
+                    // const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                    // await client.query(_querySubscription);
+                    //
+                    // const querySubscription = `UPDATE data.subscriptions SET status='${subscription.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
+                    const querySubscription = `UPDATE data.subscriptions SET status='${paymentIntentResult.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
+                    // console.log(paymentIntentResult.status)
                     if (paymentIntentResult.status === 'succeeded') {
                         console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
                         await client.query(querySubscription);
@@ -654,7 +696,6 @@ class User {
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
                     LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
                     WHERE customer_id='${paymentIntentResult.customer}'`);
-                    // console.log('[User.checkPayment]', subscriptionRes.rows[0]);
 
                     if (subscriptionRes.rows.length) {
                         paymentIntentResult.email = subscriptionRes.rows[0].email;
@@ -696,6 +737,13 @@ class User {
         }
     }
 
+    async findUserByEmailOnly(email) {
+        const client = await pool.connect();
+        const res = await client.query(`SELECT * FROM data.users WHERE email='${email}'`);
+
+        return res.rows.length > 0 ? res.rows[0] : null;
+    }
+
 
     /**
      * Create user
@@ -709,7 +757,6 @@ class User {
             hash
         } = this.setPassword(userData.password);
         const client = await pool.connect();
-        // console.log("USER DATA", userData);
         try {
             const res = await client.query(`
             INSERT INTO data.users (
@@ -728,7 +775,9 @@ class User {
                 userData.identification_number,
                 userData.full_address
             ]);
-            const user = res ? await this.findUserByEmail(userData.email) : null;
+            // const user = res ? await this.findUserByEmailOnly(userData.email) : null;
+            const user = await this.findUserByEmailOnly(userData.email);
+            console.log("USER BY EMAIL", user);
             if (user) {
                 // add to user default chatbot scenarios
                 // buy+item+color+size+quantity

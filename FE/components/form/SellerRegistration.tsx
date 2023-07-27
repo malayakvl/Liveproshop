@@ -20,10 +20,12 @@ const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 
 export default function SellerRegistration({
     email,
-    locale = ''
+    locale = '',
+    forFree
 }: {
     email: any;
     locale?: string;
+    forFree?: number;
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
@@ -33,7 +35,7 @@ export default function SellerRegistration({
         () => prepareCountriesDropdown(countries, locale),
         [countries]
     );
-
+    console.log('FREE REGISTRATION', forFree);
     useEffect(() => {
         dispatch(fetchCountriesAction());
     }, []);
@@ -94,6 +96,7 @@ export default function SellerRegistration({
 
     const onSubmit = (values: any) => {
         dispatch(showLoaderAction(true));
+        values['forFree'] = forFree;
         fetch(`${baseUrl}/register?locale=${locale}`, {
             method: 'POST',
             body: JSON.stringify(values),
@@ -103,7 +106,10 @@ export default function SellerRegistration({
                 signIn('credentials_login', {
                     email: values.email,
                     password: values.password,
-                    callbackUrl: `${window.location.origin}/${locale === 'en' ? 'en/' : ''}account`
+                    callbackUrl:
+                        forFree === 1
+                            ? `${window.location.origin}/${locale === 'en' ? 'en/' : ''}account`
+                            : `${window.location.origin}/${locale === 'en' ? 'en/' : ''}pricing`
                 });
             });
         });
@@ -125,6 +131,7 @@ export default function SellerRegistration({
                             </div>
 
                             <InputTextDisabled name="email" icon="f-email" props={props} />
+                            {/*{forFree ? 'Free' : 'SUbscription'}*/}
 
                             <div className="mb-3 mt-9 text-blue-350 text-sm">
                                 {t('Almost there, please')}
@@ -139,7 +146,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'first_name'}
-                                placeholder={t('Name')}
+                                placeholder={('Name')}
                                 props={props}
                                 tips={null}
                             />
@@ -148,7 +155,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'last_name'}
-                                placeholder={t('Surname')}
+                                placeholder={('Surname')}
                                 props={props}
                                 tips={null}
                             />
@@ -157,7 +164,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'company_name'}
-                                placeholder={t('Company Name')}
+                                placeholder={('Company Name')}
                                 props={props}
                                 tips={null}
                             />
@@ -166,7 +173,7 @@ export default function SellerRegistration({
                                 style={'w-1/2'}
                                 label={null}
                                 name={'identification_number'}
-                                placeholder={t('Company ID')}
+                                placeholder={('Company ID')}
                                 props={props}
                                 tips={null}
                             />
@@ -175,7 +182,7 @@ export default function SellerRegistration({
                                 style={'w-1/2'}
                                 label={null}
                                 name={'vat'}
-                                placeholder={t('Vat')}
+                                placeholder={('Vat')}
                                 props={props}
                                 tips={null}
                             />
@@ -183,7 +190,7 @@ export default function SellerRegistration({
                                 <Select
                                     className={'form-control-dropdown mb-0'}
                                     classNamePrefix={'inventory'}
-                                    placeholder={t('Country')}
+                                    placeholder={('Country')}
                                     name="country_id"
                                     options={preparedCountriesDropdown}
                                     value={preparedCountriesDropdown?.find(
@@ -201,7 +208,7 @@ export default function SellerRegistration({
                                 name={'state'}
                                 label={null}
                                 icon={'f-location'}
-                                placeholder={t('State')}
+                                placeholder={('State')}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -211,7 +218,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'city'}
-                                placeholder={t('City')}
+                                placeholder={('City')}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -220,7 +227,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'post_code'}
-                                placeholder={t('Post Code')}
+                                placeholder={('Post Code')}
                                 style={'w-1/2'}
                                 props={props}
                                 tips={null}
@@ -229,7 +236,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'address_line_1'}
-                                placeholder={t('Address Line 1')}
+                                placeholder={('Address Line 1')}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -238,7 +245,7 @@ export default function SellerRegistration({
                                 label={null}
                                 icon={'f-location'}
                                 name={'address_line_2'}
-                                placeholder={t('Address Line 2')}
+                                placeholder={('Address Line 2')}
                                 style={null}
                                 props={props}
                                 tips={null}
@@ -248,7 +255,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'phone'}
-                                placeholder={t('Phone Number')}
+                                placeholder={('Phone Number')}
                                 props={props}
                                 tips={null}
                                 onChange={(event) => {
@@ -264,7 +271,7 @@ export default function SellerRegistration({
                                 style={null}
                                 label={null}
                                 name={'password'}
-                                placeholder={t('Password')}
+                                placeholder={('Password')}
                                 props={props}
                             />
                             <TogglePassword
@@ -272,7 +279,7 @@ export default function SellerRegistration({
                                 style={'mb-9'}
                                 label={null}
                                 name={'password_confirmation'}
-                                placeholder={t('Confirm password')}
+                                placeholder={('Confirm password')}
                                 props={props}
                             />
                             <div className="border-t pt-9">
