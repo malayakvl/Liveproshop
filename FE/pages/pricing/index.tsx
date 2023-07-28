@@ -17,6 +17,7 @@ import { InputText } from '../../components/_form';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import Try from '../../components/try';
+import { setupFreeSubscriptionAction } from '../../redux/user';
 
 type PriceProps = {
     planId: number;
@@ -268,7 +269,10 @@ export default function Pricing({ locale }: { locale: any }) {
                                         <span className="block font-bold">{t('text_always')}</span>
                                     </>
                                 )}
-                                <span className={`mt-[30px] ${hideTrialBtn ? 'hidden' : 'block'}`}>
+                                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                <span
+                                    onClick={() => dispatch(setupFreeSubscriptionAction(true))}
+                                    className={`mt-[30px] ${hideTrialBtn ? 'hidden' : 'block'}`}>
                                     <Link href={'/auth/signup'}>
                                         <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block lg:mr-[84px] text-center">
                                             <span className="text-[20px] inline-block min-w-[220px] text-center">
