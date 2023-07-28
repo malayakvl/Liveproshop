@@ -19,7 +19,6 @@ BE/error.log
 ./settings
 .project
 /.settings/
-BE/error.log
 BE/_stepByStepMigration
 /_DELETETE_SERVER/SidebarHeaderOld.tsx
 /_DELETETE_SERVER/SidebarLayoutOld.tsx
@@ -27,5 +26,6 @@ BE/_stepByStepMigration
 /BE/public/uploads/
 /_DB.zip
 /_DB 2.zip
-/BE/public/uploads/
-/BE/public/uploads/products/
+BE/public/uploads/
+BE/public/uploads/products/
+/FE/_services/OLD
