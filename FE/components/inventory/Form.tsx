@@ -18,7 +18,6 @@ import {
     uploadedFilesSelector
 } from '../../redux/products/selectors';
 import { findTagAction, setIdentAction, updateProductAction } from '../../redux/products/actions';
-// import SunEditor from 'suneditor-react';
 import dynamic from 'next/dynamic';
 import 'suneditor/dist/css/suneditor.min.css';
 import { InventoryPhotos, RenderSizes, RenderVariant } from './index';
@@ -292,7 +291,8 @@ function ProductForm({
                                         setOptions={{ height: '250' }}
                                         onChange={handleChangeEditor}
                                     />
-                                    {props.errors['description'] && (
+                                    {editorContent.replace(/(&nbsp;|<([^>]+)>)/gi, '').length ===
+                                        0 && (
                                         <div className="error-el">
                                             {props.errors['description']}
                                         </div>
