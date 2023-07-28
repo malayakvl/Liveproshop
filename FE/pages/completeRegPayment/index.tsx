@@ -28,9 +28,6 @@ export default function CompletePayment({
 
     useEffect(() => {
         // dispatch(checkPaymentStatusAction(paymentIntent, paymentIntentSecret));
-        console.log('CHECK PAYMENT STATUS UPDATED', query.setup_intent);
-        console.log('CLIENT INTENT', query.setup_intent_client_secret);
-        console.log('setupIntent', setupIntent);
         dispatch(
             checkPaymentStatusAction(
                 setupIntent ? setupIntent : query.setup_intent,

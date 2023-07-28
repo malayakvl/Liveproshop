@@ -263,17 +263,19 @@ class Product {
                 const productPhotos = photos.concat(copyPhotos);
                 
                 const productTags = tags;
+                const descriptionContent = dataProduct.description[0];
                 const queryUpdate = `
                     UPDATE data.products
                     SET
                         name = $$${dataProduct.name}$$,
-                        description = $$${dataProduct.description}$$,
+                        description = $$${descriptionContent}$$,
                         photos = '{${productPhotos}}',
                         tags = '{${productTags}}',
                         material_id = ${dataProduct.material_id},
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
                         publish = ${dataProduct.publish ? dataProduct.publish : true}
                      WHERE id=${_resProd.rows[0].id};`;
+                // console.log(queryUpdate);
                 await client.query(queryUpdate);
                 
                 // update configuration
