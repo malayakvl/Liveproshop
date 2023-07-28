@@ -23,7 +23,7 @@ export default function Signup({ locale }: { locale: string }) {
     };
 
     const t = useTranslations();
-    const [roleId, setRoleId] = useState(1);
+    const [roleId, setRoleId] = useState(2);
     const [isFbClicked, setIsFbClicked] = useState(false);
     const [hideForm, setHideForm] = useState(false);
 
@@ -39,8 +39,9 @@ export default function Signup({ locale }: { locale: string }) {
     }, [hideFormSelector]);
 
     const onSubmit = (values: FormData, actions: any) => {
+        console.log(values);
         if (isFbClicked) {
-            accountService.registerFB(`${roleId}_${locale}`);
+            accountService.registerFB(`${roleId}_${locale}_${forFree ? 1 : 0}`);
         } else {
             // setup value from selector
             values['forFree'] = forFree;
@@ -50,6 +51,7 @@ export default function Signup({ locale }: { locale: string }) {
     };
 
     console.log('FOR FREE', forFree);
+    console.log('ROLE', roleId);
 
     return (
         <>

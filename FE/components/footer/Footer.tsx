@@ -27,7 +27,7 @@ export default function Footer() {
                             <div className="mr-9">
                                 <div className="mb-2 font-bold text-white">{t('Get started')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/plans'}>{t('Pricing')}</Link>
+                                    <Link href={'/pricing'}>{t('Pricing')}</Link>
                                 </div>
                                 <div>
                                     <Link href={'/contact-us'}>{t('Contact Us')}</Link>

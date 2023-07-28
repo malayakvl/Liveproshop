@@ -25,14 +25,18 @@ async function syncFB() {
 }
 
 async function registerFB(paramData) {
-    console.log('REGISTER PARAM', paramData);
     const infoParam = paramData.split('_');
     const roleId = infoParam[0] ? infoParam[0] : 2;
     const locale = infoParam[1];
+    const forFree = infoParam[2];
     // login with facebook then authenticate with the API to get a JWT auth token
     const { authResponse } = await new Promise(window.FB.login);
     authResponse.roleId = roleId;
     authResponse.locale = locale;
+    authResponse.forFree = forFree;
+    console.log('REGISTER LOCALE', authResponse.locale);
+    console.log('REGISTER ROLE', authResponse.roleId);
+    console.log('REGISTER FREE', authResponse.forFree);
     if (authResponse) {
         await getAccountData(authResponse);
     } else {
@@ -94,10 +98,14 @@ async function getAccountData(authResponse) {
             data.accessToken = authResponse.accessToken;
             // data.providerId = authResponse.userID,
             data.expirationTime = authResponse.data_access_expiration_time;
+            // data.callbackUrl = `${window.location.origin}/${
+            //     authResponse.locale === 'fr' ? '' : 'en/'
+            // }account`;
             data.callbackUrl = `${window.location.origin}/${
                 authResponse.locale === 'fr' ? '' : 'en/'
-            }account`;
+            }pricing`;
             data.roleId = authResponse.roleId ? authResponse.roleId : 2;
+            data.forFree = authResponse.forFree;
             store.dispatch(showLoaderAction(true));
             signIn('credentials_sdkfacebook', data);
         });
