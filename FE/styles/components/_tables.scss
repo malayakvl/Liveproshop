@@ -40,7 +40,14 @@
     }
   }
   th.actions {
-    @apply text-right;
+    @apply text-right w-[100px] justify-center;
+    max-width: 100px;
+
+    div {
+      justify-content: center;
+      margin-left: 22px;
+      //border: solid 1px;
+    }
   }
   td {
     @apply md:min-w-0 px-3 py-1 text-sm font-bold text-left text-gray-350 align-top;
@@ -101,6 +108,7 @@
   font-size: 16px !important;
   font-weight: bold !important;
   color: #4f5b84 !important;
+  //padding-left: 30px !important;
 }
 
 .inventory-color {
@@ -252,7 +260,7 @@ span.canceled {
   @apply flex w-[30px];
 }
 .sortable-block {
-  @apply float-right ml-8 min-w-[15px];
+  @apply min-w-[15px] right-[10px];
 }
 
 .scroll-horizontal {

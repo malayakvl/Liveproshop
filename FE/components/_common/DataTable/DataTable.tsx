@@ -189,38 +189,36 @@ const DataTable: React.FC<Props> = ({
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
                 )}
-                <div className="flex flex-row">
+                <div className="flex flex-row relative">
+                    {item.sortKey && (
+                        <div className="sortable-block absolute top-[-12px] rigth-0">
+                            <div
+                                role="presentation"
+                                data-name={item.sortKey}
+                                data-direction="ASC"
+                                onClick={setSort}
+                                className={classNames('btn_sort top', {
+                                    active: column === item.sortKey && sort === 'ASC'
+                                })}
+                            />
+                            <div
+                                role="presentation"
+                                data-name={item.sortKey}
+                                data-direction="DESC"
+                                onClick={setSort}
+                                className={classNames('btn_sort down', {
+                                    active: column === item.sortKey && sort === 'DESC'
+                                })}
+                            />
+                        </div>
+                    )}
                     {item.iconClass && (
                         <div>
                             <i className={`tbl-icon ${item.iconClass}`} />
                         </div>
                     )}
-                    <div>
-                        {item.sortKey && (
-                            <div className="sortable-block">
-                                <div
-                                    role="presentation"
-                                    data-name={item.sortKey}
-                                    data-direction="ASC"
-                                    onClick={setSort}
-                                    className={classNames('btn_sort top', {
-                                        active: column === item.sortKey && sort === 'ASC'
-                                    })}
-                                />
-                                <div
-                                    role="presentation"
-                                    data-name={item.sortKey}
-                                    data-direction="DESC"
-                                    onClick={setSort}
-                                    className={classNames('btn_sort down', {
-                                        active: column === item.sortKey && sort === 'DESC'
-                                    })}
-                                />
-                            </div>
-                        )}
-                    </div>
                     {item.titleKey && (
-                        <div style={{ marginTop: '-5px' }}>
+                        <div style={{ marginTop: '-2px' }}>
                             {item.titleKey ? t(item.titleKey) : ''}
                         </div>
                     )}
