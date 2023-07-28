@@ -51,30 +51,16 @@ export default function CompletePayment({
                 seller_email: stripePaymentIntent?.email,
                 callbackUrl: `${window.location.origin}/dashboard`
             });
-
-            // if (!user?.email) {
-            //     signIn('credentials_subscription_login', {
-            //         email: stripePaymentIntent?.email,
-            //         seller_email: stripePaymentIntent?.email,
-            //         callbackUrl: `${window.location.origin}/dashboard`
-            //     });
-            // } else {
-            //     signIn('credentials_subscription_login', {
-            //         email: stripePaymentIntent?.email,
-            //         seller_email: stripePaymentIntent?.email,
-            //         callbackUrl: `${window.location.origin}/dashboard`
-            //     });
-            // }
         }
     }, [stripePaymentIntent?.email]);
 
     return (
         <div className="flex justify-center">
-            <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-24">
-                <div className="mb-8 font-bold text-3xl line-height-105percent">
+            <div className="mt-10 rounded-lg bg-white w-96 p-10">
+                <div className="font-bold text-3xl line-height-105percent text-center">
                     {t('Payment Confirmation')}!
                 </div>
-                <div className="error-el">{query.message}</div>
+                {query.message && <div className="error-el mt-3">${query.message}</div>}
             </div>
         </div>
     );

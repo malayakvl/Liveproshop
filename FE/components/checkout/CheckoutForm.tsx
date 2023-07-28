@@ -45,7 +45,7 @@ const CheckoutUnregisteredForm = () => {
             dispatch(showLoaderAction(false));
         } else {
             // update subscription status
-            console.log('NEED TO UPDATE STATUSIN DB');
+            // console.log('NEED TO UPDATE STATUSIN DB');
         }
     };
 
