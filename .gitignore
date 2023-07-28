@@ -4,12 +4,14 @@ BE/.env
 FE/node_modules
 FE/.env
 BE/combined.log
+BE/error.log
 /BE/public/uploads/orders/
 /BE/public/uploads/products/
 /BE/public/uploads/shipping/
 /BE/public/uploads/tmp/
 /BE/public/uploads/users/
-/BE/combined.log
+/BE/error.log
+/BE/combined.log.log
 .idea
 /_DB/
 /BE/public/uploads/archives/
