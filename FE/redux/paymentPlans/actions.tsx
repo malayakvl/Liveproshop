@@ -136,7 +136,6 @@ export const paymentPlanInfoAction: any = createAction(
             };
         }
 );
-
 export const requestDemoAction: any = createAction(
     'pricing/SEND-REQUEST-DEMO',
     async (data: any) =>

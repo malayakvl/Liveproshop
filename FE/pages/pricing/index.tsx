@@ -5,7 +5,7 @@ import Router from 'next/router';
 import Head from 'next/head';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { clientSecretSelector, userSelector } from '../../redux/user/selectors';
+import { userSelector } from '../../redux/user/selectors';
 import { session } from 'next-auth/client';
 import { setModalCalendlyMetaAction, showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction, requestDemoAction } from '../../redux/paymentPlans';
@@ -91,6 +91,7 @@ const PriceHeading = ({
                 {planId < 3 && (
                     <button
                         onClick={() => {
+                            // dispatch(setSelectedPlanAction(planId));
                             if (user?.email) {
                                 Router.push(`/subscription?planId=${planId}`);
                             } else {
@@ -139,7 +140,7 @@ export default function Pricing({ locale }: { locale: any }) {
     const plans = useSelector(itemsSelector);
     const user = useSelector(userSelector);
     // const [showTrial, setShowTrial] = useState(true);
-    const stripeClientSecret = useSelector(clientSecretSelector);
+    // const stripeClientSecret = useSelector(clientSecretSelector);
 
     const [success, setSuccess] = useState(false);
     const [hideTrialBtn, setHideTrialBtn] = useState(false);
