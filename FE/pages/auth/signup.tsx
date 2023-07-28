@@ -39,7 +39,6 @@ export default function Signup({ locale }: { locale: string }) {
     }, [hideFormSelector]);
 
     const onSubmit = (values: FormData, actions: any) => {
-        console.log(values);
         if (isFbClicked) {
             accountService.registerFB(`${roleId}_${locale}_${forFree ? 1 : 0}`);
         } else {

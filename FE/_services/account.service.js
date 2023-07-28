@@ -34,9 +34,6 @@ async function registerFB(paramData) {
     authResponse.roleId = roleId;
     authResponse.locale = locale;
     authResponse.forFree = forFree;
-    console.log('REGISTER LOCALE', authResponse.locale);
-    console.log('REGISTER ROLE', authResponse.roleId);
-    console.log('REGISTER FREE', authResponse.forFree);
     if (authResponse) {
         await getAccountData(authResponse);
     } else {
@@ -103,7 +100,8 @@ async function getAccountData(authResponse) {
             // }account`;
             data.callbackUrl = `${window.location.origin}/${
                 authResponse.locale === 'fr' ? '' : 'en/'
-            }pricing`;
+            }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
+            console.log(data.callbackUrl);
             data.roleId = authResponse.roleId ? authResponse.roleId : 2;
             data.forFree = authResponse.forFree;
             store.dispatch(showLoaderAction(true));

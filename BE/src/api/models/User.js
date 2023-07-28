@@ -202,7 +202,7 @@ class User {
                 `;
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
-                if (userData.roleId === 2) {
+                if (parseInt(userData.roleId) === 2 && parseInt(userData.forFree) === 1) {
                     // check user subscription
                     // if we register for free
                     const periodStart =  new Date();
@@ -221,8 +221,7 @@ class User {
                         is_trial: true
                     }
                     const _querySubscription = `SELECT * FROM 
-                    data.set_subscriptions
-                    ('${JSON.stringify(dbSubscription)}');`;
+                        data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
                     await client.query(_querySubscription);
                 }
 
