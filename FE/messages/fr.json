@@ -531,5 +531,7 @@
   "Prenom": "Prenom",
   "Select Plan": "Sélectionnez le plan",
   "Accept Cookies": "Accepter les cookies",
-  "Decline Cookes": "Refuser les cookies"
+  "Decline Cookes": "Refuser les cookies",
+  "cookie_text": "Notre site utilise des cookies. En poursuivant votre navigation, nous supposons votre autorisation de déployer des cookies comme détaillé dans notre ",
+  "cookie_policy_link": "Politique de confidentialité."
 }

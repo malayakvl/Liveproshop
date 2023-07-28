@@ -5,6 +5,7 @@ import { fetchUserAction, setUserAction } from '../../redux/user';
 import { userSelector } from '../../redux/user/selectors';
 import CookieConsent from 'react-cookie-consent';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
 
 export default function MainLayout({ children }: { children: any }) {
     const [session] = useSession();
@@ -60,8 +61,14 @@ export default function MainLayout({ children }: { children: any }) {
                 expires={150}>
                 <div className="cookie-text">
                     <span>
-                        Our website use cookies. By continuing navigating, we assume your permission
-                        deploy cookies as detailed in our Privacy Policy.
+                        {t('cookie_text')}
+                        <em>
+                            <Link href={'/privacy'}>
+                                <a className="red-yellow-gradient-text" target="_blank">
+                                    {t('cookie_policy_link')}
+                                </a>
+                            </Link>
+                        </em>
                     </span>
                 </div>
                 {/*<span style={{ fontSize: '10px' }}>This bit of text is smaller :O</span>*/}
