@@ -352,8 +352,8 @@ class User {
         try {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
-            console.log("!!!", resPlan.rows.length);
             if (resPlan.rows.length) {
+                console.log("STRIPE ID", resPlan.rows[0].stripe_id)
                 if (resPlan.rows[0].stripe_id) {
                     let customerId;
                     console.log("AAAA", userData);
@@ -365,7 +365,6 @@ class User {
                     if (uncompleteSubscr.rows.length > 0) {
                         userData.user.customer_id = uncompleteSubscr.rows[0].customer_id;
                     }
-console.log("!!!", userData);
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
                         const customer = await stripe.customers.create({
@@ -399,7 +398,7 @@ console.log("!!!", userData);
                     //     subscriptionObject.coupon =  'free-period';
                     // }
                     const subscription = await stripe.subscriptions.create(subscriptionObject);
-                    console.log("STRIPE SUBSCRIPTION", subscription);
+                    console.log("CREATED SUBSCRIPTION", subscription);
 
                     // if subscription created add record to DB
                     if (subscription?.id) {
@@ -413,6 +412,8 @@ console.log("!!!", userData);
                             period_end: subscription.current_period_end,
                             is_trial: false
                         }
+                        console.log("INSERT SUBSCRIPTION DATA", subscriptionData);
+                        console.log(`SELECT * FROM data.set_subscriptions('${JSON.stringify(subscriptionData)}');`);
                         const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(subscriptionData)}');`;
                         await client.query(querySubscription);
                     }
@@ -497,6 +498,7 @@ console.log("!!!", userData);
         const client = await pool.connect();
         try {
             const dbPlansRes = await client.query('SELECT * FROM data.subscription_plans WHERE stripe_id IS NOT NULL');
+            let subscription;
             if (customerId.includes('fake_subscription') || isTrial) {
                 // getting subscription fron db
                 const subscriptionRow = await client.query(`SELECT * FROM data.subscriptions WHERE customer_id='${customerId}'`);
@@ -539,7 +541,7 @@ console.log("!!!", userData);
                 // console.log("FAKE SUBSCRIPTION WITH REAL STRIPE CUSTOMER", subscriptionFakeData);
             }
             else {
-                const subscription = await stripe.subscriptions.retrieve(
+                subscription = await stripe.subscriptions.retrieve(
                     subscriptionId
                 );
             }
@@ -556,6 +558,7 @@ console.log("!!!", userData);
             subscription.defaultPayment = customer.invoice_settings.default_payment_method;
             subscription.defaultPlanId = subscription.items.data[0].plan.id;
             subscription.dbPlans = dbPlansRes.rows;
+            console.log("SUBSCRIPTION", subscription);
 
             // const paymentPlansInfo = await paymentPlanModel.fetchItems();
             subscription.paymentPlanList = await paymentPlanModel.fetchItems();
@@ -614,7 +617,8 @@ console.log("!!!", userData);
             if (!resUser.rows.length) {
                 return { subscription: {}, error: { code: 404, message: 'User Not found' } };
             } else {
-                return await this.createExistUserSubscription({ user: resUser.rows[0], type: type, planId:planId }, resUser.rows[0]);
+                return { user: resUser.rows[0], error: null };
+                // return await this.createExistUserSubscription({ user: resUser.rows[0], type: type, planId:planId }, resUser.rows[0]);
                 // return await this.createExistUserSubscription({ user: userData, type: type, planId:planId }, resUser.rows[0]);
             }
         } catch (e) {
@@ -629,15 +633,43 @@ console.log("!!!", userData);
         const client = await pool.connect();
         try {
             let paymentIntentResult;
-            if (type === 'fromPricing') {
+            // paymentIntentResult = await stripe.setupIntents.retrieve(
+            //     paymentIntent
+            // );
+            console.log("TYPE", type);
+
+            if (type === 'useSetup') {
+                console.log("paymentIntent", paymentIntent);
                 paymentIntentResult = await stripe.setupIntents.retrieve(
                     paymentIntent
                 );
+                // paymentIntentResult = await stripe.paymentIntents.retrieve(
+                //     paymentIntent
+                // );
+                console.log(paymentIntentResult)
             } else {
+                // =======================================================================
+                // =======================================================================
+                // payment intent after registration->select plan->add card (WORK VARIANT)
+                // =======================================================================
+                // =======================================================================
                 paymentIntentResult = await stripe.paymentIntents.retrieve(
                     paymentIntent
                 );
             }
+
+
+            // ========================================================
+            // console.log("TYPE 2", paymentIntentResultType2);
+            // if (type === 'fromPricing') {
+            //     paymentIntentResult = await stripe.setupIntents.retrieve(
+            //         paymentIntent
+            //     );
+            // } else {
+            //     paymentIntentResult = await stripe.paymentIntents.retrieve(
+            //         paymentIntent
+            //     );
+            // }
             // console.log("[paymentIntentResult]", paymentIntentResult.client_secret);
             // console.log("[paymentIntentSecret]", paymentIntentSecret);
             // console.log("[paymentIntentResult.client_secret]", paymentIntentSecret);
@@ -648,6 +680,10 @@ console.log("!!!", userData);
 
             // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
             // if (paymentIntentResult.client_secret === paymentIntentSecret) {
+            console.log("STRIPE SECRET", paymentIntentResult.client_secret);
+            console.log("URL SECRET", paymentIntentSecret);
+            console.log("STRIPE INTENT", paymentIntentResult.client_secret);
+            console.log("URL INTENT", paymentIntentSecret);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 // setup payment intent as default payment method
                 await stripe.customers.update(

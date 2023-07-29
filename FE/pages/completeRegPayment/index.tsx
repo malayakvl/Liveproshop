@@ -25,15 +25,26 @@ export default function CompletePayment({
     const { query } = useRouter();
     // const user = useSelector(userSelector);
     const stripePaymentIntent = useSelector(paymentIntentSelector);
+    console.log('HERE COMPLETE PAYMENT REG', query);
 
     useEffect(() => {
         // dispatch(checkPaymentStatusAction(paymentIntent, paymentIntentSecret));
+        // dispatch(
+        //     checkPaymentStatusAction(
+        //         // setupIntent ? setupIntent : query.setup_intent,
+        //         query.setup_intent,
+        //         query.setup_intent_client_secret,
+        //         planId,
+        //         'fromPricing'
+        //     )
+        // );
         dispatch(
             checkPaymentStatusAction(
-                setupIntent ? setupIntent : query.setup_intent,
-                query.setup_intent_client_secret,
+                setupIntent ? setupIntent : query.payment_intent,
+                // setupIntentSecret ? setupIntentSecret : query.payment_intent_client_secret,
+                query.payment_intent_client_secret,
                 planId,
-                'fromPricing'
+                null
             )
         );
     }, [paymentIntent]);

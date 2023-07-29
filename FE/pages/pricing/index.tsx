@@ -225,7 +225,7 @@ export default function Pricing({ locale }: { locale: any }) {
                         <div className="option-row">
                             <div className="option-value">
                                 {/*{parseTranslation(data.option, 'name', locale)}*/}
-                                {t(data.option.name)}!
+                                {t(data.option.name)}
                             </div>
                         </div>
                     </Fragment>

@@ -176,15 +176,18 @@ class UserController {
     }
 
     async createUserFromSubscription (req, res) {
-        const data = await userModel.createUserFromSubscription(req.body.userData, req.body.planId, req.body.type);
+        const createdUser = await userModel.createUserFromSubscription(req.body.userData, req.body.planId, req.body.type);
+        // const createdUser = await userModel
+        createdUser.planId = req.body.planId;
+        const data = await userModel.createExistUserSubscription(createdUser);
         if (data.subscription) {
-            // console.log('DATA SUBSCRIPTION', data.subscription);
+            // console.log('createUserFromSubscription', data.subscription);
             return res.status(200).json({
-                user: null,
+                user: createdUser.user,
                 subscription: data.subscription,
                 planId: data.planId,
                 // clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
-                clientSecret: data.subscription.status === 'trialing' ? null : data.setupIntent.client_secret
+                clientSecret: data.subscription.latest_invoice.payment_intent.client_secret
             });
         } else {
             return res.status(402).json('Something wend wrong');
@@ -352,8 +355,6 @@ class UserController {
 
 
     async checkPaymentStatus (req, res) {
-        console.log("INTENT", req.body.paymentIntent);
-        console.log("SECRET", req.body.paymentIntentSecret);
         const data = await userModel.checkPayment(req.body.paymentIntent, req.body.paymentIntentSecret, req.body.planId, req.body.type);
 
         if (data.paymentIntent) {

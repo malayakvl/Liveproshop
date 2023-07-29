@@ -5,6 +5,7 @@ import { providers, getSession, signIn } from 'next-auth/client';
 import { Field, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { createExistUserSubscriptionAction } from '../../redux/user';
 import { createUserFromSubscriptionAction } from '../../redux/user';
 import {
     clientSecretSelector,
@@ -91,6 +92,7 @@ export default function Signup({
             .oneOf([Yup.ref('password'), null], t('Passwords must match'))
     });
 
+    console.log('Client Secret', clientSecret);
     return (
         <div className="flex main-bg justify-center">
             <div className="mt-10 rounded-lg colored-shadow bg-white w-96 p-10 pb-24">

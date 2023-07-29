@@ -272,7 +272,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                             {subscriptionInfo.DBName}
                                             <br />
                                             <a
-                                                className="cursor-pointer text-xs gradient-btn-small block max-w-max"
+                                                className="cursor-pointer text-xs gradient-btn-small block max-w-max mt-5"
                                                 href={subscriptionInfo.invoicePdf}
                                                 target="_blank"
                                                 rel="noreferrer">
@@ -321,7 +321,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                         <td style={{ textAlign: 'center' }}>
                                             <span
                                                 role="presentation"
-                                                className="cursor-pointer border border-gray-300 text-gray-300 py-1.5 rounded-lg px-1"
+                                                className="cursor-pointer border border-gray-300 text-gray-300 py-1.5 rounded-lg px-1 inline-block"
                                                 onClick={() => {
                                                     dispatch(unsubscribeAction());
                                                 }}>

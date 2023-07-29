@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 const { publicRuntimeConfig } = getConfig();
 const siteUrl = publicRuntimeConfig.siteUrl;
 
-const CheckourRegisteredForm = () => {
+const CheckoutRegisteredForm = () => {
     const stripe = useStripe();
     const elements = useElements();
     const t = useTranslations();
@@ -26,26 +26,26 @@ const CheckourRegisteredForm = () => {
             return;
         }
         dispatch(showLoaderAction(true));
-        // const result = await stripe.confirmPayment({
-        //     //`Elements` instance that was used to create the Payment Element
-        //     elements,
-        //     confirmParams: {
-        //         return_url: `${siteUrl}/completePayment`
-        //     }
-        // });
-        const result = await stripe.confirmSetup({
+        const result = await stripe.confirmPayment({
             //`Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
-                return_url: `${siteUrl}/completeRegPayment?planId=${query.planId}`
+                return_url: `${siteUrl}/completePayment`
             }
         });
+        // const result = await stripe.confirmSetup({
+        //     //`Elements` instance that was used to create the Payment Element
+        //     elements,
+        //     confirmParams: {
+        //         return_url: `${siteUrl}/completeRegPayment?planId=${query.planId}`
+        //     }
+        // });
         if (result.error) {
             // Show error to your customer (for example, payment details incomplete)
             dispatch(showLoaderAction(false));
         } else {
             // update subscription status
-            console.log('NEED TO UPDATE STATUSIN DB');
+            // console.log('NEED TO UPDATE STATUSIN DB');
         }
     };
 
@@ -60,4 +60,4 @@ const CheckourRegisteredForm = () => {
     );
 };
 
-export default CheckourRegisteredForm;
+export default CheckoutRegisteredForm;
