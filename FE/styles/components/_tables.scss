@@ -16,7 +16,8 @@
   }
 
   th {
-    @apply px-3 py-3 text-xs pr-[55px] font-bold leading-4 tracking-wider text-blue-350 align-top relative;
+    //@apply px-3 py-3 text-xs pr-[55px] font-bold leading-4 tracking-wider text-blue-350 align-top relative;
+    @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-blue-350 align-top relative;
 
     .toggle-bg {
       width: 20px;
@@ -260,7 +261,7 @@ span.canceled {
   @apply flex w-[30px];
 }
 .sortable-block {
-  @apply min-w-[15px] right-[10px];
+  @apply min-w-[15px] left-[-40px];
 }
 
 .scroll-horizontal {

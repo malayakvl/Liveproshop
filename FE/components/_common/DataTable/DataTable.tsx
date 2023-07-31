@@ -189,9 +189,9 @@ const DataTable: React.FC<Props> = ({
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
                 )}
-                <div className="flex flex-row relative">
+                <div className="relative w-full inline-block">
                     {item.sortKey && (
-                        <div className="sortable-block absolute top-[-12px] rigth-0">
+                        <div className="sortable-block absolute top-[-9px] left-0">
                             <div
                                 role="presentation"
                                 data-name={item.sortKey}
@@ -212,16 +212,20 @@ const DataTable: React.FC<Props> = ({
                             />
                         </div>
                     )}
-                    {item.iconClass && (
-                        <div>
-                            <i className={`tbl-icon ${item.iconClass}`} />
-                        </div>
-                    )}
-                    {item.titleKey && (
-                        <div style={{ marginTop: '-2px' }}>
-                            {item.titleKey ? t(item.titleKey) : ''}
-                        </div>
-                    )}
+                    <div
+                        className="inline-block"
+                        style={{ marginLeft: item.sortKey ? '30px' : '0' }}>
+                        {item.iconClass && (
+                            <div className="inline-block">
+                                <i className={`tbl-icon ${item.iconClass}`} />
+                            </div>
+                        )}
+                        {item.titleKey && (
+                            <div style={{ marginTop: '-2px' }} className="inline-block">
+                                {item.titleKey ? t(item.titleKey) : ''}
+                            </div>
+                        )}
+                    </div>
 
                     {/*</div>*/}
                     {/*<div style={{ minWidth: '55px' }} className="sortable-icon-block">*/}
