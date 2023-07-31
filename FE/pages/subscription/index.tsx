@@ -47,6 +47,7 @@ export default function Subscription({
     const [clientSecret, setClientSecret] = useState('');
 
     useEffect(() => {
+        dispatch(showLoaderAction(true));
         if (!stripeClientSecret) {
             dispatch(paymentPlanInfoAction(planId));
             dispatch(showLoaderAction(true));

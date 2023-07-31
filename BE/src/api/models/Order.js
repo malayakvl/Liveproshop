@@ -32,15 +32,26 @@ async function createInvoice (invoice, path, locale) {
 async function generateHeader(doc, seller, locale) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
 
+    // doc
+    //     .image("./public/images/logo.png", 40, 45, { width: 160 })
+    //     .fillColor("#444444")
+    //     .fontSize(20)
+    //     .text("", 170, 0)
+    //     .fontSize(10)
+    //     .text(t['address_line_1'], 300, 50, { align: "right" })
+    //     .text(t['address_line_2'], 300, 65, { align: "right" })
+    //     .text(t['address_line_3'], 300, 80, { align: "right" })
+    //     // .text(seller.phone, 300, 95, { align: "right" })
+    //     .moveDown();
     doc
-        .image("./public/images/logo.png", 40, 45, { width: 160 })
         .fillColor("#444444")
         .fontSize(20)
         .text("", 170, 0)
         .fontSize(10)
-        .text(t['address_line_1'], 300, 50, { align: "right" })
-        .text(t['address_line_2'], 300, 65, { align: "right" })
-        .text(t['address_line_3'], 300, 80, { align: "right" })
+        .text(seller.address_line_1, 300, 50, { align: "right" })
+        .text(`${seller.phone}`, 300, 65, { align: "right" })
+        // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
+        .text(seller.company_name, 300, 80, { align: "right" })
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }

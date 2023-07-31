@@ -823,7 +823,7 @@ class User {
             ]);
             // const user = res ? await this.findUserByEmailOnly(userData.email) : null;
             const user = await this.findUserByEmailOnly(userData.email);
-            console.log("USER BY EMAIL", user);
+            // console.log("USER BY EMAIL", user);
             if (user) {
                 // add to user default chatbot scenarios
                 // buy+item+color+size+quantity
