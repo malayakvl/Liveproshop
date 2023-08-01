@@ -182,7 +182,7 @@ function ProductForm({
         name: Yup.string()
             .max(140, t('Must be less characters', { charNumber: 140 }))
             .required(t('Required field')),
-        description: Yup.string().required(t('Required field')),
+        // description: Yup.string().required(t('Required field')),
         price: Yup.number().when('configured', {
             is: false,
             then: Yup.number().required(t('Required field')).min(0)
