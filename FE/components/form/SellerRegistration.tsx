@@ -35,7 +35,6 @@ export default function SellerRegistration({
         () => prepareCountriesDropdown(countries, locale),
         [countries]
     );
-    console.log('FREE REGISTRATION', forFree);
     useEffect(() => {
         dispatch(fetchCountriesAction());
     }, []);

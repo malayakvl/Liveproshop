@@ -96,12 +96,15 @@ const FilterCountry: React.FC<Props> = ({ locale }) => {
                                         <label
                                             className="text-xs text-blue-350 ml-3 font-bold flex"
                                             htmlFor={`country_${item.name}`}>
-                                            <Image
-                                                width="40"
-                                                height="24"
-                                                src={`/images/flags/${item.iso.toLowerCase()}.svg`}
-                                            />
-                                            <span className="inline-block text-sm ml-2">
+                                            {item.iso}
+                                            {/*<Image*/}
+                                            {/*    width="40"*/}
+                                            {/*    height="24"*/}
+                                            {/*    src={`/images/flags/${item.iso.toLowerCase()}.svg`}*/}
+                                            {/*/>*/}
+                                            <span
+                                                className="inline-block text-sm ml-2"
+                                                style={{ marginTop: '-3px' }}>
                                                 {parseTranslation(item, 'name', locale)}
                                             </span>
                                         </label>

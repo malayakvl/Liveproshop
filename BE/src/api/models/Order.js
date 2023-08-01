@@ -495,6 +495,7 @@ class Order {
             const payments = await client.query(`SELECT * FROM data.get_orders_payments('${JSON.stringify(_filters)}');`);
             res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
             const countries = await client.query(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
+            console.log(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
             res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
             const amounts = await client.query(`SELECT * FROM data.get_orders_total_amount_range('${JSON.stringify(_filters)}');`);
             res.amounts = amounts.rows[0].total_amount_range.max ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
