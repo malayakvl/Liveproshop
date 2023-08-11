@@ -12,7 +12,7 @@ import { fetchFormAction, requestDemoAction } from '../../redux/paymentPlans';
 import { itemsSelector } from '../../redux/paymentPlans/selectors';
 // import { formatCurrency, parseTranslation } from '../../lib/functions';
 import FullLayout from '../../components/layout/FullLayout';
-// import { skipExistUserSubscriptionAction } from '../../redux/user';
+import { skipExistUserSubscriptionNewAction } from '../../redux/user';
 import { InputText } from '../../components/_form';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -93,7 +93,7 @@ const PriceHeading = ({
                         onClick={() => {
                             // dispatch(setSelectedPlanAction(planId));
                             if (user?.email) {
-                                Router.push(`/subscription?planId=${planId}`);
+                                Router.push(`/subscription/create?planId=${planId}`);
                             } else {
                                 Router.push(`/auth/subscription?planId=${planId}`);
                             }
@@ -139,7 +139,8 @@ export default function Pricing({ locale }: { locale: any }) {
     const dispatch = useDispatch();
     const plans = useSelector(itemsSelector);
     const user = useSelector(userSelector);
-    // const [showTrial, setShowTrial] = useState(true);
+    const [showTrial, setShowTrial] = useState(true);
+    const [hideFreeBtn, setHideFreeBtn] = useState(false);
     // const stripeClientSecret = useSelector(clientSecretSelector);
 
     const [success, setSuccess] = useState(false);
@@ -170,9 +171,23 @@ export default function Pricing({ locale }: { locale: any }) {
         if (user?.email) {
             if (user.is_trial) {
                 setHideTrialBtn(true);
+                setShowTrial(false);
             }
+            if (user.subscription_id?.includes('skip_sub')) {
+                setShowTrial(false);
+            }
+            setHideFreeBtn(true);
         }
+        // setShowTrial(false);
     }, [user?.email]);
+
+    // useEffect(() => {
+    //     if (user.email) {
+    //         if (user.status) {
+    //             setShowTrial(false);
+    //         }
+    //     }
+    // }, [user?.email]);
 
     // useEffect(() => {
     //     if (stripeClientSecret) {
@@ -273,7 +288,7 @@ export default function Pricing({ locale }: { locale: any }) {
                                 {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                 <span
                                     onClick={() => dispatch(setupFreeSubscriptionAction(true))}
-                                    className={`mt-[30px] ${hideTrialBtn ? 'hidden' : 'block'}`}>
+                                    className={`mt-[30px] ${hideFreeBtn ? 'hidden' : 'block'}`}>
                                     <Link href={'/auth/signup'}>
                                         <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block lg:mr-[84px] text-center">
                                             <span className="text-[20px] inline-block min-w-[220px] text-center">
@@ -287,6 +302,40 @@ export default function Pricing({ locale }: { locale: any }) {
                         <div className="w-full md:w-1/3">
                             <div className="sitting-boy" />
                         </div>
+                    </div>
+
+                    {/*SKIP NOW BLOCK*/}
+                    <div className="underline text-center mt-8 lg:mt-10">
+                        {showTrial && (
+                            <Fragment>
+                                {user?.email && (
+                                    <span
+                                        className="cursor-pointer"
+                                        role="presentation"
+                                        onClick={() => {
+                                            dispatch(
+                                                skipExistUserSubscriptionNewAction(
+                                                    `${window.location.origin}/dashboard`,
+                                                    locale
+                                                )
+                                            );
+                                        }}>
+                                        {t('Skip for now')}
+                                    </span>
+                                )}
+                                {!user?.email && (
+                                    <Link href="/auth/signup?forFree=skip">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                        <a
+                                            onClick={() =>
+                                                dispatch(setupFreeSubscriptionAction('skip'))
+                                            }>
+                                            {t('Skip for now')}
+                                        </a>
+                                    </Link>
+                                )}
+                            </Fragment>
+                        )}
                     </div>
 
                     {/*PRICING BLOCK*/}
@@ -393,71 +442,75 @@ export default function Pricing({ locale }: { locale: any }) {
                     </div>
                 </div>
                 {/*FORM BLOCK*/}
-                <div className="text-gray-350 mx-auto border-red-900">
-                    <div className="clear-both" />
-                    <h3 className="hidden red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
-                        {t('Try it for free today!')}
-                    </h3>
-                    <h4 className="hidden text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
-                        {t('It only takes 30 seconds to get started')}.
-                    </h4>
-                    {/*=======================================================*/}
-                    {/*====================== TRY FOR TODAY ==================*/}
-                    {/*=======================================================*/}
-                    <div className="lg:mt-[100px]">
-                        <Try />
-                    </div>
-                    {/*<div className="w-full mt-[40px] text-center mb-[100px] hidden">*/}
-                    {/*    <Link href={'/auth/signup'}>*/}
-                    {/*        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">*/}
-                    {/*            <span className="text-[16px] inline-block min-w-[220px]">*/}
-                    {/*                {t('Register now!')}*/}
-                    {/*            </span>*/}
-                    {/*        </a>*/}
-                    {/*    </Link>*/}
-                    {/*    /!* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions *!/*/}
-                    {/*    <a*/}
-                    {/*        onClick={() => {*/}
-                    {/*            dispatch(setModalCalendlyMetaAction(true));*/}
-                    {/*        }}*/}
-                    {/*        className="w-full inline-block cursor-pointer btn-big text-center md:w-auto md:inline-block md:ml-[75px]">*/}
-                    {/*        <span className="text-[16px] md:text-[20px]">*/}
-                    {/*            {t('Request a seles call')}*/}
-                    {/*        </span>*/}
-                    {/*    </a>*/}
-                    {/*</div>*/}
-
-                    {success ? (
-                        <div className="mt-8 mb-16 font-bold text-2xl text-center text-green-500 hidden">
-                            {t('Your request has been sent')}
+                {showTrial && (
+                    <div className="text-gray-350 mx-auto border-red-900">
+                        <div className="clear-both" />
+                        <h3 className="hidden red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
+                            {t('Try it for free today!')}
+                        </h3>
+                        <h4 className="hidden text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
+                            {t('It only takes 30 seconds to get started')}.
+                        </h4>
+                        {/*=======================================================*/}
+                        {/*====================== TRY FOR TODAY ==================*/}
+                        {/*=======================================================*/}
+                        <div className="lg:mt-[100px]">
+                            <Try />
                         </div>
-                    ) : (
-                        <Formik
-                            initialValues={{}}
-                            validationSchema={validationSchema}
-                            onSubmit={handlerSubmit}>
-                            {(props) => (
-                                <Form className="flex flex-wrap justify-center align-middle lg:flex-nowrap lg:max-w-2xl mt-8 mb-16 mx-auto hidden">
-                                    <InputText
-                                        style={'h-14 text-lg w-full'}
-                                        icon={'f-email'}
-                                        label={null}
-                                        name={'email'}
-                                        placeholder={t('holder_email')}
-                                        props={props}
-                                        tips={null}
-                                    />
+                        {/*<div className="w-full mt-[40px] text-center mb-[100px] hidden">*/}
+                        {/*    <Link href={'/auth/signup'}>*/}
+                        {/*        <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">*/}
+                        {/*            <span className="text-[16px] inline-block min-w-[220px]">*/}
+                        {/*                {t('Register now!')}*/}
+                        {/*            </span>*/}
+                        {/*        </a>*/}
+                        {/*    </Link>*/}
+                        {/*    /!* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions *!/*/}
+                        {/*    <a*/}
+                        {/*        onClick={() => {*/}
+                        {/*            dispatch(setModalCalendlyMetaAction(true));*/}
+                        {/*        }}*/}
+                        {/*        className="w-full inline-block cursor-pointer btn-big text-center md:w-auto md:inline-block md:ml-[75px]">*/}
+                        {/*        <span className="text-[16px] md:text-[20px]">*/}
+                        {/*            {t('Request a seles call')}*/}
+                        {/*        </span>*/}
+                        {/*    </a>*/}
+                        {/*</div>*/}
 
-                                    <div className="mb-6 min-w-max w-full lg:w-auto ">
-                                        <button className="lg:ml-5 lg:mt-0 w-full gradient-btn hover:bg-indigo-600 focus:outline-none duration-100 ease-in-out">
-                                            <span className="text-lg">{t('Request a demo')}</span>
-                                        </button>
-                                    </div>
-                                </Form>
-                            )}
-                        </Formik>
-                    )}
-                </div>
+                        {success ? (
+                            <div className="mt-8 mb-16 font-bold text-2xl text-center text-green-500 hidden">
+                                {t('Your request has been sent')}
+                            </div>
+                        ) : (
+                            <Formik
+                                initialValues={{}}
+                                validationSchema={validationSchema}
+                                onSubmit={handlerSubmit}>
+                                {(props) => (
+                                    <Form className="flex flex-wrap justify-center align-middle lg:flex-nowrap lg:max-w-2xl mt-8 mb-16 mx-auto hidden">
+                                        <InputText
+                                            style={'h-14 text-lg w-full'}
+                                            icon={'f-email'}
+                                            label={null}
+                                            name={'email'}
+                                            placeholder={t('holder_email')}
+                                            props={props}
+                                            tips={null}
+                                        />
+
+                                        <div className="mb-6 min-w-max w-full lg:w-auto ">
+                                            <button className="lg:ml-5 lg:mt-0 w-full gradient-btn hover:bg-indigo-600 focus:outline-none duration-100 ease-in-out">
+                                                <span className="text-lg">
+                                                    {t('Request a demo')}
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </Form>
+                                )}
+                            </Formik>
+                        )}
+                    </div>
+                )}
             </div>
         </div>
     );

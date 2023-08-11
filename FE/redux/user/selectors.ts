@@ -24,7 +24,7 @@ export const userSubscriptionSelector = createSelector(
 );
 export const userForFreeSelector = createSelector(
     rootSelector,
-    (user: State.User): boolean => user.forFree
+    (user: State.User): any => user.forFree
 );
 export const clientSecretSelector = createSelector(
     rootSelector,
@@ -37,4 +37,8 @@ export const paymentIntentSelector = createSelector(
 export const showChangeSubscriptionSelector = createSelector(
     rootSelector,
     (user: State.User): any => user.showChangeSubscription
+);
+export const redirectAfterSubscriptionSelector = createSelector(
+    rootSelector,
+    (user: State.User): boolean => user.redirectAfterSubscription
 );

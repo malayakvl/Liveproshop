@@ -32,6 +32,7 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
     const [isMobile, setIsMobile] = useState(false);
     const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
     const toggleProfileSideClass = useSelector(isProfileMenuOpenSelector);
+    const [redirectToPlan, setRedirectToPlan] = useState(false);
 
     useEffect(
         function () {
@@ -57,6 +58,12 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                     window.removeEventListener('resize', handleWindowResize);
                 };
             }
+            setRedirectToPlan(
+                !!(
+                    user.subscription_id?.includes('fake_sub') ||
+                    user.subscription_id?.includes('skip_sub')
+                )
+            );
         },
         [user]
     );
@@ -181,9 +188,27 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 </a>
                                             </Link>
                                         </li>
-                                        {user.role_id === 2 && (
+                                        {user.role_id === 2 && !redirectToPlan && (
                                             <li>
                                                 <Link href="/account/plan">
+                                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                                    <a
+                                                        role="presentation"
+                                                        onClick={() => {
+                                                            setShowProfileMenu(!showProfileMenu);
+                                                            toggleSidebar();
+                                                        }}>
+                                                        <i className="plan" />
+                                                        <span className="s-caption">
+                                                            {t('My Plan')}
+                                                        </span>
+                                                    </a>
+                                                </Link>
+                                            </li>
+                                        )}
+                                        {user.role_id === 2 && redirectToPlan && (
+                                            <li>
+                                                <Link href="/pricing">
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                     <a
                                                         role="presentation"

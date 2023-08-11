@@ -2,26 +2,21 @@ import FullLayout from '../../components/layout/FullLayout';
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { providers, getSession, signIn } from 'next-auth/client';
-import { Field, Formik, ErrorMessage } from 'formik';
+import { Field, Formik, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { createExistUserSubscriptionAction } from '../../redux/user';
+import { setRedirectAfterSubscription } from '../../redux/user';
 import { createUserFromSubscriptionAction } from '../../redux/user';
 import {
-    clientSecretSelector,
     userForFreeSelector,
-    userSubscriptionSelector
+    userSubscriptionSelector,
+    redirectAfterSubscriptionSelector
 } from '../../redux/user/selectors';
 import { InputPassword, InputText } from '../../components/_form';
 import { useRouter } from 'next/router';
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import { CheckoutRegisteredForm } from '../../components/checkout';
-import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-const stripeKey = publicRuntimeConfig.stripeKey;
-
-const stripePromise = loadStripe(stripeKey);
+import { PaymentMethodPlan } from '../../components/checkout';
+import { addPyamentMethodFromSubscriptionActions } from '../../redux/user/actions';
+import CardValidator from 'card-validator';
 
 export default function Signup({
     planId,
@@ -34,42 +29,36 @@ export default function Signup({
 }) {
     const dispatch = useDispatch();
     const t = useTranslations();
-    const stripeClientSecret = useSelector(clientSecretSelector);
     const subscription = useSelector(userSubscriptionSelector);
     const { query } = useRouter();
     const forFree = useSelector(userForFreeSelector);
+    const redirectAfter = useSelector(redirectAfterSubscriptionSelector);
 
-    const [clientSecret, setClientSecret] = useState('');
     const [loginData, setLoginData] = useState<{ email: string; password: string }>();
     const [hideForm, setHideForm] = useState(false);
 
     useEffect(() => {
+        if (redirectAfter) {
+            dispatch(setRedirectAfterSubscription(false));
+            signIn('credentials_login', {
+                email: loginData?.email,
+                password: loginData?.password,
+                callbackUrl: `${window.location.origin}${
+                    locale === 'fr' ? '' : `/${locale}`
+                }/dashboard`
+            });
+        }
+    }, [redirectAfter]);
+
+    useEffect(() => {
         if (subscription) {
             if (subscription.status === 'trialing') {
-                signIn('credentials_login', {
-                    email: loginData?.email,
-                    password: loginData?.password,
-                    callbackUrl: `${window.location.origin}${
-                        locale === 'fr' ? '' : `/${locale}`
-                    }/dashboard`
-                });
+                setHideForm(true);
             } else {
-                setClientSecret(stripeClientSecret);
                 setHideForm(true);
             }
         }
     }, [subscription]);
-
-    const appearance: any = {
-        theme: 'stripe',
-        fontFamily: 'Montserrat',
-        borderRadius: '8px',
-        colorText: '#ccc'
-    };
-    const options: StripeElementsOptions = {
-        clientSecret,
-        appearance
-    };
 
     const validationSchema = Yup.object().shape({
         first_name: Yup.string()
@@ -92,12 +81,52 @@ export default function Signup({
             .oneOf([Yup.ref('password'), null], t('Passwords must match'))
     });
 
-    console.log('Client Secret', clientSecret);
+    const validationSchemaCard = Yup.object({
+        card_number: Yup.string()
+            .strict(true)
+            .when('paymentMethod', {
+                is: (val: string) => val === 'card',
+                then: Yup.string()
+                    .test(
+                        'test-card-number',
+                        t('Credit card number is invalid'),
+                        (value) => CardValidator.number(value).isValid
+                    ) // return true false based on validation
+                    .required(t('Required field'))
+                // otherwise: Yup.required(),
+            }),
+        card_expire_date: Yup.string()
+            .strict(true)
+            .when('paymentMethod', {
+                is: (val: string) => val === 'card',
+                then: Yup.string()
+                    .test(
+                        'test-card-exp',
+                        t('Credit card expiration date is invalid'),
+                        (value) => CardValidator.expirationDate(value).isValid
+                    )
+                    .required(t('Required field'))
+            }),
+        card_ccv: Yup.string()
+            .strict(true)
+            .when('paymentMethod', {
+                is: (val: string) => val === 'card',
+                then: Yup.string()
+                    .test(
+                        'test-card-ccv',
+                        t('Credit card CCV is invalid'),
+                        (value) => CardValidator.cvv(value).isValid
+                    )
+                    .required(t('Required field'))
+            })
+    });
+
     return (
         <div className="flex main-bg justify-center">
-            <div className="mt-10 rounded-lg colored-shadow bg-white w-96 p-10 pb-24">
+            <div>
+                {/*{!hideForm && (*/}
                 {!hideForm && (
-                    <>
+                    <div className="mt-10 rounded-lg colored-shadow bg-white w-96 p-10 pb-24">
                         <div className="mb-8 font-bold text-3xl line-height-105percent">
                             {t('Please sign into your account')}
                         </div>
@@ -116,7 +145,6 @@ export default function Signup({
                             validationSchema={validationSchema}
                             onSubmit={(values) => {
                                 setLoginData({ email: values.email, password: values.password });
-                                // values['forFree'] = forFree ? 'yes' : 'no';
                                 dispatch(createUserFromSubscriptionAction(values, planId, type));
                             }}>
                             {(props) => (
@@ -205,12 +233,58 @@ export default function Signup({
                                 </form>
                             )}
                         </Formik>
-                    </>
+                    </div>
                 )}
-                {clientSecret !== '' && (
-                    <Elements options={options} stripe={stripePromise}>
-                        <CheckoutRegisteredForm />
-                    </Elements>
+                {hideForm && (
+                    <div className="flex justify-center h-[630px]">
+                        <div className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
+                            <div className="font-bold mt-[170px] pr-12 w-2/4">
+                                <div className="text-2xl line-height-105percent mb-9 w-full">
+                                    You will not be charged not, but in the end of your 30-day trial
+                                    period
+                                </div>
+                            </div>
+
+                            <div className="pl-12 border-l w-2/4">
+                                <>
+                                    <div className="flex mb-14">
+                                        <div>
+                                            <Formik
+                                                // enableReinitialize
+                                                initialValues={{
+                                                    card_ccv: '',
+                                                    card_expire_date: '',
+                                                    card_number: ''
+                                                }}
+                                                validationSchema={validationSchemaCard}
+                                                onSubmit={(values) => {
+                                                    dispatch(
+                                                        addPyamentMethodFromSubscriptionActions(
+                                                            values
+                                                        )
+                                                    );
+                                                    // actions.setSubmitting(false);
+                                                }}>
+                                                <Form>
+                                                    <div className="flex flex-wrap justify-between">
+                                                        <div className="flex-auto lg:flex-1">
+                                                            <div className="text-2xl font-bold text-gray-350 mb-6">
+                                                                {t('Add Payment Method')}
+                                                            </div>
+                                                            <PaymentMethodPlan />
+                                                        </div>
+                                                    </div>
+                                                    <button className="gradient-btn mt-4">
+                                                        {t('Add Card & Continue')}
+                                                    </button>
+                                                </Form>
+                                            </Formik>
+                                        </div>
+                                    </div>
+                                </>
+                            </div>
+                        </div>
+                    </div>
                 )}
                 <div className="error-el">{query.message}</div>
             </div>

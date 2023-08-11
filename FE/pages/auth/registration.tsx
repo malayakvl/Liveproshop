@@ -13,6 +13,7 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
     if (invitation.role_id === 1) {
         Form = <BuyerRegistration email={invitation.email} locale={locale} />;
     }
+    console.log(invitation);
 
     if (invitation.role_id === 2) {
         Form = (
@@ -20,6 +21,7 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
                 email={invitation.email}
                 locale={locale}
                 forFree={invitation.is_free === true ? 1 : 0}
+                skip={invitation.is_skip === true ? 1 : null}
             />
         );
     }

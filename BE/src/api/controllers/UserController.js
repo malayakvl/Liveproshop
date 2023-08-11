@@ -107,9 +107,15 @@ class UserController {
 
     async updateProfile(req, res) {
         // const _user = req.user;
+
         if (!req.user) {
             return res.status(402).json('Something wend wrong');
         }
+        // const dataUser = req.body;
+        // // delete dataUser.email;
+        // console.log(dataUser);
+        // await userModel.update(dataUser, req.user.id);
+
         const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`;
         if (!fs.existsSync(dirUpload)) {
             fs.mkdirSync(dirUpload, { recursive: true });
@@ -130,8 +136,16 @@ class UserController {
                 return res.status(500).json(err);
             }
             const dataUser = req.body;
-            delete dataUser.email;
-            await userModel.update(dataUser, req.user.id);
+            const profileData = dataUser;
+            delete profileData.user;
+            delete profileData.email;
+            delete profileData.subscription;
+            delete profileData.address;
+            delete profileData.period_left;
+            delete profileData.plan_options;
+            // delete dataUser.email;
+            // await userModel.update(dataUser, req.user.id);
+            await userModel.update(profileData, req.user.id);
             if (req.file) {
                 await userModel.updateProfilePhoto(`/uploads/users/${req.user.id}/${req.file.filename}`, req.user.id);
             }
@@ -175,6 +189,20 @@ class UserController {
         return res.status(402).json('Something wend wrong');
     }
 
+    async createAfterSkipSubscription(req, res) {
+        const data = await userModel.createExistUserSubscriptionAfterTrial(req.user, req.body.planId);
+        if (data.subscription) {
+            return res.status(200).json({
+                user: req.user,
+                subscription: data.subscription,
+                planId: data.planId,
+                // clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
+                clientSecret: data.setupIntent.client_secret
+            });
+        }
+        return res.status(402).json('Something wend wrong');
+    }
+
     async createUserFromSubscription (req, res) {
         const createdUser = await userModel.createUserFromSubscription(req.body.userData, req.body.planId, req.body.type);
         // const createdUser = await userModel
@@ -187,7 +215,7 @@ class UserController {
                 subscription: data.subscription,
                 planId: data.planId,
                 // clientSecret: data.subscription.status === 'trialing' ? null : data.subscription.latest_invoice.payment_intent.client_secret
-                clientSecret: data.subscription.latest_invoice.payment_intent.client_secret
+                // clientSecret: data.subscription.latest_invoice.payment_intent.client_secret
             });
         } else {
             return res.status(402).json('Something wend wrong');
@@ -241,6 +269,67 @@ class UserController {
         }
     }
 
+    async addPaymentMethodAfterRegistration(req, res) {
+        const formData = req.body;
+        const data = await userModel.createExistUserTrialSubscription(formData);
+        if (data.subscription) {
+            req.body.subscription = data.subscription;
+            const dataPayment = await userModel.addPaymentMethodBySubscription(req.body);
+            const _user = await userModel.findUserByEmail(formData.user.email);
+
+            return res.status(200).json({
+                success: true,
+                user: _user
+            });
+        }
+        // console.log("FORM DATA", formData);
+
+        // for incoming user create free month subscription
+
+
+
+        return res.status(402).json('Something wend wrong');
+
+        // if (formData.subscription.id) {
+        //     const data = await userModel.addPaymentMethodBySubscription(req.body);
+        //     if (data.success) {
+        //         return res.status(200).json({
+        //             success: data.success,
+        //             user: data.user
+        //         });
+        //     } else {
+        //         return res.status(402).json({
+        //             success: data.success,
+        //             error: data.error
+        //         });
+        //     }
+        // } else {
+        //     return res.status(402).json('Something wend wrong');
+        // }
+    }
+
+
+    async addPaymentMethodFromSubscription(req, res) {
+        const formData = req.body;
+        if (formData.subscription.id) {
+            const data = await userModel.addPaymentMethodBySubscription(req.body);
+            if (data.success) {
+                return res.status(200).json({
+                    success: data.success,
+                    user: data.user
+                });
+            } else {
+                return res.status(402).json({
+                    success: data.success,
+                    error: data.error
+                });
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+
+
     async addPaymentMethod(req, res) {
         if (req.user) {
             const data = await userModel.addPaymentMethod(req.user, req.body);
@@ -259,6 +348,26 @@ class UserController {
         }
     }
 
+
+    // async addPaymentMethod(req, res) {
+    //     if (req.user) {
+    //         console.log("here");
+    //         const data = await userModel.addPaymentMethod(req.user, req.body);
+    //         if (data.success) {
+    //             return res.status(200).json({
+    //                 success: data.success
+    //             });
+    //         } else {
+    //             return res.status(402).json({
+    //                 success: data.success,
+    //                 error: data.error
+    //             });
+    //         }
+    //     } else {
+    //         return res.status(402).json('Something wend wrong');
+    //     }
+    // }
+
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
             const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
@@ -274,6 +383,31 @@ class UserController {
             }
         } else {
             return res.status(402).json('Something wend wrong');
+        }
+    }
+
+    async skipExistUserSubscriptionNew (req, res) {
+        if (req.user) {
+            // skipping subscription
+            if (!req.user.subscription_id) {
+                const data = await userModel.createSkipSubscriptionNew(req.user);
+                return res.status(200).json({
+                    success: true,
+                    user: data.user
+                });
+            }
+            if (req.user.subscription_id.includes('fake_sub') || req.user.subscription_id.includes('skip_sub')) {
+                const data = await userModel.createSkipSubscription(req.user);
+                return res.status(200).json({
+                    success: true,
+                    user: data.user
+                });
+            } else {
+                return res.status(200).json({
+                    success: true,
+                    data
+                });
+            }
         }
     }
 
@@ -352,6 +486,8 @@ class UserController {
         }
         return res.status(402).json('Something wend wrong');
     }
+
+
 
 
     async checkPaymentStatus (req, res) {

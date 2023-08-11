@@ -19,7 +19,7 @@ export default function Signup({ locale }: { locale: string }) {
         email: string;
         acceptTerms: boolean;
         role_id: '1' | '2';
-        forFree: boolean;
+        forFree: any;
     };
 
     const t = useTranslations();

@@ -82,7 +82,7 @@ export const createUserFromSubscriptionAction: any = createAction(
                 }
                 return {
                     subscription: res.data.subscription,
-                    clientSecret: res.data.clientSecret
+                    clientSecret: 'addCardFormData'
                 };
             } catch (e) {
                 dispatch(showLoaderAction(false));
@@ -122,6 +122,72 @@ export const skipExistUserSubscriptionAction: any = createAction(
                 dispatch(setUserAction(res.data.user));
                 window.location.href = redirectUrl;
             }
+            return {
+                subscription: res.data.subscription,
+                clientSecret: res.data.clientSecret
+            };
+        }
+);
+export const skipExistUserSubscriptionNewAction: any = createAction(
+    'user/SKIP_EXIST_USER_SUBSCRIPTION',
+    async (redirectUrl: string, locale: string) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ subscription: any; clientSecret: string }> => {
+            dispatch(showLoaderAction(true));
+            const state = getState();
+            const res = await axios.post(
+                `${baseUrl}/skip-exist-user-subscription-new`,
+                { locale: locale },
+                {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                }
+            );
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            if (res.data.user.subscription.status === 'skipping') {
+                window.localStorage.removeItem('user');
+                window.localStorage.setItem('user', JSON.stringify(res.data.user));
+                dispatch(setUserAction(res.data.user));
+                window.location.href = (locale === 'en' ? '/en' : '') + '/dashboard';
+            }
+            return {
+                subscription: res.data.subscription,
+                clientSecret: res.data.clientSecret
+            };
+        }
+);
+export const createSubscriptionAfterSkipAction: any = createAction(
+    'user/EXIST_USER_SUBSCRIPTION',
+    async (data: any, planId: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ subscription: any; clientSecret: string }> => {
+            dispatch(showLoaderAction(true));
+            const state = getState();
+            const res = await axios.post(
+                `${baseUrl}/after-skip-subscription`,
+                { user: data, planId: planId, type: '' },
+                {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                }
+            );
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            // console.log(res.data);
+            // if (res.data.subscription.status === 'trialing') {
+            //     window.localStorage.removeItem('user');
+            //     window.localStorage.setItem('user', JSON.stringify(res.data.user));
+            //     dispatch(setUserAction(res.data.user));
+            // }
             return {
                 subscription: res.data.subscription,
                 clientSecret: res.data.clientSecret
@@ -279,6 +345,63 @@ export const updateSubscriptionAction: any = createAction(
                 });
         }
 );
+export const addPyamentMethodFromRegisterActions: any = createAction(
+    'user/ADD_PAYMENT_METHOD_FROM_REGISTRATION',
+    async (data: any, planId: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            // const user = state.user.user;
+            // const subscription = state.user.subscription;
+            data.user = state.user.user;
+            data.user.planId = planId;
+            data.planId = planId;
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/profile/add-payment-method-after_registration`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(() => {
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(setRedirectAfterSubscription(true));
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const addPyamentMethodFromSubscriptionActions: any = createAction(
+    'user/ADD_PAYMENT_METHOD_FROM_SUBSCRIPTION',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            // const user = state.user.user;
+            // const subscription = state.user.subscription;
+            data.subscription = state.user.subscription;
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/profile/add-payment-method-from-subscription`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res) => {
+                    console.log('AAAAA', res);
+                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(setRedirectAfterSubscription(true));
+                    // dispatch(fetchUserSubscriptionAction());
+                    dispatch(showLoaderAction(false));
+                    // dispatch()
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 export const addPyamentMethodActions: any = createAction(
     'user/ADD_PAYMENT_METHOD',
     async (data: any) =>
@@ -384,3 +507,4 @@ export const setUserAction: any = createAction('user/SET_USER');
 export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM');
 export const showChangeSubscriptionFormAction: any = createAction('user/CHANGE_SUBSCRIPTION_FORM');
 export const setupFreeSubscriptionAction: any = createAction('user/SETUP_FREE_SUBSCRIPTION');
+export const setRedirectAfterSubscription: any = createAction('user/REDIRECT_AFTER_SUBSCRIPTION');

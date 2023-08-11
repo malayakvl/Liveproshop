@@ -284,3 +284,39 @@ input:checked + .toggle-bg {
   padding: 3px 0 2px 0;
   @apply absolute right-[0] top-[20px] md:top-0 md:right-[145px] p-[5px];
 }
+
+.input-card-date-icon {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 0.5rem;
+    top: 0.75rem;
+    background-image: url(../../public/images/icon-credit-card-exp.svg);
+    //background-image: url(../../public/images/icon-credit-card-ccv.svg);
+}
+.input-card-number-icon {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 0.5rem;
+  top: 0.75rem;
+  background-image: url(../../public/images/icon-credit-card.svg);
+}
+.input-card-csv-icon {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  left: 55px;
+  top: 0.75rem;
+  background-image: url(../../public/images/icon-credit-card-ccv.svg);
+  //background-image: url(../../public/images/icon-credit-card-ccv.svg);
+}

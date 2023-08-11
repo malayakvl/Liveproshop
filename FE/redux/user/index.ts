@@ -9,7 +9,9 @@ import {
     fetchUserSubscriptionAction,
     showChangeSubscriptionFormAction,
     skipExistUserSubscriptionAction,
-    setupFreeSubscriptionAction
+    setupFreeSubscriptionAction,
+    skipExistUserSubscriptionNewAction,
+    setRedirectAfterSubscription
 } from './actions';
 
 // const initialState: State.User = {
@@ -24,14 +26,16 @@ const initialState: {
     user: User.User;
     paymentIntent: null;
     showChangeSubscription: boolean;
-    forFree: boolean;
+    forFree: boolean | string;
+    redirectAfterSubscription: boolean;
 } = {
     user: {} as User.User,
     clientSecret: null,
     subscription: null,
     paymentIntent: null,
     showChangeSubscription: false,
-    forFree: false
+    forFree: false,
+    redirectAfterSubscription: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -124,6 +128,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             forFree: action.payload
         })
+    },
+    [setRedirectAfterSubscription]: {
+        next: (state: State.User, action: Action<boolean>): State.User => ({
+            ...state,
+            redirectAfterSubscription: action.payload
+        })
     }
 };
 
@@ -137,7 +147,9 @@ export {
     fetchUserSubscriptionAction,
     showChangeSubscriptionFormAction,
     skipExistUserSubscriptionAction,
-    setupFreeSubscriptionAction
+    setupFreeSubscriptionAction,
+    skipExistUserSubscriptionNewAction,
+    setRedirectAfterSubscription
 };
 
 // ------------------------------------

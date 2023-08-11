@@ -77,6 +77,8 @@ apiRoutes.post('/changePassword', UserController.changePassword);
 apiRoutes.get('/profile/subscription', UserController.getSubscription);
 apiRoutes.post('/profile/delete-payment-method', UserController.deletePaymentMethod);
 apiRoutes.post('/profile/default-payment-method', UserController.defaultPaymentSetup);
+apiRoutes.post('/profile/add-payment-method-from-subscription', UserController.addPaymentMethodFromSubscription);
+apiRoutes.post('/profile/add-payment-method-after_registration', UserController.addPaymentMethodAfterRegistration);
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
 apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
 apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
@@ -171,7 +173,9 @@ apiRoutes.route('/checkout/confirm').post(CheckoutController.chechoutComfirmatio
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
 
 apiRoutes.route('/exist-user-subscription').post(UserController.createExistUserSubscription);
+apiRoutes.route('/after-skip-subscription').post(UserController.createAfterSkipSubscription);
 apiRoutes.route('/skip-exist-user-subscription').post(UserController.skipExistUserSubscription);
+apiRoutes.route('/skip-exist-user-subscription-new').post(UserController.skipExistUserSubscriptionNew);
 
 apiRoutes.route('/shipping/create').post(ShippingController.create);
 apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll);

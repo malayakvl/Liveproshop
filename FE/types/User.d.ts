@@ -8,7 +8,8 @@ declare namespace User {
         paymentIntent: any;
         paymentMethodsNoSubscription: any;
         showChangeSubscription: boolean;
-        forFree: boolean;
+        forFree: boolean | string;
+        redirectAfterSubscription: boolean;
     }
 
     interface User {

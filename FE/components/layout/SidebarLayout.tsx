@@ -2,10 +2,11 @@ import { SidebarCustomer, SidebarBuyer, SidebarAdmin } from '../sidebar/index';
 import SidebarHeader from '../header/SidebarHeader';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
 import { toggleProfileMenuAction, toggleSidebarAction } from '../../redux/layouts';
-// import Router from 'next/router';
+import Router from 'next/router';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
@@ -13,15 +14,23 @@ export default function SidebarLayout({ children }: { children: any }) {
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
-    // useEffect(() => {
-    //     if (user.subscription_expired) {
-    //         if (user.status === 'incomplete') {
-    //             Router.push(`/subscription?planId=${user.plan_id}`);
-    //         } else {
-    //             Router.push(`/pricing`);
-    //         }
-    //     }
-    // }, [user?.email]);
+    useEffect(() => {
+        if (user?.email && user.role_id == 2) {
+            if (user.subscription_id?.includes('fake_sub_') || !user.subscription_id) {
+                Router.push(`/pricing`);
+            }
+        }
+        // if (user.subscription_id?.includes('fake_sub_') || !user.subscription_id) {
+        //     Router.push(`/pricing`);
+        // }
+        // if (user.subscription_expired) {
+        //     if (user.status === 'incomplete') {
+        //         Router.push(`/subscription?planId=${user.plan_id}`);
+        //     } else {
+        //         Router.push(`/pricing`);
+        //     }
+        // }
+    }, [user?.email]);
 
     return (
         <div className="relative min-h-screen">

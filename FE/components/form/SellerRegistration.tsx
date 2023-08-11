@@ -21,16 +21,17 @@ const baseUrl = `${publicRuntimeConfig.apiUrl}/auth`;
 export default function SellerRegistration({
     email,
     locale = '',
-    forFree
+    forFree,
+    skip
 }: {
     email: any;
     locale?: string;
     forFree?: number;
+    skip: number | null;
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
     const countries = useSelector(countriesSelector);
-
     const preparedCountriesDropdown = useMemo(
         () => prepareCountriesDropdown(countries, locale),
         [countries]
@@ -96,6 +97,9 @@ export default function SellerRegistration({
     const onSubmit = (values: any) => {
         dispatch(showLoaderAction(true));
         values['forFree'] = forFree;
+        if (skip) {
+            values['forFree'] = 'skipNow';
+        }
         fetch(`${baseUrl}/register?locale=${locale}`, {
             method: 'POST',
             body: JSON.stringify(values),
@@ -107,7 +111,9 @@ export default function SellerRegistration({
                     password: values.password,
                     callbackUrl:
                         forFree === 1
-                            ? `${window.location.origin}/${locale === 'en' ? 'en/' : ''}account`
+                            ? `${window.location.origin}/${locale === 'en' ? 'en/' : ''}pricing`
+                            : skip
+                            ? `${window.location.origin}/${locale === 'en' ? 'en/' : ''}dashboard`
                             : `${window.location.origin}/${locale === 'en' ? 'en/' : ''}pricing`
                 });
             });
