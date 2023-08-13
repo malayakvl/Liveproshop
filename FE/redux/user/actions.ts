@@ -362,14 +362,15 @@ export const addPyamentMethodFromRegisterActions: any = createAction(
             data.planId = planId;
             dispatch(showLoaderAction(true));
             return axios
-                .post(`${baseUrl}/profile/add-payment-method-after_registration`, data, {
+                .post(`${baseUrl}/profile/add-payment-method-after-registration`, data, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
                 })
                 .then((res) => {
                     dispatch(setSuccessToastAction('Response was sent successfully'));
-                    dispatch(updateUserSubscriptionAction(res.data.user.subscription));
+                    dispatch(setUserAction(res.data.user));
+                    // dispatch(updateUserSubscriptionAction(res.data.user.subscription));
                     dispatch(setRedirectAfterSubscription(true));
                     dispatch(showLoaderAction(false));
                 })

@@ -78,7 +78,7 @@ apiRoutes.get('/profile/subscription', UserController.getSubscription);
 apiRoutes.post('/profile/delete-payment-method', UserController.deletePaymentMethod);
 apiRoutes.post('/profile/default-payment-method', UserController.defaultPaymentSetup);
 apiRoutes.post('/profile/add-payment-method-from-subscription', UserController.addPaymentMethodFromSubscription);
-apiRoutes.post('/profile/add-payment-method-after_registration', UserController.addPaymentMethodAfterRegistration);
+apiRoutes.post('/profile/add-payment-method-after-registration', UserController.addPaymentMethodAfterRegistration);
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
 apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
 apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
