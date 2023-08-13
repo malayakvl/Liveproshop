@@ -5,12 +5,13 @@ import { providers, getSession, signIn } from 'next-auth/client';
 import { Field, Formik, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRedirectAfterSubscription } from '../../redux/user';
+// import { setRedirectAfterSubscription } from '../../redux/user';
 import { createUserFromSubscriptionAction } from '../../redux/user';
 import {
     userForFreeSelector,
     userSubscriptionSelector,
-    redirectAfterSubscriptionSelector
+    redirectAfterSubscriptionSelector,
+    userSelector
 } from '../../redux/user/selectors';
 import { InputPassword, InputText } from '../../components/_form';
 import { useRouter } from 'next/router';
@@ -33,22 +34,29 @@ export default function Signup({
     const { query } = useRouter();
     const forFree = useSelector(userForFreeSelector);
     const redirectAfter = useSelector(redirectAfterSubscriptionSelector);
+    const user = useSelector(userSelector);
 
     const [loginData, setLoginData] = useState<{ email: string; password: string }>();
     const [hideForm, setHideForm] = useState(false);
 
     useEffect(() => {
+        // signIn('credentials_login', {
+        //     email: loginData?.email,
+        //     password: loginData?.password,
+        //     callbackUrl: `${window.location.origin}${
+        //         locale === 'fr' ? '' : `/${locale}`
+        //     }/dashboard`
+        // });
         if (redirectAfter) {
-            dispatch(setRedirectAfterSubscription(false));
-            signIn('credentials_login', {
-                email: loginData?.email,
-                password: loginData?.password,
+            signIn('credentials_login_subscription', {
+                email: user.email,
+                subscriptionId: user.subscription.id,
                 callbackUrl: `${window.location.origin}${
                     locale === 'fr' ? '' : `/${locale}`
                 }/dashboard`
             });
         }
-    }, [redirectAfter]);
+    }, [redirectAfter, user]);
 
     useEffect(() => {
         if (subscription) {

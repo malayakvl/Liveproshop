@@ -12,6 +12,7 @@ export const userSelector = createSelector(
     rootSelector,
     (user: State.User): User.User => user.user
 );
+export const userRegisterSelector = createSelector(rootSelector, (user: State.User): any => user);
 
 export const hideRegisterFormSelector = createSelector(
     rootSelector,

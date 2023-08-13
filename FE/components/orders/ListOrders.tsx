@@ -179,9 +179,11 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     </Link>
                                 )}
                                 {user.role_id === 1 && item.status === 'new' && (
-                                    <Link href={`/checkout/${item.order_number}`}>
-                                        <a>{item.order_number}</a>
-                                    </Link>
+                                    <>
+                                        <Link href={`/checkout/${item.order_number}`}>
+                                            <a>{item.order_number}</a>
+                                        </Link>
+                                    </>
                                 )}
                                 {user.role_id === 1 && item.status !== 'new' && (
                                     <Link href={`/orders/${item.order_number}`}>
@@ -240,6 +242,17 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
                             <td>{formatCurrency(item.total_amount)}</td>
+                            {user.role_id === 1 && item.status === 'new' && (
+                                <td>
+                                    <Link href={`/checkout/${item.order_number}`}>
+                                        <div className="gradient-btn cursor-pointer">
+                                            <span className="font-medium text-white py-[3px] bg-none">
+                                                Pay
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </td>
+                            )}
                         </tr>
                         <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
                             <td />

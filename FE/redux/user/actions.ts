@@ -66,7 +66,7 @@ export const createUserFromSubscriptionAction: any = createAction(
     async (data: any, planId: number, type: string | null, forFree: string | null) =>
         async (
             dispatch: Type.Dispatch
-        ): Promise<{ subscription: any; clientSecret: string | null }> => {
+        ): Promise<{ clientSecret: string | null; user: any; subscription: any }> => {
             // const state = getState();
             dispatch(showLoaderAction(true));
             try {
@@ -80,16 +80,21 @@ export const createUserFromSubscriptionAction: any = createAction(
                 if (res.status) {
                     dispatch(showLoaderAction(false));
                 }
+                const tmpUser = res.data.user;
+                tmpUser.subscription = res.data.subscription;
                 return {
                     subscription: res.data.subscription,
-                    clientSecret: 'addCardFormData'
+                    clientSecret: 'addCardFormData',
+                    user: tmpUser,
+                    ...tmpUser
                 };
             } catch (e) {
                 dispatch(showLoaderAction(false));
                 dispatch(setErrorToastAction(`Email present`));
                 return {
                     clientSecret: null,
-                    subscription: undefined
+                    subscription: null,
+                    user: null
                 };
             }
         }
@@ -362,8 +367,9 @@ export const addPyamentMethodFromRegisterActions: any = createAction(
                         ...authHeader(state.user.user.email)
                     }
                 })
-                .then(() => {
+                .then((res) => {
                     dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(updateUserSubscriptionAction(res.data.user.subscription));
                     dispatch(setRedirectAfterSubscription(true));
                     dispatch(showLoaderAction(false));
                 })
@@ -380,6 +386,7 @@ export const addPyamentMethodFromSubscriptionActions: any = createAction(
             const state = getState();
             // const user = state.user.user;
             // const subscription = state.user.subscription;
+            // data.subscription = state.user.subscription;
             data.subscription = state.user.subscription;
             dispatch(showLoaderAction(true));
             return axios
@@ -389,10 +396,9 @@ export const addPyamentMethodFromSubscriptionActions: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('AAAAA', res);
                     dispatch(setSuccessToastAction('Response was sent successfully'));
+                    // dispatch(setUserAction(res.data));
                     dispatch(setRedirectAfterSubscription(true));
-                    // dispatch(fetchUserSubscriptionAction());
                     dispatch(showLoaderAction(false));
                     // dispatch()
                 })
@@ -508,3 +514,4 @@ export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM
 export const showChangeSubscriptionFormAction: any = createAction('user/CHANGE_SUBSCRIPTION_FORM');
 export const setupFreeSubscriptionAction: any = createAction('user/SETUP_FREE_SUBSCRIPTION');
 export const setRedirectAfterSubscription: any = createAction('user/REDIRECT_AFTER_SUBSCRIPTION');
+export const updateUserSubscriptionAction: any = createAction('user/UPDATE_REGISTER_SUBSCRIPTION');

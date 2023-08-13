@@ -123,7 +123,18 @@
   &:active,
   &:focus,
   &:focus-visible {
-    @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350 font-medium border-gray-180 border;
+    @apply bg-white w-full rounded-lg p-2.5 pl-9 text-sm text-gray-350 font-medium border-gray-180 border placeholder-gray-180;
+  }
+}
+.form-control-icon::placeholder,  {
+  color: gray !important;
+
+  &:active,
+  &:focus,
+  &:focus-visible {
+    ::placeholder {
+      color: red !important;
+    }
   }
 }
 .control-label {

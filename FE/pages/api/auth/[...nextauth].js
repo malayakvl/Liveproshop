@@ -124,6 +124,22 @@ export default NextAuth({
                 throw `/auth/signin?message=you are not registered yet`;
                 // return null;
             }
+        }),
+        CredentialsProvider({
+            id: 'credentials_login_subscription',
+            async authorize(credentials) {
+                const res = await fetch(`${baseUrl}/subscription-register-login`, {
+                    method: 'POST',
+                    body: JSON.stringify(credentials),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const resp = await res.json();
+                if (res.ok && resp.user) {
+                    return resp.user;
+                }
+                throw `/auth/signin?message=you are not registered yet`;
+                // return null;
+            }
         })
     ],
     events: {

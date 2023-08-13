@@ -18,6 +18,7 @@ authRoute.post('/provider-login', authController.authProviderLogin);
 authRoute.post('/provider', authController.authProvider);
 authRoute.post('/restorePassword', authController.restorePassword);
 authRoute.post('/changePassword', authController.changePassword);
+authRoute.post('/subscription-register-login', authController.authRegisterSubscriptionLogin);
 authRoute.get('/invitation/:hash', authController.getInvitation);
 authRoute.get('/activate-hash/:hash', authController.activateHash);
 

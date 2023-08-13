@@ -274,9 +274,8 @@ class UserController {
         const data = await userModel.createExistUserTrialSubscription(formData);
         if (data.subscription) {
             req.body.subscription = data.subscription;
-            const dataPayment = await userModel.addPaymentMethodBySubscription(req.body);
+            await userModel.addPaymentMethodBySubscription(req.body);
             const _user = await userModel.findUserByEmail(formData.user.email);
-
             return res.status(200).json({
                 success: true,
                 user: _user

@@ -24,6 +24,7 @@ declare namespace User {
         full_address: string | null;
         identification_number: string | null;
         subscription_id: string | null;
+        subscription: any;
         vat: string | null;
         phone: string | null;
         status: string | null;
@@ -31,6 +32,7 @@ declare namespace User {
         updated_at: any;
         plan_id: number | null;
         is_trial: boolean;
+        customer_id: string | null;
         plan_options: {
             feature_fb: boolean;
             support_coach: boolean;

@@ -94,6 +94,18 @@ class AuthController {
         res.status(200).json({ user: user });
     }
 
+    async authRegisterSubscriptionLogin(req, res) {
+        console.log("HEEEEEEEEEE", req.body);
+        const user = await userModel.findUserByEmail(req.body.email);
+        console.log(user);
+        if (user.subscription_id === req.body.subscriptionId) {
+            console.log("EBUCHAYA GADINA");
+        }
+        if (!user) {
+            return res.status(400).json('Not found user');
+        }
+        res.status(200).json({ user: user });
+    }
     /**
      * Register new user via form data
      * @param req

@@ -5,8 +5,8 @@ import { providers, getSession, signIn } from 'next-auth/client';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { setRedirectAfterSubscription } from '../../redux/user';
-import { redirectAfterSubscriptionSelector } from '../../redux/user/selectors';
+// import { setRedirectAfterSubscription } from '../../redux/user';
+import { redirectAfterSubscriptionSelector, userSelector } from '../../redux/user/selectors';
 // import { InputPassword, InputText } from '../../components/_form';
 import { useRouter } from 'next/router';
 // import { StripeElementsOptions } from '@stripe/stripe-js';
@@ -20,17 +20,13 @@ import CardValidator from 'card-validator';
 
 // const stripePromise = loadStripe(stripeKey);
 
-export default function ExistSubscription({
-    locale
-}: {
-    locale: string;
-}) {
+export default function ExistSubscription({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const t = useTranslations();
     // const stripeClientSecret = useSelector(clientSecretSelector);
     // const subscription = useSelector(userSubscriptionSelector);
     const { query } = useRouter();
-    // const user = useSelector(userSelector);
+    const user = useSelector(userSelector);
 
     // const [clientSecret, setClientSecret] = useState('');
     const [loginData, setLoginData] = useState<{ email: string; password: string }>();
@@ -39,8 +35,15 @@ export default function ExistSubscription({
     const selectedPlanId = query.planId;
 
     useEffect(() => {
-        if (redirectAfter) {
-            dispatch(setRedirectAfterSubscription(false));
+        if (redirectAfter && user) {
+            // signIn('credentials_login_subscription', {
+            //     email: user.email,
+            //     subscriptionId: user.subscription.id,
+            //     callbackUrl: `${window.location.origin}${
+            //         locale === 'fr' ? '' : `/${locale}`
+            //     }/dashboard`
+            // });
+            // dispatch(setRedirectAfterSubscription(false));
             signIn('credentials_login', {
                 email: loginData?.email,
                 password: loginData?.password,

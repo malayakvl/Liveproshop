@@ -528,11 +528,9 @@ console.log(_user);
     async createExistUserSubscription(userData) {
         const client = await pool.connect();
         try {
-            console.log("MODEL", userData);
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
             if (resPlan.rows.length) {
-                console.log("12222", userData)
                 if (resPlan.rows[0].stripe_id) {
                     let customerId;
 
@@ -577,7 +575,7 @@ console.log(_user);
                     //     subscriptionObject.coupon =  'free-period';
                     // }
                     const subscription = await stripe.subscriptions.create(subscriptionObject);
-                    console.log("CREATED SUBSCRIPTION", subscription);
+                    // console.log("CREATED SUBSCRIPTION", subscription);
 
                     // if subscription created add record to DB
                     if (subscription?.id) {

@@ -11,7 +11,8 @@ import {
     skipExistUserSubscriptionAction,
     setupFreeSubscriptionAction,
     skipExistUserSubscriptionNewAction,
-    setRedirectAfterSubscription
+    setRedirectAfterSubscription,
+    updateUserSubscriptionAction
 } from './actions';
 
 // const initialState: State.User = {
@@ -134,6 +135,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             redirectAfterSubscription: action.payload
         })
+    },
+    [updateUserSubscriptionAction]: {
+        next: (state: State.User, action: Action<boolean>): State.User => ({
+            ...state,
+            subscription: action.payload
+        })
     }
 };
 
@@ -149,7 +156,8 @@ export {
     skipExistUserSubscriptionAction,
     setupFreeSubscriptionAction,
     skipExistUserSubscriptionNewAction,
-    setRedirectAfterSubscription
+    setRedirectAfterSubscription,
+    updateUserSubscriptionAction
 };
 
 // ------------------------------------
