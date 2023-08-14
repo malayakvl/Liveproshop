@@ -5,7 +5,9 @@ import { useTranslations } from 'next-intl';
 import { useFormikContext, Field, ErrorMessage } from 'formik';
 import { formatCurrency } from '../../lib/functions';
 import { baseApiUrl, OrderStatus } from '../../constants';
-
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const siteUrl = publicRuntimeConfig.siteUrl;
 import {
     orderCheckoutSelector,
     shippingMethodsCheckoutSelector
@@ -100,7 +102,23 @@ const OrderSummary = () => {
                     className="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-gray-300 rounded"
                 />
                 <label htmlFor="isAgreeTerms" className="ml-3 text-sm font-medium text-gray-700">
-                    I’ve read and agree with the Terms of Service and Privacy Terms.
+                    I’ve read and agree with the{' '}
+                    <a
+                        href={`${siteUrl}/terms-and-conditions`}
+                        target="_blank"
+                        className="red-yellow-gradient-text"
+                        rel="noreferrer">
+                        Terms of Service
+                    </a>{' '}
+                    and{' '}
+                    <a
+                        className="red-yellow-gradient-text"
+                        href={`${siteUrl}/privacy`}
+                        target="_blank"
+                        rel="noreferrer">
+                        Privacy Terms
+                    </a>
+                    .
                 </label>
                 <ErrorMessage name="isAgreeTerms" component="div" className="error-el" />
             </div>
