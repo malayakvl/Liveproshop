@@ -20,7 +20,7 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
             <SellerRegistration
                 email={invitation.email}
                 locale={locale}
-                forFree={invitation.is_free === true ? 1 : 0}
+                forFree={invitation.is_free === true ? 0 : 0}
                 skip={invitation.is_skip === true ? 1 : null}
             />
         );

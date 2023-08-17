@@ -31,6 +31,15 @@
   //border-width: 5px;
   box-shadow: 0px 5.82317px 11.6463px rgba(247, 109, 109, 0.2), inset 0px -2.32927px 0px rgba(0, 0, 0, 0.1);
 }
+.border-gradient-radio {
+  border: 2px solid;
+  border-image-slice: 1;
+  border-color: orange;
+  //border-bottom: none;
+  border-radius: 9.31707px;
+  //border-width: 5px;
+  box-shadow: 0px 5.82317px 11.6463px rgba(247, 109, 109, 0.2), inset 0px -2.32927px 0px rgba(0, 0, 0, 0.1);
+}
 .border-gradient-purple {
   border-image-source: linear-gradient(50.53deg, #AB44C1 14.13%, #E96597 51.45%, #FF9384 64.45%, #FFC16C 80.86%, #F9F871 99.95%, #F9F871 99.96%);;
 }
@@ -247,4 +256,12 @@
 //}
 .gradient-selectur {
   @apply xl:text-[20px];
+}
+
+.stamp {
+  background-image: url(../../public/images/stamp.svg);
+  background-repeat: no-repeat;
+  width: 295px;
+  height: 280px;
+  margin: 0px auto;
 }

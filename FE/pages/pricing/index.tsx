@@ -343,7 +343,9 @@ export default function Pricing({ locale }: { locale: any }) {
                         <div className="flex w-full flex-col md:flex-row">
                             {/*PLANS OPTION DESCRIPTIONS*/}
                             <div className="hidden md:w-[40%] md:block description-column">
-                                <div className="block-fixed-height-heading" />
+                                <div className="block-fixed-height-heading">
+                                    <div className="stamp" />
+                                </div>
                                 <Fragment>
                                     {plans.values.map((values: any, key: number) => (
                                         <div key={key}>

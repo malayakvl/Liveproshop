@@ -79,4 +79,5 @@ export default {
 
   //requestDemoFromEmail
   "Request Demo from": "Demandez use demo",
+
 };

@@ -14,14 +14,27 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
     return (
         <>
             <div className="w-full border-b md:border-b-0 mb-4 md:mb-0 flex flex-col w-full md:w-full  lg:w-1/4 xl:w-1/5 justify-center align-middle">
-                <span className="font-bold text-sm text-blue-350">
-                    {user.role_id == 2 ? t('Total Revenue') : t('Total Spent')}
-                </span>
-                <div className="">
-                    <Image src="/images/dashboard-card.svg" width={20} height={18} />
-                    <span className="ml-3 font-bold text-gray-350 text-2xl">
-                        {formatCurrency(totals.total_amount ?? 0)}
-                    </span>
+                <div className="flex flex-row w-full">
+                    <div className="w-1/2 flex-col">
+                        <span className="font-bold text-sm text-blue-350">
+                            {user.role_id == 2 ? t('Total Revenue') : t('Total Spent')}
+                        </span>
+                        <div className="">
+                            <Image src="/images/dashboard-card.svg" width={20} height={18} />
+                            <span className="ml-3 font-bold text-gray-350 text-2xl">
+                                {formatCurrency(totals.total_amount ?? 0)}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="w-1/2 flex-col">
+                        <span className="font-bold text-sm text-blue-350">{t('Total Refund')}</span>
+                        <div className="">
+                            <Image src="/images/dashboard-card-blue.svg" width={20} height={18} />
+                            <span className="ml-3 font-bold text-refund text-2xl">
+                                {formatCurrency(totals.total_refund ?? 0)}
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
             {roleId !== 1 && (

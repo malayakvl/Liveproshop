@@ -89,6 +89,18 @@ class Checkout {
             const orderRes = await client.query(`SELECT id FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
             if (orderRes.rows.length) {
                 if (data.type === 'redirect') {
+                    // setup payment details
+                    // await axios
+                    //     .get(`${process.env.MULTISAFEPAY_URL}/orders/LP-ID-${orderRes.rows[0].id}?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
+                    //         headers: { 'Content-Type': 'application/json' }
+                    //     })
+                    //     .then(async (res) => {
+                    //         // console.log("Res Data", res.data);
+                    //         console.log("MULTISAFE DATA", res.data);
+                    //         // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
+                    //     }).catch(error => {
+                    //
+                    //     });
                     await client.query(`UPDATE data.orders SET status='payed' WHERE id=${orderRes.rows[0].id}`);
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {
@@ -142,18 +154,27 @@ class Checkout {
                             AND country_id=${data.country_id}`);
                     shippingPrice = parseFloat(shippingRes.rows[0].price);
                 }
+                // const multyData = await axios
+                //     .get(`${process.env.MULTISAFEPAY_URL}/orders/LP-ID-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
+                //         headers: { 'Content-Type': 'application/json' }
+                //     })
+                //     .then(async (resp) => {
+                //         console.log(resp);
+                //     }).catch(error => {
+                //         console.log("Merchant error", error);
+                //     });
                 // generate unique code for check redirect from merchant
                 const hash = crypto.randomBytes(25).toString('hex');
                 const totalPayment = shippingPrice + parseFloat(orderRes.rows[0].order_amount);
                 await client.query(`UPDATE data.orders SET
                                         country_id=${data.country_id},
-                                        state=$$${data.state}$$,
+                                        state=$$${data.state ? data.state : ''}$$,
                                         city=$$${data.city}$$,
                                         post_code=$$${data.post_code}$$,
                                         shipping_id=${data.shippingMethodId ? data.shippingMethodId : null},
                                         phone=$$${data.phone}$$,
                                         shipping_amount=${shippingPrice},
-                                        shipping_address=$$${data.address_line_1}$$,
+                                        shipping_address=$$${data.address_line_1 ?  data.address_line_1 : data.shipping_address}$$,
                                         hash='${hash}',
                                         total_amount='${totalPayment}'
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
@@ -162,7 +183,7 @@ class Checkout {
                     // site_id: '31313',
                     type: 'redirect',
                     // email: 'malaya.kvl@gmail.com',
-                    order_id: `LiveProshop-id-${orderRes.rows[0].id}`,
+                    order_id: `LP-ID-${orderRes.rows[0].id}`,
                     gateway: '',
                     currency: 'EUR',
                     amount: (totalPayment)*100,
@@ -189,16 +210,26 @@ class Checkout {
                     }
                 }
                 const multiSafePayClientRes = await axios
-                    .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
+                    .post(`${process.env.MULTISAFEPAY_URL}/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
-                        // console.log("Res Data", res.data);
                         return {redirectUrl: res.data.data.payment_url, error: null}
-                        // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
                     }).catch(error => {
+                        console.log("Merchant error", error);
                         return {redirectUrl: null, error: error.message}
                     });
+                // const multiSafePayClientRes = await axios
+                //     .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
+                //         headers: { 'Content-Type': 'application/json' }
+                //     })
+                //     .then(async (res) => {
+                //         // console.log("Res Data", res.data);
+                //         return {redirectUrl: res.data.data.payment_url, error: null}
+                //         // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
+                //     }).catch(error => {
+                //         return {redirectUrl: null, error: error.message}
+                //     });
                 // console.log('here we are', multiSafePayClientRes);
                 return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}
             } else {

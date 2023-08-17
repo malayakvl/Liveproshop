@@ -223,7 +223,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 {item.shipping_image && (
                                     <Image
                                         src={baseApiUrl + item.shipping_image}
-                                        width={36}
+                                        width={24}
                                         height={24}
                                         className=""
                                         alt=""
@@ -243,10 +243,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                             </td>
                             <td>{formatCurrency(item.total_amount)}</td>
                             {user.role_id === 1 && item.status === 'new' && (
-                                <td>
+                                <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                     <Link href={`/checkout/${item.order_number}`}>
-                                        <div className="gradient-btn cursor-pointer">
-                                            <span className="font-medium text-white py-[3px] bg-none">
+                                        <div
+                                            className="gradient-btn-small cursor-pointer"
+                                            style={{ paddingTop: '3px', paddingBottom: '3px' }}>
+                                            <span className="font-medium text-white bg-none font-bold">
                                                 Pay
                                             </span>
                                         </div>

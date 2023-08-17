@@ -1,7 +1,7 @@
 const Radio = ({ field, title, text, img }: any) => (
     <label
-        className={`flex justify-between space-x-2 border border-solid box-border rounded-lg py-6 px-5 mb-4 text-gray-350
-          ${field.checked ? 'border-gradient' : ''}`}>
+        className={`flex justify-between space-x-2 box-border rounded-lg py-6 px-5 mb-4 text-gray-350
+          ${field.checked ? 'border-gradient-radio' : ''}`}>
         <div className="flex-none flex space-x-1 font-bold min-w-max w-1/6">
             <div>
                 <img
@@ -19,7 +19,7 @@ const Radio = ({ field, title, text, img }: any) => (
         <div className={`flex-auto ${!field.checked ? 'text-gray-450' : ''}`}>{text}</div>
 
         <div className="flex-none">
-            <img width="46" height="32" src={img} alt={text} />
+            <img width="32" height="auto" src={img} alt={text} />
         </div>
     </label>
 );

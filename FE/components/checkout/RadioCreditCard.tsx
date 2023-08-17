@@ -11,7 +11,7 @@ const RadioCreditCard = ({ field, title, form }: any) => {
 
     return (
         <label
-            className={`flex flex-col justify-items-stretch border border-solid box-border rounded-lg pt-6 pb-2 px-5 mb-4
+            className={`credit-card-account flex flex-col justify-items-stretch border border-solid box-border rounded-lg pt-6 pb-2 px-5 mb-4
           ${field.checked ? 'shadow-border' : 'shadow-border'}`}>
             <div className="flex justify-between space-x-2 text-gray-350">
                 <div className="flex-none flex space-x-1 font-bold min-w-max w-1/6">

@@ -23,6 +23,7 @@ const initialState: {
     buyers: [],
     totals: {
         total_amount: 0,
+        total_refund: 0,
         total_buyers: 0,
         total_pending: 0
     },

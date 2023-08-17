@@ -223,7 +223,7 @@ class AuthController {
             await invitationModel.delete(invitation.id)
 
         }
-
+console.log("INVITATION CREATE");
         invitation = await invitationModel.create(data);
 
 

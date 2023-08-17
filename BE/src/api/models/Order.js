@@ -15,7 +15,8 @@ async function createInvoice (invoice, path, locale) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        await generateCustomerInformation(doc, invoice, locale);
+        console.log("ABC");
+        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
         await generateInvoiceTable(doc, invoice, locale);
         // await generateFooter(doc, locale);
 
@@ -31,7 +32,6 @@ async function createInvoice (invoice, path, locale) {
 
 async function generateHeader(doc, seller, locale) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
-
     // doc
     //     .image("./public/images/logo.png", 40, 45, { width: 160 })
     //     .fillColor("#444444")
@@ -55,12 +55,13 @@ async function generateHeader(doc, seller, locale) {
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
-async function generateCustomerInformation(doc, invoice, locale) {
+async function generateCustomerInformation(doc, invoice, paymentData, locale) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
+    console.log(invoice);
     doc
         .fillColor("#444444")
         .fontSize(20)
-        .text(t["Invoice"], 50, 160);
+        .text(invoice.status == 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
 
     generateHr(doc, 185);
 
@@ -80,11 +81,14 @@ async function generateCustomerInformation(doc, invoice, locale) {
             150,
             customerInformationTop + 30
         )
-
         .font("Helvetica-Bold")
         .text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
-        .text(invoice.shipping.address, 300, customerInformationTop + 15)
+        .text(t["Delivery Address"]+invoice.shipping.address, 300, customerInformationTop + 15)
+        .text(t["Transaction ID"]+paymentData.payment_details.external_transaction_id, 300, customerInformationTop + 30)
+        .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
+        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 60)
+        // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
         // .text(
         //     invoice.shipping.city +
         //     ", " +
@@ -96,7 +100,7 @@ async function generateCustomerInformation(doc, invoice, locale) {
         // )
         .moveDown();
 
-    generateHr(doc, 252);
+    generateHr(doc, 282);
 }
 
 async function generateInvoiceTable(doc, invoice, locale) {
@@ -398,7 +402,7 @@ class Order {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
-
+            console.log(user.role_id);
             switch (user.role_id) {
                 case UserRole.ADMIN:
                     break;
@@ -421,7 +425,7 @@ class Order {
                 }
             }
 
-            _filters.buyer_id = _filters.shopper_id;
+            // _filters.buyer_id = _filters.shopper_id;
 
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
@@ -438,6 +442,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -495,7 +500,7 @@ class Order {
             const payments = await client.query(`SELECT * FROM data.get_orders_payments('${JSON.stringify(_filters)}');`);
             res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
             const countries = await client.query(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
-            console.log(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
+            // console.log(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
             res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
             const amounts = await client.query(`SELECT * FROM data.get_orders_total_amount_range('${JSON.stringify(_filters)}');`);
             res.amounts = amounts.rows[0].total_amount_range.max ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
@@ -600,26 +605,43 @@ class Order {
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].seller_id}`);
+                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
+                console.log(buyerData.rows[0]);
+                const multiSafePayClientRes = await axios
+                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(async (resM) => {
+                        return resM.data.data;
+                    }).catch(error => {
+                        console.log("Merchant error", error);
+                    });
+                const buyerAddress = ''
+                // console.log('Buyer', res.rows[0]);
+                // const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
+                //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
+                //                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const invoice = {
                     shipping: {
-                        name: res.rows[0].buyer_first_name,
+                        name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
-                        city: res.rows[0].city,
-                        post_code: res.rows[0].post_code,
-                        phone: res.rows[0].phone
+                        city: res.rows[0].city+"1",
+                        post_code: res.rows[0].post_code+"1",
+                        phone: res.rows[0].phone+"1"
                     },
                     seller: {
                       data: addressRes.rows[0]
                     },
+                    status: res.rows[0].status,
                     items: res.rows[0].order_items,
                     subtotal: res.rows[0].order_amount,
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
+                    paymentDetails: multiSafePayClientRes
                 };
-
                 await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}_${locale}.pdf`, locale);
 
                 await setTimeout(4000);
@@ -770,7 +792,7 @@ class Order {
                 "description": "Refund by seller"
             }
             const multiSafePayClientRes = await axios
-                .post(`https://testapi.multisafepay.com/v1/json/orders/amadeo-order-id-${order.id}/refunds?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, orderData,{
+                .post(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${order.id}/refunds?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, orderData,{
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(async () => {
