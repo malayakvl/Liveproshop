@@ -146,6 +146,7 @@ class Livesession {
                     auth_provider_expiration_time,
                     auth_provider_expires_in
                 FROM data.get_live_sessions_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().format('HH:mm:ss')}');`;
+        console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
