@@ -76,7 +76,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         (status: string) => {
             if (status === 'shipped') {
                 return dispatch(bulkShippingAction());
-            } else if (status === 'cancel') {
+            } else if (status === 'cancel' || status === 'refund') {
                 return dispatch(showCancelConfirmationModalAction(true));
             } else {
                 return dispatch(bulkDownloadAction());
@@ -150,20 +150,32 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                 {items?.map((item: any) => (
                     <Fragment key={item.id}>
                         <tr>
-                            {user.role_id === 2 && (
-                                <td>
-                                    <input
-                                        className="float-checkbox"
-                                        type="checkbox"
-                                        onChange={() => dispatch(checkIdsAction(item.id))}
-                                        value={item.id}
-                                        checked={
-                                            checkedIds.find((data: any) => data.id === item.id)
-                                                ?.checked || false
-                                        }
-                                    />
-                                </td>
-                            )}
+                            {/*{user.role_id === 2 && (*/}
+                            {/*    <td>*/}
+                            {/*        <input*/}
+                            {/*            className="float-checkbox"*/}
+                            {/*            type="checkbox"*/}
+                            {/*            onChange={() => dispatch(checkIdsAction(item.id))}*/}
+                            {/*            value={item.id}*/}
+                            {/*            checked={*/}
+                            {/*                checkedIds.find((data: any) => data.id === item.id)*/}
+                            {/*                    ?.checked || false*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </td>*/}
+                            {/*)}*/}
+                            <td>
+                                <input
+                                    className="float-checkbox"
+                                    type="checkbox"
+                                    onChange={() => dispatch(checkIdsAction(item.id))}
+                                    value={item.id}
+                                    checked={
+                                        checkedIds.find((data: any) => data.id === item.id)
+                                            ?.checked || false
+                                    }
+                                />
+                            </td>
                             <td style={{ width: '50px' }}>
                                 <i
                                     role="presentation"

@@ -51,7 +51,6 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
         city: Yup.string().required(t('Required field')),
         address_line_1: Yup.string().required(t('Required field'))
     });
-
     return (
         <Formik
             enableReinitialize
@@ -65,6 +64,7 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
                     <>
+                        {console.log(props.values)}
                         {Object.values(props.errors).map((error) => (
                             // eslint-disable-next-line react/jsx-key
                             <div>{error}</div>
@@ -74,7 +74,10 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
                         <Select
                             className={'form-control-dropdown'}
                             classNamePrefix={'inventory'}
-                            onChange={(value: any) => setSelectedCountry(value)}
+                            onChange={(value: any) => {
+                                props.values['country_id'] = value.value;
+                                setSelectedCountry(value);
+                            }}
                             placeholder={t('Country')}
                             name="country_id"
                             value={selectedCountry}

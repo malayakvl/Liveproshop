@@ -15,16 +15,16 @@ async function createInvoice (invoice, path, locale) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        console.log("ABC");
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
         await generateInvoiceTable(doc, invoice, locale);
-        // await generateFooter(doc, locale);
+        await generateFooter(doc, locale);
 
         doc.end();
         doc.pipe(fs.createWriteStream(path));
 
         return {success: true}
     } catch (e) {
+        console.log("error")
         return {success: false}
     }
 }
@@ -57,7 +57,6 @@ async function generateHeader(doc, seller, locale) {
 }
 async function generateCustomerInformation(doc, invoice, paymentData, locale) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
-    console.log(invoice);
     doc
         .fillColor("#444444")
         .fontSize(20)
@@ -402,7 +401,6 @@ class Order {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
-            console.log(user.role_id);
             switch (user.role_id) {
                 case UserRole.ADMIN:
                     break;
@@ -442,7 +440,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -576,7 +574,10 @@ class Order {
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
-                fs.mkdirSync(dirArchiveFolder);
+                fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
+                fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+                fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+                // fs.mkdirSync(dirArchiveFolder);
             }
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)
@@ -606,7 +607,6 @@ class Order {
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
-                console.log(buyerData.rows[0]);
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
                         headers: { 'Content-Type': 'application/json' }
@@ -644,7 +644,7 @@ class Order {
                 };
                 await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}_${locale}.pdf`, locale);
 
-                await setTimeout(4000);
+                await setTimeout(8000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(4000);
                 }

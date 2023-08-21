@@ -106,7 +106,6 @@ class OrderController {
         } else {
             const ids = [];
             JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-
             const data = await orderModel.bulkDownload(ids, req.user);
             return res.status(200).json({ data: data.success, achive: data.achive });
         }

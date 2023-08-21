@@ -54,9 +54,11 @@ const DataTable: React.FC<Props> = ({
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
     const listShowIds = [PRODUCTS, CHATBOT, SHIPPING, PAYMENTS];
-    if (user.role_id === 2) {
-        listShowIds.push(ORDERS);
-    }
+
+    listShowIds.push(ORDERS);
+    // if (user.role_id === 2) {
+    //     listShowIds.push(ORDERS);
+    // }
     const showIds: boolean = listShowIds.includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
@@ -68,7 +70,10 @@ const DataTable: React.FC<Props> = ({
     }
 
     if (paginationType === PaginationType.ORDERS && user.role_id === 2) {
-        dropdownOptions = ['shipped', 'cancel', 'download_pdf'];
+        // dropdownOptions = ['shipped', 'cancel', 'download_pdf'];
+        dropdownOptions = ['shipped', 'refund', 'download_pdf'];
+    } else {
+        dropdownOptions = ['download_pdf'];
     }
 
     if (paginationType === PaginationType.PAYMENTS && user.role_id === 2) {

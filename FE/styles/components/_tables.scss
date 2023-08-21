@@ -9,6 +9,7 @@
     border: 0.15em solid #00c868;
     border-radius: 4px;
     transform: translateY(-0.075em);
+    margin-left: 4px;
   }
 
   .copied-row {
@@ -258,7 +259,7 @@ span.canceled {
   @apply md:mr-1.5;
 }
 .ids {
-  @apply flex w-[30px];
+  @apply flex w-[30px] ml-[4px];
 }
 .sortable-block {
   @apply min-w-[15px] left-[-40px];

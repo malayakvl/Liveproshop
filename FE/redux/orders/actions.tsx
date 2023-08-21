@@ -128,26 +128,43 @@ export const bulkDownloadAction: any = createAction(
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            return axios
-                .post(
-                    `${baseUrl}/orders/bulk-download`,
-                    { data: JSON.stringify(state.layouts.checkedIds) },
-                    {
-                        headers: {
-                            ...authHeader(state.user.user.email)
+            let countChecked = 0;
+            if (state.layouts.checkedIds.length == 0) {
+                dispatch(setErrorToastAction('Please select an order to be downloaded'));
+            } else {
+
+            }
+            state.layouts.checkedIds.forEach((id) => {
+                if (state.orders.items.find((data) => data.id === id.id)?.status == 'payed') {
+                    countChecked++;
+                }
+            });
+            console.log(state.orders.items);
+            if (countChecked == 0) {
+                dispatch(setErrorToastAction('Please select an order to be downloaded'));
+                dispatch(showLoaderAction(false));
+            } else {
+                return axios
+                    .post(
+                        `${baseUrl}/orders/bulk-download`,
+                        { data: JSON.stringify(state.layouts.checkedIds) },
+                        {
+                            headers: {
+                                ...authHeader(state.user.user.email)
+                            }
                         }
-                    }
-                )
-                .then(async (result) => {
-                    dispatch(setAchiveNameAction(result.data.achive));
-                    dispatch(showLoaderAction(false));
-                    dispatch(setSuccessToastAction('Orders has been downloaded'));
-                    dispatch(fetchItemsAction());
-                })
-                .catch((e) => {
-                    dispatch(setErrorToastAction(e.message));
-                    dispatch(showLoaderAction(false));
-                });
+                    )
+                    .then(async (result) => {
+                        dispatch(setAchiveNameAction(result.data.achive));
+                        dispatch(showLoaderAction(false));
+                        dispatch(setSuccessToastAction('Orders has been downloaded'));
+                        dispatch(fetchItemsAction());
+                    })
+                    .catch((e) => {
+                        dispatch(setErrorToastAction(e.message));
+                        dispatch(showLoaderAction(false));
+                    });
+            }
         }
 );
 export const singleDownloadAction: any = createAction(
