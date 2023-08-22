@@ -133,7 +133,7 @@ export const bulkDownloadAction: any = createAction(
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
             }
             state.layouts.checkedIds.forEach((id) => {
-                if (state.orders.items.find((data) => data.id === id.id)?.status == 'payed') {
+                if (state.orders.items.find((data) => data.id === id.id)?.status != 'new') {
                     countChecked++;
                 }
             });
