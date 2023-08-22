@@ -131,15 +131,12 @@ export const bulkDownloadAction: any = createAction(
             let countChecked = 0;
             if (state.layouts.checkedIds.length == 0) {
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
-            } else {
-
             }
             state.layouts.checkedIds.forEach((id) => {
                 if (state.orders.items.find((data) => data.id === id.id)?.status == 'payed') {
                     countChecked++;
                 }
             });
-            console.log(state.orders.items);
             if (countChecked == 0) {
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
                 dispatch(showLoaderAction(false));
