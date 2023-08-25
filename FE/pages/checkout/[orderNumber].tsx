@@ -176,7 +176,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                 {/*    <div className="text-2xl font-bold text-gray-350 mb-6">*/}
                                 {/*        {t('Payment  Method')}*/}
                                 {/*    </div>*/}
-                                {/*    <PaymentMethod />*/}
+                                {/*    <PaymentGuide />*/}
                                 {/*</div>*/}
                             </div>
 

@@ -31,9 +31,12 @@ export default function FullLayout({ children }: { children: any }) {
                     router.pathname == '/' ||
                     router.pathname == '/full-guide' ||
                     router.pathname == '/pricing' ||
+                    // router.pathname == '/message-page' ||
                     router.pathname == '/full-guide/livesession' ||
                     router.pathname == '/full-guide/scenario' ||
                     router.pathname == '/full-guide/rules' ||
+                    router.pathname == '/full-guide/addproduct' ||
+                    router.pathname == '/full-guide/payment' ||
                     router.pathname == '/pricing' ||
                     router.pathname == '/plans' ||
                     router.pathname == '/customer-story' ||
@@ -55,6 +58,7 @@ export default function FullLayout({ children }: { children: any }) {
                 {children}
             </div>
             <Footer />
+            {/*{router.pathname != '/message-page' && <Footer />}*/}
         </>
     );
 }

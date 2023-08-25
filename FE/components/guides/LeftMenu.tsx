@@ -43,6 +43,27 @@ export default function LeftMenu() {
                             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                             <span
                                 onClick={() => {
+                                    router.push('/full-guide/addproduct');
+                                    // setLayoutActive('session');
+                                }}
+                                className={`cursor-pointer text-link${
+                                    prefix === '/addproduct' ? '-active' : ''
+                                }`}>
+                                {t('How to add a product?')}
+                            </span>
+                            <ul
+                                className={`submenu none ${
+                                    prefix === '/addproduct' ? 'block' : 'hide-submenu'
+                                }`}>
+                                <li>
+                                    <a href="#addproduct">{t('Product creation page')}</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li className="mb-[10px]">
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                onClick={() => {
                                     router.push('/full-guide/scenario');
                                     // setLayoutActive('scenario');
                                 }}
@@ -77,6 +98,39 @@ export default function LeftMenu() {
                                 }`}>
                                 {t('rules_csv')}
                             </span>
+                        </li>
+                        <li className="mb-[10px]">
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                onClick={() => {
+                                    router.push('/full-guide/payment');
+                                    // setLayoutActive('scenario');
+                                }}
+                                className={`cursor-pointer text-link${
+                                    prefix === '/payment' ? '-active' : ''
+                                }`}>
+                                {t('How to enable/disable a payment method?')}
+                            </span>
+                            <ul
+                                className={`submenu none ${
+                                    prefix === '/payment' ? 'block' : 'hide-submenu'
+                                }`}>
+                                <li>
+                                    <a href="#transactions-review">
+                                        {t('How to review transactions of your shopper?')}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#download-invoices">
+                                        {t('How to download invoices?')}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#filter-transactions">
+                                        {t('How to filter your transactions?')}
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     <div className="clear-both" />

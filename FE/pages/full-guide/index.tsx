@@ -1,20 +1,12 @@
 import Head from 'next/head';
-// import Link from 'next/link';
-// import Image from 'next/image';
-// import { getSession } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-// import { LivesessionRules, ScenarioRules } from '../../components/guides';
-// import { history } from 'react-router';
-// import { history } from '../../_helpers/history';
-// import { useRouter } from 'next/router';
 import { LeftMenu, LivesessionRules, ScenarioRules, TextRules } from '../../components/guides';
 
 export default function Index({ locale }: { locale: string }) {
     const t = useTranslations();
     const [layoutActive, setLayoutActive] = useState('session');
-    // const router = useRouter();
 
     return (
         <div className="main-bg container xl:max-w-[1400px] mx-auto">
@@ -47,6 +39,15 @@ export default function Index({ locale }: { locale: string }) {
                                 layoutActive !== 'rules' ? 'hidden' : 'block'
                             }`}>
                             <TextRules locale={locale} />
+                        </div>
+                        <div
+                            className={`livesession-content ${
+                                layoutActive !== 'addproduct' ? 'hidden' : ''
+                            }`}>
+                            {/*<InventoryAdd />*/}
+                        </div>
+                        <div className={`payment ${layoutActive !== 'payment' ? 'hidden' : ''}`}>
+                            {/*<InventoryAdd />*/}
                         </div>
                     </div>
                 </div>
