@@ -150,7 +150,6 @@ class AuthController {
         // create trial subscription
         user.subscription = null;
         if (invitation.is_skip) {
-            console.log("AAAAAAAAAA");
             await userModel.createDbSubscription(user.id, 'skip');
         }
         // if (forFree === 0) {

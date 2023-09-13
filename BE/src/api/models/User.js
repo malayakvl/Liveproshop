@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
+import axios from "axios";
 // import moment, {now} from "moment";
 import paymentPlanModel from "./PaymentPlan.js";
 import { confirmSubscriptionEmail, confirmSubscriptionPaymentEmail } from "../sender/templates.js";
@@ -187,8 +188,9 @@ class User {
             // user = await this.findUserByEmail(userData.email);
             user = await this.findUserByProviderId(userData.id);
             if (!user) {
+                console.log("HERE WE ARE");
                 const query = `
-                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id)
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id, auth_provider_accounts)
                     VALUES
                     (
                         '${userData.email ? userData.email : userData.id}',
@@ -197,17 +199,91 @@ class User {
                         '${userData.accessToken}',
                         to_timestamp(${userData.expirationTime}),
                         '${userData.name}',
-                        '${userData.roleId}'
+                        '${userData.roleId}',
+                        '${(userData.accounts)}'
                     )
                     ;
                 `;
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
+
+                if (parseInt(userData.roleId) === 2) {
+                    // console.log("USER DATA ATTACH PAGES", userData.userAccounts);
+                    console.log("USER TOKEN", userData.accessToken);
+                    // console.log("USER ACCOUNTS:", userData.userAccounts.data);
+                    // userData.userAccounts.data.forEach(storeInfo => {
+                    //     console.log("store:", storeInfo);
+                    // })
+                    // get user stores
+                    try {
+                        if (userData.accessToken) {
+                            console.log("TRY TO GET STORES");
+                            await axios
+                                .get(
+                                    `https://graph.facebook.com/v17.0/me?fields=accounts&access_token=${userData.accessToken}`
+                                )
+                                .then(async (responsePages) => {
+                                    console.log("RESPONCE", responsePages.data.accounts.data);
+                                    if (responsePages.data.error) {
+                                        store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                    } else {
+                                        const storesList = responsePages.data.accounts.data;
+                                        storesList.forEach(async (store) => {
+                                            // console.log("STORE INFO", store);
+                                            // console.log(
+                                            //     `
+                                            //     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
+                                            //     VALUES
+                                            //     (
+                                            //         '${userData.id}',
+                                            //         '${store.id}',
+                                            //         '${store.access_token}',
+                                            //         '${store.name}',
+                                            //         '${user.id}'
+                                            //     );`
+                                            // );
+                                            await  client.query(`
+                                                INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
+                                                VALUES
+                                                (
+                                                    '${userData.id}',
+                                                    '${store.id}',
+                                                    '${store.access_token}',
+                                                    '${store.name}',
+                                                    '${user.id}'
+                                                );`
+                                            );
+                                        })
+                                    }
+                                    const { data } = responsePages;
+                                    // console.log("Users account connected pages", dataPages);
+                                    if (data.error) {
+                                        store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                    }
+                                    // data.accounts = data.accounts;
+                                    // const storesList = data.accounts;
+                                    // storesList.data.forEach(async store => {
+                                    //     await  client.query(`
+                                    //         INSERT INTO data.user_stores (user_id, store_id, access_token, name, )
+                                    //         VALUES
+                                    //         (
+                                    //             '${userData.id}',
+                                    //             '${store.id}',
+                                    //             '${store.access_token}',
+                                    //             '${store.name}'
+                                    //         );`)});
+                                });
+                        }
+                    } catch (e) {
+                        console.log(e.message);
+                    }
+                }
+
                 if (parseInt(userData.roleId) === 2 && parseInt(userData.forFree) === 1) {
                     // check user subscription
                     // if we register for free
-                    const periodStart =  new Date();
-                    const periodEnd  = new Date();
+                    const periodStart = new Date();
+                    const periodEnd = new Date();
                     periodEnd.setMonth(periodEnd.getMonth() + 1);
                     const timestampStart = periodStart.getTime();
                     const timestampEnd = periodEnd.getTime();
@@ -217,8 +293,8 @@ class User {
                         customer_id: `fake_subscription_${user.id}`,
                         subscription_id: `fake_sub_${user.id}`,
                         status: 'trialing',
-                        period_start: timestampStart/1000,
-                        period_end: timestampEnd/1000,
+                        period_start: timestampStart / 1000,
+                        period_end: timestampEnd / 1000,
                         is_trial: true
                     }
                     const _querySubscription = `SELECT * FROM 

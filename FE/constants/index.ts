@@ -14,7 +14,8 @@ export enum PaginationType {
     ORDERS = 'orders',
     WAITING = 'waiting',
     SELLERS = 'sellers',
-    DASHBOARD = 'dashboard'
+    DASHBOARD = 'dashboard',
+    STORES = 'stores'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -26,6 +27,12 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, className: 'inventory-size' },
         { titleKey: null, className: 'inventory-qty' },
         { titleKey: 'Price', className: 'inventory-price' },
+        { titleKey: 'Actions', className: 'actions' }
+    ],
+    [PaginationType.STORES]: [
+        { titleKey: null, className: 'option-switcher' },
+        { titleKey: 'Photo' },
+        { titleKey: 'Name' },
         { titleKey: 'Actions', className: 'actions' }
     ],
     [PaginationType.NOTIFICATIONS]: [],
