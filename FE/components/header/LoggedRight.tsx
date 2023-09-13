@@ -124,6 +124,19 @@ const LoggedRight: React.FC = () => {
                             </li>
                             {user.role_id === 2 && !redirectToPlan && (
                                 <li>
+                                    <Link href="/stores">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="store" />
+                                            <span className="s-caption">{t('My Stores')}</span>
+                                        </a>
+                                    </Link>
+                                </li>
+                            )}
+                            {user.role_id === 2 && !redirectToPlan && (
+                                <li>
                                     <Link href="/account/plan">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
