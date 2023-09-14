@@ -30,9 +30,10 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: 'Actions', className: 'actions' }
     ],
     [PaginationType.MYSTORES]: [
-        { titleKey: null, className: 'option-switcher' },
+        // { titleKey: null, className: 'option-switcher' },
         { titleKey: 'Photo' },
         { titleKey: 'Name' },
+        { titleKey: 'Followes Count' },
         { titleKey: 'Actions', className: 'actions' }
     ],
     [PaginationType.NOTIFICATIONS]: [],
