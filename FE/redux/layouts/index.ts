@@ -119,6 +119,13 @@ const initialState: State.Layouts = {
                 // total_amount: [],
                 created_at: []
             }
+        },
+        [PaginationType.MYSTORES]: {
+            ...initPagination,
+            limit: 20,
+            filters: {
+                created_at: []
+            }
         }
     },
     isSidebarOpen: false,
