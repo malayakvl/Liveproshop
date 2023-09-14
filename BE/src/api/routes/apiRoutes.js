@@ -20,6 +20,7 @@ import DashboardController from "../controllers/DashboardController.js";
 import PaymentPlanController from "../controllers/PaymentPlanController.js";
 import CheckoutController from "../controllers/CheckoutController.js";
 import ContactUsController from "../controllers/ContactUsController.js";
+import StoreController from "../controllers/StoreController.js";
 
 
 const apiRoutes = express.Router();
@@ -92,6 +93,7 @@ apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
 
+apiRoutes.route('/fetch-stores').get(StoreController.fetchData);
 apiRoutes.route('/product').post(ProductController.addProduct);
 apiRoutes.route('/products/fetch-additional').get(ProductController.fetchAdditional);
 apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);

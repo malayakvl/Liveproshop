@@ -8,114 +8,30 @@ import {
     paginationSelectorFactory,
     switchHeaderSelector
 } from '../../redux/layouts/selectors';
-import { checkIdsAction, initIdsAction } from '../../redux/layouts';
-import {
-    paginatedProductsSelector,
-    productsCountSelector,
-    copyIdsSelector
-} from '../../redux/products/selectors';
-import {
-    fetchProductsAction,
-    bulkDeleteAction,
-    bulkCopyAction,
-    fetchProductAction,
-    deleteProductAction,
-    copyProductAction
-} from '../../redux/products/actions';
+import { checkIdsAction } from '../../redux/layouts';
+import { fetchStoresAction } from '../../redux/mystores/actions';
 import { baseApiUrl } from '../../constants';
-import { setModalConfirmationMetaAction } from '../../redux/layouts';
 import { BanIcon } from '@heroicons/react/solid';
-import { setActivePageAction } from '../../redux/layouts/actions';
 import Image from 'next/image';
-import { formatCurrency } from '../../lib/functions';
+import { paginatedStoresSelector, storeCountSelector } from '../../redux/mystores/selectors';
 
 const ListStores: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
-    const count = useSelector(productsCountSelector);
-    const copyIds = useSelector(copyIdsSelector);
-    const items = useSelector(paginatedProductsSelector);
+    const count = useSelector(storeCountSelector);
+    const items = useSelector(paginatedStoresSelector);
     const checkedIds = useSelector(checkedIdsSelector);
-    const switchAllHeader = useSelector(switchHeaderSelector);
-    const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
-
-    const [filterOpen, setFilterOpen] = useState(false);
-    const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.PRODUCTS)
-    );
 
     const sendRequest = useCallback(() => {
-        return dispatch(fetchProductsAction());
+        return dispatch(fetchStoresAction());
     }, [dispatch]);
 
-    const sendDeleteRequest = useCallback(() => {
-        return dispatch(bulkDeleteAction());
-    }, [dispatch]);
-
-    const sendCopyRequest = useCallback(() => {
-        return dispatch(bulkCopyAction());
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (switchAllHeader) {
-            const nextCheckedItems = { ...showMoreConfigs };
-            items.forEach((item: Products.ProductItem) => {
-                nextCheckedItems[item.id] = true;
-            });
-            setShowMoreConfigs(nextCheckedItems);
-        } else {
-            setShowMoreConfigs({});
-        }
-        // const nextCheckedItems = { ...showMoreConfigs };
-    }, [switchAllHeader]);
-
-    useEffect(() => {
-        const setupChecked: any = [];
-        items.forEach((item: Products.ProductItem) => {
-            setupChecked.push({ id: item.id, checked: false });
-        });
-        dispatch(initIdsAction(setupChecked));
-    }, [items]);
-
-    const handleDuplicateBtnClick = useCallback(
-        (event: React.SyntheticEvent): void => {
-            const id = Number(event.currentTarget.getAttribute('data-id'));
-            dispatch(copyProductAction(id));
-        },
-        [dispatch]
-    );
-
-    const handleDeleteBtnClick = useCallback(
-        (event: React.SyntheticEvent): void => {
-            const id = Number(event.currentTarget.getAttribute('data-id'));
-            dispatch(
-                setModalConfirmationMetaAction({
-                    onConfirm: async () => dispatch(deleteProductAction(id)).then(sendRequest)
-                })
-            );
-        },
-        [dispatch, sendRequest]
-    );
-    const handleEditBtnClick = useCallback(
-        (event: React.SyntheticEvent): void => {
-            const id = Number(event.currentTarget.getAttribute('data-id'));
-            // dispatch(setActiveTabAction('edit'));
-            dispatch(
-                setActivePageAction({
-                    type: 'inventory',
-                    modifier: 'edit'
-                })
-            );
-            dispatch(fetchProductAction(id));
-        },
-        [items, dispatch]
-    );
-
-    const handleShowMore = (productId: number) => {
-        const nextCheckedItems = { ...showMoreConfigs };
-        nextCheckedItems[productId] = !nextCheckedItems[productId];
-        setShowMoreConfigs(nextCheckedItems);
-    };
+    // useEffect(() => {
+    //     const setupChecked: any = [];
+    //     items.forEach((item: any) => {
+    //         setupChecked.push({ id: item.id, checked: false });
+    //     });
+    // }, [items]);
 
     return (
         <>
@@ -127,13 +43,11 @@ const ListStores: React.FC<any> = () => {
                     </h2>
                 </div>
                 <DataTable
-                    paginationType={PaginationType.PRODUCTS}
+                    paginationType={PaginationType.MYSTORES}
                     totalAmount={count}
-                    sendRequest={sendRequest}
-                    sendDeleteRequest={sendDeleteRequest}
-                    sendCopyRequest={sendCopyRequest}>
+                    sendRequest={sendRequest}>
                     {items?.map((item: any) => (
-                        <tr key={item.id} className={copyIds.includes(item.id) ? 'copied-row' : ''}>
+                        <tr key={item.id}>
                             <td className="dropdown-action">
                                 <input
                                     className="float-checkbox"
@@ -146,32 +60,15 @@ const ListStores: React.FC<any> = () => {
                                     }
                                 />
                             </td>
-                            <td className="toggler-action">
-                                <button
-                                    className="dropdown-toggler"
-                                    style={{ marginRight: '25px' }}
-                                    onClick={() => handleShowMore(item.id)}
-                                />
-                            </td>
-                            {/*<td style>*/}
-                            {/*    <button*/}
-                            {/*        className="dropdown-toggler"*/}
-                            {/*        onClick={() => handleShowMore(item.id)}*/}
-                            {/*    />*/}
-                            {/*</td>*/}
                             <td style={{ width: '150px' }}>
-                                {item.previewphoto && (
+                                {item.picture && (
                                     <img
-                                        src={
-                                            /(http(s?)):\/\//i.test(item.previewphoto)
-                                                ? item.previewphoto
-                                                : `${baseApiUrl}/${item.previewphoto}`
-                                        }
+                                        src={item.picture}
                                         alt=""
                                         className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5"
                                     />
                                 )}
-                                {!item.previewphoto && (
+                                {!item.picture && (
                                     <div className="border rounded-lg w-[85px] h-[95px] block flex items-center text-center">
                                         <BanIcon
                                             width={30}
@@ -181,46 +78,28 @@ const ListStores: React.FC<any> = () => {
                                     </div>
                                 )}
                             </td>
-                            <td>
-                                <span className="text-gray-180 text-sm">Ref.</span>{' '}
-                                <span className="text-blue-350">{item.id}</span> <br />
-                                <span className="text-[18px]">{item.name}</span>
-                                <br />
-                                {item.description && (
-                                    <div
-                                        className={`${
-                                            !showMoreConfigs[item.id] ? 'hidden' : 'block'
-                                        }`}>
-                                        <div
-                                            className="text-blue-350 mt-4 block font-normal text-sm"
-                                            dangerouslySetInnerHTML={{
-                                                __html: `${item.description.substring(0, 250)} ...`
-                                            }}
-                                        />{' '}
-                                    </div>
-                                )}
-                            </td>
+                            <td>{item.name}</td>
                             <td
                                 className="text-right whitespace-nowrap"
                                 style={{ minWidth: '150px' }}>
-                                <ButtonTableAction
-                                    dataId={String(item.id)}
-                                    localeKey="Edit"
-                                    className={'btn-edit'}
-                                    onClick={handleEditBtnClick}
-                                />
-                                <ButtonTableAction
-                                    dataId={String(item.id)}
-                                    onClick={handleDuplicateBtnClick}
-                                    localeKey="Duplicate"
-                                    className={'btn-copy'}
-                                />
-                                <ButtonTableAction
-                                    dataId={String(item.id)}
-                                    onClick={handleDeleteBtnClick}
-                                    localeKey="Delete"
-                                    className={'btn-delete'}
-                                />
+                                {/*<ButtonTableAction*/}
+                                {/*    dataId={String(item.id)}*/}
+                                {/*    localeKey="Edit"*/}
+                                {/*    className={'btn-edit'}*/}
+                                {/*    onClick={handleEditBtnClick}*/}
+                                {/*/>*/}
+                                {/*<ButtonTableAction*/}
+                                {/*    dataId={String(item.id)}*/}
+                                {/*    onClick={handleDuplicateBtnClick}*/}
+                                {/*    localeKey="Duplicate"*/}
+                                {/*    className={'btn-copy'}*/}
+                                {/*/>*/}
+                                {/*<ButtonTableAction*/}
+                                {/*    dataId={String(item.id)}*/}
+                                {/*    onClick={handleDeleteBtnClick}*/}
+                                {/*    localeKey="Delete"*/}
+                                {/*    className={'btn-delete'}*/}
+                                {/*/>*/}
                             </td>
                         </tr>
                     ))}

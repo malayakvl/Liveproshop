@@ -20,6 +20,7 @@ declare namespace State {
         settings: Settings;
         paymentPlans: PaymentPlans;
         checkout: Checkout;
+        mystores: Mystores;
     }
 
     type Address = Address.Root;
@@ -45,4 +46,5 @@ declare namespace State {
     type Dashboard = Dashboard.Root;
     type Settings = Settings.Root;
     type Checkout = Checkout.Root;
+    type Mystores = Mystores.Root;
 }
