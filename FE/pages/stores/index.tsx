@@ -1,13 +1,14 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { getSession } from 'next-auth/client';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListStores } from '../../components/stores';
-import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
+// import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
-import { setSwitchHeaderAction, setActivePageAction } from '../../redux/layouts/actions';
+// import { setSwitchHeaderAction, setActivePageAction } from '../../redux/layouts/actions';
+import { accountService } from '../../_services';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -16,31 +17,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
     const hiddenFileInput = useRef(null);
 
-    useEffect(() => {
-        dispatch(fetchAdditionalAction());
-        dispatch(setSwitchHeaderAction(null));
-    }, []);
-
-    const handleClick = () => {
-        (hiddenFileInput as any).current.click();
-    };
-
-    const handleChange = (event: any) => {
-        const fileUploaded = event.target.files[0];
-        const formData = new FormData();
-        if (fileUploaded) {
-            formData.append('file', fileUploaded);
-        }
-        dispatch(importProductAction(formData));
-    };
-
-    const handleAddProduct = () => {
-        dispatch(
-            setActivePageAction({
-                type: 'inventory',
-                modifier: 'add'
-            })
-        );
+    const fbSync = () => {
+        accountService.syncFB();
     };
 
     return (
@@ -52,10 +30,17 @@ export default function Index({ session, locale }: { session: any; locale: strin
             </Head>
 
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
-                <div className="tabs-content">
-                    <div className={`w-full ${activeTabLayout.tab !== 'products' ? 'hidden' : ''}`}>
-                        <ListStores locale={locale} />
+                <div className="page-title">
+                    <h1 className="float-left">{t('My Stores')}</h1>
+                    <div className="float-left text-right">
+                        <button className="btn-sync-fb" onClick={() => fbSync()}>
+                            <span>{t('Sync account')}</span>
+                        </button>
                     </div>
+                    <div className="clear-both" />
+                </div>
+                <div className={`w-full ${activeTabLayout.tab !== 'products' ? 'hidden' : ''}`}>
+                    <ListStores locale={locale} />
                 </div>
             </div>
         </>

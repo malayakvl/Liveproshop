@@ -188,7 +188,6 @@ class User {
             // user = await this.findUserByEmail(userData.email);
             user = await this.findUserByProviderId(userData.id);
             if (!user) {
-                console.log("HERE WE ARE");
                 const query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id, auth_provider_accounts)
                     VALUES
@@ -208,51 +207,42 @@ class User {
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
                 if (parseInt(userData.roleId) === 2) {
-                    // console.log("USER DATA ATTACH PAGES", userData.userAccounts);
                     console.log("USER TOKEN", userData.accessToken);
-                    // console.log("USER ACCOUNTS:", userData.userAccounts.data);
-                    // userData.userAccounts.data.forEach(storeInfo => {
-                    //     console.log("store:", storeInfo);
-                    // })
                     // get user stores
                     try {
                         if (userData.accessToken) {
-                            console.log("TRY TO GET STORES");
                             await axios
                                 .get(
                                     `https://graph.facebook.com/v17.0/me?fields=accounts&access_token=${userData.accessToken}`
                                 )
                                 .then(async (responsePages) => {
-                                    console.log("RESPONCE", responsePages.data.accounts.data);
+                                    // console.log("RESPONCE", responsePages.data.accounts.data);
                                     if (responsePages.data.error) {
                                         store.dispatch(setErrorToastAction('Could no getting stores list'));
                                     } else {
                                         const storesList = responsePages.data.accounts.data;
                                         storesList.forEach(async (store) => {
-                                            // console.log("STORE INFO", store);
-                                            // console.log(
-                                            //     `
-                                            //     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
-                                            //     VALUES
-                                            //     (
-                                            //         '${userData.id}',
-                                            //         '${store.id}',
-                                            //         '${store.access_token}',
-                                            //         '${store.name}',
-                                            //         '${user.id}'
-                                            //     );`
-                                            // );
-                                            await  client.query(`
-                                                INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
-                                                VALUES
-                                                (
-                                                    '${userData.id}',
-                                                    '${store.id}',
-                                                    '${store.access_token}',
-                                                    '${store.name}',
-                                                    '${user.id}'
-                                                );`
-                                            );
+                                            const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
+                                            if (queryStore.rows.length === 0) {
+                                                await  client.query(`
+                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
+                                                    VALUES
+                                                    (
+                                                        '${userData.id}',
+                                                        '${store.id}',
+                                                        '${store.access_token}',
+                                                        '${store.name}',
+                                                        '${user.id}'
+                                                    );`
+                                                );
+                                            } else {
+                                                await  client.query(`
+                                                    UPDATE data.user_stores SET 
+                                                     access_token='${store.access_token}', 
+                                                     name='${store.name}'
+                                                    WHERE user_id = '${user.id}';`
+                                                );
+                                            }
                                         })
                                     }
                                     const { data } = responsePages;
@@ -260,18 +250,6 @@ class User {
                                     if (data.error) {
                                         store.dispatch(setErrorToastAction('Could no getting stores list'));
                                     }
-                                    // data.accounts = data.accounts;
-                                    // const storesList = data.accounts;
-                                    // storesList.data.forEach(async store => {
-                                    //     await  client.query(`
-                                    //         INSERT INTO data.user_stores (user_id, store_id, access_token, name, )
-                                    //         VALUES
-                                    //         (
-                                    //             '${userData.id}',
-                                    //             '${store.id}',
-                                    //             '${store.access_token}',
-                                    //             '${store.name}'
-                                    //         );`)});
                                 });
                         }
                     } catch (e) {
@@ -334,8 +312,59 @@ class User {
         const client = await pool.connect();
         try {
             let user;
-            console.log("USER DATA", userData);
+            console.log("USER DATA FOR SYNC", userData);
             user = await this.findUserByProviderId(userData.userID);
+            if (parseInt(userData.roleId) === 2) {
+                console.log("USER TOKEN", userData.accessToken);
+                // get user stores
+                try {
+                    if (userData.accessToken) {
+                        await axios
+                            .get(
+                                `https://graph.facebook.com/v17.0/me?fields=accounts&access_token=${userData.accessToken}`
+                            )
+                            .then(async (responsePages) => {
+                                console.log("RESPONCE", responsePages.data.accounts.data);
+                                if (responsePages.data.error) {
+                                    store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                } else {
+                                    const storesList = responsePages.data.accounts.data;
+                                    storesList.forEach(async (store) => {
+                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
+                                        if (queryStore.rows.length === 0) {
+                                            await  client.query(`
+                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
+                                                    VALUES
+                                                    (
+                                                        '${userData.id}',
+                                                        '${store.id}',
+                                                        '${store.access_token}',
+                                                        '${store.name}',
+                                                        '${user.id}'
+                                                    );`
+                                            );
+                                        } else {
+                                            await  client.query(`
+                                                    UPDATE data.user_stores SET 
+                                                     access_token='${store.access_token}', 
+                                                     name='${store.name}'
+                                                    WHERE user_id = '${user.id}';`
+                                            );
+                                        }
+                                    })
+                                }
+                                const { data } = responsePages;
+                                // console.log("Users account connected pages", dataPages);
+                                if (data.error) {
+                                    store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                }
+                            });
+                    }
+                } catch (e) {
+                    console.log(e.message);
+                }
+            }
+
             if (!user) {
                 return { user: null, error: { code: 404, message: 'User Not found' } };
             } else {
@@ -1398,6 +1427,60 @@ console.log(_user);
                         auth_provider_expiration_time=to_timestamp(${data.data_access_expiration_time})
                        WHERE id=${userData.id}
                         `;
+        const userFbId = data.userID;
+        try {
+            if (data.accessToken) {
+                await axios
+                    .get(
+                        `https://graph.facebook.com/v17.0/me/accounts?fields=picture,fan_count,name,access_token&access_token=${data.accessToken}`
+                    )
+                    .then(async (responsePages) => {
+                        if (responsePages.data.error) {
+                            store.dispatch(setErrorToastAction('Could no getting stores list'));
+                        } else {
+                            const storesList = responsePages.data;
+                            console.log(storesList.data);
+                            // getting picture for store
+                            let storePicture = '';
+                            storesList.data.forEach(async (store) => {
+                                const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+
+                                if (queryStore.rows.length === 0) {
+                                    await  client.query(`
+                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count)
+                                                    VALUES
+                                                    (
+                                                        '${userFbId}',
+                                                        '${store.id}',
+                                                        '${store.access_token}',
+                                                        '${store.name}',
+                                                        '${userData.id}',
+                                                        '${store.fan_count}'
+                                                    );`
+                                    );
+                                } else {
+                                    await  client.query(`
+                                                    UPDATE data.user_stores SET
+                                                        access_token='${store.access_token}',
+                                                        name='${store.name}',
+                                                        picture='${store.picture.data.url}',
+                                                        fan_count='${store.fan_count}'
+                                                    WHERE account_id='${userFbId}' AND store_id='${store.id}';`
+                                    );
+                                }
+                            })
+                        }
+                        const { data } = responsePages;
+                        // console.log("Users account connected pages", dataPages);
+                        if (data.error) {
+                            store.dispatch(setErrorToastAction('Could no getting stores list'));
+                        }
+                    });
+            }
+        } catch (e) {
+            console.log(e.message);
+        }
+
         try {
             await client.query(query);
             const user = await this.findUserByEmail(userData.email);

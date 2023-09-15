@@ -366,6 +366,7 @@ class Livesession {
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
+        console.log(settings.rows[0])
         let intervalDuration;
         const timeValue = settings.rows[0].order_timer.hours ? settings.rows[0].order_timer.hours: settings.rows[0].order_timer.days;
         const type = settings.rows[0].order_timer.hours ? 'h': 'd';
@@ -375,10 +376,11 @@ class Livesession {
             intervalDuration = `${timeValue} day${timeValue > 1 ? 's' : ''}`;
         }
         
-        const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer)
+        const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}'
+                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
                 );`;
+        console.log(query);
         try {
             await client.query(query);
             return { success: true };

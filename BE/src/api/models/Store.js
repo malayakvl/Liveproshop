@@ -15,7 +15,7 @@ class Store {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            const productQuery = `SELECT * FROM data.user_stores WHERE user_id='${userId}' ORDER BY created_at DESC limit ${perPage} OFFSET ${offset}`;
+            const productQuery = `SELECT * FROM data.user_stores WHERE user_id='${userId}' ORDER BY fan_count DESC limit ${perPage} OFFSET ${offset}`;
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

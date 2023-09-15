@@ -136,6 +136,7 @@ export const stopSessionAction: any = createAction(
             }
         }
 );
+export const setLiveSessionStoreAction: any = createAction('livesession/SET_STORE');
 export const showPopupAction: any = createAction('livesession/SHOW_POPUP');
 export const setEmptyFormAction: any = createAction('livesession/EMPTY_FORM');
 // export const showItemAction: any = createAction('livesession/CHATBOT_SHOWITEM');

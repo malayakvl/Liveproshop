@@ -83,13 +83,15 @@ async function loginFBusiness() {
 }
 
 async function getAccountData(authResponse) {
-    console.log("SEND RESPONCSE TO THIS URL", `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`);
+    console.log(
+        'SEND RESPONCSE TO THIS URL',
+        `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`
+    );
     axios
         .get(
             `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`
         )
         .then((response) => {
-           
             const { data } = response;
             if (data.error) {
                 store.dispatch(setErrorToastAction('Could no autherntificate'));
@@ -104,7 +106,6 @@ async function getAccountData(authResponse) {
             data.callbackUrl = `${window.location.origin}/${
                 authResponse.locale === 'fr' ? '' : 'en/'
             }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
-            console.log(data.callbackUrl);
             data.roleId = authResponse.roleId ? authResponse.roleId : 2;
             data.forFree = authResponse.forFree;
             data.userAccounts = JSON.stringify(data.accounts);
