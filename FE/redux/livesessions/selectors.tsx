@@ -28,3 +28,7 @@ export const scenariosSelector = createSelector(
     rootSelector,
     (livesessions: State.Livesessions): Livesessions.DataScenario[] => livesessions.itemScenarios
 );
+export const storeSelector = createSelector(
+    rootSelector,
+    (livesessions: State.Livesessions): any => livesessions.selectedStoreId
+);

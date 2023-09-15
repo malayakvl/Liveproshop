@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { toggleModalPopup } from '../../lib/functions';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { showPopupSelector } from '../../redux/livesessions/selectors';
+import { showPopupSelector, storeSelector } from '../../redux/livesessions/selectors';
 import { userSelector } from '../../redux/user/selectors';
-import { showPopupAction } from '../../redux/livesessions';
+import { setLiveSessionStoreAction, showPopupAction } from '../../redux/livesessions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'rc-slider/assets/index.css';
@@ -14,27 +14,58 @@ import * as Yup from 'yup';
 import { submitFormAction } from '../../redux/livesessions/actions';
 import InputMask from 'react-input-mask';
 import Link from 'next/link';
+import Select from 'react-select';
+import { fetchStoresAction } from '../../redux/mystores';
+import { paginatedStoresSelector } from '../../redux/mystores/selectors';
 
 const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const showModal = useSelector(showPopupSelector);
-    // const {
-    //     plan_options: { feature_fb_schedule }
-    // } = useSelector(userSelector);
-
+    const selectedStoreId = useSelector(storeSelector);
+    const [selectedStore, setSelectedStore] = useState(null);
     const feature_fb_schedule = useSelector(userSelector)?.plan_options?.feature_fb_schedule;
 
     // const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(moment().format('HH:mm'));
+    const [listStores, setListStores] = useState([]);
+    const storeItems = useSelector(paginatedStoresSelector);
+
     // const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
 
     useEffect(() => {
         if (showModal) {
             toggleModalPopup('.modal-schedule');
+            dispatch(fetchStoresAction());
         }
     }, [dispatch, showModal]);
+
+    // useEffect(() => {
+    //     if (selectedStoreId) {
+    //         setSelectedStore(storeItems.find((_store: any) => _store.value === selectedStoreId));
+    //     }
+    // }, [selectedStoreId, storeItems]);
+
+    useEffect(() => {
+        const storeDropdown: { label: any; value: any }[] = [];
+        storeItems.forEach((store: any) => {
+            storeDropdown.push({ label: store.name, value: store.id });
+        });
+        if (selectedStoreId) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            setSelectedStore(storeDropdown.find((_store: any) => _store.value === selectedStoreId));
+        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setListStores(storeDropdown);
+    }, [storeItems]);
+
+    const handleChangeStore = (selectedOption: any) => {
+        setSelectedStore(selectedOption);
+        dispatch(setLiveSessionStoreAction(selectedOption.value));
+    };
 
     // const updateScenarios = (id: number) => {
     //     const _scenarios = selectedScenarios;
@@ -96,6 +127,7 @@ const SchedulePopup: React.FC<any> = () => {
                                         }
                                         sessionData.cart_duration = (values as any).cart_duration;
                                         sessionData.type = (values as any).type;
+                                        sessionData.storeId = selectedStoreId;
                                         dispatch(submitFormAction(sessionData));
                                         resetForm();
                                     }}>
@@ -103,6 +135,15 @@ const SchedulePopup: React.FC<any> = () => {
                                         return (
                                             <form onSubmit={props.handleSubmit}>
                                                 <div className="grid grid-cols-1">
+                                                    <div className="mb-3">
+                                                        <Select
+                                                            isClearable={true}
+                                                            className={'form-control-dropdown'}
+                                                            options={listStores}
+                                                            value={selectedStore}
+                                                            onChange={handleChangeStore}
+                                                        />
+                                                    </div>
                                                     <div>
                                                         <span className="block text-gray-350 text-[18px] font-bold mb-5">
                                                             Choose a date

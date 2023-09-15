@@ -5,9 +5,9 @@ import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListStores } from '../../components/stores';
-import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
+// import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
-import { setSwitchHeaderAction, setActivePageAction } from '../../redux/layouts/actions';
+// import { setSwitchHeaderAction, setActivePageAction } from '../../redux/layouts/actions';
 import { accountService } from '../../_services';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {

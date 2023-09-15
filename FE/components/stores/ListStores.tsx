@@ -4,17 +4,20 @@ import { useTranslations } from 'next-intl';
 import { DataTable } from '../../components/_common';
 import { PaginationType } from '../../constants';
 import { fetchStoresAction } from '../../redux/mystores/actions';
-import { baseApiUrl } from '../../constants';
+// import { baseApiUrl } from '../../constants';
 import { BanIcon } from '@heroicons/react/solid';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { paginatedStoresSelector, storeCountSelector } from '../../redux/mystores/selectors';
 import { showPopupAction } from '../../redux/livesessions';
+import { setLiveSessionStoreAction } from '../../redux/livesessions/index';
+import SchedulePopup from '../liveselling/SchedulePopup';
 
 const ListStores: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const count = useSelector(storeCountSelector);
     const items = useSelector(paginatedStoresSelector);
+    const [selectedStore, setSelectedStore] = useState(null);
     // const checkedIds = useSelector(checkedIdsSelector);
 
     const sendRequest = useCallback(() => {
@@ -62,13 +65,17 @@ const ListStores: React.FC<any> = () => {
                                 style={{ minWidth: '150px' }}>
                                 <button
                                     className="gradient-btn-small xl:ml-4 mt-4 md:mt-0"
-                                    onClick={() => dispatch(showPopupAction(true))}>
+                                    onClick={() => {
+                                        dispatch(setLiveSessionStoreAction(item.id));
+                                        dispatch(showPopupAction(true));
+                                    }}>
                                     {t('Schedule new session')}
                                 </button>
                             </td>
                         </tr>
                     ))}
                 </DataTable>
+                <SchedulePopup />
             </div>
         </>
     );
