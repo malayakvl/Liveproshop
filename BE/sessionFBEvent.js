@@ -12,7 +12,7 @@ const providerData = args[4].split('=');
 async function startProcess() {
     console.log(`Getting video parameters for sessionId: ${sessionsData[1]}, with token: ${tokenData[1]}, provider: ${providerData[1]}`);
     try {
-        await axios.get(`https://graph.facebook.com/v13.0/me/live_videos?broadcast_status=["LIVE"]&fields=broadcast_start_time,id,title&access_token=${tokenData[1]}`)
+        await axios.get(`https://graph.facebook.com/v17.0/me/live_videos?broadcast_status=["LIVE"]&fields=broadcast_start_time,id,title&access_token=${tokenData[1]}`)
             .then(async function () {
                 // imagine that we receive list
                 // const results = response.data;

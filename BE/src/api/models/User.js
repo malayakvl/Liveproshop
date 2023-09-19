@@ -243,6 +243,17 @@ class User {
                                                     WHERE user_id = '${user.id}';`
                                                 );
                                             }
+                                            await  client.query(`
+                                                INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
+                                                VALUES
+                                                (
+                                                    '${userData.id}',
+                                                    '${store.id}',
+                                                    '${store.access_token}',
+                                                    '${store.name}',
+                                                    '${user.id}'
+                                                );`
+                                            );
                                         })
                                     }
                                     const { data } = responsePages;

@@ -17,32 +17,6 @@ async function startProcess() {
             .then(async function (response) {
                 // imagine that we receive list
                 const results = response.data;
-                // const results = [
-                //     {
-                //         id: moment().valueOf(),
-                //         message: 'Hello',
-                //         from: { name: `Test ${moment().valueOf()}`, id: moment().valueOf() },
-                //         created_time: moment.utc().valueOf()
-                //     },
-                //     {
-                //         id: moment().valueOf(),
-                //         message: 'Hello',
-                //         from: { name: `Test ${moment().valueOf()}`, id: moment().valueOf() },
-                //         created_time: moment.utc().valueOf()
-                //     },
-                //     {
-                //         id: moment().valueOf(),
-                //         message: 'Hello',
-                //         from: { name: `Test ${moment().valueOf()}`, id: moment().valueOf() },
-                //         created_time: moment.utc().valueOf()
-                //     },
-                //     {
-                //         id: moment().valueOf(),
-                //         message: 'Hello',
-                //         from: { name: `Test ${moment().valueOf()}`, id: moment().valueOf() },
-                //         created_time: moment.utc().valueOf()
-                //     }
-                // ];
                 await axios
                     .post(`${apiUrl}/api/add-live-messages?sessionId=${sessionsData[1]}`, results)
                     .then(() => {

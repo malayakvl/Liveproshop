@@ -1,4 +1,5 @@
 import livesessionModel from '../models/Livesession.js';
+import chatbotMessageModel from "../models/ChatbotMessage.js";
 
 class LivesessionController {
     /**
@@ -64,8 +65,22 @@ class LivesessionController {
             return res.status(401).json({ error: data.error });
         }
     }
-    
-    
+
+    /**
+     * Get list of session wich started and get video id for it
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
+    async getStoreSessionsForStart (req, res) {
+        const data = await livesessionModel.getStoreSessionsForStart();
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ error: data.error });
+        }
+    }
+
     /**
      * Get list session with started and have video for apply event about parsing/creating order
      * @param req
@@ -96,8 +111,22 @@ class LivesessionController {
             return res.status(401).json({ result: false, error: data.error });
         }
     }
-    
-    
+
+    /**
+     * Getting FB video id change status to active and setup video ID
+     * @param req
+     * @param res
+     * @returns {Promise<void>}
+     */
+    async updateStoreSessionStatusFB (req, res) {
+        const data = await livesessionModel.updateSessionStoreStatusFB(req.query.sessionId, req.query.videoId);
+        if (!data.error) {
+            return res.status(200).json({ result: true, error: data.error });
+        } else {
+            return res.status(401).json({ result: false, error: data.error });
+        }
+    }
+
     async getAllInAir (req, res) {
         const data = await livesessionModel.getAllInAir();
         return res.status(200).json({ items: data.result });
@@ -153,7 +182,16 @@ class LivesessionController {
         await livesessionModel.stopSession(req.params.id, req.user.id);
         return res.status(200).json({ success: true });
     }
-    
+
+    async sendReplyToParsedMessage(req, res) {
+        const data = await chatbotMessageModel.getMessagesForReply(req.query.sessionId, req.body);
+        if (!data.error) {
+            return res.status(200).json({success: true, data: data.items});
+        } else {
+            return res.status(401).json({success: false, error: data.error});
+        }
+    }
+
 }
 
 export default new LivesessionController();

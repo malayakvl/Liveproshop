@@ -43,12 +43,15 @@ apiRoutes.route('/pages').get(PageController.getPage);
 apiRoutes.route('/fetch-live-sessions').get(LivesessionController.getAllInAir);
 apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/fetch-session-for-start').get(LivesessionController.getSessionsForStart);
+apiRoutes.route('/fetch-store-session-for-start').get(LivesessionController.getStoreSessionsForStart);
 apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/update-store_session-status').get(LivesessionController.updateStoreSessionStatusFB);
 apiRoutes.route('/update-session-status').get(LivesessionController.updateSessionStatusFB);
 apiRoutes.route('/fetch-launch-stop-sessions').get(LivesessionController.getLaunchForStop);
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
+apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
 
 apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
 apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);

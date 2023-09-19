@@ -17,6 +17,8 @@ import Link from 'next/link';
 import Select from 'react-select';
 import { fetchStoresAction } from '../../redux/mystores';
 import { paginatedStoresSelector } from '../../redux/mystores/selectors';
+// import { fetchStoresAction } from '../../redux/mystores';
+// import { paginatedStoresSelector } from '../../redux/mystores/selectors';
 
 const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
@@ -41,6 +43,26 @@ const SchedulePopup: React.FC<any> = () => {
         }
     }, [dispatch, showModal]);
 
+    useEffect(() => {
+        const storeDropdown: { label: any; value: any }[] = [];
+        storeItems.forEach((store: any) => {
+            storeDropdown.push({ label: store.name, value: store.id });
+        });
+        if (selectedStoreId) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            setSelectedStore(storeDropdown.find((_store: any) => _store.value === selectedStoreId));
+        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setListStores(storeDropdown);
+    }, [storeItems, selectedStoreId]);
+
+    const handleChangeStore = (selectedOption: any) => {
+        setSelectedStore(selectedOption);
+        dispatch(setLiveSessionStoreAction(selectedOption.value));
+    };
+
     // useEffect(() => {
     //     if (selectedStoreId) {
     //         setSelectedStore(storeItems.find((_store: any) => _store.value === selectedStoreId));
@@ -62,10 +84,10 @@ const SchedulePopup: React.FC<any> = () => {
         setListStores(storeDropdown);
     }, [storeItems]);
 
-    const handleChangeStore = (selectedOption: any) => {
-        setSelectedStore(selectedOption);
-        dispatch(setLiveSessionStoreAction(selectedOption.value));
-    };
+    // const handleChangeStore = (selectedOption: any) => {
+    //     setSelectedStore(selectedOption);
+    //     dispatch(setLiveSessionStoreAction(selectedOption.value));
+    // };
 
     // const updateScenarios = (id: number) => {
     //     const _scenarios = selectedScenarios;

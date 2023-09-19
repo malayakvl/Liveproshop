@@ -5,7 +5,7 @@ import moment from 'moment';
 class ChatbotMessage {
     async addMessages(sessionId, data) {
         const client = await pool.connect();
-        const productQuery = `SELECT * FROM data.set_live_sessions_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
+        const productQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
         try {
             await client.query(productQuery);
             const items = [];
@@ -119,9 +119,44 @@ class ChatbotMessage {
     }
     
     
-    // async createOrder(item) {
-    //     return { success: true};
-    // }
+    async getMessagesForReply(sessionId, data) {
+        const client = await pool.connect();
+        try {
+            const productQuery = `SELECT * FROM data.live_sessions_messages WHERE parcer_status = TRUE and message_store_id IS NULL ORDER BY created_at DESC LIMIT 50 `;
+            const res = await client.query(productQuery);
+            const items = res.rows.length > 0 ? res.rows : [];
+            const error = null;
+
+            // const promisesQuery = [];
+            // items.forEach(item => {
+            //     promisesQuery.push(this.createOrder(item));
+            // });
+            // await Promise.all(promisesQuery);
+            return {
+                items,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'add live messages'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
     
     async createMessage(item) {
         const client = await pool.connect();
