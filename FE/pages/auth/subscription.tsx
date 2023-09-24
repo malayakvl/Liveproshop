@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { PaymentMethodPlan } from '../../components/checkout';
 import { addPyamentMethodFromSubscriptionActions } from '../../redux/user/actions';
 import CardValidator from 'card-validator';
+import Link from 'next/link';
 
 export default function Signup({
     planId,
@@ -216,12 +217,21 @@ export default function Signup({
                                             className="text-xs font-medium">
                                             {t('I have read and accept the')}{' '}
                                             <span className="text-orange-450">
-                                                <a
-                                                    href="https://www.liveproshop.com/terms-and-conditions"
-                                                    target="_blank"
-                                                    rel="noreferrer">
-                                                    {t('terms of use')}
-                                                </a>
+                                                <Link href={'/terms-and-conditions'}>
+                                                    <a
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className="rainbow-gradient-text">
+                                                        {' '}
+                                                        {t('terms of use')}
+                                                    </a>
+                                                </Link>
+                                                {/*<a*/}
+                                                {/*    href="https://www.liveproshop.com/terms-and-conditions"*/}
+                                                {/*    target="_blank"*/}
+                                                {/*    rel="noreferrer">*/}
+                                                {/*    {t('terms of use')}*/}
+                                                {/*</a>*/}
                                             </span>
                                         </label>
                                     </div>

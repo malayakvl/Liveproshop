@@ -199,12 +199,21 @@ export default function Signup({ locale }: { locale: string }) {
                                                         className="text-xs font-medium">
                                                         {t('I have read and accept the')}{' '}
                                                         <span className="rainbow-gradient-text">
-                                                            <a
-                                                                href="https://www.liveproshop.com/terms-and-conditions"
-                                                                target="_blank"
-                                                                rel="noreferrer">
-                                                                {t('terms of use')}
-                                                            </a>
+                                                            <Link href={'/terms-and-conditions'}>
+                                                                <a
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                    className="rainbow-gradient-text">
+                                                                    {' '}
+                                                                    {t('terms of use')}
+                                                                </a>
+                                                            </Link>
+                                                            {/*<a*/}
+                                                            {/*    href="https://liveproshop.com/terms-and-conditions"*/}
+                                                            {/*    target="_blank"*/}
+                                                            {/*    rel="noreferrer">*/}
+                                                            {/*    {t('terms of use')}*/}
+                                                            {/*</a>*/}
                                                         </span>
                                                     </label>
                                                 </div>

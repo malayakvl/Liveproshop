@@ -174,13 +174,22 @@ function Signin({ locale }: { locale: string }) {
                         </div>
                         <div className="text-gray-450">
                             {t('By signing in, you accept the')}{' '}
-                            <a
-                                href="https://www.liveproshop.com/terms-and-conditions"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="rainbow-gradient-text">
-                                {t('terms of use')}
-                            </a>
+                            <Link href={'/terms-and-conditions'}>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rainbow-gradient-text">
+                                    {' '}
+                                    {t('terms of use')}
+                                </a>
+                            </Link>
+                            {/*<a*/}
+                            {/*    href="https://www.liveproshop.com/terms-and-conditions"*/}
+                            {/*    target="_blank"*/}
+                            {/*    rel="noreferrer"*/}
+                            {/*    className="rainbow-gradient-text">*/}
+                            {/*    {t('terms of use')}*/}
+                            {/*</a>*/}
                         </div>
                     </div>
                 </div>

@@ -13,6 +13,7 @@ declare namespace Layouts {
             buyers: Pagination;
             dashboard: Pagination;
             mystores: Pagination;
+            userstores: Pagination;
         };
         isSidebarOpen: boolean;
         isMobileDevice: boolean | null;

@@ -13,7 +13,7 @@ async function startProcess() {
         .then( (response) => {
             response.data.result.forEach(async session => {
                 // console.log('Livesession:', session);
-                // console.log('pm2 command:', `pm2 start sessionFBStoreVideos.js --name "FB store session videoAPI ${session.id}" -- sessionId=${session.id} storeId=${session.store_id} accessToken=${session.access_token} `);
+                // console.log('pm2 command:', `pm2 start jobStoreVideos.js --name "FB store session videoAPI ${session.id}" -- sessionId=${session.id} storeId=${session.store_id} accessToken=${session.access_token} `);
                 shell.exec(`pm2 start sessionFBStoreVideos.js --name "FB STORE session videoAPI ${session.id}" -- sessionId=${session.id} storeId=${session.store_id} accessToken=${session.access_token}`, function(code, output) {
                     console.log('Exit code:', code);
                     console.log('Program output:', output);

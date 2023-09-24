@@ -38,12 +38,22 @@ apiRoutes.route('/invoice').get(OrderController.generateInvoice);
 
 apiRoutes.route('/countries').get(CountryController.getAll);
 
+/*********************************************
+/***************JOB ROUTES********************
+/*********************************************/
+apiRoutes.route('/activate-store-session/:id').get(LivesessionController.launchedSession);
+apiRoutes.route('/fetch-store-session-for-start').get(LivesessionController.getStoreSessionsForStart);
+apiRoutes.route('/fetch-store-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/update-parsed-message').get(LivesessionController.updateReplyedMessage);
+apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/fetch-active-sessions-sender').get(LivesessionController.getActiveSessionsSender);
+apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
+
+
 apiRoutes.route('/pages/all').get(PageController.getAll);
 apiRoutes.route('/pages').get(PageController.getPage);
 apiRoutes.route('/fetch-live-sessions').get(LivesessionController.getAllInAir);
-apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/fetch-session-for-start').get(LivesessionController.getSessionsForStart);
-apiRoutes.route('/fetch-store-session-for-start').get(LivesessionController.getStoreSessionsForStart);
 apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
 apiRoutes.route('/update-store_session-status').get(LivesessionController.updateStoreSessionStatusFB);
 apiRoutes.route('/update-session-status').get(LivesessionController.updateSessionStatusFB);

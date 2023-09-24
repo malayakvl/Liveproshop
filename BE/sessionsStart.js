@@ -13,7 +13,7 @@ async function startProcess() {
         .then( (response) => {
             response.data.result.forEach(async session => {
                 console.log('Livesession:', session);
-                shell.exec(`pm2 start sessionFBEvent.js --name "FB session videoAPI ${session.id}" -- sessionId=${session.id} accessToken=${session.auth_provider_access_token} providerId=${session.auth_provider_id}`, function(code, output) {
+                shell.exec(`pm2 start sessionStoreEvent.js --name "FB session videoAPI ${session.id}" -- sessionId=${session.id} accessToken=${session.auth_provider_access_token} providerId=${session.auth_provider_id}`, function(code, output) {
                     console.log('Exit code:', code);
                     console.log('Program output:', output);
                 });

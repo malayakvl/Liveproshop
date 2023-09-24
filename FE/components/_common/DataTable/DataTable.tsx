@@ -79,6 +79,7 @@ const DataTable: React.FC<Props> = ({
     if (paginationType === PaginationType.PAYMENTS && user.role_id === 2) {
         dropdownOptions = ['download_pdf'];
     }
+    console.log('DT', paginationType);
     const dispatch = useDispatch();
     const { limit, sort, column, offset, query, filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(paginationType)

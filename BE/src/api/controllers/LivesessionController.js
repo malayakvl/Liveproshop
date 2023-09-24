@@ -88,15 +88,25 @@ class LivesessionController {
      * @returns {Promise<*>}
      */
     async getActiveSessions (req, res) {
-        const data = await livesessionModel.getAllActive();
+        // const data = await livesessionModel.getAllActive();
+        const data = await livesessionModel.getAllStoreActive();
         if (!data.error) {
             return res.status(200).json({ result: data.result, error: data.error });
         } else {
             return res.status(401).json({ result: [], error: data.error });
         }
     }
-    
-    
+
+    async getActiveSessionsSender (req, res) {
+        // const data = await livesessionModel.getAllActive();
+        const data = await livesessionModel.getAllStoreActiveSender();
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ result: [], error: data.error });
+        }
+    }
+
     /**
      * Getting FB video id change status to active and setup video ID
      * @param req
@@ -189,6 +199,17 @@ class LivesessionController {
             return res.status(200).json({success: true, data: data.items});
         } else {
             return res.status(401).json({success: false, error: data.error});
+        }
+    }updateMessageForSend
+
+    async updateReplyedMessage(req, res) {
+        const messageId = req.query.messageId;
+        const replyId = req.query.replyId;
+        const data = await chatbotMessageModel.setMessageAsReplied(messageId, replyId);
+        if (!data.error) {
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(401).json({success: false});
         }
     }
 

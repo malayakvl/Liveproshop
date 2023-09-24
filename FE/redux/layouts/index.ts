@@ -126,7 +126,15 @@ const initialState: State.Layouts = {
             filters: {
                 created_at: []
             }
+        },
+        [PaginationType.USERSTORES]: {
+            ...initPagination,
+            limit: 20,
+            filters: {
+                created_at: []
+            }
         }
+
     },
     isSidebarOpen: false,
     isMobileDevice: false,

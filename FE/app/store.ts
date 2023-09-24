@@ -46,7 +46,8 @@ const reducers = combineReducers({
     settings: settingsReducer,
     paymentPlans: paymentPlansReducer,
     checkout: checkoutReducer,
-    mystores: mystoresReducer
+    mystores: mystoresReducer,
+    userstores: mystoresReducer
 });
 
 const initStore = (initialState = {}) => {

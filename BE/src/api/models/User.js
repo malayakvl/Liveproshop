@@ -1443,22 +1443,21 @@ console.log(_user);
             if (data.accessToken) {
                 await axios
                     .get(
-                        `https://graph.facebook.com/v17.0/me/accounts?fields=picture,fan_count,name,access_token&access_token=${data.accessToken}`
+                        `https://graph.facebook.com/v18.0/me/accounts?fields=picture{url},name,fan_count,access_token&access_token=${data.accessToken}`
                     )
                     .then(async (responsePages) => {
                         if (responsePages.data.error) {
                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                         } else {
                             const storesList = responsePages.data;
-                            console.log(storesList.data);
                             // getting picture for store
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
+                                const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                 const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-
                                 if (queryStore.rows.length === 0) {
                                     await  client.query(`
-                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count)
+                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
                                                     VALUES
                                                     (
                                                         '${userFbId}',
@@ -1466,7 +1465,9 @@ console.log(_user);
                                                         '${store.access_token}',
                                                         '${store.name}',
                                                         '${userData.id}',
-                                                        '${store.fan_count}'
+                                                        '${store.fan_count}',
+                                                        true,
+                                                        '${store.picture.data.url}'
                                                     );`
                                     );
                                 } else {
@@ -1475,7 +1476,8 @@ console.log(_user);
                                                         access_token='${store.access_token}',
                                                         name='${store.name}',
                                                         picture='${store.picture.data.url}',
-                                                        fan_count='${store.fan_count}'
+                                                        fan_count='${store.fan_count}',
+                                                        synchronized=true
                                                     WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                     );
                                 }

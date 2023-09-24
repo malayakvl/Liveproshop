@@ -21,6 +21,7 @@ const ListStores: React.FC<any> = () => {
     // const checkedIds = useSelector(checkedIdsSelector);
 
     const sendRequest = useCallback(() => {
+        console.log('here');
         return dispatch(fetchStoresAction());
     }, [dispatch]);
 
@@ -30,12 +31,11 @@ const ListStores: React.FC<any> = () => {
     //         setupChecked.push({ id: item.id, checked: false });
     //     });
     // }, [items]);
-
     return (
         <>
             <div className="mt-7">
                 <DataTable
-                    paginationType={PaginationType.MYSTORES}
+                    paginationType={PaginationType.DASHBOARD}
                     totalAmount={count}
                     sendRequest={sendRequest}>
                     {items?.map((item: any) => (
@@ -62,16 +62,32 @@ const ListStores: React.FC<any> = () => {
                             <td>{item.fan_count}</td>
                             <td
                                 className="text-right whitespace-nowrap"
-                                style={{ minWidth: '150px' }}>
-                                <button
-                                    className="gradient-btn-small xl:ml-4 mt-4 md:mt-0"
-                                    onClick={() => {
-                                        dispatch(setLiveSessionStoreAction(item.id));
-                                        dispatch(showPopupAction(true));
-                                    }}>
-                                    {t('Schedule new session')}
-                                </button>
+                                style={{ minWidth: '150px', textAlign: 'right' }}>
+                                {item.synchronized ? (
+                                    <button
+                                        className="gradient-btn-small xl:ml-4 mt-4 md:mt-0 float-right"
+                                        onClick={() => {
+                                            dispatch(setLiveSessionStoreAction(item.id));
+                                            dispatch(showPopupAction(true));
+                                        }}>
+                                        {t('Schedule new session')}
+                                    </button>
+                                ) : (
+                                    <>not synchronized with Facebook or missing</>
+                                )}
                             </td>
+                            {/*<td*/}
+                            {/*    className="text-right whitespace-nowrap"*/}
+                            {/*    style={{ minWidth: '150px' }}>*/}
+                            {/*    <button*/}
+                            {/*        className="gradient-btn-small xl:ml-4 mt-4 md:mt-0"*/}
+                            {/*        onClick={() => {*/}
+                            {/*            dispatch(setLiveSessionStoreAction(item.id));*/}
+                            {/*            dispatch(showPopupAction(true));*/}
+                            {/*        }}>*/}
+                            {/*        {t('Schedule new session')}*/}
+                            {/*    </button>*/}
+                            {/*</td>*/}
                         </tr>
                     ))}
                 </DataTable>

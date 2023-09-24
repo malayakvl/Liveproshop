@@ -157,7 +157,47 @@ class ChatbotMessage {
             client.release();
         }
     }
-    
+
+    async setMessageAsReplied(messageId, replyId) {
+        const client = await pool.connect();
+        try {
+            const productQuery = `UPDATE data.live_sessions_messages SET message_store_id='${replyId}' WHERE message_id='${messageId}'`;
+            const res = await client.query(productQuery);
+            const items = res.rows.length > 0 ? res.rows : [];
+            const error = null;
+
+            // const promisesQuery = [];
+            // items.forEach(item => {
+            //     promisesQuery.push(this.createOrder(item));
+            // });
+            // await Promise.all(promisesQuery);
+            return {
+                items,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'add live messages'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
     async createMessage(item) {
         const client = await pool.connect();
         try {
