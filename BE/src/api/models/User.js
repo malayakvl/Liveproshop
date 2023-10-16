@@ -1431,6 +1431,8 @@ console.log(_user);
      * @returns {Promise<{user: (*|null)}|{error: {code: number, message: string}, user: null}>}
      */
     async syncFb(userData, data) {
+        console.log('UserData', userData);
+        console.log('data', data);
         const client = await pool.connect();
         const query = `UPDATE data.users SET
                         auth_provider_name='facebook', auth_provider_id='${data.userID}',
@@ -1451,11 +1453,25 @@ console.log(_user);
                         } else {
                             const storesList = responsePages.data;
                             // getting picture for store
+                            console.log(storesList);
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
                                 const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                 const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                 if (queryStore.rows.length === 0) {
+                                    console.log(`
+                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
+                                                    VALUES
+                                                    (
+                                                        '${userFbId}',
+                                                        '${store.id}',
+                                                        '${store.access_token}',
+                                                        '${store.name}',
+                                                        '${userData.id}',
+                                                        '${store.fan_count}',
+                                                        true,
+                                                        '${store.picture.data.url}'
+                                                    );`);
                                     await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
                                                     VALUES

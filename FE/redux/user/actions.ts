@@ -52,6 +52,7 @@ export const syncFbAction: any = createAction(
                 .then(async () => {
                     dispatch(setSuccessToastAction(`Sync success`));
                     dispatch(showLoaderAction(false));
+                    window.location.reload();
                 })
                 .catch((e) => {
                     dispatch(setErrorToastAction(`Sync fail`));

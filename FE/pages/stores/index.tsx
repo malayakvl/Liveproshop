@@ -9,6 +9,7 @@ import { ListStores } from '../../components/stores';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
 // import { setSwitchHeaderAction, setActivePageAction } from '../../redux/layouts/actions';
 import { accountService } from '../../_services';
+import {userSelector} from "../../redux/user/selectors";
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -16,6 +17,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const dispatch = useDispatch();
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
     const hiddenFileInput = useRef(null);
+    const user = useSelector(userSelector);
 
     const fbSync = () => {
         accountService.syncFB();
