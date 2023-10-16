@@ -1,23 +1,20 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { getSession } from 'next-auth/client';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { useTranslations } from 'next-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ListStores } from '../../components/stores';
-// import { fetchAdditionalAction, importProductAction } from '../../redux/products/actions';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
-// import { setSwitchHeaderAction, setActivePageAction } from '../../redux/layouts/actions';
 import { accountService } from '../../_services';
-import {userSelector} from "../../redux/user/selectors";
+// import { userSelector } from '../../redux/user/selectors';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
-    const hiddenFileInput = useRef(null);
-    const user = useSelector(userSelector);
+    // const hiddenFileInput = useRef(null);
+    // const user = useSelector(userSelector);
 
     const fbSync = () => {
         accountService.syncFB();
