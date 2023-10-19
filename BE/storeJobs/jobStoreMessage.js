@@ -4,11 +4,9 @@ import shell from "shelljs";
 const args = process.argv;
 const apiUrl = process.env.API_URL;
 const sessionsData = args[2].split('=');
-const storeData = args[3].split('=');
-const tokenData = args[4].split('=');
+// const storeData = args[3].split('=');
+// const tokenData = args[4].split('=');
 
-
-// curl -i -X POST "https://graph.facebook.com/134773596380836/messages?recipient={'comment_id':'281006991455265_658980583001932'}&message={'text':'Thanks, Cindy!'}&message_type=RESPONSE&access_token=EAArS9KI0vagBOzv0dNkCUgcCvCysoHGS4VIqZBdZAv3GDlKoKmKyhqBZBSlZBH79EgRsntfQwSnkZAFrOuknjXOnJDi3U8tjY0OH2SGcjWAw4k8ZA6D3XAicQ6my5yP4wdsW6BLZBad5WV11XiWkujJZA3wICEzlP7cWaIBkhKOqQw0XND7Wa32nL0lH5lELdBmPZA3dEiNN2rfKCI1l1FLZBwlGgZD"
 
 async function sessionLaunche() {
     // start parsing messages
@@ -21,9 +19,24 @@ async function sessionLaunche() {
                     console.log(`Reply/Message comment ${order.message_id}: ${order.from_id}`);
                     if (order.from_id && order.parcer_status === true) {
                         // const product = await
-                        const msgText = `Congrats! Item Ref ${order.parcer_data.item} ${order.parcer_data.color ? order.parcer_data.color : ''} ${order.parcer_data.size} quantity ${order.parcer_data.quantity} has been added to your cart! https://liveproshop.com So user can click and see his cart. ATTENTION: The reservation of your product is only valid for X minutes / hours / days Check the timer, because once the time is up, your products will be automatically put back on sale PLUS! If you order several times in the next few days, you will only be charged for shipping once! And from X €, shipping is free!`;
-                        const msgTextNew = `Congrats! XXXX (example: Sleeveless Jacket) has been added to your cart! https://liveproshop.com ATTENTION: The reservation of your product is only valid for X minutes / hours / days Check the timer, because once the time is up, your products will be automatically put back on sale  PLUS! If you order several times in the next few days, you will only be charged for shipping once! And from X €, shipping is free!`;
-                        console.log(msgText);
+                        // console.log(order);
+                        let typeTimer = order.order_timer.days ? 'd' : order.order_timer.hours ? 'h' : 'm';
+                        let orderTimer = order.order_timer.hours ?? order.order_timer.days ?? order.order_timer.minutes;
+                        // const msgText = `Congrats! ${order.product_name} #${order.parcer_data.item} ${order.parcer_data.color ? order.parcer_data.color : ''} ${order.parcer_data.size} quantity ${order.parcer_data.quantity} has been added to your cart! https://liveproshop.com So user can click and see his cart. ATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer} Check the timer, because once the time is up, your products will be automatically put back on sale PLUS! If you order several times in the next few days, you will only be charged for shipping once! And from X €, shipping is free!`;
+                        let freeShippingTimer = '';
+                        let freeTimer = '';
+                        if (order.free_shipping_timer) {
+                            freeShippingTimer = order.free_shipping_timer.hours ?? order.free_shipping_timer.days ?? order.free_shipping_timer.minutes;
+                        }
+
+                        const msgText1 = `Congrats! ${order.product_name} #${order.parcer_data.item} ${order.parcer_data.color ? order.parcer_data.color : ''} ${order.parcer_data.size} quantity ${order.parcer_data.quantity} has been added to your cart!`;
+                        const msgText2 = `ATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer} Check the timer, because once the time is up, your products will be automatically put back on sale PLUS!`;
+                        const msgText3 = `PLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${order.threshold} €, shipping is free!`;
+                        console.log(msgText1);
+                        console.log(msgText2);
+                        console.log(msgText3);
+
+                        // const msgTextNew = `Congrats! XXXX (example: Sleeveless Jacket) has been added to your cart! https://liveproshop.com ATTENTION: The reservation of your product is only valid for X minutes / hours / days Check the timer, because once the time is up, your products will be automatically put back on sale  PLUS! If you order several times in the next few days, you will only be charged for shipping once! And from X €, shipping is free!`;
                         // const responceResultMessage =  await axios.post(
                         //     `https://graph.facebook.com/v18.0/${storeData[1]}/messages`,
                         //     '',
@@ -40,39 +53,19 @@ async function sessionLaunche() {
                         //     }).catch(e => {
                         //         console.log(e.message);
                         //     });
-                        await axios(`${apiUrl}/api/update-parsed-message?messageId=${orderMessageId}&replyId=${responceResultMessage.data.message_id}`)
-                            .then( (response) => {
-
-                            });
+                        // await axios(`${apiUrl}/api/update-parsed-message?messageId=${orderMessageId}&replyId=${responceResultMessage.data.message_id}`)
+                        //     .then( (response) => {
+                        //
+                        //     });
                     } else {
 
                     }
-                    // const responceResult =  await axios.post(
-                    //         `https://graph.facebook.com/v18.0/${order.message_id}/comments`,
-                    //         '',
-                    //         {
-                    //             params: {
-                    //                 'message': `Your order link https://liveproshop.com?token_key=${orderMessageId}`,
-                    //                 'access_token': tokenData[1]
-                    //             }
-                    //         }
-                    //     )
-                    //     .then(async function (responseSending) {
-                    //         return responseSending.data.id;
-                    //     }).catch(e => {
-                    //         console.log(e.data.message);
-                    //     });
-                    //     console.log(`${orderMessageId}: ${responceResult}`)
-                    //     await axios(`${apiUrl}/api/update-parsed-message?messageId=${orderMessageId}&replyId=${responceResult}`)
-                    //         .then( (response) => {
-                    //
-                    //         });
                 }
             })
 
         }).catch((e) => {
             console.log('error sending reply message', e);
-    });
+        });
 }
 
 setTimeout(await sessionLaunche, 10000);

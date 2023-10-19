@@ -26,4 +26,3 @@ async function startProcess() {
         });
 }
 setTimeout(await startProcess, 10000);
-

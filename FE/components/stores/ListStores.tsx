@@ -21,16 +21,9 @@ const ListStores: React.FC<any> = () => {
     // const checkedIds = useSelector(checkedIdsSelector);
 
     const sendRequest = useCallback(() => {
-        console.log('here');
         return dispatch(fetchStoresAction());
     }, [dispatch]);
 
-    // useEffect(() => {
-    //     const setupChecked: any = [];
-    //     items.forEach((item: any) => {
-    //         setupChecked.push({ id: item.id, checked: false });
-    //     });
-    // }, [items]);
     return (
         <>
             <div className="mt-7">
@@ -40,12 +33,12 @@ const ListStores: React.FC<any> = () => {
                     sendRequest={sendRequest}>
                     {items?.map((item: any) => (
                         <tr key={item.id}>
-                            <td style={{ width: '150px' }}>
+                            <td style={{ width: '50px' }}>
                                 {item.picture && (
                                     <img
                                         src={item.picture}
                                         alt=""
-                                        className="h-[95px] w-[95px] block rounded-md"
+                                        className="h-[50px] w-[50px] block rounded-full"
                                     />
                                 )}
                                 {!item.picture && (

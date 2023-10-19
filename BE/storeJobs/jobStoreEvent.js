@@ -19,22 +19,11 @@ async function startProcess() {
                     console.log('Exit code:', code);
                     console.log('Program output:', output);
                 });
-                // // // //
+
                 shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${session.id}" -- sessionId=${session.id}`, function(code, output) {
                     console.log('Exit code:', code);
                     console.log('Program output:', output);
                 });
-
-                // shell.exec(`pm2 start jobStoreMessage.js --name "jobStoreMessage ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_token=${session.access_token}`, function(code, output) {
-                //     console.log('Exit code:', code);
-                //     console.log('Program output:', output);
-                // });
-
-                // Change status on active live session from scheduled->Live
-                // await axios(`${apiUrl}/api/launched-session/${session.id}`)
-                //     .then(() => {
-                //
-                //     });
             })
         });
 }

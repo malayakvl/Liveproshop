@@ -13,13 +13,13 @@ async function sessionLaunche() {
         .then((response) => {
             console.log('Response Data:', response.data.message);
         });
-    
+
     // start creating orders
     axios(`${apiUrl}/api/create-orders?sessionId=${sessionsData[1]}`)
         .then((response) => {
             console.log(response.data.message);
         });
-    
+
 }
 
 setTimeout(await sessionLaunche, 10000);
