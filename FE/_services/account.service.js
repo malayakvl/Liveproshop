@@ -19,7 +19,6 @@ export const accountService = {
 };
 
 async function syncFB() {
-    console.log('Sync FB SDK');
     // login with facebook then authenticate with the API to get a JWT auth token
     // const { authResponse } = await new Promise(window.FB.login);
     // console.log('public_profile,email,pages_show_list');
@@ -46,7 +45,6 @@ async function syncFB() {
         window.FB.login(
             function (response) {
                 // handle the response
-                console.log('!!!!!!!', response.authResponse);
                 store.dispatch(syncFbAction(response.authResponse));
                 return response;
             },
@@ -121,15 +119,15 @@ async function loginFB() {
 }
 
 async function getAccountData(authResponse) {
-    console.log(
-        'SEND RESPONCSE TO THIS URL',
-        `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`
-    );
+    // console.log(
+    //     'SEND RESPONCSE TO THIS URL',
+    //     `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`
+    // );
     // const loginOptions = {
     //     scope: 'pages_show_list,pages_messaging,pages_manage_metadata,pages_read_user_content'
     // };
     const loginOptions = {
-        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content'
+        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
     };
     axios
         .get(
@@ -140,12 +138,7 @@ async function getAccountData(authResponse) {
                 store.dispatch(setErrorToastAction('Could no autherntificate'));
             }
             data.accessToken = authResponse.accessToken;
-            //console.log("FB RESPONCE DATA", data);
-            // data.providerId = authResponse.userID,
             data.expirationTime = authResponse.data_access_expiration_time;
-            // data.callbackUrl = `${window.location.origin}/${
-            //     authResponse.locale === 'fr' ? '' : 'en/'
-            // }account`;
             data.callbackUrl = `${window.location.origin}/${
                 authResponse.locale === 'fr' ? '' : 'en/'
             }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;

@@ -582,6 +582,10 @@
   "New Live Livesession": "New Live Livesession",
   "Followes Count": "Followes Count",
   "Total Refund": "Total Refund",
-  "Sync": "Sync"
+  "Sync": "Sync",
+  "Before scheduling a new session": "Avant de planifier une nouvelle session",
+  "please, fill in all settings": "s`il vous plaît, remplissez tous les paramètres",
+  "here": "ici"
+
 
 }

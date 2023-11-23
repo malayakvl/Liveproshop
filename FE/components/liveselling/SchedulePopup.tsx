@@ -129,9 +129,22 @@ const SchedulePopup: React.FC<any> = () => {
                             />
                         </div>
                     </div>
-
                     {/*Body*/}
                     <div>
+                        <div className="flex">
+                            <span className="block mb-3 text-sm">
+                                {t('Before scheduling a new session')},
+                                <br /> {t('please, fill in all settings')}&nbsp;
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    target="_blank"
+                                    href="javascript:;"
+                                    className="text-purple-250"
+                                    rel="noreferrer">
+                                    <Link href={'/settings'}>{t('here')}</Link>
+                                </a>
+                            </span>
+                        </div>
                         <div className="flex">
                             {feature_fb_schedule ? (
                                 <Formik
@@ -220,7 +233,7 @@ const SchedulePopup: React.FC<any> = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex justify-center">
+                                                <div className="flex justify-end">
                                                     <button
                                                         type="button"
                                                         className="cancel mr-2.5"

@@ -197,7 +197,7 @@ class LivesessionController {
         const data = await chatbotMessageModel.getMessagesForReply(req.query.sessionId, req.body);
         // const settings = await set
         if (!data.error) {
-            return res.status(200).json({success: true, data: data.items});
+            return res.status(200).json({success: true, data: data.items, dataWrong: data.itemsWrong});
         } else {
             return res.status(401).json({success: false, error: data.error});
         }
