@@ -215,6 +215,7 @@ class Livesession {
 
     async getStoreSessionsForStart() {
         const client = await pool.connect();
+        console.log('rrerjfewiorwjwerjewlrjwer');
         const queryStr = `SELECT
                     id,
                     store_id,
@@ -225,6 +226,7 @@ class Livesession {
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
+            console.log(result);
             return {
                 result
             };

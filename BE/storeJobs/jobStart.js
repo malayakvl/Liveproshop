@@ -19,6 +19,7 @@ async function startProcess() {
                 FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
     await axios(`${apiUrl}/api/fetch-store-session-for-start`)
         .then( (response) => {
+            console.log(response.data.result);
             response.data.result.forEach(async session => {
                 // console.log('LiveVideo started:', session);
                 shell.exec(`pm2 start jobStoreEvent.js --name "jobStoreEvent ${session.id}" -- sessionId=${session.id} accessToken=${session.auth_provider_access_token} providerId=${session.auth_provider_id}`, function(code, output) {
