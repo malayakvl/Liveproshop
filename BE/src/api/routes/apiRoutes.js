@@ -49,6 +49,7 @@ apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSes
 apiRoutes.route('/fetch-active-sessions-sender').get(LivesessionController.getActiveSessionsSender);
 apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
+apiRoutes.route('/get-product-qty').get(OrderController.getOrderQuantity);
 
 
 apiRoutes.route('/pages/all').get(PageController.getAll);

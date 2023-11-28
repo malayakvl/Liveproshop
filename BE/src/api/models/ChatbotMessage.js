@@ -46,6 +46,7 @@ class ChatbotMessage {
     async parseMessages(sessionId) {
         const client = await pool.connect();
         try {
+            // const productQuery = `SELECT * FROM data.set_live_sessions_messages_parcer_data(${sessionId}, 100);`;
             const productQuery = `SELECT * FROM data.set_live_sessions_messages_parcer_data(${sessionId}, 100);`;
             await client.query(productQuery);
             const items = [];

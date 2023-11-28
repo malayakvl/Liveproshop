@@ -78,6 +78,12 @@ class OrderController {
         return res.status(200).json({success: true, message: 'creating orders'});
     }
 
+    async getOrderQuantity(req, res) {
+        const resQuery = await orderModel.getProductQty(req.query.product_id, req.query.product_configuration_id);
+        const productQuant = resQuery.qty;
+        return res.status(200).json({success: true, qty: productQuant});
+    }
+
     async setupShipped (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');

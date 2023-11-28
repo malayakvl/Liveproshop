@@ -275,6 +275,39 @@ class Order {
         }
     }
 
+    async getProductQty (productId, configId) {
+        const client = await pool.connect();
+        try {
+            const productQuery = `SELECT pc.quantity FROM data.products p LEFT JOIN data.product_configurations pc ON pc.product_id = p.id 
+                                    WHERE p.id = 15 AND pc.id = 260;`;
+            const resQuery = await client.query(productQuery);
+            const qty = (resQuery.rows[0].quantity);
+            return {
+                qty
+            };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
     async updateProductConfigQty(configId, qty, sessionId) {
         const client = await pool.connect();
         try {
