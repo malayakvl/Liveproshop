@@ -11,7 +11,8 @@ import {
     showCancelConfirmationModalAction,
     clearBase64Action,
     setAchiveNameAction,
-    setSingleFileNameAction
+    setSingleFileNameAction,
+    connectOrderAction
 } from './actions';
 
 const initialState: {
@@ -175,7 +176,14 @@ const ACTION_HANDLERS: any = {
             ...state,
             downloadFileName: action.payload
         })
-    }
+    },
+    [connectOrderAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            commentOrderId: action.payload
+        })
+    },
+
 };
 
 export {
@@ -189,7 +197,8 @@ export {
     findSellersAction,
     showCancelConfirmationModalAction,
     clearBase64Action,
-    setSingleFileNameAction
+    setSingleFileNameAction,
+    connectOrderAction
 };
 
 // ------------------------------------

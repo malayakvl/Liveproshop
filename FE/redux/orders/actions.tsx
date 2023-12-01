@@ -286,6 +286,37 @@ export const findSellersAction: any = createAction(
                 .then((res: any) => res.data.result);
         }
 );
+export const connectOrderAction: any = createAction(
+    'orders/CONNECT_ORDER_ACTION',
+    async (query: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/connect-action?messageId=11111`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
+export const fetchUserOrderAction: any = createAction(
+    'order/FETCH_USER_ORDER',
+    async (email: string) => {
+        return axios
+            .get(
+                `${baseUrl}/orders/connect-bycomment?userEmail=${email}commentId=${window.localStorage.getItem(
+                    'order_comment_id'
+                )}`,
+                {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                })
+            .then((res) => res.data.user)
+            .catch((e) => console.log(e.message));
+    }
+);
 
 export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
@@ -296,3 +327,4 @@ export const showCancelConfirmationModalAction: any = createAction(
 );
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
 export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');
+// export const connectOrderAction: any = createAction('orders/CONNECT_ORDER_ACTION');
