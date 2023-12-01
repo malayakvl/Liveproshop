@@ -137,6 +137,7 @@ apiRoutes.route('/chatbot/bulk-delete').post(ChatbotController.bulkDelete);
 apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive);
 apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
 
+apiRoutes.route('/orders/connect-bycomment').get(OrderController.fetchOrderByComment);
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-waiting-items').get(OrderController.fetchWaitingList);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);

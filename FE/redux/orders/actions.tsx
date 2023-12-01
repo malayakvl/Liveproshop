@@ -305,9 +305,9 @@ export const fetchUserOrderAction: any = createAction(
     async (email: string) => {
         return axios
             .get(
-                `${baseUrl}/orders/connect-bycomment?userEmail=${email}commentId=${window.localStorage.getItem(
-                    'order_comment_id'
-                )}`,
+                `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
+                    'user'
+                )}commentId=${window.localStorage.getItem('order_comment_id')}`,
                 {
                     headers: {
                         ...authHeader(email)
