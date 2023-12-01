@@ -19,7 +19,7 @@ async function startProcess() {
                     console.log('Exit code:', code);
                     console.log('Program output:', output);
                 });
-                // shell.exec(`pm2 start jobStoreVideosNew.js --name "jobStoreVideos ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
+                // shell.exec(`pm2 start jobStoreVideosNew.js --name "jobStoreVideosNew ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
                 //     console.log('Exit code:', code);
                 //     console.log('Program output:', output);
                 // });

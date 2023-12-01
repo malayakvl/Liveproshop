@@ -57,9 +57,10 @@ async function syncFB() {
     store.dispatch(syncFbAction(authResponse));
 }
 
-async function registerFB(paramData) {
+async function registerFB(paramData, commentId) {
     const infoParam = paramData.split('_');
     const roleId = infoParam[0] ? infoParam[0] : 2;
+    // const commentId = infoParam[0] ? infoParam[0] : 2;
     const locale = infoParam[1];
     const forFree = infoParam[2];
     console.log('Register FB SDK');

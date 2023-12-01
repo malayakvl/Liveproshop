@@ -43,3 +43,7 @@ export const redirectAfterSubscriptionSelector = createSelector(
     rootSelector,
     (user: State.User): boolean => user.redirectAfterSubscription
 );
+export const userOrderCommentSelector = createSelector(
+    rootSelector,
+    (user: State.User): any => user.commentId
+);

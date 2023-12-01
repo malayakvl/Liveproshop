@@ -730,6 +730,25 @@ class Order {
         }
     }
 
+    async checkOrderStatus (messageId) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.order_items WHERE message_id = '${messageId}';`;
+            const res = await client.query(SQL);
+            return {success: true, error: null, data: res.rows[0]};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
 
     async setupShippingStatus (orderIds) {
         const client = await pool.connect();

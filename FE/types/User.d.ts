@@ -10,6 +10,7 @@ declare namespace User {
         showChangeSubscription: boolean;
         forFree: boolean | string;
         redirectAfterSubscription: boolean;
+        commentId: string;
     }
 
     interface User {

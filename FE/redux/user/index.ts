@@ -12,7 +12,8 @@ import {
     setupFreeSubscriptionAction,
     skipExistUserSubscriptionNewAction,
     setRedirectAfterSubscription,
-    updateUserSubscriptionAction
+    updateUserSubscriptionAction,
+    setOrderCommentAction
 } from './actions';
 
 // const initialState: State.User = {
@@ -29,6 +30,7 @@ const initialState: {
     showChangeSubscription: boolean;
     forFree: boolean | string;
     redirectAfterSubscription: boolean;
+    commentId: null;
 } = {
     user: {} as User.User,
     clientSecret: null,
@@ -36,7 +38,8 @@ const initialState: {
     paymentIntent: null,
     showChangeSubscription: false,
     forFree: false,
-    redirectAfterSubscription: false
+    redirectAfterSubscription: false,
+    commentId: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -50,6 +53,12 @@ const ACTION_HANDLERS: any = {
         next: (state: State.User, action: Action<any>): State.User => ({
             ...state,
             user: action.payload
+        })
+    },
+    [setOrderCommentAction]: {
+        next: (state: State.User, action: Action<any>): State.User => ({
+            ...state,
+            commentId: action.payload
         })
     },
     [hideRegisterFormAction]: {
@@ -157,7 +166,8 @@ export {
     setupFreeSubscriptionAction,
     skipExistUserSubscriptionNewAction,
     setRedirectAfterSubscription,
-    updateUserSubscriptionAction
+    updateUserSubscriptionAction,
+    setOrderCommentAction
 };
 
 // ------------------------------------

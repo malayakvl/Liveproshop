@@ -39,8 +39,8 @@ apiRoutes.route('/invoice').get(OrderController.generateInvoice);
 apiRoutes.route('/countries').get(CountryController.getAll);
 
 /*********************************************
-/***************JOB ROUTES********************
-/*********************************************/
+ /***************JOB ROUTES********************
+ /*********************************************/
 apiRoutes.route('/activate-store-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/fetch-store-session-for-start').get(LivesessionController.getStoreSessionsForStart);
 apiRoutes.route('/fetch-store-active-sessions').get(LivesessionController.getActiveSessions);
@@ -49,8 +49,11 @@ apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSes
 apiRoutes.route('/fetch-active-sessions-sender').get(LivesessionController.getActiveSessionsSender);
 apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
-apiRoutes.route('/get-product-qty').get(OrderController.getOrderQuantity);
-
+apiRoutes.route('/update-live-messages').get(LivesessionController.updateLiveMessage);
+apiRoutes.route('/check-order-status').get(LivesessionController.checkOrderStatus);
+apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderStatus);
+// apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitStatus);
+// apiRoutes.route('/live-product-qty').get(OrderController.getLiveProductQty);
 
 apiRoutes.route('/pages/all').get(PageController.getAll);
 apiRoutes.route('/pages').get(PageController.getPage);

@@ -215,7 +215,6 @@ class Livesession {
 
     async getStoreSessionsForStart() {
         const client = await pool.connect();
-        console.log('rrerjfewiorwjwerjewlrjwer');
         const queryStr = `SELECT
                     id,
                     store_id,
@@ -223,6 +222,7 @@ class Livesession {
                     auth_provider_expiration_time,
                     auth_provider_expires_in
                 FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];

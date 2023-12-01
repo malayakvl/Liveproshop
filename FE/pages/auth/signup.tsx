@@ -5,14 +5,18 @@ import { providers, getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Link from 'next/link';
 import * as Yup from 'yup';
-import { Field, Formik, ErrorMessage } from 'formik';
+import { Field, Formik, ErrorMessage, useFormikContext, useField, FormikProps } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { inviteUserAction } from '../../redux/user/actions';
+import { inviteUserAction, setOrderCommentAction } from '../../redux/user/actions';
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
+    // const {
+    //     values: { roleId }
+    // } = useFormikContext();
+    // const { setFieldValue } = useFormikContext();
     const hideFormSelector = useSelector(hideRegisterFormSelector);
     const forFree = useSelector(userForFreeSelector);
     type FormData = {
@@ -21,11 +25,17 @@ export default function Signup({ locale }: { locale: string }) {
         role_id: '1' | '2';
         forFree: any;
     };
+    console.log();
 
     const t = useTranslations();
-    const [roleId, setRoleId] = useState(2);
+    const [roleId, setRoleId] = useState(1);
     const [isFbClicked, setIsFbClicked] = useState(false);
     const [hideForm, setHideForm] = useState(false);
+    const [commentId, setCommentId] = useState('');
+    // const { values, submitForm } = useFormikContext();
+    // const { setFieldValue } = useFormikContext();
+    // const params = new URLSearchParams(window.location.pathname);
+    // console.log(window.location.pathname);
 
     const validationSchema = Yup.object().shape({
         email: !isFbClicked
@@ -38,9 +48,56 @@ export default function Signup({ locale }: { locale: string }) {
         setHideForm(hideFormSelector);
     }, [hideFormSelector]);
 
+    useEffect(() => {
+        const urlParams = window.location.search.substring(1);
+        const dataParams = urlParams.split('&');
+        const commentStr = dataParams[0].split('=');
+        // const commentId = commentStr[1];
+        setCommentId(commentStr[1]);
+        setRoleId(1);
+        // const { setFieldValue } = useFormikContext();
+        // console.log(FormikProps);
+        // setFieldValue(1);
+    }, [typeof window !== 'undefined']);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (typeof window !== 'undefined') {
+        // Client-side-only code
+        const urlParams = window.location.search.substring(1);
+        const dataParams = urlParams.split('&');
+        const commentStr = dataParams[0].split('=');
+        const parseCommentId = commentStr[1];
+        if (commentStr[0] == 'comment_id' && commentStr[1]) {
+            //if (!commentId) {
+            console.log(commentStr[1]);
+            dispatch(setOrderCommentAction(commentStr[1]));
+            // setCommentId(commentStr[1]);
+            //}
+            // setCommentId(commentStr[1]);
+            // setFieldValue('roleId', '1');
+        }
+    }
+
     const onSubmit = (values: FormData, actions: any) => {
         if (isFbClicked) {
-            accountService.registerFB(`${roleId}_${locale}_${forFree ? 1 : 0}`);
+            let parseCommentId;
+            if (typeof window !== 'undefined') {
+                // Client-side-only code
+                const urlParams = window.location.search.substring(1);
+                const dataParams = urlParams.split('&');
+                const commentStr = dataParams[0].split('=');
+                const parseCommentId = commentStr[1];
+                // if (commentStr[0] == 'comment_id' && commentStr[1]) {
+                //     // setRoleId(1);
+                //     if (!commentId) {
+                //         setCommentId(commentStr[1]);
+                //     }
+                //     // setCommentId(commentStr[1]);
+                //     // setFieldValue('roleId', '1');
+                // }
+            }
+            accountService.registerFB(`${roleId}_${locale}_${forFree ? 1 : 0}_${parseCommentId}`);
         } else {
             // setup value from selector
             values['forFree'] = forFree;
@@ -48,9 +105,6 @@ export default function Signup({ locale }: { locale: string }) {
             actions.resetForm();
         }
     };
-
-    console.log('FOR FREE', forFree);
-    console.log('ROLE', roleId);
 
     return (
         <>
@@ -61,7 +115,12 @@ export default function Signup({ locale }: { locale: string }) {
             <div className="flex main-bg justify-center md:h-[620px]">
                 <Formik
                     enableReinitialize
-                    initialValues={{ email: '', acceptTerms: false, role_id: '2', forFree: false }}
+                    initialValues={{
+                        email: '',
+                        acceptTerms: false,
+                        role_id: typeof window !== 'undefined' ? '1' : '2',
+                        forFree: false
+                    }}
                     validationSchema={validationSchema}
                     onSubmit={onSubmit}>
                     {(props) => (

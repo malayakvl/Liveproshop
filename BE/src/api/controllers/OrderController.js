@@ -78,6 +78,11 @@ class OrderController {
         return res.status(200).json({success: true, message: 'creating orders'});
     }
 
+    async checkOrderStatus (req, res) {
+        const data = await orderModel.checkOrderStatus(req.query.comment_id);
+        return res.status(200).json({success: true, data: data});
+    }
+
     async getOrderQuantity(req, res) {
         const resQuery = await orderModel.getProductQty(req.query.product_id, req.query.product_configuration_id);
         const productQuant = resQuery.qty;

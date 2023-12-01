@@ -517,3 +517,4 @@ export const showChangeSubscriptionFormAction: any = createAction('user/CHANGE_S
 export const setupFreeSubscriptionAction: any = createAction('user/SETUP_FREE_SUBSCRIPTION');
 export const setRedirectAfterSubscription: any = createAction('user/REDIRECT_AFTER_SUBSCRIPTION');
 export const updateUserSubscriptionAction: any = createAction('user/UPDATE_REGISTER_SUBSCRIPTION');
+export const setOrderCommentAction: any = createAction('user/SET_ORDER_COMMENT');
