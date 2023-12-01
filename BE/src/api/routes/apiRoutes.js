@@ -50,9 +50,9 @@ apiRoutes.route('/fetch-active-sessions-sender').get(LivesessionController.getAc
 apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
 apiRoutes.route('/update-live-messages').get(LivesessionController.updateLiveMessage);
-apiRoutes.route('/check-order-status').get(LivesessionController.checkOrderStatus);
-apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderStatus);
-// apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitStatus);
+apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitStatus);
+// apiRoutes.route('/check-order-status').get(LivesessionController.checkOrderStatus);
+// apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderStatus);
 // apiRoutes.route('/live-product-qty').get(OrderController.getLiveProductQty);
 
 apiRoutes.route('/pages/all').get(PageController.getAll);

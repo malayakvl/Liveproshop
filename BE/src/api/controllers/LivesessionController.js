@@ -40,8 +40,15 @@ class LivesessionController {
         return res.status(200).json({ result: req.query.comment_id });
     }
 
+
     async checkOrderStatus (req, res) {
         // const data = await chatbotMessageModel.checkWaitingItemStatus(req.query.comment_id);
+        return res.status(200).json({ result: data.result });
+    }
+
+
+    async checkOrderWaitStatus (req, res) {
+        const data = await chatbotMessageModel.checkWaitingItemStatus(req.query.comment_id);
         return res.status(200).json({ result: data.result });
     }
 

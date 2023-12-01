@@ -33,15 +33,29 @@ async function sessionLaunche() {
                         let msgText;
                         let msgTextFr;
 
-                        if (message.order_status === true) {
-                            // we can parce message and find product
-                            msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/auth/signup?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
-                            msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} à votre panier !\n\nhttps://liveproshop.com/auth/signup?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
+                        // before send message check order status about wait
+                        const statusWaitItem = await axios(`${apiUrl}/api/check-wait-status?comment_id=${message.message_id}`)
+                            .then( (response) => {
+                                return response.data.result;
+                            }).catch(e => {
+                                console.log(e);
+                            });
+
+                        if (statusWaitItem) {
+                            msgText = `We are sorry, but the product ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} is no longer available.\n\nYou have been added to the waiting list and we will notify you as soon as it is available again in your cart!`;
+                            msgTextFr = `Nous sommes désolés, mais le produit ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} n'est plus disponible.\n\nVous avez été rajouté(e) sur la liste d’attente et nous vous avertirons dès qu’il sera à nouveau disponible dans votre panier!`;
                         } else {
-                            // we can parce message and didnt find product
-                            msgText = `Sorry, we could not find the keyword (reference / size / color / etc.) you were asking for.\n\nHere are some examples of correct comments:\n\nSOLD 14 green\n\nSOLD 169 M\n\nSOLD 35 beige M\n\nPlease check that you have typed the keyword correctly.`;
-                            msgTextFr = `Désolés, nous n'avons pas pu trouver le mot clé (référence / taille / couleur / etc.) que vous demandiez.\n\nVoici quelques exemples de commentaires corrects:\n\nVENDU 14 vert\n\nVENDU 169 M\n\nVENDU 35 beige M\n\nMerci de vérifier que vous avez correctement tapé le mot-clé.`;
+                            if (message.order_status === true) {
+                                // we can parce message and find product
+                                msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/auth/signup?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
+                                msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} à votre panier !\n\nhttps://liveproshop.com/auth/signup?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
+                            } else {
+                                // we parce messege but not found product
+                                msgText = `Sorry, we could not find the keyword (reference / size / color / etc.) you were asking for.\n\nHere are some examples of correct comments:\n\nSOLD 14 green\n\nSOLD 169 M\n\nSOLD 35 beige M\n\nPlease check that you have typed the keyword correctly.`;
+                                msgTextFr = `Désolés, nous n'avons pas pu trouver le mot clé (référence / taille / couleur / etc.) que vous demandiez.\n\nVoici quelques exemples de commentaires corrects:\n\nVENDU 14 vert\n\nVENDU 169 M\n\nVENDU 35 beige M\n\nMerci de vérifier que vous avez correctement tapé le mot-clé.`;
+                            }
                         }
+
 
                         await axios.get(
                             `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}`
