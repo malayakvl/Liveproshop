@@ -72,6 +72,7 @@ export default function Signup({ locale }: { locale: string }) {
             //if (!commentId) {
             console.log(commentStr[1]);
             dispatch(setOrderCommentAction(commentStr[1]));
+            window.localStorage.setItem('order_comment_id', commentStr[1]);
             // setCommentId(commentStr[1]);
             //}
             // setCommentId(commentStr[1]);
