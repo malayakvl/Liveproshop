@@ -48,6 +48,10 @@ export const fetchItemsAction: any = createAction(
             )(state);
             const queryFilter = JSON.stringify(filters);
             dispatch(showLoaderAction(true));
+            let orderCommentId;
+            if (window.localStorage.getItem('order_comment_id')) {
+                orderCommentId = window.localStorage.getItem('order_comment_id')
+            }
             return axios
                 .get(
                     `${baseUrl}/orders/fetch-items?${queryString.stringify({
@@ -56,7 +60,8 @@ export const fetchItemsAction: any = createAction(
                         sort,
                         column,
                         query,
-                        queryFilter
+                        queryFilter,
+                        orderCommentId
                     })}`,
                     {
                         headers: {

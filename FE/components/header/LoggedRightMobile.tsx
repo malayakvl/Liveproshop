@@ -188,7 +188,7 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 </a>
                                             </Link>
                                         </li>
-                                        {user.role_id === 2 && !redirectToPlan && (
+                                        {user.role_id === 1 && !redirectToPlan && (
                                             <li>
                                                 <Link href="/account/plan">
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -206,7 +206,7 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 </Link>
                                             </li>
                                         )}
-                                        {user.role_id === 2 && redirectToPlan && (
+                                        {user.role_id === 1 && redirectToPlan && (
                                             <li>
                                                 <Link href="/pricing">
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

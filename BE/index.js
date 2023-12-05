@@ -10,13 +10,22 @@ import authRoutes from './src/api/routes/authRoute.js';
 import apiRoutes from './src/api/routes/apiRoutes.js';
 import appRoute from './src/appRoute.js';
 import bodyParser from 'body-parser';
-const x = '{"status" : true, "sold" : true, "item" : 48, "color" : "white", "color_id" : 2, "size" : "m", "size_id" : 25, "quantity" : 1}';
-const parsedJson = (JSON.parse(x));
-let lng = 'fr';
-if (parsedJson.hasOwnProperty("sold")) {
-    lng = 'en';
-}
-console.log(lng);
+import slugify from "slugify";
+// const x = '{"status" : true, "sold" : true, "item" : 48, "color" : "white", "color_id" : 2, "size" : "m", "size_id" : 25, "quantity" : 1}';
+// const parsedJson = (JSON.parse(x));
+// let lng = 'fr';
+// if (parsedJson.hasOwnProperty("sold")) {
+//     lng = 'en';
+// }
+// const slgWord = slugify('Ahead Fashion', {
+//     replacement: '-',  // replace spaces with replacement character, defaults to `-`
+//     remove: undefined, // remove characters that match regex, defaults to `undefined`
+//     lower: true,      // convert to lower case, defaults to `false`
+//     strict: false,     // strip special characters except replacement, defaults to `false`
+//     locale: 'vi',      // language code of the locale to use
+//     trim: true         // trim leading and trailing replacement chars, defaults to `true`
+// })
+// console.log(slgWord);
 /**
  * App Variables
  */

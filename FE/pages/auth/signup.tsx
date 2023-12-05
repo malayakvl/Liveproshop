@@ -69,14 +69,9 @@ export default function Signup({ locale }: { locale: string }) {
         const commentStr = dataParams[0].split('=');
         const parseCommentId = commentStr[1];
         if (commentStr[0] == 'comment_id' && commentStr[1]) {
-            //if (!commentId) {
             console.log(commentStr[1]);
             dispatch(setOrderCommentAction(commentStr[1]));
             window.localStorage.setItem('order_comment_id', commentStr[1]);
-            // setCommentId(commentStr[1]);
-            //}
-            // setCommentId(commentStr[1]);
-            // setFieldValue('roleId', '1');
         }
     }
 

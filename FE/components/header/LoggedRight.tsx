@@ -122,7 +122,7 @@ const LoggedRight: React.FC = () => {
                                     </a>
                                 </Link>
                             </li>
-                            {user.role_id === 2 && !redirectToPlan && (
+                            {user.role_id === 1 && !redirectToPlan && (
                                 <li>
                                     <Link href="/stores">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -135,7 +135,7 @@ const LoggedRight: React.FC = () => {
                                     </Link>
                                 </li>
                             )}
-                            {user.role_id === 2 && !redirectToPlan && (
+                            {user.role_id === 1 && !redirectToPlan && (
                                 <li>
                                     <Link href="/account/plan">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -148,7 +148,7 @@ const LoggedRight: React.FC = () => {
                                     </Link>
                                 </li>
                             )}
-                            {user.role_id === 2 && redirectToPlan && (
+                            {user.role_id === 1 && redirectToPlan && (
                                 <li>
                                     <Link href="/pricing">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -161,21 +161,23 @@ const LoggedRight: React.FC = () => {
                                     </Link>
                                 </li>
                             )}
-                            <li>
-                                <Link href="/payment-setting">
-                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                    <a
-                                        role="presentation"
-                                        onClick={() => setShowProfileMenu(!showProfileMenu)}>
-                                        <i className="settings-pay" />
-                                        <span
-                                            className="s-caption"
-                                            style={{ whiteSpace: 'normal' }}>
-                                            {t('My payment settings')}
-                                        </span>
-                                    </a>
-                                </Link>
-                            </li>
+                            {user.role_id === 1 && redirectToPlan && (
+                                <li>
+                                    <Link href="/payment-setting">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="settings-pay" />
+                                            <span
+                                                className="s-caption"
+                                                style={{ whiteSpace: 'normal' }}>
+                                                {t('My payment settings')}
+                                            </span>
+                                        </a>
+                                    </Link>
+                                </li>
+                            )}
                             <li>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a

@@ -189,10 +189,11 @@ class ChatbotMessage {
         const client = await pool.connect();
         try {
             const productQueryNew = `SELECT lsm.* , p.name AS product_name, ls.user_id, dss.order_timer, 
-                    dss.free_shipping_timer, foth.threshold
+                    dss.free_shipping_timer, foth.threshold, us.name as store_name
                     FROM data.live_sessions_messages lsm
                     LEFT JOIN data.products p ON (p.id = (lsm.parcer_data->>'item')::integer)
                     LEFT JOIN data.live_sessions ls ON lsm.live_sessions_id = ls.id
+                    LEFT JOIN data.user_stores us ON us.id=ls.store_id
                     LEFT JOIN data.seller_settings dss ON dss.user_id = ls.user_id
                     LEFT JOIN data.free_order_threshold foth ON foth.user_id = ls.user_id
                     WHERE lsm.parcer_status = TRUE AND lsm.order_status IS NOT NULL AND lsm.reply_sended IS NULL

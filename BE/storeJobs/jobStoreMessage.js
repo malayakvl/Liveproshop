@@ -1,6 +1,7 @@
 import axios from "axios";
 import 'dotenv/config';
 import shell from "shelljs";
+import slugify from "slugify";
 const args = process.argv;
 const apiUrl = process.env.API_URL;
 const sessionsData = args[2].split('=');
@@ -12,7 +13,6 @@ async function sessionLaunche() {
     // start parsing messages
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
-            console.log(response.data.data);
             response.data.data.forEach(async message => {
                 if (message.message_id) {
                     const orderMessageId = message.message_id;
@@ -32,6 +32,15 @@ async function sessionLaunche() {
                         }
                         let msgText;
                         let msgTextFr;
+                        const slgStoreName = slugify(message.store_name, {
+                            replacement: '-',  // replace spaces with replacement character, defaults to `-`
+                            remove: undefined, // remove characters that match regex, defaults to `undefined`
+                            lower: true,      // convert to lower case, defaults to `false`
+                            strict: false,     // strip special characters except replacement, defaults to `false`
+                            locale: 'vi',      // language code of the locale to use
+                            trim: true         // trim leading and trailing replacement chars, defaults to `true`
+                        })
+
 
                         // before send message check order status about wait
                         const statusWaitItem = await axios(`${apiUrl}/api/check-wait-status?comment_id=${message.message_id}`)
@@ -47,8 +56,10 @@ async function sessionLaunche() {
                         } else {
                             if (message.order_status === true) {
                                 // we can parce message and find product
-                                msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/auth/signup?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
-                                msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} à votre panier !\n\nhttps://liveproshop.com/auth/signup?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
+                                msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
+                                msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
+                                // msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/auth/signup?storeName=ahead_fashion&comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
+                                // msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/auth/signup?storeName=ahead_fashion&comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
                             } else {
                                 // we parce messege but not found product
                                 msgText = `Sorry, we could not find the keyword (reference / size / color / etc.) you were asking for.\n\nHere are some examples of correct comments:\n\nSOLD 14 green\n\nSOLD 169 M\n\nSOLD 35 beige M\n\nPlease check that you have typed the keyword correctly.`;

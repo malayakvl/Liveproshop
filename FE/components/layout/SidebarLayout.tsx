@@ -15,21 +15,11 @@ export default function SidebarLayout({ children }: { children: any }) {
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
-        if (user?.email && user.role_id == 2) {
-            if (user.subscription_id?.includes('fake_sub_') || !user?.subscription) {
+        if (user?.email && user.role_id == 1) {
+            if (user.subscription_id?.includes('fake_sub_') || user?.subscription_expired) {
                 Router.push(`/pricing`);
             }
         }
-        // if (user.subscription_id?.includes('fake_sub_') || !user.subscription_id) {
-        //     Router.push(`/pricing`);
-        // }
-        // if (user.subscription_expired) {
-        //     if (user.status === 'incomplete') {
-        //         Router.push(`/subscription?planId=${user.plan_id}`);
-        //     } else {
-        //         Router.push(`/pricing`);
-        //     }
-        // }
     }, [user?.email]);
 
     return (
@@ -45,8 +35,8 @@ export default function SidebarLayout({ children }: { children: any }) {
                     </div>
                 </div>
             )}
-            {user.role_id === 1 && <SidebarBuyer />}
-            {user.role_id === 2 && <SidebarCustomer />}
+            {user.role_id === 2 && <SidebarBuyer />}
+            {user.role_id === 1 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
             <div
                 className={`relative ml-0 h-full mt-2 pb-2 md:mt-0 md:mb-10 md:pl-4 md:mr-8 ${

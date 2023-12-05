@@ -8,10 +8,14 @@ class OrderController {
      * @returns {Promise<*>}
      */
     async fetchItems(req, res) {
-        const { limit, offset, queryFilter, column, sort } = req.query;
+        const { limit, offset, queryFilter, column, sort, orderCommentId } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
+            if (orderCommentId) {
+                console.log('here we are', req.user.id);
+                await orderModel.updateOrderByCommentId(orderCommentId, req.user.id);
+            }
             const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
             return res.status(200).json({ count: data.size, items: data.items});
         }

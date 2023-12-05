@@ -72,41 +72,66 @@ function Profile() {
             );
         return !validEmail ? false : true;
     };
-
-    const SubmitSchema = Yup.object().shape({
-        email: Yup.string()
-            .trim(t('Cannot include leading and trailing spaces'))
-            .min(3, t('Must be at least 3 characters'))
-            .email(t('Must be a valid email'))
-            .strict(true)
-            .required(t('You must enter your email')),
-        last_name: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your family name')),
-        first_name: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your first name')),
-        identification_number: Yup.string()
-            .trim(t('Cannot include leading and trailing spaces'))
-            .strict(true)
-            .min(3, t('Must be at least 3 characters'))
-            .required(t('You must enter your tax-ID')),
-        company_name: Yup.string()
-            .strict(true)
-            .min(3, t('Must be at least 3 characters'))
-            .trim(t('Cannot include leading and trailing spaces')),
-        phone: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your phone number'))
-            .min(5, t('Phone must be at least 5 characters')),
-        vat: Yup.string()
-            .min(3, t('Must be at least 3 characters'))
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-    });
+    console.log(user.role_id);
+    let SubmitSchema;
+    if (user.role_id == 1) {
+        SubmitSchema = Yup.object().shape({
+            email: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .min(3, t('Must be at least 3 characters'))
+                .email(t('Must be a valid email'))
+                .strict(true)
+                .required(t('You must enter your email')),
+            last_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your family name')),
+            first_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your first name')),
+            identification_number: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .strict(true)
+                .min(3, t('Must be at least 3 characters'))
+                .required(t('You must enter your tax-ID')),
+            company_name: Yup.string()
+                .strict(true)
+                .min(3, t('Must be at least 3 characters'))
+                .trim(t('Cannot include leading and trailing spaces')),
+            phone: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your phone number'))
+                .min(5, t('Phone must be at least 5 characters')),
+            vat: Yup.string()
+                .min(3, t('Must be at least 3 characters'))
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+        });
+    } else {
+        SubmitSchema = Yup.object().shape({
+            email: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .min(3, t('Must be at least 3 characters'))
+                .email(t('Must be a valid email'))
+                .strict(true)
+                .required(t('You must enter your email')),
+            last_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your family name')),
+            first_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your first name')),
+            phone: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your phone number'))
+                .min(5, t('Phone must be at least 5 characters'))
+        });
+    }
 
     return (
         <Formik
@@ -205,36 +230,39 @@ function Profile() {
                             props={props}
                             tips={null}
                         />
-
-                        <InputText
-                            icon={'f-company'}
-                            label={null}
-                            name={'company_name'}
-                            placeholder={'Company Name'}
-                            style={'lg:w-full'}
-                            props={props}
-                            tips={null}
-                        />
-
-                        <InputText
-                            icon={'f-company-id'}
-                            label={null}
-                            name={'identification_number'}
-                            placeholder={'Company ID'}
-                            style={'lg:w-full'}
-                            props={props}
-                            tips={null}
-                        />
-
-                        <InputText
-                            icon={'f-vat'}
-                            label={null}
-                            name={'vat'}
-                            placeholder={'VAT (If applicable)'}
-                            style={'lg:w-1/2'}
-                            props={props}
-                            tips={null}
-                        />
+                        {user.role_id === 1 && (
+                            <InputText
+                                icon={'f-company'}
+                                label={null}
+                                name={'company_name'}
+                                placeholder={'Company Name'}
+                                style={'lg:w-full'}
+                                props={props}
+                                tips={null}
+                            />
+                        )}
+                        {user.role_id === 1 && (
+                            <InputText
+                                icon={'f-company-id'}
+                                label={null}
+                                name={'identification_number'}
+                                placeholder={'Company ID'}
+                                style={'lg:w-full'}
+                                props={props}
+                                tips={null}
+                            />
+                        )}
+                        {user.role_id === 1 && (
+                            <InputText
+                                icon={'f-vat'}
+                                label={null}
+                                name={'vat'}
+                                placeholder={'VAT (If applicable)'}
+                                style={'lg:w-1/2'}
+                                props={props}
+                                tips={null}
+                            />
+                        )}
 
                         <InputText
                             icon={'f-phone'}
