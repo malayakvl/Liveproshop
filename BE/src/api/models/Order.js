@@ -473,7 +473,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            // console.log(ordersQuery);
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -797,6 +797,28 @@ class Order {
         }
     }
 
+    async findByCommentId (commentId, userId) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT order_id FROM data.order_items WHERE message_id='${commentId}'`;
+            console.log(SQL);
+            const res = await client.query(SQL);
+            const orderSQL = `UPDATE data.orders SET user_id='${userId}' WHERE id='${res.rows[0].order_id}'`;
+            await client.query(orderSQL);
+            return {success: true, orderId: res.rows[0].order_id};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
 
     async bulkCancel (orderIds) {
         const client = await pool.connect();

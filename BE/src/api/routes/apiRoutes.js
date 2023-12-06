@@ -125,6 +125,8 @@ apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
 apiRoutes.route('/products/import').post(ProductController.import);
 apiRoutes.route('/products/find').get(ProductController.find);
 
+apiRoutes.route('/orders/find-order-by-comment').get(OrderController.findOrderByCommentId);
+
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 
 apiRoutes.route('/chatbot').post(ChatbotController.storeItem);

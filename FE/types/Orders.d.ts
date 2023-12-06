@@ -15,7 +15,7 @@ declare namespace Orders {
         showCancelPopup: boolean;
         achiveName: null | string;
         downloadFileName: null | string;
-        commentOrderId: null | any;
+        commentIdOrder: null | any;
     }
 
     interface DataItem {

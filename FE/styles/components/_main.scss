@@ -392,3 +392,7 @@
     //@apply top-[10px];
   }
 }
+
+.product-photo {
+  @apply object-cover h-[90px] w-[60px] border;
+}

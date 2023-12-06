@@ -47,7 +47,7 @@ const OrderSummary = () => {
                                 : `${baseApiUrl}/${product.previewphoto}`
                         }
                         alt="Product preview"
-                        className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5 flex-none"
+                        className="product-photo"
                     />
                     <div className="flex-auto">
                         <span className="text-gray-350 text-sm font-bold">Ref. {product.sku}</span>{' '}

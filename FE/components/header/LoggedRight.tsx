@@ -122,7 +122,7 @@ const LoggedRight: React.FC = () => {
                                     </a>
                                 </Link>
                             </li>
-                            {user.role_id === 1 && !redirectToPlan && (
+                            {user.role_id === 2 && !redirectToPlan && (
                                 <li>
                                     <Link href="/stores">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -135,7 +135,7 @@ const LoggedRight: React.FC = () => {
                                     </Link>
                                 </li>
                             )}
-                            {user.role_id === 1 && !redirectToPlan && (
+                            {user.role_id === 2 && !redirectToPlan && (
                                 <li>
                                     <Link href="/account/plan">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -148,7 +148,7 @@ const LoggedRight: React.FC = () => {
                                     </Link>
                                 </li>
                             )}
-                            {user.role_id === 1 && redirectToPlan && (
+                            {user.role_id === 2 && redirectToPlan && (
                                 <li>
                                     <Link href="/pricing">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -161,7 +161,7 @@ const LoggedRight: React.FC = () => {
                                     </Link>
                                 </li>
                             )}
-                            {user.role_id === 1 && redirectToPlan && (
+                            {user.role_id === 2 && redirectToPlan && (
                                 <li>
                                     <Link href="/payment-setting">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}

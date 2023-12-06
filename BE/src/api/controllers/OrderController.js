@@ -12,10 +12,9 @@ class OrderController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            if (orderCommentId) {
-                console.log('here we are', req.user.id);
-                await orderModel.updateOrderByCommentId(orderCommentId, req.user.id);
-            }
+            // if (orderCommentId) {
+            //     await orderModel.updateOrderByCommentId(orderCommentId, req.user.id);
+            // }
             const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
             return res.status(200).json({ count: data.size, items: data.items});
         }
@@ -132,6 +131,16 @@ class OrderController {
         }
     }
 
+    async findOrderByCommentId (req, res) {
+        if (req.user) {
+            const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
+        }
+        // console.log(data.orderId);
+        // console.log(data.userId);
+        // JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+        // const data = await orderModel.bulkDownload(ids, req.user);
+        return res.status(200).json({ success: true });
+    }
 }
 
 export default new OrderController();

@@ -30,8 +30,11 @@ class User {
             const res1 = await client.query(`SELECT fields_json FROM data.find_user_by_email('${email.toLowerCase()}', '3.5 hours');`);
             if (res1.rows[0].fields_json) {
                 res1.rows[0].subscription_expired = false;
-                if (res1.rows[0].fields_json.role_id === 2) {
+                if (res1.rows[0].fields_json.role_id === 1) {
+                    console.log(res1.rows[0].fields_json);
+
                     if ((res1.rows[0].fields_json.customer_id || !res1.rows[0].fields_json.is_fake) && (res1.rows[0].fields_json.period_left === null || res1.rows[0].fields_json.period_left < 0)) {
+
                         try {
                             const subscription = await stripe.subscriptions.retrieve(res1.rows[0].fields_json.subscription_id);
                             if (subscription.current_period_end > moment().unix()) {

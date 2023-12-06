@@ -61,7 +61,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                             className={`tabs ${activeTab === 'profile' ? 'active' : ''}`}>
                             {t('Personal Information')}
                         </button>
-                        {profileData.role_id === 2 && (
+                        {profileData.role_id === 1 && (
                             <button
                                 id="addresses"
                                 onClick={handleTabClick}
@@ -82,7 +82,7 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                         {profileData.email && <Profile />}
                     </div>
                     <div className={`w-full ${activeTab !== 'addresses' ? 'hidden' : ''}`}>
-                        {profileData.role_id === 2 && (
+                        {profileData.role_id === 1 && (
                             <Fragment>
                                 <Address address={profileData.address} locale={locale} />
                             </Fragment>

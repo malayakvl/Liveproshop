@@ -7,6 +7,7 @@ import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
 import { toggleProfileMenuAction, toggleSidebarAction } from '../../redux/layouts';
 import Router from 'next/router';
+import { findOrderByCommentAction } from '../../redux/orders';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
@@ -15,10 +16,17 @@ export default function SidebarLayout({ children }: { children: any }) {
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
-        if (user?.email && user.role_id == 1) {
+        if (user?.email && user.role_id == 2) {
             if (user.subscription_id?.includes('fake_sub_') || user?.subscription_expired) {
                 Router.push(`/pricing`);
             }
+        }
+        console.log('USER', user);
+        console.log('CommentId', window.localStorage.getItem('orderCommentId'));
+        if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
+            dispatch(
+                findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
+            );
         }
     }, [user?.email]);
 
@@ -35,8 +43,8 @@ export default function SidebarLayout({ children }: { children: any }) {
                     </div>
                 </div>
             )}
-            {user.role_id === 2 && <SidebarBuyer />}
-            {user.role_id === 1 && <SidebarCustomer />}
+            {user.role_id === 1 && <SidebarBuyer />}
+            {user.role_id === 2 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
             <div
                 className={`relative ml-0 h-full mt-2 pb-2 md:mt-0 md:mb-10 md:pl-4 md:mr-8 ${

@@ -72,9 +72,8 @@ function Profile() {
             );
         return !validEmail ? false : true;
     };
-    console.log(user.role_id);
     let SubmitSchema;
-    if (user.role_id == 1) {
+    if (user.role_id == 2) {
         SubmitSchema = Yup.object().shape({
             email: Yup.string()
                 .trim(t('Cannot include leading and trailing spaces'))
@@ -230,7 +229,7 @@ function Profile() {
                             props={props}
                             tips={null}
                         />
-                        {user.role_id === 1 && (
+                        {user.role_id === 2 && (
                             <InputText
                                 icon={'f-company'}
                                 label={null}
@@ -241,7 +240,7 @@ function Profile() {
                                 tips={null}
                             />
                         )}
-                        {user.role_id === 1 && (
+                        {user.role_id === 2 && (
                             <InputText
                                 icon={'f-company-id'}
                                 label={null}
@@ -252,7 +251,7 @@ function Profile() {
                                 tips={null}
                             />
                         )}
-                        {user.role_id === 1 && (
+                        {user.role_id === 2 && (
                             <InputText
                                 icon={'f-vat'}
                                 label={null}

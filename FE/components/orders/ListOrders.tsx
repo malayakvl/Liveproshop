@@ -185,19 +185,19 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td className="order-number">
-                                {user.role_id === 2 && (
+                                {user.role_id === 1 && (
                                     <Link href={`/orders/${item.order_number}?locale=${locale}`}>
                                         <a>{item.order_number}</a>
                                     </Link>
                                 )}
-                                {user.role_id === 1 && item.status === 'new' && (
+                                {user.role_id === 2 && item.status === 'new' && (
                                     <>
                                         <Link href={`/checkout/${item.order_number}`}>
                                             <a>{item.order_number}</a>
                                         </Link>
                                     </>
                                 )}
-                                {user.role_id === 1 && item.status !== 'new' && (
+                                {user.role_id === 2 && item.status !== 'new' && (
                                     <Link href={`/orders/${item.order_number}`}>
                                         <a>{item.order_number}</a>
                                     </Link>
@@ -254,7 +254,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
                             <td>{formatCurrency(item.total_amount)}</td>
-                            {user.role_id === 1 && item.status === 'new' && (
+                            {user.role_id === 2 && item.status === 'new' && (
                                 <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                     <Link href={`/checkout/${item.order_number}`}>
                                         <div

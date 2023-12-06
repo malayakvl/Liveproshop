@@ -12,7 +12,9 @@ import {
     clearBase64Action,
     setAchiveNameAction,
     setSingleFileNameAction,
-    connectOrderAction
+    connectOrderAction,
+    setFbCommentAction,
+    findOrderByCommentAction
 } from './actions';
 
 const initialState: {
@@ -30,6 +32,7 @@ const initialState: {
     tagSellersSuggestions: any[];
     showCancelPopup: boolean;
     achiveName: string | null;
+    commentIdOrder: string | null;
 } = {
     isFetched: false,
     loading: false,
@@ -49,7 +52,8 @@ const initialState: {
     base64Data: null,
     tagSellersSuggestions: [],
     showCancelPopup: false,
-    achiveName: null
+    achiveName: null,
+    commentIdOrder: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -177,13 +181,24 @@ const ACTION_HANDLERS: any = {
             downloadFileName: action.payload
         })
     },
-    [connectOrderAction]: {
+    // [connectOrderAction]: {
+    //     next: (state: State.Orders, action: Action<any>): State.Orders => ({
+    //         ...state,
+    //         commentOrderId: action.payload
+    //     })
+    // },
+    [setFbCommentAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
-            commentOrderId: action.payload
+            commentIdOrder: action.payload
         })
     },
-
+    [findOrderByCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            commentIdOrder: action.payload
+        })
+    }
 };
 
 export {
@@ -198,7 +213,9 @@ export {
     showCancelConfirmationModalAction,
     clearBase64Action,
     setSingleFileNameAction,
-    connectOrderAction
+    connectOrderAction,
+    setFbCommentAction,
+    findOrderByCommentAction
 };
 
 // ------------------------------------

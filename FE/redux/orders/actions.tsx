@@ -50,7 +50,7 @@ export const fetchItemsAction: any = createAction(
             dispatch(showLoaderAction(true));
             let orderCommentId;
             if (window.localStorage.getItem('order_comment_id')) {
-                orderCommentId = window.localStorage.getItem('order_comment_id')
+                orderCommentId = window.localStorage.getItem('order_comment_id');
             }
             return axios
                 .get(
@@ -317,12 +317,28 @@ export const fetchUserOrderAction: any = createAction(
                     headers: {
                         ...authHeader(email)
                     }
-                })
+                }
+            )
             .then((res) => res.data.user)
             .catch((e) => console.log(e.message));
     }
 );
+export const findOrderByCommentAction: any = createAction(
+    'order/FETCH_USER_ORDER',
+    async (commentId: string, email: string) => {
+        return axios
+            .get(`${baseUrl}/orders/find-order-by-comment?commentId=${commentId}`,
+                {
+                headers: {
+                    ...authHeader(email)
+                }
+            })
+            .then((res) => res.data.orderId)
+            .catch((e) => console.log(e.message));
+    }
+);
 
+export const setFbCommentAction: any = createAction('orders/SET_FB_ORDER_COMMENT');
 export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');

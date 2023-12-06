@@ -228,7 +228,7 @@ const ListProducts: React.FC<any> = () => {
                             {/*        onClick={() => handleShowMore(item.id)}*/}
                             {/*    />*/}
                             {/*</td>*/}
-                            <td style={{ width: '150px' }}>
+                            <td style={{ maxWidth: '150px' }}>
                                 {item.previewphoto && (
                                     <img
                                         src={
@@ -237,7 +237,7 @@ const ListProducts: React.FC<any> = () => {
                                                 : `${baseApiUrl}/${item.previewphoto}`
                                         }
                                         alt=""
-                                        className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5"
+                                        className="product-photo"
                                     />
                                 )}
                                 {!item.previewphoto && (
