@@ -825,12 +825,73 @@ class Order {
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            const SQL = `SELECT order_id FROM data.order_items WHERE message_id='${commentId}'`;
+            const SQL = `SELECT order_id, data.orders.live_sessions_id, order_amount, total_amount
+                FROM data.order_items 
+                LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
+                WHERE message_id='${commentId}'`;
             console.log(SQL);
             const res = await client.query(SQL);
-            const orderSQL = `UPDATE data.orders SET user_id='${userId}', total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
-            console.log(orderSQL);
-            await client.query(orderSQL);
+            console.log("1", res.rows[0].order_id);
+            console.log(`SELECT id FROM data.orders WHERE user_id='${userId}' 
+                AND status='new' AND id != '${res.rows[0].order_id}' 
+                AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
+            const existNonPayedOrder = await client.query(
+                `SELECT id FROM data.orders WHERE user_id='${userId}' 
+                AND status='new' AND id != '${res.rows[0].order_id}' 
+                AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
+            if (existNonPayedOrder.rows[0]?.id) {
+                const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}'`;
+                await client.query(updateExistItemsSQL);
+                // update amounts for order splited order
+                const updateAmountSQL = `UPDATE data.orders 
+                    SET order_amount = order_amount + ${res.rows[0].order_amount},
+                    total_amount = total_amount +  ${res.rows[0].total_amount}
+                    WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                await client.query(updateAmountSQL);
+                // delete unused order
+                await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
+            } else {
+                console.log("AAAAA");
+                const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
+                    total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+                await client.query(orderSQL);
+            }
+            //http://localhost:3000/en/fb-order/ahead-fashion?comment_id=6905490776200182_827171379096520
+            // // find unpayed order from this seller
+            // //http://localhost:3000/en/fb-order/ahead-fashion?comment_id=735930858566786_872678114368912
+            // const existSQLOrder = `SELECT id FROM data.orders WHERE user_id='${userId}' AND status='new'`;
+            // const resExistOrder = await client.query(existSQLOrder);
+            // console.log('===================')
+            // console.log(resExistOrder.rows[0].id);
+            // console.log('===================')
+            // if (resExistOrder.rows[0].id) {
+            //     //get previous order
+            //     console.log(`SELECT order_id, order_amount, total_amount FROM data.orders WHERE id='${resExistOrder.rows[0].id}'`);
+            //     const existOrderData = await client.query(`SELECT id, order_amount, total_amount FROM data.orders WHERE id='${resExistOrder.rows[0].id}'`);
+            //     // console.log('===================')
+            //     const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${resExistOrder.rows[0].id}' WHERE message_id='${commentId}'`;
+            //     // await client.query(updateExistItemsSQL);
+            //     // console.log(updateExistItemsSQL);
+            //     // console.log('===================')
+            //     const deleteOrderSQL = `DELETE FROM data.orders  WHERE id='${existOrderData.rows[0].order_id}'`;
+            //     // await client.query(deleteOrderSQL);
+            //     console.log(`DELETE data.orders  WHERE id='${existOrderData.rows[0].order_id}'`);
+            //     // console.log('===================')
+            // } else {
+            //     const orderSQL = `UPDATE data.orders SET user_id='${userId}', total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+            //     await client.query(orderSQL);
+            //     const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${resExistOrder.rows[0].id}' WHERE message_id='${commentId}'`;
+            //     const resExistOrderRes = await client.query(updateExistItemsSQL);
+            //     console.log(updateExistItemsSQL);
+            // }
+            // const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${resExistOrder.rows[0].id}' WHERE message_id='${commentId}'`;
+            // const resExistOrderRes = await client.query(updateExistItemsSQL);
+            // console.log(updateExistItemsSQL);
+            // console.log('===================')
+            // const orderSQL = `UPDATE data.orders SET user_id='${userId}', total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+            // console.log('===================')
+            // console.log(orderSQL);
+            // await client.query(orderSQL);
             return {success: true, orderId: res.rows[0].order_id};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

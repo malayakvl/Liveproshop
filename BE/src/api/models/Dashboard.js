@@ -34,11 +34,11 @@ class Dashboard {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            console.log('[Dashboard.fetchItems] _filters =', _filters);
+            // console.log('[Dashboard.fetchItems] _filters =', _filters);
 
             if (user.role_id !== UserRole.BUYER) {
                 let querySQL = `SELECT * FROM data.get_buyers(${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'first_name ASC');`; //'${column} ${sort}'
-                console.log('[Dashboard.fetchItems] buyersQuery = ', querySQL);
+                // console.log('[Dashboard.fetchItems] buyersQuery = ', querySQL);
                 let res = await client.query(querySQL);
                 buyers = res.rows.length > 0 ? res.rows : [];
             }
