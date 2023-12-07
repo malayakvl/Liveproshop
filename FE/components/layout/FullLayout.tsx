@@ -10,7 +10,6 @@ export default function FullLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const router = useRouter();
     // const user = useSelector(userSelector);
-console.log(router.pathname);
     return (
         <>
             {showLoader && (

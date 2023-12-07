@@ -253,7 +253,11 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 {item.order_items.length}x{' '}
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
-                            <td>{formatCurrency(item.total_amount ? item.total_amount : item.order_amount)}</td>
+                            <td>
+                                {formatCurrency(
+                                    item.total_amount ? item.total_amount : item.order_amount
+                                )}
+                            </td>
                             {user.role_id === 1 && item.status === 'new' && (
                                 <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                     <Link href={`/checkout/${item.order_number}`}>

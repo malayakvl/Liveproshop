@@ -15,12 +15,13 @@ async function createInvoice (invoice, path, locale) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
-        await generateInvoiceTable(doc, invoice, locale);
-        await generateFooter(doc, locale);
-
-        doc.end();
-        doc.pipe(fs.createWriteStream(path));
+        // console.log('generate header done');
+        // await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
+        // await generateInvoiceTable(doc, invoice, locale);
+        // await generateFooter(doc, locale);
+        //
+        // doc.end();
+        // doc.pipe(fs.createWriteStream(path));
 
         return {success: true}
     } catch (e) {
@@ -619,7 +620,6 @@ class Order {
                 // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 // fs.mkdirSync(dirArchiveFolder);
             }
-            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -629,7 +629,7 @@ class Order {
                     )
                     .catch(
                         (error) => {
-                            console.log(error); //Exepection error....
+                            console.log(error.message); //Exepection error....
                         }
                     );
                 return {
@@ -648,15 +648,15 @@ class Order {
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
-                const multiSafePayClientRes = await axios
-                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
-                        headers: { 'Content-Type': 'application/json' }
-                    })
-                    .then(async (resM) => {
-                        return resM.data.data;
-                    }).catch(error => {
-                        console.log("Merchant error", error);
-                    });
+                // const multiSafePayClientRes = await axios
+                //     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
+                //         headers: { 'Content-Type': 'application/json' }
+                //     })
+                //     .then(async (resM) => {
+                //         return resM.data.data;
+                //     }).catch(error => {
+                //         console.log("Merchant error", error);
+                //     });
                 const buyerAddress = ''
                 // console.log('Buyer', res.rows[0]);
                 // const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
@@ -681,7 +681,8 @@ class Order {
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
-                    paymentDetails: multiSafePayClientRes
+                    // paymentDetails: multiSafePayClientRes
+                    paymentDetails: {}
                 };
                 await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}_${locale}.pdf`, locale);
 
@@ -799,6 +800,7 @@ class Order {
         const client = await pool.connect();
         try {
             const SQL = `SELECT order_id FROM data.order_items WHERE message_id='${commentId}'`;
+
             const res = await client.query(SQL);
             const orderSQL = `UPDATE data.orders SET user_id='${userId}' WHERE id='${res.rows[0].order_id}'`;
             await client.query(orderSQL);

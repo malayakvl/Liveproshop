@@ -139,11 +139,18 @@ async function getAccountData(authResponse) {
             if (data.error) {
                 store.dispatch(setErrorToastAction('Could no autherntificate'));
             }
+            // console.log('AUTH RESPONCE HERE', authResponse.roleId);
             data.accessToken = authResponse.accessToken;
             data.expirationTime = authResponse.data_access_expiration_time;
-            data.callbackUrl = `${window.location.origin}/${
-                authResponse.locale === 'fr' ? '' : 'en/'
-            }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
+            if (parseInt(authResponse.roleId) === 1) {
+                data.callbackUrl = `${window.location.origin}/${
+                    authResponse.locale === 'fr' ? '' : 'en/'
+                }dashboard`;
+            } else {
+                data.callbackUrl = `${window.location.origin}/${
+                    authResponse.locale === 'fr' ? '' : 'en/'
+                }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
+            }
             data.roleId = authResponse.roleId ? authResponse.roleId : 2;
             data.forFree = authResponse.forFree;
             data.userAccounts = JSON.stringify(data.accounts);

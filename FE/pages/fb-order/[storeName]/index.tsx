@@ -8,7 +8,7 @@ import { userSelector } from '../../../redux/user/selectors';
 // import {findOrderByCommentUnregAction} from "../../../redux/orders/actions";
 // import { useNavigate } from 'react-router-dom';
 import { orderCommentIdSelector } from '../../../redux/orders/selectors';
-import {findOrderByCommentAction} from "../../../redux/orders";
+// import {findOrderByCommentAction} from "../../../redux/orders";
 
 export default function Index({ locale }: { locale: string }) {
     const dispatch = useDispatch();
@@ -20,20 +20,20 @@ export default function Index({ locale }: { locale: string }) {
         query: { comment_id }
     } = useRouter();
 
-    // useEffect(() => {
-    //     if (typeof comment_id === 'string') {
-    //         window.localStorage.setItem('orderCommentId', comment_id);
-    //         // dispatch(findOrderByCommentAction(comment_id));
-    //     }
-    //     if (user?.email && user.role_id == 1) {
-    //         // dispatch(
-    //         //     findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
-    //         // );
-    //         // window.location.href = `${locale == 'fr' ? '' : '/en'}/orders`;
-    //     } else {
-    //         window.location.href = `${locale == 'fr' ? '' : '/en'}/auth/signup`;
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (typeof comment_id === 'string') {
+            window.localStorage.setItem('orderCommentId', comment_id);
+            // dispatch(findOrderByCommentAction(comment_id));
+        }
+        if (user?.email && user.role_id == 1) {
+            // dispatch(
+            //     findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
+            // );
+            // window.location.href = `${locale == 'fr' ? '' : '/en'}/orders`;
+        } else {
+            window.location.href = `${locale == 'fr' ? '' : '/en'}/auth/signup`;
+        }
+    }, []);
 
     return (
         <div className="main-bg container xl:max-w-[1400px] mx-auto">
