@@ -10,7 +10,7 @@ export default function FullLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const router = useRouter();
     // const user = useSelector(userSelector);
-
+console.log(router.pathname);
     return (
         <>
             {showLoader && (
@@ -51,6 +51,7 @@ export default function FullLayout({ children }: { children: any }) {
                     router.pathname == '/auth/signup' ||
                     router.pathname == '/auth/registration' ||
                     router.pathname == '/contact-us' ||
+                    router.pathname == '/fb-order/[storeName]' ||
                     router.pathname == '/privacy'
                         ? 'bg-white'
                         : 'bg-gray-150'

@@ -450,7 +450,6 @@ class UserController {
                 subscriptionData = await userModel.createExistUserSubscription(req.body, req.user);
 
             }
-            console.log("ZAEBALO", subscriptionData);
             // console.log("SUBSCRIPTION", data.subscription);
             // let data;
             // if (!req.user.subscription) {
@@ -461,11 +460,6 @@ class UserController {
             // if (!req.user.subscription) {
             //     data = await userModel.createExistUserSubscription(req.body, req.user);
             // }
-            console.log("=========================")
-            console.log("=========================")
-            console.log("=========================")
-            console.log("=========================")
-
             const user = await userModel.findUserByEmail(req.user.email, true);
             // console.log(user);
 

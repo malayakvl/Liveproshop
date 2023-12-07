@@ -31,8 +31,6 @@ class User {
             if (res1.rows[0].fields_json) {
                 res1.rows[0].subscription_expired = false;
                 if (res1.rows[0].fields_json.role_id === 1) {
-                    console.log(res1.rows[0].fields_json);
-
                     if ((res1.rows[0].fields_json.customer_id || !res1.rows[0].fields_json.is_fake) && (res1.rows[0].fields_json.period_left === null || res1.rows[0].fields_json.period_left < 0)) {
 
                         try {
@@ -110,7 +108,6 @@ class User {
 
     async createDbSubscription(userId, type = '') {
         const client = await pool.connect();
-        console.log('TYPE', type);
         try {
             const periodStart =  new Date();
             const periodEnd  = new Date();
@@ -127,7 +124,6 @@ class User {
                 period_end: timestampEnd/1000,
                 is_trial: true
             }
-            console.log(dbSubscription);
             const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
             await client.query(_querySubscription);
         } catch (e) {
@@ -210,7 +206,6 @@ class User {
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
                 if (parseInt(userData.roleId) === 2) {
-                    console.log("USER TOKEN", userData.accessToken);
                     // get user stores
                     try {
                         if (userData.accessToken) {
@@ -326,10 +321,8 @@ class User {
         const client = await pool.connect();
         try {
             let user;
-            console.log("USER DATA FOR SYNC", userData);
             user = await this.findUserByProviderId(userData.userID);
             if (parseInt(userData.roleId) === 2) {
-                console.log("USER TOKEN", userData.accessToken);
                 // get user stores
                 try {
                     if (userData.accessToken) {
@@ -338,7 +331,6 @@ class User {
                                 `https://graph.facebook.com/v17.0/me?fields=accounts&access_token=${userData.accessToken}`
                             )
                             .then(async (responsePages) => {
-                                console.log("RESPONCE", responsePages.data.accounts.data);
                                 if (responsePages.data.error) {
                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
                                 } else {
@@ -404,7 +396,6 @@ class User {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${planId}'`);
             const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
             if (resPlan.rows.length) {
-                console.log(userData);
                 if (resPlan.rows[0].stripe_id) {
                     let customerId;
                     // create custome on stripe
@@ -541,7 +532,6 @@ class User {
             await client.query(_querySubscription);
             const dbUser = await client.query(`SELECT email FROM data.users WHERE id='${userId}'`);
             const _user = await this.findUserByEmail(dbUser.rows[0].email);
-console.log(_user);
             return { user: _user, error: null };
 
         } catch (e) {
@@ -562,7 +552,6 @@ console.log(_user);
     async createExistUserTrialSubscription(userData) {
         const client = await pool.connect();
         try {
-            console.log("MODEL", userData);
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
             if (resPlan.rows.length) {
@@ -577,7 +566,6 @@ console.log(_user);
                         const customerStripe = await stripe.customers.retrieve(
                             userData.user.customer_id
                         );
-                        console.log(customerStripe);
                         if (!customerStripe || customerStripe?.deleted) {
                             userData.user.customer_id = null;
                         }
@@ -854,7 +842,6 @@ console.log(_user);
             subscription.defaultPayment = customer.invoice_settings.default_payment_method;
             subscription.defaultPlanId = subscription.items.data[0].plan.id;
             subscription.dbPlans = dbPlansRes.rows;
-            console.log("SUBSCRIPTION", subscription);
 
             // const paymentPlansInfo = await paymentPlanModel.fetchItems();
             subscription.paymentPlanList = await paymentPlanModel.fetchItems();
@@ -932,7 +919,6 @@ console.log(_user);
             // paymentIntentResult = await stripe.setupIntents.retrieve(
             //     paymentIntent
             // );
-            console.log("TYPE", type);
 
             if (type === 'useSetup') {
                 console.log("paymentIntent", paymentIntent);
@@ -1434,8 +1420,6 @@ console.log(_user);
      * @returns {Promise<{user: (*|null)}|{error: {code: number, message: string}, user: null}>}
      */
     async syncFb(userData, data) {
-        console.log('UserData', userData);
-        console.log('data', data);
         const client = await pool.connect();
         const query = `UPDATE data.users SET
                         auth_provider_name='facebook', auth_provider_id='${data.userID}',
@@ -1456,7 +1440,6 @@ console.log(_user);
                         } else {
                             const storesList = responsePages.data;
                             // getting picture for store
-                            console.log(storesList);
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
                                 const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
@@ -1760,7 +1743,6 @@ console.log(_user);
                     name: `${user.first_name} ${user.last_name}`
                 });
                 customerId = customer.id;
-                console.log("!!!!!", customerId);
                 // const queryUpdSubscr = `UPDATE data.subscriptions SET customer_id='${customerId}' WHERE user_id=${user.id};`;
                 // const resUpd = await client.query(`UPDATE data.subscriptions SET customer_id='${customerId}' WHERE user_id=${user.id};`);
                 // const resUpd = await client.query(`DELETE FROM data.subscriptions WHERE user_id=${user.id};`);

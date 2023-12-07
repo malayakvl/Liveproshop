@@ -23,11 +23,26 @@ const OrderSummary = () => {
     const order = useSelector(orderCheckoutSelector) || {};
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
-
     const selectedShippingMethod = useMemo(
         () => shippingMethods?.filter((item) => item.id === +shippingMethodId)[0],
         [shippingMethodId]
     );
+
+    const reaclculateTotal = (dataOrder: any) => {
+        let totalOrder = 0;
+        if (dataOrder.total_amount > 0) {
+            totalOrder += order.total_amount;
+        } else {
+            totalOrder += order.order_amount * 1.2;
+        }
+        // totalOrder = totalOrder.toFixed();
+        if (selectedShippingMethod?.price) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            totalOrder += parseInt(selectedShippingMethod.price);
+        }
+        return formatCurrency(totalOrder);
+    };
 
     return (
         <>
@@ -54,11 +69,13 @@ const OrderSummary = () => {
                         <span className="text-blue-350 text-sm">{product.product_id}</span>
                         <div className="text-gray-350 my-1 font-normal text-lg">{product.name}</div>
                         <div className="product-size">
-                            {product.color_name}, {product.size_name}
+                            {t('checkout_color')}:{' '}
+                            <span className="font-bold">{product.color_name}</span>,{' '}
+                            {t('checkout_size')}: {product.size_name}
                         </div>
                         {product.description && (
                             <div
-                                className="text-gray-350 font-normal text-sm"
+                                className="text-gray-350 font-normal text-sm hidden"
                                 dangerouslySetInnerHTML={{
                                     __html: `${product.description.substring(0, 250)} ...`
                                 }}
@@ -88,9 +105,12 @@ const OrderSummary = () => {
             )}
 
             <div className="flex justify-between my-6 py-6 text-gray-350 text-2xl text-right border-t border-gray-200">
-                Order total:
+                {t('Order total')}:
                 <span className="inline-block ml-4 font-bold min-w-[5rem]">
-                    {formatCurrency(+order.total_amount)}
+                    {reaclculateTotal(order)}
+                    {/*{formatCurrency(*/}
+                    {/*    +(order.total_amount ? order.total_amount : (order.order_amount * 1.2 + (selectedShippingMethod?.price ? selectedShippingMethod?.price : 0)))*/}
+                    {/*)}*/}
                 </span>
             </div>
 
@@ -126,9 +146,15 @@ const OrderSummary = () => {
                 type="submit"
                 disabled={order.status === OrderStatus.PAYED}
                 className="uppercase my-4 gradient-btn w-full">
-                {order.status === OrderStatus.PAYED
-                    ? t('payed').toLocaleUpperCase() + ' ' + formatCurrency(+order.total_amount)
-                    : t('Pay') + ' ' + formatCurrency(+order.total_amount)}
+                {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
+                {reaclculateTotal(order)}
+                {/*{order.status === OrderStatus.PAYED*/}
+                {/*    ? t('payed').toLocaleUpperCase() +*/}
+                {/*      ' ' +*/}
+                {/*      formatCurrency(*/}
+                {/*          +order.total_amount ? order.total_amount : order.order_amount * 1.2*/}
+                {/*      )*/}
+                {/*    : t('Pay') + ' ' + { reaclculateTotal(order) }}*/}
             </button>
         </>
     );

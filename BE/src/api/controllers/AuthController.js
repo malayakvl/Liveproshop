@@ -95,9 +95,7 @@ class AuthController {
     }
 
     async authRegisterSubscriptionLogin(req, res) {
-        console.log("HEEEEEEEEEE", req.body);
         const user = await userModel.findUserByEmail(req.body.email);
-        console.log(user);
         if (user.subscription_id === req.body.subscriptionId) {
             console.log("EBUCHAYA GADINA");
         }
@@ -222,7 +220,6 @@ class AuthController {
             await invitationModel.delete(invitation.id)
 
         }
-console.log("INVITATION CREATE");
         invitation = await invitationModel.create(data);
 
 

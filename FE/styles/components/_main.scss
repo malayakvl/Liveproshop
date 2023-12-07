@@ -396,3 +396,10 @@
 .product-photo {
   @apply object-cover h-[90px] w-[60px] border;
 }
+
+.connect-page-status {
+  background-image: url(../../public/images/main/clock-3d.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  @apply min-h-[400px]
+}

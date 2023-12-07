@@ -7,6 +7,6 @@ export const OrderStatus = {
 
 export const UserRole = {
     ADMIN: 3,
-    CUSTOMER: 1,
-    BUYER: 2
+    CUSTOMER: 2,
+    BUYER: 1
 }

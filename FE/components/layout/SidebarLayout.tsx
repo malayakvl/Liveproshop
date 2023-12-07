@@ -21,8 +21,6 @@ export default function SidebarLayout({ children }: { children: any }) {
                 Router.push(`/pricing`);
             }
         }
-        console.log('USER', user);
-        console.log('CommentId', window.localStorage.getItem('orderCommentId'));
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             dispatch(
                 findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)

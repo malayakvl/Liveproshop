@@ -81,7 +81,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                 </td>
                                 <td>
                                     <div className="text-right">
-                                        {formatCurrency(item.total_amount)}
+                                        {formatCurrency(item.total_amount ?item.total_amount : item.order_amount )}
                                     </div>
                                 </td>
                             </tr>

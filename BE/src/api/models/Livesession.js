@@ -179,7 +179,6 @@ class Livesession {
                     auth_provider_expiration_time,
                     auth_provider_expires_in
                 FROM data.get_live_sessions_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().format('HH:mm:ss')}');`;
-        console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
@@ -222,11 +221,9 @@ class Livesession {
                     auth_provider_expiration_time,
                     auth_provider_expires_in
                 FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
-        console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
-            console.log(result);
             return {
                 result
             };
@@ -454,7 +451,6 @@ class Livesession {
             }
             
             const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
-            console.log(productQuery)
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -525,7 +521,6 @@ class Livesession {
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
-        console.log(settings.rows[0])
         let intervalDuration;
         const timeValue = settings.rows[0].order_timer.hours ? settings.rows[0].order_timer.hours: settings.rows[0].order_timer.days;
         const type = settings.rows[0].order_timer.hours ? 'h': 'd';
@@ -539,7 +534,6 @@ class Livesession {
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
                     '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
                 );`;
-        console.log(query);
         try {
             await client.query(query);
             return { success: true };
