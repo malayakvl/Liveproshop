@@ -71,7 +71,8 @@ const OrderSummary = () => {
                         <div className="product-size">
                             {t('checkout_color')}:{' '}
                             <span className="font-bold">{product.color_name}</span>,{' '}
-                            {t('checkout_size')}: {product.size_name}
+                            {t('checkout_size')}:{' '}
+                            <span className="font-bold">{product.size_name}</span>
                         </div>
                         {product.description && (
                             <div

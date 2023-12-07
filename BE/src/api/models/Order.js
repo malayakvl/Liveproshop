@@ -448,7 +448,7 @@ class Order {
                 case UserRole.BUYER:
                     _filters.buyer_id = [user.id];
             }
-
+console.log(user.role_id, );
             if (_filters.status?.length === 0) {
                 if (user.role_id === UserRole.BUYER) {
                     _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW];
@@ -458,7 +458,7 @@ class Order {
             }
 
             // _filters.buyer_id = _filters.shopper_id;
-
+console.log(_filters);
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
@@ -474,6 +474,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -800,9 +801,10 @@ class Order {
         const client = await pool.connect();
         try {
             const SQL = `SELECT order_id FROM data.order_items WHERE message_id='${commentId}'`;
-
+            console.log(SQL);
             const res = await client.query(SQL);
             const orderSQL = `UPDATE data.orders SET user_id='${userId}' WHERE id='${res.rows[0].order_id}'`;
+            console.log(orderSQL);
             await client.query(orderSQL);
             return {success: true, orderId: res.rows[0].order_id};
         } catch (e) {
