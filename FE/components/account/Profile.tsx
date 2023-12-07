@@ -81,6 +81,12 @@ function Profile() {
                 .email(t('Must be a valid email'))
                 .strict(true)
                 .required(t('You must enter your email')),
+            email_real: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .min(3, t('Must be at least 3 characters'))
+                .email(t('Must be a valid email'))
+                .strict(true)
+                .required(t('You must enter your email')),
             last_name: Yup.string()
                 .strict(true)
                 .trim(t('Cannot include leading and trailing spaces'))
@@ -132,7 +138,7 @@ function Profile() {
         });
     }
 
-    console.log(user.email);
+    console.log(user.email_real);
 
     return (
         <Formik
@@ -204,7 +210,7 @@ function Profile() {
                         {user.role_id == 1 && (
                             <>
                                 <InputText
-                                    disabled={validateEmail(props.values['email'])}
+                                    disabled={true}
                                     icon={'f-facebook'}
                                     label={null}
                                     name={'email'}

@@ -18,6 +18,7 @@ declare namespace User {
         role_id: number;
         subscription_expired: boolean;
         email: string;
+        email_real: string;
         photo: string | null;
         first_name: string | null;
         last_name: string | null;

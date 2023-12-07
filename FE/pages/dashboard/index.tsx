@@ -70,7 +70,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     }, [state, user]);
 
-    // console.log(user.email);
+    console.log(user);
 
     return (
         <>

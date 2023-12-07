@@ -110,8 +110,8 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
         .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 30)
-        .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
-        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 60)
+        // .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
+        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 45)
         // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
         // .text(
         //     invoice.shipping.city +
