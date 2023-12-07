@@ -851,7 +851,6 @@ class Order {
                 // delete unused order
                 await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
             } else {
-                console.log("AAAAA");
                 const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
                     total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                 await client.query(orderSQL);
