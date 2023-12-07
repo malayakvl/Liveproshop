@@ -448,7 +448,6 @@ class Order {
                 case UserRole.BUYER:
                     _filters.buyer_id = [user.id];
             }
-console.log(user.role_id, );
             if (_filters.status?.length === 0) {
                 if (user.role_id === UserRole.BUYER) {
                     _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW];
