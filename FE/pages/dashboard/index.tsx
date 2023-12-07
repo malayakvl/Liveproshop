@@ -70,6 +70,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     }, [state, user]);
 
+    // console.log(user.email);
+
     return (
         <>
             <Head>
@@ -160,7 +162,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                 </div>
             </div>
 
-            {(user.role_id !== 2) && (<div className="block-white-4 mr-10" onClick={reverseDatePopup}>   {/* eslint-disable-line */}
+            {(user.role_id !== 1) && (<div className="block-white-4 mr-10" onClick={reverseDatePopup}>   {/* eslint-disable-line */}
                     <div className="font-bold text-gray-350 text-base pb-4 mt-8 mb-2 border border-t-0 border-l-0 border-r-0">
                         {t('Clients')}{' '}
                         <span className="text-sm text-gray-180 font-normal">

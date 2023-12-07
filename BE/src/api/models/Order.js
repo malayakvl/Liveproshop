@@ -13,15 +13,16 @@ import * as zipLib from "zip-a-folder";
 
 async function createInvoice (invoice, path, locale) {
     try {
+
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        // console.log('generate header done');
-        // await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
-        // await generateInvoiceTable(doc, invoice, locale);
-        // await generateFooter(doc, locale);
-        //
-        // doc.end();
-        // doc.pipe(fs.createWriteStream(path));
+        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
+        console.log('generate customer information done');
+        await generateInvoiceTable(doc, invoice, locale);
+        await generateFooter(doc, locale);
+
+        doc.end();
+        doc.pipe(fs.createWriteStream(path));
 
         return {success: true}
     } catch (e) {
@@ -44,12 +45,23 @@ async function generateHeader(doc, seller, locale) {
     //     .text(t['address_line_3'], 300, 80, { align: "right" })
     //     // .text(seller.phone, 300, 95, { align: "right" })
     //     .moveDown();
+    // doc
+    //     .fillColor("#444444")
+    //     .fontSize(20)
+    //     .text("", 170, 0)
+    //     .fontSize(10)
+    //     .text(seller.address_line_1, 300, 50, { align: "right" })
+    //     .text(`${seller.phone}`, 300, 65, { align: "right" })
+    //     // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
+    //     .text(seller.company_name, 300, 80, { align: "right" })
+    //     // .text(seller.phone, 300, 95, { align: "right" })
+    //     .moveDown();
     doc
         .fillColor("#444444")
         .fontSize(20)
         .text("", 170, 0)
         .fontSize(10)
-        .text(seller.address_line_1, 300, 50, { align: "right" })
+        .text(seller.full_address, 300, 50, { align: "right" })
         .text(`${seller.phone}`, 300, 65, { align: "right" })
         // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
         .text(seller.company_name, 300, 80, { align: "right" })
@@ -64,9 +76,21 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .text(invoice.status == 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
 
     generateHr(doc, 185);
-
     const customerInformationTop = 200;
+    let deliveryAddress = [];
+    deliveryAddress[0] = invoice.shipping.country ? invoice.shipping.country : '';
+    if (invoice.shipping.state) {
+        deliveryAddress[1] = invoice.shipping.state ? invoice.shipping.state : 'N/A';
+        deliveryAddress[2] = invoice.shipping.post_code;
+        deliveryAddress[3] = invoice.shipping.city;
+        deliveryAddress[4] = invoice.shipping.address;
+    } else {
+        deliveryAddress[1] = invoice.shipping.post_code;
+        deliveryAddress[2] = invoice.shipping.city;
+        deliveryAddress[3] = invoice.shipping.address;
 
+    }
+    console.log(invoice);
     doc
         .fontSize(10)
         .text(t["Invoice number:"], 50, customerInformationTop)
@@ -77,15 +101,15 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
         .text(t["Balance Due:"], 50, customerInformationTop + 30)
         .text(
-            formatCurrency(invoice.paid),
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
             150,
             customerInformationTop + 30
         )
         .font("Helvetica-Bold")
         .text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
-        .text(t["Delivery Address"]+invoice.shipping.address, 300, customerInformationTop + 15)
-        .text(t["Transaction ID"]+paymentData.payment_details.external_transaction_id, 300, customerInformationTop + 30)
+        .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
+        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 30)
         .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
         .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 60)
         // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
@@ -165,7 +189,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             vatToDatePosition,
             "",
             "",
-            t["VAT"],
+            "VAT",
             "",
             formatCurrency((invoice.subtotal*15/100))
         );
@@ -180,7 +204,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             "",
             t["Total Payment"],
             "",
-            formatCurrency(invoice.paid)
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal))
         );
         doc.font("Helvetica");
     }
@@ -457,7 +481,6 @@ class Order {
             }
 
             // _filters.buyer_id = _filters.shopper_id;
-console.log(_filters);
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
@@ -473,7 +496,6 @@ console.log(_filters);
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -620,6 +642,7 @@ console.log(ordersQuery);
                 // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 // fs.mkdirSync(dirArchiveFolder);
             }
+            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -643,36 +666,39 @@ console.log(ordersQuery);
                 }
             }
             if (res.rows.length > 0) {
-                // get seller information
+                // get buyer information
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
-                                                       WHERE user_id=${res.rows[0].seller_id}`);
-                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
-                // const multiSafePayClientRes = await axios
-                //     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
-                //         headers: { 'Content-Type': 'application/json' }
-                //     })
-                //     .then(async (resM) => {
-                //         return resM.data.data;
-                //     }).catch(error => {
-                //         console.log("Merchant error", error);
-                //     });
+                                                       WHERE user_id=${res.rows[0].buyer_id}`);
+                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+                const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+                const multiSafePayClientRes = await axios
+                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(async (resM) => {
+                        return resM.data.data;
+                    }).catch(error => {
+                        console.log("Merchant error", error);
+                    });
                 const buyerAddress = ''
                 // console.log('Buyer', res.rows[0]);
                 // const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                 //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                 //                                        WHERE user_id=${res.rows[0].seller_id}`);
+                const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 const invoice = {
                     shipping: {
                         name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
-                        city: res.rows[0].city+"1",
-                        post_code: res.rows[0].post_code+"1",
-                        phone: res.rows[0].phone+"1"
+                        city: res.rows[0].city,
+                        post_code: res.rows[0].post_code,
+                        phone: res.rows[0].phone,
+                        country: coutryRes.rows[0].nicename
                     },
                     seller: {
-                      data: addressRes.rows[0]
+                      data: sellerData.rows[0]
                     },
                     status: res.rows[0].status,
                     items: res.rows[0].order_items,
@@ -681,8 +707,8 @@ console.log(ordersQuery);
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
-                    // paymentDetails: multiSafePayClientRes
-                    paymentDetails: {}
+                    paymentDetails: multiSafePayClientRes
+                    // paymentDetails: {}
                 };
                 await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}_${locale}.pdf`, locale);
 
@@ -802,7 +828,7 @@ console.log(ordersQuery);
             const SQL = `SELECT order_id FROM data.order_items WHERE message_id='${commentId}'`;
             console.log(SQL);
             const res = await client.query(SQL);
-            const orderSQL = `UPDATE data.orders SET user_id='${userId}' WHERE id='${res.rows[0].order_id}'`;
+            const orderSQL = `UPDATE data.orders SET user_id='${userId}', total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
             console.log(orderSQL);
             await client.query(orderSQL);
             return {success: true, orderId: res.rows[0].order_id};

@@ -133,7 +133,6 @@ class OrderController {
 
     async findOrderByCommentId (req, res) {
         if (req.user) {
-            console.log(req.query.commentId, req.user.id)
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
         }
         // console.log(data.orderId);

@@ -132,6 +132,8 @@ function Profile() {
         });
     }
 
+    console.log(user.email);
+
     return (
         <Formik
             enableReinitialize
@@ -199,16 +201,30 @@ function Profile() {
                         </div>
                     </div>
                     <div className="float-left ml-[20px] min-w-[300px]">
-                        <InputText
-                            disabled={validateEmail(props.values['email'])}
-                            icon={'f-email'}
-                            label={null}
-                            name={'email'}
-                            placeholder={t('Email Address')}
-                            style={'lg:w-full'}
-                            props={props}
-                            tips={null}
-                        />
+                        {user.role_id == 1 && (
+                            <>
+                                <InputText
+                                    disabled={validateEmail(props.values['email'])}
+                                    icon={'f-facebook'}
+                                    label={null}
+                                    name={'email'}
+                                    placeholder={t('FB account ID')}
+                                    style={'lg:w-full'}
+                                    props={props}
+                                    tips={null}
+                                />
+                                <InputText
+                                    disabled={validateEmail(props.values['email'])}
+                                    icon={'f-email'}
+                                    label={null}
+                                    name={'email_real'}
+                                    placeholder={t('Email Address')}
+                                    style={'lg:w-full'}
+                                    props={props}
+                                    tips={null}
+                                />
+                            </>
+                        )}
 
                         <InputText
                             icon={'f-fname'}
