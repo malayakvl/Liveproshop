@@ -822,15 +822,106 @@ class Order {
         }
     }
 
+
+    async removeOrderItem (orderItemId) {
+        const client = await pool.connect();
+        try {
+            const itemRow = await client.query(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
+            console.log(`UPDATE data.orders SET 
+                order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
+                total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
+                WHERE id=${itemRow.rows[0].order_id}`);
+            await client.query(`UPDATE data.orders SET 
+                order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
+                total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
+                WHERE id=${itemRow.rows[0].order_id}`);
+            const SQL = await client.query(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            const SQL = `SELECT order_id FROM data.order_items WHERE message_id='${commentId}'`;
+            const SQL = `SELECT order_id, data.orders.live_sessions_id, order_amount, total_amount, quantity
+                FROM data.order_items 
+                LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
+                WHERE message_id='${commentId}'`;
             console.log(SQL);
             const res = await client.query(SQL);
-            const orderSQL = `UPDATE data.orders SET user_id='${userId}', total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
-            console.log(orderSQL);
-            await client.query(orderSQL);
+            console.log("1", res.rows[0].order_id);
+            console.log(`SELECT id FROM data.orders WHERE user_id='${userId}' 
+                AND status='new' AND id != '${res.rows[0].order_id}' 
+                AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
+            const existNonPayedOrder = await client.query(
+                `SELECT id FROM data.orders WHERE user_id='${userId}'
+                AND status='new' AND id != '${res.rows[0].order_id}'
+                AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
+            if (existNonPayedOrder.rows[0]?.id) {
+                // before add new items check if this item already aexist in order, if yes only change quantity
+                const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}'`;
+                await client.query(updateExistItemsSQL);
+                // update amounts for order splited order
+                const updateAmountSQL = `UPDATE data.orders 
+                    SET order_amount = order_amount + ${res.rows[0].order_amount},
+                    total_amount = total_amount +  ${res.rows[0].total_amount}
+                    WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                await client.query(updateAmountSQL);
+                // delete unused order
+                await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
+
+                // combined same rows in order_items
+                const combinedSQL = await client.query(`
+                    SELECT product_configuration_id, SUM(quantity) AS resultsQty
+                    FROM data.order_items
+                    WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                    GROUP BY product_configuration_id`);
+                const realOrderItems = await client.query(`SELECT id 
+                    FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
+                // need to combine two rows into one
+                if (combinedSQL.rows.length < realOrderItems.rows.length) {
+                    const combinedData = [];
+                    combinedSQL.rows.forEach(_item => {
+                        combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
+                    })
+                    const _dataResCombine = await client.query(`SELECT product_configuration_id, 
+                        SUM(quantity) AS resultsQty, array_agg(id) as products
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id;`)
+                    _dataResCombine.rows.forEach(_row => {
+                        if (_row.products.length > 1) {
+                            _row.products.forEach(async (_itemId, _key) => {
+                                console.log(_key)
+                                if (_key > 0) {
+                                    await client.query(`DELETE FROM data.order_items WHERE id='${_itemId}'`);
+                                }
+                            })
+                        }
+                    });
+                    // update quantity for order items row
+                    combinedData.forEach(async (_item) => {
+                        await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
+                        WHERE product_configuration_id='${_item.config_id}'`)
+                    });
+                }
+            } else {
+                const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
+                    total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+                await client.query(orderSQL);
+            }
             return {success: true, orderId: res.rows[0].order_id};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

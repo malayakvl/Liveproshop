@@ -395,6 +395,10 @@
 
 .product-photo {
   @apply object-cover h-[90px] w-[60px] border;
+  border-radius: 10px;
+  border: solid 1px;
+  padding: 7px;
+  border-color: #E2E4E9;
 }
 
 .connect-page-status {

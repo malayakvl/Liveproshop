@@ -9,7 +9,6 @@ class DashboardController {
      */
     async fetchItems(req, res) {
         const { limit, offset, queryFilter, column, sort } = req.query;
-        console.log('here we are');
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {

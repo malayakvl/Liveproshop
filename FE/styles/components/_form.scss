@@ -334,3 +334,43 @@ input:checked + .toggle-bg {
 .credit-card-account {
   max-width: 375px;
 }
+
+.delete-item-card {
+  background-image: url(../../public/images/card/delete.svg);
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 24px;
+  display: inline-block;
+}
+
+.product-qty-input {
+  width: 40px;
+  height: 40px;
+  border: solid 1px #E2E4E9;
+  padding:5px;
+  border-radius: 5px;
+  display: inline-block;
+  text-align: center;
+}
+
+.qty-minus {
+  background-image: url(../../public/images/card/minus.svg);
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 24px;
+  display: inline-block;
+  position: absolute;
+  top: -16px;
+  left: -33px;
+}
+
+.card-icon-white {
+  background-image: url(../../public/images/card/card.svg);
+  background-repeat: no-repeat;
+  width: 31px;
+  height: 24px;
+  display: inline-block;
+  position: absolute;
+  top: -16px;
+  left: -41px;
+}
