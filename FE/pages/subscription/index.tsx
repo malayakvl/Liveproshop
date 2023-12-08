@@ -6,6 +6,7 @@ import {
     userSubscriptionSelector,
     clientSecretSelector
 } from '../../redux/user/selectors';
+import { itemsSelector } from '../../redux/paymentPlans/selectors';
 import { getSession } from 'next-auth/client';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
@@ -19,11 +20,11 @@ import { formatCurrency } from '../../lib/functions';
 import { createExistUserSubscriptionAction } from '../../redux/user';
 import Router, { useRouter } from 'next/router';
 import getConfig from 'next/config';
+import { showLoaderAction } from '../../redux/layouts/actions';
 const { publicRuntimeConfig } = getConfig();
 const stripeKey = publicRuntimeConfig.stripeKey;
 
 const stripePromise = loadStripe(stripeKey);
-
 export default function Subscription({
     locale,
     planId,
@@ -38,22 +39,25 @@ export default function Subscription({
     const { query } = useRouter();
 
     const user = useSelector(userSelector);
-
     const stripeClientSecret = useSelector(clientSecretSelector);
     const subscription = useSelector(userSubscriptionSelector);
     const planInfo = useSelector(planInfoSelector);
+    const plans = useSelector(itemsSelector);
 
     const [clientSecret, setClientSecret] = useState('');
 
     useEffect(() => {
+        dispatch(showLoaderAction(true));
         if (!stripeClientSecret) {
             dispatch(paymentPlanInfoAction(planId));
+            dispatch(showLoaderAction(true));
         }
         // Create PaymentIntent and Plan Price as soon as the page loads
     }, []);
 
     useEffect(() => {
         // Create PaymentIntent and Plan Price as soon as the page loads
+        dispatch(paymentPlanInfoAction(planId));
         if (user.email && !stripeClientSecret) {
             dispatch(createExistUserSubscriptionAction(user, planId, query.type));
         }
@@ -100,7 +104,7 @@ export default function Subscription({
                                             {t('Selected plan Price')}:{' '}
                                             {formatCurrency(planInfo.stripeInfo.unit_amount / 100)}
                                         </span>
-                                        <span className="block mt-2 mb-4">{t('trial_notice')}</span>
+                                        {/*<span className="block mt-2 mb-4">{t('trial_notice')}</span>*/}
                                     </>
                                 )}
                                 {query.type === 'trial' && (

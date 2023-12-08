@@ -6,6 +6,7 @@ export { default as FilterStatus } from './filters/FilterStatus';
 export { default as FilterPayment } from './filters/FilterPayment';
 export { default as FilterAmount } from './filters/FilterAmount';
 export { default as FilterCountry } from './filters/FilterCountry';
+export { default as FilterShoppers } from './filters/FilterShoppers';
 export { default as FilterDelivery } from './filters/FilterDelivery';
 export { default as FilterNumber } from './filters/FilterNumber';
 export { default as FilterDate } from './filters/FilterDate';

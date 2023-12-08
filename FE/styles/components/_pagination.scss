@@ -67,3 +67,20 @@
 .pagination-total {
   @apply text-xs font-bold flex text-gray-180  items-center;
 }
+
+//curl -i -X POST "https://graph.facebook.com/LATEST-API-VERSION/PAGE-ID/messages
+//?recipient={'id':'2763630843946760'}
+//&messaging_type=RESPONSE
+//&message={'text':'hello,message'}
+//&access_token=EAArS9KI0vagBOZBAKdMFzvyURIfmzV2bL0crZC7T1C62vYLTBXH0i21WuZBHEblVTAyYAWtGaOWiphzebuRUnGqTRutslw4fE32G6XW5XVgRf1O8HKnFIwG6NcNbt9l9ZAo9ZBRK8uRZAclwm5EZCKlmyoqyCwZCGPei9G1sAFTKlBWeLbk1Eg1j77CB9lFsAXJczDcKXU3qwaFOrD4BZAdStfqYZD
+//
+//
+//curl -X POST -H "Content-Type: application/json" -d '{
+//"recipient":{
+//           "id":"2763630843946760"
+//           },
+//"messaging_type": "RESPONSE",
+//"message":{
+//         "text":"Hello, API messages!"
+//         }
+//}' "https://graph.facebook.com/v17.0/121167871079469/messages?access_token=EAArS9KI0vagBOZCAvaNYuej5VbioW05JZByTdRLQgt32ZCTDR0Hw7GuvdPMHdvowZCaPLp4YzfNbKiGhVTZBkBHkfmYy3eDwDxiX15rpifin7yQt9Jqm2ZAFlLRhxoL7cw8ElvJ5VJDRbo2zAwhf9iN19lCwZCin7OPZAhm8mrgBaJEgdjHpGaZCYfwHZCgqiNoa0w6WCQFInbpo071AFJnpAPrRkZD"

@@ -9,6 +9,7 @@
     border: 0.15em solid #00c868;
     border-radius: 4px;
     transform: translateY(-0.075em);
+    margin-left: 4px;
   }
 
   .copied-row {
@@ -16,6 +17,7 @@
   }
 
   th {
+    //@apply px-3 py-3 text-xs pr-[55px] font-bold leading-4 tracking-wider text-blue-350 align-top relative;
     @apply px-3 py-3 text-xs font-bold leading-4 tracking-wider text-blue-350 align-top relative;
 
     .toggle-bg {
@@ -40,7 +42,14 @@
     }
   }
   th.actions {
-    @apply text-right;
+    @apply text-right w-[100px] justify-center;
+    max-width: 100px;
+
+    div {
+      justify-content: center;
+      margin-left: 22px;
+      //border: solid 1px;
+    }
   }
   td {
     @apply md:min-w-0 px-3 py-1 text-sm font-bold text-left text-gray-350 align-top;
@@ -101,6 +110,7 @@
   font-size: 16px !important;
   font-weight: bold !important;
   color: #4f5b84 !important;
+  //padding-left: 30px !important;
 }
 
 .inventory-color {
@@ -227,6 +237,9 @@ span.scheduled {
 span.active-subscription {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;
 }
+span.trial-subscription {
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-blue-600 bg-blue-100 border-blue-600;
+}
 
 span.new {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
@@ -246,8 +259,25 @@ span.canceled {
   @apply md:mr-1.5;
 }
 .ids {
-  @apply flex w-[30px];
+  @apply flex w-[30px] ml-[4px];
 }
 .sortable-block {
-  @apply float-right ml-8 min-w-[15px];
+  @apply min-w-[15px] left-[-40px];
+}
+
+.scroll-horizontal {
+  overflow-x: scroll !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sortable-icon-block {
+  float:left;
+  width: 55px;
+  background: pink;
+  padding-right: 20px;
+}
+.head-row-title {
+  float: left;
+  background: yellow;
+  //padding-left: 55px;
 }

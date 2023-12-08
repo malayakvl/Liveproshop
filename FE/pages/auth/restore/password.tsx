@@ -39,8 +39,8 @@ export default function Password({ hash, locale }: { hash: string; locale: strin
                 <title>LiveProshop - Restore Password</title>
             </Head>
 
-            <div className="flex justify-center">
-                <div className="rounded-lg border shadow-xl mt-10 bg-white w-96 p-10 pb-16">
+            <div className="flex main-bg justify-center">
+                <div className="rounded-lg colored-shadow mt-10 bg-white w-96 p-10 pb-16">
                     <div className="flex">
                         <div className="font-bold text-3xl line-height-105percent mb-2">
                             Restore Password

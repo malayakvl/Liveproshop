@@ -5,6 +5,9 @@ import { useFormikContext, Field } from 'formik';
 import { shippingMethodsCheckoutSelector } from '../../redux/checkout/selectors';
 import { Radio } from './';
 import { formatCurrency } from '../../lib/functions';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = `${publicRuntimeConfig.apiUrl}/`;
 
 const ShippingMethod = ({ title, className }: { title: string; className: string }) => {
     const { setFieldValue }: any = useFormikContext();
@@ -28,7 +31,7 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
                         value={String(shippingMethod.id)}
                         title={formatCurrency(shippingMethod.price)}
                         text={shippingMethod.name}
-                        img={shippingMethod.image}
+                        img={baseUrl + shippingMethod.image}
                         component={Radio}
                     />
                 ))}

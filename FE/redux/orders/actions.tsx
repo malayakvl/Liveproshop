@@ -48,6 +48,10 @@ export const fetchItemsAction: any = createAction(
             )(state);
             const queryFilter = JSON.stringify(filters);
             dispatch(showLoaderAction(true));
+            let orderCommentId;
+            if (window.localStorage.getItem('order_comment_id')) {
+                orderCommentId = window.localStorage.getItem('order_comment_id');
+            }
             return axios
                 .get(
                     `${baseUrl}/orders/fetch-items?${queryString.stringify({
@@ -56,7 +60,8 @@ export const fetchItemsAction: any = createAction(
                         sort,
                         column,
                         query,
-                        queryFilter
+                        queryFilter,
+                        orderCommentId
                     })}`,
                     {
                         headers: {
@@ -128,10 +133,52 @@ export const bulkDownloadAction: any = createAction(
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
+            let countChecked = 0;
+            if (state.layouts.checkedIds.length == 0) {
+                dispatch(setErrorToastAction('Please select an order to be downloaded'));
+            }
+            state.layouts.checkedIds.forEach((id) => {
+                if (state.orders.items.find((data) => data.id === id.id)?.status != 'new') {
+                    countChecked++;
+                }
+            });
+            if (countChecked == 0) {
+                dispatch(setErrorToastAction('Please select an order to be downloaded'));
+                dispatch(showLoaderAction(false));
+            } else {
+                return axios
+                    .post(
+                        `${baseUrl}/orders/bulk-download`,
+                        { data: JSON.stringify(state.layouts.checkedIds) },
+                        {
+                            headers: {
+                                ...authHeader(state.user.user.email)
+                            }
+                        }
+                    )
+                    .then(async (result) => {
+                        dispatch(setAchiveNameAction(result.data.achive));
+                        dispatch(showLoaderAction(false));
+                        dispatch(setSuccessToastAction('Orders has been downloaded'));
+                        dispatch(fetchItemsAction());
+                    })
+                    .catch((e) => {
+                        dispatch(setErrorToastAction(e.message));
+                        dispatch(showLoaderAction(false));
+                    });
+            }
+        }
+);
+export const singleDownloadAction: any = createAction(
+    'products/SINGLE_DOWNLOAD',
+    async (orderNumber: any, locale: string) =>
+        async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .post(
-                    `${baseUrl}/orders/bulk-download`,
-                    { data: JSON.stringify(state.layouts.checkedIds) },
+                    `${baseUrl}/orders/single-download`,
+                    { data: { orderNumber: orderNumber, locale: locale } },
                     {
                         headers: {
                             ...authHeader(state.user.user.email)
@@ -139,10 +186,11 @@ export const bulkDownloadAction: any = createAction(
                     }
                 )
                 .then(async (result) => {
-                    dispatch(setAchiveNameAction(result.data.achive));
+                    console.log('Result', result);
+                    dispatch(setSingleFileNameAction(result.data.fileDownload));
                     dispatch(showLoaderAction(false));
                     dispatch(setSuccessToastAction('Orders has been downloaded'));
-                    dispatch(fetchItemsAction());
+                    // dispatch(fetchItemsAction());
                 })
                 .catch((e) => {
                     dispatch(setErrorToastAction(e.message));
@@ -243,7 +291,54 @@ export const findSellersAction: any = createAction(
                 .then((res: any) => res.data.result);
         }
 );
+export const connectOrderAction: any = createAction(
+    'orders/CONNECT_ORDER_ACTION',
+    async (query: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/connect-action?messageId=11111`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
+export const fetchUserOrderAction: any = createAction(
+    'order/FETCH_USER_ORDER',
+    async (email: string) => {
+        return axios
+            .get(
+                `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
+                    'user'
+                )}commentId=${window.localStorage.getItem('order_comment_id')}`,
+                {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                }
+            )
+            .then((res) => res.data.user)
+            .catch((e) => console.log(e.message));
+    }
+);
+export const findOrderByCommentAction: any = createAction(
+    'order/FETCH_USER_ORDER',
+    async (commentId: string, email: string) => {
+        return axios
+            .get(`${baseUrl}/orders/find-order-by-comment?commentId=${commentId}`,
+                {
+                headers: {
+                    ...authHeader(email)
+                }
+            })
+            .then((res) => res.data.orderId)
+            .catch((e) => console.log(e.message));
+    }
+);
 
+export const setFbCommentAction: any = createAction('orders/SET_FB_ORDER_COMMENT');
 export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
 export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP');
@@ -252,3 +347,5 @@ export const showCancelConfirmationModalAction: any = createAction(
     'orders/CANCEL_CONFIRMATION_ORDER'
 );
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
+export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');
+// export const connectOrderAction: any = createAction('orders/CONNECT_ORDER_ACTION');

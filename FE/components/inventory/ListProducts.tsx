@@ -126,13 +126,19 @@ const ListProducts: React.FC<any> = () => {
                         <tr
                             key={config.color_code}
                             className={i > 0 && !showMoreConfigs[productId] ? 'hidden' : ''}>
-                            <td style={{ textAlign: 'center', width: '25px' }}>
+                            <td style={{ textAlign: 'center', width: '25px', paddingLeft: '30px' }}>
                                 <div
                                     className="rounded-full w-3 h-3 inline-block mr-1"
                                     style={{ backgroundColor: `${config.color_code}` }}
                                 />
                             </td>
-                            <td style={{ padding: '0' }}>
+                            <td
+                                style={{
+                                    paddingTop: '0',
+                                    paddingLeft: '20px',
+                                    paddingRight: '0',
+                                    paddingBottom: '0'
+                                }}>
                                 <table className="w-full">
                                     <tbody>
                                         {config.configuration.map((_config: any) => (
@@ -143,7 +149,7 @@ const ListProducts: React.FC<any> = () => {
                                                 <td style={{ textAlign: 'center', width: '100px' }}>
                                                     {_config.quantity}
                                                 </td>
-                                                <td style={{ textAlign: 'right' }}>
+                                                <td style={{ textAlign: 'left' }}>
                                                     {formatCurrency(_config.price)}
                                                 </td>
                                             </tr>
@@ -222,7 +228,7 @@ const ListProducts: React.FC<any> = () => {
                             {/*        onClick={() => handleShowMore(item.id)}*/}
                             {/*    />*/}
                             {/*</td>*/}
-                            <td style={{ width: '150px' }}>
+                            <td style={{ maxWidth: '150px' }}>
                                 {item.previewphoto && (
                                     <img
                                         src={
@@ -231,7 +237,7 @@ const ListProducts: React.FC<any> = () => {
                                                 : `${baseApiUrl}/${item.previewphoto}`
                                         }
                                         alt=""
-                                        className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5"
+                                        className="product-photo"
                                     />
                                 )}
                                 {!item.previewphoto && (
@@ -251,11 +257,16 @@ const ListProducts: React.FC<any> = () => {
                                 <br />
                                 {item.description && (
                                     <div
-                                        className="text-blue-350 mt-4 block font-normal text-sm"
-                                        dangerouslySetInnerHTML={{
-                                            __html: `${item.description.substring(0, 250)} ...`
-                                        }}
-                                    />
+                                        className={`${
+                                            !showMoreConfigs[item.id] ? 'hidden' : 'block'
+                                        }`}>
+                                        <div
+                                            className="text-blue-350 mt-4 block font-normal text-sm"
+                                            dangerouslySetInnerHTML={{
+                                                __html: `${item.description.substring(0, 250)} ...`
+                                            }}
+                                        />{' '}
+                                    </div>
                                 )}
                             </td>
                             <td className="w-[300px]" colSpan={4} style={{ padding: '0' }}>

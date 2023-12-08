@@ -8,10 +8,13 @@ class OrderController {
      * @returns {Promise<*>}
      */
     async fetchItems(req, res) {
-        const { limit, offset, queryFilter, column, sort } = req.query;
+        const { limit, offset, queryFilter, column, sort, orderCommentId } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
+            // if (orderCommentId) {
+            //     await orderModel.updateOrderByCommentId(orderCommentId, req.user.id);
+            // }
             const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
             return res.status(200).json({ count: data.size, items: data.items});
         }
@@ -78,6 +81,22 @@ class OrderController {
         return res.status(200).json({success: true, message: 'creating orders'});
     }
 
+    async checkOrderStatus (req, res) {
+        const data = await orderModel.checkOrderStatus(req.query.comment_id);
+        return res.status(200).json({success: true, data: data});
+    }
+
+    async fetchOrderByComment (req, res) {
+        // const data = await orderModel.checkOrderStatus(req.query.comment_id);
+        return res.status(200).json({success: true});
+    }
+
+    async getOrderQuantity(req, res) {
+        const resQuery = await orderModel.getProductQty(req.query.product_id, req.query.product_configuration_id);
+        const productQuant = resQuery.qty;
+        return res.status(200).json({success: true, qty: productQuant});
+    }
+
     async setupShipped (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -88,6 +107,7 @@ class OrderController {
             return res.status(200).json({ data: data.success });
         }
     }
+
 
     async bulkCancel (req, res) {
         if (!req.user) {
@@ -106,12 +126,21 @@ class OrderController {
         } else {
             const ids = [];
             JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-
             const data = await orderModel.bulkDownload(ids, req.user);
             return res.status(200).json({ data: data.success, achive: data.achive });
         }
     }
 
+    async findOrderByCommentId (req, res) {
+        if (req.user) {
+            const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
+        }
+        // console.log(data.orderId);
+        // console.log(data.userId);
+        // JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+        // const data = await orderModel.bulkDownload(ids, req.user);
+        return res.status(200).json({ success: true });
+    }
 }
 
 export default new OrderController();

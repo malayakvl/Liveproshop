@@ -5,7 +5,9 @@ import { useTranslations } from 'next-intl';
 import { useFormikContext, Field, ErrorMessage } from 'formik';
 import { formatCurrency } from '../../lib/functions';
 import { baseApiUrl, OrderStatus } from '../../constants';
-
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const siteUrl = publicRuntimeConfig.siteUrl;
 import {
     orderCheckoutSelector,
     shippingMethodsCheckoutSelector
@@ -21,11 +23,26 @@ const OrderSummary = () => {
     const order = useSelector(orderCheckoutSelector) || {};
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
-
     const selectedShippingMethod = useMemo(
         () => shippingMethods?.filter((item) => item.id === +shippingMethodId)[0],
         [shippingMethodId]
     );
+
+    const reaclculateTotal = (dataOrder: any) => {
+        let totalOrder = 0;
+        if (dataOrder.total_amount > 0) {
+            totalOrder += order.total_amount;
+        } else {
+            totalOrder += order.order_amount * 1.2;
+        }
+        // totalOrder = totalOrder.toFixed();
+        if (selectedShippingMethod?.price) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            totalOrder += parseInt(selectedShippingMethod.price);
+        }
+        return formatCurrency(totalOrder);
+    };
 
     return (
         <>
@@ -45,15 +62,21 @@ const OrderSummary = () => {
                                 : `${baseApiUrl}/${product.previewphoto}`
                         }
                         alt="Product preview"
-                        className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5 flex-none"
+                        className="product-photo"
                     />
                     <div className="flex-auto">
-                        <span className="text-gray-350 text-sm font-bold">Ref.</span>{' '}
+                        <span className="text-gray-350 text-sm font-bold">Ref. {product.sku}</span>{' '}
                         <span className="text-blue-350 text-sm">{product.product_id}</span>
                         <div className="text-gray-350 my-1 font-normal text-lg">{product.name}</div>
+                        <div className="product-size">
+                            {t('checkout_color')}:{' '}
+                            <span className="font-bold">{product.color_name}</span>,{' '}
+                            {t('checkout_size')}:{' '}
+                            <span className="font-bold">{product.size_name}</span>
+                        </div>
                         {product.description && (
                             <div
-                                className="text-gray-350 font-normal text-sm"
+                                className="text-gray-350 font-normal text-sm hidden"
                                 dangerouslySetInnerHTML={{
                                     __html: `${product.description.substring(0, 250)} ...`
                                 }}
@@ -83,9 +106,12 @@ const OrderSummary = () => {
             )}
 
             <div className="flex justify-between my-6 py-6 text-gray-350 text-2xl text-right border-t border-gray-200">
-                Order total:
+                {t('Order total')}:
                 <span className="inline-block ml-4 font-bold min-w-[5rem]">
-                    {formatCurrency(+order.total_amount)}
+                    {reaclculateTotal(order)}
+                    {/*{formatCurrency(*/}
+                    {/*    +(order.total_amount ? order.total_amount : (order.order_amount * 1.2 + (selectedShippingMethod?.price ? selectedShippingMethod?.price : 0)))*/}
+                    {/*)}*/}
                 </span>
             </div>
 
@@ -97,7 +123,23 @@ const OrderSummary = () => {
                     className="focus:ring-indigo-500 h-5 w-5 text-indigo-600 border-gray-300 rounded"
                 />
                 <label htmlFor="isAgreeTerms" className="ml-3 text-sm font-medium text-gray-700">
-                    I’ve read and agree with the Terms of Service and Privacy Terms.
+                    I’ve read and agree with the{' '}
+                    <a
+                        href={`${siteUrl}/terms-and-conditions`}
+                        target="_blank"
+                        className="red-yellow-gradient-text"
+                        rel="noreferrer">
+                        Terms of Service
+                    </a>{' '}
+                    and{' '}
+                    <a
+                        className="red-yellow-gradient-text"
+                        href={`${siteUrl}/privacy`}
+                        target="_blank"
+                        rel="noreferrer">
+                        Privacy Terms
+                    </a>
+                    .
                 </label>
                 <ErrorMessage name="isAgreeTerms" component="div" className="error-el" />
             </div>
@@ -105,9 +147,15 @@ const OrderSummary = () => {
                 type="submit"
                 disabled={order.status === OrderStatus.PAYED}
                 className="uppercase my-4 gradient-btn w-full">
-                {order.status === OrderStatus.PAYED
-                    ? t('payed').toLocaleUpperCase() + ' ' + formatCurrency(+order.total_amount)
-                    : t('Pay') + ' ' + formatCurrency(+order.total_amount)}
+                {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
+                {reaclculateTotal(order)}
+                {/*{order.status === OrderStatus.PAYED*/}
+                {/*    ? t('payed').toLocaleUpperCase() +*/}
+                {/*      ' ' +*/}
+                {/*      formatCurrency(*/}
+                {/*          +order.total_amount ? order.total_amount : order.order_amount * 1.2*/}
+                {/*      )*/}
+                {/*    : t('Pay') + ' ' + { reaclculateTotal(order) }}*/}
             </button>
         </>
     );

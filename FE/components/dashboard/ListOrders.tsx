@@ -16,7 +16,7 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
     const t = useTranslations();
 
     return (
-        <div className="overflow-x-scroll">
+        <div className="overflow-x-scroll scroll-horizontal">
             <table className="min-w-full float-table text-left">
                 <thead>
                     <tr>
@@ -81,7 +81,11 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                 </td>
                                 <td>
                                     <div className="text-right">
-                                        {formatCurrency(item.total_amount)}
+                                        {formatCurrency(
+                                            item.total_amount
+                                                ? item.total_amount
+                                                : item.order_amount
+                                        )}
                                     </div>
                                 </td>
                             </tr>

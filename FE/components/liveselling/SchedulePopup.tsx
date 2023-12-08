@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { toggleModalPopup } from '../../lib/functions';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { showPopupSelector } from '../../redux/livesessions/selectors';
+import { showPopupSelector, storeSelector } from '../../redux/livesessions/selectors';
 import { userSelector } from '../../redux/user/selectors';
-import { showPopupAction } from '../../redux/livesessions';
+import { setLiveSessionStoreAction, showPopupAction } from '../../redux/livesessions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'rc-slider/assets/index.css';
@@ -14,27 +14,82 @@ import * as Yup from 'yup';
 import { submitFormAction } from '../../redux/livesessions/actions';
 import InputMask from 'react-input-mask';
 import Link from 'next/link';
+import Select from 'react-select';
+import { fetchStoresAction } from '../../redux/mystores';
+import { paginatedStoresSelector } from '../../redux/mystores/selectors';
+// import { fetchStoresAction } from '../../redux/mystores';
+// import { paginatedStoresSelector } from '../../redux/mystores/selectors';
 
 const SchedulePopup: React.FC<any> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const showModal = useSelector(showPopupSelector);
-    // const {
-    //     plan_options: { feature_fb_schedule }
-    // } = useSelector(userSelector);
-
+    const selectedStoreId = useSelector(storeSelector);
+    const [selectedStore, setSelectedStore] = useState(null);
     const feature_fb_schedule = useSelector(userSelector)?.plan_options?.feature_fb_schedule;
+
+    console.log(useSelector(userSelector)?.plan_options);
 
     // const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(moment().format('HH:mm'));
+    const [listStores, setListStores] = useState([]);
+    const storeItems = useSelector(paginatedStoresSelector);
+
     // const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
 
     useEffect(() => {
         if (showModal) {
             toggleModalPopup('.modal-schedule');
+            dispatch(fetchStoresAction());
         }
     }, [dispatch, showModal]);
+
+    useEffect(() => {
+        const storeDropdown: { label: any; value: any }[] = [];
+        storeItems.forEach((store: any) => {
+            storeDropdown.push({ label: store.name, value: store.id });
+        });
+        if (selectedStoreId) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            setSelectedStore(storeDropdown.find((_store: any) => _store.value === selectedStoreId));
+        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setListStores(storeDropdown);
+    }, [storeItems, selectedStoreId]);
+
+    const handleChangeStore = (selectedOption: any) => {
+        setSelectedStore(selectedOption);
+        dispatch(setLiveSessionStoreAction(selectedOption.value));
+    };
+
+    // useEffect(() => {
+    //     if (selectedStoreId) {
+    //         setSelectedStore(storeItems.find((_store: any) => _store.value === selectedStoreId));
+    //     }
+    // }, [selectedStoreId, storeItems]);
+
+    useEffect(() => {
+        const storeDropdown: { label: any; value: any }[] = [];
+        storeItems.forEach((store: any) => {
+            storeDropdown.push({ label: store.name, value: store.id });
+        });
+        if (selectedStoreId) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            setSelectedStore(storeDropdown.find((_store: any) => _store.value === selectedStoreId));
+        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setListStores(storeDropdown);
+    }, [storeItems]);
+
+    // const handleChangeStore = (selectedOption: any) => {
+    //     setSelectedStore(selectedOption);
+    //     dispatch(setLiveSessionStoreAction(selectedOption.value));
+    // };
 
     // const updateScenarios = (id: number) => {
     //     const _scenarios = selectedScenarios;
@@ -61,7 +116,7 @@ const SchedulePopup: React.FC<any> = () => {
                     className="modal-content py-4 text-left px-6 overflow-auto"
                     style={{ maxHeight: '90vh' }}>
                     <div className="flex justify-between items-center pb-3">
-                        <p className="text-2xl font-bold">{t('New Live Session')}</p>
+                        <p className="text-2xl font-bold">{t('New Live Livesession')}</p>
                         <div
                             className="modal-close cursor-pointer z-50"
                             role="presentation"
@@ -76,9 +131,22 @@ const SchedulePopup: React.FC<any> = () => {
                             />
                         </div>
                     </div>
-
                     {/*Body*/}
                     <div>
+                        <div className="flex">
+                            <span className="block mb-3 text-sm">
+                                {t('Before scheduling a new session')},
+                                <br /> {t('please, fill in all settings')}&nbsp;
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    target="_blank"
+                                    href="javascript:;"
+                                    className="text-purple-250"
+                                    rel="noreferrer">
+                                    <Link href={'/settings'}>{t('here')}</Link>
+                                </a>
+                            </span>
+                        </div>
                         <div className="flex">
                             {feature_fb_schedule ? (
                                 <Formik
@@ -96,6 +164,7 @@ const SchedulePopup: React.FC<any> = () => {
                                         }
                                         sessionData.cart_duration = (values as any).cart_duration;
                                         sessionData.type = (values as any).type;
+                                        sessionData.storeId = selectedStoreId;
                                         dispatch(submitFormAction(sessionData));
                                         resetForm();
                                     }}>
@@ -103,6 +172,15 @@ const SchedulePopup: React.FC<any> = () => {
                                         return (
                                             <form onSubmit={props.handleSubmit}>
                                                 <div className="grid grid-cols-1">
+                                                    <div className="mb-3">
+                                                        <Select
+                                                            isClearable={true}
+                                                            className={'form-control-dropdown'}
+                                                            options={listStores}
+                                                            value={selectedStore}
+                                                            onChange={handleChangeStore}
+                                                        />
+                                                    </div>
                                                     <div>
                                                         <span className="block text-gray-350 text-[18px] font-bold mb-5">
                                                             Choose a date
@@ -157,7 +235,7 @@ const SchedulePopup: React.FC<any> = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex justify-center">
+                                                <div className="flex justify-end">
                                                     <button
                                                         type="button"
                                                         className="cancel mr-2.5"
@@ -179,7 +257,7 @@ const SchedulePopup: React.FC<any> = () => {
                             ) : (
                                 <div>
                                     <p className="mb-4">{t('liveselling_warning')}</p>
-                                    <Link href="/FE/DELETE/pricing">Pricing & Plans</Link>
+                                    <Link href="/pricing">Pricing & Plans</Link>
                                 </div>
                             )}
                         </div>

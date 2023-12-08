@@ -12,6 +12,9 @@ import {
 import { userSelector } from '../../redux/user/selectors';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { fetchShippingMethodsByCountryCheckoutAction } from '../../redux/checkout';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const baseUrl = `${publicRuntimeConfig.apiUrl}/`;
 
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { InputText } from '../_form';
@@ -46,7 +49,8 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
             props.values.state = order.state || props.values.state;
             props.values.post_code = order.post_code || props.values.post_code;
             props.values.city = order.city || props.values.city;
-            props.values.shipping_address = order.shipping_address || props.values.shipping_address;
+            const shippingAddress = order.shipping_address || props.values.shipping_address;
+            props.values.shipping_address = shippingAddress ? shippingAddress : '';
         }
     }, [order]);
 
@@ -63,10 +67,34 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
             props.values.country_id = props.values.country_id || address.country_id;
             props.values.post_code = props.values.post_code || address.post_code;
             props.values.state = props.values.state || address.state;
-            props.values.city = props.values.city || address.city;
-            props.values.shipping_address =
-                props.values.shipping_address ||
-                address.address_line_1 + ' ' + address.address_line_2;
+            props.values.city = props.values.city
+                ? props.values.city
+                : '' || address.city
+                ? address.city
+                : '';
+            let orderAddress = '';
+            if (props.values.shipping_address && props.values.shipping_address != 'undefined') {
+                orderAddress = props.values.shipping_address;
+            } else {
+                const tmpAddress = [];
+                address.address_line_1 ? tmpAddress.push(address.address_line_1) : '';
+                address.address_line_2 ? tmpAddress.push(address.address_line_2) : '';
+                if (tmpAddress.length > 0) {
+                    orderAddress = tmpAddress.join();
+                } else {
+                    orderAddress = '';
+                }
+            }
+            // orderAddress = props.values.shipping_address ? props.values.shipping_address :
+            //     address.address_line_1 ? address.address_line_1 + ' ' + address.address_line_2 : '';
+            // console.log(props.values.shipping_address, address.address_line_1);
+            props.values.shipping_address = orderAddress;
+            // props.values.shipping_address =
+            //     props.values.shipping_address || address.address_line_1
+            //         ? address.address_line_1
+            //         : '' + '' + address.address_line_2
+            //         ? address.address_line_2
+            //         : '';
         }
     }, [address]);
 

@@ -5,25 +5,37 @@ import { providers, getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Link from 'next/link';
 import * as Yup from 'yup';
-import { Field, Formik, ErrorMessage } from 'formik';
+import { Field, Formik, ErrorMessage, useFormikContext, useField, FormikProps } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { inviteUserAction } from '../../redux/user/actions';
+import { inviteUserAction, setOrderCommentAction } from '../../redux/user/actions';
 import { accountService } from '../../_services';
-import { hideRegisterFormSelector } from '../../redux/user/selectors';
+import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
+    // const {
+    //     values: { roleId }
+    // } = useFormikContext();
+    // const { setFieldValue } = useFormikContext();
     const hideFormSelector = useSelector(hideRegisterFormSelector);
+    const forFree = useSelector(userForFreeSelector);
     type FormData = {
         email: string;
         acceptTerms: boolean;
         role_id: '1' | '2';
+        forFree: any;
     };
+    console.log();
 
     const t = useTranslations();
     const [roleId, setRoleId] = useState(1);
     const [isFbClicked, setIsFbClicked] = useState(false);
     const [hideForm, setHideForm] = useState(false);
+    const [commentId, setCommentId] = useState('');
+    // const { values, submitForm } = useFormikContext();
+    // const { setFieldValue } = useFormikContext();
+    // const params = new URLSearchParams(window.location.pathname);
+    // console.log(window.location.pathname);
 
     const validationSchema = Yup.object().shape({
         email: !isFbClicked
@@ -36,10 +48,55 @@ export default function Signup({ locale }: { locale: string }) {
         setHideForm(hideFormSelector);
     }, [hideFormSelector]);
 
+    useEffect(() => {
+        const urlParams = window.location.search.substring(1);
+        const dataParams = urlParams.split('&');
+        const commentStr = dataParams[0].split('=');
+        // const commentId = commentStr[1];
+        setCommentId(commentStr[1]);
+        setRoleId(1);
+        // const { setFieldValue } = useFormikContext();
+        // console.log(FormikProps);
+        // setFieldValue(1);
+    }, [typeof window !== 'undefined']);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (typeof window !== 'undefined') {
+        // Client-side-only code
+        const urlParams = window.location.search.substring(1);
+        const dataParams = urlParams.split('&');
+        const commentStr = dataParams[0].split('=');
+        const parseCommentId = commentStr[1];
+        if (commentStr[0] == 'comment_id' && commentStr[1]) {
+            console.log(commentStr[1]);
+            dispatch(setOrderCommentAction(commentStr[1]));
+            window.localStorage.setItem('order_comment_id', commentStr[1]);
+        }
+    }
+
     const onSubmit = (values: FormData, actions: any) => {
         if (isFbClicked) {
-            accountService.registerFB(roleId);
+            let parseCommentId;
+            if (typeof window !== 'undefined') {
+                // Client-side-only code
+                const urlParams = window.location.search.substring(1);
+                const dataParams = urlParams.split('&');
+                const commentStr = dataParams[0].split('=');
+                const parseCommentId = commentStr[1];
+                // if (commentStr[0] == 'comment_id' && commentStr[1]) {
+                //     // setRoleId(1);
+                //     if (!commentId) {
+                //         setCommentId(commentStr[1]);
+                //     }
+                //     // setCommentId(commentStr[1]);
+                //     // setFieldValue('roleId', '1');
+                // }
+            }
+            accountService.registerFB(`${roleId}_${locale}_${forFree ? 1 : 0}_${parseCommentId}`);
         } else {
+            // setup value from selector
+            values['forFree'] = forFree;
             dispatch(inviteUserAction(values, locale));
             actions.resetForm();
         }
@@ -51,26 +108,34 @@ export default function Signup({ locale }: { locale: string }) {
                 <title>LiveProshop - Sign Up</title>
             </Head>
 
-            <div className="flex justify-center md:h-[620px]">
+            <div className="flex main-bg justify-center md:h-[620px]">
                 <Formik
                     enableReinitialize
-                    initialValues={{ email: '', acceptTerms: false, role_id: '2' }}
+                    initialValues={{
+                        email: '',
+                        acceptTerms: false,
+                        role_id: typeof window !== 'undefined' ? '1' : '2',
+                        forFree: false
+                    }}
                     validationSchema={validationSchema}
                     onSubmit={onSubmit}>
                     {(props) => (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="w-80 mb-5 p-8 flex-col w-full md:px-4 rounded-lg border shadow-xl mt-10 flex md:flex-row md:w-[900px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
-                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-10 md:w-2/4 md:flex md:flex-col md:justify-center">
-                                <div className="text-3xl md:text-5xl line-height-105percent mb-9 text-gray-600">
+                            className="w-80 mb-5 p-8 flex-col rounded-lg colored-shadow mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
+                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-8 md:w-2/4 md:flex md:flex-col md:justify-center">
+                                <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
 
                                 <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>
+                                <div className="mb-6 text-sm line-height-105percent text-gray-600 italic">
+                                    {t('You can cancel at any time before to avoid the charge')}
+                                </div>
 
-                                <div className="font-normal mb-6 text-blue-350">
+                                <div className="font-normal mb-6 text-blue-350 hidden">
                                     {t('registr_descr_small')}
                                 </div>
 
@@ -94,7 +159,7 @@ export default function Signup({ locale }: { locale: string }) {
                                                 </div>
                                                 <div className="text-gray-180 text-xs mb-2">
                                                     <Field
-                                                        onClick={() => setRoleId(2)}
+                                                        onClick={() => setRoleId(1)}
                                                         id="buyer-radio"
                                                         type="radio"
                                                         className="radio mr-2.5"
@@ -189,12 +254,21 @@ export default function Signup({ locale }: { locale: string }) {
                                                         className="text-xs font-medium">
                                                         {t('I have read and accept the')}{' '}
                                                         <span className="rainbow-gradient-text">
-                                                            <a
-                                                                href="https://www.liveproshop.com/terms-and-conditions"
-                                                                target="_blank"
-                                                                rel="noreferrer">
-                                                                {t('terms of use')}
-                                                            </a>
+                                                            <Link href={'/terms-and-conditions'}>
+                                                                <a
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                    className="rainbow-gradient-text">
+                                                                    {' '}
+                                                                    {t('terms of use')}
+                                                                </a>
+                                                            </Link>
+                                                            {/*<a*/}
+                                                            {/*    href="https://liveproshop.com/terms-and-conditions"*/}
+                                                            {/*    target="_blank"*/}
+                                                            {/*    rel="noreferrer">*/}
+                                                            {/*    {t('terms of use')}*/}
+                                                            {/*</a>*/}
                                                         </span>
                                                     </label>
                                                 </div>

@@ -3,9 +3,14 @@ declare namespace User {
         user: User;
         hideRegisterFrom: boolean;
         subscription: any;
+        paymentMethodsAllow: any;
         clientSecret: string;
         paymentIntent: any;
+        paymentMethodsNoSubscription: any;
         showChangeSubscription: boolean;
+        forFree: boolean | string;
+        redirectAfterSubscription: boolean;
+        commentId: string;
     }
 
     interface User {
@@ -13,6 +18,7 @@ declare namespace User {
         role_id: number;
         subscription_expired: boolean;
         email: string;
+        email_real: string;
         photo: string | null;
         first_name: string | null;
         last_name: string | null;
@@ -20,6 +26,7 @@ declare namespace User {
         full_address: string | null;
         identification_number: string | null;
         subscription_id: string | null;
+        subscription: any;
         vat: string | null;
         phone: string | null;
         status: string | null;
@@ -27,6 +34,7 @@ declare namespace User {
         updated_at: any;
         plan_id: number | null;
         is_trial: boolean;
+        customer_id: string | null;
         plan_options: {
             feature_fb: boolean;
             support_coach: boolean;

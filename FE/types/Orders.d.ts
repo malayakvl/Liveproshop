@@ -14,6 +14,8 @@ declare namespace Orders {
         tagSellersSuggestions: any[];
         showCancelPopup: boolean;
         achiveName: null | string;
+        downloadFileName: null | string;
+        commentIdOrder: null | any;
     }
 
     interface DataItem {

@@ -13,9 +13,17 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
     if (invitation.role_id === 1) {
         Form = <BuyerRegistration email={invitation.email} locale={locale} />;
     }
+    console.log(invitation);
 
     if (invitation.role_id === 2) {
-        Form = <SellerRegistration email={invitation.email} locale={locale} />;
+        Form = (
+            <SellerRegistration
+                email={invitation.email}
+                locale={locale}
+                forFree={invitation.is_free === true ? 0 : 0}
+                skip={invitation.is_skip === true ? 1 : null}
+            />
+        );
     }
 
     return (
@@ -24,7 +32,7 @@ function Registration({ locale, invitation }: { locale: string; invitation: any 
                 <title>LiveProshop - Registration</title>
             </Head>
 
-            <div className="flex justify-center">{Form}</div>
+            <div className="flex main-bg justify-center">{Form}</div>
         </>
     );
 }

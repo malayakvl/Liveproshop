@@ -1,0 +1,17 @@
+.privacy-text {
+  p {
+    @apply mb-2 block;
+  }
+
+  ul {
+    @apply mt-3 mb-3 list-disc;
+
+    li {
+      @apply mb-3 ml-5;
+    }
+  }
+
+  ol {
+    @apply list-decimal mt-4;
+  }
+}

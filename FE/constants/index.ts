@@ -14,7 +14,9 @@ export enum PaginationType {
     ORDERS = 'orders',
     WAITING = 'waiting',
     SELLERS = 'sellers',
-    DASHBOARD = 'dashboard'
+    DASHBOARD = 'dashboard',
+    MYSTORES = 'mystores',
+    USERSTORES = 'userstores'
 }
 
 export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } = {
@@ -26,6 +28,21 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, className: 'inventory-size' },
         { titleKey: null, className: 'inventory-qty' },
         { titleKey: 'Price', className: 'inventory-price' },
+        { titleKey: 'Actions', className: 'actions' }
+    ],
+    [PaginationType.MYSTORES]: [
+        { titleKey: null, className: 'option-switcher' },
+        { titleKey: 'Photo' },
+        { titleKey: 'Name' },
+        { titleKey: 'Followes Count' },
+        { titleKey: 'Sync' },
+        { titleKey: 'Actions', className: 'actions' }
+    ],
+    [PaginationType.USERSTORES]: [
+        { titleKey: 'Photo' },
+        { titleKey: 'Name' },
+        { titleKey: 'Followes Count' },
+        { titleKey: 'Sync' },
         { titleKey: 'Actions', className: 'actions' }
     ],
     [PaginationType.NOTIFICATIONS]: [],
@@ -79,13 +96,14 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { sortKey: 'orders.order_number', iconClass: 'icon-tbl-order' },
         { sortKey: 'orders.status', iconClass: 'icon-tbl-status' },
         { sortKey: 'orders.created_at', iconClass: 'icon-tbl-date' },
-        { sortKey: 'users__buyer.first_name', titleKey: 'Shopper', iconClass: 'icon-tbl-users' },
+        { sortKey: 'users__buyer.first_name', titleKey: 'Shoppers', iconClass: 'icon-tbl-users' },
         { sortKey: 'countries.iso', iconClass: 'icon-tbl-country' },
         // { sortKey: 'orders.shipping_id', iconClass: 'icon-tbl-sh-cart' },
         { sortKey: 'shipping.name', iconClass: 'icon-tbl-sh-cart' },
         { sortKey: 'payments.name', iconClass: 'icon-tbl-card' },
         { titleKey: 'Products' },
-        { sortKey: 'orders.order_amount', titleKey: 'Total' }
+        { iconClass: 'icon-tbl-total', sortKey: 'orders.order_amount', titleKey: 'Total' },
+        { titleKey: '' }
     ],
     [PaginationType.SELLERS]: [
         // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
@@ -100,7 +118,7 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
             titleKey: 'Live Sessions',
             sortKey: 'total_sessions'
         },
-        { sortKey: 'total_buyers', iconClass: 'icon-tbl-order', titleKey: 'Shoppers' },
+        { sortKey: 'total_buyers', iconClass: 'icon-tbl-order', titleKey: 'Sellers' },
         { sortKey: 'total_orders', iconClass: 'icon-tbl-order', titleKey: 'Orders' },
         { sortKey: 'total_amount', titleKey: 'Total Revenue' },
         {

@@ -1,0 +1,199 @@
+.message-sent,
+.message-received {
+  clear: both;
+}
+
+.message-sent::before,
+.message-received::before,
+.message-sent::after,
+.message-received::after {
+  content: '';
+  display: table;
+}
+
+header,
+section,
+footer {
+  padding: 2em;
+}
+
+.center {
+  max-width: 80em;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+[class^='grid-'] {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+[class^='grid-'] {
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+}
+
+.grid-message >[class^='col-'] {
+  margin-top: 1em;
+  margin-right: 1em;
+}
+
+.grid-message >[class^='col-']:nth-child(-n + 1) {
+  margin-top: 0;
+}
+
+.grid-message >[class^='col-']:nth-child(1n) {
+  margin-right: 0;
+}
+
+.col-message-sent {
+  margin-left: calc(8.33333333% + 0.08333333em) !important;
+}
+
+.col-message-received {
+  margin-right: calc(8.33333333% + 0.08333333em) !important;
+}
+
+.col-message-sent,
+.col-message-received {
+  width: calc(91.66666667% - 0.08235677em);
+}
+
+.message-sent,
+.message-received {
+  margin-top: 0.0625em;
+  margin-bottom: 0.0625em;
+  padding: 0.25em 1em;
+}
+
+.message-sent p,
+.message-received p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.message-sent {
+  float: right;
+  color: white;
+  background-color: dodgerblue;
+  border-radius: 1em 0.25em 0.25em 1em;
+}
+
+.message-sent:first-child {
+  border-radius: 1em 1em 0.25em 1em;
+}
+
+.message-sent:last-child {
+  border-radius: 1em 0.25em 1em 1em;
+}
+
+.message-sent:only-child {
+  border-radius: 1em;
+}
+
+.message-received {
+  float: left;
+  color: black;
+  background-color: lightgray;
+  border-radius: 0.25em 1em 1em 0.25em;
+}
+
+.message-received:first-child {
+  border-radius: 1em 1em 1em 0.25em;
+}
+
+.message-received:last-child {
+  border-radius: 0.25em 1em 1em 1em;
+}
+
+.message-received:only-child {
+  border-radius: 1em;
+}
+
+.message-box {
+  margin-top: 1em;
+  padding: 1em 0.5em;
+  border-top-width: 0.0625em;
+  border-style: solid;
+  border-color: lightgray;
+  color: darkgray;
+}
+
+.message-box p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.col-message-sent {
+  margin-top: 0.25em !important;
+}
+
+.col-message-received {
+  margin-top: 0.25em !important;
+}
+
+.message {
+  //min-height: 53.33203125em;
+  max-width: 30em;
+  /* !!!!!!!!!! COMMENT OUT THIS LINE TO MAKE IT FULL WIDTH !!!!!!!!!! */
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.message-comp {
+  position: absolute;
+  bottom: 70px;
+  right: -70px;
+  height: 560px;
+  width: 360px;
+  max-height: 560px;
+  overflow-y: scroll;
+  border-radius: 5px;
+  background: #fff;
+  border: solid 1px #fff;
+
+  @apply shadow-2xl;
+}
+
+.layout-fb {
+  background: url(../../public/images/messanger/bg.png);
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.message-who {
+  background: url(../../public/images/messanger/top.png);
+  width: 100%;
+  height: 70px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.message-send-field {
+  background: url(../../public/images/messanger/bottom.png);
+  width: 100%;
+  height: 70px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.live-pro {
+  background: url(../../public/images/messanger/lp.svg);
+  background-position: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  float:left;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: solid 1px gray;
+  position: absolute;
+  bottom: 0;
+}

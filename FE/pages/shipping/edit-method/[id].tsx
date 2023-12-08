@@ -108,7 +108,7 @@ export default function EditMethod() {
                                     <div>{t('Method image')}</div>
                                     <div className="mt-4">
                                         <Image
-                                            src={`${baseApiUrl}/${shipping.image}`}
+                                            src={`${baseApiUrl}${shipping.image}`}
                                             width={60}
                                             height={60}
                                         />

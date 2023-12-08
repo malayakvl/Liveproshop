@@ -12,7 +12,7 @@ import { countriesSelector } from '../../redux/countries/selectors';
 function Address({ locale, address }: { address: Profile.Address; locale: string }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-
+    // console.log('CURRENT LOCALE', locale);
     const countries = useSelector(countriesSelector);
     const addressTypeData = [
         { value: 'home address', label: t('home address') },
@@ -51,7 +51,6 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
         city: Yup.string().required(t('Required field')),
         address_line_1: Yup.string().required(t('Required field'))
     });
-
     return (
         <Formik
             enableReinitialize
@@ -64,11 +63,20 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
+                    <>
+                        {Object.values(props.errors).map((error) => (
+                            // eslint-disable-next-line react/jsx-key
+                            <div>{error}</div>
+                        ))}
+                    </>
                     <div className="mb-4 lg:w-1/4">
                         <Select
                             className={'form-control-dropdown'}
                             classNamePrefix={'inventory'}
-                            onChange={(value: any) => setSelectedCountry(value)}
+                            onChange={(value: any) => {
+                                props.values['country_id'] = value.value;
+                                setSelectedCountry(value);
+                            }}
                             placeholder={t('Country')}
                             name="country_id"
                             value={selectedCountry}

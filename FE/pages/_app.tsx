@@ -69,24 +69,16 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     <MainLayout>
                         <div id="fb-root" />
                         <Head>
-                            <title>LiveProshop</title>
+                            <title>Live Pro Shop</title>
+                            <link rel="icon" href="/images/logo-1.svg" />
                             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                             <script
                                 async
                                 defer
                                 crossOrigin="anonymous"
-                                src="https://connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v12.0&appId=3046697902325160&autoLogAppEvents=1"
-                                nonce="qpTXeSyr"
-                            />
-                            <link
-                                href="https://assets.calendly.com/assets/external/widget.css"
-                                rel="stylesheet"
-                            />
-                            <script
-                                src="https://assets.calendly.com/assets/external/widget.js"
-                                type="text/javascript"
-                                async
-                            />
+                                src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v17.0&appId=3046697902325160&autoLogAppEvents=1"
+                                nonce="GGVdSmMO"></script>
+                            <div id="fb-root"></div>
                         </Head>
                         <Layout>
                             <Toasts />

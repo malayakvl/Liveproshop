@@ -42,7 +42,7 @@ const ListItems: React.FC<any> = ({ items, orderId }) => {
                                                 : `${baseApiUrl}/${item.previewphoto}`
                                         }
                                         alt=""
-                                        className="object-scale-down h-[95px] w-[85px] rounded-lg border p-1.5"
+                                        className="product-photo"
                                     />
                                 )}
                                 {!item.previewphoto && (

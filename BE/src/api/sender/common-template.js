@@ -6,15 +6,13 @@ const translateDefault = {
   "Amadeo Proshop": "Live Pro Shop"
 };
 const frontUrl = process.env.APPLICATION_BASE_URL;
-const logoUrl = `${frontUrl}/images/logo.svg`;
-// console.log(frontUrl);
-// console.log(logoUrl);
+const logoUrl = `${frontUrl}/images/logo.png`;
 export const emailHtml = (translate = translateDefault, content = '') => `<!doctype html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>${translate["Amadeo Proshop"]}</title>
+    <title>${translate["Live Proshop"]}</title>
     <style>
       @media only screen and (max-width: 620px) {
         table[class=body] h1 {
@@ -109,7 +107,7 @@ export const emailHtml = (translate = translateDefault, content = '') => `<!doct
               <tr>
                 <td class="align-center" width="100%" style="font-family: sans-serif; font-size: 14px; vertical-align: top; text-align: center;" valign="top" align="center">
                   <a href="${frontUrl}" style="color: #ec0867; text-decoration: underline;">
-                    <img src="https://test.dev-tech.com.ua/images/logo.png" height="40" alt="${translate["Proshop"]}" style="border: none; -ms-interpolation-mode: bicubic; max-width: 100%;">
+                    <img src="https://liveproshop.com/images/logo.png" height="40" alt="${translate["Proshop"]}" style="border: none; -ms-interpolation-mode: bicubic; max-width: 100%;">
                   </a>
                 </td>
               </tr>

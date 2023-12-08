@@ -2,15 +2,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
-import { setModalCalendlyMetaAction } from '../../redux/layouts';
-import { useDispatch } from 'react-redux';
 
 export default function Footer() {
     const t = useTranslations();
-    const dispatch = useDispatch();
 
     return (
-        <footer className="w-full bg-blue-550 pt-[50px]">
+        <footer className="w-full bg-blue-550 pt-[30px]">
             <div className="container mx-auto">
                 <div className="px-4 pb-4 tracking-wide text-sm text-blue-350 flex h-full justify-between flex-col">
                     <div className="flex flex-col md:flex-row justify-between md:pb-4">
@@ -30,7 +27,7 @@ export default function Footer() {
                             <div className="mr-9">
                                 <div className="mb-2 font-bold text-white">{t('Get started')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/plans'}>{t('Pricing')}</Link>
+                                    <Link href={'/pricing'}>{t('Pricing')}</Link>
                                 </div>
                                 <div>
                                     <Link href={'/contact-us'}>{t('Contact Us')}</Link>
@@ -39,10 +36,15 @@ export default function Footer() {
                             <div>
                                 <div className="mb-2 font-bold text-white">{t('Resources')}</div>
                                 <div className="mb-0.5">
-                                    <Link href={'/customer-story'}>{t('Customer stories')}</Link>
+                                    <Link href={'/case-studies'}>{t('Case Studies')}</Link>
                                 </div>
                                 <div className="uppercase mb-0.5">
                                     <Link href={'/faq'}>{t('Faq')}</Link>
+                                </div>
+                                <div className="mb-0.5">
+                                    <Link href={'/full-guide/livesession'}>
+                                        {t('Knowlage Center')}
+                                    </Link>
                                 </div>
                                 {/*<div>*/}
                                 {/*    <InlineWidget url="https://calendly.com/victoriya-korogod/test" />*/}
@@ -60,61 +62,72 @@ export default function Footer() {
                     <div className="pt-4 flex-col md:flex-row justify-between border-t border-blue-450">
                         <div className="flex justify-end">
                             <div className="mr-10">
-                                <Image
-                                    src="/images/social/facebook.svg"
-                                    width={15}
-                                    height={15}
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    href="https://www.facebook.com/liveproshop"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    <Image
+                                        src="/images/social/facebook.svg"
+                                        width={15}
+                                        height={15}
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </a>
                             </div>
 
                             <div className="mr-10">
-                                <Image
-                                    src="/images/social/instagram.svg"
-                                    width={15}
-                                    height={15}
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                <a
+                                    href="https://www.instagram.com/liveproshop/"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    <Image
+                                        src="/images/social/instagram.svg"
+                                        width={15}
+                                        height={15}
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </a>
                             </div>
 
                             <div>
-                                <Image
-                                    className=""
-                                    src="/images/social/linkedin.svg"
-                                    width={15}
-                                    height={15}
-                                    layout="fixed"
-                                    alt=""
-                                />
+                                <a
+                                    href="https://www.linkedin.com/company/liveproshop/"
+                                    target="_blank"
+                                    rel="noreferrer">
+                                    <Image
+                                        className=""
+                                        src="/images/social/linkedin.svg"
+                                        width={15}
+                                        height={15}
+                                        layout="fixed"
+                                        alt=""
+                                    />
+                                </a>
                             </div>
                         </div>
 
                         <div className="flex flex-col float-right md:flex-row md:justify-end">
                             <div className="mr-0 text-right md:mr-5">
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <Link href=":;">
+                                <Link href={'/about-us'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                                    <a
-                                        onClick={() => {
-                                            console.log(123);
-                                            dispatch(setModalCalendlyMetaAction(true));
-                                        }}>
-                                        {t('About Liveproshop')}
-                                    </a>
+                                    {t('About Liveproshop')}
                                 </Link>
                             </div>
                             <div className="mr-0 text-right md:mr-5">
-                                <Link href={'/pages/privacy'}>Privacy</Link>
+                                <Link href={'/privacy'}>Privacy</Link>
                             </div>
                             <div className="mr-0 text-right md:mr-5">
-                                <a
-                                    href="https://www.liveproshop.com/terms-and-conditions"
-                                    target="_blank"
-                                    rel="noreferrer">
-                                    Terms
-                                </a>
+                                {/*<a*/}
+                                {/*    href="https://www.liveproshop.com/terms-and-conditions"*/}
+                                {/*    target="_blank"*/}
+                                {/*    rel="noreferrer">*/}
+                                {/*    Terms*/}
+                                {/*</a>*/}
+                                <Link href={'/terms-and-conditions'}>Terms</Link>
                             </div>
                             <div className="text-white">
                                 @ {moment().format('YYYY')} Liveproshop

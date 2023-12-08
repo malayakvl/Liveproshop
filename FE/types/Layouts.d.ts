@@ -12,6 +12,8 @@ declare namespace Layouts {
             payments: Pagination;
             buyers: Pagination;
             dashboard: Pagination;
+            mystores: Pagination;
+            userstores: Pagination;
         };
         isSidebarOpen: boolean;
         isMobileDevice: boolean | null;
@@ -25,6 +27,9 @@ declare namespace Layouts {
         activeTab: {
             inventory: TabTypes;
         };
+        showTextingMenu: boolean;
+        showProfileMenu: boolean;
+        selectedLng: string;
     }
 
     interface TabTypes {

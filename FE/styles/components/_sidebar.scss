@@ -29,10 +29,11 @@
 
   .brand {
     background-image: url("../../public/images/logo.svg");
+    background-repeat: no-repeat;
     background-size: 200px auto;
     width: 200px;
-    height: 32px;
-    min-height: 32px;
+    height: 27px;
+    min-height: 27px;
     text-indent: -99999px;
     white-space: nowrap;
     @apply block mx-4 mt-6 mb-6;
@@ -48,7 +49,8 @@
         @apply  relative flex flex-row items-center;
 
         .s-caption {
-          @apply text-blue-350 ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
+          //@apply text-blue-350 ml-2 text-base font-bold tracking-wide truncate cursor-pointer w-full;
+          @apply text-blue-350 ml-2 text-base font-bold tracking-wide cursor-pointer w-full;
         }
       }
 
@@ -204,7 +206,7 @@
 
   ul {
     //@apply hidden;
-    
+
     li {
       @apply pl-2.5 pr-2.5;
 
@@ -256,8 +258,9 @@
   transition: margin-left .3s ease-in-out, width .3s ease-in-out;
 }
 .side-margin {
-  margin-left:80px;
+  //margin-left:80px;
+  @apply md:ml-[80px];
 }
 .side-with-sidebar {
-  margin-left:260px;
+  @apply md:ml-[260px];
 }

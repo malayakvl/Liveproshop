@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userSubscriptionSelector } from '../../../redux/user/selectors';
 import { fetchUserSubscriptionAction, showChangeSubscriptionFormAction } from '../../../redux/user';
@@ -23,7 +23,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     if (!session) return <></>;
     const dispatch = useDispatch();
     const t = useTranslations();
-
+    const [hideBtn, setHideBtn] = useState(false);
     const user = useSelector(userSelector);
     const subscriptionInfo = useSelector(userSubscriptionSelector);
 
@@ -34,6 +34,13 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
         dispatch(fetchStripeProductAction());
     }, [user?.email]);
+
+    useEffect(() => {
+        // Create PaymentIntent and Plan Price as soon as the page loads
+        if (subscriptionInfo?.is_fake) {
+            setHideBtn(false);
+        }
+    }, [subscriptionInfo]);
 
     const preparePeriod = () => {
         if (subscriptionInfo.trial_end && subscriptionInfo.status != 'active') {
@@ -52,6 +59,28 @@ export default function Index({ session, locale }: { session: any; locale: strin
                 .format('DD.MM.YYYY')}
                     
                 `;
+        }
+    };
+    const preparePeriodFake = () => {
+        return `
+                    ${moment(subscriptionInfo.period_start).format('DD.MM.YYYY')} - ${moment(
+            subscriptionInfo.period_end
+        ).format('DD.MM.YYYY')}
+                `;
+    };
+
+    const prepareDayLeftFake = () => {
+        let dDiff = 0;
+        const start = moment(subscriptionInfo.period_end);
+        const end = moment();
+        const dayLeft = moment.duration(start.diff(end)).asDays().toFixed(0);
+        if (subscriptionInfo.is_fake) {
+            return dayLeft;
+        } else {
+            const a = moment();
+            const b = moment(moment.unix(subscriptionInfo.current_period_end).format('YYYY-MM-DD'));
+            dDiff = b.diff(a, 'days');
+            return dDiff < 0 ? `expired ${-dDiff} days ago` : dDiff;
         }
     };
 
@@ -143,7 +172,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                 </td>
                                                 <td
                                                     style={{
-                                                        paddingTop: '10px',
                                                         paddingBottom: '10px'
                                                     }}>
                                                     {method.id !==
@@ -168,13 +196,13 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                 </td>
                                                 <td
                                                     style={{
-                                                        paddingTop: '10px',
                                                         paddingBottom: '10px'
                                                     }}>
                                                     {method.id !==
                                                         subscriptionInfo.defaultPayment && (
                                                         <span
-                                                            className="cursor-pointer disabled-btn-small"
+                                                            style={{ paddingTop: '2px' }}
+                                                            className="cursor-pointer disabled-btn-small h-[30px] pt-[1px] mt-[-5px]"
                                                             role="presentation"
                                                             onClick={() =>
                                                                 dispatch(
@@ -238,49 +266,102 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        {subscriptionInfo.DBName}
-                                        <br />
-                                        <a
-                                            className="cursor-pointer text-xs gradient-btn-small block max-w-max"
-                                            href={subscriptionInfo.invoicePdf}
-                                            target="_blank"
-                                            rel="noreferrer">
-                                            {t('Download Invoice')}
-                                        </a>
-                                    </td>
-                                    <td style={{ textAlign: 'center' }}>
-                                        <span className={`${subscriptionInfo.status}-subscription`}>
-                                            {subscriptionInfo.status}
-                                        </span>
-                                    </td>
-                                    <td style={{ textAlign: 'center' }}>
-                                        {moment.unix(subscriptionInfo.created).format('DD.MM.YYYY')}
-                                    </td>
-                                    <td style={{ textAlign: 'center' }}>{preparePeriod()}</td>
-                                    <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
-                                    <td>
-                                        <span
-                                            className="cursor-pointer gradient-btn-small block max-w-max"
-                                            role="presentation"
-                                            onClick={() =>
-                                                dispatch(showChangeSubscriptionFormAction(true))
-                                            }>
-                                            {t('Change Plan')}
-                                        </span>
-                                    </td>
-                                    <td style={{ textAlign: 'center' }}>
-                                        <span
-                                            role="presentation"
-                                            className="cursor-pointer border border-gray-300 text-gray-300 py-1.5 rounded-lg px-1"
-                                            onClick={() => {
-                                                dispatch(unsubscribeAction());
-                                            }}>
-                                            {t('Unsubscribe')}
-                                        </span>
-                                    </td>
-                                </tr>
+                                {!subscriptionInfo.is_fake && (
+                                    <tr>
+                                        <td>
+                                            {subscriptionInfo.DBName}
+                                            <br />
+                                            <a
+                                                className="cursor-pointer text-xs gradient-btn-small block max-w-max mt-5"
+                                                href={subscriptionInfo.invoicePdf}
+                                                target="_blank"
+                                                rel="noreferrer">
+                                                {t('Download Invoice')}
+                                            </a>
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <span
+                                                className={`${subscriptionInfo.status}-subscription`}>
+                                                {subscriptionInfo.status}
+                                            </span>
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            {moment
+                                                .unix(subscriptionInfo.created)
+                                                .format('DD.MM.YYYY')}
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>{preparePeriod()}</td>
+                                        <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
+                                        <td>
+                                            {subscriptionInfo.is_trial && (
+                                                <span
+                                                    className="cursor-pointer gradient-btn-small block max-w-max"
+                                                    role="presentation"
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            showChangeSubscriptionFormAction(true)
+                                                        )
+                                                    }>
+                                                    {t('Change Plan')}
+                                                </span>
+                                            )}
+                                            {!subscriptionInfo.is_trial && (
+                                                <span
+                                                    className="cursor-pointer gradient-btn-small block max-w-max"
+                                                    role="presentation"
+                                                    onClick={() =>
+                                                        dispatch(
+                                                            showChangeSubscriptionFormAction(true)
+                                                        )
+                                                    }>
+                                                    {t('Change Plan')}
+                                                </span>
+                                            )}
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <span
+                                                role="presentation"
+                                                className="cursor-pointer border border-gray-300 text-gray-300 py-1.5 rounded-lg px-1 inline-block"
+                                                onClick={() => {
+                                                    dispatch(unsubscribeAction());
+                                                }}>
+                                                {t('Unsubscribe')}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                )}
+                                {subscriptionInfo.is_fake && (
+                                    <tr>
+                                        <td>{t('Try for free')}</td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <span className={`trial-subscription`}>
+                                                {t('trial subscription')}
+                                            </span>
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            {moment(subscriptionInfo.created_at).format(
+                                                'DD.MM.YYYY'
+                                            )}
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            {preparePeriodFake()}
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            {prepareDayLeftFake()}
+                                        </td>
+                                        <td>
+                                            <span
+                                                className="cursor-pointer gradient-btn-small block max-w-max"
+                                                role="presentation"
+                                                onClick={() =>
+                                                    dispatch(showChangeSubscriptionFormAction(true))
+                                                }>
+                                                {t('Change Plan')}
+                                            </span>
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>&nbsp;</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>

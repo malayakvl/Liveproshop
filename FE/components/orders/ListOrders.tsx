@@ -76,7 +76,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         (status: string) => {
             if (status === 'shipped') {
                 return dispatch(bulkShippingAction());
-            } else if (status === 'cancel') {
+            } else if (status === 'cancel' || status === 'refund') {
                 return dispatch(showCancelConfirmationModalAction(true));
             } else {
                 return dispatch(bulkDownloadAction());
@@ -99,7 +99,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     return (
         <div className="mt-7">
             <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
-                <h2 className="dark-blue-header">
+                <h2 className="dark-blue-header mt-[75px] md:mt-auto">
                     {t('Orders')}
                     <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                 </h2>
@@ -108,26 +108,36 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     locale={locale}
                     filterOpen={filterOpen}
                 />
-                <button
-                    onClick={() => {
-                        if (filterOpen) {
-                            dispatch(showDateSelectorAction(false));
-                        }
-                        setFilterOpen(!filterOpen);
-                    }}
-                    className="absolute top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1">
-                    <Image width={16} height={16} src={'/images/filter.svg'} />
-                    <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
-                    <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                        {filters.country_id.length +
-                            filters.payment_id.length +
-                            filters.status.length +
-                            filters.seller_id.length +
-                            !!filters.total_amount.length +
-                            !!filters.created_at.length +
-                            filters.country_id.length}
-                    </div>
-                </button>
+                <div className="">
+                    <button
+                        // style={{ right: '0px', top: '20px' }}
+                        className={`gradient-btn btn-download-orders`}
+                        onClick={() => dispatch(bulkDownloadAction())}>
+                        <div className="font-medium text-white ml-2 mr-2 py-[3px]">
+                            {t('Download Orders')}
+                        </div>
+                    </button>
+                    <button
+                        onClick={() => {
+                            if (filterOpen) {
+                                dispatch(showDateSelectorAction(false));
+                            }
+                            setFilterOpen(!filterOpen);
+                        }}
+                        className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
+                        <Image width={16} height={16} src={'/images/filter.svg'} />
+                        <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                        <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                            {filters.country_id.length +
+                                filters.payment_id.length +
+                                filters.status.length +
+                                filters.seller_id.length +
+                                !!filters.total_amount.length +
+                                !!filters.created_at.length +
+                                filters.country_id.length}
+                        </div>
+                    </button>
+                </div>
             </div>
             <div className="mb-5">
                 <FilterValues />
@@ -140,20 +150,32 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                 {items?.map((item: any) => (
                     <Fragment key={item.id}>
                         <tr>
-                            {user.role_id === 2 && (
-                                <td>
-                                    <input
-                                        className="float-checkbox"
-                                        type="checkbox"
-                                        onChange={() => dispatch(checkIdsAction(item.id))}
-                                        value={item.id}
-                                        checked={
-                                            checkedIds.find((data: any) => data.id === item.id)
-                                                ?.checked || false
-                                        }
-                                    />
-                                </td>
-                            )}
+                            {/*{user.role_id === 2 && (*/}
+                            {/*    <td>*/}
+                            {/*        <input*/}
+                            {/*            className="float-checkbox"*/}
+                            {/*            type="checkbox"*/}
+                            {/*            onChange={() => dispatch(checkIdsAction(item.id))}*/}
+                            {/*            value={item.id}*/}
+                            {/*            checked={*/}
+                            {/*                checkedIds.find((data: any) => data.id === item.id)*/}
+                            {/*                    ?.checked || false*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </td>*/}
+                            {/*)}*/}
+                            <td>
+                                <input
+                                    className="float-checkbox"
+                                    type="checkbox"
+                                    onChange={() => dispatch(checkIdsAction(item.id))}
+                                    value={item.id}
+                                    checked={
+                                        checkedIds.find((data: any) => data.id === item.id)
+                                            ?.checked || false
+                                    }
+                                />
+                            </td>
                             <td style={{ width: '50px' }}>
                                 <i
                                     role="presentation"
@@ -163,17 +185,19 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td className="order-number">
-                                {user.role_id === 2 && (
+                                {user.role_id === 1 && (
                                     <Link href={`/orders/${item.order_number}?locale=${locale}`}>
                                         <a>{item.order_number}</a>
                                     </Link>
                                 )}
-                                {user.role_id === 1 && item.status === 'new' && (
-                                    <Link href={`/checkout/${item.order_number}`}>
-                                        <a>{item.order_number}</a>
-                                    </Link>
+                                {user.role_id === 2 && item.status === 'new' && (
+                                    <>
+                                        <Link href={`/checkout/${item.order_number}`}>
+                                            <a>{item.order_number}</a>
+                                        </Link>
+                                    </>
                                 )}
-                                {user.role_id === 1 && item.status !== 'new' && (
+                                {user.role_id === 2 && item.status !== 'new' && (
                                     <Link href={`/orders/${item.order_number}`}>
                                         <a>{item.order_number}</a>
                                     </Link>
@@ -185,22 +209,24 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                             <td className="order-date">
                                 {moment(item.created_at).format('DD/MM/YYYY')}
                             </td>
-                            <td>
-                                <div className="flex">
-                                    <div className="user-photo">
-                                        <Image
-                                            src={
-                                                item.buyer_photo
-                                                    ? baseApiUrl + item.buyer_photo
-                                                    : userProfileImg
-                                            }
-                                            width={24}
-                                            height={24}
-                                            className="rounded-full cursor-pointer"
-                                            alt=""
-                                        />
+                            <td className="">
+                                <div className="float-left">
+                                    <div className="flex flex-row">
+                                        <div className="user-photo" style={{ marginLeft: '0' }}>
+                                            <Image
+                                                src={
+                                                    item.buyer_photo
+                                                        ? baseApiUrl + item.buyer_photo
+                                                        : userProfileImg
+                                                }
+                                                width={24}
+                                                height={24}
+                                                className="rounded-full cursor-pointer"
+                                                alt=""
+                                            />
+                                        </div>
+                                        <div className="pl-3">{item.buyer_first_name}</div>
                                     </div>
-                                    <span className="pl-3">{item.buyer_first_name}</span>
                                 </div>
                             </td>
                             <td>{parseTranslation(item.country_json, 'name', locale)}</td>
@@ -209,7 +235,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 {item.shipping_image && (
                                     <Image
                                         src={baseApiUrl + item.shipping_image}
-                                        width={36}
+                                        width={24}
                                         height={24}
                                         className=""
                                         alt=""
@@ -227,7 +253,24 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 {item.order_items.length}x{' '}
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
-                            <td>{formatCurrency(item.total_amount)}</td>
+                            <td>
+                                {formatCurrency(
+                                    item.total_amount ? item.total_amount : item.order_amount
+                                )}
+                            </td>
+                            {user.role_id === 1 && item.status === 'new' && (
+                                <td style={{ paddingTop: 0, paddingBottom: 0 }}>
+                                    <Link href={`/checkout/${item.order_number}`}>
+                                        <div
+                                            className="gradient-btn-small cursor-pointer"
+                                            style={{ paddingTop: '3px', paddingBottom: '3px' }}>
+                                            <span className="font-medium text-white bg-none font-bold">
+                                                Pay
+                                            </span>
+                                        </div>
+                                    </Link>
+                                </td>
+                            )}
                         </tr>
                         <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
                             <td />
@@ -241,7 +284,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             <CancelConfirmation />
             <a
                 href={achiveName}
-                className=""
+                className="hidden"
                 target="_blank"
                 download
                 ref={achiveRefname}

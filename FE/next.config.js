@@ -23,7 +23,8 @@ module.exports = {
     publicRuntimeConfig: {
         apiUrl: process.env.API_URL,
         siteUrl: process.env.API_SITE_URL,
-        stripeKey: process.env.API_STRIPE
+        stripeKey: process.env.API_STRIPE,
+        facebookClientId: process.env.FACEBOOK_CLIENT_ID
     },
     sassOptions: {
         includePaths: [path.join(__dirname, 'styles')]

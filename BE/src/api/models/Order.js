@@ -13,9 +13,11 @@ import * as zipLib from "zip-a-folder";
 
 async function createInvoice (invoice, path, locale) {
     try {
+
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        await generateCustomerInformation(doc, invoice, locale);
+        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
+        console.log('generate customer information done');
         await generateInvoiceTable(doc, invoice, locale);
         await generateFooter(doc, locale);
 
@@ -24,6 +26,7 @@ async function createInvoice (invoice, path, locale) {
 
         return {success: true}
     } catch (e) {
+        console.log("error")
         return {success: false}
     }
 }
@@ -31,30 +34,63 @@ async function createInvoice (invoice, path, locale) {
 
 async function generateHeader(doc, seller, locale) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
-
+    // doc
+    //     .image("./public/images/logo.png", 40, 45, { width: 160 })
+    //     .fillColor("#444444")
+    //     .fontSize(20)
+    //     .text("", 170, 0)
+    //     .fontSize(10)
+    //     .text(t['address_line_1'], 300, 50, { align: "right" })
+    //     .text(t['address_line_2'], 300, 65, { align: "right" })
+    //     .text(t['address_line_3'], 300, 80, { align: "right" })
+    //     // .text(seller.phone, 300, 95, { align: "right" })
+    //     .moveDown();
+    // doc
+    //     .fillColor("#444444")
+    //     .fontSize(20)
+    //     .text("", 170, 0)
+    //     .fontSize(10)
+    //     .text(seller.address_line_1, 300, 50, { align: "right" })
+    //     .text(`${seller.phone}`, 300, 65, { align: "right" })
+    //     // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
+    //     .text(seller.company_name, 300, 80, { align: "right" })
+    //     // .text(seller.phone, 300, 95, { align: "right" })
+    //     .moveDown();
     doc
-        .image("./public/images/logo.png", 40, 45, { width: 160 })
         .fillColor("#444444")
         .fontSize(20)
         .text("", 170, 0)
         .fontSize(10)
-        .text(t['address_line_1'], 300, 50, { align: "right" })
-        .text(t['address_line_2'], 300, 65, { align: "right" })
-        .text(t['address_line_3'], 300, 80, { align: "right" })
+        .text(seller.full_address, 300, 50, { align: "right" })
+        .text(`${seller.phone}`, 300, 65, { align: "right" })
+        // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
+        .text(seller.company_name, 300, 80, { align: "right" })
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
-async function generateCustomerInformation(doc, invoice, locale) {
+async function generateCustomerInformation(doc, invoice, paymentData, locale) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
     doc
         .fillColor("#444444")
         .fontSize(20)
-        .text(t["Invoice"], 50, 160);
+        .text(invoice.status == 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
 
     generateHr(doc, 185);
-
     const customerInformationTop = 200;
+    let deliveryAddress = [];
+    deliveryAddress[0] = invoice.shipping.country ? invoice.shipping.country : '';
+    if (invoice.shipping.state) {
+        deliveryAddress[1] = invoice.shipping.state ? invoice.shipping.state : 'N/A';
+        deliveryAddress[2] = invoice.shipping.post_code;
+        deliveryAddress[3] = invoice.shipping.city;
+        deliveryAddress[4] = invoice.shipping.address;
+    } else {
+        deliveryAddress[1] = invoice.shipping.post_code;
+        deliveryAddress[2] = invoice.shipping.city;
+        deliveryAddress[3] = invoice.shipping.address;
 
+    }
+    console.log(invoice);
     doc
         .fontSize(10)
         .text(t["Invoice number:"], 50, customerInformationTop)
@@ -65,15 +101,18 @@ async function generateCustomerInformation(doc, invoice, locale) {
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
         .text(t["Balance Due:"], 50, customerInformationTop + 30)
         .text(
-            formatCurrency(invoice.paid),
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
             150,
             customerInformationTop + 30
         )
-
         .font("Helvetica-Bold")
         .text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
-        .text(invoice.shipping.address, 300, customerInformationTop + 15)
+        .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
+        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 30)
+        // .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
+        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 45)
+        // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
         // .text(
         //     invoice.shipping.city +
         //     ", " +
@@ -85,7 +124,7 @@ async function generateCustomerInformation(doc, invoice, locale) {
         // )
         .moveDown();
 
-    generateHr(doc, 252);
+    generateHr(doc, 282);
 }
 
 async function generateInvoiceTable(doc, invoice, locale) {
@@ -150,7 +189,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             vatToDatePosition,
             "",
             "",
-            t["VAT"],
+            "VAT",
             "",
             formatCurrency((invoice.subtotal*15/100))
         );
@@ -165,7 +204,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             "",
             t["Total Payment"],
             "",
-            formatCurrency(invoice.paid)
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal))
         );
         doc.font("Helvetica");
     }
@@ -176,7 +215,7 @@ async function generateFooter(doc, locale) {
     doc
         .fontSize(10)
         .text(
-            t["Payment is due within 15 days. Thank you for your business."],
+            "",
             50,
             780,
             { align: "center", width: 500 }
@@ -253,6 +292,39 @@ class Order {
             };
             return {
                 items,
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
+    async getProductQty (productId, configId) {
+        const client = await pool.connect();
+        try {
+            const productQuery = `SELECT pc.quantity FROM data.products p LEFT JOIN data.product_configurations pc ON pc.product_id = p.id 
+                                    WHERE p.id = 15 AND pc.id = 260;`;
+            const resQuery = await client.query(productQuery);
+            const qty = (resQuery.rows[0].quantity);
+            return {
+                qty
+            };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
                 error
             };
 
@@ -387,7 +459,6 @@ class Order {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
-
             switch (user.role_id) {
                 case UserRole.ADMIN:
                     break;
@@ -401,7 +472,6 @@ class Order {
                 case UserRole.BUYER:
                     _filters.buyer_id = [user.id];
             }
-
             if (_filters.status?.length === 0) {
                 if (user.role_id === UserRole.BUYER) {
                     _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW];
@@ -410,6 +480,7 @@ class Order {
                 }
             }
 
+            // _filters.buyer_id = _filters.shopper_id;
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
@@ -425,7 +496,6 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -483,10 +553,25 @@ class Order {
             const payments = await client.query(`SELECT * FROM data.get_orders_payments('${JSON.stringify(_filters)}');`);
             res.payments = payments.rows[0].payments ? payments.rows[0].payments : [];
             const countries = await client.query(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
+            // console.log(`SELECT * FROM data.get_orders_countries('${JSON.stringify(_filters)}');`);
             res.countries = countries.rows[0].countries ? countries.rows[0].countries : [];
             const amounts = await client.query(`SELECT * FROM data.get_orders_total_amount_range('${JSON.stringify(_filters)}');`);
             res.amounts = amounts.rows[0].total_amount_range.max ? [amounts.rows[0].total_amount_range.min, amounts.rows[0].total_amount_range.max] : [];
             const error = null;
+            const _filterBuyers = {};
+            if (user.role_id === 2) {
+                // sellerIds.push(user.id);
+                _filterBuyers.seller_id = [user.id];
+                if (_filterBuyers.userIds) {
+                    _filterBuyers.seller_id = _filters.userIds;
+                    delete _filterBuyers.userIds;
+                }
+            }
+            // const buyersQuery = `SELECT * FROM data.get_buyers(10000, 0, '${JSON.stringify(_filterBuyers)}', '${column} ${sort}');`;
+
+            const ordersQueryBuyers = await client.query(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`); // 'orders.created_at DESC'
+            res.buyers =  ordersQueryBuyers.rows;
+            // res.shoppers = await client.query(`SELECT * FROM data.orders WHERE ('${JSON.stringify(_filters)}');`);
 
             return {
                 res,
@@ -518,13 +603,11 @@ class Order {
 
 
 
-
     async generatePdf (orderNumber, userId, user, locale, type='') {
         const client = await pool.connect();
         const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
-
         try {
             const _filters = {
                 // status: [OrderStatus.PAYED],
@@ -546,8 +629,20 @@ class Order {
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
-                fs.mkdirSync(dirArchiveFolder);
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
+                }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+                }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+                }
+                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+                // fs.mkdirSync(dirArchiveFolder);
             }
+            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -557,7 +652,7 @@ class Order {
                     )
                     .catch(
                         (error) => {
-                            console.log(error); //Exepection error....
+                            console.log(error.message); //Exepection error....
                         }
                     );
                 return {
@@ -571,37 +666,57 @@ class Order {
                 }
             }
             if (res.rows.length > 0) {
-                // get seller information
+                // get buyer information
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
-                                                       WHERE user_id=${res.rows[0].seller_id}`);
+                                                       WHERE user_id=${res.rows[0].buyer_id}`);
+                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+                const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+                const multiSafePayClientRes = await axios
+                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(async (resM) => {
+                        return resM.data.data;
+                    }).catch(error => {
+                        console.log("Merchant error", error);
+                    });
+                const buyerAddress = ''
+                // console.log('Buyer', res.rows[0]);
+                // const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
+                //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
+                //                                        WHERE user_id=${res.rows[0].seller_id}`);
+                const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 const invoice = {
                     shipping: {
-                        name: res.rows[0].buyer_first_name,
+                        name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
                         city: res.rows[0].city,
                         post_code: res.rows[0].post_code,
-                        phone: res.rows[0].phone
+                        phone: res.rows[0].phone,
+                        country: coutryRes.rows[0].nicename
                     },
                     seller: {
-                      data: addressRes.rows[0]
+                      data: sellerData.rows[0]
                     },
+                    status: res.rows[0].status,
                     items: res.rows[0].order_items,
                     subtotal: res.rows[0].order_amount,
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number,
                     invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
+                    paymentDetails: multiSafePayClientRes
+                    // paymentDetails: {}
                 };
+                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}_${locale}.pdf`, locale);
 
-                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}.pdf`, locale);
-
-                await setTimeout(4000);
+                await setTimeout(8000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(4000);
                 }
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -613,13 +728,14 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     isCreated: true,
                     error: null
                 }
             }
         } catch (e) {
+            console.log(e.message)
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -641,6 +757,51 @@ class Order {
     }
 
 
+    async updateOrderByCommentId (commentId, userId) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.order_items WHERE message_id='${commentId}';`;
+            const res = await client.query(SQL);
+            if (res.rows[0]) {
+                const orderId = res.rows[0].order_id;
+                await client.query(`UPDATE data.orders SET user_id=${userId} WHERE id=${orderId}`);
+            }
+            return {success: true, error: null, data: res.rows[0]};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async checkOrderStatus (messageId) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.order_items WHERE message_id = '${messageId}';`;
+            const res = await client.query(SQL);
+            return {success: true, error: null, data: res.rows[0]};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async setupShippingStatus (orderIds) {
         const client = await pool.connect();
         try {
@@ -661,6 +822,29 @@ class Order {
         }
     }
 
+    async findByCommentId (commentId, userId) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT order_id FROM data.order_items WHERE message_id='${commentId}'`;
+            console.log(SQL);
+            const res = await client.query(SQL);
+            const orderSQL = `UPDATE data.orders SET user_id='${userId}', total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+            console.log(orderSQL);
+            await client.query(orderSQL);
+            return {success: true, orderId: res.rows[0].order_id};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
 
     async bulkCancel (orderIds) {
         const client = await pool.connect();
@@ -719,6 +903,7 @@ class Order {
                 achive: `${process.env.API_URL}${process.env.DB_DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`
             };
         } catch (e) {
+            console.log(e.message)
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -745,7 +930,7 @@ class Order {
                 "description": "Refund by seller"
             }
             const multiSafePayClientRes = await axios
-                .post(`https://testapi.multisafepay.com/v1/json/orders/amadeo-order-id-${order.id}/refunds?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, orderData,{
+                .post(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${order.id}/refunds?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, orderData,{
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(async () => {

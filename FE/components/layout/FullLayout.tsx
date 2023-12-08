@@ -4,11 +4,12 @@ import Footer from '../footer/Footer';
 import { useSelector } from 'react-redux';
 import { isDataLoadingSelector } from '../../redux/layouts/selectors';
 import { useRouter } from 'next/router';
+// import { userSelector } from '../../redux/user/selectors';
 
 export default function FullLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const router = useRouter();
-
+    // const user = useSelector(userSelector);
     return (
         <>
             {showLoader && (
@@ -23,20 +24,41 @@ export default function FullLayout({ children }: { children: any }) {
                 </div>
             )}
             <Header />
+            {/*<SidebarHeader />*/}
             <div
                 className={`min-h-[750px] ${
                     router.pathname == '/' ||
+                    router.pathname == '/full-guide' ||
+                    router.pathname == '/pricing' ||
+                    // router.pathname == '/message-page' ||
+                    router.pathname == '/full-guide/livesession' ||
+                    router.pathname == '/full-guide/scenario' ||
+                    router.pathname == '/full-guide/rules' ||
+                    router.pathname == '/full-guide/addproduct' ||
+                    router.pathname == '/full-guide/payment' ||
                     router.pathname == '/pricing' ||
                     router.pathname == '/plans' ||
                     router.pathname == '/customer-story' ||
                     router.pathname == '/features' ||
-                    router.pathname == '/faq'
+                    router.pathname == '/case-studies' ||
+                    router.pathname == '/faq' ||
+                    router.pathname == '/about-us' ||
+                    router.pathname == '/terms-and-conditions' ||
+                    router.pathname == '/auth/signin' ||
+                    router.pathname == '/auth/restore' ||
+                    router.pathname == '/auth/restore/password' ||
+                    router.pathname == '/auth/signup' ||
+                    router.pathname == '/auth/registration' ||
+                    router.pathname == '/contact-us' ||
+                    router.pathname == '/fb-order/[storeName]' ||
+                    router.pathname == '/privacy'
                         ? 'bg-white'
                         : 'bg-gray-150'
                 } text-black dark:text-white`}>
                 {children}
             </div>
             <Footer />
+            {/*{router.pathname != '/message-page' && <Footer />}*/}
         </>
     );
 }

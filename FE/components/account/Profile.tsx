@@ -23,7 +23,6 @@ function Profile() {
     const filePickerRef = useRef<HTMLInputElement>(null);
     const [imagePost, setImagePost] = useState<File>();
     const [isNewPhoto, setIsNewPhoto] = useState(false);
-
     useEffect(() => {
         if (user.email) {
             dispatch(fetchProfileAction());
@@ -39,71 +38,107 @@ function Profile() {
     };
 
     useEffect(() => {
+        console.log('here we are update photo', imagePost);
         dispatch(setPhotoAction(imagePost));
     }, [imagePost]);
 
     const handlerSubmit = useCallback(
         (values: Profile.Profile, photo: any) => {
             const formData = new FormData();
-            let count = 0;
+            // let count = 0;
 
             Object.keys(values).forEach((key: string) => {
                 if ((values as any)[key] !== (profileData as any)[key]) {
                     formData.append(key, (values as any)[key]);
-                    count++;
+                    // count++;
                 }
             });
-            // console.log('photo from selector', photo);
 
-            // console.log('get image post', );
             if (imagePost || photo) {
                 formData.append('photo', imagePost || photo);
             }
 
-            if (count) dispatch(updateProfileAction(formData));
+            // if (count) dispatch(updateProfileAction(formData));
+            dispatch(updateProfileAction(formData));
         },
         [dispatch]
     );
 
-    const SubmitSchema = Yup.object().shape({
-        email: Yup.string()
-            .trim(t('Cannot include leading and trailing spaces'))
-            .min(3, t('Must be at least 3 characters'))
-            .email(t('Must be a valid email'))
-            .strict(true)
-            .required(t('You must enter your email')),
-        last_name: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your family name')),
-        first_name: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your first name')),
-        identification_number: Yup.string()
-            .trim(t('Cannot include leading and trailing spaces'))
-            .strict(true)
-            .min(3, t('Must be at least 3 characters'))
-            .required(t('You must enter your tax-ID')),
-        // full_address: Yup.string()
-        //     .required(t('You must enter your address'))
-        //     .strict(true)
-        //     .min(3, t('Must be at least 3 characters'))
-        //     .trim(t('Cannot include leading and trailing spaces')),
-        company_name: Yup.string()
-            .strict(true)
-            .min(3, t('Must be at least 3 characters'))
-            .trim(t('Cannot include leading and trailing spaces')),
-        phone: Yup.string()
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-            .required(t('You must enter your phone number'))
-            .min(5, t('Phone must be at least 5 characters')),
-        vat: Yup.string()
-            .min(3, t('Must be at least 3 characters'))
-            .strict(true)
-            .trim(t('Cannot include leading and trailing spaces'))
-    });
+    const validateEmail = (email: string) => {
+        const validEmail = String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+        return !validEmail ? false : true;
+    };
+    let SubmitSchema;
+    if (user.role_id == 2) {
+        SubmitSchema = Yup.object().shape({
+            email: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .min(3, t('Must be at least 3 characters'))
+                .email(t('Must be a valid email'))
+                .strict(true)
+                .required(t('You must enter your email')),
+            email_real: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .min(3, t('Must be at least 3 characters'))
+                .email(t('Must be a valid email'))
+                .strict(true)
+                .required(t('You must enter your email')),
+            last_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your family name')),
+            first_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your first name')),
+            identification_number: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .strict(true)
+                .min(3, t('Must be at least 3 characters'))
+                .required(t('You must enter your tax-ID')),
+            company_name: Yup.string()
+                .strict(true)
+                .min(3, t('Must be at least 3 characters'))
+                .trim(t('Cannot include leading and trailing spaces')),
+            phone: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your phone number'))
+                .min(5, t('Phone must be at least 5 characters')),
+            vat: Yup.string()
+                .min(3, t('Must be at least 3 characters'))
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+        });
+    } else {
+        SubmitSchema = Yup.object().shape({
+            email: Yup.string()
+                .trim(t('Cannot include leading and trailing spaces'))
+                .min(3, t('Must be at least 3 characters'))
+                .email(t('Must be a valid email'))
+                .strict(true)
+                .required(t('You must enter your email')),
+            last_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your family name')),
+            first_name: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your first name')),
+            phone: Yup.string()
+                .strict(true)
+                .trim(t('Cannot include leading and trailing spaces'))
+                .required(t('You must enter your phone number'))
+                .min(5, t('Phone must be at least 5 characters'))
+        });
+    }
+
+    console.log(user.email_real);
 
     return (
         <Formik
@@ -131,19 +166,19 @@ function Profile() {
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
-                    <div className="flex mb-4 mt-4 lg:w-1/4">
-                        <div className="rounded-full w-[160px] h-[160px] w-360 bg-gray-180 flex relative">
+                    <div className="float-left mb-4 mt-4 lg:w-1/4 mr-[20px]">
+                        <div className="rounded-full w-[160px] h-[160px] bg-gray-180 relative">
                             {imagePost && (
                                 <img
                                     alt=""
-                                    className="rounded-full w-[160px] h-[160px]"
+                                    className="rounded-full w-[160px] h-[160px] object-cover"
                                     src={URL.createObjectURL(imagePost)}
                                 />
                             )}
                             {profileData.photo && !isNewPhoto && (
                                 <img
                                     alt=""
-                                    className="rounded-full w-[160px] h-[160px]"
+                                    className="rounded-full w-[160px] h-[160px] object-cover"
                                     src={baseApiUrl + profileData.photo}
                                 />
                             )}
@@ -171,85 +206,107 @@ function Profile() {
                             </span>
                         </div>
                     </div>
-                    <InputText
-                        disabled
-                        icon={'f-email'}
-                        label={null}
-                        name={'email'}
-                        placeholder={t('Email Address')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                    <div className="float-left ml-[20px] min-w-[300px]">
+                        {user.role_id == 1 && (
+                            <>
+                                <InputText
+                                    disabled={true}
+                                    icon={'f-facebook'}
+                                    label={null}
+                                    name={'email'}
+                                    placeholder={t('FB account ID')}
+                                    style={'lg:w-full'}
+                                    props={props}
+                                    tips={null}
+                                />
+                                <InputText
+                                    disabled={validateEmail(props.values['email'])}
+                                    icon={'f-email'}
+                                    label={null}
+                                    name={'email_real'}
+                                    placeholder={t('Email Address')}
+                                    style={'lg:w-full'}
+                                    props={props}
+                                    tips={null}
+                                />
+                            </>
+                        )}
 
-                    <InputText
-                        icon={'f-fname'}
-                        label={null}
-                        name={'first_name'}
-                        placeholder={t('Name')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-fname'}
+                            label={null}
+                            name={'first_name'}
+                            placeholder={t('Name')}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                        />
 
-                    <InputText
-                        icon={'f-lname'}
-                        label={null}
-                        name={'last_name'}
-                        placeholder={t('Surname')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-lname'}
+                            label={null}
+                            name={'last_name'}
+                            placeholder={'Surname'}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                        />
+                        {user.role_id === 2 && (
+                            <InputText
+                                icon={'f-company'}
+                                label={null}
+                                name={'company_name'}
+                                placeholder={'Company Name'}
+                                style={'lg:w-full'}
+                                props={props}
+                                tips={null}
+                            />
+                        )}
+                        {user.role_id === 2 && (
+                            <InputText
+                                icon={'f-company-id'}
+                                label={null}
+                                name={'identification_number'}
+                                placeholder={'Company ID'}
+                                style={'lg:w-full'}
+                                props={props}
+                                tips={null}
+                            />
+                        )}
+                        {user.role_id === 2 && (
+                            <InputText
+                                icon={'f-vat'}
+                                label={null}
+                                name={'vat'}
+                                placeholder={'VAT (If applicable)'}
+                                style={'lg:w-1/2'}
+                                props={props}
+                                tips={null}
+                            />
+                        )}
 
-                    <InputText
-                        icon={'f-company'}
-                        label={null}
-                        name={'company_name'}
-                        placeholder={t('Company Name')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                    />
+                        <InputText
+                            icon={'f-phone'}
+                            label={null}
+                            name={'phone'}
+                            placeholder={'Phone Number'}
+                            style={'lg:w-full'}
+                            props={props}
+                            tips={null}
+                            onChange={(event) => {
+                                event.target.value = event.target.value.replace(
+                                    /[^\s\d+()-]+/gm,
+                                    ''
+                                );
+                                props.handleChange(event);
+                            }}
+                        />
 
-                    <InputText
-                        icon={'f-company-id'}
-                        label={null}
-                        name={'identification_number'}
-                        placeholder={t('Company ID')}
-                        style={'lg:w-1/6'}
-                        props={props}
-                        tips={null}
-                    />
-
-                    <InputText
-                        icon={'f-vat'}
-                        label={null}
-                        name={'vat'}
-                        placeholder={t('VAT (If applicable)')}
-                        style={'lg:w-1/6'}
-                        props={props}
-                        tips={null}
-                    />
-
-                    <InputText
-                        icon={'f-phone'}
-                        label={null}
-                        name={'phone'}
-                        placeholder={t('Phone Number')}
-                        style={'lg:w-1/4'}
-                        props={props}
-                        tips={null}
-                        onChange={(event) => {
-                            event.target.value = event.target.value.replace(/[^\s\d+()-]+/gm, '');
-                            props.handleChange(event);
-                        }}
-                    />
-
-                    <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
-                    <button type="submit" className="gradient-btn">
-                        {t('Save')}
-                    </button>
+                        <div className="mt-10 mb-7 block border border-gray-180 border-b-0" />
+                        <button type="submit" className="gradient-btn">
+                            {t('Save')}
+                        </button>
+                    </div>
                 </form>
             )}
         </Formik>

@@ -46,7 +46,7 @@ const CancelConfirmation: React.FC<any> = () => {
                         <p className="text-xl font-bold px-5 pb-5">
                             {t('Are you sure you want to cancel transaction?')}
                         </p>
-                        <div className="flex">
+                        <div className="flex justify-center">
                             <div className="flex justify-center">
                                 <button
                                     type="button"

@@ -46,7 +46,7 @@ export default function ShippingThreshold() {
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>
                 </div>
-                <div className="text-gray-400">{t('settings_descr')}</div>
+                <div className="text-gray-400">{t('settings_theshold')}</div>
             </div>
 
             <div className="md:flex mt-10 block-white-8 white-shadow-big">
@@ -55,7 +55,7 @@ export default function ShippingThreshold() {
                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                             {t('Free shipping')}
                         </div>
-                        <div className="text-sm text-gray-500 mt-12">{t('shipping_threshold')}</div>
+                        <div className="text-sm text-gray-500 mt-12">{t('setting_window')}</div>
                         <Formik
                             onSubmit={(values) => {
                                 dispatch(setThresholdAction(values));

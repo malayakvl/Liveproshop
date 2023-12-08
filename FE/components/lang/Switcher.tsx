@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 
-export default function LangSwitcher() {
+export default function LangSwitcher({ type }: { type: string | null | boolean }) {
     const { locale, locales, defaultLocale }: any = useRouter();
     const router = useRouter();
     const node = useRef<HTMLDivElement>(null);
+    // const [isMobile, setIsMobile] = useState(false);
 
     const [showLangMenu, setShowLangMenu] = useState(false);
-
     const switchLang = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
         const { pathname, asPath, query } = router;
         const target = event.target as HTMLSpanElement;
@@ -18,6 +18,9 @@ export default function LangSwitcher() {
 
     useEffect(() => {
         document.addEventListener('mousedown', handleClick);
+        // if (window.innerWidth < 991) {
+        //     setIsMobile(true);
+        // }
 
         return () => {
             document.removeEventListener('mousedown', handleClick);
@@ -35,32 +38,35 @@ export default function LangSwitcher() {
     };
 
     return (
-        <div className="relative w-full bordered md:w-auto">
-            <div className="language-block inline-block text-right">
-                <button
-                    className="btn-langs"
-                    onClick={() => {
-                        setShowLangMenu(!showLangMenu);
-                    }}>
-                    <span>{locale}</span>
-                </button>
-                {showLangMenu && (
-                    <div className="lang-menu shadow-2xl" ref={node}>
-                        <div className="corner" />
-                        <ul>
-                            {locales.map((locale: string) => (
-                                <li
-                                    role="presentation"
-                                    key={locale}
-                                    data-lang={locale}
-                                    onClick={switchLang}>
-                                    {locale}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </div>
+        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+        <div
+            className={`language-block inline-block text-right  ${
+                type ? 'language-block-content-1' : ''
+            }`}>
+            <button
+                className="btn-langs z-50"
+                onClick={() => {
+                    setShowLangMenu(!showLangMenu);
+                }}>
+                <span className="active-lang">{locale}</span>
+            </button>
+            {showLangMenu && (
+                <div className="lang-menu shadow-2xl" ref={node}>
+                    <div className="corner" />
+                    <ul>
+                        {locales.map((_locale: string) => (
+                            <li
+                                className={_locale == locale ? 'hidden' : ''}
+                                role="presentation"
+                                key={_locale}
+                                data-lang={_locale}
+                                onClick={switchLang}>
+                                {_locale}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     );
 }

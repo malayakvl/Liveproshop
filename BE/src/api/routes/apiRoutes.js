@@ -20,6 +20,7 @@ import DashboardController from "../controllers/DashboardController.js";
 import PaymentPlanController from "../controllers/PaymentPlanController.js";
 import CheckoutController from "../controllers/CheckoutController.js";
 import ContactUsController from "../controllers/ContactUsController.js";
+import StoreController from "../controllers/StoreController.js";
 
 
 const apiRoutes = express.Router();
@@ -37,12 +38,29 @@ apiRoutes.route('/invoice').get(OrderController.generateInvoice);
 
 apiRoutes.route('/countries').get(CountryController.getAll);
 
+/*********************************************
+ /***************JOB ROUTES********************
+ /*********************************************/
+apiRoutes.route('/activate-store-session/:id').get(LivesessionController.launchedSession);
+apiRoutes.route('/fetch-store-session-for-start').get(LivesessionController.getStoreSessionsForStart);
+apiRoutes.route('/fetch-store-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/update-parsed-message').get(LivesessionController.updateReplyedMessage);
+apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/fetch-active-sessions-sender').get(LivesessionController.getActiveSessionsSender);
+apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
+apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
+apiRoutes.route('/update-live-messages').get(LivesessionController.updateLiveMessage);
+apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitStatus);
+// apiRoutes.route('/check-order-status').get(LivesessionController.checkOrderStatus);
+// apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderStatus);
+// apiRoutes.route('/live-product-qty').get(OrderController.getLiveProductQty);
+
 apiRoutes.route('/pages/all').get(PageController.getAll);
 apiRoutes.route('/pages').get(PageController.getPage);
 apiRoutes.route('/fetch-live-sessions').get(LivesessionController.getAllInAir);
-apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/fetch-session-for-start').get(LivesessionController.getSessionsForStart);
 apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/update-store_session-status').get(LivesessionController.updateStoreSessionStatusFB);
 apiRoutes.route('/update-session-status').get(LivesessionController.updateSessionStatusFB);
 apiRoutes.route('/fetch-launch-stop-sessions').get(LivesessionController.getLaunchForStop);
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
@@ -77,10 +95,14 @@ apiRoutes.post('/changePassword', UserController.changePassword);
 apiRoutes.get('/profile/subscription', UserController.getSubscription);
 apiRoutes.post('/profile/delete-payment-method', UserController.deletePaymentMethod);
 apiRoutes.post('/profile/default-payment-method', UserController.defaultPaymentSetup);
+apiRoutes.post('/profile/add-payment-method-from-subscription', UserController.addPaymentMethodFromSubscription);
+apiRoutes.post('/profile/add-payment-method-after-registration', UserController.addPaymentMethodAfterRegistration);
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
 apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
 apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
 apiRoutes.get('/profile/generate-stripe-invoice', UserController.generateInvoice);
+apiRoutes.route('/profile/order-comment')
+    .get(OrderController.fetchOrderByComment);
 apiRoutes.route('/profile')
     .post(UserController.updateProfile)
     .get(UserController.getProfile);
@@ -90,6 +112,7 @@ apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
 
+apiRoutes.route('/fetch-stores').get(StoreController.fetchData);
 apiRoutes.route('/product').post(ProductController.addProduct);
 apiRoutes.route('/products/fetch-additional').get(ProductController.fetchAdditional);
 apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
@@ -101,6 +124,8 @@ apiRoutes.route('/products/bulk-delete').post(ProductController.bulkDelete);
 apiRoutes.route('/products/bulk-copy').post(ProductController.bulkCopy);
 apiRoutes.route('/products/import').post(ProductController.import);
 apiRoutes.route('/products/find').get(ProductController.find);
+
+apiRoutes.route('/orders/find-order-by-comment').get(OrderController.findOrderByCommentId);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 
@@ -114,6 +139,7 @@ apiRoutes.route('/chatbot/bulk-delete').post(ChatbotController.bulkDelete);
 apiRoutes.route('/chatbot/change-active/:id').get(ChatbotController.changeActive);
 apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllActive);
 
+apiRoutes.route('/orders/connect-bycomment').get(OrderController.fetchOrderByComment);
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
 apiRoutes.route('/orders/fetch-waiting-items').get(OrderController.fetchWaitingList);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
@@ -122,6 +148,7 @@ apiRoutes.route('/create-order/:id/:locale').get(OrderController.generateInvoice
 apiRoutes.route('/orders/bulk-shipping').post(OrderController.setupShipped);
 apiRoutes.route('/orders/bulk-cancel').post(OrderController.bulkCancel);
 apiRoutes.route('/orders/bulk-download').post(OrderController.bulkDownload);
+apiRoutes.route('/orders/single-download').post(PaymentController.downloadInvoice);
 apiRoutes.route('/order/run-wait-workflow').post(OrderController.runWaitWorkflow);
 apiRoutes.route('/order/update-config-qty').post(OrderController.updateProductConfigQty);
 
@@ -130,7 +157,7 @@ apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);
 apiRoutes.route('/payments/fetch-methods').get(PaymentController.fetchMethods);
 apiRoutes.route('/payments/change-methods-statuses').patch(PaymentController.changeMethodsStatuses);
 apiRoutes.route('/payments/fetch-filters').get(PaymentController.fetchFilters);
-apiRoutes.route('/payments/download-invoice/:orderNumber').get(PaymentController.downloadInvoice);
+apiRoutes.route('/payments/download-invoice/:orderNumber/:locale').get(PaymentController.downloadInvoice);
 
 apiRoutes.route('/buyers/fetch-items').get(BuyerController.fetchItems);
 apiRoutes.route('/buyers/fetch-item').get(BuyerController.fetchItem);
@@ -170,7 +197,9 @@ apiRoutes.route('/checkout/confirm').post(CheckoutController.chechoutComfirmatio
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
 
 apiRoutes.route('/exist-user-subscription').post(UserController.createExistUserSubscription);
+apiRoutes.route('/after-skip-subscription').post(UserController.createAfterSkipSubscription);
 apiRoutes.route('/skip-exist-user-subscription').post(UserController.skipExistUserSubscription);
+apiRoutes.route('/skip-exist-user-subscription-new').post(UserController.skipExistUserSubscriptionNew);
 
 apiRoutes.route('/shipping/create').post(ShippingController.create);
 apiRoutes.route('/shipping/fetch-all').get(ShippingController.fetchAll);

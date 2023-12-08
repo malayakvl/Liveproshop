@@ -17,7 +17,10 @@ import {
     showLoaderAction,
     setActivePageAction,
     setSwitchToggleAction,
-    sidebarCloseAction
+    sidebarCloseAction,
+    toggleTextingMenuAction,
+    setLngAction,
+    toggleProfileMenuAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 
@@ -116,7 +119,22 @@ const initialState: State.Layouts = {
                 // total_amount: [],
                 created_at: []
             }
+        },
+        [PaginationType.MYSTORES]: {
+            ...initPagination,
+            limit: 20,
+            filters: {
+                created_at: []
+            }
+        },
+        [PaginationType.USERSTORES]: {
+            ...initPagination,
+            limit: 20,
+            filters: {
+                created_at: []
+            }
         }
+
     },
     isSidebarOpen: false,
     isMobileDevice: false,
@@ -129,7 +147,10 @@ const initialState: State.Layouts = {
     modalCalendlyMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
-    }
+    },
+    showTextingMenu: false,
+    showProfileMenu: false,
+    selectedLng: 'fr'
 };
 
 // ------------------------------------
@@ -278,7 +299,25 @@ const ACTION_HANDLERS: any = {
         modalCalendlyMeta: action.payload && {
             ...action.payload
         }
-    })
+    }),
+    [toggleTextingMenuAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            showTextingMenu: action.payload
+        })
+    },
+    [toggleProfileMenuAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            showProfileMenu: action.payload
+        })
+    },
+    [setLngAction]: {
+        next: (state: State.Layouts, action: Action<string>): State.Layouts => ({
+            ...state,
+            selectedLng: action.payload
+        })
+    }
 };
 
 export {
@@ -296,7 +335,10 @@ export {
     setModalConfirmationMetaAction,
     setModalCalendlyMetaAction,
     setSwitchToggleAction,
-    sidebarCloseAction
+    sidebarCloseAction,
+    toggleTextingMenuAction,
+    setLngAction,
+    toggleProfileMenuAction
 };
 
 // ------------------------------------

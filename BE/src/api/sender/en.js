@@ -8,6 +8,7 @@ export default {
   "Hi": "Hi",
   "Hello": "Hello",
   "link": "link",
+  "Click here": "Click here",
 
   // "Amadeo CRM - restore password": "Amadeo CRM - restore password",
   // "You can use following": "You can use following",
@@ -44,6 +45,7 @@ export default {
   "If you are having trouble logging into your account, contact us at": "If you are having trouble logging into your account, contact us at",
 
   //welcome//
+  "Verification email":"Verification email",
   "Account Activation Required": "Account Activation Required",
   "Verify yourself below to sign in to your Liveproshop.com account for": "Verify yourself below to sign in to your Liveproshop.com account for",
   "Here’s the verification link": "Here’s the verification link",

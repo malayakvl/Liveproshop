@@ -67,3 +67,15 @@ export const modalCalendlyMetaSelector = createSelector(
 
 export const activeTabSelectorFactory = (type: string) =>
     createSelector(rootSelector, (formula: State.Layouts): any => (formula.activeTab as any)[type]);
+export const isSTextingMenuOpenSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.showTextingMenu
+);
+export const isProfileMenuOpenSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.showProfileMenu
+);
+export const siteLanguageSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): string => layouts.selectedLng
+);

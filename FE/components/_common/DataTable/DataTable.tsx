@@ -54,9 +54,11 @@ const DataTable: React.FC<Props> = ({
     // const hideEntries: boolean = [CATEGORIES, INVESTMENT].includes(paginationType);
     // const hideEntries = false;
     const listShowIds = [PRODUCTS, CHATBOT, SHIPPING, PAYMENTS];
-    if (user.role_id === 2) {
-        listShowIds.push(ORDERS);
-    }
+
+    listShowIds.push(ORDERS);
+    // if (user.role_id === 2) {
+    //     listShowIds.push(ORDERS);
+    // }
     const showIds: boolean = listShowIds.includes(paginationType);
     // const hideSearch: boolean = [INVESTMENT].includes(paginationType);
     // const hideSearch = false;
@@ -68,7 +70,10 @@ const DataTable: React.FC<Props> = ({
     }
 
     if (paginationType === PaginationType.ORDERS && user.role_id === 2) {
-        dropdownOptions = ['shipped', 'cancel', 'download_pdf'];
+        // dropdownOptions = ['shipped', 'cancel', 'download_pdf'];
+        dropdownOptions = ['shipped', 'refund', 'download_pdf'];
+    } else {
+        dropdownOptions = ['download_pdf'];
     }
 
     if (paginationType === PaginationType.PAYMENTS && user.role_id === 2) {
@@ -189,30 +194,78 @@ const DataTable: React.FC<Props> = ({
                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                     </label>
                 )}
-                {item.iconClass && <i className={`tbl-icon ${item.iconClass}`} />}
-                {item.titleKey ? t(item.titleKey) : ''}
-                {item.sortKey && (
-                    <div className="sortable-block">
-                        <div
-                            role="presentation"
-                            data-name={item.sortKey}
-                            data-direction="ASC"
-                            onClick={setSort}
-                            className={classNames('btn_sort top', {
-                                active: column === item.sortKey && sort === 'ASC'
-                            })}
-                        />
-                        <div
-                            role="presentation"
-                            data-name={item.sortKey}
-                            data-direction="DESC"
-                            onClick={setSort}
-                            className={classNames('btn_sort down', {
-                                active: column === item.sortKey && sort === 'DESC'
-                            })}
-                        />
+                <div className="relative w-full inline-block">
+                    {item.sortKey && (
+                        <div className="sortable-block absolute top-[-9px] left-0">
+                            <div
+                                role="presentation"
+                                data-name={item.sortKey}
+                                data-direction="ASC"
+                                onClick={setSort}
+                                className={classNames('btn_sort top', {
+                                    active: column === item.sortKey && sort === 'ASC'
+                                })}
+                            />
+                            <div
+                                role="presentation"
+                                data-name={item.sortKey}
+                                data-direction="DESC"
+                                onClick={setSort}
+                                className={classNames('btn_sort down', {
+                                    active: column === item.sortKey && sort === 'DESC'
+                                })}
+                            />
+                        </div>
+                    )}
+                    <div
+                        className="inline-block"
+                        style={{ marginLeft: item.sortKey ? '30px' : '0' }}>
+                        {item.iconClass && (
+                            <div className="inline-block">
+                                <i className={`tbl-icon ${item.iconClass}`} />
+                            </div>
+                        )}
+                        {item.titleKey && (
+                            <div style={{ marginTop: '-2px' }} className="inline-block">
+                                {item.titleKey ? t(item.titleKey) : ''}
+                            </div>
+                        )}
                     </div>
-                )}
+
+                    {/*</div>*/}
+                    {/*<div style={{ minWidth: '55px' }} className="sortable-icon-block">*/}
+                    {/*    {item.iconClass && <i className={`tbl-icon ${item.iconClass}`} />}*/}
+                    {/*    {item.sortKey && (*/}
+                    {/*        <div className="sortable-block">*/}
+                    {/*            <div*/}
+                    {/*                role="presentation"*/}
+                    {/*                data-name={item.sortKey}*/}
+                    {/*                data-direction="ASC"*/}
+                    {/*                onClick={setSort}*/}
+                    {/*                className={classNames('btn_sort top', {*/}
+                    {/*                    active: column === item.sortKey && sort === 'ASC'*/}
+                    {/*                })}*/}
+                    {/*            />*/}
+                    {/*            <div*/}
+                    {/*                role="presentation"*/}
+                    {/*                data-name={item.sortKey}*/}
+                    {/*                data-direction="DESC"*/}
+                    {/*                onClick={setSort}*/}
+                    {/*                className={classNames('btn_sort down', {*/}
+                    {/*                    active: column === item.sortKey && sort === 'DESC'*/}
+                    {/*                })}*/}
+                    {/*            />*/}
+                    {/*        </div>*/}
+                    {/*    )}*/}
+                    {/*</div>*/}
+                    {/*{item.titleKey && (*/}
+                    {/*    <div className="head-row-title">{item.titleKey ? t(item.titleKey) : ''}</div>*/}
+                    {/*)}*/}
+                </div>
+                {/*{item.titleKey && (*/}
+                {/*    <span className="head-row-title">{item.titleKey ? t(item.titleKey) : ''}</span>*/}
+                {/*)}*/}
+                {/*<span className="head-row-title">{item.titleKey ? t(item.titleKey) : ''}</span>*/}
             </th>
         );
 

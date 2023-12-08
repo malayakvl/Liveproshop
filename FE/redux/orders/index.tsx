@@ -10,7 +10,11 @@ import {
     findSellersAction,
     showCancelConfirmationModalAction,
     clearBase64Action,
-    setAchiveNameAction
+    setAchiveNameAction,
+    setSingleFileNameAction,
+    connectOrderAction,
+    setFbCommentAction,
+    findOrderByCommentAction
 } from './actions';
 
 const initialState: {
@@ -28,6 +32,7 @@ const initialState: {
     tagSellersSuggestions: any[];
     showCancelPopup: boolean;
     achiveName: string | null;
+    commentIdOrder: string | null;
 } = {
     isFetched: false,
     loading: false,
@@ -47,7 +52,8 @@ const initialState: {
     base64Data: null,
     tagSellersSuggestions: [],
     showCancelPopup: false,
-    achiveName: null
+    achiveName: null,
+    commentIdOrder: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -168,6 +174,30 @@ const ACTION_HANDLERS: any = {
             ...state,
             base64Data: action.payload
         })
+    },
+    [setSingleFileNameAction]: {
+        next: (state: State.Orders, action: Action<string>): State.Orders => ({
+            ...state,
+            downloadFileName: action.payload
+        })
+    },
+    // [connectOrderAction]: {
+    //     next: (state: State.Orders, action: Action<any>): State.Orders => ({
+    //         ...state,
+    //         commentOrderId: action.payload
+    //     })
+    // },
+    [setFbCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            commentIdOrder: action.payload
+        })
+    },
+    [findOrderByCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            commentIdOrder: action.payload
+        })
     }
 };
 
@@ -181,7 +211,11 @@ export {
     fetchOrderPdfAction,
     findSellersAction,
     showCancelConfirmationModalAction,
-    clearBase64Action
+    clearBase64Action,
+    setSingleFileNameAction,
+    connectOrderAction,
+    setFbCommentAction,
+    findOrderByCommentAction
 };
 
 // ------------------------------------

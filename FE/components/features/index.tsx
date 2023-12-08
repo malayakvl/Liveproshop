@@ -1,149 +1,133 @@
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import Link from 'next/link';
+import Try from '../../components/try';
 
 function Features() {
     const t = useTranslations();
-
     return (
         <>
-            <div className="flex lg:mt-[50px]">
-                <div className="w-full">
-                    <div className="dotted-bg md:flex">
-                        <div className="header-t-block">
-                            <h1 className="page-heading text-left">Key Features</h1>
-                            <span className="block text-gray-350 text-[36px] leading-[44px] font-bold mt-[16px]">
-                                EVERYTHING YOU NEED, ALL IN ONE PLACE
+            <div className="flex mb-[-90px] md:mb-auto md:mt-[50px]">
+                <div className="w-full dotted-bg">
+                    <div className="w-full flex">
+                        <div className="w-full md:float-left md:w-2/3">
+                            <span className="block text-16px mb-[10px] md:text-[14px] text-gray-350 font-semibold md:ml-[5px]">
+                                {t('Learn more about our')}
                             </span>
-                            <span className="mb-[15px] mt-[24px] text-[14px] leading-[24px] block text-gray-350 md:text-[30px] md:leading-[38px] mdd:mt-[48px]">
-                                Live pro Shop is the fastest way for your business to bill customer,
-                                capture more revenue and support your business models
+                            <h1 className="page-heading-features text-left">{t('Key Features')}</h1>
+                            <span className="block text-gray-350 text-16px leading-[24px] md:text-[36px] md:leading-[44px] font-bold mt-[16px] md:max-w-[675px]">
+                                {t('title_feature')}
                             </span>
-                            <div className="mt-[40px]">
+                            <span className="block font-medium text-gray-350 mb-[15px] mt-[14px] text-[14px] leading-[24px] md:text-[30px] md:leading-[38px] md:mt-[30px] md:max-w-[670px]">
+                                {t('text_features')}
+                            </span>
+                            <div className="mt-[45px]">
                                 <Link href={'/auth/signup'}>
-                                    <button className="sm:pl-0.5 sm:pr-0.5 w-[60%] md:w-auto gradient-btn max-h-[40px] pt-[7px]">
-                                        <span className="inline-block">{t('Try for free')}!</span>
+                                    <button className="w-full md:w-auto btn-big md:mr-[20px] block mb-[15px] md:mb-auto md:inline-block lg:mr-[84px]">
+                                        <span className="inline-block md:text-[20px]">
+                                            {t('Try for free')}!
+                                        </span>
                                     </button>
                                 </Link>
                             </div>
                         </div>
-                        <div className="feature-photo"></div>
+                        <div className="hidden feature-phone-photo md:flex w-1/3" />
                     </div>
                     <div className="clear-both" />
-
-                    <div className="dotted-bg md:flex">
-                        <div className="feature-comp"></div>
-                        <div className="flex flex-col">
-                            <div className="flex flex-row">
-                                <div className="w-1/2 lg:mr-[30px]">
-                                    <h4 className="text-[24px] text-gray-350 font-bold">
-                                        Forget about cart abandonement
-                                    </h4>
-                                    <div className="text-blue-350 text-[16px] leading-[24px] mt-[16px]">
-                                        You decide how much time you leave to your customer to
-                                        finalize their orders. You can max out impulsive buying and
-                                        pressure them, or play it chill. If the client does not
-                                        check out on time, the article is back in the shop again.
-                                    </div>
-                                </div>
-                                <div className="w-1/2">
-                                    <h4 className="text-[24px] text-gray-350 font-bold">
-                                        Customize cart expiration
-                                    </h4>
-                                    <div className="text-blue-350 text-[16px] leading-[24px] mt-[16px] mr-[20px]">
-                                        You decide how much time the client has before his or her
-                                        cart expires. You decide how much pressure you put on them.
-                                        In case he or she does not proceed with check out on time,
-                                        the products are back in the shop and available for someone
-                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                        else to buy, so you don't lose clients.
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="clear-both" />
+                    <div className="flex flex-col md:flex-row md:mt-[120px]">
+                        <div className="w-full md:w-2/5">
+                            <div className="feature-comp-new"></div>
                         </div>
-                    </div>
-
-                    <div className="dotted-bg md:flex">
-                        <div className="flex flex-col">
-                            <div className="flex flex-row">
-                                <div className="w-1/2">
-                                    <h4 className="text-[24px] text-gray-350 font-bold">
-                                        Live Inventory management
+                        <div className="w-full md:w-3/5">
+                            <div className="flex flex-col xl:flex-row lg:mb-[40px]">
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold md:pr-[20px]">
+                                        {t('Forget about cart abandonement')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] leading-[24px] mt-[16px]">
-                                        Stay away from oversell and avoid bad customer experience
-                                        and and being forced to reimburse.
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] lg:pr-[20px]">
+                                        {t('text_1')}
                                     </div>
                                 </div>
-                                <div className="w-1/2">
-                                    <h4 className="text-[24px] text-gray-350 font-bold">
-                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                        Maximize the average cart value with "Pay only one shipping
-                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
-                                        fee"
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Customize cart expiration')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] leading-[24px] mt-[16px] mr-[20px]">
-                                        You first charge the shipping fees along with checkout, but
-                                        still enable them to add articles to the cart for a while.
-                                        This encourages them to add additional articles from shop
-                                        shop and raise average cart value.
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                        {t('text_2')}
                                     </div>
                                 </div>
                             </div>
-                            <div className="clear-both" />
-                            <div className="flex flex-row mt-[40px]">
-                                <div className="w-1/2">
-                                    <h4 className="text-[24px] text-gray-350 font-bold">
-                                        Extended shipping and payment methods
+                            <div className="flex flex-col xl:flex-row">
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold md:pr-[20px]">
+                                        {t('Choose the free shipping fees threshold')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] leading-[24px] mt-[16px] mr-[20px]">
-                                        8% of carts are abandonned because payment options are too
-                                        rigid. Avoid that and adapt yourself to client payment
-                                        preferences
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] lg:pr-[20px]">
+                                        {t('text_7')}
                                     </div>
                                 </div>
-                                <div className="w-1/2">
-                                    <h4 className="text-[24px] text-gray-350 font-bold">
-                                        Waiting list
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Automatic invoicing')}
                                     </h4>
-                                    <div className="text-blue-350 text-[16px] leading-[24px] mt-[16px] mr-[20px]">
-                                        In case a product is sold out or pending a confirmed
-                                        checkout, the waiting list enables you to sell to interested
-                                        persons and not lose out on sales
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                        {t('text_8')}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="feature-phone-photo xl:pl-[430px]"></div>
                     </div>
-
+                    <div className="clear-both md:h-[100px] lg:h-0" />
+                    <div className="flex flex-col md:flex-row second-dotted-bg">
+                        <div className="w-full md:w-3/5 lg:mt-[100px]">
+                            <div className="flex flex-col xl:flex-row lg:mb-[40px]">
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Live InventoryAdd management')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px] lg:pr-[20px]">
+                                        {t('text_3')}
+                                    </div>
+                                </div>
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Maximize the average')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px]">
+                                        {t('text_4')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex flex-col xl:flex-row">
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Extended shipping and payment methods')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] lg:pr-[20px]">
+                                        {t('text_5')}
+                                    </div>
+                                </div>
+                                <div className="w-full mb-[20px]">
+                                    <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
+                                        {t('Waiting list')}
+                                    </h4>
+                                    <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px]">
+                                        {t('text_6')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-full md:w-2/5 lg:mt-[100px]">
+                            <div className="feature-screen-photo-new"></div>
+                        </div>
+                    </div>
                     {/*=======================================================*/}
                     {/*====================== TRY FOR TODAY ==================*/}
                     {/*=======================================================*/}
-                    <div className="clear-both" />
-                    <h3 className="red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
-                        {t('Try it for free today!')}
-                    </h3>
-                    <h4 className="text-gray-350 leading-[38px] text-[30px] w-full text-center font-medium mt-[24px]">
-                        {t('It only takes 30 seconds to get started')}.
-                    </h4>
-                    <div className="w-full mt-[40px] text-center mb-[100px]">
-                        <Link href={'/'}>
-                            <a className="btn-big md:mr-[20px] block mb-[10px] md:mb-auto md:inline-block  lg:mr-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
-                                    {t('Register now!')}
-                                </span>
-                            </a>
-                        </Link>
-                        <Link href={'/'}>
-                            <a className="btn-big md:ml-[20px] block md:inline-block lg:ml-[84px]">
-                                <span className="text-[20px] inline-block min-w-[220px]">
-                                    {t('I want to know more!')}
-                                </span>
-                            </a>
-                        </Link>
+                    <div className="try-features lg:mt-[-100px]">
+                        <Try />
                     </div>
+                    <div className="clear-both h-[30px] md:hidden"></div>
                 </div>
             </div>
         </>

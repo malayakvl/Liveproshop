@@ -70,7 +70,7 @@ class AuthController {
      * @returns {Promise<*>}
      */
     async authProvider(req, res) {
-        const { user, error } = await userModel.provider(req.body);
+        const { user, error } = await userModel.provider(req.body, false, true);
         if (error) {
             return res.status(error.code).json(error);
         }
@@ -79,6 +79,7 @@ class AuthController {
 
     async authProviderLogin(req, res) {
         const { user, error } = await userModel.providerLogin(req.body);
+        // create trial fake subscription
         if (error) {
             return res.status(error.code).json(error);
         }
@@ -93,6 +94,16 @@ class AuthController {
         res.status(200).json({ user: user });
     }
 
+    async authRegisterSubscriptionLogin(req, res) {
+        const user = await userModel.findUserByEmail(req.body.email);
+        if (user.subscription_id === req.body.subscriptionId) {
+            console.log("EBUCHAYA GADINA");
+        }
+        if (!user) {
+            return res.status(400).json('Not found user');
+        }
+        res.status(200).json({ user: user });
+    }
     /**
      * Register new user via form data
      * @param req
@@ -101,13 +112,12 @@ class AuthController {
      */
     async authRegister(req, res) {
         let formData = req.body;
-        let email = formData.email
+        let email = formData.email;
 
         let invitation = await invitationModel.findByEmail(email);
 
         if (!invitation) {
             return res.status(403).json({ message: "You don't have invitation" });
-
         }
 
         if (!invitation.active) {
@@ -115,16 +125,13 @@ class AuthController {
         }
 
         const _user = await userModel.findUserByEmail(email);
-
         if (_user) {
             return res.status(403).json({ user: null, error: 'Email present' });
-
         }
 
-        const { country_id, state, city, post_code, address_line_1, address_line_2, address_type } = formData;
-
+        const { country_id, state, city, post_code, address_line_1, address_line_2, address_type, forFree } = formData;
         const countryName = (await countryModel.findById(country_id))?.nicename;
-
+        // exit;
         const createUserData = {
             email,
             password: formData.password,
@@ -137,9 +144,21 @@ class AuthController {
             identification_number: formData.identification_number,
             vat: formData.vat
         }
-
         const { user, error } = await userModel.create(createUserData);
         // create trial subscription
+        user.subscription = null;
+        if (invitation.is_skip) {
+            await userModel.createDbSubscription(user.id, 'skip');
+        }
+        // if (forFree === 0) {
+        //     user.subscription = null;
+        //     // await userModel.createDbSubscription(user.id);
+        // } else {
+        //     // free subscription
+        //     // create fake subscription data and store them to db
+        //     await userModel.createDbSubscription(user.id);
+        // }
+
         // const userData = {
         //     planId: 1,
         //     type: 'trial',
@@ -154,8 +173,6 @@ class AuthController {
         if (error) {
             return res.status(error.code).json(error);
         }
-
-
         const createAddressData = {
             country_id,
             state,
@@ -165,17 +182,12 @@ class AuthController {
             address_line_2,
             address_type
         }
-
         const { error: errorAddress } = await userModel.saveAddress(user.id, createAddressData);
 
         if (errorAddress) {
             return res.status(errorAddress.code).json(errorAddress);
-
         }
-
-
         invitationModel.deactivate(invitation.id)
-
         const mail = await registerEmail(user.email, req.query.locale);
 
         sendMail(
@@ -197,7 +209,6 @@ class AuthController {
     async authInvite(req, res) {
         const data = req.body;
         const user = await userModel.findUserByEmail(data.email);
-
         if (user) {
             return res.status(403).json({ message: 'Email present' });
 
@@ -209,12 +220,16 @@ class AuthController {
             await invitationModel.delete(invitation.id)
 
         }
-
         invitation = await invitationModel.create(data);
 
-        let link = `${process.env.APPLICATION_BASE_URL}/auth/registration?hash=${invitation.hash}`;
+
+        let link = `${process.env.APPLICATION_BASE_URL}/${req.query.locale === 'en' ? 'en/' : ''}auth/registration?hash=${invitation.hash}&forFree=${data.forFree === 'skip' ? 'skip' :  data.forFree ? 'yes' : 'no'}`;
+        // console.log("LOCALE", link);
+        console.log("LINK", link);
 
         const mail = await welcomeEmail(data.email, link, req.query.locale);
+
+        // console.log("MAIL BODY", mail.body)
 
         sendMail(
             data.email,

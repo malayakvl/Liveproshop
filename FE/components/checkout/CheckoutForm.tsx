@@ -26,24 +26,26 @@ const CheckoutUnregisteredForm = () => {
             return;
         }
         dispatch(showLoaderAction(true));
-        // const result = await stripe.confirmPayment({
-        //     //`Elements` instance that was used to create the Payment Element
-        //     elements,
-        //     confirmParams: {
-        //         return_url: `${siteUrl}/completePayment`
-        //     }
-        // });
-        const result = await stripe.confirmSetup({
+        const result = await stripe.confirmPayment({
             //`Elements` instance that was used to create the Payment Element
             elements,
             confirmParams: {
-                return_url: `${siteUrl}/completePayment?planId=${query.planId}&type=${query.type}`
+                return_url: `${siteUrl}/completePayment`
             }
         });
-
+        // const result = await stripe.confirmSetup({
+        //     //`Elements` instance that was used to create the Payment Element
+        //     elements,
+        //     confirmParams: {
+        //         return_url: `${siteUrl}/completePayment?planId=${query.planId}&type=${query.type}`
+        //     }
+        // });
         if (result.error) {
             // Show error to your customer (for example, payment details incomplete)
             dispatch(showLoaderAction(false));
+        } else {
+            // update subscription status
+            // console.log('NEED TO UPDATE STATUSIN DB');
         }
     };
 

@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { providers, getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
@@ -8,27 +9,36 @@ import { signIn } from 'next-auth/client';
 import FullLayout from '../../components/layout/FullLayout';
 import { Formik, Field } from 'formik';
 import Head from 'next/head';
+import { useDispatch } from 'react-redux';
 import { accountService } from '../../_services';
 import React from 'react';
+import { hideRegisterFormAction, setupFreeSubscriptionAction } from '../../redux/user';
 
 function Signin({ locale }: { locale: string }) {
     const t = useTranslations();
     const { query } = useRouter();
+    const dispatch = useDispatch();
+    const fbBtnRef = useRef(null);
 
     const SubmitSchema = Yup.object().shape({
         email: Yup.string().email(t('Must be a valid email')).required(t('Required field')),
         password: Yup.string().required(t('Required field'))
     });
+
+    // useState()
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return (
         <>
             <Head>
                 <title>LiveProshop - Sign In</title>
             </Head>
 
-            <div className="flex justify-center">
-                <div className="w-80 p-8 mt-10 rounded-lg bg-white md:w-96 md:p-10 pb-14">
+            <div className="flex main-bg justify-center">
+                <div className="w-80 p-8 mt-10 rounded-lg bg-white colored-shadow md:w-96 md:p-10 pb-14">
                     <div className="mb-2 font-sm">{t('Welcome back!')}</div>
-                    <div className="mb-8 font-bold text-3xl line-height-105percent text-gray-600">
+                    <div className="mb-8 font-bold text-2xl line-height-105percent text-gray-600">
                         {t('Please sign into your account')}
                     </div>
 
@@ -111,6 +121,19 @@ function Signin({ locale }: { locale: string }) {
                     </Formik>
 
                     {/*<ProviderBtns Providers={providers} locale={locale} />*/}
+                    <div id="fb-block-btn" ref={fbBtnRef}></div>
+
+                    {/*<fb:login-button*/}
+                    {/*    config_id="{config_id}"*/}
+                    {/*    throwIfNamespace={}false*/}
+                    {/*    onlogin="checkLoginState();">*/}
+                    {/*</fb:login-button>*/}
+                    {/*<div>*/}
+                    {/*    <fb:login-button*/}
+                    {/*        config_id="{config_id}"*/}
+                    {/*        onlogin="checkLoginState();">*/}
+                    {/*    </fb:login-button>*/}
+                    {/*</div>*/}
                     <button
                         className="image-btn bg-social-facebook text-white"
                         onClick={() => accountService.loginFB()}>
@@ -126,24 +149,47 @@ function Signin({ locale }: { locale: string }) {
                         </div>
                         {/*<div className="text-sm bg-facebook-btn">{t('Continue with Facebook')}</div>*/}
                     </button>
+                    {/*<button*/}
+                    {/*    className="image-btn bg-social-facebook text-white"*/}
+                    {/*    onClick={() => accountService.loginFBusiness()}>*/}
+                    {/*    <div className="text-[12px] md:text-sm w-full text-center bg-facebook-btn">*/}
+                    {/*        {t('Continue with Facebook')}*/}
+                    {/*    </div>*/}
+                    {/*    /!*<div className="text-sm bg-facebook-btn">{t('Continue with Facebook')}</div>*!/*/}
+                    {/*</button>*/}
 
                     <div className="mt-3 border-t text-center text-sm">
                         <div className="mb-2 pt-1">
                             <Link href={'/auth/signup'}>
-                                <a className="red-yellow-gradient-text font-bold">
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                <a
+                                    onClick={() => {
+                                        dispatch(hideRegisterFormAction(false));
+                                        dispatch(setupFreeSubscriptionAction(false));
+                                    }}
+                                    className="red-yellow-gradient-text font-bold">
                                     {t('Don’t have an account?')} {t('Sign up here!')}
                                 </a>
                             </Link>
                         </div>
                         <div className="text-gray-450">
                             {t('By signing in, you accept the')}{' '}
-                            <a
-                                href="https://www.liveproshop.com/terms-and-conditions"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="rainbow-gradient-text">
-                                {t('terms of use')}
-                            </a>
+                            <Link href={'/terms-and-conditions'}>
+                                <a
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rainbow-gradient-text">
+                                    {' '}
+                                    {t('terms of use')}
+                                </a>
+                            </Link>
+                            {/*<a*/}
+                            {/*    href="https://www.liveproshop.com/terms-and-conditions"*/}
+                            {/*    target="_blank"*/}
+                            {/*    rel="noreferrer"*/}
+                            {/*    className="rainbow-gradient-text">*/}
+                            {/*    {t('terms of use')}*/}
+                            {/*</a>*/}
                         </div>
                     </div>
                 </div>

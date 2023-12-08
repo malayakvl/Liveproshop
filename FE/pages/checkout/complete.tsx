@@ -16,7 +16,7 @@ export default function Index({ session }: { session: any }) {
             <div className="max-w-screen-xl min-h-[calc(100vh-10rem)] lg:white-shadow-medium bg-white rounded-lg p-4 pb-4 lg:p-8 lg:pb-8 lg:mr-4 mt-10">
                 <div className="flex flex-wrap items-center ">
                     <div className="text-3xl font-bold text-gray-350 p-4 lg:p-8 mr-4 lg:mr-8">
-                        {t('Let’s check you out!')}
+                        {t('lets_check_out')}
                     </div>
 
                     <div className="flex-1 p-4 lg:p-8">

@@ -1,11 +1,13 @@
 import { SidebarCustomer, SidebarBuyer, SidebarAdmin } from '../sidebar/index';
 import SidebarHeader from '../header/SidebarHeader';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
-import { toggleSidebarAction } from '../../redux/layouts';
+import { toggleProfileMenuAction, toggleSidebarAction } from '../../redux/layouts';
 import Router from 'next/router';
+import { findOrderByCommentAction } from '../../redux/orders';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
@@ -14,12 +16,15 @@ export default function SidebarLayout({ children }: { children: any }) {
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
-        if (user.subscription_expired) {
-            if (user.status === 'incomplete') {
-                Router.push(`/subscription?planId=${user.plan_id}`);
-            } else {
+        if (user?.email && user.role_id == 2) {
+            if (user.subscription_id?.includes('fake_sub_') || user?.subscription_expired) {
                 Router.push(`/pricing`);
             }
+        }
+        if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
+            dispatch(
+                findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
+            );
         }
     }, [user?.email]);
 
@@ -40,7 +45,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             {user.role_id === 2 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
             <div
-                className={`relative h-full mt-4 md:mt-8 md:mb-10 ml-[40px] md:ml-4 md:pl-4 md:mr-8 ${
+                className={`relative ml-0 h-full mt-2 pb-2 md:mt-0 md:mb-10 md:pl-4 md:mr-8 ${
                     !isSidebarOpen ? 'side-margin' : 'side-with-sidebar'
                 }`}>
                 <div className="absolute md:hidden flex items-center">
@@ -48,6 +53,7 @@ export default function SidebarLayout({ children }: { children: any }) {
                         className="outline-none mobile-menu-button"
                         onClick={() => {
                             dispatch(toggleSidebarAction());
+                            dispatch(toggleProfileMenuAction(false));
                         }}>
                         <svg
                             width="24"
@@ -62,16 +68,6 @@ export default function SidebarLayout({ children }: { children: any }) {
                                 fill="#4F5B84"
                             />
                         </svg>
-                        {/*<svg*/}
-                        {/*    className="w-6 h-6 text-gray-500"*/}
-                        {/*    fill="none"*/}
-                        {/*    strokeLinecap="round"*/}
-                        {/*    strokeLinejoin="round"*/}
-                        {/*    strokeWidth="2"*/}
-                        {/*    viewBox="0 0 24 24"*/}
-                        {/*    stroke="currentColor">*/}
-                        {/*    <path d="M4 6h16M4 12h16M4 18h16" />*/}
-                        {/*</svg>*/}
                     </button>
                 </div>
 

@@ -74,7 +74,7 @@ Desition - add .babelrc
 ### Starting major task
 
 ```bash
-pm2 start sessionsStart.js --name="Check started session"
+pm2 start _sessionsStart.js --name="Check started session"
 ```
 
 ```bash
@@ -147,7 +147,7 @@ Desition - add .babelrc
 ### Starting major task
 
 ```bash
-pm2 start sessionsStart.js --name="Check started session"
+pm2 start _sessionsStart.js --name="Check started session"
 ```
 
 Custom starting parse process without FB for test mode only

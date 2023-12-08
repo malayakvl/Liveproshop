@@ -5,9 +5,9 @@
   "started a free trial in the last 30 days": "started a free trial in the last 30 days",
   "It only takes 30 seconds to get started": "It only takes 30 seconds to get started",
   "Register for free": "Register for free",
-  "Request a seles call": "Request a seles call",
+  "Request a seles call": "Request a sales call",
   "Quick features view": "Quick features view",
-  "Try it for free today!": "Essai gratuit pendant 30 jours",
+  "Try it for free today!": "Try it for free today!",
   "Register now!": "Register now!",
   "I want to know more!": "I want to know more!",
   "tip_caption_1": "Leave behind cart abandonment ",
@@ -33,14 +33,22 @@
   "increase_sales": "Increase sales 300+%",
   "increase_sales_descr": "With a sales system as intuitive as Live Pro Shop, it`s possible!",
   "save_up": "Save up to 3 hours",
-  "save_up_descr": "With a sales system as intuitive as Live Pro Shop, it`s possible!",
+  "save_up_descr": "An intense live with many sales involves hours of repitive administrative management. Automate the process and forget about those long hours.",
   "dedicate_cap": "70% or the users could dedicate more time to their community ",
   "dedicate_cap_descr": "And the other 30% spent the whole time for themselves and their family",
   "best_caption": "Best of all, Live Pro Shop works with all your favorite sites!",
-  "best_descr": "Live pro shop gathers the best partners to increase revenue and strengthen customer loyaulty through live video sales",
+  "best_descr": "Live pro shop gathers the best partners to increase revenue and strengthen customer loyaulty through live video sales.",
   "Customer stories": "Customer stories",
   "you_to_client": "You too, be like our clients",
   "perfect_tool_text": "Perfect tool for business owner that utilizes live streaming for retail sales",
+  "Welcome to": "Welcome to",
+  "Advantages": "Advantages",
+  "Integration": "Integration",
+  "text_rocket_sub": "See how Live Pro Shop tools help companies run their business",
+  "Support": "Support",
+  "Guide": "Guide",
+  "FAQ": "FAQ",
+  "Faq": "FAQ",
   "arrayOfObjects": [
     {
       "person": "Sabrina M.",
@@ -60,5 +68,7 @@
       "title": "It's all very simple to use!",
       "text": "I love all the features of LiveProShop, but my favorite is that my customers have access and control to their cart. They can see what they've ordered."
     }
-  ]
+  ],
+  "Resources": "Resources",
+  "Get started": "Get started"
 }

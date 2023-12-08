@@ -25,10 +25,23 @@ export default function CompletePayment({
     const { query } = useRouter();
     // const user = useSelector(userSelector);
     const stripePaymentIntent = useSelector(paymentIntentSelector);
+    // console.log('stripePaymentIntent from URL', query.payment_intent);
+    // console.log('stripePaymentSecret from URL', query.payment_intent_client_secret);
+    // console.log('setupIntentIncome', stripePaymentIntent);
 
     useEffect(() => {
         // dispatch(checkPaymentStatusAction(paymentIntent, paymentIntentSecret));
-        dispatch(checkPaymentStatusAction(setupIntent, setupIntentSecret, planId, type));
+        // console.log('CHECK PAYMENT STATUS UPDATED', query.payment_intent_client_secret);
+        // console.log('CLIENT INTENT', query.payment_intent_client_secret);
+        dispatch(
+            checkPaymentStatusAction(
+                setupIntent ? setupIntent : query.payment_intent,
+                // setupIntentSecret ? setupIntentSecret : query.payment_intent_client_secret,
+                query.payment_intent_client_secret,
+                planId,
+                type
+            )
+        );
     }, [paymentIntent]);
 
     useEffect(() => {
@@ -38,30 +51,16 @@ export default function CompletePayment({
                 seller_email: stripePaymentIntent?.email,
                 callbackUrl: `${window.location.origin}/dashboard`
             });
-
-            // if (!user?.email) {
-            //     signIn('credentials_subscription_login', {
-            //         email: stripePaymentIntent?.email,
-            //         seller_email: stripePaymentIntent?.email,
-            //         callbackUrl: `${window.location.origin}/dashboard`
-            //     });
-            // } else {
-            //     signIn('credentials_subscription_login', {
-            //         email: stripePaymentIntent?.email,
-            //         seller_email: stripePaymentIntent?.email,
-            //         callbackUrl: `${window.location.origin}/dashboard`
-            //     });
-            // }
         }
     }, [stripePaymentIntent?.email]);
 
     return (
         <div className="flex justify-center">
-            <div className="mt-10 rounded-lg bg-white w-96 p-10 pb-24">
-                <div className="mb-8 font-bold text-3xl line-height-105percent">
-                    {t('Payment Confirmation')}
+            <div className="mt-10 rounded-lg bg-white w-96 p-10">
+                <div className="font-bold text-3xl line-height-105percent text-center">
+                    {t('Payment Confirmation')}!
                 </div>
-                <div className="error-el">{query.message}</div>
+                {query.message && <div className="error-el mt-3">${query.message}</div>}
             </div>
         </div>
     );

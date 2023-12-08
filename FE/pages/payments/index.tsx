@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { userSelector } from '../../redux/user/selectors';
 import { getSession } from 'next-auth/client';
@@ -14,12 +14,14 @@ import {
 } from '../../components/payments';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
+import { bulkDownloadAction } from '../../redux/orders/actions';
 
 export default function Payments({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     // const dispatch = useDispatch();
     const user = useSelector(userSelector);
+    const dispatch = useDispatch();
 
     const [filterOpen, setFilterOpen] = useState(false);
     const { filters }: Layouts.Pagination = useSelector(
@@ -60,7 +62,14 @@ export default function Payments({ session }: { session: any }) {
                             </div>
 
                             <Filters handleHideFilter={handleHideFilter} filterOpen={filterOpen} />
-
+                            <button
+                                style={{ right: '145px' }}
+                                className={`gradient-btn absolute top-0 right-[145px] p-[5px]`}
+                                onClick={() => dispatch(bulkDownloadAction())}>
+                                <div className="font-medium text-white ml-2 font-bold">
+                                    {t('Download Orders')}
+                                </div>
+                            </button>
                             <button
                                 onClick={() => {
                                     // if (filterOpen) {

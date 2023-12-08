@@ -56,3 +56,11 @@ export const achiveNameSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.achiveName
 );
+export const singleDowloadFileSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.downloadFileName
+);
+export const orderCommentIdSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.commentIdOrder
+);

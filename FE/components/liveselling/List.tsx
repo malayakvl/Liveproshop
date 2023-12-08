@@ -55,7 +55,7 @@ const ListMessages: React.FC = () => {
                                 <span className="closed">{t('Closed')}</span>
                             )}
                         </td>
-                        {/*<td>{item.product_cnt ? item.product_cnt : '-'}</td>*/}
+                        <td>Store name</td>
                         {/*<td>{item.user_cnt ? item.user_cnt : '-'}</td>*/}
                     </tr>
                 ))}

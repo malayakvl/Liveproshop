@@ -14,5 +14,10 @@ export default {
     "Invoice number:": "Numéro de facture:",
     "Invoice Date:":"Date de Facturation:",
     "Balance Due:":"Solde Dû:",
-    "Total Payment":"Paiement Total"
+    "Total Payment":"Paiement Total",
+    "Delivery Address": "Delivery Address: ",
+    "Transaction ID": "Transaction ID: ",
+    "Holder Name": "Holder Name: ",
+    "Payment Method": "Payment Method: ",
+    "Refund": "Refund"
 }

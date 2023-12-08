@@ -14,5 +14,11 @@ export default {
     "Invoice number:": "Invoice number:",
     "Invoice Date:":"Invoice Date:",
     "Balance Due:":"Balance Due:",
-    "Total Payment":"Total Payment"
+    "Total Payment":"Total Payment",
+    "Delivery Address": "Delivery Address: ",
+    "Transaction ID": "Transaction ID: ",
+    "Holder Name": "Holder Name: ",
+    "Payment Method": "Payment Method: ",
+    "Refund": "Refund"
+
 }

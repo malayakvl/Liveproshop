@@ -1,0 +1,17 @@
+.rapide-text {
+  font-weight: bold;
+}
+.see-full-link {
+
+}
+.text-sys {
+  max-width: 650px;
+}
+
+.social-caption-main {
+  @apply block text-[14px] md:max-w-[90px]  md:text-[13px] text-gray-350 text-center lg:max-w-[90px] xl:max-w-[120px] mt-[14px] font-bold;
+}
+
+.icon-social-block-content {
+  @apply mt-[240px] md:mt-[550px] lg:mt-auto lg:pl-[485px] xl:pl-[495px];
+}

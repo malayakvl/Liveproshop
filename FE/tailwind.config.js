@@ -1,17 +1,19 @@
 require('tailwindcss/colors');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
     mode: 'jit',
     purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
     darkMode: 'class', // or 'media' or 'class'
     theme: {
-        screens: {
-            sm: '640px',
-            md: '768px',
-            lg: '1024px',
-            xl: '1280px',
-            '2xl': '1536px'
-        },
+        // screens: {
+        //     sm: '640px',
+        //     md: '768px',
+        //     lg: '1024px',
+        //     xl: '1280px',
+        //     ...defaultTheme.screens
+        // },
         fontFamily: {
             montserrat: ['Montserrat'],
             sans: ['"Montserrat"']
@@ -68,7 +70,9 @@ module.exports = {
                     350: '#99ABCE'
                 },
                 gray: {
+                    25: '#E2E4E9',
                     50: '#A8AFBD',
+                    75: '#EEF1F7',
                     100: '#F8F8F8',
                     200: '#C5CAD3',
                     150: '#ECEFF1',
@@ -77,10 +81,14 @@ module.exports = {
                     350: '#4F5B84',
                     450: '#90A4AE',
                     500: '#8C94A6',
+                    550: '#667085',
                     600: '#4F5B84'
                 },
                 orange: {
                     450: '#EE5342'
+                },
+                purple: {
+                    250: '#cb55ac'
                 },
                 yellow: {
                     450: '#EFBB58'

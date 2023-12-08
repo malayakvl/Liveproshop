@@ -5,12 +5,13 @@ const facebookAppId = process.env.REACT_APP_FACEBOOK_APP_ID;
 export function initFacebookSdk() {
     return new Promise((resolve) => {
         // wait for facebook sdk to initialize before starting the react app
+        console.log('here we are init sdk');
         window.fbAsyncInit = function () {
             window.FB.init({
                 appId: facebookAppId,
                 cookie: true,
                 xfbml: true,
-                version: 'v8.0'
+                version: 'v17.0'
             });
 
             // auto authenticate with the api if already logged in with facebook

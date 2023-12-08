@@ -46,7 +46,7 @@ export default function BuyerRegistration({ email, locale }: { email: string; lo
     };
 
     return (
-        <div className="mt-10 rounded-lg border shadow-xl bg-white w-96 p-10 pb-10">
+        <div className="mt-10 rounded-lg colored-shadow bg-white w-96 p-10 pb-10">
             <div className="flex items-center mb-4">
                 <div className="mr-2.5 font-bold text-3xl line-height-105percent w-60">
                     {t('Your email has been verified!')}

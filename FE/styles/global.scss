@@ -51,7 +51,7 @@
     line-height: 105%;
   }
   .dark-blue-header {
-    @apply text-gray-350 font-bold text-[18px];
+    @apply text-[24px] text-gray-350 font-bold md:text-[30px];
   }
   .loader {
     @apply w-full h-full bg-black fixed z-50 opacity-75;
@@ -68,7 +68,7 @@
   }
   .container {
     //background: #b7cfe0;
-    @apply xl:max-w-[1400px];
+    @apply 2xl:max-w-[1400px] xl:px-4 relative;
   }
 }
 
@@ -123,13 +123,31 @@
   direction: ltr;
 }
 
+.dark-logged {
+  @apply text-[16px];
+}
+.dark-logged-1 {
+  @apply text-[18px];
+}
+.dark-blue-header-2 {
+  font-size: 16px !important;
+}
+
+.calendly-inline-widget {
+  height: 420px !important;
+}
+
+.text-refund {
+  color: rgb(185, 28, 28);
+}
+
+@import "components/sidebar-header";
 @import "components/header";
 @import "components/main";
 @import "components/buttons";
 @import "components/alerts";
 @import "components/sidebar";
 @import "components/form";
-@import "components/sidebar-header";
 @import "components/page-titles";
 @import "components/tables";
 @import "components/tabs";
@@ -140,7 +158,14 @@
 @import "components/filters";
 @import "components/dropdown";
 @import "components/popup";
+@import "components/home";
 @import "components/faq";
 @import "components/testimonials";
 @import "components/features";
 @import "components/plans";
+@import "components/privacy";
+@import "components/guide";
+@import "components/404";
+@import "components/pricing";
+@import "components/cookies";
+//@import "components/messager";

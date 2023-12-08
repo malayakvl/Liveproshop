@@ -1,4 +1,5 @@
 export { default as CheckoutForm } from './CheckoutForm';
+export { default as CheckoutRegisteredForm } from './CheckoutRegisterForm';
 export { default as CardForm } from './CardForm';
 export { default as ShippingAddress } from './ShippingAddress';
 export { default as ShippingMethod } from './ShippingMethod';

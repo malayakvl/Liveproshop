@@ -38,8 +38,8 @@ function ContactUs({ locale }: { locale: string }) {
                 <title>LiveProshop - {t('Contact Us')}</title>
             </Head>
 
-            <div className="flex justify-center">
-                <div className="mt-10 rounded-lg bg-white w-96 p-10">
+            <div className="flex main-bg justify-center">
+                <div className="mt-10 rounded-lg colored-shadow bg-white w-96 p-10">
                     <div className="mb-8 font-bold text-3xl line-height-105percent">
                         {t('Contact Us')}
                     </div>

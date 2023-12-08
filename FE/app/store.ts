@@ -24,6 +24,7 @@ import dashboardReducer from '../redux/dashboard';
 import settingsReducer from '../redux/settings';
 import paymentPlansReducer from '../redux/paymentPlans';
 import checkoutReducer from '../redux/checkout';
+import mystoresReducer from '../redux/mystores';
 
 const reducers = combineReducers({
     // address: addressReducer,
@@ -44,7 +45,9 @@ const reducers = combineReducers({
     dashboard: dashboardReducer,
     settings: settingsReducer,
     paymentPlans: paymentPlansReducer,
-    checkout: checkoutReducer
+    checkout: checkoutReducer,
+    mystores: mystoresReducer,
+    userstores: mystoresReducer
 });
 
 const initStore = (initialState = {}) => {

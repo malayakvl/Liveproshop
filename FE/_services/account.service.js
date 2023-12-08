@@ -20,34 +20,75 @@ export const accountService = {
 
 async function syncFB() {
     // login with facebook then authenticate with the API to get a JWT auth token
-    const { authResponse } = await new Promise(window.FB.login);
-    // const authResponse = {
-    //     accessToken:
-    //         'EAArS9KI0vagBAILslZArSEh0l8gLYZAQTbjg8DOzkC7A17ZC3445oUb16yWQPJq4GJ65nJi7H1gZCWUDFduDf8WuaowacJjU9QWoxapQc3ZCEZAwHPZBUukMPXOR8JkZCSzZAugLZCmk3hhcLQZCoW6IW5uILLrO6YZBSEHUPXzrWkgp39ptKgGI86dsRvjJjqUDM6F2yfIlZC3viKZAZC0ZB0EA0SzT',
-    //     userID: '2763630843946760',
-    //     expiresIn: 5541,
-    //     signedRequest:
-    //         'UVLZg3i-hV26oubUREkooPPLh97OGsyOubTKhBpOQPE.eyJ1c2VyX2lkIjoiMjc2MzYzMDg0Mzk0Njc2MCIsImNvZGUiOiJBUURUa0F3TVpuNjRtQlNzdXV6XzFsdmEtVlNKVGtwblVQNEcyTE5wNEhocGNNMUJidDR0ci1pZUNjVUpydWNwREZhWndDTnBEdFhjeHA0dnhUaGtjbEZjSkZZTGxwSG1QUF95TW9GQ2pHRThac0U1NlRlc0t6bnlwbDZxR0dmUW1STVF6U1hMVWRDZ0tMcTBlZmI5enRCVDNVWERYeXVCcFNFSnkzX3YxcXNyZnAwR2JLOUhMM0J0LVBFUl9ock1oQkRCUFRkNHZfUmFZcmZ3ZjlnbTdQNU5BamxhalRsajViTHVDY3Z0UWlpWU94QThyaFRyUkhaXzZPVkt4ZlFZeG15WENRVk5SMUNIczNuVEQydDZKRm0zRDZrSi1PczU5UEwzLUZCaFZ2WklsaFlOa0FRREd4LWpxMFBqUDdaTER0Rk5VWFd4MmQ4ZF8yWm81Q09EOUVpbCIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNjQzMjAzNjU5fQ',
-    //     graphDomain: 'facebook',
-    //     data_access_expiration_time: 1650992801
-    // };
+    // const { authResponse } = await new Promise(window.FB.login);
+    // console.log('public_profile,email,pages_show_list');
+    // FB.login(
+    //     function (response) {
+    //         // handle the response
+    //     },
+    //     {
+    //         scope: 'public_profile,email,pages_show_list,publish_video,pages_messaging'
+    //     }
+    // );
+    const { authResponse } = await new Promise(
+        // window.FB.login(
+        //     function (response) {
+        //         // handle the response
+        //         console.log('!!!!!!!', response.authResponse);
+        //         store.dispatch(syncFbAction(response.authResponse));
+        //         return response;
+        //     },
+        //     {
+        //         scope: 'public_profile,email,pages_show_list,publish_video,pages_messaging'
+        //     }
+        // )
+        window.FB.login(
+            function (response) {
+                // handle the response
+                store.dispatch(syncFbAction(response.authResponse));
+                return response;
+            },
+            {
+                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content'
+            }
+        )
+    );
+    console.log('AUTH RESPONCE', authResponse);
     store.dispatch(syncFbAction(authResponse));
 }
 
-async function registerFB(roleId) {
+async function registerFB(paramData, commentId) {
+    const infoParam = paramData.split('_');
+    // const roleId = infoParam[0] ? infoParam[0] : 2;
+    const roleId = infoParam[0] ? infoParam[0] : 1;
+    // const commentId = infoParam[0] ? infoParam[0] : 2;
+    const locale = infoParam[1];
+    const forFree = infoParam[2];
+    console.log('Register FB SDK');
     // login with facebook then authenticate with the API to get a JWT auth token
+    // const { authResponse } = await new Promise(window.FB.login);
     const { authResponse } = await new Promise(window.FB.login);
-    // const authResponse = {
-    //     accessToken:
-    //         'EAArS9KI0vagBAHQBZACSnqonUDbwBFg0ssXFWuKnSZBZAWRiGGapIjMFipjD4P7pHnNOWXZAT0DWxk72D1fjFzy29TWuxO4SbHdz6mYKEoj0psziiZC15nq7rwaxdavwOqfeyeM2KwF8ApwmKV5610IGBzFSRLWc6HVT5eSag8m9o4w9f31e55N1F7NevZATS1wejBtkGUmQkZAKo7XPl5A',
-    //     userID: '2763630843946760',
-    //     expiresIn: 5541,
-    //     signedRequest:
-    //         'UVLZg3i-hV26oubUREkooPPLh97OGsyOubTKhBpOQPE.eyJ1c2VyX2lkIjoiMjc2MzYzMDg0Mzk0Njc2MCIsImNvZGUiOiJBUURUa0F3TVpuNjRtQlNzdXV6XzFsdmEtVlNKVGtwblVQNEcyTE5wNEhocGNNMUJidDR0ci1pZUNjVUpydWNwREZhWndDTnBEdFhjeHA0dnhUaGtjbEZjSkZZTGxwSG1QUF95TW9GQ2pHRThac0U1NlRlc0t6bnlwbDZxR0dmUW1STVF6U1hMVWRDZ0tMcTBlZmI5enRCVDNVWERYeXVCcFNFSnkzX3YxcXNyZnAwR2JLOUhMM0J0LVBFUl9ock1oQkRCUFRkNHZfUmFZcmZ3ZjlnbTdQNU5BamxhalRsajViTHVDY3Z0UWlpWU94QThyaFRyUkhaXzZPVkt4ZlFZeG15WENRVk5SMUNIczNuVEQydDZKRm0zRDZrSi1PczU5UEwzLUZCaFZ2WklsaFlOa0FRREd4LWpxMFBqUDdaTER0Rk5VWFd4MmQ4ZF8yWm81Q09EOUVpbCIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNjQzMjAzNjU5fQ',
-    //     graphDomain: 'facebook',
-    //     data_access_expiration_time: 1651002797
+
+    // login and add stores
+    // const loginOptions = {
+    //     scope: 'publish_video,manage_pages,pages_show_list,pages_messaging'
     // };
+    // const { authResponse } = await new Promise((resolve, reject) => {
+    //     window.FB.login(
+    //         (response) => {
+    //             // handle the response
+    //             if (response.authResponse) {
+    //                 resolve(response);
+    //             } else {
+    //                 reject(response);
+    //             }
+    //         },
+    //         { scope: 'email,pages_show_list,pages_messaging,publish_video' }
+    //     );
+    // });
     authResponse.roleId = roleId;
+    authResponse.locale = locale;
+    authResponse.forFree = forFree;
     if (authResponse) {
         await getAccountData(authResponse);
     } else {
@@ -58,16 +99,19 @@ async function registerFB(roleId) {
 async function loginFB() {
     // login with facebook then authenticate with the API to get a JWT auth token
     const { authResponse } = await new Promise(window.FB.login);
-    // const authResponse = {
-    //     accessToken:
-    //         'EAArS9KI0vagBAGRrb0gSuSgMOfsuEZBM8InZCyVf0JcKCE2RVmRc5NZCfGs3zNR5zIrxMdzc7baTo2Gra9LLYKcZAZB40ZBpmWU1xpZB3kWJtBgRA7Ge1ZAqJx8wvZAGMidWimhyzHrtsz0pyNAjUxXhtOXLUJaFv7MGYyPf9QskObO5TCsBjbP6yxkJGHFbOxSXRwyoiSH3nCC8MZCEZB7tSzm',
-    //     userID: '2763630843946760',
-    //     expiresIn: 5541,
-    //     signedRequest:
-    //         'UVLZg3i-hV26oubUREkooPPLh97OGsyOubTKhBpOQPE.eyJ1c2VyX2lkIjoiMjc2MzYzMDg0Mzk0Njc2MCIsImNvZGUiOiJBUURUa0F3TVpuNjRtQlNzdXV6XzFsdmEtVlNKVGtwblVQNEcyTE5wNEhocGNNMUJidDR0ci1pZUNjVUpydWNwREZhWndDTnBEdFhjeHA0dnhUaGtjbEZjSkZZTGxwSG1QUF95TW9GQ2pHRThac0U1NlRlc0t6bnlwbDZxR0dmUW1STVF6U1hMVWRDZ0tMcTBlZmI5enRCVDNVWERYeXVCcFNFSnkzX3YxcXNyZnAwR2JLOUhMM0J0LVBFUl9ock1oQkRCUFRkNHZfUmFZcmZ3ZjlnbTdQNU5BamxhalRsajViTHVDY3Z0UWlpWU94QThyaFRyUkhaXzZPVkt4ZlFZeG15WENRVk5SMUNIczNuVEQydDZKRm0zRDZrSi1PczU5UEwzLUZCaFZ2WklsaFlOa0FRREd4LWpxMFBqUDdaTER0Rk5VWFd4MmQ4ZF8yWm81Q09EOUVpbCIsImFsZ29yaXRobSI6IkhNQUMtU0hBMjU2IiwiaXNzdWVkX2F0IjoxNjQzMjAzNjU5fQ',
-    //     graphDomain: 'facebook',
-    //     data_access_expiration_time: 1651004629
+    // const loginOptions = {
+    //     scope: 'publish_video,manage_pages,pages_show_list,pages_messaging'
     // };
+    // const { authResponse } = await new Promise((resolve, reject) => {
+    //     window.FB.login((response) => {
+    //         // handle the response
+    //         if (response.authResponse) {
+    //             resolve(response);
+    //         } else {
+    //             reject(response);
+    //         }
+    //     }, loginOptions);
+    // });
     if (authResponse) {
         store.dispatch(showLoaderAction(true));
         signIn('credentials_sdkfacebook_login', authResponse);
@@ -77,42 +121,43 @@ async function loginFB() {
 }
 
 async function getAccountData(authResponse) {
+    // console.log(
+    //     'SEND RESPONCSE TO THIS URL',
+    //     `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`
+    // );
+    // const loginOptions = {
+    //     scope: 'pages_show_list,pages_messaging,pages_manage_metadata,pages_read_user_content'
+    // };
+    const loginOptions = {
+        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
+    };
     axios
         .get(
-            `https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${authResponse.accessToken}`
-        )
+            `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`, loginOptions)
         .then((response) => {
             const { data } = response;
             if (data.error) {
                 store.dispatch(setErrorToastAction('Could no autherntificate'));
             }
+            // console.log('AUTH RESPONCE HERE', authResponse.roleId);
             data.accessToken = authResponse.accessToken;
-            // data.providerId = authResponse.userID,
             data.expirationTime = authResponse.data_access_expiration_time;
-            data.callbackUrl = `${window.location.origin}/dashboard`;
-            data.roleId = authResponse.roleId;
+            if (parseInt(authResponse.roleId) === 1) {
+                data.callbackUrl = `${window.location.origin}/${
+                    authResponse.locale === 'fr' ? '' : 'en/'
+                }dashboard`;
+            } else {
+                data.callbackUrl = `${window.location.origin}/${
+                    authResponse.locale === 'fr' ? '' : 'en/'
+                }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
+            }
+            data.roleId = authResponse.roleId ? authResponse.roleId : 2;
+            data.forFree = authResponse.forFree;
+            data.userAccounts = JSON.stringify(data.accounts);
             store.dispatch(showLoaderAction(true));
             signIn('credentials_sdkfacebook', data);
         });
 }
-
-// async function apiAuthenticate(authResponse) {
-//     // authenticate with the api using a facebook access token,
-//     // on success the api returns an account object with a JWT auth token
-//     const response = await axios.post(
-//         `${baseUrl}/fb-authenticate`,
-//         { accessToken },
-//         {
-//             headers: {
-//                 ...authHeader(state.user.user.email)
-//             }
-//         }
-//     );
-//     const account = response.data;
-//     accountSubject.next(account);
-//     startAuthenticateTimer();
-//     return account;
-// }
 
 function logout() {
     // revoke app permissions to logout completely because FB.logout() doesn't remove FB cookie
@@ -126,17 +171,9 @@ function logout() {
 
 let authenticateTimeout;
 
-// function startAuthenticateTimer() {
-//     // parse json object from base64 encoded jwt token
-//     const jwtToken = JSON.parse(atob(accountSubject.value.token.split('.')[1]));
-//     // set a timeout to re-authenticate with the api one minute before the token expires
-//     const expires = new Date(jwtToken.exp * 1000);
-//     const timeout = expires.getTime() - Date.now() - 60 * 1000;
-//     const { accessToken } = window.FB.getAuthResponse();
-//     authenticateTimeout = setTimeout(() => apiAuthenticate(accessToken), timeout);
-// }
-
 function stopAuthenticateTimer() {
     // cancel timer for re-authenticating with the api
     clearTimeout(authenticateTimeout);
 }
+
+// curl -i -X GET "https://graph.facebook.com/2763630843946760/accounts?access_token=EAArS9KI0vagBO46CIW5SZCe2ZCHRAyxmvNEcwZC4GMJCEmYuoZCGxmCcv7hNA5QP9zDQ6EbYPjKTaGSdP5e1J7fkXwM3w1sjzHXnTBDJpkEdeQ06qf42svmCgubo6ZBgKWiXAZA5i32ZAIUpcKfZCWGaZC2sNGCS92RgtHqi2ZCoOtuQyNx3tigaN60aPp8Rm8jwXvFxvLCeixZBlbs8Ka2dsM2Uopg6ecZD"

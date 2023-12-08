@@ -7,6 +7,7 @@ declare namespace Livesessions {
         loading: boolean;
         showPopup: boolean;
         itemScenarios: DataScenario[];
+        selectedStoreId: number | null;
     }
 
     interface DataScenario {

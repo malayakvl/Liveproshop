@@ -15,5 +15,6 @@ declare namespace Dashboard {
         total_amount: number;
         total_buyers: number;
         total_pending: number;
+        total_refund: number;
     }
 }

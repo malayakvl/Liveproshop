@@ -8,7 +8,12 @@ import {
     checkPaymentStatusAction,
     fetchUserSubscriptionAction,
     showChangeSubscriptionFormAction,
-    skipExistUserSubscriptionAction
+    skipExistUserSubscriptionAction,
+    setupFreeSubscriptionAction,
+    skipExistUserSubscriptionNewAction,
+    setRedirectAfterSubscription,
+    updateUserSubscriptionAction,
+    setOrderCommentAction
 } from './actions';
 
 // const initialState: State.User = {
@@ -23,12 +28,18 @@ const initialState: {
     user: User.User;
     paymentIntent: null;
     showChangeSubscription: boolean;
+    forFree: boolean | string;
+    redirectAfterSubscription: boolean;
+    commentId: null;
 } = {
     user: {} as User.User,
     clientSecret: null,
     subscription: null,
     paymentIntent: null,
-    showChangeSubscription: false
+    showChangeSubscription: false,
+    forFree: false,
+    redirectAfterSubscription: false,
+    commentId: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -42,6 +53,12 @@ const ACTION_HANDLERS: any = {
         next: (state: State.User, action: Action<any>): State.User => ({
             ...state,
             user: action.payload
+        })
+    },
+    [setOrderCommentAction]: {
+        next: (state: State.User, action: Action<any>): State.User => ({
+            ...state,
+            commentId: action.payload
         })
     },
     [hideRegisterFormAction]: {
@@ -115,6 +132,24 @@ const ACTION_HANDLERS: any = {
             ...state,
             showChangeSubscription: action.payload
         })
+    },
+    [setupFreeSubscriptionAction]: {
+        next: (state: State.User, action: Action<boolean>): State.User => ({
+            ...state,
+            forFree: action.payload
+        })
+    },
+    [setRedirectAfterSubscription]: {
+        next: (state: State.User, action: Action<boolean>): State.User => ({
+            ...state,
+            redirectAfterSubscription: action.payload
+        })
+    },
+    [updateUserSubscriptionAction]: {
+        next: (state: State.User, action: Action<boolean>): State.User => ({
+            ...state,
+            subscription: action.payload
+        })
     }
 };
 
@@ -127,7 +162,12 @@ export {
     checkPaymentStatusAction,
     fetchUserSubscriptionAction,
     showChangeSubscriptionFormAction,
-    skipExistUserSubscriptionAction
+    skipExistUserSubscriptionAction,
+    setupFreeSubscriptionAction,
+    skipExistUserSubscriptionNewAction,
+    setRedirectAfterSubscription,
+    updateUserSubscriptionAction,
+    setOrderCommentAction
 };
 
 // ------------------------------------

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isSidebarOpenSelector } from '../../redux/layouts/selectors';
 import { useWindowSize } from '../../hooks';
 import { sidebarCloseAction, toggleSidebarAction } from '../../redux/layouts';
+import { useRouter } from 'next/router';
 
 const SidebarBuyer: React.FC = () => {
     const t = useTranslations();
@@ -14,6 +15,8 @@ const SidebarBuyer: React.FC = () => {
     const dispatch = useDispatch();
     const node = useRef<HTMLDivElement>(null);
     const { isMobile } = useWindowSize();
+    const router = useRouter();
+    const currRoute = router.route.substring(1);
 
     const handleClick = (e: any) => {
         if (node?.current?.contains(e.target) || node?.current === null) {
@@ -42,7 +45,7 @@ const SidebarBuyer: React.FC = () => {
                 <Brand />
                 <div className="overflow-y-auto overflow-x-hidden transparent-scrollbar-thumb rtl flex flex-col justify-between flex-grow">
                     <ul className="ltr">
-                        <li className="active">
+                        <li className={currRoute === 'dashboard' ? 'active' : ''}>
                             <Link href={'/dashboard'}>
                                 <a>
                                     <i className="dashboard" />
@@ -50,7 +53,7 @@ const SidebarBuyer: React.FC = () => {
                                 </a>
                             </Link>
                         </li>
-                        <li>
+                        <li className={currRoute === 'orders' ? 'active' : ''}>
                             <Link href={'/orders'}>
                                 <a>
                                     <i className="order" />

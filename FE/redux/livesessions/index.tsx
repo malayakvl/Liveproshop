@@ -4,7 +4,8 @@ import {
     fetchItemAction,
     setEmptyFormAction,
     showPopupAction,
-    fetchScenariosAction
+    fetchScenariosAction,
+    setLiveSessionStoreAction
 } from './actions';
 
 const initialState: {
@@ -15,6 +16,7 @@ const initialState: {
     item: Livesessions.DataItem;
     showPopup: boolean;
     itemScenarios: Livesessions.DataScenario[];
+    selectedStoreId: number | null;
 } = {
     isFetched: false,
     loading: false,
@@ -30,7 +32,8 @@ const initialState: {
         updated_at: ''
     },
     showPopup: false,
-    itemScenarios: []
+    itemScenarios: [],
+    selectedStoreId: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -85,6 +88,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             showPopup: action.payload
         })
+    },
+    [setLiveSessionStoreAction]: {
+        next: (state: State.Livesessions, action: Action<any>): State.Livesessions => ({
+            ...state,
+            selectedStoreId: action.payload
+        })
     }
 };
 
@@ -93,7 +102,8 @@ export {
     fetchItemAction,
     showPopupAction,
     setEmptyFormAction,
-    fetchScenariosAction
+    fetchScenariosAction,
+    setLiveSessionStoreAction
 };
 
 // ------------------------------------
