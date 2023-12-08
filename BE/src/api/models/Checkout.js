@@ -19,6 +19,7 @@ class Checkout {
             });
 
             const ordersQuery = `SELECT * FROM data.get_orders(1, 0, '${filter}');`;
+            console.log(ordersQuery)
             const res = await client.query(ordersQuery);
             order = res.rows.length > 0 ? res.rows[0] : [];
             console.log(res.rows[0].id)

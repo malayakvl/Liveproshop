@@ -9,6 +9,7 @@ import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
 import { showLoaderAction } from '../layouts/actions';
+import {fetchCheckoutAction} from "../checkout";
 
 export const submitFormAction: any = createAction(
     'orders/ADD_UPDATE_DATA',
@@ -327,8 +328,7 @@ export const findOrderByCommentAction: any = createAction(
     'order/FETCH_USER_ORDER',
     async (commentId: string, email: string) => {
         return axios
-            .get(`${baseUrl}/orders/find-order-by-comment?commentId=${commentId}`,
-                {
+            .get(`${baseUrl}/orders/find-order-by-comment?commentId=${commentId}`, {
                 headers: {
                     ...authHeader(email)
                 }
@@ -337,24 +337,38 @@ export const findOrderByCommentAction: any = createAction(
             .catch((e) => console.log(e.message));
     }
 );
-
 export const demoveItemOrderAction: any = createAction(
-    'order/FETCH_USER_ORDER',
-    async (configurationId: string, email: string, orderId: any, qty: number) => {
-        return axios
-            .get(
-                `${baseUrl}/orders/remove-item-order?configId=${configurationId}&orderId=${orderId}&qty=${qty}`,
-                {
+    'orders/REMOVE_ITEM_ACTION',
+    async (itemId: number, orderNumber: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/remove-item-order?orderItemId=${itemId}`, {
                     headers: {
-                        ...authHeader(email)
+                        ...authHeader(state.user.user.email)
                     }
-            })
-            .then((res) => {
-                window.location.reload();
-            })
-            .catch((e) => console.log(e.message));
-    }
+                })
+                .then((res: any) => {
+                    dispatch(fetchCheckoutAction(orderNumber));
+                });
+        }
 );
+// export const demoveItemOrderAction: any = createAction(
+//     'order/REMOVE_ITEM_ACTION',
+//     async (itemId: number, email: string) => {
+//         return axios
+//             .get(`${baseUrl}/orders/remove-item-order?orderItemId=${itemId}`, {
+//                 headers: {
+//                     ...authHeader(email)
+//                 }
+//             })
+//             .then((res) => {
+//                 // window.location.reload();
+//                 dispatch(fetchCheckoutAction(orderNumber));
+//             })
+//             .catch((e) => console.log(e.message));
+//     }
+// );
 
 export const setFbCommentAction: any = createAction('orders/SET_FB_ORDER_COMMENT');
 export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');

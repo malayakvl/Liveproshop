@@ -98,7 +98,7 @@ class OrderController {
     }
 
     async removeOrderItem(req, res) {
-        // const resQuery = await orderModel.removeOrderItem(req.query.configId, req.query.orderId, req.query.qty);
+        const resQuery = await orderModel.removeOrderItem(req.query.orderItemId);
         // const productQuant = resQuery.qty;
         return res.status(200).json({success: true});
     }

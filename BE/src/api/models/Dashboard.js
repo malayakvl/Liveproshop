@@ -58,6 +58,7 @@ class Dashboard {
             let querySQL = `SELECT
                     *
                 FROM data.get_orders(${perPage}, ${offset}, '${JSON.stringify(_orderFilters)}', '${column} ${sort}');`; // 'created_at DESC'
+
             let res = await client.query(querySQL);
             orders = res.rows.length > 0 ? res.rows : [];
             
