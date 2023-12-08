@@ -66,6 +66,7 @@ apiRoutes.route('/fetch-launch-stop-sessions').get(LivesessionController.getLaun
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
+apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);
 
 apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
 apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);

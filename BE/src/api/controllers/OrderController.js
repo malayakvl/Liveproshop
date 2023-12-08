@@ -97,6 +97,12 @@ class OrderController {
         return res.status(200).json({success: true, qty: productQuant});
     }
 
+    async removeOrderItem(req, res) {
+        // const resQuery = await orderModel.removeOrderItem(req.query.configId, req.query.orderId, req.query.qty);
+        // const productQuant = resQuery.qty;
+        return res.status(200).json({success: true});
+    }
+
     async setupShipped (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');

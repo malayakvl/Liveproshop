@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { useFormikContext, Field, ErrorMessage } from 'formik';
 import { formatCurrency } from '../../lib/functions';
@@ -12,15 +12,18 @@ import {
     orderCheckoutSelector,
     shippingMethodsCheckoutSelector
 } from '../../redux/checkout/selectors';
+import { demoveItemOrderAction } from '../../redux/orders/actions';
+import { userSelector } from '../../redux/user/selectors';
 
 const OrderSummary = () => {
     const t = useTranslations();
-
+    const dispatch = useDispatch();
     const {
         values: { shippingMethodId }
     } = useFormikContext();
 
     const order = useSelector(orderCheckoutSelector) || {};
+    const user = useSelector(userSelector);
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
     const selectedShippingMethod = useMemo(
@@ -43,13 +46,24 @@ const OrderSummary = () => {
         }
         return formatCurrency(totalOrder);
     };
+    // console.log(Object.keys(order.order_items));
+    // const totalProps = order.order_items.reduce((a, obj) => a + Object.keys(obj).length, 0);
+    // let itemCnt = 0;
+    // order.order_items?.map((product: any, key: number) => {
+    //     ++itemCnt;
+    // });
+
+    const removeItemOrder = (configId: any, orderId: any, qty: number) => {
+        dispatch(demoveItemOrderAction(configId, user?.email, orderId, qty));
+    };
+    console.log(order.order_items);
 
     return (
         <>
             <div className="text-gray-350 font-normal text-lg">
                 {order.order_items?.length} items in Cart
             </div>
-            {order.order_items?.map((product: any) => (
+            {order.order_items?.map((product: any, key: number) => (
                 <div
                     key={product.product_id}
                     className="flex space-x-4 pb-12 my-12 border-b border-gray-200">
@@ -66,6 +80,20 @@ const OrderSummary = () => {
                     />
                     <div className="flex-auto">
                         <span className="text-gray-350 text-sm font-bold">Ref. {product.sku}</span>{' '}
+                        {order.order_items?.length && (
+                            // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                            <span
+                                className="absolute right-[90px] cursor-pointer"
+                                onClick={() => {
+                                    removeItemOrder(
+                                        product.product_configuration_id,
+                                        order.id,
+                                        product.quantity
+                                    );
+                                }}>
+                                X
+                            </span>
+                        )}
                         <span className="text-blue-350 text-sm">{product.product_id}</span>
                         <div className="text-gray-350 my-1 font-normal text-lg">{product.name}</div>
                         <div className="product-size">

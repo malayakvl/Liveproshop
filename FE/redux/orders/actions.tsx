@@ -338,6 +338,24 @@ export const findOrderByCommentAction: any = createAction(
     }
 );
 
+export const demoveItemOrderAction: any = createAction(
+    'order/FETCH_USER_ORDER',
+    async (configurationId: string, email: string, orderId: any, qty: number) => {
+        return axios
+            .get(
+                `${baseUrl}/orders/remove-item-order?configId=${configurationId}&orderId=${orderId}&qty=${qty}`,
+                {
+                    headers: {
+                        ...authHeader(email)
+                    }
+            })
+            .then((res) => {
+                window.location.reload();
+            })
+            .catch((e) => console.log(e.message));
+    }
+);
+
 export const setFbCommentAction: any = createAction('orders/SET_FB_ORDER_COMMENT');
 export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');

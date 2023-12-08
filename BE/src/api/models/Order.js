@@ -822,6 +822,45 @@ class Order {
         }
     }
 
+
+    async removeOrderItem (configId, orderId, qty) {
+        const client = await pool.connect();
+        try {
+            const SQL = `DELETE FROM data.order_items WHERE product_configuration_id='${configId}' AND quantity=${qty}`;
+            console.log(SQL);
+            await client.query(SQL);
+            // update total orders
+            const sqlItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${orderId}'`);
+            let totalAmount = 0;
+            sqlItems.rows.forEach(item => {
+                totalAmount += item.quantity*item.price;
+            });
+            const updateOrderTotalSQL = `UPDATE data.orders SET order_amount=${totalAmount}, total_amount=${totalAmount} WHERE id=${orderId}`;
+            console.log(updateOrderTotalSQL);
+            await client.query(updateOrderTotalSQL);
+            // return order qty to product configuration
+            // return order qty to product configuration
+            const updateProductQtySQL = `UPDATE data.product_configurations SET quantity=quantity+1, total_amount=${totalAmount} WHERE id=${orderId}`;
+            console.log(updateProductQtySQL);
+            await client.query(updateOrderTotalSQL);
+
+
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
