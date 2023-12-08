@@ -14,6 +14,7 @@ class CheckoutController {
         const { orderNumber } = req.query;
 
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
+        // const orderItems = await checkoutModel.fetchOrderItems(orderData.or);
         const address = await userModel.findUserAddress(req.user.id);
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, true);
 

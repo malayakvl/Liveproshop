@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import {useEffect, useMemo} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { useFormikContext, Field, ErrorMessage } from 'formik';
 import { formatCurrency } from '../../lib/functions';
@@ -12,15 +12,23 @@ import {
     orderCheckoutSelector,
     shippingMethodsCheckoutSelector
 } from '../../redux/checkout/selectors';
+import { demoveItemOrderAction } from '../../redux/orders/actions';
+import { userSelector } from '../../redux/user/selectors';
+import { useRouter } from 'next/router';
+import {checkPaymentStatusAction} from "../../redux/checkout";
 
 const OrderSummary = () => {
     const t = useTranslations();
-
+    const dispatch = useDispatch();
     const {
         values: { shippingMethodId }
     } = useFormikContext();
+    const {
+        query: { orderNumber }
+    } = useRouter();
 
     const order = useSelector(orderCheckoutSelector) || {};
+    const user = useSelector(userSelector);
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
     const selectedShippingMethod = useMemo(
@@ -31,9 +39,13 @@ const OrderSummary = () => {
     const reaclculateTotal = (dataOrder: any) => {
         let totalOrder = 0;
         if (dataOrder.total_amount > 0) {
-            totalOrder += order.total_amount;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            totalOrder += parseInt(order.total_amount);
         } else {
-            totalOrder += order.order_amount * 1.2;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            totalOrder += parseInt(order.order_amount * 1.2);
         }
         // totalOrder = totalOrder.toFixed();
         if (selectedShippingMethod?.price) {
@@ -43,15 +55,33 @@ const OrderSummary = () => {
         }
         return formatCurrency(totalOrder);
     };
+    // console.log(Object.keys(order.order_items));
+    // const totalProps = order.order_items.reduce((a, obj) => a + Object.keys(obj).length, 0);
+    // let itemCnt = 0;
+    // order.order_items?.map((product: any, key: number) => {
+    //     ++itemCnt;
+    // });
+    useEffect(() => {
+        reaclculateTotal(order);
+    }, [order]);
+
+    const removeItemOrder = (itemId: number) => {
+        dispatch(demoveItemOrderAction(itemId, orderNumber));
+    };
+    const munusQtyItemOrder = (itemId: number) => {
+        console.log(itemId);
+        // dispatch(demoveItemOrderAction(configId, user?.email, orderId, qty));
+    };
 
     return (
         <>
             <div className="text-gray-350 font-normal text-lg">
                 {order.order_items?.length} items in Cart
             </div>
-            {order.order_items?.map((product: any) => (
+            {order.order_items?.map((product: any, key: number) => (
                 <div
-                    key={product.product_id}
+                    id={`item_${product.id}`}
+                    key={product.id}
                     className="flex space-x-4 pb-12 my-12 border-b border-gray-200">
                     <img
                         width={85}
@@ -66,6 +96,16 @@ const OrderSummary = () => {
                     />
                     <div className="flex-auto">
                         <span className="text-gray-350 text-sm font-bold">Ref. {product.sku}</span>{' '}
+                        {order.order_items?.length && (
+                            // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                            <span
+                                className="absolute right-[65px] cursor-pointer"
+                                onClick={() => {
+                                    removeItemOrder(product.id);
+                                }}>
+                                <span className="delete-item-card" />
+                            </span>
+                        )}
                         <span className="text-blue-350 text-sm">{product.product_id}</span>
                         <div className="text-gray-350 my-1 font-normal text-lg">{product.name}</div>
                         <div className="product-size">
@@ -83,13 +123,31 @@ const OrderSummary = () => {
                             />
                         )}
                         <div className="text-lg text-right text-gray-350 font-bold mt-3">
-                            {product.quantity} x {formatCurrency(product.price)}
+                            <div>
+                                <div className="inline-block relative">
+                                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                    <span
+                                        className="qty-minus cursor-pointer"
+                                        onClick={() => munusQtyItemOrder(product.id)}
+                                    />
+                                </div>
+                                <span className="product-qty-input">{product.quantity}</span>
+                                {/*<input*/}
+                                {/*    type="text"*/}
+                                {/*    className="product-qty-input"*/}
+                                {/*    value={product.quantity}*/}
+                                {/*/>*/}
+                                <span className="inline-block ml-2">
+                                    {formatCurrency(product.price)}
+                                </span>
+                            </div>
+                            <span className="hidden">{product.quantity} x {formatCurrency(product.price)}</span>
                         </div>
                     </div>
                 </div>
             ))}
 
-            <div className="flex justify-between text-gray-350 text-lg text-right -mt-6">
+            <div className="flex justify-between text-gray-350 text-[18px] text-right -mt-6">
                 VAT (20%)
                 <span className="inline-block ml-4 font-bold min-w-[3rem]">
                     {formatCurrency(+order.order_amount * 0.2)}
@@ -97,7 +155,7 @@ const OrderSummary = () => {
             </div>
 
             {selectedShippingMethod && (
-                <div className="flex justify-between my-2 text-gray-350 text-lg text-right">
+                <div className="flex justify-between my-2 text-gray-350 text-[18px] text-right">
                     Shipping
                     <span className="inline-block ml-4 font-bold min-w-[3rem]">
                         {formatCurrency(selectedShippingMethod.price)}
@@ -105,13 +163,10 @@ const OrderSummary = () => {
                 </div>
             )}
 
-            <div className="flex justify-between my-6 py-6 text-gray-350 text-2xl text-right border-t border-gray-200">
+            <div className="flex justify-between my-6 py-6 text-gray-350 text-[30px] font-bold text-right border-t border-gray-200">
                 {t('Order total')}:
                 <span className="inline-block ml-4 font-bold min-w-[5rem]">
                     {reaclculateTotal(order)}
-                    {/*{formatCurrency(*/}
-                    {/*    +(order.total_amount ? order.total_amount : (order.order_amount * 1.2 + (selectedShippingMethod?.price ? selectedShippingMethod?.price : 0)))*/}
-                    {/*)}*/}
                 </span>
             </div>
 
@@ -147,15 +202,11 @@ const OrderSummary = () => {
                 type="submit"
                 disabled={order.status === OrderStatus.PAYED}
                 className="uppercase my-4 gradient-btn w-full">
+                <div className="inline-block relative">
+                    <i className="card-icon-white" />
+                </div>
                 {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
                 {reaclculateTotal(order)}
-                {/*{order.status === OrderStatus.PAYED*/}
-                {/*    ? t('payed').toLocaleUpperCase() +*/}
-                {/*      ' ' +*/}
-                {/*      formatCurrency(*/}
-                {/*          +order.total_amount ? order.total_amount : order.order_amount * 1.2*/}
-                {/*      )*/}
-                {/*    : t('Pay') + ' ' + { reaclculateTotal(order) }}*/}
             </button>
         </>
     );

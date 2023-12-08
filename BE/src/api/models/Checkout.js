@@ -19,9 +19,50 @@ class Checkout {
             });
 
             const ordersQuery = `SELECT * FROM data.get_orders(1, 0, '${filter}');`;
+            console.log(ordersQuery)
             const res = await client.query(ordersQuery);
             order = res.rows.length > 0 ? res.rows[0] : [];
+            console.log(res.rows[0].id)
 
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Checkout fetchOrder):',
+                    { message: e.message }
+                );
+            }
+            error = {
+                code: 500,
+                message: 'Error get order'
+            };
+
+        } finally {
+            client.release();
+            return {
+                order,
+                error
+            };
+        }
+    }
+
+
+    async fetchOrderItems(orderId, userId) {
+        const client = await pool.connect();
+
+        let order = null;
+        let error = null;
+
+        try {
+            const filter = JSON.stringify({
+                // status: ["payed"],
+                buyer_id: [userId],
+                order_number: orderNumber
+            });
+
+            const ordersQuery = `SELECT * FROM data.order_items WHERE order_id='${orderId}';`;
+            const res = await client.query(ordersQuery);
+            order = res.rows.length > 0 ? res.rows : [];
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
