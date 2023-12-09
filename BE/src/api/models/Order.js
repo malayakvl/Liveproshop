@@ -827,15 +827,18 @@ class Order {
         const client = await pool.connect();
         try {
             const itemRow = await client.query(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
-            console.log(`UPDATE data.orders SET 
-                order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
-                total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
-                WHERE id=${itemRow.rows[0].order_id}`);
+            // console.log(`UPDATE data.orders SET
+            //     order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
+            //     total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
+            //     WHERE id=${itemRow.rows[0].order_id}`);
             await client.query(`UPDATE data.orders SET 
                 order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
                 total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
                 WHERE id=${itemRow.rows[0].order_id}`);
             const SQL = await client.query(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
+            // return quantity to product
+            await client.query(`UPDATE data.product_configurations SET quantity = quantity + ${itemRow.rows[0].quantity}
+                WHERE id='${itemRow.rows[0].product_configuration_id}'`);
             return {success: true, error: null};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
