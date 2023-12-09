@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import {useEffect, useMemo} from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { useFormikContext, Field, ErrorMessage } from 'formik';
@@ -15,7 +15,6 @@ import {
 import { demoveItemOrderAction } from '../../redux/orders/actions';
 import { userSelector } from '../../redux/user/selectors';
 import { useRouter } from 'next/router';
-import {checkPaymentStatusAction} from "../../redux/checkout";
 
 const OrderSummary = () => {
     const t = useTranslations();
@@ -132,16 +131,13 @@ const OrderSummary = () => {
                                     />
                                 </div>
                                 <span className="product-qty-input">{product.quantity}</span>
-                                {/*<input*/}
-                                {/*    type="text"*/}
-                                {/*    className="product-qty-input"*/}
-                                {/*    value={product.quantity}*/}
-                                {/*/>*/}
                                 <span className="inline-block ml-2">
                                     {formatCurrency(product.price)}
                                 </span>
                             </div>
-                            <span className="hidden">{product.quantity} x {formatCurrency(product.price)}</span>
+                            <span className="hidden">
+                                {product.quantity} x {formatCurrency(product.price)}
+                            </span>
                         </div>
                     </div>
                 </div>
