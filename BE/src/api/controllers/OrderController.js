@@ -8,7 +8,7 @@ class OrderController {
      * @returns {Promise<*>}
      */
     async fetchItems(req, res) {
-        const { limit, offset, queryFilter, column, sort, orderCommentId } = req.query;
+        const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
@@ -98,7 +98,13 @@ class OrderController {
     }
 
     async removeOrderItem(req, res) {
-        const resQuery = await orderModel.removeOrderItem(req.query.orderItemId);
+        await orderModel.removeOrderItem(req.query.orderItemId);
+        // const productQuant = resQuery.qty;
+        return res.status(200).json({success: true});
+    }
+
+    async minusOrderItem(req, res) {
+        await orderModel.minusOrderItem(req.query.orderItemId);
         // const productQuant = resQuery.qty;
         return res.status(200).json({success: true});
     }
@@ -139,7 +145,7 @@ class OrderController {
 
     async findOrderByCommentId (req, res) {
         if (req.user) {
-            const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
+            await orderModel.findByCommentId(req.query.commentId, req.user.id);
         }
         // console.log(data.orderId);
         // console.log(data.userId);

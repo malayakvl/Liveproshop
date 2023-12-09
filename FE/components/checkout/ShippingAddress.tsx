@@ -56,9 +56,10 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
 
     useEffect(() => {
         if (user && user.id) {
-            props.values.first_name = props.values.first_name || user.first_name;
-            props.values.last_name = props.values.last_name || user.last_name;
-            props.values.phone = props.values.phone || user.phone;
+            props.values.first_name =
+                props.values.first_name || user.first_name ? user.first_name : '';
+            props.values.last_name = props.values.last_name || user.last_name ? user.last_name : '';
+            props.values.phone = props.values.phone || user.phone ? user.phone : '';
         }
     }, [user]);
 
