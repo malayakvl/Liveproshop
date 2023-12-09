@@ -131,11 +131,6 @@ const OrderSummary = () => {
                                     />
                                 </div>
                                 <span className="product-qty-input">{product.quantity}</span>
-                                {/*<input*/}
-                                {/*    type="text"*/}
-                                {/*    className="product-qty-input"*/}
-                                {/*    value={product.quantity}*/}
-                                {/*/>*/}
                                 <span className="inline-block ml-2">
                                     {formatCurrency(product.price)}
                                 </span>
