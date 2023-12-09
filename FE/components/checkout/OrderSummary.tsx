@@ -12,7 +12,7 @@ import {
     orderCheckoutSelector,
     shippingMethodsCheckoutSelector
 } from '../../redux/checkout/selectors';
-import { demoveItemOrderAction } from '../../redux/orders/actions';
+import { removeItemOrderAction, minusItemOrderAction } from '../../redux/orders/actions';
 import { userSelector } from '../../redux/user/selectors';
 import { useRouter } from 'next/router';
 
@@ -65,11 +65,10 @@ const OrderSummary = () => {
     }, [order]);
 
     const removeItemOrder = (itemId: number) => {
-        dispatch(demoveItemOrderAction(itemId, orderNumber));
+        dispatch(removeItemOrderAction(itemId, orderNumber));
     };
     const munusQtyItemOrder = (itemId: number) => {
-        console.log(itemId);
-        // dispatch(demoveItemOrderAction(configId, user?.email, orderId, qty));
+        dispatch(minusItemOrderAction(itemId));
     };
 
     return (
@@ -79,7 +78,7 @@ const OrderSummary = () => {
             </div>
             {order.order_items?.map((product: any, key: number) => (
                 <div
-                    id={`item_${product.id}`}
+                    id={`item_${product.id}_${key}`}
                     key={product.id}
                     className="flex space-x-4 pb-12 my-12 border-b border-gray-200">
                     <img

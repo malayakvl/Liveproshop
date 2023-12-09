@@ -33,7 +33,7 @@ async function createInvoice (invoice, path, locale) {
 
 
 async function generateHeader(doc, seller, locale) {
-    const { default: t } = await import(`../sender/order-${locale}.js`);
+    // const { default: t } = await import(`../sender/order-${locale}.js`);
     // doc
     //     .image("./public/images/logo.png", 40, 45, { width: 160 })
     //     .fillColor("#444444")
@@ -73,7 +73,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
     doc
         .fillColor("#444444")
         .fontSize(20)
-        .text(invoice.status == 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
+        .text(invoice.status === 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
 
     generateHr(doc, 185);
     const customerInformationTop = 200;
@@ -211,7 +211,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
 }
 
 async function generateFooter(doc, locale) {
-    const { default: t } = await import(`../sender/order-${locale}.js`);
+    // const { default: t } = await import(`../sender/order-${locale}.js`);
     doc
         .fontSize(10)
         .text(
@@ -482,6 +482,7 @@ class Order {
 
             // _filters.buyer_id = _filters.shopper_id;
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
+            console.log(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
             if (reqOffset) {
@@ -681,7 +682,7 @@ class Order {
                     }).catch(error => {
                         console.log("Merchant error", error);
                     });
-                const buyerAddress = ''
+                // const buyerAddress = ''
                 // console.log('Buyer', res.rows[0]);
                 // const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                 //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
@@ -835,9 +836,45 @@ class Order {
                 order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
                 total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
                 WHERE id=${itemRow.rows[0].order_id}`);
-            const SQL = await client.query(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
+            await client.query(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
             // return quantity to product
             await client.query(`UPDATE data.product_configurations SET quantity = quantity + ${itemRow.rows[0].quantity}
+                WHERE id='${itemRow.rows[0].product_configuration_id}'`);
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async minusOrderItem (orderItemId) {
+        const client = await pool.connect();
+        try {
+            const itemRow = await client.query(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
+            console.log(itemRow.rows[0]);
+            console.log(`UPDATE data.orders SET
+                order_amount=order_amount - ${itemRow.rows[0].price*1},
+                total_amount=total_amount - ${itemRow.rows[0].price*1}
+                WHERE id=${itemRow.rows[0].order_id}`);
+            await client.query(`UPDATE data.orders SET
+                order_amount=order_amount - ${itemRow.rows[0].price*1},
+                total_amount=total_amount - ${itemRow.rows[0].price*1}
+                WHERE id=${itemRow.rows[0].order_id}`);
+            // console.log(`UPDATE data.order_items SET quantity = quantity - 1 WHERE id='${orderItemId}'`);
+            await client.query(`UPDATE data.order_items SET quantity = quantity - 1 WHERE id='${orderItemId}'`);
+            // return quantity to product
+            // console.log(`UPDATE data.product_configurations SET quantity = quantity + 1
+            //     WHERE id='${itemRow.rows[0].product_configuration_id}'`);
+            await client.query(`UPDATE data.product_configurations SET quantity = quantity + 1
                 WHERE id='${itemRow.rows[0].product_configuration_id}'`);
             return {success: true, error: null};
         } catch (e) {
@@ -923,6 +960,7 @@ class Order {
             } else {
                 const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
                     total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+                console.log(orderSQL);
                 await client.query(orderSQL);
             }
             return {success: true, orderId: res.rows[0].order_id};

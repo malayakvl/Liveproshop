@@ -9,7 +9,7 @@ import { paginationSelectorFactory } from '../layouts/selectors';
 import { PaginationType } from '../../constants';
 import queryString from 'query-string';
 import { showLoaderAction } from '../layouts/actions';
-import {fetchCheckoutAction} from "../checkout";
+import { fetchCheckoutAction } from '../checkout';
 
 export const submitFormAction: any = createAction(
     'orders/ADD_UPDATE_DATA',
@@ -294,7 +294,7 @@ export const findSellersAction: any = createAction(
 );
 export const connectOrderAction: any = createAction(
     'orders/CONNECT_ORDER_ACTION',
-    async (query: string) =>
+    async () =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             return axios
@@ -337,7 +337,7 @@ export const findOrderByCommentAction: any = createAction(
             .catch((e) => console.log(e.message));
     }
 );
-export const demoveItemOrderAction: any = createAction(
+export const removeItemOrderAction: any = createAction(
     'orders/REMOVE_ITEM_ACTION',
     async (itemId: number, orderNumber: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
@@ -353,6 +353,23 @@ export const demoveItemOrderAction: any = createAction(
                 });
         }
 );
+export const minusItemOrderAction: any = createAction(
+    'orders/MINUS_ITEM_ACTION',
+    async (itemId: number, orderNumber: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/minus-item-order?orderItemId=${itemId}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    dispatch(fetchCheckoutAction(orderNumber));
+                });
+        }
+);
+
 // export const demoveItemOrderAction: any = createAction(
 //     'order/REMOVE_ITEM_ACTION',
 //     async (itemId: number, email: string) => {
