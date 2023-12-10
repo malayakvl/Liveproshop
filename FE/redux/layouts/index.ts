@@ -20,9 +20,11 @@ import {
     sidebarCloseAction,
     toggleTextingMenuAction,
     setLngAction,
-    toggleProfileMenuAction
+    toggleProfileMenuAction,
+    showEmailNotificationAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
+// import { showPopupAction } from '../dashboard';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
 
@@ -133,8 +135,13 @@ const initialState: State.Layouts = {
             filters: {
                 created_at: []
             }
+        },
+        [showEmailNotificationAction]: {
+            next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+                ...state,
+                showEmailNotification: action.payload
+            })
         }
-
     },
     isSidebarOpen: false,
     isMobileDevice: false,
@@ -150,7 +157,8 @@ const initialState: State.Layouts = {
     },
     showTextingMenu: false,
     showProfileMenu: false,
-    selectedLng: 'fr'
+    selectedLng: 'fr',
+    showEmailNotification: false
 };
 
 // ------------------------------------
@@ -338,7 +346,8 @@ export {
     sidebarCloseAction,
     toggleTextingMenuAction,
     setLngAction,
-    toggleProfileMenuAction
+    toggleProfileMenuAction,
+    showEmailNotificationAction
 };
 
 // ------------------------------------

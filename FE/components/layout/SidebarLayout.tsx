@@ -5,7 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
-import { toggleProfileMenuAction, toggleSidebarAction } from '../../redux/layouts';
+import {
+    showEmailNotificationAction,
+    toggleProfileMenuAction,
+    toggleSidebarAction
+} from '../../redux/layouts';
 import Router from 'next/router';
 import { findOrderByCommentAction } from '../../redux/orders';
 
@@ -14,6 +18,10 @@ export default function SidebarLayout({ children }: { children: any }) {
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
+
+    const isValidEmail = (email: any) => {
+        return /\S+@\S+\.\S+/.test(email);
+    };
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
         if (user?.email && user.role_id == 2) {
@@ -25,6 +33,11 @@ export default function SidebarLayout({ children }: { children: any }) {
             dispatch(
                 findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
             );
+        }
+        if (user?.email) {
+            if (!isValidEmail(user?.email) && !user?.email_real) {
+                dispatch(showEmailNotificationAction(true));
+            }
         }
     }, [user?.email]);
 
