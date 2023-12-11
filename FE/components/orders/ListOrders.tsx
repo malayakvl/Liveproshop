@@ -177,12 +177,16 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td style={{ width: '50px' }}>
-                                <i
-                                    role="presentation"
-                                    className="icon-tbl-triangle cursor-pointer"
-                                    style={{ marginTop: '5px' }}
-                                    onClick={() => handleShowMore(item.id)}
-                                />
+                                {item?.order_items && (
+                                    <>
+                                        <i
+                                            role="presentation"
+                                            className="icon-tbl-triangle cursor-pointer"
+                                            style={{ marginTop: '5px' }}
+                                            onClick={() => handleShowMore(item.id)}
+                                        />
+                                    </>
+                                )}
                             </td>
                             <td className="order-number">
                                 {user.role_id === 1 && item.status !== 'new' ? (
@@ -252,15 +256,25 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td style={{ minWidth: '150px' }}>
-                                {item.order_items.length}x{' '}
-                                <span className="red-yellow-gradient-text">product (s)</span>
+                                {item?.order_items ? (
+                                    <>
+                                        {item.order_items.length}x{' '}
+                                        <span className="red-yellow-gradient-text">
+                                            {t('product (s)')}
+                                        </span>
+                                    </>
+                                ) : (
+                                    <>0 {t('product (s)')}</>
+                                )}
+                                {/*{item.order_items.length}x{' '}*/}
+                                {/*<span className="red-yellow-gradient-text">product (s)</span>*/}
                             </td>
                             <td>
                                 {formatCurrency(
                                     item.total_amount ? item.total_amount : item.order_amount
                                 )}
                             </td>
-                            {user.role_id === 1 && item.status === 'new' && (
+                            {user.role_id === 1 && item.status === 'new' && item?.order_items && (
                                 <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                     <Link href={`/checkout/${item.order_number}`}>
                                         <div

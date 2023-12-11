@@ -859,7 +859,7 @@ class Order {
             //     redirect = true;
             // }
 
-            return {success: true, error: null, redirectToOrder: redirect};
+            return {success: true, error: null, redirectToOrder: false};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -982,7 +982,7 @@ class Order {
                 console.log(orderSQL);
                 await client.query(orderSQL);
             }
-            return {success: true, orderId: res.rows[0].order_id};
+            return {success: true, orderId: res.rows[0].order_id, orderNumber: res.rows[0].order_number};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

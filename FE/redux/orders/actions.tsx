@@ -333,7 +333,10 @@ export const findOrderByCommentAction: any = createAction(
                     ...authHeader(email)
                 }
             })
-            .then((res) => res.data.orderId)
+            .then((res) => {
+                window.location.href = ``;
+                return res.data.orderId;
+            })
             .catch((e) => console.log(e.message));
     }
 );

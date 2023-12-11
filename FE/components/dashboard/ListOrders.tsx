@@ -81,10 +81,16 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                 </td>
                                 <td style={{ minWidth: '150px' }}>
                                     <div className="text-right">
-                                        {item.order_items.length}x{' '}
-                                        <span className="red-yellow-gradient-text">
-                                            {t('product (s)')}
-                                        </span>
+                                        {item?.order_items ? (
+                                            <>
+                                                {item.order_items.length}x{' '}
+                                                <span className="red-yellow-gradient-text">
+                                                    {t('product (s)')}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <>0 {t('product (s)')}</>
+                                        )}
                                     </div>
                                 </td>
                                 <td>
