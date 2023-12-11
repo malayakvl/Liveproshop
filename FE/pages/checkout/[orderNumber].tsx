@@ -10,6 +10,7 @@ import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import {clearOrderByCommentAction} from "../../redux/orders";
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
@@ -26,6 +27,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
+        dispatch(clearOrderByCommentAction(null));
     }, []);
 
     useEffect(() => {

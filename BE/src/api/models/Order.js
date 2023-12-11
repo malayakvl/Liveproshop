@@ -918,7 +918,7 @@ class Order {
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            const SQL = `SELECT order_id, data.orders.live_sessions_id, order_amount, total_amount, quantity
+            const SQL = `SELECT order_id, order_number, data.orders.live_sessions_id, order_amount, total_amount, quantity
                 FROM data.order_items 
                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
                 WHERE message_id='${commentId}'`;
@@ -983,8 +983,9 @@ class Order {
             } else {
                 const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
                     total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
-                console.log(orderSQL);
                 await client.query(orderSQL);
+                console.log("AAAAAAA", res.rows[0])
+                // const res = await client.query(``);
             }
             return {success: true, orderId: res.rows[0].order_id, orderNumber: res.rows[0].order_number};
         } catch (e) {

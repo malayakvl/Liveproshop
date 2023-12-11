@@ -23,6 +23,7 @@ export default function Index({ locale }: { locale: string }) {
     useEffect(() => {
         if (typeof comment_id === 'string') {
             window.localStorage.setItem('orderCommentId', comment_id);
+            window.localStorage.setItem('currLocale', locale);
             // dispatch(findOrderByCommentAction(comment_id));
         }
         if (user?.email && user.role_id == 1) {

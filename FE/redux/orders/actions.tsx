@@ -334,8 +334,10 @@ export const findOrderByCommentAction: any = createAction(
                 }
             })
             .then((res) => {
-                window.location.href = ``;
-                return res.data.orderId;
+                // console.log('CONNECTED ORDER', res);
+                // alert(res.data.orderNumber);
+                // window.location.href = `https://liveproshop.com/checkout/${res.data.orderNumber}`;
+                return res.data;
             })
             .catch((e) => console.log(e.message));
     }
@@ -405,4 +407,5 @@ export const showCancelConfirmationModalAction: any = createAction(
 );
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
 export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');
+export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');
 // export const connectOrderAction: any = createAction('orders/CONNECT_ORDER_ACTION');
