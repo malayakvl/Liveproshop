@@ -59,14 +59,13 @@ class Dashboard {
             let querySQL = `SELECT
                     *
                 FROM data.get_orders(${perPage}, ${offset}, '${JSON.stringify(_orderFilters)}', '${column} ${sort}');`; // 'created_at DESC'
-console.log(querySQL);
+// console.log(querySQL);
             let res = await client.query(querySQL);
             orders = res.rows.length > 0 ? res.rows : [];
             
             querySQL = `SELECT dashboard_total FROM data.get_dashboard_total('${JSON.stringify(_filters)}');`;
-            console.log("Dashboard", querySQL);
             res = await client.query(querySQL);
-            totals = res.rows.length > 0 ? res.rows[0].total_amount : [];
+            totals = res.rows.length > 0 ? res.rows[0].dashboard_total : [];
 
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

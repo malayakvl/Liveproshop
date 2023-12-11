@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
-import { Address, Profile, Password } from '../../components/account';
+import { Address, Profile, Password, BuyerAddress } from '../../components/account';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileSelector } from '../../redux/profile/selectors';
 import { fetchProfileAction } from '../../redux/profile';
@@ -35,6 +35,9 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
             case 'addresses':
                 setSubTitle(t('Addresses'));
                 break;
+            case 'baddress':
+                setSubTitle(t('Address'));
+                break;
             case 'password':
                 setSubTitle(t('Password'));
                 break;
@@ -61,12 +64,20 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                             className={`tabs ${activeTab === 'profile' ? 'active' : ''}`}>
                             {t('Personal Information')}
                         </button>
-                        {profileData.role_id === 1 && (
+                        {profileData.role_id == 1 && (
                             <button
                                 id="addresses"
                                 onClick={handleTabClick}
                                 className={`tabs ${activeTab === 'addresses' ? 'active' : ''}`}>
                                 {t('Addresses')}
+                            </button>
+                        )}
+                        {profileData.role_id == 2 && (
+                            <button
+                                id="baddress"
+                                onClick={handleTabClick}
+                                className={`tabs ${activeTab === 'baddress' ? 'active' : ''}`}>
+                                {t('Address')}
                             </button>
                         )}
                         <button
@@ -82,9 +93,16 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                         {profileData.email && <Profile />}
                     </div>
                     <div className={`w-full ${activeTab !== 'addresses' ? 'hidden' : ''}`}>
-                        {profileData.role_id === 1 && (
+                        {profileData.role_id == 1 && (
                             <Fragment>
                                 <Address address={profileData.address} locale={locale} />
+                            </Fragment>
+                        )}
+                    </div>
+                    <div className={`w-full ${activeTab !== 'baddress' ? 'hidden' : ''}`}>
+                        {profileData.role_id == 2 && (
+                            <Fragment>
+                                <BuyerAddress address={profileData.address} locale={locale} />
                             </Fragment>
                         )}
                     </div>

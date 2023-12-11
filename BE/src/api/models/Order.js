@@ -73,7 +73,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .fillColor("#444444")
         .fontSize(20)
         .text(invoice.status === 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
-console.log(invoice);
+// console.log(invoice);
     generateHr(doc, 185);
     const customerInformationTop = 200;
     let deliveryAddress = [];
@@ -89,7 +89,7 @@ console.log(invoice);
         deliveryAddress[3] = invoice.shipping.address;
 
     }
-    console.log(invoice);
+    console.log(invoice.shipping);
     doc
         .fontSize(10)
         .text(t["Invoice number:"], 50, customerInformationTop)
@@ -691,9 +691,10 @@ class Order {
                 //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                 //                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
+
                 const invoice = {
                     shipping: {
-                        name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
+                        name: buyerData.rows[0].first_name+" "+(buyerData.rows[0]?.last_name != null ? buyerData.rows[0]?.last_name : "" ),
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
                         city: res.rows[0].city,
