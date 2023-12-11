@@ -135,12 +135,6 @@ const initialState: State.Layouts = {
             filters: {
                 created_at: []
             }
-        },
-        [showEmailNotificationAction]: {
-            next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
-                ...state,
-                showEmailNotification: action.payload
-            })
         }
     },
     isSidebarOpen: false,
@@ -325,7 +319,14 @@ const ACTION_HANDLERS: any = {
             ...state,
             selectedLng: action.payload
         })
+    },
+    [showEmailNotificationAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            showEmailNotification: action.payload
+        })
     }
+
 };
 
 export {

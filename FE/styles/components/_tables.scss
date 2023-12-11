@@ -281,3 +281,13 @@ span.canceled {
   background: yellow;
   //padding-left: 55px;
 }
+
+
+.empty-card {
+  display: inline-block;
+  background: url(../../public/images/card/empty-cart.png);
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 40px;
+  background-size: contain;
+}

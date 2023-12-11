@@ -99,7 +99,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .font("Helvetica")
         .text(t["Invoice Date:"], 50, customerInformationTop + 15)
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
-        .text(t["Balance Due:"], 50, customerInformationTop + 30)
+        .text(t["Total Amount:"], 50, customerInformationTop + 30)
         .text(
             formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
             150,
@@ -109,9 +109,9 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
-        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 30)
+        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 40)
         // .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
-        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 45)
+        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
         // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
         // .text(
         //     invoice.shipping.city +
@@ -854,10 +854,10 @@ class Order {
             console.log(`SELECT COUNT(id) AS cnt FROM data.order_items WHERE order_id='${itemRow.rows[0].order_id}'`);
             const orderItemCnt = await client.query(`SELECT COUNT(id) AS cnt FROM data.order_items WHERE order_id='${itemRow.rows[0].order_id}'`);
             let redirect = false;
-            if (parseFloat(orderItemCnt.rows[0].cnt) === 0) {
-                await client.query(`DELETE FROM data.orders WHERE id='${itemRow.rows[0].order_id}'`);
-                redirect = true;
-            }
+            // if (parseFloat(orderItemCnt.rows[0].cnt) === 0) {
+            //     await client.query(`DELETE FROM data.orders WHERE id='${itemRow.rows[0].order_id}'`);
+            //     redirect = true;
+            // }
 
             return {success: true, error: null, redirectToOrder: redirect};
         } catch (e) {

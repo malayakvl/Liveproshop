@@ -35,8 +35,18 @@ export default function SidebarLayout({ children }: { children: any }) {
             );
         }
         if (user?.email) {
+            console.log('+++++++++++++++++++++');
+            console.log(!isValidEmail(user?.email));
+            console.log(!user?.email_real);
+            console.log(user?.email, user?.email_real);
             if (!isValidEmail(user?.email) && !user?.email_real) {
+                console.log('AAAAAAA');
+            }
+            if (!isValidEmail(user?.email) && !user?.email_real) {
+                console.log('BBBBBBBB');
                 dispatch(showEmailNotificationAction(true));
+            } else {
+                dispatch(showEmailNotificationAction(false));
             }
         }
     }, [user?.email]);
