@@ -185,10 +185,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td className="order-number">
-                                {user.role_id === 1 && (
+                                {user.role_id === 1 && item.status !== 'new' ? (
                                     <Link href={`/orders/${item.order_number}?locale=${locale}`}>
                                         <a>{item.order_number}</a>
                                     </Link>
+                                ) : (
+                                    item.order_number
                                 )}
                                 {user.role_id === 2 && item.status === 'new' && (
                                     <>

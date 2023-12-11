@@ -828,19 +828,38 @@ class Order {
         const client = await pool.connect();
         try {
             const itemRow = await client.query(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
-            // console.log(`UPDATE data.orders SET
-            //     order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
-            //     total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
-            //     WHERE id=${itemRow.rows[0].order_id}`);
-            await client.query(`UPDATE data.orders SET 
+            console.log(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
+
+            // update order total amounts
+            console.log(`UPDATE data.orders SET
                 order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
                 total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
                 WHERE id=${itemRow.rows[0].order_id}`);
+            await client.query(`UPDATE data.orders SET
+                order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
+                total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
+                WHERE id=${itemRow.rows[0].order_id}`);
+
+            // remove item from order
+            console.log(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
             await client.query(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
+
             // return quantity to product
+            console.log(`UPDATE data.product_configurations SET quantity = quantity + ${itemRow.rows[0].quantity}
+                WHERE id='${itemRow.rows[0].product_configuration_id}'`);
             await client.query(`UPDATE data.product_configurations SET quantity = quantity + ${itemRow.rows[0].quantity}
                 WHERE id='${itemRow.rows[0].product_configuration_id}'`);
-            return {success: true, error: null};
+
+            // get items count for current order
+            console.log(`SELECT COUNT(id) AS cnt FROM data.order_items WHERE order_id='${itemRow.rows[0].order_id}'`);
+            const orderItemCnt = await client.query(`SELECT COUNT(id) AS cnt FROM data.order_items WHERE order_id='${itemRow.rows[0].order_id}'`);
+            let redirect = false;
+            if (parseFloat(orderItemCnt.rows[0].cnt) === 0) {
+                await client.query(`DELETE FROM data.orders WHERE id='${itemRow.rows[0].order_id}'`);
+                redirect = true;
+            }
+
+            return {success: true, error: null, redirectToOrder: redirect};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

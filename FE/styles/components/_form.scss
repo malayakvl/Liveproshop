@@ -363,6 +363,9 @@ input:checked + .toggle-bg {
   top: -16px;
   left: -33px;
 }
+.qty-minus.disabled {
+  background-image: url(../../public/images/card/minus-disabled.svg);
+}
 
 .card-icon-white {
   background-image: url(../../public/images/card/card.svg);

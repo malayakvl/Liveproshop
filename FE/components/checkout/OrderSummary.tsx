@@ -67,6 +67,7 @@ const OrderSummary = () => {
     const removeItemOrder = (itemId: number) => {
         dispatch(removeItemOrderAction(itemId, orderNumber));
     };
+
     const munusQtyItemOrder = (itemId: number) => {
         dispatch(minusItemOrderAction(itemId));
     };
@@ -104,7 +105,7 @@ const OrderSummary = () => {
                                 <span className="delete-item-card" />
                             </span>
                         )}
-                        <span className="text-blue-350 text-sm">{product.product_id}</span>
+                        <span className="text-blue-350 text-sm">#{product.product_id}</span>
                         <div className="text-gray-350 my-1 font-normal text-lg">{product.name}</div>
                         <div className="product-size">
                             {t('checkout_color')}:{' '}
@@ -125,7 +126,9 @@ const OrderSummary = () => {
                                 <div className="inline-block relative">
                                     {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                     <span
-                                        className="qty-minus cursor-pointer"
+                                        className={`qty-minus ${
+                                            product.quantity == 1 ? 'disabled' : 'cursor-pointer'
+                                        }`}
                                         onClick={() => munusQtyItemOrder(product.id)}
                                     />
                                 </div>

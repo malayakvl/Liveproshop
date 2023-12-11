@@ -342,6 +342,7 @@ export const removeItemOrderAction: any = createAction(
     async (itemId: number, orderNumber: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            const lang = state.layouts.selectedLng;
             return axios
                 .get(`${baseUrl}/orders/remove-item-order?orderItemId=${itemId}`, {
                     headers: {
@@ -349,7 +350,11 @@ export const removeItemOrderAction: any = createAction(
                     }
                 })
                 .then((res: any) => {
-                    dispatch(fetchCheckoutAction(orderNumber));
+                    if (!res.redirect) {
+                        dispatch(fetchCheckoutAction(orderNumber));
+                    } else {
+                        window.location.href = `${lang == 'fr' ? '/' : '/en/'}orders`;
+                    }
                 });
         }
 );

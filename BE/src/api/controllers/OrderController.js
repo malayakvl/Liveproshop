@@ -98,9 +98,9 @@ class OrderController {
     }
 
     async removeOrderItem(req, res) {
-        await orderModel.removeOrderItem(req.query.orderItemId);
+        const data = await orderModel.removeOrderItem(req.query.orderItemId);
         // const productQuant = resQuery.qty;
-        return res.status(200).json({success: true});
+        return res.status(200).json({success: true, redirectToOrder: data.redirectToOrder});
     }
 
     async minusOrderItem(req, res) {
