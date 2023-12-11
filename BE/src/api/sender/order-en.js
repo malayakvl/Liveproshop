@@ -13,7 +13,7 @@ export default {
     "Payment is due within 15 days. Thank you for your business.":"Payment is due within 15 days. Thank you for your business.",
     "Invoice number:": "Invoice number:",
     "Invoice Date:":"Invoice Date:",
-    "Balance Due:":"Balance Due:",
+    "Balance Due:":"Paid Amount:",
     "Total Payment":"Total Payment",
     "Delivery Address": "Delivery Address: ",
     "Transaction ID": "Transaction ID: ",

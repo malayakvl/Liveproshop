@@ -13,7 +13,6 @@ import * as zipLib from "zip-a-folder";
 
 async function createInvoice (invoice, path, locale) {
     try {
-
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
@@ -74,7 +73,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .fillColor("#444444")
         .fontSize(20)
         .text(invoice.status === 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
-
+console.log(invoice);
     generateHr(doc, 185);
     const customerInformationTop = 200;
     let deliveryAddress = [];
@@ -99,7 +98,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .font("Helvetica")
         .text(t["Invoice Date:"], 50, customerInformationTop + 15)
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
-        .text(t["Total Amount:"], 50, customerInformationTop + 30)
+        .text(t["Balance Due:"], 50, customerInformationTop + 30)
         .text(
             formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
             150,
@@ -189,9 +188,9 @@ async function generateInvoiceTable(doc, invoice, locale) {
             vatToDatePosition,
             "",
             "",
-            "VAT",
+            "VAT(20%)",
             "",
-            formatCurrency((invoice.subtotal*15/100))
+            formatCurrency((invoice.subtotal*20/100))
         );
 
 
@@ -671,7 +670,11 @@ class Order {
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
-                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+                console.log("BUYER DATA");
+                console.log("========");
+                console.log("========");
+                console.log(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`)
+                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
