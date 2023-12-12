@@ -14,8 +14,8 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
     const { setFieldValue }: any = useFormikContext();
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
-    // const showEmailNotice = useSelector(showEmailNoticeSelector);
-    const showEmailNotice = true;
+    const showEmailNotice = useSelector(showEmailNoticeSelector);
+    // const showEmailNotice = true;
 
     useEffect(
         () => setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false),

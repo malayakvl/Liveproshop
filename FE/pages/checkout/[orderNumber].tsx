@@ -22,8 +22,8 @@ import Link from 'next/link';
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
     const t = useTranslations();
-    // const showEmailNotice = useSelector(showEmailNoticeSelector);
-    const showEmailNotice = true;
+    const showEmailNotice = useSelector(showEmailNoticeSelector);
+    // const showEmailNotice = true;
     const order = useSelector(orderCheckoutSelector) || {};
 
     const {

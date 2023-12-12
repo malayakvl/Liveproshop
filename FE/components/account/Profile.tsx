@@ -13,7 +13,7 @@ import { userSelector } from '../../redux/user/selectors';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { setModalConfirmationMetaAction } from '../../redux/layouts';
 import { setPhotoAction } from '../../redux/profile/actions';
-import {redirectCheckoutSelector, returnedUrlSelector} from '../../redux/orders/selectors';
+import { redirectCheckoutSelector, returnedUrlSelector } from '../../redux/orders/selectors';
 import { useRouter } from 'next/router';
 
 function Profile() {

@@ -29,8 +29,8 @@ const OrderSummary = () => {
 
     const order = useSelector(orderCheckoutSelector) || {};
     // const user = useSelector(userSelector);
-    // const showEmailNotice = useSelector(showEmailNoticeSelector);
-    const showEmailNotice = true;
+    const showEmailNotice = useSelector(showEmailNoticeSelector);
+    // const showEmailNotice = true;
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
     const selectedShippingMethod = useMemo(
