@@ -128,6 +128,25 @@ export const saveAddressAction: any = createAction(
                 });
         }
 );
+export const saveAddressSellerAction: any = createAction(
+    'assetModels/SAVE_SELLER_ADDRESS',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            const isNew = data.id;
+            return axios
+                .post(`${baseUrl}/address-seller`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(
+                        setSuccessToastAction(`Address has been ${isNew ? 'updated' : 'created'}`)
+                    );
+                });
+        }
+);
 
 export const setPhotoAction: any = createAction('profile/SET_PROFILE_PHOTO');
 export const setAddressAction: any = createAction('addresses/SET_ADDRESS');

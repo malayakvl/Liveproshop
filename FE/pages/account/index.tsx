@@ -3,18 +3,22 @@ import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Head from 'next/head';
 import { useState, useEffect } from 'react';
-import { Address, Profile, Password } from '../../components/account';
+import { Address, Profile, Password, SellerAddress } from '../../components/account';
 import { useDispatch, useSelector } from 'react-redux';
 import { profileSelector } from '../../redux/profile/selectors';
 import { fetchProfileAction } from '../../redux/profile';
 import { userSelector } from '../../redux/user/selectors';
+import { countriesSelector } from '../../redux/countries/selectors';
 
 function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: string | null }) {
     const t = useTranslations();
     const [activeTab, setActiveTab] = useState(reqActiveTab ? reqActiveTab : 'profile');
     const [subTitle, setSubTitle] = useState(t('Personal Information'));
-
+    const [parsedAddress, setParsedAddress] = useState({});
+    const [countryAddress, setCoutryAddress] = useState('');
+    const countries = useSelector(countriesSelector);
     const dispatch = useDispatch();
+    let selectedCountry;
 
     const profileData = useSelector(profileSelector);
     const user = useSelector(userSelector);
@@ -24,6 +28,24 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
             dispatch(fetchProfileAction());
         }
     }, [user?.email]);
+
+    useEffect(() => {
+        if (user.full_address) {
+            const _address = user.full_address.split(',');
+            setParsedAddress(user.full_address.split(','));
+            setCoutryAddress(_address[4]);
+        }
+    }, [user?.full_address]);
+
+    useEffect(() => {
+        if (countryAddress && countries.length > 0) {
+            selectedCountry = countries.find(
+                (item: any) => item.nicename === countryAddress[4].trimStart()
+            );
+
+            // selectedCountry = countries.find((item: any) => item.nicename === 'France');
+        }
+    }, [countryAddress, countries]);
 
     const handleTabClick = (e: React.MouseEvent<HTMLElement>) => {
         const target = e.target as HTMLElement;
@@ -69,6 +91,14 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                                 {t('Addresses')}
                             </button>
                         )}
+                        {profileData.role_id === 2 && (
+                            <button
+                                id="addresses"
+                                onClick={handleTabClick}
+                                className={`tabs ${activeTab === 'addresses' ? 'active' : ''}`}>
+                                {t('Address')}
+                            </button>
+                        )}
                         <button
                             id="password"
                             onClick={handleTabClick}
@@ -85,6 +115,15 @@ function Account({ locale, reqActiveTab }: { locale: string; reqActiveTab: strin
                         {profileData.role_id === 1 && (
                             <Fragment>
                                 <Address address={profileData.address} locale={locale} />
+                            </Fragment>
+                        )}
+                        {profileData.role_id === 2 && countries.length > 0 && (
+                            <Fragment>
+                                <SellerAddress
+                                    address={parsedAddress}
+                                    country={selectedCountry}
+                                    locale={locale}
+                                />
                             </Fragment>
                         )}
                     </div>
@@ -109,7 +148,6 @@ export async function getServerSideProps(context: any) {
             redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
         };
     }
-    console.log('LOCALE', locale);
 
     return {
         props: {
