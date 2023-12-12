@@ -18,6 +18,8 @@ declare namespace Orders {
         commentIdOrder: null | any;
         tmpCommentOrderId: null | any;
         connectedOrderNumber: null | any;
+        orderReturnedUrl: null | any;
+        redirectCheckout: boolean;
     }
 
     interface DataItem {

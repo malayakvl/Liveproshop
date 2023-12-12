@@ -5,6 +5,7 @@ import { setSuccessToastAction, setErrorToastAction } from '../layouts';
 import { setUserAction } from '../user/';
 import { showLoaderAction } from '../layouts/actions';
 import { baseApiUrl } from '../../constants';
+import {redirectCheckoutAction} from "../orders";
 const baseUrl = `${baseApiUrl}/api`;
 const baseAuthUrl = `${baseApiUrl}/auth`;
 
@@ -28,6 +29,7 @@ export const updateProfileAction: any = createAction(
     async (data: any) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            const redirectReturned = state.orders.orderReturnedUrl;
             return axios
                 .post(`${baseUrl}/profile`, data, {
                     headers: {
@@ -39,6 +41,7 @@ export const updateProfileAction: any = createAction(
                     window.localStorage.setItem('user', JSON.stringify(res.data.user));
                     dispatch(setUserAction(res.data.user));
                     dispatch(setSuccessToastAction(`Profile has been updated`));
+                    // dispatch(redirectCheckoutAction());
                 });
         }
 );

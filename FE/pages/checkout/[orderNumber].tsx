@@ -7,7 +7,11 @@ import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout'
 import { useDispatch, useSelector } from 'react-redux';
 import { orderCheckoutSelector, redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
-import { clearOrderByCommentAction } from '../../redux/orders';
+import {
+    clearOrderByCommentAction,
+    redirectCheckoutAction,
+    setupReturnedUrlAction
+} from '../../redux/orders';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -174,11 +178,29 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                             <div className="p-[10px] items-center text-sm bg-gradient-to-r from-green-50 to-green-300 absolute rounded-lg left-[33%] top-[16px]">
                                                 <div className="relative">
                                                     <i className="icon-warning" />
-                                                    <span className="inline-block pl-[25px]">
+                                                    <span className="inline-block ml-[25px]">
                                                         Please add an email in your{' '}
                                                         <Link href={'/account'}>
-                                                            <a className="ml-auto text-sm font-bold red-yellow-gradient-text">
-                                                                profile
+                                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                                            <a
+                                                                className="ml-auto text-sm font-bold red-yellow-gradient-text"
+                                                                onClick={() => {
+                                                                    dispatch(
+                                                                        setupReturnedUrlAction(
+                                                                            `${
+                                                                                locale == 'fr'
+                                                                                    ? ''
+                                                                                    : '/en'
+                                                                            }/checkout/${
+                                                                                order.order_number
+                                                                            }`
+                                                                        )
+                                                                    );
+                                                                    dispatch(
+                                                                        redirectCheckoutAction(true)
+                                                                    );
+                                                                }}>
+                                                                profile!
                                                             </a>
                                                         </Link>
                                                     </span>

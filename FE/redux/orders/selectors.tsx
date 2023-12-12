@@ -72,3 +72,11 @@ export const orderNumberConnectedSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.connectedOrderNumber
 );
+export const redirectCheckoutSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.redirectCheckout
+);
+export const returnedUrlSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.orderReturnedUrl
+);

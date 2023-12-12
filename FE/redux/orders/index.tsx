@@ -16,7 +16,9 @@ import {
     setFbCommentAction,
     setupOrderByCommentAction,
     setTmpFbCommentAction,
-    clearOrderByCommentAction
+    clearOrderByCommentAction,
+    setupReturnedUrlAction,
+    redirectCheckoutAction
 } from './actions';
 
 const initialState: {
@@ -37,6 +39,8 @@ const initialState: {
     commentIdOrder: string | null;
     tmpCommentOrderId: string | null;
     connectedOrderNumber: string | null;
+    orderReturnedUrl: string | null;
+    redirectCheckout: boolean;
 } = {
     isFetched: false,
     loading: false,
@@ -59,7 +63,9 @@ const initialState: {
     achiveName: null,
     commentIdOrder: null,
     tmpCommentOrderId: null,
-    connectedOrderNumber: null
+    connectedOrderNumber: null,
+    orderReturnedUrl: null,
+    redirectCheckout: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -216,6 +222,18 @@ const ACTION_HANDLERS: any = {
             ...state,
             connectedOrderNumber: null
         })
+    },
+    [setupReturnedUrlAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            orderReturnedUrl: action.payload
+        })
+    },
+    [redirectCheckoutAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            redirectCheckout: action.payload
+        })
     }
 };
 
@@ -235,7 +253,9 @@ export {
     setFbCommentAction,
     setupOrderByCommentAction,
     setTmpFbCommentAction,
-    clearOrderByCommentAction
+    clearOrderByCommentAction,
+    setupReturnedUrlAction,
+    redirectCheckoutAction
 };
 
 // ------------------------------------
