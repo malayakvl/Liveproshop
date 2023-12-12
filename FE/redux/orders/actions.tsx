@@ -399,3 +399,4 @@ export const showCancelConfirmationModalAction: any = createAction(
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
 export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');
 // export const connectOrderAction: any = createAction('orders/CONNECT_ORDER_ACTION');
+export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');

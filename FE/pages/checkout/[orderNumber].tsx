@@ -7,6 +7,7 @@ import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout'
 import { useDispatch, useSelector } from 'react-redux';
 import { redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
+import { clearOrderByCommentAction } from '../../redux/orders';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -26,6 +27,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
+        dispatch(clearOrderByCommentAction(null));
     }, []);
 
     useEffect(() => {

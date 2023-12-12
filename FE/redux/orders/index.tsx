@@ -15,7 +15,8 @@ import {
     connectOrderAction,
     setFbCommentAction,
     setupOrderByCommentAction,
-    setTmpFbCommentAction
+    setTmpFbCommentAction,
+    clearOrderByCommentAction
 } from './actions';
 
 const initialState: {
@@ -209,6 +210,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             connectedOrderNumber: action.payload
         })
+    },
+    [clearOrderByCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            connectedOrderNumber: null
+        })
     }
 };
 
@@ -227,7 +234,8 @@ export {
     connectOrderAction,
     setFbCommentAction,
     setupOrderByCommentAction,
-    setTmpFbCommentAction
+    setTmpFbCommentAction,
+    clearOrderByCommentAction
 };
 
 // ------------------------------------
