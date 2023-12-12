@@ -30,6 +30,7 @@ declare namespace Layouts {
         showTextingMenu: boolean;
         showProfileMenu: boolean;
         selectedLng: string;
+        showEmailNotification: boolean;
     }
 
     interface TabTypes {

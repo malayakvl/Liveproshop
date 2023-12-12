@@ -14,7 +14,8 @@ import {
     setSingleFileNameAction,
     connectOrderAction,
     setFbCommentAction,
-    findOrderByCommentAction
+    findOrderByCommentAction,
+    clearOrderByCommentAction
 } from './actions';
 
 const initialState: {
@@ -196,7 +197,13 @@ const ACTION_HANDLERS: any = {
     [findOrderByCommentAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
-            commentIdOrder: action.payload
+            commentIdOrderNumber: action.payload.orderNumber
+        })
+    },
+    [clearOrderByCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            commentIdOrderNumber: null
         })
     }
 };
@@ -215,7 +222,8 @@ export {
     setSingleFileNameAction,
     connectOrderAction,
     setFbCommentAction,
-    findOrderByCommentAction
+    findOrderByCommentAction,
+    clearOrderByCommentAction
 };
 
 // ------------------------------------

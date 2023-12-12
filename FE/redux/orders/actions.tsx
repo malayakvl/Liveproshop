@@ -333,7 +333,13 @@ export const findOrderByCommentAction: any = createAction(
                     ...authHeader(email)
                 }
             })
-            .then((res) => res.data.orderId)
+            .then((res) => {
+                // console.log('CONNECTED ORDER', res);
+                // alert(res.data.orderNumber);
+                // window.location.href = `https://liveproshop.com/checkout/${res.data.orderNumber}`;
+                console.log(res.data);
+                return res.data;
+            })
             .catch((e) => console.log(e.message));
     }
 );
@@ -342,6 +348,7 @@ export const removeItemOrderAction: any = createAction(
     async (itemId: number, orderNumber: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            const lang = state.layouts.selectedLng;
             return axios
                 .get(`${baseUrl}/orders/remove-item-order?orderItemId=${itemId}`, {
                     headers: {
@@ -349,7 +356,11 @@ export const removeItemOrderAction: any = createAction(
                     }
                 })
                 .then((res: any) => {
-                    dispatch(fetchCheckoutAction(orderNumber));
+                    if (!res.redirect) {
+                        dispatch(fetchCheckoutAction(orderNumber));
+                    } else {
+                        window.location.href = `${lang == 'fr' ? '/' : '/en/'}orders`;
+                    }
                 });
         }
 );
@@ -397,4 +408,5 @@ export const showCancelConfirmationModalAction: any = createAction(
 );
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
 export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');
+export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');
 // export const connectOrderAction: any = createAction('orders/CONNECT_ORDER_ACTION');
