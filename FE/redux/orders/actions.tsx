@@ -387,6 +387,7 @@ export const minusItemOrderAction: any = createAction(
 //     }
 // );
 
+export const setTmpFbCommentAction: any = createAction('orders/SET_TMPFB_ORDER_COMMENT');
 export const setFbCommentAction: any = createAction('orders/SET_FB_ORDER_COMMENT');
 export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');

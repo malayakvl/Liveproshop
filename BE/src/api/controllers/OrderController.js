@@ -145,9 +145,9 @@ class OrderController {
 
     async findOrderByCommentId (req, res) {
         if (req.user) {
-            await orderModel.findByCommentId(req.query.commentId, req.user.id);
+            const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
         }
-        // console.log(data.orderId);
+        console.log("ORDER DATA", data);
         // console.log(data.userId);
         // JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
         // const data = await orderModel.bulkDownload(ids, req.user);

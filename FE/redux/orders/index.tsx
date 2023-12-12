@@ -14,7 +14,8 @@ import {
     setSingleFileNameAction,
     connectOrderAction,
     setFbCommentAction,
-    findOrderByCommentAction
+    findOrderByCommentAction,
+    setTmpFbCommentAction
 } from './actions';
 
 const initialState: {
@@ -33,6 +34,7 @@ const initialState: {
     showCancelPopup: boolean;
     achiveName: string | null;
     commentIdOrder: string | null;
+    tmpCommentOrderId: string | null;
 } = {
     isFetched: false,
     loading: false,
@@ -53,7 +55,8 @@ const initialState: {
     tagSellersSuggestions: [],
     showCancelPopup: false,
     achiveName: null,
-    commentIdOrder: null
+    commentIdOrder: null,
+    tmpCommentOrderId: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -193,6 +196,12 @@ const ACTION_HANDLERS: any = {
             commentIdOrder: action.payload
         })
     },
+    [setTmpFbCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            tmpCommentOrderId: action.payload
+        })
+    },
     [findOrderByCommentAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
@@ -215,7 +224,8 @@ export {
     setSingleFileNameAction,
     connectOrderAction,
     setFbCommentAction,
-    findOrderByCommentAction
+    findOrderByCommentAction,
+    setTmpFbCommentAction
 };
 
 // ------------------------------------

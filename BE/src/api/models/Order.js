@@ -895,21 +895,24 @@ class Order {
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            const SQL = `SELECT order_id, data.orders.live_sessions_id, order_amount, total_amount, quantity
+            let orderNumber;
+            const SQL = `SELECT order_id, order_number, data.orders.live_sessions_id, order_amount, total_amount, quantity
                 FROM data.order_items 
                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
                 WHERE message_id='${commentId}'`;
             console.log(SQL);
             const res = await client.query(SQL);
+            orderNumber = res.rows[0].order_number;
             console.log("1", res.rows[0].order_id);
             console.log(`SELECT id FROM data.orders WHERE user_id='${userId}' 
                 AND status='new' AND id != '${res.rows[0].order_id}' 
                 AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
             const existNonPayedOrder = await client.query(
-                `SELECT id FROM data.orders WHERE user_id='${userId}'
+                `SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
                 AND status='new' AND id != '${res.rows[0].order_id}'
                 AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
             if (existNonPayedOrder.rows[0]?.id) {
+                orderNumber = existNonPayedOrder.rows[0].order_number;
                 // before add new items check if this item already aexist in order, if yes only change quantity
                 const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}'`;
                 await client.query(updateExistItemsSQL);
@@ -963,7 +966,7 @@ class Order {
                 console.log(orderSQL);
                 await client.query(orderSQL);
             }
-            return {success: true, orderId: res.rows[0].order_id};
+            return {success: true, orderId: res.rows[0].order_id, orderNumber: orderNumber };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
