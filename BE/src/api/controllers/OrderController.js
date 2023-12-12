@@ -145,7 +145,6 @@ class OrderController {
 
     async findOrderByCommentId (req, res) {
         if (req.user) {
-            console.log("BBBBBB");
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
             console.log(data);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber});

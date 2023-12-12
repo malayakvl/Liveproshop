@@ -337,6 +337,7 @@ export const findOrderByCommentAction: any = createAction(
                 // console.log('CONNECTED ORDER', res);
                 // alert(res.data.orderNumber);
                 // window.location.href = `https://liveproshop.com/checkout/${res.data.orderNumber}`;
+                console.log(res.data);
                 return res.data;
             })
             .catch((e) => console.log(e.message));
