@@ -99,6 +99,7 @@ class Checkout {
                 shippingMethods = []
             } else {
                 query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
+                console.log(query);
                 res = await client.query(query, [orderId, countryId]);
                 shippingMethods = res.rows;
             }

@@ -225,6 +225,7 @@ export default function List({ locale }: { locale: string }) {
                                 </td>
 
                                 <td>
+                                    <span>{item.status ? 'yes' : 'no'}</span>
                                     <label className="flex items-center cursor-pointer relative">
                                         <input
                                             type="checkbox"

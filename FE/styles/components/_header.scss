@@ -294,3 +294,14 @@
 
 //document.getElementById('sidenav-2').classList.remove('left-slide-close');
 //document.getElementById('sidenav-2').classList.add('left-side-open');
+.icon-warning {
+  background: url(../../public/images/icon-warning.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  margin-top:10px;
+  display: inline-block;
+  position: absolute;
+  top: -6px;
+}

@@ -147,7 +147,7 @@ function Profile() {
         });
     }
 
-    console.log(user.email_real);
+    console.log('1111', user.email_real);
 
     return (
         <Formik
@@ -229,7 +229,7 @@ function Profile() {
                                     tips={null}
                                 />
                                 <InputText
-                                    disabled={validateEmail(props.values['email'])}
+                                    disabled={validateEmail(props.values['email_real'])}
                                     icon={'f-email'}
                                     label={null}
                                     name={'email_real'}

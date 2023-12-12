@@ -52,13 +52,14 @@ class Dashboard {
                         _orderFilters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
                         break;
                     case UserRole.BUYER:
-                        _orderFilters.status = [OrderStatus.NEW, OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED]
+                        // _orderFilters.status = [OrderStatus.NEW, OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED]
+                        _orderFilters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.NEW, OrderStatus.CANCELED]
                 }
             }
             let querySQL = `SELECT
                     *
                 FROM data.get_orders(${perPage}, ${offset}, '${JSON.stringify(_orderFilters)}', '${column} ${sort}');`; // 'created_at DESC'
-
+// console.log(querySQL);
             let res = await client.query(querySQL);
             orders = res.rows.length > 0 ? res.rows : [];
             

@@ -307,12 +307,15 @@ class Shipping {
         try {
             let query =
                 'DELETE FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2';
-
+console.log("Status", status);
             if (!status) {
                 query =
                     'INSERT INTO data.customer_disabled_shipping(user_id, shipping_id) VALUES($1, $2)';
+            } else {
+                console.log("EBANY VLADIK")
             }
-
+console.log(query)
+console.log(customerId, shippingId);
             await client.query(query, [customerId, shippingId]);
 
             return true

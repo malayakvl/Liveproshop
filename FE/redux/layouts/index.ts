@@ -24,6 +24,7 @@ import {
     showEmailNotificationAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
+// import { showPopupAction } from '../dashboard';
 
 const initPagination = { limit: 25, offset: 0, sort: 'DESC', column: 'created_at', query: '' };
 
@@ -325,6 +326,7 @@ const ACTION_HANDLERS: any = {
             showEmailNotification: action.payload
         })
     }
+
 };
 
 export {
