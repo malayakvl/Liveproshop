@@ -966,6 +966,10 @@ class Order {
                 console.log(orderSQL);
                 await client.query(orderSQL);
             }
+            console.log("=============");
+            console.log("RETURNED DATA");
+            console.log({success: true, orderId: res.rows[0].order_id, orderNumber: orderNumber })
+            console.log("=============");
             return {success: true, orderId: res.rows[0].order_id, orderNumber: orderNumber };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

@@ -324,7 +324,7 @@ export const fetchUserOrderAction: any = createAction(
             .catch((e) => console.log(e.message));
     }
 );
-export const findOrderByCommentAction: any = createAction(
+export const setupOrderByCommentAction: any = createAction(
     'order/FETCH_USER_ORDER',
     async (commentId: string, email: string) => {
         return axios
@@ -333,7 +333,7 @@ export const findOrderByCommentAction: any = createAction(
                     ...authHeader(email)
                 }
             })
-            .then((res) => res.data.orderId)
+            .then((res) => res.data.orderNumber)
             .catch((e) => console.log(e.message));
     }
 );

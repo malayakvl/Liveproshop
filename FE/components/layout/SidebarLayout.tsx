@@ -7,13 +7,16 @@ import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
 import { toggleProfileMenuAction, toggleSidebarAction } from '../../redux/layouts';
 import Router from 'next/router';
-import { findOrderByCommentAction } from '../../redux/orders';
+import { setupOrderByCommentAction } from '../../redux/orders';
+import { orderNumberConnectedSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
+    const connectedOrderNumber = useSelector(orderNumberConnectedSelector);
+
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
         if (user?.email && user.role_id == 2) {
@@ -23,10 +26,17 @@ export default function SidebarLayout({ children }: { children: any }) {
         }
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             dispatch(
-                findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
+                setupOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
             );
         }
     }, [user?.email]);
+
+    useEffect(() => {
+        if (connectedOrderNumber && user?.email && user.role_id == 1) {
+            dispatch(setupOrderByCommentAction(null));
+            Router.push(`/en/checkout/${connectedOrderNumber}`);
+        }
+    }, [connectedOrderNumber]);
 
     return (
         <div className="relative min-h-screen">

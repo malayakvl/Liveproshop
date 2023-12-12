@@ -17,6 +17,7 @@ declare namespace Orders {
         downloadFileName: null | string;
         commentIdOrder: null | any;
         tmpCommentOrderId: null | any;
+        connectedOrderNumber: null | any;
     }
 
     interface DataItem {
