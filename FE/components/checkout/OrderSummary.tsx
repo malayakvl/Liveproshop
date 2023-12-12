@@ -15,6 +15,7 @@ import {
 import { removeItemOrderAction, minusItemOrderAction } from '../../redux/orders/actions';
 import { userSelector } from '../../redux/user/selectors';
 import { useRouter } from 'next/router';
+import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 
 const OrderSummary = () => {
     const t = useTranslations();
@@ -27,7 +28,9 @@ const OrderSummary = () => {
     } = useRouter();
 
     const order = useSelector(orderCheckoutSelector) || {};
-    const user = useSelector(userSelector);
+    // const user = useSelector(userSelector);
+    const showEmailNotice = useSelector(showEmailNoticeSelector);
+    // const showEmailNotice = true;
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
     const selectedShippingMethod = useMemo(
@@ -35,7 +38,7 @@ const OrderSummary = () => {
         [shippingMethodId]
     );
 
-    const reaclculateTotal = (dataOrder: any) => {
+    const recalculateTotal = (dataOrder: any) => {
         let totalOrder = 0;
         if (dataOrder.total_amount > 0) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -61,15 +64,28 @@ const OrderSummary = () => {
     //     ++itemCnt;
     // });
     useEffect(() => {
-        reaclculateTotal(order);
+        recalculateTotal(order);
+        if (order?.order_items) {
+            order.order_items.sort((a: any, b: any) => (a.id > b.id ? 1 : -1));
+        }
+        // console.log(order.order_items.sort(compare));
     }, [order]);
 
     const removeItemOrder = (itemId: number) => {
         dispatch(removeItemOrderAction(itemId, orderNumber));
     };
-
     const munusQtyItemOrder = (itemId: number) => {
         dispatch(minusItemOrderAction(itemId));
+    };
+
+    const compare = (a: any, b: any) => {
+        if (a.id < b.id) {
+            return -1;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        return 0;
     };
 
     return (
@@ -117,7 +133,7 @@ const OrderSummary = () => {
                                         <span className="delete-item-card" />
                                     </span>
                                 )}
-                                <span className="text-blue-350 text-sm">#{product.product_id}</span>
+                                <span className="text-blue-350 text-sm">{product.product_id}</span>
                                 <div className="text-gray-350 my-1 font-normal text-lg">
                                     {product.name}
                                 </div>
@@ -139,18 +155,18 @@ const OrderSummary = () => {
                                     <div>
                                         <div className="inline-block relative">
                                             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                                            <span
-                                                className={`qty-minus ${
-                                                    product.quantity == 1
-                                                        ? 'disabled'
-                                                        : 'cursor-pointer'
-                                                }`}
-                                                onClick={() => {
-                                                    if (product.quantity > 1) {
-                                                        munusQtyItemOrder(product.id);
-                                                    }
-                                                }}
-                                            />
+                                            {product.quantity > 1 ? (
+                                                // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                                                <span
+                                                    className={`qty-minus cursor-pointer ${
+                                                        product.quantity == 1 ? 'disabled' : ''
+                                                    }`}
+                                                    onClick={() => munusQtyItemOrder(product.id)}
+                                                />
+                                            ) : (
+                                                // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                                                <span className={`qty-minus disabled`} />
+                                            )}
                                         </div>
                                         <span className="product-qty-input">
                                             {product.quantity}
@@ -166,7 +182,6 @@ const OrderSummary = () => {
                             </div>
                         </div>
                     ))}
-
                     <div className="flex justify-between text-gray-350 text-[18px] text-right -mt-6">
                         VAT (20%)
                         <span className="inline-block ml-4 font-bold min-w-[3rem]">
@@ -186,10 +201,9 @@ const OrderSummary = () => {
                     <div className="flex justify-between my-6 py-6 text-gray-350 text-[30px] font-bold text-right border-t border-gray-200">
                         {t('Order total')}:
                         <span className="inline-block ml-4 font-bold min-w-[5rem]">
-                            {reaclculateTotal(order)}
+                            {recalculateTotal(order)}
                         </span>
                     </div>
-
                     <div className="col-span-2 my-6">
                         <Field
                             type="checkbox"
@@ -220,16 +234,29 @@ const OrderSummary = () => {
                         </label>
                         <ErrorMessage name="isAgreeTerms" component="div" className="error-el" />
                     </div>
-                    <button
-                        type="submit"
-                        disabled={order.status === OrderStatus.PAYED}
-                        className="uppercase my-4 gradient-btn w-full">
-                        <div className="inline-block relative">
-                            <i className="card-icon-white" />
-                        </div>
-                        {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
-                        {reaclculateTotal(order)}
-                    </button>
+                    {!showEmailNotice ? (
+                        <button
+                            type="submit"
+                            disabled={order.status === OrderStatus.PAYED}
+                            className={`uppercase my-4 gradient-btn w-full`}>
+                            <div className="inline-block relative">
+                                <i className="card-icon-white" />
+                            </div>
+                            {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
+                            {recalculateTotal(order)}
+                        </button>
+                    ) : (
+                        <button
+                            type="submit"
+                            disabled={true}
+                            className={`uppercase my-4 gradient-btn w-full opacity-25`}>
+                            <div className="inline-block relative">
+                                <i className="card-icon-white" />
+                            </div>
+                            {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
+                            {recalculateTotal(order)}
+                        </button>
+                    )}
                 </>
             )}
         </>

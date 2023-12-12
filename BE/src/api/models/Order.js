@@ -13,6 +13,7 @@ import * as zipLib from "zip-a-folder";
 
 async function createInvoice (invoice, path, locale) {
     try {
+
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
@@ -73,7 +74,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .fillColor("#444444")
         .fontSize(20)
         .text(invoice.status === 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
-// console.log(invoice);
+
     generateHr(doc, 185);
     const customerInformationTop = 200;
     let deliveryAddress = [];
@@ -89,7 +90,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         deliveryAddress[3] = invoice.shipping.address;
 
     }
-    console.log(invoice.shipping);
+    console.log(invoice);
     doc
         .fontSize(10)
         .text(t["Invoice number:"], 50, customerInformationTop)
@@ -108,9 +109,9 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
-        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 40)
+        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 30)
         // .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
-        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
+        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 45)
         // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
         // .text(
         //     invoice.shipping.city +
@@ -188,9 +189,9 @@ async function generateInvoiceTable(doc, invoice, locale) {
             vatToDatePosition,
             "",
             "",
-            "VAT(20%)",
+            "VAT",
             "",
-            formatCurrency((invoice.subtotal*20/100))
+            formatCurrency((invoice.subtotal*15/100))
         );
 
 
@@ -670,11 +671,7 @@ class Order {
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
-                console.log("BUYER DATA");
-                console.log("========");
-                console.log("========");
-                console.log(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`)
-                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
+                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
@@ -691,10 +688,9 @@ class Order {
                 //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                 //                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
-
                 const invoice = {
                     shipping: {
-                        name: buyerData.rows[0].first_name+" "+(buyerData.rows[0]?.last_name != null ? buyerData.rows[0]?.last_name : "" ),
+                        name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
                         city: res.rows[0].city,
@@ -832,38 +828,19 @@ class Order {
         const client = await pool.connect();
         try {
             const itemRow = await client.query(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
-            console.log(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
-
-            // update order total amounts
-            console.log(`UPDATE data.orders SET
+            // console.log(`UPDATE data.orders SET
+            //     order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
+            //     total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
+            //     WHERE id=${itemRow.rows[0].order_id}`);
+            await client.query(`UPDATE data.orders SET 
                 order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
                 total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
                 WHERE id=${itemRow.rows[0].order_id}`);
-            await client.query(`UPDATE data.orders SET
-                order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
-                total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
-                WHERE id=${itemRow.rows[0].order_id}`);
-
-            // remove item from order
-            console.log(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
             await client.query(`DELETE FROM data.order_items WHERE id='${orderItemId}'`);
-
             // return quantity to product
-            console.log(`UPDATE data.product_configurations SET quantity = quantity + ${itemRow.rows[0].quantity}
-                WHERE id='${itemRow.rows[0].product_configuration_id}'`);
             await client.query(`UPDATE data.product_configurations SET quantity = quantity + ${itemRow.rows[0].quantity}
                 WHERE id='${itemRow.rows[0].product_configuration_id}'`);
-
-            // get items count for current order
-            console.log(`SELECT COUNT(id) AS cnt FROM data.order_items WHERE order_id='${itemRow.rows[0].order_id}'`);
-            const orderItemCnt = await client.query(`SELECT COUNT(id) AS cnt FROM data.order_items WHERE order_id='${itemRow.rows[0].order_id}'`);
-            let redirect = false;
-            // if (parseFloat(orderItemCnt.rows[0].cnt) === 0) {
-            //     await client.query(`DELETE FROM data.orders WHERE id='${itemRow.rows[0].order_id}'`);
-            //     redirect = true;
-            // }
-
-            return {success: true, error: null, redirectToOrder: false};
+            return {success: true, error: null};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -918,16 +895,15 @@ class Order {
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            const SQL = `SELECT order_id, order_number, data.orders.user_id AS user_delete, data.orders.live_sessions_id, order_amount, total_amount, quantity
+            let orderNumber;
+            const SQL = `SELECT order_id, order_number, data.orders.live_sessions_id, order_amount, total_amount, quantity
                 FROM data.order_items 
                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
                 WHERE message_id='${commentId}'`;
             console.log(SQL);
             const res = await client.query(SQL);
-            let orderNumberReturned = res.rows[0].order_number;
-            let deleteUserId = res.rows[0].user_delete;
+            orderNumber = res.rows[0].order_number;
             console.log("1", res.rows[0].order_id);
-            console.log("USER FOR DELETE", deleteUserId);
             console.log(`SELECT id FROM data.orders WHERE user_id='${userId}' 
                 AND status='new' AND id != '${res.rows[0].order_id}' 
                 AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
@@ -935,14 +911,13 @@ class Order {
                 `SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
                 AND status='new' AND id != '${res.rows[0].order_id}'
                 AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
-            console.log(existNonPayedOrder.rows[0]?.id);
             if (existNonPayedOrder.rows[0]?.id) {
-                orderNumberReturned = existNonPayedOrder.rows[0]?.order_number;
+                orderNumber = existNonPayedOrder.rows[0].order_number;
                 // before add new items check if this item already aexist in order, if yes only change quantity
                 const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}'`;
                 await client.query(updateExistItemsSQL);
-                // // update amounts for order splited order
-                const updateAmountSQL = `UPDATE data.orders
+                // update amounts for order splited order
+                const updateAmountSQL = `UPDATE data.orders 
                     SET order_amount = order_amount + ${res.rows[0].order_amount},
                     total_amount = total_amount +  ${res.rows[0].total_amount}
                     WHERE id='${existNonPayedOrder.rows[0].id}'`;
@@ -956,7 +931,7 @@ class Order {
                     FROM data.order_items
                     WHERE order_id=${existNonPayedOrder.rows[0]?.id}
                     GROUP BY product_configuration_id`);
-                const realOrderItems = await client.query(`SELECT id
+                const realOrderItems = await client.query(`SELECT id 
                     FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
                 // need to combine two rows into one
                 if (combinedSQL.rows.length < realOrderItems.rows.length) {
@@ -964,7 +939,7 @@ class Order {
                     combinedSQL.rows.forEach(_item => {
                         combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
                     })
-                    const _dataResCombine = await client.query(`SELECT product_configuration_id,
+                    const _dataResCombine = await client.query(`SELECT product_configuration_id, 
                         SUM(quantity) AS resultsQty, array_agg(id) as products
                         FROM data.order_items
                         WHERE order_id=${existNonPayedOrder.rows[0]?.id}
@@ -981,20 +956,21 @@ class Order {
                     });
                     // update quantity for order items row
                     combinedData.forEach(async (_item) => {
-                        await client.query(`UPDATE data.order_items SET quantity='${_item.qty}'
+                        await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
                         WHERE product_configuration_id='${_item.config_id}'`)
                     });
                 }
-                console.log(`DELETE FROM data.users WHERE id='${deleteUserId}'`);
-                await client.query(`DELETE FROM data.users WHERE id='${deleteUserId}'`);
             } else {
                 const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
                     total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+                console.log(orderSQL);
                 await client.query(orderSQL);
-                await client.query(`// DELETE FROM data.users WHERE id='${deleteUserId}'`);
             }
-            console.log("AAAAAAA", orderNumberReturned)
-            return {success: true, orderId: res.rows[0].order_id, orderNumber: orderNumberReturned};
+            console.log("=============");
+            console.log("RETURNED DATA");
+            console.log({success: true, orderId: res.rows[0].order_id, orderNumber: orderNumber })
+            console.log("=============");
+            return {success: true, orderId: res.rows[0].order_id, orderNumber: orderNumber };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

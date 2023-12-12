@@ -13,6 +13,8 @@ import { userSelector } from '../../redux/user/selectors';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { setModalConfirmationMetaAction } from '../../redux/layouts';
 import { setPhotoAction } from '../../redux/profile/actions';
+import { redirectCheckoutSelector, returnedUrlSelector } from '../../redux/orders/selectors';
+import { useRouter } from 'next/router';
 
 function Profile() {
     const t = useTranslations();
@@ -23,6 +25,10 @@ function Profile() {
     const filePickerRef = useRef<HTMLInputElement>(null);
     const [imagePost, setImagePost] = useState<File>();
     const [isNewPhoto, setIsNewPhoto] = useState(false);
+    const redirectToCheckout = useSelector(redirectCheckoutSelector);
+    const orderReturnedUrl = useSelector(returnedUrlSelector);
+    const router = useRouter();
+
     useEffect(() => {
         if (user.email) {
             dispatch(fetchProfileAction());
@@ -60,6 +66,9 @@ function Profile() {
 
             // if (count) dispatch(updateProfileAction(formData));
             dispatch(updateProfileAction(formData));
+            if (redirectToCheckout) {
+                router.push(orderReturnedUrl);
+            }
         },
         [dispatch]
     );

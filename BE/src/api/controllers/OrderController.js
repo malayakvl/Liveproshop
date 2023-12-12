@@ -98,9 +98,9 @@ class OrderController {
     }
 
     async removeOrderItem(req, res) {
-        const data = await orderModel.removeOrderItem(req.query.orderItemId);
+        await orderModel.removeOrderItem(req.query.orderItemId);
         // const productQuant = resQuery.qty;
-        return res.status(200).json({success: true, redirectToOrder: data.redirectToOrder});
+        return res.status(200).json({success: true});
     }
 
     async minusOrderItem(req, res) {
@@ -146,15 +146,10 @@ class OrderController {
     async findOrderByCommentId (req, res) {
         if (req.user) {
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
-            console.log(data);
-            return res.status(200).json({ success: true, orderNumber: data.orderNumber});
+            console.log("ORDER DATA", data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }
-
-        // console.log(data.orderId);
-        // console.log(data.userId);
-        // JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-        // const data = await orderModel.bulkDownload(ids, req.user);
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, orderNumber: null });
     }
 }
 

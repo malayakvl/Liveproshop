@@ -179,6 +179,21 @@ class UserController {
         }
     }
 
+    async saveAddressSeller(req, res) {
+        let status;
+        // Mayachny 21, p 5 f 4, Amsterdam, 67012, France
+        const user = req.user;
+        if (user) {
+            const counrtRes = await countryModel.findById(req.body.country_id);
+            const addressLine = req.body.address_line_1+", " + req.body.address_line_2.trimStart()+", " + req.body.city.trimStart() + ", " + req.body.post_code.trimStart() + ", " + counrtRes.nicename;
+            status = await userModel.saveSellerAddress(user.id, addressLine);
+            return res.status(200).json({ status: true });
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
+
+
     async changePassword(req, res) {
         if (req.user) {
             const status = await userModel.changePassword(req.user, req.body);

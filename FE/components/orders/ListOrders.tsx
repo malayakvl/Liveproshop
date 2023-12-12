@@ -177,24 +177,18 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td style={{ width: '50px' }}>
-                                {item?.order_items && (
-                                    <>
-                                        <i
-                                            role="presentation"
-                                            className="icon-tbl-triangle cursor-pointer"
-                                            style={{ marginTop: '5px' }}
-                                            onClick={() => handleShowMore(item.id)}
-                                        />
-                                    </>
-                                )}
+                                <i
+                                    role="presentation"
+                                    className="icon-tbl-triangle cursor-pointer"
+                                    style={{ marginTop: '5px' }}
+                                    onClick={() => handleShowMore(item.id)}
+                                />
                             </td>
                             <td className="order-number">
-                                {user.role_id === 1 && item.status !== 'new' ? (
+                                {user.role_id === 1 && (
                                     <Link href={`/orders/${item.order_number}?locale=${locale}`}>
                                         <a>{item.order_number}</a>
                                     </Link>
-                                ) : (
-                                    item.order_number
                                 )}
                                 {user.role_id === 2 && item.status === 'new' && (
                                     <>
@@ -256,25 +250,15 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td style={{ minWidth: '150px' }}>
-                                {item?.order_items ? (
-                                    <>
-                                        {item.order_items.length}x{' '}
-                                        <span className="red-yellow-gradient-text">
-                                            {t('product (s)')}
-                                        </span>
-                                    </>
-                                ) : (
-                                    <>0 {t('product (s)')}</>
-                                )}
-                                {/*{item.order_items.length}x{' '}*/}
-                                {/*<span className="red-yellow-gradient-text">product (s)</span>*/}
+                                {item.order_items?.length ? item.order_items?.length : 0}x{' '}
+                                <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
                             <td>
                                 {formatCurrency(
                                     item.total_amount ? item.total_amount : item.order_amount
                                 )}
                             </td>
-                            {user.role_id === 1 && item.status === 'new' && item?.order_items && (
+                            {user.role_id === 1 && item.status === 'new' && item.total_amount != 0 && (
                                 <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                     <Link href={`/checkout/${item.order_number}`}>
                                         <div

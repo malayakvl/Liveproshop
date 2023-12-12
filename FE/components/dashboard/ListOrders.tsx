@@ -5,8 +5,6 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../../redux/user/selectors';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -16,7 +14,6 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
     locale
 }) => {
     const t = useTranslations();
-    const user = useSelector(userSelector);
 
     return (
         <div className="overflow-x-scroll scroll-horizontal">
@@ -37,14 +34,9 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                         <Fragment key={item.id}>
                             <tr>
                                 <td className="red-yellow-gradient-text">
-                                    {user.role_id === 1 && item.status !== 'new' ? (
-                                        <Link
-                                            href={`/orders/${item.order_number}?locale=${locale}`}>
-                                            <a>{item.order_number}</a>
-                                        </Link>
-                                    ) : (
-                                        item.order_number
-                                    )}
+                                    <Link href={`/orders/${item.order_number}`}>
+                                        <a>{item.order_number}</a>
+                                    </Link>
                                 </td>
                                 <td>
                                     <span className={item.status}>{t(item.status)}</span>
@@ -81,16 +73,10 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                 </td>
                                 <td style={{ minWidth: '150px' }}>
                                     <div className="text-right">
-                                        {item?.order_items ? (
-                                            <>
-                                                {item.order_items.length}x{' '}
-                                                <span className="red-yellow-gradient-text">
-                                                    {t('product (s)')}
-                                                </span>
-                                            </>
-                                        ) : (
-                                            <>0 {t('product (s)')}</>
-                                        )}
+                                        {item.order_items?.length ? item.order_items?.length : 0}x{' '}
+                                        <span className="red-yellow-gradient-text">
+                                            {t('product (s)')}
+                                        </span>
                                     </div>
                                 </td>
                                 <td>

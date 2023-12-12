@@ -10,9 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { inviteUserAction, setOrderCommentAction } from '../../redux/user/actions';
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
+import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
+    const tmpCommentOrderId = useSelector(orderTmpCommentIdSelector);
     // const {
     //     values: { roleId }
     // } = useFormikContext();
@@ -25,13 +27,13 @@ export default function Signup({ locale }: { locale: string }) {
         role_id: '1' | '2';
         forFree: any;
     };
-    console.log();
 
     const t = useTranslations();
     const [roleId, setRoleId] = useState(1);
     const [isFbClicked, setIsFbClicked] = useState(false);
     const [hideForm, setHideForm] = useState(false);
     const [commentId, setCommentId] = useState('');
+    const [commentTmpId, setCommentTmpId] = useState('');
     // const { values, submitForm } = useFormikContext();
     // const { setFieldValue } = useFormikContext();
     // const params = new URLSearchParams(window.location.pathname);
@@ -55,10 +57,14 @@ export default function Signup({ locale }: { locale: string }) {
         // const commentId = commentStr[1];
         setCommentId(commentStr[1]);
         setRoleId(1);
-        // const { setFieldValue } = useFormikContext();
-        // console.log(FormikProps);
-        // setFieldValue(1);
     }, [typeof window !== 'undefined']);
+
+    useEffect(() => {
+        if (tmpCommentOrderId) {
+            setCommentTmpId(tmpCommentOrderId);
+            setRoleId(1);
+        }
+    }, [tmpCommentOrderId]);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

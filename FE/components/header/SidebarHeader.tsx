@@ -22,6 +22,7 @@ const SidebarHeader: React.FC = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
     const showEmailNotice = useSelector(showEmailNoticeSelector);
+    // const showEmailNotice = true;
 
     useEffect(
         function () {

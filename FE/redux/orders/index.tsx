@@ -14,8 +14,11 @@ import {
     setSingleFileNameAction,
     connectOrderAction,
     setFbCommentAction,
-    findOrderByCommentAction,
-    clearOrderByCommentAction
+    setupOrderByCommentAction,
+    setTmpFbCommentAction,
+    clearOrderByCommentAction,
+    setupReturnedUrlAction,
+    redirectCheckoutAction
 } from './actions';
 
 const initialState: {
@@ -34,6 +37,10 @@ const initialState: {
     showCancelPopup: boolean;
     achiveName: string | null;
     commentIdOrder: string | null;
+    tmpCommentOrderId: string | null;
+    connectedOrderNumber: string | null;
+    orderReturnedUrl: string | null;
+    redirectCheckout: boolean;
 } = {
     isFetched: false,
     loading: false,
@@ -54,7 +61,11 @@ const initialState: {
     tagSellersSuggestions: [],
     showCancelPopup: false,
     achiveName: null,
-    commentIdOrder: null
+    commentIdOrder: null,
+    tmpCommentOrderId: null,
+    connectedOrderNumber: null,
+    orderReturnedUrl: null,
+    redirectCheckout: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -194,16 +205,34 @@ const ACTION_HANDLERS: any = {
             commentIdOrder: action.payload
         })
     },
-    [findOrderByCommentAction]: {
+    [setTmpFbCommentAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
-            commentIdOrderNumber: action.payload.orderNumber
+            tmpCommentOrderId: action.payload
+        })
+    },
+    [setupOrderByCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            connectedOrderNumber: action.payload
         })
     },
     [clearOrderByCommentAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
-            commentIdOrderNumber: null
+            connectedOrderNumber: null
+        })
+    },
+    [setupReturnedUrlAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            orderReturnedUrl: action.payload
+        })
+    },
+    [redirectCheckoutAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            redirectCheckout: action.payload
         })
     }
 };
@@ -222,8 +251,11 @@ export {
     setSingleFileNameAction,
     connectOrderAction,
     setFbCommentAction,
-    findOrderByCommentAction,
-    clearOrderByCommentAction
+    setupOrderByCommentAction,
+    setTmpFbCommentAction,
+    clearOrderByCommentAction,
+    setupReturnedUrlAction,
+    redirectCheckoutAction
 };
 
 // ------------------------------------

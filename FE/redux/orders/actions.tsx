@@ -324,7 +324,7 @@ export const fetchUserOrderAction: any = createAction(
             .catch((e) => console.log(e.message));
     }
 );
-export const findOrderByCommentAction: any = createAction(
+export const setupOrderByCommentAction: any = createAction(
     'order/FETCH_USER_ORDER',
     async (commentId: string, email: string) => {
         return axios
@@ -333,13 +333,7 @@ export const findOrderByCommentAction: any = createAction(
                     ...authHeader(email)
                 }
             })
-            .then((res) => {
-                // console.log('CONNECTED ORDER', res);
-                // alert(res.data.orderNumber);
-                // window.location.href = `https://liveproshop.com/checkout/${res.data.orderNumber}`;
-                console.log(res.data);
-                return res.data;
-            })
+            .then((res) => res.data.orderNumber)
             .catch((e) => console.log(e.message));
     }
 );
@@ -348,7 +342,6 @@ export const removeItemOrderAction: any = createAction(
     async (itemId: number, orderNumber: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            const lang = state.layouts.selectedLng;
             return axios
                 .get(`${baseUrl}/orders/remove-item-order?orderItemId=${itemId}`, {
                     headers: {
@@ -356,11 +349,7 @@ export const removeItemOrderAction: any = createAction(
                     }
                 })
                 .then((res: any) => {
-                    if (!res.redirect) {
-                        dispatch(fetchCheckoutAction(orderNumber));
-                    } else {
-                        window.location.href = `${lang == 'fr' ? '/' : '/en/'}orders`;
-                    }
+                    dispatch(fetchCheckoutAction(orderNumber));
                 });
         }
 );
@@ -398,6 +387,7 @@ export const minusItemOrderAction: any = createAction(
 //     }
 // );
 
+export const setTmpFbCommentAction: any = createAction('orders/SET_TMPFB_ORDER_COMMENT');
 export const setFbCommentAction: any = createAction('orders/SET_FB_ORDER_COMMENT');
 export const clearBase64Action: any = createAction('orders/CLEAR_BASE_64');
 export const showPopupAction: any = createAction('orders/SHOW_POPUP');
@@ -408,5 +398,7 @@ export const showCancelConfirmationModalAction: any = createAction(
 );
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
 export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');
-export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');
 // export const connectOrderAction: any = createAction('orders/CONNECT_ORDER_ACTION');
+export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');
+export const setupReturnedUrlAction: any = createAction('orders/SETUP_RETURNED_URL');
+export const redirectCheckoutAction: any = createAction('orders/REDIRECT_CHECKOUT_ACTION');

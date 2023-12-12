@@ -365,6 +365,13 @@ input:checked + .toggle-bg {
 }
 .qty-minus.disabled {
   background-image: url(../../public/images/card/minus-disabled.svg);
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 24px;
+  display: inline-block;
+  position: absolute;
+  top: -16px;
+  left: -33px;
 }
 
 .card-icon-white {

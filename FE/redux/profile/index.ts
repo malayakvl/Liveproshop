@@ -7,6 +7,7 @@ import {
     restorePasswordAction,
     setValidEmailStatusAction,
     saveAddressAction,
+    saveAddressSellerAction,
     setPhotoAction
 } from './actions';
 
@@ -70,7 +71,8 @@ export {
     changePasswordInvitationAction,
     restorePasswordAction,
     setValidEmailStatusAction,
-    saveAddressAction
+    saveAddressAction,
+    saveAddressSellerAction
 };
 
 // ------------------------------------

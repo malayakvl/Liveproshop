@@ -10,32 +10,22 @@ import {
     toggleProfileMenuAction,
     toggleSidebarAction
 } from '../../redux/layouts';
-import Router, { useRouter } from 'next/router';
-import { findOrderByCommentAction } from '../../redux/orders';
-import { orderCommentNumberSelector } from '../../redux/orders/selectors';
+import Router from 'next/router';
+import { setupOrderByCommentAction } from '../../redux/orders';
+import { orderNumberConnectedSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
-    const orderCommentNumber = useSelector(orderCommentNumberSelector);
-    const { locale }: any = useRouter();
-
-    console.log('locale', locale);
+    const connectedOrderNumber = useSelector(orderNumberConnectedSelector);
 
     const isValidEmail = (email: any) => {
         return /\S+@\S+\.\S+/.test(email);
     };
-    // const isMobileDevice = useSelector(isMobileDeviceSelector);
-    useEffect(() => {
-        if (orderCommentNumber) {
-            Router.push(
-                `/${window.localStorage.getItem('currLocale')}/checkout/${orderCommentNumber}`
-            );
-        }
-    }, [orderCommentNumber]);
 
+    // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
         if (user?.email && user.role_id == 2) {
             if (user.subscription_id?.includes('fake_sub_') || user?.subscription_expired) {
@@ -44,7 +34,10 @@ export default function SidebarLayout({ children }: { children: any }) {
         }
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             dispatch(
-                findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
+                setupOrderByCommentAction(
+                    window.localStorage.getItem('orderCommentId'),
+                    user?.email
+                )
             );
         }
         if (user?.email) {
@@ -56,6 +49,14 @@ export default function SidebarLayout({ children }: { children: any }) {
             }
         }
     }, [user?.email]);
+
+    useEffect(() => {
+        if (connectedOrderNumber && user?.email && user.role_id == 1) {
+            dispatch(setupOrderByCommentAction(null));
+            Router.push(`/en/checkout/${connectedOrderNumber}`);
+        }
+    }, [connectedOrderNumber]);
+
     return (
         <div className="relative min-h-screen">
             {showLoader && (

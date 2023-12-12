@@ -64,7 +64,19 @@ export const orderCommentIdSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.commentIdOrder
 );
-export const orderCommentNumberSelector = createSelector(
+export const orderTmpCommentIdSelector = createSelector(
     rootSelector,
-    (orders: State.Orders): any => orders.commentIdOrderNumber
+    (orders: State.Orders): any => orders.tmpCommentOrderId
+);
+export const orderNumberConnectedSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.connectedOrderNumber
+);
+export const redirectCheckoutSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.redirectCheckout
+);
+export const returnedUrlSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.orderReturnedUrl
 );

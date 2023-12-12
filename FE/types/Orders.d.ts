@@ -16,7 +16,10 @@ declare namespace Orders {
         achiveName: null | string;
         downloadFileName: null | string;
         commentIdOrder: null | any;
-        commentIdOrderNumber: null | any;
+        tmpCommentOrderId: null | any;
+        connectedOrderNumber: null | any;
+        orderReturnedUrl: null | any;
+        redirectCheckout: boolean;
     }
 
     interface DataItem {
