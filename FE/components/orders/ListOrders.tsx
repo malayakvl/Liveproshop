@@ -250,7 +250,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 />
                             </td>
                             <td style={{ minWidth: '150px' }}>
-                                {item.order_items.length}x{' '}
+                                {item.order_items?.length ? item.order_items?.length : 0}x{' '}
                                 <span className="red-yellow-gradient-text">product (s)</span>
                             </td>
                             <td>
@@ -258,7 +258,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     item.total_amount ? item.total_amount : item.order_amount
                                 )}
                             </td>
-                            {user.role_id === 1 && item.status === 'new' && (
+                            {user.role_id === 1 && item.status === 'new' && item.total_amount != 0 && (
                                 <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                     <Link href={`/checkout/${item.order_number}`}>
                                         <div

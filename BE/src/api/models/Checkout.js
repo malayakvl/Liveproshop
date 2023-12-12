@@ -220,6 +220,26 @@ class Checkout {
                                         total_amount='${totalPayment}'
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
                 // return {redirectUrl: null, error: 'No find order'}
+                console.log(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
+                const bAddressRes = await client.query(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
+                if (bAddressRes.rows.length === 0) {
+                    // console.log(`INSERT INTO data.addresses SET user_id='${user.id}',
+                    //     country_id='${data.country_id}', state='${data.state ? data.state : ''}',
+                    //     post_code='${data.post_code}', city='${data.city}',
+                    //     address_line_1='${data.address_line_1 ?  data.address_line_1 : data.shipping_address}'`);
+
+                    const queryAddress = `INSERT INTO data.addresses (
+                        user_id, country_id, state, post_code, city, address_line_1, address_type) VALUES (
+                        '${user.id}', '${data.country_id}', '${data.state ? data.state : ''}',
+                        '${data.post_code}', '${data.city}', 
+                        '${data.address_line_1 ?  data.address_line_1 : data.shipping_address}', 'home address')`;
+                    await client.query(queryAddress);
+
+                    // await client.query(`INSERT INTO data.addresses SET user_id='${user.id}',
+                    //     country_id='${data.country_id}', state='${data.state ? data.state : ''}',
+                    //     post_code='${data.post_code}', city='${data.city}',
+                    //     address_line_1='${data.address_line_1 ?  data.address_line_1 : data.shipping_address}'`);
+                }
                 const dataOrder = {
                     // site_id: '31313',
                     type: 'redirect',
