@@ -1,17 +1,18 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
+import { orderCheckoutSelector, redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
 import { clearOrderByCommentAction } from '../../redux/orders';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
+import Link from 'next/link';
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
@@ -19,6 +20,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const t = useTranslations();
     // const showEmailNotice = useSelector(showEmailNoticeSelector);
     const showEmailNotice = true;
+    const order = useSelector(orderCheckoutSelector) || {};
 
     const {
         query: { orderNumber }
@@ -164,19 +166,39 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     }}>
                     <Form>
                         <div className="flex flex-wrap justify-between relative">
-                            <div className="flex-auto lg:flex-1">
-                                {showEmailNotice && <div className="disabled-checkout-hover" />}
+                            <div className="flex-auto lg:flex-1 relative">
+                                {showEmailNotice && (
+                                    <div>
+                                        <div className="disabled-checkout-hover" />
+                                        <div className="checkout-notice">
+                                            <div className="p-[10px] items-center text-sm bg-gradient-to-r from-green-50 to-green-300 absolute rounded-lg left-[33%] top-[16px]">
+                                                <div className="relative">
+                                                    <i className="icon-warning" />
+                                                    <span className="inline-block pl-[25px]">
+                                                        Please add an email in your{' '}
+                                                        <Link href={'/account'}>
+                                                            <a className="ml-auto text-sm font-bold red-yellow-gradient-text">
+                                                                profile
+                                                            </a>
+                                                        </Link>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-8">
                                     <div className="text-2xl font-bold text-gray-350 mb-6">
                                         {t('Shipping Address')}
                                     </div>
                                     <ShippingAddress locale={locale} />
                                 </div>
-
-                                <ShippingMethod
-                                    title={t('Shipping  Method')}
-                                    className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10"
-                                />
+                                {order.order_items?.length && (
+                                    <ShippingMethod
+                                        title={t('Shipping  Method')}
+                                        className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10"
+                                    />
+                                )}
 
                                 {/*<div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">*/}
                                 {/*    <div className="text-2xl font-bold text-gray-350 mb-6">*/}

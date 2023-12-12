@@ -419,3 +419,21 @@
   min-height: 479px;
   background: #99ABCE;
 }
+.disabled-checkout-hover-shipping {
+  top: -24px;
+  position: absolute;
+  width: 577px;
+  z-index: 999;
+  opacity: 0.3;
+  left: -25px;
+  min-height: 401px;
+  background: #99ABCE;
+}
+
+.checkout-notice {
+  position: absolute;
+  top: 245px;
+  left: 3%;
+  z-index: 9999;
+  min-width: 500px;
+}
