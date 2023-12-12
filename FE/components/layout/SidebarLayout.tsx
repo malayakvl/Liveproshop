@@ -26,7 +26,10 @@ export default function SidebarLayout({ children }: { children: any }) {
         }
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             dispatch(
-                setupOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
+                setupOrderByCommentAction(
+                    window.localStorage.getItem('orderCommentId'),
+                    user?.email
+                )
             );
         }
     }, [user?.email]);
