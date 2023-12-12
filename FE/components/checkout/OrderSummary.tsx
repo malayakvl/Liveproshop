@@ -35,7 +35,7 @@ const OrderSummary = () => {
         [shippingMethodId]
     );
 
-    const reaclculateTotal = (dataOrder: any) => {
+    const recalculateTotal = (dataOrder: any) => {
         let totalOrder = 0;
         if (dataOrder.total_amount > 0) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -61,7 +61,12 @@ const OrderSummary = () => {
     //     ++itemCnt;
     // });
     useEffect(() => {
-        reaclculateTotal(order);
+        recalculateTotal(order);
+        console.log(order.order_items);
+        if (order?.order_items) {
+            order.order_items.sort((a: any, b: any) => (a.id > b.id ? 1 : -1));
+        }
+        // console.log(order.order_items.sort(compare));
     }, [order]);
 
     const removeItemOrder = (itemId: number) => {
@@ -69,6 +74,16 @@ const OrderSummary = () => {
     };
     const munusQtyItemOrder = (itemId: number) => {
         dispatch(minusItemOrderAction(itemId));
+    };
+
+    const compare = (a: any, b: any) => {
+        if (a.id < b.id) {
+            return -1;
+        }
+        if (a.id > b.id) {
+            return 1;
+        }
+        return 0;
     };
 
     return (
@@ -161,7 +176,7 @@ const OrderSummary = () => {
             <div className="flex justify-between my-6 py-6 text-gray-350 text-[30px] font-bold text-right border-t border-gray-200">
                 {t('Order total')}:
                 <span className="inline-block ml-4 font-bold min-w-[5rem]">
-                    {reaclculateTotal(order)}
+                    {recalculateTotal(order)}
                 </span>
             </div>
 
@@ -201,7 +216,7 @@ const OrderSummary = () => {
                     <i className="card-icon-white" />
                 </div>
                 {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
-                {reaclculateTotal(order)}
+                {recalculateTotal(order)}
             </button>
         </>
     );
