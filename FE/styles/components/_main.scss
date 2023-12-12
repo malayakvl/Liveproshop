@@ -407,3 +407,15 @@
   background-position: center;
   @apply min-h-[400px]
 }
+
+.disabled-checkout-hover {
+  top: 30px;
+  position: absolute;
+  //border: solid 1px red;
+  width: 577px;
+  z-index: 999;
+  opacity: 0.3;
+  left: 30px;
+  min-height: 479px;
+  background: #99ABCE;
+}

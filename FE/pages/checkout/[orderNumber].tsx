@@ -11,11 +11,14 @@ import { clearOrderByCommentAction } from '../../redux/orders';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
     const t = useTranslations();
+    // const showEmailNotice = useSelector(showEmailNoticeSelector);
+    const showEmailNotice = true;
 
     const {
         query: { orderNumber }
@@ -160,8 +163,9 @@ export default function Index({ session, locale }: { session: any; locale: any }
                         actions.setSubmitting(false);
                     }}>
                     <Form>
-                        <div className="flex flex-wrap justify-between">
+                        <div className="flex flex-wrap justify-between relative">
                             <div className="flex-auto lg:flex-1">
+                                {showEmailNotice && <div className="disabled-checkout-hover" />}
                                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-8">
                                     <div className="text-2xl font-bold text-gray-350 mb-6">
                                         {t('Shipping Address')}

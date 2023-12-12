@@ -15,6 +15,7 @@ import {
 import { removeItemOrderAction, minusItemOrderAction } from '../../redux/orders/actions';
 import { userSelector } from '../../redux/user/selectors';
 import { useRouter } from 'next/router';
+import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 
 const OrderSummary = () => {
     const t = useTranslations();
@@ -28,6 +29,8 @@ const OrderSummary = () => {
 
     const order = useSelector(orderCheckoutSelector) || {};
     const user = useSelector(userSelector);
+    // const showEmailNotice = useSelector(showEmailNoticeSelector);
+    const showEmailNotice = true;
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
     const selectedShippingMethod = useMemo(
@@ -208,16 +211,29 @@ const OrderSummary = () => {
                 </label>
                 <ErrorMessage name="isAgreeTerms" component="div" className="error-el" />
             </div>
-            <button
-                type="submit"
-                disabled={order.status === OrderStatus.PAYED}
-                className="uppercase my-4 gradient-btn w-full">
-                <div className="inline-block relative">
-                    <i className="card-icon-white" />
-                </div>
-                {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
-                {recalculateTotal(order)}
-            </button>
+            {!showEmailNotice ? (
+                <button
+                    type="submit"
+                    disabled={order.status === OrderStatus.PAYED}
+                    className={`uppercase my-4 gradient-btn w-full`}>
+                    <div className="inline-block relative">
+                        <i className="card-icon-white" />
+                    </div>
+                    {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
+                    {recalculateTotal(order)}
+                </button>
+            ) : (
+                <button
+                    type="submit"
+                    disabled={true}
+                    className={`uppercase my-4 gradient-btn w-full opacity-25`}>
+                    <div className="inline-block relative">
+                        <i className="card-icon-white" />
+                    </div>
+                    {order.status === OrderStatus.PAYED ? t('payed') : t('Pay')}{' '}
+                    {recalculateTotal(order)}
+                </button>
+            )}
         </>
     );
 };
