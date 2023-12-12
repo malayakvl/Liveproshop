@@ -91,74 +91,100 @@ const OrderSummary = () => {
 
     return (
         <>
-            <div className="text-gray-350 font-normal text-lg">
-                {order.order_items?.length} items in Cart
-            </div>
-            {order.order_items?.map((product: any, key: number) => (
-                <div
-                    id={`item_${product.id}_${key}`}
-                    key={product.id}
-                    className="flex space-x-4 pb-12 my-12 border-b border-gray-200">
-                    <img
-                        width={85}
-                        height={95}
-                        src={
-                            /(http(s?)):\/\//i.test(product.previewphoto)
-                                ? product.previewphoto
-                                : `${baseApiUrl}/${product.previewphoto}`
-                        }
-                        alt="Product preview"
-                        className="product-photo"
-                    />
-                    <div className="flex-auto">
-                        <span className="text-gray-350 text-sm font-bold">Ref. {product.sku}</span>{' '}
-                        {order.order_items?.length && (
-                            // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-                            <span
-                                className="absolute right-[65px] cursor-pointer"
-                                onClick={() => {
-                                    removeItemOrder(product.id);
-                                }}>
-                                <span className="delete-item-card" />
-                            </span>
-                        )}
-                        <span className="text-blue-350 text-sm">{product.product_id}</span>
-                        <div className="text-gray-350 my-1 font-normal text-lg">{product.name}</div>
-                        <div className="product-size">
-                            {t('checkout_color')}:{' '}
-                            <span className="font-bold">{product.color_name}</span>,{' '}
-                            {t('checkout_size')}:{' '}
-                            <span className="font-bold">{product.size_name}</span>
-                        </div>
-                        {product.description && (
-                            <div
-                                className="text-gray-350 font-normal text-sm hidden"
-                                dangerouslySetInnerHTML={{
-                                    __html: `${product.description.substring(0, 250)} ...`
-                                }}
-                            />
-                        )}
-                        <div className="text-lg text-right text-gray-350 font-bold mt-3">
-                            <div>
-                                <div className="inline-block relative">
-                                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                                    <span
-                                        className="qty-minus cursor-pointer"
-                                        onClick={() => munusQtyItemOrder(product.id)}
-                                    />
-                                </div>
-                                <span className="product-qty-input">{product.quantity}</span>
-                                <span className="inline-block ml-2">
-                                    {formatCurrency(product.price)}
-                                </span>
-                            </div>
-                            <span className="hidden">
-                                {product.quantity} x {formatCurrency(product.price)}
-                            </span>
-                        </div>
-                    </div>
+            {!order.order_items?.length && (
+                <div className="relative">
+                    <span className="empty-card"></span>
+                    <span className="inline-block absolute top-[7px] left-[50px]">
+                        {t('Your cart is empty')}
+                    </span>
                 </div>
-            ))}
+            )}
+            {order.order_items?.length && (
+                <>
+                    <div className="text-gray-350 font-normal text-lg">
+                        {order.order_items?.length} items in Cart
+                    </div>
+                    {order.order_items?.map((product: any, key: number) => (
+                        <div
+                            id={`item_${product.id}_${key}`}
+                            key={product.id}
+                            className="flex space-x-4 pb-12 my-12 border-b border-gray-200">
+                            <img
+                                width={85}
+                                height={95}
+                                src={
+                                    /(http(s?)):\/\//i.test(product.previewphoto)
+                                        ? product.previewphoto
+                                        : `${baseApiUrl}/${product.previewphoto}`
+                                }
+                                alt="Product preview"
+                                className="product-photo"
+                            />
+                            <div className="flex-auto">
+                                <span className="text-gray-350 text-sm font-bold">
+                                    Ref. {product.sku}
+                                </span>{' '}
+                                {order.order_items?.length && (
+                                    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                                    <span
+                                        className="absolute right-[65px] cursor-pointer"
+                                        onClick={() => {
+                                            removeItemOrder(product.id);
+                                        }}>
+                                        <span className="delete-item-card" />
+                                    </span>
+                                )}
+                                <span className="text-blue-350 text-sm">{product.product_id}</span>
+                                <div className="text-gray-350 my-1 font-normal text-lg">
+                                    {product.name}
+                                </div>
+                                <div className="product-size">
+                                    {t('checkout_color')}:{' '}
+                                    <span className="font-bold">{product.color_name}</span>,{' '}
+                                    {t('checkout_size')}:{' '}
+                                    <span className="font-bold">{product.size_name}</span>
+                                </div>
+                                {product.description && (
+                                    <div
+                                        className="text-gray-350 font-normal text-sm hidden"
+                                        dangerouslySetInnerHTML={{
+                                            __html: `${product.description.substring(0, 250)} ...`
+                                        }}
+                                    />
+                                )}
+                                <div className="text-lg text-right text-gray-350 font-bold mt-3">
+                                    <div>
+                                        <div className="inline-block relative">
+                                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                            {product.quantity > 1 ? (
+                                                // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                                                <span
+                                                    className={`qty-minus cursor-pointer ${
+                                                        product.quantity == 1 ? 'disabled' : ''
+                                                    }`}
+                                                    onClick={() => munusQtyItemOrder(product.id)}
+                                                />
+                                            ) : (
+                                                // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                                                <span className={`qty-minus disabled`} />
+                                            )}
+                                        </div>
+                                        <span className="product-qty-input">
+                                            {product.quantity}
+                                        </span>
+                                        <span className="inline-block ml-2">
+                                            {formatCurrency(product.price)}
+                                        </span>
+                                    </div>
+                                    <span className="hidden">
+                                        {product.quantity} x {formatCurrency(product.price)}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </>
+            )}
 
             <div className="flex justify-between text-gray-350 text-[18px] text-right -mt-6">
                 VAT (20%)

@@ -586,6 +586,8 @@
   "here": "here",
   "Order total": "Order total",
   "checkout_color": "color",
-  "checkout_size": "size"
-
+  "checkout_size": "size",
+  "FB account ID": "FB account ID",
+  "new": "new",
+  "Your cart is empty": "Your cart is empty"
 }
