@@ -991,8 +991,7 @@ class Order {
                 const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
                     total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                 await client.query(orderSQL);
-                await client.query(`DELETE FROM data.users WHERE id='${deleteUserId}'`);
-                // const res = await client.query(``);
+                await client.query(`// DELETE FROM data.users WHERE id='${deleteUserId}'`);
             }
             console.log("AAAAAAA", orderNumberReturned)
             return {success: true, orderId: res.rows[0].order_id, orderNumber: orderNumberReturned};
