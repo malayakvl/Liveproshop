@@ -136,9 +136,12 @@ class UserController {
                 return res.status(500).json(err);
             }
             const dataUser = req.body;
+            // const userEmail = dataUser.email;
+            const userEmail = '122111272808068624';
             const profileData = dataUser;
             delete profileData.user;
             delete profileData.email;
+            // delete profileData.email_real;
             delete profileData.subscription;
             delete profileData.address;
             delete profileData.period_left;
@@ -148,6 +151,13 @@ class UserController {
             await userModel.update(profileData, req.user.id);
             if (req.file) {
                 await userModel.updateProfilePhoto(`/uploads/users/${req.user.id}/${req.file.filename}`, req.user.id);
+            }
+            // const isValidEmail = (email: any) => {
+            //     return /\S+@\S+\.\S+/.test(email);
+            // };
+            if (!/\S+@\S+\.\S+/.test(userEmail) && profileData.email_real) {
+                await userModel.updateEmail(profileData.email_real, req.user.id);
+                console.log("need update user email", profileData.email_real);
             }
             const user = await userModel.findUserByEmail(req.user.email);
             delete user.password;

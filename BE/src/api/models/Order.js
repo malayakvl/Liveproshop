@@ -62,9 +62,9 @@ async function generateHeader(doc, seller, locale) {
         .text("", 170, 0)
         .fontSize(10)
         .text(seller.full_address, 300, 50, { align: "right" })
-        .text(`${seller.phone}`, 300, 65, { align: "right" })
+        .text(`${seller.phone}`, 300, 75, { align: "right" })
         // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
-        .text(seller.company_name, 300, 80, { align: "right" })
+        .text(seller.company_name, 300, 90, { align: "right" })
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
@@ -74,6 +74,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .fillColor("#444444")
         .fontSize(20)
         .text(invoice.status === 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
+
 
     generateHr(doc, 185);
     const customerInformationTop = 200;
@@ -189,9 +190,9 @@ async function generateInvoiceTable(doc, invoice, locale) {
             vatToDatePosition,
             "",
             "",
-            "VAT",
+            "VAT (20%)",
             "",
-            formatCurrency((invoice.subtotal*15/100))
+            formatCurrency((invoice.subtotal*20/100))
         );
 
 
@@ -643,7 +644,6 @@ class Order {
                 // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 // fs.mkdirSync(dirArchiveFolder);
             }
-            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -671,7 +671,8 @@ class Order {
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
-                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+                const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
+console.log(buyerData.rows[0])
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {

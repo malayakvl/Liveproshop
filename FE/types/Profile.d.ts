@@ -11,6 +11,7 @@ declare namespace Profile {
         id: number;
         role_id: number;
         email: string;
+        email_real: string;
         photo: string | null;
         first_name: string | null;
         last_name: string | null;

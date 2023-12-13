@@ -1399,6 +1399,33 @@ class User {
         }
     }
 
+
+    /**
+     *
+     * @param email
+     * @param userId
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean}>}
+     */
+    async updateEmail(email, userId) {
+        const client = await pool.connect();
+        try {
+            const query = `UPDATE data.users SET email='${email}' WHERE id='${userId}';`;
+            await client.query(query);
+            return { success: true };
+        } catch (e) {
+            return {
+                user: null,
+                error: {
+                    code: 500,
+                    message: 'Error restore password'
+                }
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
     /**
      * Login user via email link
      * @param hash
