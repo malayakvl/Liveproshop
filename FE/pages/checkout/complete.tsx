@@ -2,10 +2,20 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { userSelector } from '../../redux/user/selectors';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
     const t = useTranslations();
+    const user = useSelector(userSelector);
+
+    useEffect(() => {
+        if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
+            window.localStorage.removeItem('orderCommentId');
+        }
+    }, [user?.email]);
 
     return (
         <>
