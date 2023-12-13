@@ -67,7 +67,9 @@ function Profile() {
             // if (count) dispatch(updateProfileAction(formData));
             dispatch(updateProfileAction(formData));
             if (redirectToCheckout) {
-                router.push(orderReturnedUrl);
+                // router.push(orderReturnedUrl);
+                window.location.href = orderReturnedUrl;
+                // router.push(orderReturnedUrl);
             }
         },
         [dispatch]
@@ -183,7 +185,7 @@ function Profile() {
         }
     }
 
-    console.log('1111', user.email_real);
+    // console.log('1111', user.email_real);
 
     return (
         <Formik

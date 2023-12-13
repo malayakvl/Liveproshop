@@ -28,11 +28,12 @@ const ListBuyers: React.FC<{ buyers: Buyers.DataItem[] }> = ({ buyers }) => {
                                 <td>{formatCurrency(item.total_amount)}</td>
                                 <td>
                                     {item.country_iso && (
-                                        <img
-                                            src={`/images/flags/${item.country_iso.toLowerCase()}.svg`}
-                                            className="fill-current text-black align-center"
-                                            alt={item.country_name}
-                                        />
+                                        <>{item.country_iso}</>
+                                        // <img
+                                        //     src={`/images/flags/${item.country_iso.toLowerCase()}`}
+                                        //     className="fill-current text-black align-center"
+                                        //     alt={item.country_name}
+                                        // />
                                     )}
                                 </td>
                             </tr>

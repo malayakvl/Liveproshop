@@ -55,21 +55,21 @@ const SidebarHeader: React.FC = () => {
     return (
         <div className="shadow-lg pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle">
             <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center" />
-            {showEmailNotice && (
-                <div className="p-[10px] items-center text-sm bg-gradient-to-r from-green-50 to-green-300 absolute rounded-lg left-[33%] top-[16px]">
-                    <div className="relative">
-                        <i className="icon-warning" />
-                        <span className="inline-block ml-[25px]">
-                            Please add an email in your{' '}
-                            <Link href={'/account'}>
-                                <a className="ml-auto text-sm font-bold red-yellow-gradient-text">
-                                    profile
-                                </a>
-                            </Link>
-                        </span>
-                    </div>
-                </div>
-            )}
+            {/*{showEmailNotice && (*/}
+            {/*    <div className="p-[10px] items-center text-sm bg-gradient-to-r from-green-50 to-green-300 absolute rounded-lg left-[33%] top-[16px]">*/}
+            {/*        <div className="relative">*/}
+            {/*            <i className="icon-warning" />*/}
+            {/*            <span className="inline-block ml-[25px]">*/}
+            {/*                Please add an email in your{' '}*/}
+            {/*                <Link href={'/account'}>*/}
+            {/*                    <a className="ml-auto text-sm font-bold red-yellow-gradient-text">*/}
+            {/*                        profile*/}
+            {/*                    </a>*/}
+            {/*                </Link>*/}
+            {/*            </span>*/}
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*)}*/}
             <div className="w-full sm:w-1/2 md:w-2/5 lg:w-2/5 xl:w-2/5 flex items-center justify-end">
                 {isMobile && <LoggedRightMobile type={null} />}
                 {/*not collapsed header*/}
