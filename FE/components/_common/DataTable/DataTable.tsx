@@ -129,6 +129,7 @@ const DataTable: React.FC<Props> = ({
 
     const bulkActionDropdown = useCallback(
         (action: any): void => {
+            console.log(action);
             if (action === 'delete' && sendDeleteRequest) {
                 sendDeleteRequest();
             }
@@ -136,7 +137,10 @@ const DataTable: React.FC<Props> = ({
                 sendCopyRequest();
             }
             if (
-                (action === 'shipped' || action === 'cancel' || action === 'download_pdf') &&
+                (action === 'shipped' ||
+                    action === 'cancel' ||
+                    action === 'download_pdf' ||
+                    action === 'refund') &&
                 sendStatusRequest
             ) {
                 sendStatusRequest(action);

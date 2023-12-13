@@ -280,7 +280,7 @@ function Profile() {
                                 disabled={validateEmail(props.values['email'])}
                                 icon={'f-email'}
                                 label={null}
-                                name={'email_real'}
+                                name={'email'}
                                 placeholder={t('Email Address')}
                                 style={'lg:w-full'}
                                 props={props}
