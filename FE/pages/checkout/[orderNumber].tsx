@@ -83,44 +83,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
             .required(t('You must enter your phone number'))
             .min(5, t('Phone must be at least 5 characters')),
         isAgreeTerms: Yup.bool().oneOf([true], 'The terms and conditions must be accepted.')
-
-        // card_number: Yup.string()
-        //     .strict(true)
-        //     .when('paymentMethod', {
-        //         is: (val: string) => val === 'card',
-        //         then: Yup.string()
-        //             .test(
-        //                 'test-card-number',
-        //                 t('Credit card number is invalid'),
-        //                 (value) => CardValidator.number(value).isValid
-        //             ) // return true false based on validation
-        //             .required(t('Required field'))
-        //         // otherwise: Yup.required(),
-        //     }),
-        // card_expire_date: Yup.string()
-        //     .strict(true)
-        //     .when('paymentMethod', {
-        //         is: (val: string) => val === 'card',
-        //         then: Yup.string()
-        //             .test(
-        //                 'test-card-exp',
-        //                 t('Credit card expiration date is invalid'),
-        //                 (value) => CardValidator.expirationDate(value).isValid
-        //             )
-        //             .required(t('Required field'))
-        //     }),
-        // card_ccv: Yup.string()
-        //     .strict(true)
-        //     .when('paymentMethod', {
-        //         is: (val: string) => val === 'card',
-        //         then: Yup.string()
-        //             .test(
-        //                 'test-card-ccv',
-        //                 t('Credit card CCV is invalid'),
-        //                 (value) => CardValidator.cvv(value).isValid
-        //             )
-        //             .required(t('Required field'))
-        //     })
     });
 
     return (

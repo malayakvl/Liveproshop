@@ -44,7 +44,7 @@ function Profile() {
     };
 
     useEffect(() => {
-        console.log('here we are update photo', imagePost);
+        // console.log('here we are update photo', imagePost);
         dispatch(setPhotoAction(imagePost));
     }, [imagePost]);
 
@@ -124,27 +124,63 @@ function Profile() {
                 .trim(t('Cannot include leading and trailing spaces'))
         });
     } else {
-        SubmitSchema = Yup.object().shape({
-            email: Yup.string()
-                .trim(t('Cannot include leading and trailing spaces'))
-                .min(3, t('Must be at least 3 characters'))
-                .email(t('Must be a valid email'))
-                .strict(true)
-                .required(t('You must enter your email')),
-            last_name: Yup.string()
-                .strict(true)
-                .trim(t('Cannot include leading and trailing spaces'))
-                .required(t('You must enter your family name')),
-            first_name: Yup.string()
-                .strict(true)
-                .trim(t('Cannot include leading and trailing spaces'))
-                .required(t('You must enter your first name')),
-            phone: Yup.string()
-                .strict(true)
-                .trim(t('Cannot include leading and trailing spaces'))
-                .required(t('You must enter your phone number'))
-                .min(5, t('Phone must be at least 5 characters'))
-        });
+        // register throw FB be didn't get user email
+        if (!validateEmail(user.email) && !user.email_real) {
+            SubmitSchema = Yup.object().shape({
+                email: Yup.string()
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .min(3, t('Must be at least 3 characters'))
+                    .strict(true)
+                    .required(t('You must enter your email')),
+                email_real: Yup.string()
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .min(3, t('Must be at least 3 characters'))
+                    .email(t('Must be a valid email'))
+                    .strict(true)
+                    .required(t('You must enter your email')),
+                last_name: Yup.string()
+                    .strict(true)
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .required(t('You must enter your family name')),
+                first_name: Yup.string()
+                    .strict(true)
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .required(t('You must enter your first name')),
+                phone: Yup.string()
+                    .strict(true)
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .required(t('You must enter your phone number'))
+                    .min(5, t('Phone must be at least 5 characters'))
+            });
+        } else {
+            SubmitSchema = Yup.object().shape({
+                email: Yup.string()
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .min(3, t('Must be at least 3 characters'))
+                    .email(t('Must be a valid email'))
+                    .strict(true)
+                    .required(t('You must enter your email')),
+                email_real: Yup.string()
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .min(3, t('Must be at least 3 characters'))
+                    .email(t('Must be a valid email'))
+                    .strict(true)
+                    .required(t('You must enter your email')),
+                last_name: Yup.string()
+                    .strict(true)
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .required(t('You must enter your family name')),
+                first_name: Yup.string()
+                    .strict(true)
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .required(t('You must enter your first name')),
+                phone: Yup.string()
+                    .strict(true)
+                    .trim(t('Cannot include leading and trailing spaces'))
+                    .required(t('You must enter your phone number'))
+                    .min(5, t('Phone must be at least 5 characters'))
+            });
+        }
     }
 
     console.log('1111', user.email_real);
@@ -216,7 +252,7 @@ function Profile() {
                         </div>
                     </div>
                     <div className="float-left ml-[20px] min-w-[300px]">
-                        {user.role_id == 1 && (
+                        {user.role_id == 1 && !validateEmail(user.email) ? (
                             <>
                                 <InputText
                                     disabled={true}
@@ -239,6 +275,17 @@ function Profile() {
                                     tips={null}
                                 />
                             </>
+                        ) : (
+                            <InputText
+                                disabled={validateEmail(props.values['email'])}
+                                icon={'f-email'}
+                                label={null}
+                                name={'email_real'}
+                                placeholder={t('Email Address')}
+                                style={'lg:w-full'}
+                                props={props}
+                                tips={null}
+                            />
                         )}
 
                         <InputText
