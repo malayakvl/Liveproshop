@@ -12,14 +12,15 @@ import {
 } from '../../redux/layouts';
 import Router from 'next/router';
 import { setupOrderByCommentAction } from '../../redux/orders';
-import { orderNumberConnectedSelector } from '../../redux/orders/selectors';
+import { orderNumberSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
-    const connectedOrderNumber = useSelector(orderNumberConnectedSelector);
+    const redirectOrderNumber = useSelector(orderNumberSelector);
+    // const redirectOrderNumber = '';
 
     const isValidEmail = (email: any) => {
         return /\S+@\S+\.\S+/.test(email);
@@ -41,7 +42,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             );
         }
         if (user?.email) {
-            console.log(user?.email, user?.email_real);
+            // console.log(user?.email, user?.email_real);
             if (!isValidEmail(user?.email) && !user?.email_real) {
                 dispatch(showEmailNotificationAction(true));
             } else {
@@ -51,11 +52,11 @@ export default function SidebarLayout({ children }: { children: any }) {
     }, [user?.email]);
 
     useEffect(() => {
-        if (connectedOrderNumber && user?.email && user.role_id == 1) {
+        if (redirectOrderNumber && user?.email && user.role_id == 1) {
             dispatch(setupOrderByCommentAction(null));
-            Router.push(`/en/checkout/${connectedOrderNumber}`);
+            Router.push(`/en/checkout/${redirectOrderNumber}`);
         }
-    }, [connectedOrderNumber]);
+    }, [redirectOrderNumber]);
 
     return (
         <div className="relative min-h-screen">
