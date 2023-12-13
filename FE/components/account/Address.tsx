@@ -104,7 +104,7 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
                         tips={null}
                     />
 
-                    <div className="mb-4 lg:w-1/4">
+                    <div className="mb-4 lg:w-1/4 hidden">
                         <Select
                             className={'form-control-dropdown'}
                             classNamePrefix={'inventory'}

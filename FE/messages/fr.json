@@ -588,7 +588,8 @@
   "here": "ici",
   "Order total": "Total de la commande",
   "checkout_color": "couleur",
-  "checkout_size": "taille"
-
-
+  "checkout_size": "taille",
+  "FB account ID": "FB account ID",
+  "new": "new",
+  "Your cart is empty": "Panier vide"
 }

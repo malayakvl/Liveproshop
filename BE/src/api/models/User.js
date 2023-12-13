@@ -1264,6 +1264,36 @@ class User {
      * @param addressData json object
      * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean}>}
      */
+    async saveSellerAddress(userId, addressData) {
+        const client = await pool.connect();
+
+        try {
+            await client.query(`UPDATE data.users SET full_address='${addressData}' WHERE id='${userId}'`);
+
+            return { success: true };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { user: null, error: { code: 404, message: 'Addresses Not found' } };
+
+        } finally {
+            client.release();
+        }
+    }
+
+
+    /**
+     *
+     * @param userId integer
+     * @param addressData json object
+     * @returns {Promise<{error: {code: number, message: string}, user: null}|{success: boolean}>}
+     */
     async saveAddress(userId, addressData) {
         const client = await pool.connect();
 

@@ -79,3 +79,7 @@ export const siteLanguageSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): string => layouts.selectedLng
 );
+export const showEmailNoticeSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.showEmailNotification
+);

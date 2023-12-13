@@ -5,15 +5,27 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { userSelector } from '../../redux/user/selectors';
 import { isDataLoadingSelector, isSidebarOpenSelector } from '../../redux/layouts/selectors';
-import { toggleProfileMenuAction, toggleSidebarAction } from '../../redux/layouts';
+import {
+    showEmailNotificationAction,
+    toggleProfileMenuAction,
+    toggleSidebarAction
+} from '../../redux/layouts';
 import Router from 'next/router';
-import { findOrderByCommentAction } from '../../redux/orders';
+import { setupOrderByCommentAction } from '../../redux/orders';
+import { orderNumberSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
     const showLoader = useSelector(isDataLoadingSelector);
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
+    const redirectOrderNumber = useSelector(orderNumberSelector);
+    // const redirectOrderNumber = '';
+
+    const isValidEmail = (email: any) => {
+        return /\S+@\S+\.\S+/.test(email);
+    };
+
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
         if (user?.email && user.role_id == 2) {
@@ -23,10 +35,28 @@ export default function SidebarLayout({ children }: { children: any }) {
         }
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             dispatch(
-                findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
+                setupOrderByCommentAction(
+                    window.localStorage.getItem('orderCommentId'),
+                    user?.email
+                )
             );
         }
+        if (user?.email) {
+            // console.log(user?.email, user?.email_real);
+            if (!isValidEmail(user?.email) && !user?.email_real) {
+                dispatch(showEmailNotificationAction(true));
+            } else {
+                dispatch(showEmailNotificationAction(false));
+            }
+        }
     }, [user?.email]);
+
+    useEffect(() => {
+        if (redirectOrderNumber && user?.email && user.role_id == 1) {
+            dispatch(setupOrderByCommentAction(null));
+            Router.push(`/en/checkout/${redirectOrderNumber}`);
+        }
+    }, [redirectOrderNumber]);
 
     return (
         <div className="relative min-h-screen">

@@ -110,6 +110,8 @@ apiRoutes.route('/profile')
     .get(UserController.getProfile);
 apiRoutes.route('/address')
     .post(UserController.saveAddress);
+apiRoutes.route('/address-seller')
+    .post(UserController.saveAddressSeller);
 apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);

@@ -1,20 +1,30 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout';
 import { useDispatch, useSelector } from 'react-redux';
-import { redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
+import { orderCheckoutSelector, redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
+import {
+    clearOrderByCommentAction,
+    redirectCheckoutAction,
+    setupReturnedUrlAction
+} from '../../redux/orders';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
+import Link from 'next/link';
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
     const t = useTranslations();
+    const showEmailNotice = useSelector(showEmailNoticeSelector);
+    // const showEmailNotice = true;
+    const order = useSelector(orderCheckoutSelector) || {};
 
     const {
         query: { orderNumber }
@@ -26,6 +36,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
+        dispatch(clearOrderByCommentAction(null));
     }, []);
 
     useEffect(() => {
@@ -158,19 +169,58 @@ export default function Index({ session, locale }: { session: any; locale: any }
                         actions.setSubmitting(false);
                     }}>
                     <Form>
-                        <div className="flex flex-wrap justify-between">
-                            <div className="flex-auto lg:flex-1">
+                        <div className="flex flex-wrap justify-between relative">
+                            <div className="flex-auto lg:flex-1 relative">
+                                {showEmailNotice && (
+                                    <div>
+                                        <div className="disabled-checkout-hover" />
+                                        <div className="checkout-notice">
+                                            <div className="p-[10px] items-center text-sm bg-gradient-to-r from-green-50 to-green-300 absolute rounded-lg left-[33%] top-[16px]">
+                                                <div className="relative">
+                                                    <i className="icon-warning" />
+                                                    <span className="inline-block ml-[25px]">
+                                                        Please add an email in your{' '}
+                                                        <Link href={'/account'}>
+                                                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                                            <a
+                                                                className="ml-auto text-sm font-bold red-yellow-gradient-text"
+                                                                onClick={() => {
+                                                                    dispatch(
+                                                                        setupReturnedUrlAction(
+                                                                            `${
+                                                                                locale == 'fr'
+                                                                                    ? ''
+                                                                                    : '/en'
+                                                                            }/checkout/${
+                                                                                order.order_number
+                                                                            }`
+                                                                        )
+                                                                    );
+                                                                    dispatch(
+                                                                        redirectCheckoutAction(true)
+                                                                    );
+                                                                }}>
+                                                                profile!
+                                                            </a>
+                                                        </Link>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-8">
                                     <div className="text-2xl font-bold text-gray-350 mb-6">
                                         {t('Shipping Address')}
                                     </div>
                                     <ShippingAddress locale={locale} />
                                 </div>
-
-                                <ShippingMethod
-                                    title={t('Shipping  Method')}
-                                    className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10"
-                                />
+                                {order.order_items?.length && (
+                                    <ShippingMethod
+                                        title={t('Shipping  Method')}
+                                        className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10"
+                                    />
+                                )}
 
                                 {/*<div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">*/}
                                 {/*    <div className="text-2xl font-bold text-gray-350 mb-6">*/}

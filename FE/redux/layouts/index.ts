@@ -20,7 +20,8 @@ import {
     sidebarCloseAction,
     toggleTextingMenuAction,
     setLngAction,
-    toggleProfileMenuAction
+    toggleProfileMenuAction,
+    showEmailNotificationAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 
@@ -134,7 +135,6 @@ const initialState: State.Layouts = {
                 created_at: []
             }
         }
-
     },
     isSidebarOpen: false,
     isMobileDevice: false,
@@ -150,7 +150,8 @@ const initialState: State.Layouts = {
     },
     showTextingMenu: false,
     showProfileMenu: false,
-    selectedLng: 'fr'
+    selectedLng: 'fr',
+    showEmailNotification: false
 };
 
 // ------------------------------------
@@ -317,6 +318,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             selectedLng: action.payload
         })
+    },
+    [showEmailNotificationAction]: {
+        next: (state: State.Layouts, action: Action<boolean>): State.Layouts => ({
+            ...state,
+            showEmailNotification: action.payload
+        })
     }
 };
 
@@ -338,7 +345,8 @@ export {
     sidebarCloseAction,
     toggleTextingMenuAction,
     setLngAction,
-    toggleProfileMenuAction
+    toggleProfileMenuAction,
+    showEmailNotificationAction
 };
 
 // ------------------------------------
