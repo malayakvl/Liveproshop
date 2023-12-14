@@ -24,9 +24,7 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
 
     return !shippingMethods.length ? null : (
         <div className={className}>
-            <div className="relative">
-                {showEmailNotice && <div className="disabled-checkout-hover-shipping" />}
-                {/*<div className="disabled-checkout-hover-shipping" />*/}
+            <div className="">
                 <div className="text-2xl font-bold text-gray-350 mb-6">{title}</div>
                 <div role="group" aria-labelledby="shipping-method-radio-group">
                     {shippingMethods.map((shippingMethod) => (

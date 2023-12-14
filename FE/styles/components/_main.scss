@@ -409,14 +409,14 @@
 }
 
 .disabled-checkout-hover {
-  top: 30px;
+  top: 0;
   position: absolute;
   //border: solid 1px red;
   min-width: 577px;
   width: calc(100% - 30px);
   z-index: 999;
   opacity: 0.3;
-  left: 30px;
+  left: 0;
   min-height: 479px;
   background: #99ABCE;
 }
@@ -434,8 +434,31 @@
 
 .checkout-notice {
   position: absolute;
-  top: 245px;
-  left: 3%;
+  top: 145px;
+  left: 40%;
   z-index: 9999;
   min-width: 500px;
+}
+.disabled-content {
+  pointer-events: none;
+  opacity: 0.7;
+  background: #edeef1;
+
+  input, .inventory__control {
+    background: #dfe8fa;
+  }
+  img {
+    opacity: 0.3;
+  }
+}
+
+.email-notice {
+  @apply relative p-[10px] items-center text-sm rounded-lg top-[200px];
+  z-index: 999;
+  opacity: 1;
+  left: calc(50% - 150px);
+  width: 300px;
+  text-align: center;
+  background: #f3e7cb;
+  border: solid 1px #bd0505;
 }

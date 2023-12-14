@@ -591,5 +591,8 @@
   "checkout_size": "taille",
   "FB account ID": "FB account ID",
   "new": "new",
-  "Your cart is empty": "Panier vide"
+  "Your cart is empty": "Panier vide",
+  "Please add an email in your" : "Veuillez ajouter un e-mail dans votre ",
+  "profile!": "profil!",
+  "items in Cart": "articles dans le panier"
 }

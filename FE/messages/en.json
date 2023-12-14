@@ -589,5 +589,9 @@
   "checkout_size": "size",
   "FB account ID": "FB account ID",
   "new": "new",
-  "Your cart is empty": "Your cart is empty"
+  "Your cart is empty": "Your cart is empty",
+  "Please add an email in your" : "Please add an email in your ",
+  "profile!": "profile!",
+  "items in Cart": "items in Cart"
+
 }
