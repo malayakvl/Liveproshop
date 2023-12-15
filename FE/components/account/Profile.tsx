@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useEffect, useCallback } from 'react';
 import { Formik } from 'formik';
-import {InputHidden, InputText} from '../_form';
+import { InputText } from '../_form';
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { profilePhotoSelector, profileSelector } from '../../redux/profile/selectors';
