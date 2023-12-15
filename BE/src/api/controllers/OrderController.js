@@ -146,7 +146,16 @@ class OrderController {
     async findOrderByCommentId (req, res) {
         if (req.user) {
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
-            console.log("ORDER DATA", data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
+    async insertStatus (req, res) {
+        if (req.user) {
+            // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
+
+            const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }
         return res.status(200).json({ success: true, orderNumber: null });
