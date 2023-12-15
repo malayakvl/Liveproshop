@@ -589,9 +589,12 @@
   "checkout_size": "size",
   "FB account ID": "FB account ID",
   "new": "new",
+  "paid": "paid",
   "Your cart is empty": "Your cart is empty",
   "Please add an email in your" : "Please add an email in your ",
   "profile!": "profile!",
-  "items in Cart": "items in Cart"
+  "items in Cart": "items in Cart",
+  "invoice pdf": "Invoice pdf",
+  "refund pdf": "Refund pdf"
 
 }

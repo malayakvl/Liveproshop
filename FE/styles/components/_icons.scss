@@ -51,6 +51,28 @@
   background-image: url("../../public/images/icon-message.svg");
   background-size: 20px 20px;
 }
+.order-status {
+  display: inline-block;
+  //width: 85px;
+  height: 27px;
+  margin-right: 4px;
+  text-align: center;
+  min-width: 80px;
+}
+.f-pdf {
+  background-image: url("../../public/images/icon-pdf.svg");
+  background-size: 20px 20px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  width: 30px;
+  height: 40px;
+  cursor: pointer;
+}
+.invoice-dropdown {
+  .dropdown-menu {
+
+  }
+}
 
 .info {
   background-image: url("../../public/images/icon-info.svg");

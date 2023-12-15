@@ -57,12 +57,7 @@ const OrderSummary = () => {
         }
         return formatCurrency(totalOrder);
     };
-    // console.log(Object.keys(order.order_items));
-    // const totalProps = order.order_items.reduce((a, obj) => a + Object.keys(obj).length, 0);
-    // let itemCnt = 0;
-    // order.order_items?.map((product: any, key: number) => {
-    //     ++itemCnt;
-    // });
+
     useEffect(() => {
         recalculateTotal(order);
         if (order?.order_items) {
@@ -87,16 +82,6 @@ const OrderSummary = () => {
 
         return formatCurrency(totalAmount - vatAmount);
     };
-
-    // const compare = (a: any, b: any) => {
-    //     if (a.id < b.id) {
-    //         return -1;
-    //     }
-    //     if (a.id > b.id) {
-    //         return 1;
-    //     }
-    //     return 0;
-    // };
 
     return (
         <>

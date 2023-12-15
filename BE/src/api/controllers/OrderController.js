@@ -34,7 +34,7 @@ class OrderController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            // check if file exist, than return true
+            // check if file exist, then return true
             const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale);
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
         }

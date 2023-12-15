@@ -75,15 +75,32 @@ function Profile() {
         [dispatch]
     );
 
+    // const validateEmail = (email: string) => {
+    //     const validEmail = String(email)
+    //         .toLowerCase()
+    //         .match(
+    //             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    //         );
+    //     if (validEmail) {
+    //         return validEmail;
+    //     } else {
+    //         return false;
+    //     }
+    //     // return validEmail;
+    // };
+
     const validateEmail = (email: string) => {
-        const validEmail = String(email)
-            .toLowerCase()
-            .match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            );
-        return !validEmail ? false : true;
+        if (!email) {
+            return false;
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            return false;
+        }
+
+        return true;
     };
+
     let SubmitSchema;
+    console.log(user.role_id);
     if (user.role_id == 2) {
         SubmitSchema = Yup.object().shape({
             email: Yup.string()
@@ -92,12 +109,12 @@ function Profile() {
                 .email(t('Must be a valid email'))
                 .strict(true)
                 .required(t('You must enter your email')),
-            email_real: Yup.string()
-                .trim(t('Cannot include leading and trailing spaces'))
-                .min(3, t('Must be at least 3 characters'))
-                .email(t('Must be a valid email'))
-                .strict(true)
-                .required(t('You must enter your email')),
+            // email_real: Yup.string()
+            //     .trim(t('Cannot include leading and trailing spaces'))
+            //     .min(3, t('Must be at least 3 characters'))
+            //     .email(t('Must be a valid email'))
+            //     .strict(true)
+            //     .required(t('You must enter your email')),
             last_name: Yup.string()
                 .strict(true)
                 .trim(t('Cannot include leading and trailing spaces'))
@@ -194,6 +211,7 @@ function Profile() {
             validationSchema={SubmitSchema}
             onSubmit={(values: Profile.Profile) => {
                 const keyEmail = 'email';
+                console.log(values);
                 const photo = profilePhotoFromSelector;
                 if (values[keyEmail] !== profileData[keyEmail]) {
                     dispatch(

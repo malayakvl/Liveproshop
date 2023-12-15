@@ -221,7 +221,7 @@ class Checkout {
                                         total_amount='${totalPayment}'
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
                 // return {redirectUrl: null, error: 'No find order'}
-                console.log(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
+                // console.log(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
                 const bAddressRes = await client.query(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
                 if (bAddressRes.rows.length === 0) {
                     // console.log(`INSERT INTO data.addresses SET user_id='${user.id}',
@@ -276,6 +276,7 @@ class Checkout {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
+                        await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
                         return {redirectUrl: res.data.data.payment_url, error: null}
                     }).catch(error => {
                         console.log("Merchant error", error);

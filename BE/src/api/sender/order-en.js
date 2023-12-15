@@ -19,6 +19,7 @@ export default {
     "Transaction ID": "Transaction ID: ",
     "Holder Name": "Holder Name: ",
     "Payment Method": "Payment Method: ",
-    "Refund": "Refund"
-
+    "Refund": "Refund",
+    "color": "color",
+    "size": "size"
 }
