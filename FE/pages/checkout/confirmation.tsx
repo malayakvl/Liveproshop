@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 // import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkPaymentStatusAction } from '../../redux/checkout';
+import { updateOrderStatusAction } from '../../redux/orders';
 import { paymentStatusSelector } from '../../redux/checkout/selectors';
 
 export default function Index({ session }: { session: any }) {
@@ -12,8 +13,10 @@ export default function Index({ session }: { session: any }) {
     const paymentStatus = useSelector(paymentStatusSelector);
 
     const {
-        query: { hash, type }
+        query: { orderId, lang, hash, type }
     } = useRouter();
+
+    console.log(orderId, lang);
 
     const dispatch = useDispatch();
 
@@ -24,7 +27,11 @@ export default function Index({ session }: { session: any }) {
     useEffect(() => {
         if (paymentStatus) {
             if (paymentStatus === 'success') {
-                location.href = `${window.location.origin}/checkout/complete`;
+                // insert history statuses here
+                dispatch(updateOrderStatusAction(orderId, 'payed'));
+                location.href = `${window.location.origin}/${
+                    lang == 'en' ? 'en/' : ''
+                }checkout/complete`;
             }
         }
     }, [paymentStatus]);

@@ -211,13 +211,13 @@ const OrderSummary = () => {
                         <label
                             htmlFor="isAgreeTerms"
                             className="ml-3 text-sm font-medium text-gray-700">
-                            I’ve read and agree with the{' '}
+                            {t('I’ve read and agree with the')}{' '}
                             <a
                                 href={`${siteUrl}/terms-and-conditions`}
                                 target="_blank"
                                 className="red-yellow-gradient-text"
                                 rel="noreferrer">
-                                Terms of Service
+                                {t('Terms of Service')}
                             </a>{' '}
                             and{' '}
                             <a
@@ -225,7 +225,7 @@ const OrderSummary = () => {
                                 href={`${siteUrl}/privacy`}
                                 target="_blank"
                                 rel="noreferrer">
-                                Privacy Terms
+                                {t('Privacy Terms')}
                             </a>
                             .
                         </label>

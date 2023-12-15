@@ -75,16 +75,17 @@ export const fetchShippingMethodsByCountryCheckoutAction: any = createAction(
 );
 export const submitCheckoutAction: any = createAction(
     'checkout/SUBMIT_CHECKOUT',
-    async (data: any, orderNumber: string) =>
+    async (data: any, orderNumber: string, locale: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ redirectUrl: string | null }> => {
             dispatch(showLoaderAction(true));
             const state = getState();
+            console.log('here we are', locale);
             data.orderNumber = orderNumber;
             try {
-                const res = await axios.post(`${baseUrl}/checkout`, data, {
+                const res = await axios.post(`${baseUrl}/checkout?locale=${locale}`, data, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
