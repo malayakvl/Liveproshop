@@ -159,7 +159,8 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 ID: {user.id}
                                             </span>
                                             <em className="red-yellow-gradient-text text-[20px]">
-                                                {user.company_name || t('No Company Name')}
+                                                {user?.company_name ||
+                                                    user.last_name + ' (' + user.phone + ')'}
                                             </em>
                                         </span>
                                     </div>

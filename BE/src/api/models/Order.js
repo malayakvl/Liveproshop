@@ -13,11 +13,9 @@ import * as zipLib from "zip-a-folder";
 
 async function createInvoice (invoice, path, locale) {
     try {
-
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
-        console.log('generate customer information done');
         await generateInvoiceTable(doc, invoice, locale);
         await generateFooter(doc, locale);
 
@@ -33,29 +31,6 @@ async function createInvoice (invoice, path, locale) {
 
 
 async function generateHeader(doc, seller, locale) {
-    // const { default: t } = await import(`../sender/order-${locale}.js`);
-    // doc
-    //     .image("./public/images/logo.png", 40, 45, { width: 160 })
-    //     .fillColor("#444444")
-    //     .fontSize(20)
-    //     .text("", 170, 0)
-    //     .fontSize(10)
-    //     .text(t['address_line_1'], 300, 50, { align: "right" })
-    //     .text(t['address_line_2'], 300, 65, { align: "right" })
-    //     .text(t['address_line_3'], 300, 80, { align: "right" })
-    //     // .text(seller.phone, 300, 95, { align: "right" })
-    //     .moveDown();
-    // doc
-    //     .fillColor("#444444")
-    //     .fontSize(20)
-    //     .text("", 170, 0)
-    //     .fontSize(10)
-    //     .text(seller.address_line_1, 300, 50, { align: "right" })
-    //     .text(`${seller.phone}`, 300, 65, { align: "right" })
-    //     // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
-    //     .text(seller.company_name, 300, 80, { align: "right" })
-    //     // .text(seller.phone, 300, 95, { align: "right" })
-    //     .moveDown();
     doc
         .fillColor("#444444")
         .fontSize(20)
@@ -65,6 +40,7 @@ async function generateHeader(doc, seller, locale) {
         .text(`${seller.phone}`, 300, 75, { align: "right" })
         // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
         .text(seller.company_name, 300, 90, { align: "right" })
+        .text("VAT: "+seller.vat, 300, 105, { align: "right" })
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
@@ -91,7 +67,6 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         deliveryAddress[3] = invoice.shipping.address;
 
     }
-    console.log(invoice);
     doc
         .fontSize(10)
         .text(t["Invoice number:"], 50, customerInformationTop)
@@ -110,9 +85,9 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
-        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 30)
+        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 40)
         // .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
-        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 45)
+        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
         // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
         // .text(
         //     invoice.shipping.city +
@@ -145,6 +120,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
     );
     generateHr(doc, invoiceTableTop + 20);
     doc.font("Helvetica");
+    // console.log(invoice.items);
     if (invoice.items) {
         for (i = 0; i < invoice.items.length; i++) {
             const item = invoice.items[i];
@@ -152,7 +128,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             generateTableRow(
                 doc,
                 position,
-                item.name,
+                item.name+` ${t["color"]}: ${item.color_name} ${t['size']}: ${item.size_name}`,
                 item.description,
                 formatCurrency(item.price),
                 item.quantity,
@@ -183,6 +159,14 @@ async function generateInvoiceTable(doc, invoice, locale) {
             "",
             formatCurrency(invoice.shipping_amount)
         );
+        // reacalculate vat
+        let vatAmount = 0;
+        let totalAmount = 0;
+        // (parseInt(order.order_amount) + 10) - ((parseInt(order.order_amount) + 10)/1.2)
+        totalAmount = parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount);
+        vatAmount = (parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount)) / 1.2;
+
+        console.log(formatCurrency(totalAmount - vatAmount));
 
         const vatToDatePosition = paidToDatePosition + 20;
         generateTableRow(
@@ -192,7 +176,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             "",
             "VAT (20%)",
             "",
-            formatCurrency((invoice.subtotal*20/100))
+            formatCurrency(totalAmount - vatAmount)
         );
 
 
@@ -483,7 +467,7 @@ class Order {
 
             // _filters.buyer_id = _filters.shopper_id;
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
-            console.log(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
+            // console.log(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
             if (reqOffset) {
@@ -607,7 +591,7 @@ class Order {
 
     async generatePdf (orderNumber, userId, user, locale, type='') {
         const client = await pool.connect();
-        const selectedLocale = !locale ? locale = 'fr' : locale;
+        // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
         try {
@@ -630,22 +614,24 @@ class Order {
             const res = await client.query(ordersQuery);
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
-            if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
-                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
-                }
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`)) {
-                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
-                }
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
-                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
-                }
-                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
-                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
-                // fs.mkdirSync(dirArchiveFolder);
-            }
-            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)) {
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].order_number}_${locale}.pdf`)
+            // if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
+            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
+            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
+            //     }
+            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`)) {
+            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+            //     }
+            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
+            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+            //     }
+            //     // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+            //     // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+            //     // fs.mkdirSync(dirArchiveFolder);
+            // }
+
+            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -657,7 +643,7 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     error: null
                 }
@@ -672,8 +658,8 @@ class Order {
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
-console.log(buyerData.rows[0])
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+                // console.log(sellerData.rows[0]);
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
                         headers: { 'Content-Type': 'application/json' }
@@ -689,6 +675,12 @@ console.log(buyerData.rows[0])
                 //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                 //                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
+                // await client.query(`INSERT INTO data.order_statuses(order_id, status)
+                //                         SELECT ${res.rows[0].id}, '${res.rows[0].status !== 'canceled' ? 'payed' : 'canceled'}'
+                //                         WHERE
+                //                         NOT EXISTS (
+                //                         SELECT order_id FROM data.order_statuses WHERE order_id = ${res.rows[0].id} AND status='${res.rows[0].status !== 'canceled' ? 'payed' : 'canceled'}'
+                //                         );`);
                 const invoice = {
                     shipping: {
                         name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
@@ -712,13 +704,13 @@ console.log(buyerData.rows[0])
                     paymentDetails: multiSafePayClientRes
                     // paymentDetails: {}
                 };
-                await createInvoice(invoice, `${dirUpload}/${res.rows[0].order_number}_${locale}.pdf`, locale);
+                await createInvoice(invoice, `${dirUpload}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale);
 
                 await setTimeout(8000);
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}.pdf`)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(4000);
                 }
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`)
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -730,7 +722,7 @@ console.log(buyerData.rows[0])
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     isCreated: true,
                     error: null
