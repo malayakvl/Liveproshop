@@ -95,6 +95,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { iconClass: 'icon-tbl-triangle' },
         { sortKey: 'orders.order_number', iconClass: 'icon-tbl-order' },
         { sortKey: 'orders.status', iconClass: 'icon-tbl-status' },
+        { sortKey: '', iconClass: 'icon-tbl-historystatus', titleKey: '' },
+        { sortKey: '', iconClass: 'icon-tbl-pdf', titleKey: '' },
         { sortKey: 'orders.created_at', iconClass: 'icon-tbl-date' },
         { sortKey: 'users__buyer.first_name', titleKey: 'Shoppers', iconClass: 'icon-tbl-users' },
         { sortKey: 'countries.iso', iconClass: 'icon-tbl-country' },

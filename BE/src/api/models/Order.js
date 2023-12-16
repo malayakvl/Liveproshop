@@ -1101,6 +1101,7 @@ class Order {
                 })
                 .then(async () => {
                     await client.query(`UPDATE data.orders SET status='canceled' WHERE id=${order.id};`);
+                    await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${order.id}', 'canceled')`);
                     return {success: true, error: null}
                 }).catch(error => {
                     console.log(error.message);

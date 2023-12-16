@@ -42,24 +42,41 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                     <span className={item.status}>{t(item.status)}</span>
                                 </td>
                                 <td>{moment(item.created_at).format('DD/MM/YYYY')}</td>
-                                {/*<td>{item.buyer_first_name}</td>*/}
                                 <td>
-                                    <div className="flex">
-                                        <div className="user-photo">
-                                            <Image
-                                                src={
-                                                    item.buyer_photo
-                                                        ? baseApiUrl + item.buyer_photo
-                                                        : userProfileImg
-                                                }
-                                                width={24}
-                                                height={24}
-                                                className="rounded-full cursor-pointer"
-                                                alt="shopper"
-                                            />
+                                    <div className="float-left">
+                                        <div className="flex flex-row">
+                                            <div className="user-photo" style={{ marginLeft: '0' }}>
+                                                <Image
+                                                    src={
+                                                        item.buyer_photo
+                                                            ? baseApiUrl + item.buyer_photo
+                                                            : userProfileImg
+                                                    }
+                                                    width={24}
+                                                    height={24}
+                                                    className="rounded-full cursor-pointer"
+                                                    alt=""
+                                                />
+                                            </div>
+                                            <div className="pl-3">{item.buyer_first_name}</div>
                                         </div>
-                                        <span className="pl-3">{item.buyer_first_name}</span>
                                     </div>
+                                    {/*<div className="hidden">*/}
+                                    {/*    <div className="user-photo">*/}
+                                    {/*        <Image*/}
+                                    {/*            src={*/}
+                                    {/*                item.buyer_photo*/}
+                                    {/*                    ? baseApiUrl + item.buyer_photo*/}
+                                    {/*                    : userProfileImg*/}
+                                    {/*            }*/}
+                                    {/*            width={24}*/}
+                                    {/*            height={24}*/}
+                                    {/*            className="rounded-full cursor-pointer"*/}
+                                    {/*            alt="shopper"*/}
+                                    {/*        />*/}
+                                    {/*    </div>*/}
+                                    {/*    <span className="pl-3">{item.buyer_first_name}</span>*/}
+                                    {/*</div>*/}
                                 </td>
                                 <td>
                                     {parseTranslation(item.country_json, 'name', locale)}

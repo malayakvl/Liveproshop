@@ -204,27 +204,31 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 )}
                             </td>
                             <td className="order-status">
-                                <div className="w-[110px] flex flex-row">
+                                <div className="flex flex-row items-center justify-center">
                                     <span className={`order-status ${item.status}`}>
                                         {t(item.status)}
                                     </span>
-                                    {item.status == 'payed' && (
-                                        <Link
-                                            href={`/orders/${item.order_number}?locale=${locale}`}>
-                                            <span className="f-pdf inline-block mt-[3px]" />
-                                        </Link>
-                                    )}
-                                    {item.status == 'canceled' && (
-                                        <div className="invoice-dropdown">
-                                            <DropdownPdfAction
-                                                onChange={(v: any) => {
-                                                    console.log('111');
-                                                }}
-                                                options={['invoice pdf', 'refund pdf']}
-                                            />
-                                        </div>
-                                    )}
                                 </div>
+                            </td>
+                            <td>
+                                <span className="inline-block w-[20px] h-[20px] f-history"></span>
+                            </td>
+                            <td>
+                                {item.status == 'payed' && (
+                                    <Link href={`/orders/${item.order_number}?locale=${locale}`}>
+                                        <span className="f-pdf inline-block mt-[3px]" />
+                                    </Link>
+                                )}
+                                {item.status == 'canceled' && (
+                                    <div className="invoice-dropdown">
+                                        <DropdownPdfAction
+                                            onChange={(v: any) => {
+                                                console.log('111');
+                                            }}
+                                            options={['invoice pdf', 'refund pdf']}
+                                        />
+                                    </div>
+                                )}
                             </td>
                             <td className="order-date">
                                 {moment(item.created_at).format('DD/MM/YYYY')}
