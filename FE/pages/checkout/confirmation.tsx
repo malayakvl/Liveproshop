@@ -21,17 +21,18 @@ export default function Index({ session }: { session: any }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(checkPaymentStatusAction(hash, type));
+        window.localStorage.removeItem('orderCommentId');
+        dispatch(checkPaymentStatusAction(hash, type, orderId));
     }, []);
 
     useEffect(() => {
         if (paymentStatus) {
             if (paymentStatus === 'success') {
                 // insert history statuses here
-                dispatch(updateOrderStatusAction(orderId, 'payed'));
+                // dispatch(updateOrderStatusAction(orderId, 'payed'));
                 location.href = `${window.location.origin}/${
                     lang == 'en' ? 'en/' : ''
-                }checkout/complete`;
+                }checkout/complete?orderId=${orderId}`;
             }
         }
     }, [paymentStatus]);

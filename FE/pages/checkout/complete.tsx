@@ -3,19 +3,31 @@ import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
+import { updateOrderStatusAction } from '../../redux/orders';
+import { useRouter } from 'next/router';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
     const t = useTranslations();
     const user = useSelector(userSelector);
+    const dispatch = useDispatch();
+    const {
+        query: { orderId }
+    } = useRouter();
 
     useEffect(() => {
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             window.localStorage.removeItem('orderCommentId');
         }
     }, [user?.email]);
+
+    useEffect(() => {
+        if (orderId) {
+            dispatch(updateOrderStatusAction(orderId, 'payed'));
+        }
+    }, [orderId]);
 
     return (
         <>

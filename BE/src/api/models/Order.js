@@ -1015,6 +1015,7 @@ class Order {
     async insertOrderStatus (orderId, status) {
         const client = await pool.connect();
         try {
+            console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             return {success: true, error: null};
             // if (res.rows.length > 0) {
