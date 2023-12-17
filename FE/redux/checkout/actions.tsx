@@ -6,6 +6,7 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 import queryString from 'query-string';
 import { setErrorToastAction, showLoaderAction } from '../layouts/actions';
+import {updateOrderStatusAction} from "../orders";
 
 export const fetchCheckoutAction: any = createAction(
     'checkout/FETCH',
@@ -75,16 +76,17 @@ export const fetchShippingMethodsByCountryCheckoutAction: any = createAction(
 );
 export const submitCheckoutAction: any = createAction(
     'checkout/SUBMIT_CHECKOUT',
-    async (data: any, orderNumber: string) =>
+    async (data: any, orderNumber: string, locale: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ redirectUrl: string | null }> => {
             dispatch(showLoaderAction(true));
             const state = getState();
+            console.log('here we are', locale);
             data.orderNumber = orderNumber;
             try {
-                const res = await axios.post(`${baseUrl}/checkout`, data, {
+                const res = await axios.post(`${baseUrl}/checkout?locale=${locale}`, data, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
@@ -106,7 +108,7 @@ export const submitCheckoutAction: any = createAction(
 );
 export const checkPaymentStatusAction: any = createAction(
     'checkout/CHECK_PAYMENT_STATUS',
-    async (hash: string, type: string) =>
+    async (hash: string, type: string, orderId: any) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -125,7 +127,11 @@ export const checkPaymentStatusAction: any = createAction(
                     }
                 );
                 if (res.status) {
+                    window.localStorage.removeItem('orderCommentId');
                     dispatch(showLoaderAction(false));
+                }
+                if (res.data.paymentStatus === 'success') {
+                    dispatch(updateOrderStatusAction(orderId, 'payed'));
                 }
                 return {
                     paymentStatus: res.data.paymentStatus

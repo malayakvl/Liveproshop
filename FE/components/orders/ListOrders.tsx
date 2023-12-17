@@ -7,7 +7,7 @@ import {
     paginatedItemsSelector
 } from '../../redux/orders/selectors';
 import { PaginationType } from '../../constants';
-import { DataTable } from '../_common';
+import { DataTable, DropdownPdfAction } from '../_common';
 import {
     clearBase64Action,
     fetchItemsAction,
@@ -204,7 +204,31 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 )}
                             </td>
                             <td className="order-status">
-                                <span className={item.status}>{t(item.status)}</span>
+                                <div className="flex flex-row items-center justify-center">
+                                    <span className={`order-status ${item.status}`}>
+                                        {t(item.status)}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span className="inline-block w-[20px] h-[20px] f-history"></span>
+                            </td>
+                            <td>
+                                {item.status == 'payed' && (
+                                    <Link href={`/orders/${item.order_number}?locale=${locale}`}>
+                                        <span className="f-pdf inline-block mt-[3px]" />
+                                    </Link>
+                                )}
+                                {item.status == 'canceled' && (
+                                    <div className="invoice-dropdown">
+                                        <DropdownPdfAction
+                                            onChange={(v: any) => {
+                                                console.log('111');
+                                            }}
+                                            options={['invoice pdf', 'refund pdf']}
+                                        />
+                                    </div>
+                                )}
                             </td>
                             <td className="order-date">
                                 {moment(item.created_at).format('DD/MM/YYYY')}

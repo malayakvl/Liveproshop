@@ -218,7 +218,7 @@ td.order-date {
   @apply font-normal;
 }
 td.order-status {
-  @apply font-normal text-[10px];
+  @apply font-normal text-[10px] min-w-[100px];
 
   .new {
     @apply rounded-lg p-1.5 text-green-250 bg-green-100 border-green-250;

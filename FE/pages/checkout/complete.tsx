@@ -2,10 +2,32 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '../../redux/user/selectors';
+import { updateOrderStatusAction } from '../../redux/orders';
+import { useRouter } from 'next/router';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
     const t = useTranslations();
+    const user = useSelector(userSelector);
+    const dispatch = useDispatch();
+    const {
+        query: { orderId }
+    } = useRouter();
+
+    useEffect(() => {
+        if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
+            window.localStorage.removeItem('orderCommentId');
+        }
+    }, [user?.email]);
+
+    useEffect(() => {
+        if (orderId) {
+            dispatch(updateOrderStatusAction(orderId, 'payed'));
+        }
+    }, [orderId]);
 
     return (
         <>
@@ -18,9 +40,29 @@ export default function Index({ session }: { session: any }) {
                     <div className="text-3xl font-bold text-gray-350 p-4 lg:p-8 mr-4 lg:mr-8">
                         {t('lets_check_out')}
                     </div>
-
                     <div className="flex-1 p-4 lg:p-8">
-                        <ol className="list-reset flex items-center text-gray-300 font-bold">
+                        <ol className="list-reset flex flex-col text-gray-300 font-bold md:hidden">
+                            <li>
+                                <div className="w-8 h-8 -mt-4 mr-2 sd:mr-4 rounded-full bg-gray-300" />
+                            </li>
+                            <li className="inline w-[300px] mt-[-30px] ml-[40px]">
+                                {t('Payment')}
+                            </li>
+                            <li className="mt-[35px]">
+                                <div className="w-8 h-8 -mt-4 mr-2 sd:mr-4 rounded-full bg-gray-300" />
+                            </li>
+                            <li className="inline w-[300px] mt-[-30px] ml-[40px]">
+                                {t('Order complete!')}
+                            </li>
+                            <li className="mt-[35px]">
+                                <div className="w-8 h-8 -mt-4 mr-2 sd:mr-4 rounded-full background-gradient shadow-2xl" />
+                            </li>
+                            <li className="inline w-[300px] mt-[-30px] ml-[40px] text-transparent rainbow-gradient-text">
+                                {t('Review your order')}
+                            </li>
+                        </ol>
+
+                        <ol className="hidden list-reset md:flex items-center text-gray-300 font-bold">
                             <li className="self-center flex-none mr-1 sd:mr-2 sd:pr-4 min-w-max h-1 bg-gray-300 hidden sm:block">
                                 <div className="w-8 h-8 -mt-4 mr-2 sd:mr-4 rounded-full bg-gray-300 shadow-2xl"></div>
                             </li>

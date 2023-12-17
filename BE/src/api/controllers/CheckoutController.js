@@ -40,7 +40,8 @@ class CheckoutController {
     
     async chechoutSubmit(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
-        const data = await checkoutModel.checkoutSubmit(req.body, req.user);
+        const locale = req.query.locale;
+        const data = await checkoutModel.checkoutSubmit(req.body, req.user, locale ? locale : 'fr');
         
         if (data.redirectUrl) {
             return res.status(200).json({ redirectUrl: data.redirectUrl });

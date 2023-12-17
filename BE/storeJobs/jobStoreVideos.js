@@ -21,6 +21,11 @@ async function startProcess() {
                             // start process for getting messages and put it to _DB
                             shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionsData[1]}" -- videoId=${results[i].id} sessionId=${sessionsData[1]} accessToken=${tokenData[1]} `, function(code, output) {
                             });
+
+                            // starting sending messages
+                            shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
+                            });
+
                             // kill process
                             shell.exec(`pm2 delete "jobStoreVideos ${sessionsData[1]}"`, function(code, output) {
                             });

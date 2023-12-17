@@ -18,7 +18,8 @@ import {
     setTmpFbCommentAction,
     clearOrderByCommentAction,
     setupReturnedUrlAction,
-    redirectCheckoutAction
+    redirectCheckoutAction,
+    updateOrderStatusAction
 } from './actions';
 
 const initialState: {
@@ -255,7 +256,8 @@ export {
     setTmpFbCommentAction,
     clearOrderByCommentAction,
     setupReturnedUrlAction,
-    redirectCheckoutAction
+    redirectCheckoutAction,
+    updateOrderStatusAction
 };
 
 // ------------------------------------

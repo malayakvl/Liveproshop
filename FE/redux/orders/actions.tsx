@@ -292,6 +292,20 @@ export const findSellersAction: any = createAction(
                 .then((res: any) => res.data.result);
         }
 );
+export const updateOrderStatusAction: any = createAction(
+    'orders/INSERT_ORDER_STATUS',
+    async (orderId: number, status: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/insert-status?orderId=${orderId}&status=${status}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => res.data.result);
+        }
+);
 export const connectOrderAction: any = createAction(
     'orders/CONNECT_ORDER_ACTION',
     async () =>

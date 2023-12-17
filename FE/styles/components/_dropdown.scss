@@ -34,6 +34,33 @@
     }
   }
 }
+.dropdown-toggler-pdf {
+  @apply relative pr-4;
+
+  &:after {
+    content: " ";
+    background-image: url("../../public/images/icon-pdf.svg");
+    background-repeat: no-repeat;
+    position: absolute;
+    top: -10px;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    background-size: contain;
+    //left: -7px;
+  }
+}
+.invoice-dropdown {
+  //margin-left: 10px;
+  .dropdown-action {
+    margin-left: 2px;
+  }
+
+  .dropdown-menu {
+    min-width: 150px !important;
+    top: 25px !important;
+  }
+}
 .toggler-action {
  padding-left: 10px !important;
 }

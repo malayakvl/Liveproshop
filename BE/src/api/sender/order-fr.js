@@ -15,9 +15,11 @@ export default {
     "Invoice Date:":"Date de Facturation:",
     "Balance Due:":"Montant Payé:",
     "Total Payment":"Paiement Total",
-    "Delivery Address": "Delivery Address: ",
-    "Transaction ID": "Transaction ID: ",
-    "Holder Name": "Holder Name: ",
-    "Payment Method": "Payment Method: ",
-    "Refund": "Refund"
+    "Delivery Address": "Adresse de livraison: ",
+    "Transaction ID": "Identifiant de transaction: ",
+    "Holder Name": "Nom du titulaire: ",
+    "Payment Method": "Mode de paiement: ",
+    "Refund": "Remboursement",
+    "color": "couleur",
+    "size": "taille"
 }

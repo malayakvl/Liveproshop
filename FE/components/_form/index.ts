@@ -5,3 +5,4 @@ export * from './TogglePassword';
 export * from './InputSelectLocalize';
 export * from './InputSwitcher';
 export * from './InputTextarea';
+export * from './InputHidden';

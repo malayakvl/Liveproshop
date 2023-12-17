@@ -34,7 +34,7 @@ class OrderController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            // check if file exist, than return true
+            // check if file exist, then return true
             const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale);
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
         }
@@ -146,7 +146,16 @@ class OrderController {
     async findOrderByCommentId (req, res) {
         if (req.user) {
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
-            console.log("ORDER DATA", data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
+    async insertStatus (req, res) {
+        if (req.user) {
+            // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
+
+            const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }
         return res.status(200).json({ success: true, orderNumber: null });

@@ -13,7 +13,7 @@ import {
     shippingMethodsCheckoutSelector
 } from '../../redux/checkout/selectors';
 import { removeItemOrderAction, minusItemOrderAction } from '../../redux/orders/actions';
-import { userSelector } from '../../redux/user/selectors';
+// import { userSelector } from '../../redux/user/selectors';
 import { useRouter } from 'next/router';
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 
@@ -57,12 +57,7 @@ const OrderSummary = () => {
         }
         return formatCurrency(totalOrder);
     };
-    // console.log(Object.keys(order.order_items));
-    // const totalProps = order.order_items.reduce((a, obj) => a + Object.keys(obj).length, 0);
-    // let itemCnt = 0;
-    // order.order_items?.map((product: any, key: number) => {
-    //     ++itemCnt;
-    // });
+
     useEffect(() => {
         recalculateTotal(order);
         if (order?.order_items) {
@@ -78,14 +73,14 @@ const OrderSummary = () => {
         dispatch(minusItemOrderAction(itemId));
     };
 
-    const compare = (a: any, b: any) => {
-        if (a.id < b.id) {
-            return -1;
-        }
-        if (a.id > b.id) {
-            return 1;
-        }
-        return 0;
+    const recalculateVat = (total: any, shipping: any) => {
+        let vatAmount = 0;
+        let totalAmount = 0;
+        // (parseInt(order.order_amount) + 10) - ((parseInt(order.order_amount) + 10)/1.2)
+        totalAmount = parseFloat(total) + parseFloat(shipping);
+        vatAmount = (parseFloat(total) + parseFloat(shipping)) / 1.2;
+
+        return formatCurrency(totalAmount - vatAmount);
     };
 
     return (
@@ -101,7 +96,7 @@ const OrderSummary = () => {
             {order.order_items?.length && (
                 <>
                     <div className="text-gray-350 font-normal text-lg">
-                        {order.order_items?.length} items in Cart
+                        {order.order_items?.length} {t('items in Cart')}
                     </div>
                     {order.order_items?.map((product: any, key: number) => (
                         <div
@@ -182,13 +177,6 @@ const OrderSummary = () => {
                             </div>
                         </div>
                     ))}
-                    <div className="flex justify-between text-gray-350 text-[18px] text-right -mt-6">
-                        VAT (20%)
-                        <span className="inline-block ml-4 font-bold min-w-[3rem]">
-                            {formatCurrency(+order.order_amount * 0.2)}
-                        </span>
-                    </div>
-
                     {selectedShippingMethod && (
                         <div className="flex justify-between my-2 text-gray-350 text-[18px] text-right">
                             Shipping
@@ -197,6 +185,15 @@ const OrderSummary = () => {
                             </span>
                         </div>
                     )}
+                    <div className="flex justify-between text-gray-350 text-[18px] text-right mt-6">
+                        VAT (20%)
+                        <span className="inline-block ml-4 font-bold min-w-[3rem]">
+                            {recalculateVat(
+                                order.total_amount,
+                                selectedShippingMethod?.price ? selectedShippingMethod?.price : 0
+                            )}
+                        </span>
+                    </div>
 
                     <div className="flex justify-between my-6 py-6 text-gray-350 text-[30px] font-bold text-right border-t border-gray-200">
                         {t('Order total')}:
@@ -214,13 +211,13 @@ const OrderSummary = () => {
                         <label
                             htmlFor="isAgreeTerms"
                             className="ml-3 text-sm font-medium text-gray-700">
-                            I’ve read and agree with the{' '}
+                            {t('I’ve read and agree with the')}{' '}
                             <a
                                 href={`${siteUrl}/terms-and-conditions`}
                                 target="_blank"
                                 className="red-yellow-gradient-text"
                                 rel="noreferrer">
-                                Terms of Service
+                                {t('Terms of Service')}
                             </a>{' '}
                             and{' '}
                             <a
@@ -228,7 +225,7 @@ const OrderSummary = () => {
                                 href={`${siteUrl}/privacy`}
                                 target="_blank"
                                 rel="noreferrer">
-                                Privacy Terms
+                                {t('Privacy Terms')}
                             </a>
                             .
                         </label>
@@ -238,7 +235,9 @@ const OrderSummary = () => {
                         <button
                             type="submit"
                             disabled={order.status === OrderStatus.PAYED}
-                            className={`uppercase my-4 gradient-btn w-full`}>
+                            className={`uppercase my-4 gradient-btn w-full ${
+                                showEmailNotice ? 'disabled-content' : ''
+                            }`}>
                             <div className="inline-block relative">
                                 <i className="card-icon-white" />
                             </div>
