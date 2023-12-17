@@ -147,7 +147,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values, actions) => {
-                        dispatch(submitCheckoutAction(values, orderNumber));
+                        dispatch(submitCheckoutAction(values, orderNumber, locale));
                         actions.setSubmitting(false);
                     }}>
                     <Form>

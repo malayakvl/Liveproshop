@@ -19,10 +19,10 @@ class Checkout {
             });
 
             const ordersQuery = `SELECT * FROM data.get_orders(1, 0, '${filter}');`;
-            console.log(ordersQuery)
+            // console.log(ordersQuery)
             const res = await client.query(ordersQuery);
             order = res.rows.length > 0 ? res.rows[0] : [];
-            console.log(res.rows[0].id)
+            // console.log(res.rows[0].id)
 
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -175,7 +175,7 @@ class Checkout {
         }
     }
     
-    async checkoutSubmit(data, user) {
+    async checkoutSubmit(data, user, lng) {
         const client = await pool.connect();
         try {
             const orderRes = await client.query(`SELECT * FROM data.orders WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
@@ -242,9 +242,7 @@ class Checkout {
                     //     address_line_1='${data.address_line_1 ?  data.address_line_1 : data.shipping_address}'`);
                 }
                 const dataOrder = {
-                    // site_id: '31313',
                     type: 'redirect',
-                    // email: 'malaya.kvl@gmail.com',
                     order_id: `LP-ID-${orderRes.rows[0].id}`,
                     gateway: '',
                     currency: 'EUR',
@@ -252,10 +250,10 @@ class Checkout {
                     description: `Payment for Order ${data.orderNumber}`,
                     payment_options: {
                         notification_url:
-                            `${process.env.APPLICATION_BASE_URL}/checkout/confirmation?hash=${hash}&type=notification`,
+                            `${process.env.APPLICATION_BASE_URL}/${lng === 'en' ? 'en/' : ''}checkout/confirmation?orderId=${orderRes.rows[0].id}&lang=${lng === 'en' ? 'en' : 'fr'}&hash=${hash}&type=notification`,
                         redirect_url:
-                            `${process.env.APPLICATION_BASE_URL}/checkout/confirmation?hash=${hash}&type=redirect`,
-                        cancel_url: `${process.env.APPLICATION_BASE_URL}/checkout/confirmation?hash=${hash}&type=cancel`,
+                            `${process.env.APPLICATION_BASE_URL}/${lng === 'en' ? 'en/' : ''}checkout/confirmation?orderId=${orderRes.rows[0].id}&lang=${lng === 'en' ? 'en' : 'fr'}&hash=${hash}&type=redirect`,
+                        cancel_url: `${process.env.APPLICATION_BASE_URL}/${lng === 'en' ? 'en/' : ''}checkout/confirmation?orderId=${orderRes.rows[0].id}&lang=${lng === 'en' ? 'en' : 'fr'}&hash=${hash}&type=cancel`,
                         close_window: true,
                     },
                     customer: {
@@ -271,12 +269,13 @@ class Checkout {
                         ]
                     }
                 }
+                console.log("Data order", dataOrder);
                 const multiSafePayClientRes = await axios
                     .post(`${process.env.MULTISAFEPAY_URL}/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
-                        await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
+                        // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
                         return {redirectUrl: res.data.data.payment_url, error: null}
                     }).catch(error => {
                         console.log("Merchant error", error);

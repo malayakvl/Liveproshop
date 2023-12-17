@@ -41,11 +41,21 @@
     content: " ";
     background-image: url("../../public/images/icon-pdf.svg");
     background-repeat: no-repeat;
-    background-size: 20px 20px;
-    @apply absolute inline-block w-[30px] h-[40px] top-[-10px];
+    position: absolute;
+    top: -10px;
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    background-size: contain;
+    //left: -7px;
   }
 }
 .invoice-dropdown {
+  //margin-left: 10px;
+  .dropdown-action {
+    margin-left: 2px;
+  }
+
   .dropdown-menu {
     min-width: 150px !important;
     top: 25px !important;

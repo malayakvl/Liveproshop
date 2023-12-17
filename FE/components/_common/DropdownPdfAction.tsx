@@ -34,7 +34,7 @@ const DropdownPdfAction: React.FC<Props> = ({ options, onChange }) => {
     }, []);
 
     return (
-        <div ref={node} className="dropdown-action float-right">
+        <div ref={node} className="dropdown-action">
             <button className="dropdown-toggler-pdf" onClick={() => setOpen(!open)} />
             {open && (
                 <ul className="dropdown-menu">

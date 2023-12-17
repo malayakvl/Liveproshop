@@ -978,6 +978,7 @@ class Order {
         }
     }
 
+
     async bulkCancel (orderIds) {
         const client = await pool.connect();
         try {
@@ -995,6 +996,40 @@ class Order {
             } else {
                 return {success: false, error: 'No record find'};
             }
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async insertOrderStatus (orderId, status) {
+        const client = await pool.connect();
+        try {
+            console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            return {success: true, error: null};
+            // if (res.rows.length > 0) {
+            //     const promisesQueries = [];
+            //     res.rows.forEach(order => {
+            //         promisesQueries.push(this.cancelOrder(order));
+            //     });
+            //     if (promisesQueries.length) {
+            //         await Promise.all(promisesQueries);
+            //     }
+            //     return {success: true, error: null};
+            // } else {
+            //     return {success: false, error: 'No record find'};
+            // }
 
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -1067,6 +1102,7 @@ class Order {
                 })
                 .then(async () => {
                     await client.query(`UPDATE data.orders SET status='canceled' WHERE id=${order.id};`);
+                    await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${order.id}', 'canceled')`);
                     return {success: true, error: null}
                 }).catch(error => {
                     console.log(error.message);
