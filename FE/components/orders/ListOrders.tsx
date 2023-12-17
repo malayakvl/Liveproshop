@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     achiveNameSelector,
     itemsCountSelector,
+    itemsStatusesSelector,
     paginatedItemsSelector
 } from '../../redux/orders/selectors';
 import { PaginationType } from '../../constants';
-import { DataTable, DropdownPdfAction } from '../_common';
+import { DataTable, DropdownPdfAction, DropdownStatusAction } from '../_common';
 import {
     clearBase64Action,
     fetchItemsAction,
@@ -39,6 +40,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
+    const itemsStatuses = useSelector(itemsStatusesSelector);
     const count = useSelector(itemsCountSelector);
     const checkedIds = useSelector(checkedIdsSelector);
     const { filters }: Layouts.Pagination = useSelector(
@@ -95,6 +97,26 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         setFilterOpen(false);
         // dispatch(showDateSelectorAction(false));
     }, []);
+
+    const displayOrderStatuses = (id: number) => {
+        // let orderStatus;
+        // eslint-disable-next-line prefer-const
+        // console.log(itemsStatuses);
+        const orderStatus = itemsStatuses.find((_item: any) => _item.id === id);
+        let resultStatuses = '';
+        const dataStatuses: any[] = [];
+        if (orderStatus?.statuses?.length > 0) {
+            orderStatus?.statuses?.map((_status: any) => {
+                resultStatuses += `${_status.status}<br/>`;
+                dataStatuses.push(
+                    _status.status + ' ' + moment(_status.created_at).format('DD/MM/YYYY H:mm:ss')
+                );
+            });
+        }
+        // console.log(orderStatus);
+
+        return dataStatuses;
+    };
 
     return (
         <div className="mt-7">
@@ -211,7 +233,23 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 </div>
                             </td>
                             <td>
-                                <span className="inline-block w-[20px] h-[20px] f-history"></span>
+                                <span className="inline-block w-[20px] h-[20px]">
+                                    {/*<div*/}
+                                    {/*    className="text-blue-350 mt-4 block font-normal text-sm"*/}
+                                    {/*    dangerouslySetInnerHTML={{*/}
+                                    {/*        __html: `${displayOrderStatuses(item.id)}`*/}
+                                    {/*    }}*/}
+                                    {/*/>*/}
+                                    <div className="status-dropdown">
+                                        <DropdownStatusAction
+                                            onChange={(v: any) => {
+                                                console.log('111');
+                                            }}
+                                            options={displayOrderStatuses(item.id)}
+                                        />
+                                    </div>
+                                    {/*{displayOrderStatuses(item.id)}*/}
+                                </span>
                             </td>
                             <td>
                                 {item.status == 'payed' && (
@@ -288,7 +326,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                         <div
                                             className="gradient-btn-small cursor-pointer"
                                             style={{ paddingTop: '3px', paddingBottom: '3px' }}>
-                                            <span className="font-medium text-white bg-none font-bold">
+                                            <span className="text-white bg-none font-bold">
                                                 Pay
                                             </span>
                                         </div>

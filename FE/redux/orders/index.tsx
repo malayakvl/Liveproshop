@@ -27,6 +27,7 @@ const initialState: {
     loading: boolean;
     count: number;
     items: Orders.DataItem[];
+    itemsStatuses: any;
     item: any;
     showPopup: boolean;
     fileterData: any;
@@ -47,6 +48,7 @@ const initialState: {
     loading: false,
     count: 0,
     items: [],
+    itemsStatuses: [],
     item: {},
     showPopup: false,
     fileterData: {

@@ -484,10 +484,47 @@ class Order {
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
+            const _items = res.rows.length > 0 ? res.rows : [];
+            const _orderIds = [];
+            if (_items.length > 0) {
+                // console.log(_items)
+                const orderIds = [];
+                _items.map(_order => {
+                    _orderIds.push(_order.id);
+                })
+            }
+            const orderStatuses = `SELECT
+                    json_agg(
+                        (jsonb_build_object('status', order_statuses.status)  || jsonb_build_object('created_at', order_statuses.created_at) || jsonb_build_object('order_id', order_statuses.order_id))::json
+                    ) AS order_statuses
+                FROM data.order_statuses
+                WHERE TRUE
+                    AND (order_statuses.order_id IN (${_orderIds.join(',')}))`
+            const orderStatusesRes = await client.query(orderStatuses);
+            const _itemStatuses = orderStatusesRes.rows[0].order_statuses;
+            const _itemStatusesIds = [];
+            orderStatusesRes.rows[0].order_statuses.map(status => {
+                _itemStatusesIds.push(status.order_id);
+            });
+            let unique = _itemStatusesIds.reduce(function (a, b)  {
+                if (a.indexOf(b) < 0) a.push(b);
+                return a;
+            }, []);
+            // console.log(_itemStatuses)
+            // console.log('++++++++++++');
+            const grouppedStatuses = [];
+            // itemStatuses.
+            unique.forEach(_id => {
+                // console.log(_itemStatuses.find(_item => _item.order_id === _id));
+                grouppedStatuses.push({id:_id, statuses:(_itemStatuses.filter(obj => {
+                    return obj.order_id === _id
+                }))});
+            });
             const error = null;
 
             return {
                 items,
+                grouppedStatuses,
                 size,
                 error
             };

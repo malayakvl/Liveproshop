@@ -84,3 +84,7 @@ export const returnedUrlSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.orderReturnedUrl
 );
+export const itemsStatusesSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.itemsStatuses
+);
