@@ -721,9 +721,10 @@ class Order {
                 //                         NOT EXISTS (
                 //                         SELECT order_id FROM data.order_statuses WHERE order_id = ${res.rows[0].id} AND status='${res.rows[0].status !== 'canceled' ? 'payed' : 'canceled'}'
                 //                         );`);
+                console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? buyerData.rows[0].last_name : ''));
                 const invoice = {
                     shipping: {
-                        name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
+                        name: buyerData.rows[0].first_name + " " +(buyerData.rows[0].last_name ? buyerData.rows[0].last_name : ''),
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
                         city: res.rows[0].city,
