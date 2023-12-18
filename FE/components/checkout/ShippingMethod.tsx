@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormikContext, Field } from 'formik';
 import {
+    addressCheckoutSelector,
     orderCheckoutSelector,
     shippingMethodsCheckoutSelector
 } from '../../redux/checkout/selectors';
@@ -23,22 +24,20 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
     const dispatch = useDispatch();
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
-    console.log('SHIPPING METHODS', shippingMethods);
-    console.log('USER', user);
+    const address = useSelector(addressCheckoutSelector);
+
+    // console.log('SHIPPING METHODS', shippingMethods);
+    // console.log('USER', user);
     const showEmailNotice = useSelector(showEmailNoticeSelector);
     // const showEmailNotice = true;
+    if (shippingMethods.length === 0 && address.country_id) {
+        console.log('NEED TO GET METHODS');
+        dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
+    }
 
     useEffect(() => {
         if (shippingMethods.length > 0) {
             setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false);
-        } else {
-            // dispatch(
-            //     fetchShippingMethodsByCountryCheckoutAction(
-            //         order.id,
-            //         2
-            //     )
-            // );
-            console.log('GET METHODS');
         }
     }, [shippingMethods]);
 

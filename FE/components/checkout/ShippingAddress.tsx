@@ -30,7 +30,6 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
     const firstShippingMethod = useSelector(firstShippingMethodCheckoutSelector);
     const user = useSelector(userSelector);
     const address = useSelector(addressCheckoutSelector);
-    console.log(address);
 
     const preparedCountriesDropdown = useMemo(
         () => prepareCountriesDropdown(countries, locale),
