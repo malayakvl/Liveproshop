@@ -34,6 +34,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             }
         }
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
+            console.log('here');
             dispatch(
                 setupOrderByCommentAction(
                     window.localStorage.getItem('orderCommentId'),
