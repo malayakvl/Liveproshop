@@ -11,12 +11,12 @@ import {
 import axios from "axios";
 import * as zipLib from "zip-a-folder";
 
-async function createInvoice (invoice, path, locale) {
+async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
-        await generateInvoiceTable(doc, invoice, locale);
+        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
+        await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
 
         doc.end();
@@ -44,12 +44,12 @@ async function generateHeader(doc, seller, locale) {
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
-async function generateCustomerInformation(doc, invoice, paymentData, locale) {
+async function generateCustomerInformation(doc, invoice, paymentData, locale, ivoiceType) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
     doc
         .fillColor("#444444")
         .fontSize(20)
-        .text(invoice.status === 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
+        .text(ivoiceType !== 'refund' ? t["Invoice"] : t["Refund"], 50, 160);
 
 
     generateHr(doc, 185);
@@ -67,6 +67,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         deliveryAddress[3] = invoice.shipping.address;
 
     }
+    const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     doc
         .fontSize(10)
         .text(t["Invoice number:"], 50, customerInformationTop)
@@ -75,7 +76,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         .font("Helvetica")
         .text(t["Invoice Date:"], 50, customerInformationTop + 15)
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
-        .text(t["Balance Due:"], 50, customerInformationTop + 30)
+        .text(captionTotal, 50, customerInformationTop + 30)
         .text(
             formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
             150,
@@ -103,7 +104,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
     generateHr(doc, 282);
 }
 
-async function generateInvoiceTable(doc, invoice, locale) {
+async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
     let i;
     const invoiceTableTop = 330;
     const { default: t } = await import(`../sender/order-${locale}.js`);
@@ -166,7 +167,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
         totalAmount = parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount);
         vatAmount = (parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount)) / 1.2;
 
-        console.log(formatCurrency(totalAmount - vatAmount));
+        // console.log(formatCurrency(totalAmount - vatAmount));
 
         const vatToDatePosition = paidToDatePosition + 20;
         generateTableRow(
@@ -187,7 +188,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             duePosition,
             "",
             "",
-            t["Total Payment"],
+            t[ivoiceType !== 'refund' ? "Total Payment" : "Refund Payment"],
             "",
             formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal))
         );
@@ -626,8 +627,9 @@ class Order {
 
 
 
-    async generatePdf (orderNumber, userId, user, locale, type='') {
+    async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
+        console.log("TYPE:!!!!", typeInvoice);
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -666,9 +668,9 @@ class Order {
             //     // fs.mkdirSync(dirArchiveFolder);
             // }
 
-            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
-            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
+            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -680,7 +682,7 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     error: null
                 }
@@ -696,7 +698,8 @@ class Order {
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
-                // console.log(sellerData.rows[0]);
+                // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
+                const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
                         headers: { 'Content-Type': 'application/json' }
@@ -737,17 +740,17 @@ class Order {
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number,
-                    invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
+                    invoice_date: moment(historyStatusRes.rows[0].created_at).format('DD/MM/YYYY'),
                     paymentDetails: multiSafePayClientRes
                     // paymentDetails: {}
                 };
-                await createInvoice(invoice, `${dirUpload}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale);
+                await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 await setTimeout(8000);
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(4000);
                 }
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -759,7 +762,7 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     isCreated: true,
                     error: null

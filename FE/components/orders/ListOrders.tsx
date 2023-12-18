@@ -28,6 +28,7 @@ import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layou
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
 import { bulkShippingAction, bulkDownloadAction } from '../../redux/orders/actions';
+import Router from 'next/router';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -243,7 +244,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     <div className="status-dropdown">
                                         <DropdownStatusAction
                                             onChange={(v: any) => {
-                                                console.log('111');
+                                                console.log('222');
                                             }}
                                             options={displayOrderStatuses(item.id)}
                                         />
@@ -261,7 +262,16 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     <div className="invoice-dropdown">
                                         <DropdownPdfAction
                                             onChange={(v: any) => {
-                                                console.log('111');
+                                                let type = '';
+                                                if (v === 'invoice pdf') {
+                                                    type = 'invoice';
+                                                } else {
+                                                    type = 'refund';
+                                                }
+
+                                                Router.push(
+                                                    `/orders/${item.order_number}?locale=${locale}&type=${type}`
+                                                );
                                             }}
                                             options={['invoice pdf', 'refund pdf']}
                                         />

@@ -39,12 +39,12 @@ export default function Index({ locale }: { locale: string }) {
     const [blobData, setBlobData] = useState<any>(null);
 
     const {
-        query: { orderNumber }
+        query: { orderNumber, type }
     } = useRouter();
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
-        dispatch(fetchOrderPdfAction(orderNumber, locale));
+        dispatch(fetchOrderPdfAction(orderNumber, locale, type));
     }, []);
 
     useEffect(() => {

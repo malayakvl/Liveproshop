@@ -256,14 +256,14 @@ export const fetchItemAction: any = createAction(
 
 export const fetchOrderPdfAction: any = createAction(
     'orders/FETCH_ORDER_PDF',
-    async (id: string, locale: string) =>
+    async (id: string, locale: string, type: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ orderFetched: boolean; fileName: string; base64Data: string }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/create-order/${id}/${locale}`, {
+            const res = await axios.get(`${baseUrl}/create-order/${id}/${locale}/${type}`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
