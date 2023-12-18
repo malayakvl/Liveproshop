@@ -29,7 +29,7 @@ class CheckoutController {
         if (!req.user) return res.status(401).json('Access deny');
 
         const { orderId, countryId } = req.query;
-
+console.log(orderId, countryId);
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderId, countryId);
 
         return res.status(200).json({

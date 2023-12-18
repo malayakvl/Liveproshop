@@ -1,26 +1,46 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormikContext, Field } from 'formik';
-import { shippingMethodsCheckoutSelector } from '../../redux/checkout/selectors';
+import {
+    orderCheckoutSelector,
+    shippingMethodsCheckoutSelector
+} from '../../redux/checkout/selectors';
 import { Radio } from './';
 import { formatCurrency } from '../../lib/functions';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/`;
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
+import { userSelector } from '../../redux/user/selectors';
+import { fetchShippingMethodsByCountryCheckoutAction } from '../../redux/checkout';
 
 const ShippingMethod = ({ title, className }: { title: string; className: string }) => {
     const { setFieldValue }: any = useFormikContext();
+    const user = useSelector(userSelector);
+    // console.log(user);
+    const order = useSelector(orderCheckoutSelector) || {};
+    const dispatch = useDispatch();
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
+    console.log('SHIPPING METHODS', shippingMethods);
+    console.log('USER', user);
     const showEmailNotice = useSelector(showEmailNoticeSelector);
     // const showEmailNotice = true;
 
-    useEffect(
-        () => setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false),
-        [shippingMethods]
-    );
+    useEffect(() => {
+        if (shippingMethods.length > 0) {
+            setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false);
+        } else {
+            // dispatch(
+            //     fetchShippingMethodsByCountryCheckoutAction(
+            //         order.id,
+            //         2
+            //     )
+            // );
+            console.log('GET METHODS');
+        }
+    }, [shippingMethods]);
 
     return !shippingMethods.length ? null : (
         <div className={className}>

@@ -190,12 +190,14 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                     </div>
                                 </div>
                                 {order.order_items?.length && (
-                                    <ShippingMethod
-                                        title={t('Shipping  Method')}
-                                        className={`white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 ${
-                                            showEmailNotice ? 'disabled-content' : ''
-                                        }`}
-                                    />
+                                    <>
+                                        <ShippingMethod
+                                            title={t('Shipping  Method')}
+                                            className={`white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 ${
+                                                showEmailNotice ? 'disabled-content' : ''
+                                            }`}
+                                        />
+                                    </>
                                 )}
 
                                 {/*<div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">*/}
