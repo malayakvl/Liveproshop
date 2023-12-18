@@ -235,21 +235,16 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                             </td>
                             <td>
                                 <span className="inline-block w-[20px] h-[20px]">
-                                    {/*<div*/}
-                                    {/*    className="text-blue-350 mt-4 block font-normal text-sm"*/}
-                                    {/*    dangerouslySetInnerHTML={{*/}
-                                    {/*        __html: `${displayOrderStatuses(item.id)}`*/}
-                                    {/*    }}*/}
-                                    {/*/>*/}
-                                    <div className="status-dropdown">
-                                        <DropdownStatusAction
-                                            onChange={(v: any) => {
-                                                console.log('222');
-                                            }}
-                                            options={displayOrderStatuses(item.id)}
-                                        />
-                                    </div>
-                                    {/*{displayOrderStatuses(item.id)}*/}
+                                    {item.status != 'new' && (
+                                        <div className="status-dropdown">
+                                            <DropdownStatusAction
+                                                onChange={(v: any) => {
+                                                    console.log('222');
+                                                }}
+                                                options={displayOrderStatuses(item.id)}
+                                            />
+                                        </div>
+                                    )}
                                 </span>
                             </td>
                             <td>

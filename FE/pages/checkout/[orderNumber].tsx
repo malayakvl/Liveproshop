@@ -37,6 +37,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
     useEffect(() => {
         dispatch(fetchCheckoutAction(orderNumber));
         dispatch(clearOrderByCommentAction(null));
+        window.localStorage.removeItem('orderCommentId');
     }, []);
 
     useEffect(() => {
