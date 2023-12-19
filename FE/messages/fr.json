@@ -602,7 +602,8 @@
   "Terms of Service": "Conditions d’utilisation",
   "Privacy Terms": "Confidentialité et modalités",
   "Pdf": "Pdf",
-  "History": "Histoire"
+  "History": "Histoire",
+  "settings_theshold_new": "Définissez un seuil de Livraison gratuite. Si la commande a atteint ce montant, l'expédition est gratuite pour cet acheteur."
 
 
 }

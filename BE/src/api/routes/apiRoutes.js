@@ -43,6 +43,7 @@ apiRoutes.route('/countries').get(CountryController.getAll);
  /*********************************************/
 apiRoutes.route('/activate-store-session/:id').get(LivesessionController.launchedSession);
 apiRoutes.route('/fetch-store-session-for-start').get(LivesessionController.getStoreSessionsForStart);
+apiRoutes.route('/fetch-store-session-for-end').get(LivesessionController.getStoreSessionsForEnd);
 apiRoutes.route('/fetch-store-active-sessions').get(LivesessionController.getActiveSessions);
 apiRoutes.route('/update-parsed-message').get(LivesessionController.updateReplyedMessage);
 apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);

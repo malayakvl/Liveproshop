@@ -42,6 +42,7 @@ const ListMessages: React.FC = () => {
                         <td>
                             {item.status != 'closed' && !closedSessions.includes(item.id) && (
                                 <span
+                                    title="Close"
                                     onClick={() => {
                                         dispatch(stopSessionAction(item.id));
                                         setClosedSession([...closedSessions, item.id]);

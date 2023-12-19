@@ -254,6 +254,49 @@ class Livesession {
         }
     }
 
+    async getStoreSessionsForEnd() {
+        const client = await pool.connect();
+        // const queryStr = `SELECT
+        //             id,
+        //             store_id,
+        //             access_token,
+        //             auth_provider_expiration_time,
+        //             auth_provider_expires_in
+        //         FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        try {
+            const query = await client.query(queryStr);
+            const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                result
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Live Sessions):',
+                    { message: e.message }
+                );
+                logger.log(
+                    'error',
+                    'Model query:',
+                    { message: queryStr }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
 
     async launchedSession(sessionId) {
         const client = await pool.connect();

@@ -600,6 +600,7 @@
   "Terms of Service": "Terms of Service",
   "Privacy Terms": "Privacy Terms",
   "Pdf": "Pdf",
-  "History": "History"
+  "History": "History",
+  "settings_theshold_new": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer"
 
 }

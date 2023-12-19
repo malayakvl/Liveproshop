@@ -99,6 +99,23 @@ class LivesessionController {
         }
     }
 
+
+    /**
+     * Get list of session wich started and get video id for it
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
+    async getStoreSessionsForEnd (req, res) {
+        const data = await livesessionModel.getStoreSessionsForEnd();
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ error: data.error });
+        }
+    }
+
+
     /**
      * Get list session with started and have video for apply event about parsing/creating order
      * @param req

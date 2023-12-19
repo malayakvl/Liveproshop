@@ -46,7 +46,8 @@ export default function ShippingThreshold() {
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>
                 </div>
-                <div className="text-gray-400">{t('settings_theshold')}</div>
+                {/*<div className="text-gray-400">{t('settings_theshold')}</div>*/}
+                <div className="text-gray-400">{t('settings_theshold_new')}</div>
             </div>
 
             <div className="md:flex mt-10 block-white-8 white-shadow-big">
@@ -74,8 +75,11 @@ export default function ShippingThreshold() {
                                 <Form onSubmit={props.handleSubmit}>
                                     <Field
                                         name="threshold"
-                                        className="w-full p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
+                                        className="w-[150px] float-left p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
                                     />
+                                    <span className="float-left mt-[35px] ml-[15px] font-bold">
+                                        &euro;
+                                    </span>
                                     <div className="error-el">
                                         <ErrorMessage name="threshold" />
                                     </div>
