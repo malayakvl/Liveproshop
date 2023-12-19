@@ -517,22 +517,52 @@ class Livesession {
     
     async create (userId, data) {
         const client = await pool.connect();
-        
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
+        // console.log(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
+        //                     FROM data.seller_settings WHERE user_id=${userId};`);
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
         let intervalDuration;
+        let _timeValue;
+        let _type;
+        if (settings.rows[0].order_timer.hours) {
+            _timeValue = settings.rows[0].order_timer.hours;
+            _type = 'h';
+        } else if (settings.rows[0].order_timer.days) {
+            _timeValue = settings.rows[0].order_timer.days;
+            _type = 'd';
+        } else {
+            _timeValue = settings.rows[0].order_timer.minutes;
+            _type = 'm';
+        }
         const timeValue = settings.rows[0].order_timer.hours ? settings.rows[0].order_timer.hours: settings.rows[0].order_timer.days;
         const type = settings.rows[0].order_timer.hours ? 'h': 'd';
+        let _intervalDuration;
+        if (_type === 'h') {
+            _intervalDuration = `${_timeValue} hour${_timeValue > 1 ? 's' : ''}`;
+        } else if (_type === 'd') {
+            _intervalDuration = `${_timeValue} day${timeValue > 1 ? 's' : ''}`;
+        } else {
+            _intervalDuration = `${_timeValue} minute${timeValue > 1 ? 's' : ''}`;
+        }
+        // console.log( `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+        //         );`)
+
         if (type === 'h') {
             intervalDuration = `${timeValue} hour${timeValue > 1 ? 's' : ''}`;
         } else {
             intervalDuration = `${timeValue} day${timeValue > 1 ? 's' : ''}`;
         }
         
+        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
+        //         );`;
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
+                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
                 );`;
         try {
             await client.query(query);
