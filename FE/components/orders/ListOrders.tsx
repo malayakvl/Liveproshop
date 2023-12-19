@@ -235,7 +235,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                             </td>
                             <td>
                                 <span className="inline-block w-[20px] h-[20px]">
-                                    {item.status !== 'new' && (
+                                    {item.status != 'new' && (
                                         <div className="status-dropdown">
                                             <DropdownStatusAction
                                                 onChange={(v: any) => {
