@@ -13,6 +13,8 @@ export default {
     "Payment is due within 15 days. Thank you for your business.":"Le paiement est dû dans les 15 jours. Merci pour votre entreprise.",
     "Invoice number:": "Numéro de facture:",
     "Invoice Date:":"Date de Facturation:",
+    "Refund number:": "Numéro de remboursement:",
+    "Refund Date:":"Date de remboursement:",
     "Balance Due:":"Montant Payé:",
     "Refund Due:":"Refunded Amount:",
     "Total Payment":"Paiement Total",
