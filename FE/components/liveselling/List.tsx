@@ -36,12 +36,17 @@ const ListMessages: React.FC = () => {
                             {item.order_timer
                                 ? item.order_timer.days
                                     ? `${item.order_timer.days} day(s)`
-                                    : `${item.order_timer.hours} hour(s)`
+                                    : `${
+                                          item.order_timer.hours
+                                              ? 'hour(s)'
+                                              : `${item.order_timer.minutes} minute(s)`
+                                      } `
                                 : ''}
                         </td>
                         <td>
                             {item.status != 'closed' && !closedSessions.includes(item.id) && (
                                 <span
+                                    title="Close"
                                     onClick={() => {
                                         dispatch(stopSessionAction(item.id));
                                         setClosedSession([...closedSessions, item.id]);

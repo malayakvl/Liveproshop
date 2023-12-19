@@ -252,7 +252,7 @@
   "List": "Liste",
   "Period": "Période",
   "Shipping section allows merchant to manage shipping methods and prices for his shoppers": "La section `Livraison` vous permet de gérer les modes et les prix de livraison pour vos clients",
-  "Free shipping": "Livraion gratuite",
+  "Free shipping": "Livraison gratuite",
   "Shipping methods": "Méthode d’expédition",
   "Empty": "Vide",
   "Shipping Method": "Mode de livraison",
@@ -314,7 +314,7 @@
   "Live session Settings": "Paramètres de diffusion live",
   "Free Shipping Settings": "Paramètres de livraison gratuite",
   "Free Shipping Window": "Fenêtre de livraison gratuite",
-  "Free Shipping": "Livraion gratuite",
+  "Free Shipping": "Livraison gratuite",
   "Free Shipping Hour(s)": "Heure de livraison gratuite",
   "support_descr": "La section “Assistance” vous permet de contacter l'équipe LiveProshop en cas de problème ou de question",
   "settings_descr": "La section `Paramètres` permet aux commerçants de configurer certaines fonctionalités afin d’améliorer l'expérience shopping pour leurs clients",
@@ -602,7 +602,8 @@
   "Terms of Service": "Conditions d’utilisation",
   "Privacy Terms": "Confidentialité et modalités",
   "Pdf": "Pdf",
-  "History": "Histoire"
+  "History": "Histoire",
+  "settings_theshold_new": "Définissez un seuil de Livraison gratuite. Si la commande a atteint ce montant, l'expédition est gratuite pour cet acheteur."
 
 
 }

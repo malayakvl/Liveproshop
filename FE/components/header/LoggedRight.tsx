@@ -103,7 +103,17 @@ const LoggedRight: React.FC = () => {
                         <span className="text-blue-350 pl-2 inline-block min-w-max">
                             ID: {user.id}
                         </span>
-                        <em>{user?.company_name || user.last_name + ' (' + user.phone + ')'}</em>
+                        {user.role_id === 1 ? (
+                            <em>
+                                {user.last_name && user.last_name}
+                                {user.phone && ' (' + user.phone + ')'}
+                                {!user.last_name && !user.phone && ''}
+                            </em>
+                        ) : (
+                            <em>
+                                {user?.company_name || user.last_name + ' (' + user.phone + ')'}
+                            </em>
+                        )}
                     </span>
                 </div>
                 {/* Profile dropdown */}

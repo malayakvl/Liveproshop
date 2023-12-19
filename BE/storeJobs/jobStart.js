@@ -16,8 +16,8 @@ async function startProcess() {
                     access_token,
                     auth_provider_expiration_time,
                     auth_provider_expires_in
-                FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
-     console.log(queryStr);            
+                FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(2, 'hours').format('HH:mm:ss')}');`;
+    console.log(queryStr);
     await axios(`${apiUrl}/api/fetch-store-session-for-start`)
         .then( (response) => {
             response.data.result.forEach(async session => {

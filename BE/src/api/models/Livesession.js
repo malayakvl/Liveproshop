@@ -72,11 +72,26 @@ class Livesession {
     async stopSession(itemId, userId) {
         const client = await pool.connect();
         try {
-            // const query = await client.query(
-            //     `UPDATE data.live_sessions SET closed=true WHERE id=${itemId} AND user_id=${userId}`
-            // );
+            // const currDateTime = new Date();
+            // const currTime = currDateTime.getHours()+':'+currDateTime.getMinutes()+':'+currDateTime.getSeconds();
+            // const currDate = currDateTime.getFullYear()+'-'+currDateTime.getMonth()+'-'+currDateTime.getUTCDay();
+            // console.log(moment().format("YYYY-MM-DD"));
+            const durationQuery = await client.query(`SELECT * FROm data.live_sessions WHERE id='${itemId}' AND user_id=${userId}`);
+            console.log(durationQuery.rows[0].order_timer);
+            let endPeriod;
+            if (durationQuery.rows[0].order_timer.minutes) {
+                endPeriod = moment().add(durationQuery.rows[0].order_timer.minutes, 'minutes');
+            } else if (durationQuery.rows[0].order_timer.hours) {
+                endPeriod = moment().add(durationQuery.rows[0].order_timer.hours, 'hours');
+            } else {
+                endPeriod = moment().add(durationQuery.rows[0].order_timer.days, 'days');
+            }
+            // console.log(endPeriod.format("YYYY-MM-DD"));
+            // console.log(endPeriod.format("HH:mm:ss"));
+            // exit;
             const query = await client.query(
-                `UPDATE data.live_sessions SET status='closed' WHERE id=${itemId} AND user_id=${userId}`
+                `UPDATE data.live_sessions SET status='closed',
+                    event_time_end = '${endPeriod.format("HH:mm:ss")}', event_date_end='${endPeriod.format("YYYY-MM-DD")}' WHERE id=${itemId} AND user_id=${userId}`
             );
             const result = query.rows.length > 0 ? query.rows : [];
             return {
@@ -84,6 +99,7 @@ class Livesession {
             };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
+                console.log(e.message)
                 logger.log(
                     'error',
                     'Model error (Products getAll):',
@@ -253,6 +269,83 @@ class Livesession {
             client.release();
         }
     }
+
+    async getStoreSessionsForEnd() {
+        const client = await pool.connect();
+        const queryStr = `SELECT
+                    *
+                FROM data.get_live_sessions_store_ended('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        try {
+            const query = await client.query(queryStr);
+            const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                result
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Live Sessions):',
+                    { message: e.message }
+                );
+                logger.log(
+                    'error',
+                    'Model query:',
+                    { message: queryStr }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async updateClosedSession(sessionId) {
+        const client = await pool.connect();
+        const queryStr = `UPDATE data.live_sessions SET job_closed=true WHERE id='${sessionId}'`;
+        try {
+            const query = await client.query(queryStr);
+            // const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                success: true
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Live Sessions):',
+                    { message: e.message }
+                );
+                logger.log(
+                    'error',
+                    'Model query:',
+                    { message: queryStr }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
 
 
     async launchedSession(sessionId) {
@@ -517,22 +610,52 @@ class Livesession {
     
     async create (userId, data) {
         const client = await pool.connect();
-        
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
+        // console.log(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
+        //                     FROM data.seller_settings WHERE user_id=${userId};`);
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
         let intervalDuration;
+        let _timeValue;
+        let _type;
+        if (settings.rows[0].order_timer.hours) {
+            _timeValue = settings.rows[0].order_timer.hours;
+            _type = 'h';
+        } else if (settings.rows[0].order_timer.days) {
+            _timeValue = settings.rows[0].order_timer.days;
+            _type = 'd';
+        } else {
+            _timeValue = settings.rows[0].order_timer.minutes;
+            _type = 'm';
+        }
         const timeValue = settings.rows[0].order_timer.hours ? settings.rows[0].order_timer.hours: settings.rows[0].order_timer.days;
         const type = settings.rows[0].order_timer.hours ? 'h': 'd';
+        let _intervalDuration;
+        if (_type === 'h') {
+            _intervalDuration = `${_timeValue} hour${_timeValue > 1 ? 's' : ''}`;
+        } else if (_type === 'd') {
+            _intervalDuration = `${_timeValue} day${timeValue > 1 ? 's' : ''}`;
+        } else {
+            _intervalDuration = `${_timeValue} minute${timeValue > 1 ? 's' : ''}`;
+        }
+        // console.log( `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+        //         );`)
+
         if (type === 'h') {
             intervalDuration = `${timeValue} hour${timeValue > 1 ? 's' : ''}`;
         } else {
             intervalDuration = `${timeValue} day${timeValue > 1 ? 's' : ''}`;
         }
         
+        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
+        //         );`;
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
+                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
                 );`;
         try {
             await client.query(query);
