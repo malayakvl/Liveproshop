@@ -109,7 +109,24 @@ class LivesessionController {
     async getStoreSessionsForEnd (req, res) {
         const data = await livesessionModel.getStoreSessionsForEnd();
         if (!data.error) {
+            console.log(data.result);
             return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ error: data.error });
+        }
+    }
+
+    /**
+     * Get list of session wich started and get video id for it
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
+    async updateClosedSession (req, res) {
+        const data = await livesessionModel.updateClosedSession(req.query.sessionId);
+        if (!data.error) {
+            // console.log(data.result);
+            return res.status(200).json({ success: true, error: data.error });
         } else {
             return res.status(401).json({ error: data.error });
         }

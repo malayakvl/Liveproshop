@@ -36,7 +36,11 @@ const ListMessages: React.FC = () => {
                             {item.order_timer
                                 ? item.order_timer.days
                                     ? `${item.order_timer.days} day(s)`
-                                    : `${item.order_timer.hours} hour(s)`
+                                    : `${
+                                          item.order_timer.hours
+                                              ? 'hour(s)'
+                                              : `${item.order_timer.minutes} minute(s)`
+                                      } `
                                 : ''}
                         </td>
                         <td>

@@ -29,10 +29,9 @@ BE/_stepByStepMigration
 BE/public/uploads/
 BE/public/uploads/products/
 /FE/_services/OLD
-/BE/public/uploads/users/
 /BE/OLDTASKS/
 /FE/_services/PRVIOUS30092023/
 /BE/serverStoreJobs/
 /BE/storeJobsLocal/
 /BE/_stepByStepMigration/
-/BE/storeJobsLocal/
+/BE/storeJobs/.env

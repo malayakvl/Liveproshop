@@ -72,11 +72,26 @@ class Livesession {
     async stopSession(itemId, userId) {
         const client = await pool.connect();
         try {
-            // const query = await client.query(
-            //     `UPDATE data.live_sessions SET closed=true WHERE id=${itemId} AND user_id=${userId}`
-            // );
+            // const currDateTime = new Date();
+            // const currTime = currDateTime.getHours()+':'+currDateTime.getMinutes()+':'+currDateTime.getSeconds();
+            // const currDate = currDateTime.getFullYear()+'-'+currDateTime.getMonth()+'-'+currDateTime.getUTCDay();
+            // console.log(moment().format("YYYY-MM-DD"));
+            const durationQuery = await client.query(`SELECT * FROm data.live_sessions WHERE id='${itemId}' AND user_id=${userId}`);
+            console.log(durationQuery.rows[0].order_timer);
+            let endPeriod;
+            if (durationQuery.rows[0].order_timer.minutes) {
+                endPeriod = moment().add(durationQuery.rows[0].order_timer.minutes, 'minutes');
+            } else if (durationQuery.rows[0].order_timer.hours) {
+                endPeriod = moment().add(durationQuery.rows[0].order_timer.hours, 'hours');
+            } else {
+                endPeriod = moment().add(durationQuery.rows[0].order_timer.days, 'days');
+            }
+            // console.log(endPeriod.format("YYYY-MM-DD"));
+            // console.log(endPeriod.format("HH:mm:ss"));
+            // exit;
             const query = await client.query(
-                `UPDATE data.live_sessions SET status='closed' WHERE id=${itemId} AND user_id=${userId}`
+                `UPDATE data.live_sessions SET status='closed',
+                    event_time_end = '${endPeriod.format("HH:mm:ss")}', event_date_end='${endPeriod.format("YYYY-MM-DD")}' WHERE id=${itemId} AND user_id=${userId}`
             );
             const result = query.rows.length > 0 ? query.rows : [];
             return {
@@ -84,6 +99,7 @@ class Livesession {
             };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
+                console.log(e.message)
                 logger.log(
                     'error',
                     'Model error (Products getAll):',
@@ -256,13 +272,9 @@ class Livesession {
 
     async getStoreSessionsForEnd() {
         const client = await pool.connect();
-        // const queryStr = `SELECT
-        //             id,
-        //             store_id,
-        //             access_token,
-        //             auth_provider_expiration_time,
-        //             auth_provider_expires_in
-        //         FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        const queryStr = `SELECT
+                    *
+                FROM data.get_live_sessions_store_ended('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
@@ -295,6 +307,44 @@ class Livesession {
             client.release();
         }
     }
+
+
+    async updateClosedSession(sessionId) {
+        const client = await pool.connect();
+        const queryStr = `UPDATE data.live_sessions SET job_closed=true WHERE id='${sessionId}'`;
+        try {
+            const query = await client.query(queryStr);
+            // const result = query.rows.length > 0 ? query.rows : [];
+            return {
+                success: true
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Live Sessions):',
+                    { message: e.message }
+                );
+                logger.log(
+                    'error',
+                    'Model query:',
+                    { message: queryStr }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
 
 
 
