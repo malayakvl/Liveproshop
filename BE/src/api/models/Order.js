@@ -10,11 +10,13 @@ import {
 } from 'timers/promises';
 import axios from "axios";
 import * as zipLib from "zip-a-folder";
+import { generateRndPrefix } from "../lib/utils.js";
 
 async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
+        let historyRes;
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
@@ -68,13 +70,15 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
 
     }
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
+    const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
+    const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
     doc
         .fontSize(10)
-        .text(t["Invoice number:"], 50, customerInformationTop)
+        .text(captionNumber, 50, customerInformationTop)
         .font("Helvetica-Bold")
         .text(invoice.invoice_nr, 150, customerInformationTop)
         .font("Helvetica")
-        .text(t["Invoice Date:"], 50, customerInformationTop + 15)
+        .text(captionDate, 50, customerInformationTop + 15)
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
         .text(captionTotal, 50, customerInformationTop + 30)
         .text(
@@ -629,7 +633,6 @@ class Order {
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
-        console.log("TYPE:!!!!", typeInvoice);
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -651,6 +654,15 @@ class Order {
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
+            const orderId = res.rows[0].id;
+            let historyRes;
+            if (res.rows[0].status === 'canceled') {
+                historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='canceled'`);
+            } else {
+                historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
+            }
+            console.log(historyRes.rows[0]);
+
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             // if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
@@ -668,7 +680,7 @@ class Order {
             //     // fs.mkdirSync(dirArchiveFolder);
             // }
 
-            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+            // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -709,21 +721,11 @@ class Order {
                     }).catch(error => {
                         console.log("Merchant error", error);
                     });
-                // const buyerAddress = ''
-                // console.log('Buyer', res.rows[0]);
-                // const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
-                //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
-                //                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
-                // await client.query(`INSERT INTO data.order_statuses(order_id, status)
-                //                         SELECT ${res.rows[0].id}, '${res.rows[0].status !== 'canceled' ? 'payed' : 'canceled'}'
-                //                         WHERE
-                //                         NOT EXISTS (
-                //                         SELECT order_id FROM data.order_statuses WHERE order_id = ${res.rows[0].id} AND status='${res.rows[0].status !== 'canceled' ? 'payed' : 'canceled'}'
-                //                         );`);
+                // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
                     shipping: {
-                        name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
+                        name: buyerData.rows[0].first_name + " " +(buyerData.rows[0].last_name ? buyerData.rows[0].last_name : ''),
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
                         city: res.rows[0].city,
@@ -739,11 +741,13 @@ class Order {
                     subtotal: res.rows[0].order_amount,
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
-                    invoice_nr: res.rows[0].order_number,
-                    invoice_date: moment(historyStatusRes.rows[0].created_at).format('DD/MM/YYYY'),
-                    paymentDetails: multiSafePayClientRes
+                    invoice_nr: res.rows[0].order_number+(typeInvoice !== 'refund' ? '' : `-${res.rows[0].refund_prefix}`),
+                    invoice_date: moment(historyRes.rows[0].created_at).format('DD/MM/YYYY'),
+                    paymentDetails: multiSafePayClientRes,
+                    orderId: orderId
                     // paymentDetails: {}
                 };
+                console.log(invoice);
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 await setTimeout(8000);
@@ -1055,22 +1059,12 @@ class Order {
     async insertOrderStatus (orderId, status) {
         const client = await pool.connect();
         try {
-            console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
-            const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            const _tmpRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='${status}'`);
+            if (_tmpRes.rows.length === 0) {
+                const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            }
             return {success: true, error: null};
-            // if (res.rows.length > 0) {
-            //     const promisesQueries = [];
-            //     res.rows.forEach(order => {
-            //         promisesQueries.push(this.cancelOrder(order));
-            //     });
-            //     if (promisesQueries.length) {
-            //         await Promise.all(promisesQueries);
-            //     }
-            //     return {success: true, error: null};
-            // } else {
-            //     return {success: false, error: 'No record find'};
-            // }
-
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -1128,6 +1122,7 @@ class Order {
         const client = await pool.connect();
         try {
             const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${order.id});`);
+            const refundPrefix = generateRndPrefix(4);
             if (sellerSettingsRes.rows.length === 0) {
                 return {success: false, error: 'No key for payment'}
             }
@@ -1141,7 +1136,8 @@ class Order {
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(async () => {
-                    await client.query(`UPDATE data.orders SET status='canceled' WHERE id=${order.id};`);
+                    console.log(`UPDATE data.orders SET status='canceled', refund_prefix='${refundPrefix}' WHERE id=${order.id};`);
+                    await client.query(`UPDATE data.orders SET status='canceled', refund_prefix='${refundPrefix}' WHERE id=${order.id};`);
                     await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${order.id}', 'canceled')`);
                     return {success: true, error: null}
                 }).catch(error => {

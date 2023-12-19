@@ -16,8 +16,6 @@ export default function Index({ session }: { session: any }) {
         query: { orderId, lang, hash, type }
     } = useRouter();
 
-    console.log(orderId, lang);
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -30,11 +28,14 @@ export default function Index({ session }: { session: any }) {
             if (paymentStatus === 'success') {
                 // insert history statuses here
                 // dispatch(updateOrderStatusAction(orderId, 'payed'));
-                setTimeout(() => {
-                    location.href = `${window.location.origin}/${
-                        lang == 'en' ? 'en/' : ''
-                    }checkout/complete?orderId=${orderId}`;
-                }, 2000);
+                location.href = `${window.location.origin}/${
+                    lang == 'en' ? 'en/' : ''
+                }checkout/complete?orderId=${orderId}`;
+                // setTimeout(() => {
+                //     location.href = `${window.location.origin}/${
+                //         lang == 'en' ? 'en/' : ''
+                //     }checkout/complete?orderId=${orderId}`;
+                // }, 2000);
             }
         }
     }, [paymentStatus]);
