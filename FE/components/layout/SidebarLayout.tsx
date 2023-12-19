@@ -34,7 +34,6 @@ export default function SidebarLayout({ children }: { children: any }) {
             }
         }
         if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
-            console.log('here');
             dispatch(
                 setupOrderByCommentAction(
                     window.localStorage.getItem('orderCommentId'),
@@ -44,7 +43,10 @@ export default function SidebarLayout({ children }: { children: any }) {
         }
         if (user?.email) {
             // console.log(user?.email, user?.email_real);
-            if (!isValidEmail(user?.email) && !user?.email_real) {
+            if (
+                !isValidEmail(user?.email) &&
+                (!user?.email_real || !isValidEmail(user?.email_real))
+            ) {
                 dispatch(showEmailNotificationAction(true));
             } else {
                 dispatch(showEmailNotificationAction(false));
