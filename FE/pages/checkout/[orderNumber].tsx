@@ -10,6 +10,7 @@ import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/
 import {
     clearOrderByCommentAction,
     redirectCheckoutAction,
+    redirectOrderNumberAction,
     setupReturnedUrlAction
 } from '../../redux/orders';
 
@@ -28,13 +29,10 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const user = useSelector(userSelector);
     // const showEmailNotice = true;
     const order = useSelector(orderCheckoutSelector) || {};
-
     const {
         query: { orderNumber }
     } = useRouter();
-
     const dispatch = useDispatch();
-
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
 
     const validateEmail = (email: string) => {
@@ -50,6 +48,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
     useEffect(() => {
         if (validateEmail(user.email_real) && !validateEmail(user.email)) {
             dispatch(showEmailNotificationAction(false));
+        } else {
+            dispatch(redirectOrderNumberAction(orderNumber));
         }
         dispatch(fetchCheckoutAction(orderNumber));
         dispatch(clearOrderByCommentAction(null));

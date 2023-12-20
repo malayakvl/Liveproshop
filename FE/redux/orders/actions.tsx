@@ -420,3 +420,4 @@ export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SI
 export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');
 export const setupReturnedUrlAction: any = createAction('orders/SETUP_RETURNED_URL');
 export const redirectCheckoutAction: any = createAction('orders/REDIRECT_CHECKOUT_ACTION');
+export const redirectOrderNumberAction: any = createAction('orders/REDIRECT_ORDER_NUMBER');

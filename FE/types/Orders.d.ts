@@ -21,6 +21,7 @@ declare namespace Orders {
         connectedOrderNumber: null | any;
         orderReturnedUrl: null | any;
         redirectCheckout: boolean;
+        redirectOrderNumber: any;
     }
 
     interface DataItem {
