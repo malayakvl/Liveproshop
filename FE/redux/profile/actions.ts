@@ -1,13 +1,19 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
 import { authHeader } from '../../lib/functions';
-import {setSuccessToastAction, setErrorToastAction, showEmailNotificationAction} from '../layouts';
+import {
+    setSuccessToastAction,
+    setErrorToastAction,
+    showEmailNotificationAction
+} from '../layouts';
 import { setUserAction } from '../user/';
 import { showLoaderAction } from '../layouts/actions';
 import { baseApiUrl } from '../../constants';
-import {redirectCheckoutAction} from "../orders";
+import { redirectOrderNumberAction } from '../orders';
+// import { redirectCheckoutAction } from "../orders";
 const baseUrl = `${baseApiUrl}/api`;
 const baseAuthUrl = `${baseApiUrl}/auth`;
+// const siteUrl = `${baseUrl}/auth`;
 
 export const fetchProfileAction: any = createAction(
     'profile/FETCH_PROFILE',
@@ -29,7 +35,7 @@ export const updateProfileAction: any = createAction(
     async (data: any) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            const redirectReturned = state.orders.orderReturnedUrl;
+            const redirectOrderNUmber = state.orders.redirectOrderNumber;
             return axios
                 .post(`${baseUrl}/profile`, data, {
                     headers: {
@@ -48,6 +54,10 @@ export const updateProfileAction: any = createAction(
                     // alert(redirectReturned);
                     // console.log(res.data.user);
                     dispatch(setSuccessToastAction(`Profile has been updated`));
+                    if (redirectOrderNUmber) {
+                        dispatch(redirectOrderNumberAction(null));
+                        window.location.href = `/en/chechout/${redirectOrderNUmber}`;
+                    }
                     // if (redirectReturned) {
                     //     window.location.href = redirectReturned;
                     // }
