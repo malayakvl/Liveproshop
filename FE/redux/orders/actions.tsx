@@ -336,7 +336,7 @@ export const fetchUserOrderAction: any = createAction(
                 }
             )
             .then((res) => {
-                window.localStorage.removeItem('orderCommentId');
+                // window.localStorage.removeItem('orderCommentId');
                 res.data.user;
             })
             .catch((e) => console.log(e.message));

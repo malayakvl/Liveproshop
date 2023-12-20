@@ -160,7 +160,7 @@ class UserController {
             // };
             if (!/\S+@\S+\.\S+/.test(userEmail) && profileData.email_real) {
                 // req.user.email = profileData.email_real
-                await userModel.updateEmail(profileData.email_real, req.user.id);
+                // await userModel.updateEmail(profileData.email_real, req.user.id);
                 console.log("need update user email", profileData.email_real);
             }
             console.log("NEW EMAIL", req.user.email);

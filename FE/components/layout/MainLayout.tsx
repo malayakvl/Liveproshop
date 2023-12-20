@@ -43,18 +43,18 @@ export default function MainLayout({ children }: { children: any }) {
                     // dispatch(fetchUserAction(localUser.email));
                     dispatch(fetchUserAction(session?.user?.email));
                     if (window.localStorage.getItem('orderCommentId')) {
-                        // dispatch(
-                        //     fetchUserOrderAction(
-                        //         session?.user?.email,
-                        //         window.localStorage.getItem('order_comment_id')
-                        //     )
-                        // );
                         dispatch(
                             fetchUserOrderAction(
-                                localUser.email,
+                                session?.user?.email,
                                 window.localStorage.getItem('orderCommentId')
                             )
                         );
+                        // dispatch(
+                        //     fetchUserOrderAction(
+                        //         localUser.email,
+                        //         window.localStorage.getItem('orderCommentId')
+                        //     )
+                        // );
                     }
                 } else {
                     dispatch(

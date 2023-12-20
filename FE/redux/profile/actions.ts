@@ -40,8 +40,8 @@ export const updateProfileAction: any = createAction(
                     // window.localStorage.removeItem('user');
                     window.localStorage.setItem('user', JSON.stringify(res.data.user));
                     window.localStorage.setItem('updatedEmail', 'yes');
-                    // dispatch(setUserAction(res.data.user));
-                    alert(JSON.stringify(res.data.user));
+                    dispatch(setUserAction(res.data.user));
+                    // alert(JSON.stringify(res.data.user));
                     // window.location.reload();
                     // alert(JSON.stringify(res.data.user));
                     // alert(redirectReturned);
