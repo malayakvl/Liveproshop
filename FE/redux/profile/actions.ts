@@ -56,7 +56,7 @@ export const updateProfileAction: any = createAction(
                     dispatch(setSuccessToastAction(`Profile has been updated`));
                     if (redirectOrderNUmber) {
                         dispatch(redirectOrderNumberAction(null));
-                        window.location.href = `/en/chechout/${redirectOrderNUmber}`;
+                        window.location.href = `/en/checkout/${redirectOrderNUmber}`;
                     }
                     // if (redirectReturned) {
                     //     window.location.href = redirectReturned;
