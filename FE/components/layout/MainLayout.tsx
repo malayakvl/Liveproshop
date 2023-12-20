@@ -43,12 +43,12 @@ export default function MainLayout({ children }: { children: any }) {
                     // dispatch(fetchUserAction(localUser.email));
                     dispatch(fetchUserAction(session?.user?.email));
                     if (window.localStorage.getItem('orderCommentId')) {
-                        dispatch(
-                            fetchUserOrderAction(
-                                session?.user?.email,
-                                window.localStorage.getItem('orderCommentId')
-                            )
-                        );
+                        // dispatch(
+                        //     fetchUserOrderAction(
+                        //         session?.user?.email,
+                        //         window.localStorage.getItem('orderCommentId')
+                        //     )
+                        // );
                         // dispatch(
                         //     fetchUserOrderAction(
                         //         localUser.email,
