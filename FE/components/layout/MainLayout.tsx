@@ -17,7 +17,6 @@ export default function MainLayout({ children }: { children: any }) {
     useEffect(
         function () {
             if (session?.user?.email && !window.localStorage.getItem('user')) {
-                console.log('PIZDA');
                 dispatch(fetchUserAction(session.user.email));
                 if (window.localStorage.getItem('order_comment_id')) {
                     dispatch(

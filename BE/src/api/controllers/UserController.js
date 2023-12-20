@@ -139,8 +139,8 @@ class UserController {
                 return res.status(500).json(err);
             }
             const dataUser = req.body;
-            // const userEmail = dataUser.email;
-            const userEmail = '122111272808068624';
+            const userEmail = dataUser.email;
+            // const userEmail = '122111272808068624';
             const profileData = dataUser;
             delete profileData.user;
             delete profileData.email;
@@ -158,14 +158,13 @@ class UserController {
             // const isValidEmail = (email: any) => {
             //     return /\S+@\S+\.\S+/.test(email);
             // };
-            if (!/\S+@\S+\.\S+/.test(userEmail) && profileData.email_real) {
-                // req.user.email = profileData.email_real
-                // await userModel.updateEmail(profileData.email_real, req.user.id);
-                console.log("need update user email", profileData.email_real);
-            }
-            console.log("NEW EMAIL", req.user.email);
+            // if (!/\S+@\S+\.\S+/.test(userEmail) && profileData.email_real) {
+            //     // req.user.email = profileData.email_real
+            //     // await userModel.updateEmail(profileData.email_real, req.user.id);
+            //     console.log("need update user email", profileData.email_real);
+            // }
             const user = await userModel.findUserByEmail(req.user.email);
-            console.log(user);
+            // console.log(user);
             delete user.password;
             delete user.salt;
             delete user.hash;

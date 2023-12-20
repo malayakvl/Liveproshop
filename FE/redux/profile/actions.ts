@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
 import { authHeader } from '../../lib/functions';
-import { setSuccessToastAction, setErrorToastAction } from '../layouts';
+import {setSuccessToastAction, setErrorToastAction, showEmailNotificationAction} from '../layouts';
 import { setUserAction } from '../user/';
 import { showLoaderAction } from '../layouts/actions';
 import { baseApiUrl } from '../../constants';
@@ -41,6 +41,7 @@ export const updateProfileAction: any = createAction(
                     window.localStorage.setItem('user', JSON.stringify(res.data.user));
                     window.localStorage.setItem('updatedEmail', 'yes');
                     dispatch(setUserAction(res.data.user));
+                    dispatch(showEmailNotificationAction(false));
                     // alert(JSON.stringify(res.data.user));
                     // window.location.reload();
                     // alert(JSON.stringify(res.data.user));

@@ -17,12 +17,15 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 import Link from 'next/link';
+import { userSelector } from '../../redux/user/selectors';
+import { showEmailNotificationAction } from '../../redux/layouts';
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
     const t = useTranslations();
     const showEmailNotice = useSelector(showEmailNoticeSelector);
+    const user = useSelector(userSelector);
     // const showEmailNotice = true;
     const order = useSelector(orderCheckoutSelector) || {};
 
@@ -34,7 +37,20 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
 
+    const validateEmail = (email: string) => {
+        if (!email) {
+            return false;
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            return false;
+        }
+
+        return true;
+    };
+
     useEffect(() => {
+        if (validateEmail(user.email_real) && !validateEmail(user.email)) {
+            dispatch(showEmailNotificationAction(false));
+        }
         dispatch(fetchCheckoutAction(orderNumber));
         dispatch(clearOrderByCommentAction(null));
         window.localStorage.removeItem('orderCommentId');
