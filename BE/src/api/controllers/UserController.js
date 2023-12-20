@@ -159,10 +159,13 @@ class UserController {
             //     return /\S+@\S+\.\S+/.test(email);
             // };
             if (!/\S+@\S+\.\S+/.test(userEmail) && profileData.email_real) {
+                // req.user.email = profileData.email_real
                 await userModel.updateEmail(profileData.email_real, req.user.id);
                 console.log("need update user email", profileData.email_real);
             }
+            console.log("NEW EMAIL", req.user.email);
             const user = await userModel.findUserByEmail(req.user.email);
+            console.log(user);
             delete user.password;
             delete user.salt;
             delete user.hash;

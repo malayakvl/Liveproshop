@@ -21,6 +21,7 @@ export const fetchCheckoutAction: any = createAction(
         }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
+            console.log('BBBBBBBBB', state.user);
             return axios
                 .get(
                     `${baseUrl}/checkout?${queryString.stringify({

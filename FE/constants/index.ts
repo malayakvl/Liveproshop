@@ -61,7 +61,7 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { className: 'table-number' },
         { titleKey: 'Shipping Method' },
         { className: 'shipping-logo' },
-        { className: 'option-switcher' },
+        { className: 'option-switcher', titleKey: 'Enabled' },
         { className: 'shipping-countries' },
         {}
     ],

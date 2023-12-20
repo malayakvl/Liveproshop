@@ -52,18 +52,21 @@ export default function List({ locale }: { locale: string }) {
         [dispatch, user.email]
     );
 
+    // console.log(selectedItem);
+
     const handlerConfirm = useCallback(() => {
         if (!selectedItem) return;
 
         dispatch(checkIdsAction(selectedItem.id));
         selectedItem.status = !selectedItem.status;
+        console.log('SELECTED ITEM', selectedItem);
 
-        dispatch(changeShippingStatus(selectedItem.id, selectedItem.status));
-        dispatch(
-            setSuccessToastAction(
-                t('Status of the shipping {name} is changed', { name: selectedItem.name })
-            )
-        );
+        dispatch(changeShippingStatus(selectedItem.id, !selectedItem.status));
+        // dispatch(
+        //     setSuccessToastAction(
+        //         t('Status of the shipping {name} is changed', { name: selectedItem.name })
+        //     )
+        // );
         setSelectedItem(null);
     }, [dispatch, selectedItem]);
 
@@ -84,6 +87,7 @@ export default function List({ locale }: { locale: string }) {
         setDropDowns(items.map(() => false));
     }, [items]);
 
+    console.log(items);
     // useEffect(() => {
     //     if (!user.email) return;
 
@@ -99,6 +103,8 @@ export default function List({ locale }: { locale: string }) {
     // }, [user.email]);
 
     if (!user.email) return null;
+
+    console.log(items);
 
     return (
         <>
@@ -233,9 +239,12 @@ export default function List({ locale }: { locale: string }) {
                                             value={`switcher_${item.id}`}
                                             checked={
                                                 checkedIds.find((data: any) => data.id === item.id)
-                                                    ?.checked || false
+                                                    ?.checked
                                             }
-                                            onChange={() => setSelectedItem(item)}
+                                            onChange={() => {
+                                                console.log('SELECTED ITEM', item);
+                                                setSelectedItem(item);
+                                            }}
                                         />
                                         <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600" />
                                     </label>
@@ -318,7 +327,9 @@ export default function List({ locale }: { locale: string }) {
             <ConfirmDialog
                 show={!!selectedItem}
                 text={t('Are you sure you want to {status} {name} method?', {
-                    status: selectedItem?.status ? t('disable') : t('enable'),
+                    status: selectedItem?.status__customer_disabled_shipping
+                        ? t('disable')
+                        : t('enable'),
                     name: selectedItem?.name
                 })}
                 titleConfirm={t('Yes')}

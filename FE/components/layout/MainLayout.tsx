@@ -17,6 +17,7 @@ export default function MainLayout({ children }: { children: any }) {
     useEffect(
         function () {
             if (session?.user?.email && !window.localStorage.getItem('user')) {
+                console.log('PIZDA');
                 dispatch(fetchUserAction(session.user.email));
                 if (window.localStorage.getItem('order_comment_id')) {
                     dispatch(
@@ -28,14 +29,30 @@ export default function MainLayout({ children }: { children: any }) {
                 }
             } else {
                 const localUser = JSON.parse(window.localStorage.getItem('user') || '{}');
+                console.log('SESSION EMAIL', session?.user?.email);
+                console.log('LOCAL EMAIL', localUser.email);
                 if (session?.user?.email !== localUser.email) {
-                    window.localStorage.setItem('user', JSON.stringify({}));
+                    // WTF я не помню зачем я ето делала
+                    // window.localStorage.setItem('user', JSON.stringify({}));
                     dispatch(fetchUserAction(session?.user?.email));
-                    if (window.localStorage.getItem('order_comment_id')) {
+                    // session?.user?.email = localUser.email;
+                    // if (session?.user?.email) {
+                    //     session.user.email = localUser.email;
+                    // }
+                    // console.log(localUser.email);
+                    // dispatch(fetchUserAction(localUser.email));
+                    dispatch(fetchUserAction(session?.user?.email));
+                    if (window.localStorage.getItem('orderCommentId')) {
+                        // dispatch(
+                        //     fetchUserOrderAction(
+                        //         session?.user?.email,
+                        //         window.localStorage.getItem('order_comment_id')
+                        //     )
+                        // );
                         dispatch(
                             fetchUserOrderAction(
-                                session?.user?.email,
-                                window.localStorage.getItem('order_comment_id')
+                                localUser.email,
+                                window.localStorage.getItem('orderCommentId')
                             )
                         );
                     }

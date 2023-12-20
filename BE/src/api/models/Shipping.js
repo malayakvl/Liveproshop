@@ -304,19 +304,24 @@ class Shipping {
 
     async changeCustomerStatus(status, customerId, shippingId) {
         const client = await pool.connect();
+        console.log('=============')
+        console.log(`change customer status ${customerId}`);
+        console.log(status, shippingId);
+        let query;
         try {
-            let query =
-                'DELETE FROM data.customer_disabled_shipping WHERE user_id = $1 AND shipping_id = $2';
-console.log("Status", status);
-            if (!status) {
-                query =
-                    'INSERT INTO data.customer_disabled_shipping(user_id, shipping_id) VALUES($1, $2)';
-            } else {
-                console.log("EBANY VLADIK")
+            console.log(`DELETE FROM data.customer_disabled_shipping WHERE user_id = ${customerId} AND shipping_id = ${shippingId}`);
+            await client.query(`DELETE FROM data.customer_disabled_shipping WHERE user_id = ${customerId} AND shipping_id = ${shippingId}`);
+            // query =
+            //     `DELETE FROM data.customer_disabled_shipping WHERE user_id = ${customerId} AND shipping_id = ${shippingId}`;
+            // console.log("Status", status);
+            if (status) {
+                console.log(`INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES ('${customerId}', '${shippingId}')`);
+                await client.query(`INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES ('${customerId}', '${shippingId}')`);
+                // query =
+                //     `INSERT INTO data.customer_disabled_shipping (user_id, shipping_id) VALUES ('${customerId}', '${shippingId}')`;
             }
-console.log(query)
-console.log(customerId, shippingId);
-            await client.query(query, [customerId, shippingId]);
+            // console.log(customerId, shippingId);
+            // await client.query(query, [customerId, shippingId]);
 
             return true
         } catch (e) {

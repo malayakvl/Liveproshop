@@ -28,6 +28,7 @@ export default function SidebarLayout({ children }: { children: any }) {
 
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
+        console.log('USER', user);
         if (user?.email && user.role_id == 2) {
             if (user.subscription_id?.includes('fake_sub_') || user?.subscription_expired) {
                 Router.push(`/pricing`);

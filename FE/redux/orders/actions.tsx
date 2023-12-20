@@ -335,7 +335,10 @@ export const fetchUserOrderAction: any = createAction(
                     }
                 }
             )
-            .then((res) => res.data.user)
+            .then((res) => {
+                window.localStorage.removeItem('orderCommentId');
+                res.data.user;
+            })
             .catch((e) => console.log(e.message));
     }
 );

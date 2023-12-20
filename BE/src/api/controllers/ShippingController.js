@@ -137,11 +137,14 @@ export default new class ShippingController {
     }
 
     changeStatus(req, res) {
-        const user = req.user
-        const status = req.body.status
-        const shippingId = req.params.id
-
+        const user = req.user;
+        const status = req.body.status;
+        const shippingId = req.params.id;
+        console.log('INCOMING DATA');
+        console.log(status, shippingId);
+        console.log('=============');
         if (user.role_id !== 3) {
+            console.log('HERE');
             shippingModel.changeCustomerStatus(status, user.id, shippingId)
             return res.status(200).json({})
         }
