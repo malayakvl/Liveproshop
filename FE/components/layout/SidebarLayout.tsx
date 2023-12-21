@@ -34,7 +34,7 @@ export default function SidebarLayout({ children }: { children: any }) {
                 Router.push(`/pricing`);
             }
         }
-        if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
+        if (user.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             dispatch(
                 setupOrderByCommentAction(
                     window.localStorage.getItem('orderCommentId'),
@@ -42,7 +42,7 @@ export default function SidebarLayout({ children }: { children: any }) {
                 )
             );
         }
-        if (user?.email) {
+        if (user.email) {
             // console.log(user?.email, user?.email_real);
             if (
                 !isValidEmail(user?.email) &&
