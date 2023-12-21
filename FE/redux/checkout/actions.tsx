@@ -6,7 +6,7 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 import queryString from 'query-string';
 import { setErrorToastAction, showLoaderAction } from '../layouts/actions';
-import {updateOrderStatusAction} from "../orders";
+import { updateOrderStatusAction } from '../orders';
 
 export const fetchCheckoutAction: any = createAction(
     'checkout/FETCH',

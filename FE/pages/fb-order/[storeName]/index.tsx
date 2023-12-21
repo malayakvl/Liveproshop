@@ -29,6 +29,7 @@ export default function Index({ locale }: { locale: string }) {
         }
         if (user?.email && user.role_id == 1) {
             console.log('here we are');
+            alert('111111');
             dispatch(
                 setupOrderByCommentAction(
                     window.localStorage.getItem('orderCommentId'),
