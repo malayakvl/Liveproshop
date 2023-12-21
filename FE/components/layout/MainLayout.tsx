@@ -17,6 +17,7 @@ export default function MainLayout({ children }: { children: any }) {
     useEffect(
         function () {
             if (session?.user?.email && !window.localStorage.getItem('user')) {
+                console.log('PIZDA');
                 dispatch(fetchUserAction(session.user.email));
                 if (window.localStorage.getItem('order_comment_id')) {
                     dispatch(
@@ -33,14 +34,8 @@ export default function MainLayout({ children }: { children: any }) {
                 if (session?.user?.email !== localUser.email) {
                     // WTF я не помню зачем я ето делала
                     // window.localStorage.setItem('user', JSON.stringify({}));
-                    // alert(session?.user?.email);
-                    // alert(localUser.email);
-                    if (session?.user?.email) {
-                        if (session?.user?.email === undefined) {
-                            dispatch(fetchUserAction(session?.user?.email));
-                        } else {
-                            dispatch(fetchUserAction(localUser.email));
-                        }
+                    if (session?.user?.email !== undefined) {
+                        dispatch(fetchUserAction(session?.user?.email));
                     }
                     // session?.user?.email = localUser.email;
                     // if (session?.user?.email) {
