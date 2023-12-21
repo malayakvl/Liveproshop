@@ -51,7 +51,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
         } else {
             dispatch(redirectOrderNumberAction(orderNumber));
         }
-
         dispatch(fetchCheckoutAction(orderNumber));
         dispatch(clearOrderByCommentAction(null));
         window.localStorage.removeItem('orderCommentId');
