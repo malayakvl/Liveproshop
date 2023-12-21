@@ -28,8 +28,6 @@ export default function Index({ locale }: { locale: string }) {
             dispatch(setTmpFbCommentAction(comment_id));
         }
         if (user?.email && user.role_id == 1) {
-            console.log('here we are');
-            alert('111111');
             setTimeout(() => {
                 dispatch(
                     setupOrderByCommentAction(

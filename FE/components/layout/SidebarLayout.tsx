@@ -20,7 +20,6 @@ export default function SidebarLayout({ children }: { children: any }) {
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     const redirectOrderNumber = useSelector(orderNumberSelector);
-    // const lng =
     // const redirectOrderNumber = '';
 
     const isValidEmail = (email: any) => {
@@ -61,8 +60,8 @@ export default function SidebarLayout({ children }: { children: any }) {
             dispatch(setupOrderByCommentAction(null));
             if (user.email || user.email_real) {
                 setTimeout(() => {
-                    // window.location.href = `/en/checkout/${redirectOrderNumber}`;
-                    Router.push(`/checkout/${redirectOrderNumber}`);
+                    window.location.href = `/en/checkout/${redirectOrderNumber}`;
+                    // Router.push(`/en/checkout/${redirectOrderNumber}`);
                 }, 1000);
             }
             // alert('55');
