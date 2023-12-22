@@ -1143,6 +1143,56 @@ class Order {
         }
     }
 
+    async isFreeShipping(userId, orderNumber) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.orders WHERE 
+                user_id=${userId} AND status='payed' AND shipping_amount > 0 ORDER BY updated_at DESC LIMIT 1`;
+            const res = await client.query(SQL);
+            if (res.rows.length) {
+                const timeStart = (new Date(res.rows[0].updated_at));
+                const timeEnd = (new Date());
+                const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
+
+                const sellerData = await client.query(`SELECT user_id 
+                                FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
+                const settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
+                const settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
+
+                const freeShipping = settings.rows[0];
+                // const freeAmountOver = settingsThreshold.rows[0].threshold;
+                if (freeShipping) {
+                    if (freeShipping.free_shipping_status) {
+                        if (settingsThreshold.rows.length) {
+                            console.log(settings.rows[0].free_shipping_timer.hours)
+                            if (res.rows[0].order_amount > settingsThreshold.rows[0].threshold && settings.rows[0].free_shipping_timer.hours > hourDiff) {
+                                console.log('Discount delivery');
+                                return {success: true, freeShipping: 1}
+                            }
+                        }
+                    }
+                }
+
+                return {success: true, freeShipping: 0}
+                // console.log(settingsThreshold.rows[0]);
+                // console.log(sellerData.rows[0].user_id);
+                // console.log(hourDiff)
+            }
+        } catch (e) {
+            console.log(e.message)
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async cancelOrder(order) {
         const client = await pool.connect();
         try {

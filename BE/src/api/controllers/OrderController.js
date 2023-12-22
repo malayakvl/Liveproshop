@@ -16,7 +16,7 @@ class OrderController {
             //     await orderModel.updateOrderByCommentId(orderCommentId, req.user.id);
             // }
             const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
-            return res.status(200).json({ count: data.size, items: data.items, itemsStatuses: data.grouppedStatuses});
+            return res.status(200).json({ count: data.size, items: data.items ? data.items : [], itemsStatuses: data.grouppedStatuses});
         }
     }
 

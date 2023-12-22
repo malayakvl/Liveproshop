@@ -177,9 +177,9 @@ const OrderSummary = () => {
                             </div>
                         </div>
                     ))}
-                    {selectedShippingMethod && (
+                    {selectedShippingMethod && order.freeShipping == 0 && (
                         <div className="flex justify-between my-2 text-gray-350 text-[18px] text-right">
-                            Shipping
+                            {t('Shipping')}
                             <span className="inline-block ml-4 font-bold min-w-[3rem]">
                                 {formatCurrency(selectedShippingMethod.price)}
                             </span>

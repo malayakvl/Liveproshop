@@ -52,6 +52,7 @@ declare namespace Orders {
         phone?: string | null;
         order_items: any;
         country_json: any;
+        freeShipping: number;
         // user_id: number;
         // user_name: string;
         // photo: string;

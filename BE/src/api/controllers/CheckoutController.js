@@ -1,5 +1,6 @@
 import checkoutModel from '../models/Checkout.js';
 import userModel from '../models/User.js';
+import orderModel from '../models/Order.js';
 
 class CheckoutController {
     /**
@@ -14,6 +15,9 @@ class CheckoutController {
         const { orderNumber } = req.query;
 
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
+        // get latest order amount
+        const freeSheppingData = await orderModel.isFreeShipping(req.user.id, orderNumber);
+
         // const orderItems = await checkoutModel.fetchOrderItems(orderData.or);
         const address = await userModel.findUserAddress(req.user.id);
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, true);
@@ -21,7 +25,8 @@ class CheckoutController {
         return res.status(200).json({
             order: orderData.order,
             address,
-            shippingMethods: shippingMethodsData.shippingMethods
+            shippingMethods: shippingMethodsData.shippingMethods,
+            freeShepping: freeSheppingData.freeShipping
         });
     }
 
@@ -29,7 +34,6 @@ class CheckoutController {
         if (!req.user) return res.status(401).json('Access deny');
 
         const { orderId, countryId } = req.query;
-console.log(orderId, countryId);
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderId, countryId);
 
         return res.status(200).json({
@@ -41,8 +45,10 @@ console.log(orderId, countryId);
     async chechoutSubmit(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
         const locale = req.query.locale;
-        const data = await checkoutModel.checkoutSubmit(req.body, req.user, locale ? locale : 'fr');
-        
+        const freeSheppingData = await orderModel.isFreeShipping(req.user.id, req.body.orderNumber);
+        const data = await checkoutModel.checkoutSubmit(req.body, req.user, freeSheppingData, locale ? locale : 'fr');
+
+
         if (data.redirectUrl) {
             return res.status(200).json({ redirectUrl: data.redirectUrl });
         } else {
