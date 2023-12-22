@@ -87,7 +87,6 @@ export default function List({ locale }: { locale: string }) {
         setDropDowns(items.map(() => false));
     }, [items]);
 
-    console.log(items);
     // useEffect(() => {
     //     if (!user.email) return;
 
@@ -172,10 +171,10 @@ export default function List({ locale }: { locale: string }) {
                         totalAmount={items?.length}
                         switcherOnClick={(status: boolean) => {
                             if (status) {
-                                dispatch(changeShippingStatuses(true));
+                                dispatch(changeShippingStatuses(false));
                                 dispatch(checkAllIdsAction(items));
                             } else {
-                                dispatch(changeShippingStatuses(false));
+                                dispatch(changeShippingStatuses(true));
                                 dispatch(uncheckAllIdsAction(items));
                             }
 
@@ -231,7 +230,9 @@ export default function List({ locale }: { locale: string }) {
                                 </td>
 
                                 <td>
-                                    <span>{item.status ? 'yes' : 'no'}</span>
+                                    <span className="hidden">
+                                        {!item.status__customer_disabled_shipping ? 'no' : 'yes'}
+                                    </span>
                                     <label className="flex items-center cursor-pointer relative">
                                         <input
                                             type="checkbox"

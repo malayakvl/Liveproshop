@@ -305,7 +305,6 @@ class Shipping {
     async changeCustomerStatus(status, customerId, shippingId) {
         const client = await pool.connect();
         console.log('=============')
-        console.log(`change customer status ${customerId}`);
         console.log(status, shippingId);
         let query;
         try {
