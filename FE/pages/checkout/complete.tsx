@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '../../redux/user/selectors';
 import { updateOrderStatusAction } from '../../redux/orders';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
@@ -107,6 +108,12 @@ export default function Index({ session }: { session: any }) {
                             {t(
                                 'You’ll receive a confirmation e-mail with your order details soon!'
                             )}
+                        </div>
+                        <div className="clearfix mt-10"></div>
+                        <div className="mx-auto lg:block mb-10">
+                            <Link href={'/orders'}>
+                                <a className="btn-big">{t('All orders')}</a>
+                            </Link>
                         </div>
                     </div>
 

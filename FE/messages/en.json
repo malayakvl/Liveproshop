@@ -601,6 +601,7 @@
   "Privacy Terms": "Privacy Terms",
   "Pdf": "Pdf",
   "History": "History",
-  "settings_theshold_new": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer"
+  "settings_theshold_new": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer",
+  "All orders": "View all orders"
 
 }
