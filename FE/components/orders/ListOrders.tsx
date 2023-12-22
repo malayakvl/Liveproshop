@@ -122,232 +122,491 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     return (
         <div className="mt-7">
             <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
-                <h2 className="dark-blue-header mt-[75px] md:mt-auto">
-                    {t('Orders')}
-                    <span className="text-gray-180 font-normal text-sm"> {count} items</span>
-                </h2>
-                <Filters
-                    handleHideFilter={handleHideFilter}
-                    locale={locale}
-                    filterOpen={filterOpen}
-                />
-                <div className="">
-                    <button
-                        // style={{ right: '0px', top: '20px' }}
-                        className={`gradient-btn btn-download-orders`}
-                        onClick={() => dispatch(bulkDownloadAction())}>
-                        <div className="font-medium text-white ml-2 mr-2 py-[3px]">
-                            {t('Download Orders')}
-                        </div>
-                    </button>
-                    <button
-                        onClick={() => {
-                            if (filterOpen) {
-                                dispatch(showDateSelectorAction(false));
-                            }
-                            setFilterOpen(!filterOpen);
-                        }}
-                        className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
-                        <Image width={16} height={16} src={'/images/filter.svg'} />
-                        <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
-                        <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                            {filters.country_id.length +
-                                filters.payment_id.length +
-                                filters.status.length +
-                                filters.seller_id.length +
-                                !!filters.total_amount.length +
-                                !!filters.created_at.length +
-                                filters.country_id.length}
-                        </div>
-                    </button>
-                </div>
-            </div>
-            <div className="mb-5">
-                <FilterValues />
-            </div>
-            <DataTable
-                paginationType={PaginationType.ORDERS}
-                sendStatusRequest={sendStatusRequest}
-                totalAmount={count}
-                sendRequest={sendRequest}>
-                {items?.map((item: any) => (
-                    <Fragment key={item.id}>
-                        <tr>
-                            {/*{user.role_id === 2 && (*/}
-                            {/*    <td>*/}
-                            {/*        <input*/}
-                            {/*            className="float-checkbox"*/}
-                            {/*            type="checkbox"*/}
-                            {/*            onChange={() => dispatch(checkIdsAction(item.id))}*/}
-                            {/*            value={item.id}*/}
-                            {/*            checked={*/}
-                            {/*                checkedIds.find((data: any) => data.id === item.id)*/}
-                            {/*                    ?.checked || false*/}
-                            {/*            }*/}
-                            {/*        />*/}
-                            {/*    </td>*/}
-                            {/*)}*/}
-                            <td>
-                                <input
-                                    className="float-checkbox"
-                                    type="checkbox"
-                                    onChange={() => dispatch(checkIdsAction(item.id))}
-                                    value={item.id}
-                                    checked={
-                                        checkedIds.find((data: any) => data.id === item.id)
-                                            ?.checked || false
+                {items.length > 0 ? (
+                    <>
+                        <h2 className="dark-blue-header mt-[75px] md:mt-auto">
+                            {t('Orders')}
+                            <span className="text-gray-180 font-normal text-sm">
+                                {' '}
+                                {count} items
+                            </span>
+                        </h2>
+                        <Filters
+                            handleHideFilter={handleHideFilter}
+                            locale={locale}
+                            filterOpen={filterOpen}
+                        />
+                        <div className="">
+                            <button
+                                // style={{ right: '0px', top: '20px' }}
+                                className={`gradient-btn btn-download-orders`}
+                                onClick={() => dispatch(bulkDownloadAction())}>
+                                <div className="font-medium text-white ml-2 mr-2 py-[3px]">
+                                    {t('Download Orders')}
+                                </div>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (filterOpen) {
+                                        dispatch(showDateSelectorAction(false));
                                     }
-                                />
-                            </td>
-                            <td style={{ width: '50px' }}>
-                                <i
-                                    role="presentation"
-                                    className="icon-tbl-triangle cursor-pointer"
-                                    style={{ marginTop: '5px' }}
-                                    onClick={() => handleShowMore(item.id)}
-                                />
-                            </td>
-                            <td className="order-number">
-                                {user.role_id === 1 && (
-                                    <Link href={`/orders/${item.order_number}?locale=${locale}`}>
-                                        <a>{item.order_number}</a>
-                                    </Link>
-                                )}
-                                {user.role_id === 2 && item.status === 'new' && (
-                                    <>
-                                        <Link href={`/checkout/${item.order_number}`}>
-                                            <a>{item.order_number}</a>
-                                        </Link>
-                                    </>
-                                )}
-                                {user.role_id === 2 && item.status !== 'new' && (
-                                    <Link href={`/orders/${item.order_number}`}>
-                                        <a>{item.order_number}</a>
-                                    </Link>
-                                )}
-                            </td>
-                            <td className="order-status">
-                                <div className="flex flex-row items-center justify-center">
-                                    <span className={`order-status ${item.status}`}>
-                                        {t(item.status)}
-                                    </span>
+                                    setFilterOpen(!filterOpen);
+                                }}
+                                className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
+                                <Image width={16} height={16} src={'/images/filter.svg'} />
+                                <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                                <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                                    {filters.country_id.length +
+                                        filters.payment_id.length +
+                                        filters.status.length +
+                                        filters.seller_id.length +
+                                        !!filters.total_amount.length +
+                                        !!filters.created_at.length +
+                                        filters.country_id.length}
                                 </div>
-                            </td>
-                            <td>
-                                <span className="inline-block w-[20px] h-[20px]">
-                                    {item.status != 'new' && (
-                                        <div className="status-dropdown">
-                                            <DropdownStatusAction
-                                                onChange={(v: any) => {
-                                                    console.log('222');
-                                                }}
-                                                options={displayOrderStatuses(item.id)}
-                                            />
-                                        </div>
-                                    )}
-                                </span>
-                            </td>
-                            <td>
-                                {item.status == 'payed' && (
-                                    <Link href={`/orders/${item.order_number}?locale=${locale}`}>
-                                        <span className="f-pdf inline-block mt-[3px]" />
-                                    </Link>
-                                )}
-                                {item.status == 'canceled' && (
-                                    <div className="invoice-dropdown">
-                                        <DropdownPdfAction
-                                            onChange={(v: any) => {
-                                                let type = '';
-                                                if (v === 'invoice pdf') {
-                                                    type = 'invoice';
-                                                } else {
-                                                    type = 'refund';
+                            </button>
+                        </div>
+                        <div className="mb-5">
+                            <FilterValues />
+                        </div>
+                        <DataTable
+                            paginationType={PaginationType.ORDERS}
+                            sendStatusRequest={sendStatusRequest}
+                            totalAmount={count}
+                            sendRequest={sendRequest}>
+                            {items?.map((item: any) => (
+                                <Fragment key={item.id}>
+                                    <tr>
+                                        {/*{user.role_id === 2 && (*/}
+                                        {/*    <td>*/}
+                                        {/*        <input*/}
+                                        {/*            className="float-checkbox"*/}
+                                        {/*            type="checkbox"*/}
+                                        {/*            onChange={() => dispatch(checkIdsAction(item.id))}*/}
+                                        {/*            value={item.id}*/}
+                                        {/*            checked={*/}
+                                        {/*                checkedIds.find((data: any) => data.id === item.id)*/}
+                                        {/*                    ?.checked || false*/}
+                                        {/*            }*/}
+                                        {/*        />*/}
+                                        {/*    </td>*/}
+                                        {/*)}*/}
+                                        <td>
+                                            <input
+                                                className="float-checkbox"
+                                                type="checkbox"
+                                                onChange={() => dispatch(checkIdsAction(item.id))}
+                                                value={item.id}
+                                                checked={
+                                                    checkedIds.find(
+                                                        (data: any) => data.id === item.id
+                                                    )?.checked || false
                                                 }
-
-                                                Router.push(
-                                                    `/orders/${item.order_number}?locale=${locale}&type=${type}`
-                                                );
-                                            }}
-                                            options={['invoice pdf', 'refund pdf']}
-                                        />
-                                    </div>
-                                )}
-                            </td>
-                            <td className="order-date">
-                                {moment(item.created_at).format('DD/MM/YYYY')}
-                            </td>
-                            <td className="">
-                                <div className="float-left">
-                                    <div className="flex flex-row">
-                                        <div className="user-photo" style={{ marginLeft: '0' }}>
-                                            <Image
-                                                src={
-                                                    item.buyer_photo
-                                                        ? baseApiUrl + item.buyer_photo
-                                                        : userProfileImg
-                                                }
-                                                width={24}
-                                                height={24}
-                                                className="rounded-full cursor-pointer"
-                                                alt=""
                                             />
-                                        </div>
-                                        <div className="pl-3">{item.buyer_first_name}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>{parseTranslation(item.country_json, 'name', locale)}</td>
-                            <td>
-                                {/*{baseApiUrl + item.shipping_image}*/}
-                                {item.shipping_image && (
-                                    <Image
-                                        src={baseApiUrl + item.shipping_image}
-                                        width={24}
-                                        height={24}
-                                        className=""
-                                        alt=""
-                                    />
-                                )}
-                            </td>
-                            <td>
-                                <img
-                                    src="/images/payments/maestro.svg"
-                                    className="fill-current text-black"
-                                    alt={''}
-                                />
-                            </td>
-                            <td style={{ minWidth: '150px' }}>
-                                {item.order_items?.length ? item.order_items?.length : 0}x{' '}
-                                <span className="red-yellow-gradient-text">product (s)</span>
-                            </td>
-                            <td>
-                                {formatCurrency(
-                                    item.total_amount ? item.total_amount : item.order_amount
-                                )}
-                            </td>
-                            {user.role_id === 1 && item.status === 'new' && item.total_amount != 0 && (
-                                <td style={{ paddingTop: 0, paddingBottom: 0 }}>
-                                    <Link href={`/checkout/${item.order_number}`}>
-                                        <div
-                                            className="gradient-btn-small cursor-pointer"
-                                            style={{ paddingTop: '3px', paddingBottom: '3px' }}>
-                                            <span className="text-white bg-none font-bold">
-                                                Pay
+                                        </td>
+                                        <td style={{ width: '50px' }}>
+                                            <i
+                                                role="presentation"
+                                                className="icon-tbl-triangle cursor-pointer"
+                                                style={{ marginTop: '5px' }}
+                                                onClick={() => handleShowMore(item.id)}
+                                            />
+                                        </td>
+                                        <td className="order-number">
+                                            {user.role_id === 1 && (
+                                                <Link
+                                                    href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                    <a>{item.order_number}</a>
+                                                </Link>
+                                            )}
+                                            {user.role_id === 2 && item.status === 'new' && (
+                                                <>
+                                                    <Link href={`/checkout/${item.order_number}`}>
+                                                        <a>{item.order_number}</a>
+                                                    </Link>
+                                                </>
+                                            )}
+                                            {user.role_id === 2 && item.status !== 'new' && (
+                                                <Link href={`/orders/${item.order_number}`}>
+                                                    <a>{item.order_number}</a>
+                                                </Link>
+                                            )}
+                                        </td>
+                                        <td className="order-status">
+                                            <div className="flex flex-row items-center justify-center">
+                                                <span className={`order-status ${item.status}`}>
+                                                    {t(item.status)}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span className="inline-block w-[20px] h-[20px]">
+                                                {item.status != 'new' && (
+                                                    <div className="status-dropdown">
+                                                        <DropdownStatusAction
+                                                            onChange={(v: any) => {
+                                                                console.log('222');
+                                                            }}
+                                                            options={displayOrderStatuses(item.id)}
+                                                        />
+                                                    </div>
+                                                )}
                                             </span>
-                                        </div>
-                                    </Link>
-                                </td>
-                            )}
-                        </tr>
-                        <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
-                            <td />
-                            <td colSpan={10} style={{ borderLeft: 'solid 1px red' }}>
-                                <ListItems items={item.order_items} orderId={item.order_number} />
-                            </td>
-                        </tr>
-                    </Fragment>
-                ))}
-            </DataTable>
+                                        </td>
+                                        <td>
+                                            {item.status == 'payed' && (
+                                                <Link
+                                                    href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                    <span className="f-pdf inline-block mt-[3px]" />
+                                                </Link>
+                                            )}
+                                            {item.status == 'canceled' && (
+                                                <div className="invoice-dropdown">
+                                                    <DropdownPdfAction
+                                                        onChange={(v: any) => {
+                                                            let type = '';
+                                                            if (v === 'invoice pdf') {
+                                                                type = 'invoice';
+                                                            } else {
+                                                                type = 'refund';
+                                                            }
+
+                                                            Router.push(
+                                                                `/orders/${item.order_number}?locale=${locale}&type=${type}`
+                                                            );
+                                                        }}
+                                                        options={['invoice pdf', 'refund pdf']}
+                                                    />
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td className="order-date">
+                                            {moment(item.created_at).format('DD/MM/YYYY')}
+                                        </td>
+                                        <td className="">
+                                            <div className="float-left">
+                                                <div className="flex flex-row">
+                                                    <div
+                                                        className="user-photo"
+                                                        style={{ marginLeft: '0' }}>
+                                                        <Image
+                                                            src={
+                                                                item.buyer_photo
+                                                                    ? baseApiUrl + item.buyer_photo
+                                                                    : userProfileImg
+                                                            }
+                                                            width={24}
+                                                            height={24}
+                                                            className="rounded-full cursor-pointer"
+                                                            alt=""
+                                                        />
+                                                    </div>
+                                                    <div className="pl-3">
+                                                        {item.buyer_first_name}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {parseTranslation(item.country_json, 'name', locale)}
+                                        </td>
+                                        <td>
+                                            {/*{baseApiUrl + item.shipping_image}*/}
+                                            {item.shipping_image && (
+                                                <Image
+                                                    src={baseApiUrl + item.shipping_image}
+                                                    width={24}
+                                                    height={24}
+                                                    className=""
+                                                    alt=""
+                                                />
+                                            )}
+                                        </td>
+                                        <td>
+                                            <img
+                                                src="/images/payments/maestro.svg"
+                                                className="fill-current text-black"
+                                                alt={''}
+                                            />
+                                        </td>
+                                        <td style={{ minWidth: '150px' }}>
+                                            {item.order_items?.length
+                                                ? item.order_items?.length
+                                                : 0}
+                                            x{' '}
+                                            <span className="red-yellow-gradient-text">
+                                                product (s)
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {formatCurrency(
+                                                item.total_amount
+                                                    ? item.total_amount
+                                                    : item.order_amount
+                                            )}
+                                        </td>
+                                        {user.role_id === 1 &&
+                                            item.status === 'new' &&
+                                            item.total_amount != 0 && (
+                                                <td style={{ paddingTop: 0, paddingBottom: 0 }}>
+                                                    <Link href={`/checkout/${item.order_number}`}>
+                                                        <div
+                                                            className="gradient-btn-small cursor-pointer"
+                                                            style={{
+                                                                paddingTop: '3px',
+                                                                paddingBottom: '3px'
+                                                            }}>
+                                                            <span className="text-white bg-none font-bold">
+                                                                Pay
+                                                            </span>
+                                                        </div>
+                                                    </Link>
+                                                </td>
+                                            )}
+                                    </tr>
+                                    <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
+                                        <td />
+                                        <td colSpan={10} style={{ borderLeft: 'solid 1px red' }}>
+                                            <ListItems
+                                                items={item.order_items}
+                                                orderId={item.order_number}
+                                            />
+                                        </td>
+                                    </tr>
+                                </Fragment>
+                            ))}
+                        </DataTable>
+                    </>
+                ) : (
+                    <p>No orders yet</p>
+                )}
+                {/*<h2 className="dark-blue-header mt-[75px] md:mt-auto">*/}
+                {/*    {t('Orders')}*/}
+                {/*    <span className="text-gray-180 font-normal text-sm"> {count} items</span>*/}
+                {/*</h2>*/}
+                {/*<Filters*/}
+                {/*    handleHideFilter={handleHideFilter}*/}
+                {/*    locale={locale}*/}
+                {/*    filterOpen={filterOpen}*/}
+                {/*/>*/}
+                {/*<div className="">*/}
+                {/*    <button*/}
+                {/*        // style={{ right: '0px', top: '20px' }}*/}
+                {/*        className={`gradient-btn btn-download-orders`}*/}
+                {/*        onClick={() => dispatch(bulkDownloadAction())}>*/}
+                {/*        <div className="font-medium text-white ml-2 mr-2 py-[3px]">*/}
+                {/*            {t('Download Orders')}*/}
+                {/*        </div>*/}
+                {/*    </button>*/}
+                {/*    <button*/}
+                {/*        onClick={() => {*/}
+                {/*            if (filterOpen) {*/}
+                {/*                dispatch(showDateSelectorAction(false));*/}
+                {/*            }*/}
+                {/*            setFilterOpen(!filterOpen);*/}
+                {/*        }}*/}
+                {/*        className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">*/}
+                {/*        <Image width={16} height={16} src={'/images/filter.svg'} />*/}
+                {/*        <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>*/}
+                {/*        <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">*/}
+                {/*            {filters.country_id.length +*/}
+                {/*                filters.payment_id.length +*/}
+                {/*                filters.status.length +*/}
+                {/*                filters.seller_id.length +*/}
+                {/*                !!filters.total_amount.length +*/}
+                {/*                !!filters.created_at.length +*/}
+                {/*                filters.country_id.length}*/}
+                {/*        </div>*/}
+                {/*    </button>*/}
+                {/*</div>*/}
+            </div>
+            {/*<div className="mb-5">*/}
+            {/*    <FilterValues />*/}
+            {/*</div>*/}
+
+            {/*<DataTable*/}
+            {/*    paginationType={PaginationType.ORDERS}*/}
+            {/*    sendStatusRequest={sendStatusRequest}*/}
+            {/*    totalAmount={count}*/}
+            {/*    sendRequest={sendRequest}>*/}
+            {/*    {items?.map((item: any) => (*/}
+            {/*        <Fragment key={item.id}>*/}
+            {/*            <tr>*/}
+            {/*                /!*{user.role_id === 2 && (*!/*/}
+            {/*                /!*    <td>*!/*/}
+            {/*                /!*        <input*!/*/}
+            {/*                /!*            className="float-checkbox"*!/*/}
+            {/*                /!*            type="checkbox"*!/*/}
+            {/*                /!*            onChange={() => dispatch(checkIdsAction(item.id))}*!/*/}
+            {/*                /!*            value={item.id}*!/*/}
+            {/*                /!*            checked={*!/*/}
+            {/*                /!*                checkedIds.find((data: any) => data.id === item.id)*!/*/}
+            {/*                /!*                    ?.checked || false*!/*/}
+            {/*                /!*            }*!/*/}
+            {/*                /!*        />*!/*/}
+            {/*                /!*    </td>*!/*/}
+            {/*                /!*)}*!/*/}
+            {/*                <td>*/}
+            {/*                    <input*/}
+            {/*                        className="float-checkbox"*/}
+            {/*                        type="checkbox"*/}
+            {/*                        onChange={() => dispatch(checkIdsAction(item.id))}*/}
+            {/*                        value={item.id}*/}
+            {/*                        checked={*/}
+            {/*                            checkedIds.find((data: any) => data.id === item.id)*/}
+            {/*                                ?.checked || false*/}
+            {/*                        }*/}
+            {/*                    />*/}
+            {/*                </td>*/}
+            {/*                <td style={{ width: '50px' }}>*/}
+            {/*                    <i*/}
+            {/*                        role="presentation"*/}
+            {/*                        className="icon-tbl-triangle cursor-pointer"*/}
+            {/*                        style={{ marginTop: '5px' }}*/}
+            {/*                        onClick={() => handleShowMore(item.id)}*/}
+            {/*                    />*/}
+            {/*                </td>*/}
+            {/*                <td className="order-number">*/}
+            {/*                    {user.role_id === 1 && (*/}
+            {/*                        <Link href={`/orders/${item.order_number}?locale=${locale}`}>*/}
+            {/*                            <a>{item.order_number}</a>*/}
+            {/*                        </Link>*/}
+            {/*                    )}*/}
+            {/*                    {user.role_id === 2 && item.status === 'new' && (*/}
+            {/*                        <>*/}
+            {/*                            <Link href={`/checkout/${item.order_number}`}>*/}
+            {/*                                <a>{item.order_number}</a>*/}
+            {/*                            </Link>*/}
+            {/*                        </>*/}
+            {/*                    )}*/}
+            {/*                    {user.role_id === 2 && item.status !== 'new' && (*/}
+            {/*                        <Link href={`/orders/${item.order_number}`}>*/}
+            {/*                            <a>{item.order_number}</a>*/}
+            {/*                        </Link>*/}
+            {/*                    )}*/}
+            {/*                </td>*/}
+            {/*                <td className="order-status">*/}
+            {/*                    <div className="flex flex-row items-center justify-center">*/}
+            {/*                        <span className={`order-status ${item.status}`}>*/}
+            {/*                            {t(item.status)}*/}
+            {/*                        </span>*/}
+            {/*                    </div>*/}
+            {/*                </td>*/}
+            {/*                <td>*/}
+            {/*                    <span className="inline-block w-[20px] h-[20px]">*/}
+            {/*                        {item.status != 'new' && (*/}
+            {/*                            <div className="status-dropdown">*/}
+            {/*                                <DropdownStatusAction*/}
+            {/*                                    onChange={(v: any) => {*/}
+            {/*                                        console.log('222');*/}
+            {/*                                    }}*/}
+            {/*                                    options={displayOrderStatuses(item.id)}*/}
+            {/*                                />*/}
+            {/*                            </div>*/}
+            {/*                        )}*/}
+            {/*                    </span>*/}
+            {/*                </td>*/}
+            {/*                <td>*/}
+            {/*                    {item.status == 'payed' && (*/}
+            {/*                        <Link href={`/orders/${item.order_number}?locale=${locale}`}>*/}
+            {/*                            <span className="f-pdf inline-block mt-[3px]" />*/}
+            {/*                        </Link>*/}
+            {/*                    )}*/}
+            {/*                    {item.status == 'canceled' && (*/}
+            {/*                        <div className="invoice-dropdown">*/}
+            {/*                            <DropdownPdfAction*/}
+            {/*                                onChange={(v: any) => {*/}
+            {/*                                    let type = '';*/}
+            {/*                                    if (v === 'invoice pdf') {*/}
+            {/*                                        type = 'invoice';*/}
+            {/*                                    } else {*/}
+            {/*                                        type = 'refund';*/}
+            {/*                                    }*/}
+
+            {/*                                    Router.push(*/}
+            {/*                                        `/orders/${item.order_number}?locale=${locale}&type=${type}`*/}
+            {/*                                    );*/}
+            {/*                                }}*/}
+            {/*                                options={['invoice pdf', 'refund pdf']}*/}
+            {/*                            />*/}
+            {/*                        </div>*/}
+            {/*                    )}*/}
+            {/*                </td>*/}
+            {/*                <td className="order-date">*/}
+            {/*                    {moment(item.created_at).format('DD/MM/YYYY')}*/}
+            {/*                </td>*/}
+            {/*                <td className="">*/}
+            {/*                    <div className="float-left">*/}
+            {/*                        <div className="flex flex-row">*/}
+            {/*                            <div className="user-photo" style={{ marginLeft: '0' }}>*/}
+            {/*                                <Image*/}
+            {/*                                    src={*/}
+            {/*                                        item.buyer_photo*/}
+            {/*                                            ? baseApiUrl + item.buyer_photo*/}
+            {/*                                            : userProfileImg*/}
+            {/*                                    }*/}
+            {/*                                    width={24}*/}
+            {/*                                    height={24}*/}
+            {/*                                    className="rounded-full cursor-pointer"*/}
+            {/*                                    alt=""*/}
+            {/*                                />*/}
+            {/*                            </div>*/}
+            {/*                            <div className="pl-3">{item.buyer_first_name}</div>*/}
+            {/*                        </div>*/}
+            {/*                    </div>*/}
+            {/*                </td>*/}
+            {/*                <td>{parseTranslation(item.country_json, 'name', locale)}</td>*/}
+            {/*                <td>*/}
+            {/*                    /!*{baseApiUrl + item.shipping_image}*!/*/}
+            {/*                    {item.shipping_image && (*/}
+            {/*                        <Image*/}
+            {/*                            src={baseApiUrl + item.shipping_image}*/}
+            {/*                            width={24}*/}
+            {/*                            height={24}*/}
+            {/*                            className=""*/}
+            {/*                            alt=""*/}
+            {/*                        />*/}
+            {/*                    )}*/}
+            {/*                </td>*/}
+            {/*                <td>*/}
+            {/*                    <img*/}
+            {/*                        src="/images/payments/maestro.svg"*/}
+            {/*                        className="fill-current text-black"*/}
+            {/*                        alt={''}*/}
+            {/*                    />*/}
+            {/*                </td>*/}
+            {/*                <td style={{ minWidth: '150px' }}>*/}
+            {/*                    {item.order_items?.length ? item.order_items?.length : 0}x{' '}*/}
+            {/*                    <span className="red-yellow-gradient-text">product (s)</span>*/}
+            {/*                </td>*/}
+            {/*                <td>*/}
+            {/*                    {formatCurrency(*/}
+            {/*                        item.total_amount ? item.total_amount : item.order_amount*/}
+            {/*                    )}*/}
+            {/*                </td>*/}
+            {/*                {user.role_id === 1 && item.status === 'new' && item.total_amount != 0 && (*/}
+            {/*                    <td style={{ paddingTop: 0, paddingBottom: 0 }}>*/}
+            {/*                        <Link href={`/checkout/${item.order_number}`}>*/}
+            {/*                            <div*/}
+            {/*                                className="gradient-btn-small cursor-pointer"*/}
+            {/*                                style={{ paddingTop: '3px', paddingBottom: '3px' }}>*/}
+            {/*                                <span className="text-white bg-none font-bold">*/}
+            {/*                                    Pay*/}
+            {/*                                </span>*/}
+            {/*                            </div>*/}
+            {/*                        </Link>*/}
+            {/*                    </td>*/}
+            {/*                )}*/}
+            {/*            </tr>*/}
+            {/*            <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>*/}
+            {/*                <td />*/}
+            {/*                <td colSpan={10} style={{ borderLeft: 'solid 1px red' }}>*/}
+            {/*                    <ListItems items={item.order_items} orderId={item.order_number} />*/}
+            {/*                </td>*/}
+            {/*            </tr>*/}
+            {/*        </Fragment>*/}
+            {/*    ))}*/}
+            {/*</DataTable>*/}
             <CancelConfirmation />
             <a
                 href={achiveName}

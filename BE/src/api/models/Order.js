@@ -491,7 +491,6 @@ class Order {
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
             const _orderIds = [];
-            console.log(_items);
             if (_items.length > 0) {
                 // console.log(_items)
                 const orderIds = [];
@@ -507,23 +506,26 @@ class Order {
             //     WHERE TRUE
             //         AND (order_statuses.order_id IN (${_orderIds.join(',')}))`;
             //
-            const orderStatuses = `
-                SELECT
-                    json_agg(
-                        json_build_object(
-                        'status', order_statuses.status,
-                        'created_at', order_statuses.created_at,
-                        'order_id', order_statuses.order_id
-                        )
-                    ) AS order_statuses
-                FROM data.order_statuses
-                WHERE TRUE
-                    AND (order_statuses.order_id IN (${_orderIds.join(',')}))
-            `
-
-
-            console.log(orderStatuses);
-            const orderStatusesRes = await client.query(orderStatuses);
+            let orderStatuses;
+            let orderStatusesRes = [];
+            if (_orderIds.length) {
+                orderStatuses = `
+                    SELECT
+                        json_agg(
+                            json_build_object(
+                            'status', order_statuses.status,
+                            'created_at', order_statuses.created_at,
+                            'order_id', order_statuses.order_id
+                            )
+                        ) AS order_statuses
+                    FROM data.order_statuses
+                    WHERE TRUE
+                        AND (order_statuses.order_id IN (${_orderIds.join(',')}))
+                `;
+               orderStatusesRes = await client.query(orderStatuses);
+            }
+//             console.log(orderStatuses);
+//             const orderStatusesRes = await client.query(orderStatuses);
             const _itemStatuses = orderStatusesRes.rows[0].order_statuses;
             const _itemStatusesIds = [];
             const grouppedStatuses = [];
