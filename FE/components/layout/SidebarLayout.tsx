@@ -28,12 +28,13 @@ export default function SidebarLayout({ children }: { children: any }) {
 
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
+        console.log('USER', user);
         if (user?.email && user.role_id == 2) {
             if (user.subscription_id?.includes('fake_sub_') || user?.subscription_expired) {
                 Router.push(`/pricing`);
             }
         }
-        if (user?.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
+        if (user.email && user.role_id == 1 && window.localStorage.getItem('orderCommentId')) {
             dispatch(
                 setupOrderByCommentAction(
                     window.localStorage.getItem('orderCommentId'),
@@ -41,9 +42,12 @@ export default function SidebarLayout({ children }: { children: any }) {
                 )
             );
         }
-        if (user?.email) {
+        if (user.email) {
             // console.log(user?.email, user?.email_real);
-            if (!isValidEmail(user?.email) && !user?.email_real) {
+            if (
+                !isValidEmail(user?.email) &&
+                (!user?.email_real || !isValidEmail(user?.email_real))
+            ) {
                 dispatch(showEmailNotificationAction(true));
             } else {
                 dispatch(showEmailNotificationAction(false));
@@ -54,9 +58,17 @@ export default function SidebarLayout({ children }: { children: any }) {
     useEffect(() => {
         if (redirectOrderNumber && user?.email && user.role_id == 1) {
             dispatch(setupOrderByCommentAction(null));
-            Router.push(`/en/checkout/${redirectOrderNumber}`);
+            if (user.email || user.email_real) {
+                setTimeout(() => {
+                    window.location.href = `/en/checkout/${redirectOrderNumber}`;
+                    // Router.push(`/en/checkout/${redirectOrderNumber}`);
+                }, 1000);
+            }
+            // alert('55');
+            // window.location.href = `/en/checkout/${redirectOrderNumber}`;
+            // Router.push(`/en/checkout/${redirectOrderNumber}`);
         }
-    }, [redirectOrderNumber]);
+    }, [redirectOrderNumber, user.email]);
 
     return (
         <div className="relative min-h-screen">

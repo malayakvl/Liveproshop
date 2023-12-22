@@ -9,7 +9,7 @@ import { userSelector } from '../../../redux/user/selectors';
 // import { useNavigate } from 'react-router-dom';
 import { orderCommentIdSelector } from '../../../redux/orders/selectors';
 import { setTmpFbCommentAction } from '../../../redux/orders';
-// import {findOrderByCommentAction} from "../../../redux/orders";
+import { setupOrderByCommentAction } from '../../../redux/orders';
 
 export default function Index({ locale }: { locale: string }) {
     const dispatch = useDispatch();
@@ -28,10 +28,15 @@ export default function Index({ locale }: { locale: string }) {
             dispatch(setTmpFbCommentAction(comment_id));
         }
         if (user?.email && user.role_id == 1) {
-            // dispatch(
-            //     findOrderByCommentAction(window.localStorage.getItem('orderCommentId'), user?.email)
-            // );
-            // window.location.href = `${locale == 'fr' ? '' : '/en'}/orders`;
+            setTimeout(() => {
+                dispatch(
+                    setupOrderByCommentAction(
+                        window.localStorage.getItem('orderCommentId'),
+                        user?.email
+                    )
+                );
+            }, 2000);
+            // window.location.href = `${locale == 'fr' ? '' : '/en'}/about-us`;
         } else {
             setTimeout(() => {
                 // window.location.href = `${locale == 'fr' ? '' : '/en'}/auth/signup`;

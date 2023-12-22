@@ -10,6 +10,7 @@ import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/
 import {
     clearOrderByCommentAction,
     redirectCheckoutAction,
+    redirectOrderNumberAction,
     setupReturnedUrlAction
 } from '../../redux/orders';
 
@@ -17,27 +18,43 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 import Link from 'next/link';
+import { userSelector } from '../../redux/user/selectors';
+import { showEmailNotificationAction } from '../../redux/layouts';
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
     const t = useTranslations();
     const showEmailNotice = useSelector(showEmailNoticeSelector);
+    const user = useSelector(userSelector);
     // const showEmailNotice = true;
     const order = useSelector(orderCheckoutSelector) || {};
-
     const {
         query: { orderNumber }
     } = useRouter();
-
     const dispatch = useDispatch();
-
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
 
+    const validateEmail = (email: string) => {
+        if (!email) {
+            return false;
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            return false;
+        }
+
+        return true;
+    };
+
     useEffect(() => {
+        if (validateEmail(user.email_real) && !validateEmail(user.email)) {
+            dispatch(showEmailNotificationAction(false));
+        } else {
+            dispatch(redirectOrderNumberAction(orderNumber));
+        }
         dispatch(fetchCheckoutAction(orderNumber));
         dispatch(clearOrderByCommentAction(null));
-    }, []);
+        window.localStorage.removeItem('orderCommentId');
+    }, [user.email]);
 
     useEffect(() => {
         if (redirectMerchantUrl) {
@@ -190,12 +207,14 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                     </div>
                                 </div>
                                 {order.order_items?.length && (
-                                    <ShippingMethod
-                                        title={t('Shipping  Method')}
-                                        className={`white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 ${
-                                            showEmailNotice ? 'disabled-content' : ''
-                                        }`}
-                                    />
+                                    <>
+                                        <ShippingMethod
+                                            title={t('Shipping  Method')}
+                                            className={`white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 ${
+                                                showEmailNotice ? 'disabled-content' : ''
+                                            }`}
+                                        />
+                                    </>
                                 )}
 
                                 {/*<div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">*/}

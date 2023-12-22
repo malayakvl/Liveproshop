@@ -319,7 +319,7 @@
   "support_descr": "Support section allows merchants contact to Proshop admin in case of issue or questions",
   "settings_descr": "Cart duration is a time period during which a shopper can finalize a purchase. Once a cart reaches its expiration, all products contained in the cart are returned to your available inventory. The adding of each new item restarts the timer.\nExample: The cart duration is 2 hours. The live session is about to close in 5 minutes. A shopper writes a comment and an item is added to the cart. This means that the shopper will have 2 hours and not 5 minutes to pay for the order.",
   "Payment Plans": "Payment Plans",
-  "payed": "paid",
+  "payed": "Paid",
   "shipped": "Shipped",
   "refund": "Refund",
   "Check confirmation link in your mailbox": "Check confirmation link in your mailbox",
@@ -600,6 +600,8 @@
   "Terms of Service": "Terms of Service",
   "Privacy Terms": "Privacy Terms",
   "Pdf": "Pdf",
-  "History": "History"
+  "History": "History",
+  "settings_theshold_new": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer",
+  "All orders": "View all orders"
 
 }

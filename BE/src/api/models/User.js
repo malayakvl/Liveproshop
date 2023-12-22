@@ -25,6 +25,7 @@ class User {
      */
     async findUserByEmail(email, isDeleted = false) {
         const client = await pool.connect();
+        // console.log("USER EMAIL", email);
         try {
             // const res = await client.query(`SELECT * FROM data.users WHERE email = '${email.toLowerCase()}'`);
             const res1 = await client.query(`SELECT fields_json FROM data.find_user_by_email('${email.toLowerCase()}', '3.5 hours');`);
@@ -439,7 +440,7 @@ class User {
                     }
                     const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
                     await client.query(querySubscription);
-                    console.log(setupIntent);
+                    // console.log(setupIntent);
                     return { subscription: subscription, setupIntent: setupIntent, planId: planId };
                     // return { subscription: {}, setupIntent: setupIntent, planId: userData.planId };
                 }

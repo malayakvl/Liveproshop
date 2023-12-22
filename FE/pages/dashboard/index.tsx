@@ -50,6 +50,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     );
 
     useEffect(() => {
+        console.log('CURRENT USER USE EFFECT', user);
         if (user.id) {
             dispatch(
                 setPaginationAction({
@@ -70,7 +71,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     }, [state, user]);
 
-    console.log(user);
+    console.log('CURRENT USER', user);
 
     return (
         <>

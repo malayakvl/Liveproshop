@@ -74,7 +74,8 @@ export const fetchItemsAction: any = createAction(
                     dispatch(showLoaderAction(false));
                     return {
                         count: res.data.count,
-                        items: res.data.items
+                        items: res.data.items,
+                        itemsStatuses: res.data.itemsStatuses
                     };
                 });
         }
@@ -255,14 +256,14 @@ export const fetchItemAction: any = createAction(
 
 export const fetchOrderPdfAction: any = createAction(
     'orders/FETCH_ORDER_PDF',
-    async (id: string, locale: string) =>
+    async (id: string, locale: string, type: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ orderFetched: boolean; fileName: string; base64Data: string }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/create-order/${id}/${locale}`, {
+            const res = await axios.get(`${baseUrl}/create-order/${id}/${locale}/${type}`, {
                 headers: {
                     ...authHeader(state.user.user.email)
                 }
@@ -334,7 +335,10 @@ export const fetchUserOrderAction: any = createAction(
                     }
                 }
             )
-            .then((res) => res.data.user)
+            .then((res) => {
+                // window.localStorage.removeItem('orderCommentId');
+                res.data.user;
+            })
             .catch((e) => console.log(e.message));
     }
 );
@@ -416,3 +420,4 @@ export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SI
 export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');
 export const setupReturnedUrlAction: any = createAction('orders/SETUP_RETURNED_URL');
 export const redirectCheckoutAction: any = createAction('orders/REDIRECT_CHECKOUT_ACTION');
+export const redirectOrderNumberAction: any = createAction('orders/REDIRECT_ORDER_NUMBER');

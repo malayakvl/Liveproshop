@@ -10,13 +10,15 @@ import {
 } from 'timers/promises';
 import axios from "axios";
 import * as zipLib from "zip-a-folder";
+import { generateRndPrefix } from "../lib/utils.js";
 
-async function createInvoice (invoice, path, locale) {
+async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale);
-        await generateInvoiceTable(doc, invoice, locale);
+        let historyRes;
+        await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
+        await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
 
         doc.end();
@@ -44,12 +46,12 @@ async function generateHeader(doc, seller, locale) {
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
-async function generateCustomerInformation(doc, invoice, paymentData, locale) {
+async function generateCustomerInformation(doc, invoice, paymentData, locale, ivoiceType) {
     const { default: t } = await import(`../sender/order-${locale}.js`);
     doc
         .fillColor("#444444")
         .fontSize(20)
-        .text(invoice.status === 'payed' ? t["Invoice"] : t["Refund"], 50, 160);
+        .text(ivoiceType !== 'refund' ? t["Invoice"] : t["Refund"], 50, 160);
 
 
     generateHr(doc, 185);
@@ -67,15 +69,18 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
         deliveryAddress[3] = invoice.shipping.address;
 
     }
+    const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
+    const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
+    const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
     doc
         .fontSize(10)
-        .text(t["Invoice number:"], 50, customerInformationTop)
+        .text(captionNumber, 50, customerInformationTop)
         .font("Helvetica-Bold")
         .text(invoice.invoice_nr, 150, customerInformationTop)
         .font("Helvetica")
-        .text(t["Invoice Date:"], 50, customerInformationTop + 15)
+        .text(captionDate, 50, customerInformationTop + 15)
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
-        .text(t["Balance Due:"], 50, customerInformationTop + 30)
+        .text(captionTotal, 50, customerInformationTop + 30)
         .text(
             formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
             150,
@@ -103,7 +108,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale) {
     generateHr(doc, 282);
 }
 
-async function generateInvoiceTable(doc, invoice, locale) {
+async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
     let i;
     const invoiceTableTop = 330;
     const { default: t } = await import(`../sender/order-${locale}.js`);
@@ -166,7 +171,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
         totalAmount = parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount);
         vatAmount = (parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount)) / 1.2;
 
-        console.log(formatCurrency(totalAmount - vatAmount));
+        // console.log(formatCurrency(totalAmount - vatAmount));
 
         const vatToDatePosition = paidToDatePosition + 20;
         generateTableRow(
@@ -187,7 +192,7 @@ async function generateInvoiceTable(doc, invoice, locale) {
             duePosition,
             "",
             "",
-            t["Total Payment"],
+            t[ivoiceType !== 'refund' ? "Total Payment" : "Refund Payment"],
             "",
             formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal))
         );
@@ -467,7 +472,6 @@ class Order {
 
             // _filters.buyer_id = _filters.shopper_id;
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
-            // console.log(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
             if (reqOffset) {
@@ -482,12 +486,72 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
+            const _items = res.rows.length > 0 ? res.rows : [];
+            const _orderIds = [];
+            if (_items.length > 0) {
+                // console.log(_items)
+                const orderIds = [];
+                _items.map(_order => {
+                    _orderIds.push(_order.id);
+                })
+            }
+            // const orderStatuses = `SELECT
+            //         json_agg(
+            //             (jsonb_build_object('status', order_statuses.status) || jsonb_build_object('created_at', order_statuses.created_at) || jsonb_build_object('order_id', order_statuses.order_id))::json
+            //         ) AS order_statuses
+            //     FROM data.order_statuses
+            //     WHERE TRUE
+            //         AND (order_statuses.order_id IN (${_orderIds.join(',')}))`;
+            //
+            let orderStatuses;
+            let orderStatusesRes = [];
+            if (_orderIds.length) {
+                orderStatuses = `
+                    SELECT
+                        json_agg(
+                            json_build_object(
+                            'status', order_statuses.status,
+                            'created_at', order_statuses.created_at,
+                            'order_id', order_statuses.order_id
+                            )
+                        ) AS order_statuses
+                    FROM data.order_statuses
+                    WHERE TRUE
+                        AND (order_statuses.order_id IN (${_orderIds.join(',')}))
+                `;
+               orderStatusesRes = await client.query(orderStatuses);
+            }
+//             console.log(orderStatuses);
+//             const orderStatusesRes = await client.query(orderStatuses);
+            const _itemStatuses = orderStatusesRes.rows[0].order_statuses;
+            const _itemStatusesIds = [];
+            const grouppedStatuses = [];
+            if (orderStatusesRes.rows[0].order_statuses !== null) {
+                orderStatusesRes.rows[0].order_statuses.map(status => {
+                    _itemStatusesIds.push(status.order_id);
+                });
+                let unique = _itemStatusesIds.reduce(function (a, b)  {
+                    if (a.indexOf(b) < 0) a.push(b);
+                    return a;
+                }, []);
+                // console.log(_itemStatuses)
+                // console.log('++++++++++++');
+                // itemStatuses.
+                unique.forEach(_id => {
+                    // console.log(_itemStatuses.find(_item => _item.order_id === _id));
+                    grouppedStatuses.push({id:_id, statuses:(_itemStatuses.filter(obj => {
+                            return obj.order_id === _id
+                        }))});
+                });
+            }
             const error = null;
 
             return {
                 items,
+                grouppedStatuses,
                 size,
                 error
             };
@@ -589,7 +653,7 @@ class Order {
 
 
 
-    async generatePdf (orderNumber, userId, user, locale, type='') {
+    async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
@@ -612,6 +676,15 @@ class Order {
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
             const res = await client.query(ordersQuery);
+            const orderId = res.rows[0].id;
+            let historyRes;
+            if (res.rows[0].status === 'canceled') {
+                historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='canceled'`);
+            } else {
+                historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
+            }
+            console.log(historyRes.rows[0]);
+
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             // if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
@@ -629,9 +702,9 @@ class Order {
             //     // fs.mkdirSync(dirArchiveFolder);
             // }
 
-            console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
-            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
+            // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -643,7 +716,7 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     error: null
                 }
@@ -659,7 +732,8 @@ class Order {
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
-                // console.log(sellerData.rows[0]);
+                // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
+                const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
                         headers: { 'Content-Type': 'application/json' }
@@ -669,21 +743,11 @@ class Order {
                     }).catch(error => {
                         console.log("Merchant error", error);
                     });
-                // const buyerAddress = ''
-                // console.log('Buyer', res.rows[0]);
-                // const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
-                //                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
-                //                                        WHERE user_id=${res.rows[0].seller_id}`);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
-                // await client.query(`INSERT INTO data.order_statuses(order_id, status)
-                //                         SELECT ${res.rows[0].id}, '${res.rows[0].status !== 'canceled' ? 'payed' : 'canceled'}'
-                //                         WHERE
-                //                         NOT EXISTS (
-                //                         SELECT order_id FROM data.order_statuses WHERE order_id = ${res.rows[0].id} AND status='${res.rows[0].status !== 'canceled' ? 'payed' : 'canceled'}'
-                //                         );`);
+                // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
                     shipping: {
-                        name: buyerData.rows[0].first_name+" "+buyerData.rows[0].last_name,
+                        name: buyerData.rows[0].first_name + " " +(buyerData.rows[0].last_name ? buyerData.rows[0].last_name : ''),
                         address: res.rows[0].shipping_address,
                         state: res.rows[0].state,
                         city: res.rows[0].city,
@@ -699,18 +763,20 @@ class Order {
                     subtotal: res.rows[0].order_amount,
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
-                    invoice_nr: res.rows[0].order_number,
-                    invoice_date: moment(res.rows[0].created_at).format('DD/MM/YYYY'),
-                    paymentDetails: multiSafePayClientRes
+                    invoice_nr: res.rows[0].order_number+(typeInvoice !== 'refund' ? '' : `-${res.rows[0].refund_prefix}`),
+                    invoice_date: moment(historyRes.rows[0].created_at).format('DD/MM/YYYY'),
+                    paymentDetails: multiSafePayClientRes,
+                    orderId: orderId
                     // paymentDetails: {}
                 };
-                await createInvoice(invoice, `${dirUpload}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale);
+                console.log(invoice);
+                await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 await setTimeout(8000);
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(4000);
                 }
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -722,7 +788,7 @@ class Order {
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${res.rows[0].status !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     isCreated: true,
                     error: null
@@ -888,7 +954,7 @@ class Order {
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            let orderNumber;
+            let orderNumber;let orderId;
             const SQL = `SELECT order_id, order_number, data.orders.live_sessions_id, order_amount, total_amount, quantity
                 FROM data.order_items 
                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
@@ -896,6 +962,7 @@ class Order {
             console.log(SQL);
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
+            orderId = res.rows[0].id;
             console.log("1", res.rows[0].order_id);
             console.log(`SELECT id FROM data.orders WHERE user_id='${userId}' 
                 AND status='new' AND id != '${res.rows[0].order_id}' 
@@ -906,6 +973,7 @@ class Order {
                 AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
             if (existNonPayedOrder.rows[0]?.id) {
                 orderNumber = existNonPayedOrder.rows[0].order_number;
+                orderId = existNonPayedOrder.rows[0].id;
                 // before add new items check if this item already aexist in order, if yes only change quantity
                 const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}'`;
                 await client.query(updateExistItemsSQL);
@@ -959,11 +1027,12 @@ class Order {
                 console.log(orderSQL);
                 await client.query(orderSQL);
             }
+
             console.log("=============");
             console.log("RETURNED DATA");
-            console.log({success: true, orderId: res.rows[0].order_id, orderNumber: orderNumber })
+            console.log({success: true, orderId: orderId, orderNumber: orderNumber })
             console.log("=============");
-            return {success: true, orderId: res.rows[0].order_id, orderNumber: orderNumber };
+            return {success: true, orderId: orderId, orderNumber: orderNumber };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -1015,22 +1084,12 @@ class Order {
     async insertOrderStatus (orderId, status) {
         const client = await pool.connect();
         try {
-            console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
-            const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            const _tmpRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='${status}'`);
+            if (_tmpRes.rows.length === 0) {
+                const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
+            }
             return {success: true, error: null};
-            // if (res.rows.length > 0) {
-            //     const promisesQueries = [];
-            //     res.rows.forEach(order => {
-            //         promisesQueries.push(this.cancelOrder(order));
-            //     });
-            //     if (promisesQueries.length) {
-            //         await Promise.all(promisesQueries);
-            //     }
-            //     return {success: true, error: null};
-            // } else {
-            //     return {success: false, error: 'No record find'};
-            // }
-
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -1084,10 +1143,63 @@ class Order {
         }
     }
 
+    async isFreeShipping(userId, orderNumber) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.orders WHERE 
+                user_id=${userId} AND status='payed' ORDER BY updated_at DESC LIMIT 1`;
+            console.log(SQL);
+            const res = await client.query(SQL);
+            if (res.rows.length) {
+                const timeStart = (new Date(res.rows[0].updated_at));
+                const timeEnd = (new Date());
+                const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
+
+                const sellerData = await client.query(`SELECT user_id 
+                                FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
+                const settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
+                const settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
+
+                const freeShipping = settings.rows[0];
+                // const freeAmountOver = settingsThreshold.rows[0].threshold;
+                if (freeShipping) {
+                    if (freeShipping.free_shipping_status) {
+                        if (settingsThreshold.rows.length) {
+                            console.log(settings.rows[0].free_shipping_timer.hours)
+                            if (res.rows[0].order_amount > settingsThreshold.rows[0].threshold && settings.rows[0].free_shipping_timer.hours > hourDiff) {
+                                console.log('Discount delivery');
+                                return {success: true, freeShipping: 1}
+                            }
+                        }
+                    }
+                }
+                return {success: true, freeShipping: 0}
+                // console.log(settingsThreshold.rows[0]);
+                // console.log(sellerData.rows[0].user_id);
+                // console.log(hourDiff)
+            } else {
+                return {success: true, freeShipping: 0}
+            }
+        } catch (e) {
+            console.log(e.message)
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async cancelOrder(order) {
         const client = await pool.connect();
         try {
             const sellerSettingsRes = await client.query(`SELECT * FROM data.get_seller_settings(${order.id});`);
+            const refundPrefix = generateRndPrefix(4);
             if (sellerSettingsRes.rows.length === 0) {
                 return {success: false, error: 'No key for payment'}
             }
@@ -1101,7 +1213,8 @@ class Order {
                     headers: { 'Content-Type': 'application/json' }
                 })
                 .then(async () => {
-                    await client.query(`UPDATE data.orders SET status='canceled' WHERE id=${order.id};`);
+                    console.log(`UPDATE data.orders SET status='canceled', refund_prefix='${refundPrefix}' WHERE id=${order.id};`);
+                    await client.query(`UPDATE data.orders SET status='canceled', refund_prefix='${refundPrefix}' WHERE id=${order.id};`);
                     await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${order.id}', 'canceled')`);
                     return {success: true, error: null}
                 }).catch(error => {

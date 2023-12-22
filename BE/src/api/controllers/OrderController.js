@@ -16,7 +16,7 @@ class OrderController {
             //     await orderModel.updateOrderByCommentId(orderCommentId, req.user.id);
             // }
             const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
-            return res.status(200).json({ count: data.size, items: data.items});
+            return res.status(200).json({ count: data.size, items: data.items ? data.items : [], itemsStatuses: data.grouppedStatuses});
         }
     }
 
@@ -35,7 +35,7 @@ class OrderController {
             return res.status(401).json('Access deny');
         } else {
             // check if file exist, then return true
-            const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale);
+            const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale, "", req.params.type);
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
         }
     }

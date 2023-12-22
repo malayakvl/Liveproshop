@@ -66,11 +66,11 @@ function Profile() {
 
             // if (count) dispatch(updateProfileAction(formData));
             dispatch(updateProfileAction(formData));
-            if (redirectToCheckout) {
-                // router.push(orderReturnedUrl);
-                window.location.href = orderReturnedUrl;
-                // router.push(orderReturnedUrl);
-            }
+            // if (redirectToCheckout) {
+            //     // router.push(orderReturnedUrl);
+            //     window.location.href = orderReturnedUrl;
+            //     // router.push(orderReturnedUrl);
+            // }
         },
         [dispatch]
     );
@@ -238,7 +238,7 @@ function Profile() {
                                     tips={null}
                                 />
                                 <InputText
-                                    disabled={validateEmail(props.values['email_real'])}
+                                    // disabled={validateEmail(props.values['email_real'])}
                                     icon={'f-email'}
                                     label={null}
                                     name={'email_real'}

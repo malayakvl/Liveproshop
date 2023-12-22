@@ -19,7 +19,8 @@ import {
     clearOrderByCommentAction,
     setupReturnedUrlAction,
     redirectCheckoutAction,
-    updateOrderStatusAction
+    updateOrderStatusAction,
+    redirectOrderNumberAction
 } from './actions';
 
 const initialState: {
@@ -27,6 +28,7 @@ const initialState: {
     loading: boolean;
     count: number;
     items: Orders.DataItem[];
+    itemsStatuses: any;
     item: any;
     showPopup: boolean;
     fileterData: any;
@@ -42,11 +44,13 @@ const initialState: {
     connectedOrderNumber: string | null;
     orderReturnedUrl: string | null;
     redirectCheckout: boolean;
+    redirectOrderNumber: any;
 } = {
     isFetched: false,
     loading: false,
     count: 0,
     items: [],
+    itemsStatuses: [],
     item: {},
     showPopup: false,
     fileterData: {
@@ -66,7 +70,8 @@ const initialState: {
     tmpCommentOrderId: null,
     connectedOrderNumber: null,
     orderReturnedUrl: null,
-    redirectCheckout: false
+    redirectCheckout: false,
+    redirectOrderNumber: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -230,12 +235,13 @@ const ACTION_HANDLERS: any = {
             orderReturnedUrl: action.payload
         })
     },
-    [redirectCheckoutAction]: {
+    [redirectOrderNumberAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
-            redirectCheckout: action.payload
+            redirectOrderNumber: action.payload
         })
-    }
+    },
+
 };
 
 export {
@@ -257,7 +263,8 @@ export {
     clearOrderByCommentAction,
     setupReturnedUrlAction,
     redirectCheckoutAction,
-    updateOrderStatusAction
+    updateOrderStatusAction,
+    redirectOrderNumberAction
 };
 
 // ------------------------------------

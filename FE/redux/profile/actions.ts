@@ -1,13 +1,19 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
 import { authHeader } from '../../lib/functions';
-import { setSuccessToastAction, setErrorToastAction } from '../layouts';
+import {
+    setSuccessToastAction,
+    setErrorToastAction,
+    showEmailNotificationAction
+} from '../layouts';
 import { setUserAction } from '../user/';
 import { showLoaderAction } from '../layouts/actions';
 import { baseApiUrl } from '../../constants';
-import {redirectCheckoutAction} from "../orders";
+import { redirectOrderNumberAction } from '../orders';
+// import { redirectCheckoutAction } from "../orders";
 const baseUrl = `${baseApiUrl}/api`;
 const baseAuthUrl = `${baseApiUrl}/auth`;
+// const siteUrl = `${baseUrl}/auth`;
 
 export const fetchProfileAction: any = createAction(
     'profile/FETCH_PROFILE',
@@ -29,7 +35,7 @@ export const updateProfileAction: any = createAction(
     async (data: any) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            const redirectReturned = state.orders.orderReturnedUrl;
+            const redirectOrderNUmber = state.orders.redirectOrderNumber;
             return axios
                 .post(`${baseUrl}/profile`, data, {
                     headers: {
@@ -37,10 +43,26 @@ export const updateProfileAction: any = createAction(
                     }
                 })
                 .then(async (res) => {
-                    window.localStorage.removeItem('user');
+                    // window.localStorage.removeItem('user');
                     window.localStorage.setItem('user', JSON.stringify(res.data.user));
+                    window.localStorage.setItem('updatedEmail', 'yes');
                     dispatch(setUserAction(res.data.user));
+                    dispatch(showEmailNotificationAction(false));
+                    // alert(JSON.stringify(res.data.user));
+                    // window.location.reload();
+                    // alert(JSON.stringify(res.data.user));
+                    // alert(redirectReturned);
+                    // console.log(res.data.user);
                     dispatch(setSuccessToastAction(`Profile has been updated`));
+                    if (redirectOrderNUmber) {
+                        dispatch(redirectOrderNumberAction(null));
+                        setTimeout(() => {
+                            window.location.href = `/en/checkout/${redirectOrderNUmber}`;
+                        }, 1000);
+                    }
+                    // if (redirectReturned) {
+                    //     window.location.href = redirectReturned;
+                    // }
                     // dispatch(redirectCheckoutAction());
                 });
         }

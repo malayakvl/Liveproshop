@@ -2,6 +2,7 @@ declare namespace Orders {
     interface Root {
         count: number;
         items: DataItem[];
+        itemsStatuses: any[];
         item: DataItem;
         isFetched: boolean;
         loading: boolean;
@@ -20,6 +21,7 @@ declare namespace Orders {
         connectedOrderNumber: null | any;
         orderReturnedUrl: null | any;
         redirectCheckout: boolean;
+        redirectOrderNumber: any;
     }
 
     interface DataItem {
@@ -50,6 +52,7 @@ declare namespace Orders {
         phone?: string | null;
         order_items: any;
         country_json: any;
+        freeShipping: number;
         // user_id: number;
         // user_name: string;
         // photo: string;

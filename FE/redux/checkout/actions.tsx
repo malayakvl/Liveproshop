@@ -6,7 +6,7 @@ const { publicRuntimeConfig } = getConfig();
 const baseUrl = `${publicRuntimeConfig.apiUrl}/api`;
 import queryString from 'query-string';
 import { setErrorToastAction, showLoaderAction } from '../layouts/actions';
-import {updateOrderStatusAction} from "../orders";
+import { updateOrderStatusAction } from '../orders';
 
 export const fetchCheckoutAction: any = createAction(
     'checkout/FETCH',
@@ -21,6 +21,7 @@ export const fetchCheckoutAction: any = createAction(
         }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
+            console.log('BBBBBBBBB', state.user);
             return axios
                 .get(
                     `${baseUrl}/checkout?${queryString.stringify({
