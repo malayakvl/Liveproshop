@@ -182,6 +182,7 @@ class Checkout {
         try {
             const isFreeShipping = freeShipping.freeShipping;
             const orderRes = await client.query(`SELECT * FROM data.orders WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
+
             if (orderRes.rows.length) {
                 // fetch seller and system settings for receive api keys
                 // const sellerSettingsRes = await client.query(`SELECT multisafe_api_key FROM data.get_seller_settings(${orderRes.rows[0].id});`);
@@ -192,7 +193,7 @@ class Checkout {
                     return {redirectUrl: null, error: 'No key for payment'}
                 }
                 let shippingPrice = 0;
-                if (data.shippingMethodId && freeShipping === 0) {
+                if (data.shippingMethodId && parseInt(isFreeShipping) !== 1) {
                     const shippingRes = await client.query(`SELECT * FROM data.shipping_to_country
                         WHERE user_id=${sellerSettingsRes.rows[0].user_id}
                             AND shipping_id=${data.shippingMethodId}

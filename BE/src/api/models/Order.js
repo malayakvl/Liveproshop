@@ -1147,7 +1147,8 @@ class Order {
         const client = await pool.connect();
         try {
             const SQL = `SELECT * FROM data.orders WHERE 
-                user_id=${userId} AND status='payed' AND shipping_amount > 0 ORDER BY updated_at DESC LIMIT 1`;
+                user_id=${userId} AND status='payed' ORDER BY updated_at DESC LIMIT 1`;
+            console.log(SQL);
             const res = await client.query(SQL);
             if (res.rows.length) {
                 const timeStart = (new Date(res.rows[0].updated_at));
@@ -1172,11 +1173,12 @@ class Order {
                         }
                     }
                 }
-
                 return {success: true, freeShipping: 0}
                 // console.log(settingsThreshold.rows[0]);
                 // console.log(sellerData.rows[0].user_id);
                 // console.log(hourDiff)
+            } else {
+                return {success: true, freeShipping: 0}
             }
         } catch (e) {
             console.log(e.message)

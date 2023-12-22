@@ -21,12 +21,12 @@ class CheckoutController {
         // const orderItems = await checkoutModel.fetchOrderItems(orderData.or);
         const address = await userModel.findUserAddress(req.user.id);
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, true);
-
+        orderData.order.freeShipping = freeSheppingData?.freeShipping || 0;
         return res.status(200).json({
             order: orderData.order,
             address,
             shippingMethods: shippingMethodsData.shippingMethods,
-            freeShepping: freeSheppingData.freeShipping
+            freeShepping: freeSheppingData?.freeShipping || 0
         });
     }
 

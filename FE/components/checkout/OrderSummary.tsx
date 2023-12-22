@@ -177,11 +177,18 @@ const OrderSummary = () => {
                             </div>
                         </div>
                     ))}
-                    {selectedShippingMethod && order.freeShipping == 0 && (
+                    {selectedShippingMethod && order.freeShipping != 1 ? (
                         <div className="flex justify-between my-2 text-gray-350 text-[18px] text-right">
                             {t('Shipping')}
                             <span className="inline-block ml-4 font-bold min-w-[3rem]">
                                 {formatCurrency(selectedShippingMethod.price)}
+                            </span>
+                        </div>
+                    ) : (
+                        <div className="flex justify-between my-2 text-gray-350 text-[18px] text-right">
+                            {t('Shipping')}
+                            <span className="inline-block ml-4 font-bold min-w-[3rem]">
+                                {formatCurrency(0)}
                             </span>
                         </div>
                     )}

@@ -52,7 +52,9 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
                             type="radio"
                             name="shippingMethodId"
                             value={String(shippingMethod.id)}
-                            title={formatCurrency(shippingMethod.price)}
+                            title={formatCurrency(
+                                order.freeShipping != 1 ? shippingMethod.price : 0
+                            )}
                             text={shippingMethod.name}
                             img={baseUrl + shippingMethod.image}
                             component={Radio}

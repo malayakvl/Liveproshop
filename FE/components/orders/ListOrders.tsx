@@ -110,7 +110,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             orderStatus?.statuses?.map((_status: any) => {
                 resultStatuses += `${_status.status}<br/>`;
                 dataStatuses.push(
-                    _status.status + ' ' + moment(_status.created_at).format('DD/MM/YYYY H:mm:ss')
+                    t(_status.status) +
+                        ' ' +
+                        moment(_status.created_at).format('DD/MM/YYYY H:mm:ss')
                 );
             });
         }
