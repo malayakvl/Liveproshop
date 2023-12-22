@@ -304,8 +304,8 @@ class Shipping {
 
     async changeCustomerStatus(status, customerId, shippingId) {
         const client = await pool.connect();
-        console.log('=============')
-        console.log(status, shippingId);
+        // console.log('=============')
+        // console.log(status, shippingId);
         let query;
         try {
             console.log(`DELETE FROM data.customer_disabled_shipping WHERE user_id = ${customerId} AND shipping_id = ${shippingId}`);

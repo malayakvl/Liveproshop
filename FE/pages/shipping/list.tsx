@@ -58,10 +58,16 @@ export default function List({ locale }: { locale: string }) {
         if (!selectedItem) return;
 
         dispatch(checkIdsAction(selectedItem.id));
-        selectedItem.status = !selectedItem.status;
+        let updatedStatus;
+        if (user.role_id === 3) {
+            updatedStatus = !selectedItem.status;
+        } else {
+            updatedStatus = !selectedItem.status__customer_disabled_shipping;
+        }
         console.log('SELECTED ITEM', selectedItem);
+        console.log('UPDATED STATUS', updatedStatus);
 
-        dispatch(changeShippingStatus(selectedItem.id, !selectedItem.status));
+        dispatch(changeShippingStatus(selectedItem.id, updatedStatus));
         // dispatch(
         //     setSuccessToastAction(
         //         t('Status of the shipping {name} is changed', { name: selectedItem.name })
@@ -103,7 +109,7 @@ export default function List({ locale }: { locale: string }) {
 
     if (!user.email) return null;
 
-    console.log(items);
+    // console.log(items);
 
     return (
         <>
@@ -171,9 +177,11 @@ export default function List({ locale }: { locale: string }) {
                         totalAmount={items?.length}
                         switcherOnClick={(status: boolean) => {
                             if (status) {
+                                console.log('Status1', status);
                                 dispatch(changeShippingStatuses(false));
                                 dispatch(checkAllIdsAction(items));
                             } else {
+                                console.log('Status2', status);
                                 dispatch(changeShippingStatuses(true));
                                 dispatch(uncheckAllIdsAction(items));
                             }
@@ -231,7 +239,7 @@ export default function List({ locale }: { locale: string }) {
 
                                 <td>
                                     <span className="hidden">
-                                        {!item.status__customer_disabled_shipping ? 'no' : 'yes'}
+                                        {item.status__customer_disabled_shipping ? 'no' : 'yes'}
                                     </span>
                                     <label className="flex items-center cursor-pointer relative">
                                         <input
@@ -244,6 +252,8 @@ export default function List({ locale }: { locale: string }) {
                                             }
                                             onChange={() => {
                                                 console.log('SELECTED ITEM', item);
+                                                item.status__customer_disabled_shipping =
+                                                    !item.status__customer_disabled_shipping;
                                                 setSelectedItem(item);
                                             }}
                                         />
