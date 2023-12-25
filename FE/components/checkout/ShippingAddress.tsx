@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import { useFormikContext } from 'formik';
@@ -13,8 +13,9 @@ import { userSelector } from '../../redux/user/selectors';
 import { fetchCountriesAction } from '../../redux/countries/actions';
 import { fetchShippingMethodsByCountryCheckoutAction } from '../../redux/checkout';
 import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
-const baseUrl = `${publicRuntimeConfig.apiUrl}/`;
+// const { publicRuntimeConfig } = getConfig();
+
+// const baseUrl = `${publicRuntimeConfig.apiUrl}/`;
 
 import { prepareCountriesDropdown } from '../../lib/functions';
 import { InputText } from '../_form';
@@ -105,6 +106,14 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
         }
     }, [firstShippingMethod]);
 
+    // const changeCountryAutocomplete = (selectedItem: any) => {
+    //     // this.setState({ selectedItem });
+    //     console.log(`Option selected:`, selectedItem);
+    // };
+    // const changeCountryAutocomplete = (input: any) => {
+    //     console.log(input);
+    // };
+
     return (
         <div className="grid grid-cols-2 gap-2 lg:gap-4">
             <InputText
@@ -139,7 +148,6 @@ const ShippingAddress = ({ locale }: { locale: string }) => {
                     props.handleChange(event);
                 }}
             />
-
             <div className="">
                 <Select
                     className={'form-control-dropdown mb-2'}

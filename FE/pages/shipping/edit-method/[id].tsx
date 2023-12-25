@@ -11,7 +11,7 @@ import {
 //Hooks
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 //Other
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
@@ -24,8 +24,11 @@ import { fetchCountriesAction } from '../../../redux/countries/actions';
 import { userSelector } from '../../../redux/user/selectors';
 import { getSession } from 'next-auth/client';
 import { setErrorToastAction } from '../../../redux/layouts';
+import { prepareCountriesDropdown } from '../../../lib/functions';
+import Select from 'react-select';
+// import {fetchShippingMethodsByCountryCheckoutAction} from "../../../redux/checkout";
 
-export default function EditMethod() {
+export default function EditMethod({ locale }: { locale: string }) {
     const t = useTranslations();
     const router = useRouter();
     const dispatch = useDispatch();
@@ -33,6 +36,12 @@ export default function EditMethod() {
     const shipping = useSelector(shippingSelector);
     const id = router.query.id;
     const user = useSelector(userSelector);
+
+    const preparedCountriesDropdown = useMemo(
+        () => prepareCountriesDropdown(countries, locale),
+        [countries, locale]
+    );
+
     const deleteCallback = () => {
         const sure = confirm(t('Are you sure ?'));
 
@@ -53,6 +62,10 @@ export default function EditMethod() {
     if (!shipping || shipping.id != id) {
         return <></>;
     }
+
+    const setFormHiddenValue = (fieldName: any, fieldValue: number) => {
+        console.log(fieldName, fieldValue);
+    };
 
     return (
         <>
@@ -147,21 +160,21 @@ export default function EditMethod() {
                             validationSchema={Yup.object().shape({
                                 countries: Yup.array().of(
                                     Yup.object().shape({
-                                        id: Yup.number().required(t('Required field')),
+                                        // id: Yup.number().required(t('Required field')),
                                         price: Yup.number()
                                             .required(t('Required field'))
-                                            .test('len', t('Must be less characters'), (item) => {
-                                                if (!item) {
-                                                    return true;
-                                                }
-
-                                                return item?.toString().length < 10;
-                                            })
-                                            .test(
-                                                'is_positive',
-                                                'The number must be positive',
-                                                (value) => value !== undefined && value > 0
-                                            )
+                                            // .test('len', t('Must be less characters'), (item) => {
+                                            //     if (!item) {
+                                            //         return true;
+                                            //     }
+                                            //
+                                            //     return item?.toString().length < 10;
+                                            // })
+                                            // .test(
+                                            //     'is_positive',
+                                            //     'The number must be positive',
+                                            //     (value) => value !== undefined && value > 0
+                                            // )
                                             .typeError('Price must be number')
                                     })
                                 )
@@ -169,6 +182,7 @@ export default function EditMethod() {
                             initialValues={{ countries: shipping.countries }}
                             onSubmit={(values) => {
                                 let dublicate = false;
+                                // console.log('here', values);
                                 values.countries.forEach((country: any, index: number) => {
                                     values.countries.forEach((_country: any, _index: number) => {
                                         if (_country.id == country.id && _index !== index) {
@@ -190,7 +204,7 @@ export default function EditMethod() {
                                     router.push('/shipping/list')
                                 );
                             }}
-                            render={({ values }) => (
+                            render={({ setFieldValue, values }) => (
                                 <Form>
                                     <FieldArray
                                         name="countries"
@@ -201,27 +215,57 @@ export default function EditMethod() {
                                                         <div key={index}>
                                                             <div className="w-full my-4 flex items-center justify-start md:w-1/2">
                                                                 <div className="w-full">
+                                                                    <div className="">
+                                                                        <Select
+                                                                            className={
+                                                                                'form-control-dropdown mb-2'
+                                                                            }
+                                                                            classNamePrefix={
+                                                                                'shipping'
+                                                                            }
+                                                                            placeholder={t(
+                                                                                'Country'
+                                                                            )}
+                                                                            name={`countriesList.${index}.id`}
+                                                                            options={
+                                                                                preparedCountriesDropdown
+                                                                            }
+                                                                            value={preparedCountriesDropdown?.find(
+                                                                                (option: any) =>
+                                                                                    option.value ===
+                                                                                    country.id
+                                                                            )}
+                                                                            onChange={(
+                                                                                selectedOption
+                                                                            ) => {
+                                                                                // console.log(
+                                                                                //     selectedOption.value
+                                                                                // );
+                                                                                // setup hidden
+                                                                                // props.setFieldValue(
+                                                                                //     `countries.${index}.id`,
+                                                                                //     selectedOption.value
+                                                                                // );
+                                                                                setFieldValue(
+                                                                                    `countries.${index}.id`,
+                                                                                    selectedOption.value
+                                                                                );
+                                                                                setFormHiddenValue(
+                                                                                    `countries.${index}.id`,
+                                                                                    selectedOption.value
+                                                                                    // props
+                                                                                );
+                                                                            }}
+                                                                        />
+                                                                    </div>
                                                                     <Field
-                                                                        className="form-control"
-                                                                        as="select"
-                                                                        name={`countries.${index}.id`}>
-                                                                        <option value="">
-                                                                            ...
-                                                                        </option>
-                                                                        {countries.map(
-                                                                            (country: any) => (
-                                                                                <option
-                                                                                    key={country.id}
-                                                                                    value={
-                                                                                        country.id
-                                                                                    }>
-                                                                                    {
-                                                                                        country.nicename
-                                                                                    }
-                                                                                </option>
-                                                                            )
-                                                                        )}
-                                                                    </Field>
+                                                                        type="hidden"
+                                                                        name={`countries.${index}.id`}
+                                                                        value={country.id}
+                                                                    />
+                                                                    {/*<Field*/}
+                                                                    {/*    className="form-control"*/}
+                                                                    {/*    name={`countries.${index}.id`}></Field>*/}
                                                                     <div className="error-el">
                                                                         <ErrorMessage
                                                                             name={`countries.${index}.id`}
