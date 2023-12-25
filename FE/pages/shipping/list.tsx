@@ -81,6 +81,7 @@ export default function List({ locale }: { locale: string }) {
         if (!items) return;
 
         const setupChecked: any = [];
+        const setupCheckedYes: any = [];
         items.forEach((item: Shipping) => {
             setupChecked.push({
                 id: item.id,
@@ -89,10 +90,24 @@ export default function List({ locale }: { locale: string }) {
                         ? item.status
                         : item.status__customer_disabled_shipping
             });
+            if (user?.role_id === UserRole.ADMIN && item.status) {
+                setupCheckedYes.push({
+                    id: item.id,
+                    checked: item.status
+                });
+            } else if (item.status__customer_disabled_shipping) {
+                setupCheckedYes.push({
+                    id: item.id,
+                    checked: item.status__customer_disabled_shipping
+                });
+            }
         });
-        console.log(items.length, Object.keys(setupChecked).length);
+        console.log(items.length, Object.keys(setupCheckedYes));
         dispatch(initIdsAction(setupChecked));
-        if (items.length === Object.keys(setupChecked).length) {
+        if (
+            items.length === Object.keys(setupCheckedYes).length &&
+            Object.keys(setupCheckedYes).length > 0
+        ) {
             dispatch(setSwitchHeaderAction(true));
         }
 
