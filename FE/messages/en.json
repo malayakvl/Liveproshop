@@ -602,6 +602,9 @@
   "Pdf": "Pdf",
   "History": "History",
   "settings_theshold_new": "Set a shipping threshold. In case order has reacted this amount, the shipping is free for this buyer",
-  "All orders": "View all orders"
-
+  "All orders": "View all orders",
+  "Edit Shipping Method": "Edit Shipping Method",
+  "Apply Countries": "Apply Countries",
+  "Must be less {charNumber} characters": "Must be less {charNumber} characters",
+  "Statuses have been changed for all shippings": "Statuses have been changed for all shippings"
 }

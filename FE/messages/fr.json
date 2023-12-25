@@ -604,7 +604,11 @@
   "Pdf": "Pdf",
   "History": "Histoire",
   "settings_theshold_new": "Définissez un seuil de Livraison gratuite. Si la commande a atteint ce montant, l'expédition est gratuite pour cet acheteur.",
-  "All orders": "Afficher toutes les commandes"
+  "All orders": "Afficher toutes les commandes",
+  "Edit Shipping Method": "Modifier le mode d'expédition",
+  "Apply Countries": "Appliquer les pays",
+  "Must be less {charNumber} characters": "Must be less",
+  "Statuses have been changed for all shippings": "Les statuts ont été modifiés pour toutes les expéditions"
 
 
 }
