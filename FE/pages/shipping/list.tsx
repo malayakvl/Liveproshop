@@ -31,6 +31,7 @@ import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { getSession } from 'next-auth/client';
 import ConfirmDialog from '../../components/_common/ConfirmDialog';
 import Head from 'next/head';
+import { setSwitchHeaderAction } from '../../redux/layouts/actions';
 
 // const { publicRuntimeConfig } = getConfig();
 // const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -89,7 +90,12 @@ export default function List({ locale }: { locale: string }) {
                         : item.status__customer_disabled_shipping
             });
         });
+        console.log(items.length, Object.keys(setupChecked).length);
         dispatch(initIdsAction(setupChecked));
+        if (items.length === Object.keys(setupChecked).length) {
+            dispatch(setSwitchHeaderAction(true));
+        }
+
         setDropDowns(items.map(() => false));
     }, [items]);
 
@@ -317,7 +323,9 @@ export default function List({ locale }: { locale: string }) {
                                     <button
                                         onClick={(e) => {
                                             e.preventDefault();
-                                            router.push(`/shipping/edit-method/${item.id}`);
+                                            router.push(
+                                                `/shipping/edit-method/${item.id}?locale=${locale}`
+                                            );
                                         }}
                                         className="ml-auto block">
                                         <Image

@@ -3,15 +3,25 @@ import { useTranslations } from 'next-intl';
 import { InputText } from '../../components/_form';
 import * as Yup from 'yup';
 import { createShippingAction } from '../../redux/shipping/actions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/client';
 import Head from 'next/head';
+// import { prepareCountriesDropdown } from '../../lib/functions';
+// import { countriesSelector } from '../../redux/countries/selectors';
+// import { useMemo } from 'react';
 
-export default function AddMethod() {
+export default function AddMethod({ locale }: { locale: string }) {
     const t = useTranslations();
     const dispatch = useDispatch();
     const router = useRouter();
+    // const countries = useSelector(countriesSelector);
+
+    // const preparedCountriesDropdown = useMemo(
+    //     () => prepareCountriesDropdown(countries, locale),
+    //     [countries, locale]
+    // );
+
     const submitSchema = Yup.object().shape({
         name: Yup.string()
             .strict(true)

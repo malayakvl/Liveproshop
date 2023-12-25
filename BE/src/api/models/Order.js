@@ -1148,18 +1148,21 @@ class Order {
         try {
             const SQL = `SELECT * FROM data.orders WHERE 
                 user_id=${userId} AND status='payed' ORDER BY updated_at DESC LIMIT 1`;
-            console.log(SQL);
             const res = await client.query(SQL);
+
+            let sellerData;
+            let settingsThreshold;
+            let settings;
+
             if (res.rows.length) {
                 const timeStart = (new Date(res.rows[0].updated_at));
                 const timeEnd = (new Date());
                 const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
 
-                const sellerData = await client.query(`SELECT user_id 
+                sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
-                const settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
-                const settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
-
+                settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
+                settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
                 const freeShipping = settings.rows[0];
                 // const freeAmountOver = settingsThreshold.rows[0].threshold;
                 if (freeShipping) {
@@ -1178,6 +1181,19 @@ class Order {
                 // console.log(sellerData.rows[0].user_id);
                 // console.log(hourDiff)
             } else {
+                console.log(`SELECT order_amount, live_sessions_id FROM 
+                    data.orders WHERE order_number='${orderNumber}'`);
+                const currOrder = await client.query(`SELECT order_amount, live_sessions_id FROM 
+                    data.orders WHERE order_number='${orderNumber}'`);
+                sellerData = await client.query(`SELECT user_id 
+                                FROM data.live_sessions WHERE id=${currOrder.rows[0].live_sessions_id}`);
+                // settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
+
+                settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
+
+                if (currOrder.rows[0].order_amount > settingsThreshold.rows[0].threshold) {
+                    return {success: true, freeShipping: 1}
+                }
                 return {success: true, freeShipping: 0}
             }
         } catch (e) {
