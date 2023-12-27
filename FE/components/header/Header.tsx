@@ -168,7 +168,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                         <Link href={'/pricing'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
-                                                href="javascript:void(0)"
+                                                href="javascript:;"
                                                 className={`m-2 ${
                                                     router.pathname === '/pricing'
                                                         ? 'text-purple-400'
@@ -182,7 +182,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                         <Link href={'/case-studies'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
-                                                href="javascript:void(0)"
+                                                href="javascript:;"
                                                 className={`m-2 ${
                                                     router.pathname === '/case-studies'
                                                         ? 'text-purple-400'
@@ -196,7 +196,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                         <Link href={'/faq'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
-                                                href="javascript:void(0)"
+                                                href="javascript:;"
                                                 className={`m-2 ${
                                                     router.pathname === '/faq'
                                                         ? 'text-purple-400'
@@ -210,7 +210,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                     {/*    <Link href={'/customer-story'}>*/}
                                     {/*        /!* eslint-disable-next-line jsx-a11y/anchor-is-valid *!/*/}
                                     {/*        <a*/}
-                                    {/*            href="javascript:void(0)"*/}
+                                    {/*            href="javascript:;"*/}
                                     {/*            className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">*/}
                                     {/*            {t('Testimonials')}*/}
                                     {/*        </a>*/}
@@ -220,7 +220,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                         <Link href={'/contact-us'}>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <a
-                                                href="javascript:void(0)"
+                                                href="javascript:;"
                                                 className={`m-2 ${
                                                     router.pathname === '/contact-us'
                                                         ? 'text-purple-400'
@@ -264,7 +264,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
                                         className="sm:float-right disabled-btn-small login-white-btn"
-                                        href="javascript:void(0)"
+                                        href="javascript:;"
                                         title={t('Login')}>
                                         {t('Login')}
                                         {/*<Image*/}
@@ -341,7 +341,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                         <span className="logout-btn login-btn-layout">
                             <Link href={'/auth/signin'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a href="javascript:void(0)" title={t('Login')}>
+                                <a href="javascript:;" title={t('Login')}>
                                     <Image
                                         className="mr-5"
                                         src="/images/login-icon.svg"

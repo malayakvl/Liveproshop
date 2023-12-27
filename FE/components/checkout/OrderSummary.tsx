@@ -10,10 +10,10 @@ const { publicRuntimeConfig } = getConfig();
 const siteUrl = publicRuntimeConfig.siteUrl;
 import {
     orderCheckoutSelector,
-    shippingMethodsCheckoutSelector
+    shippingMethodsCheckoutSelector,
+    waitItemsSelector
 } from '../../redux/checkout/selectors';
 import { removeItemOrderAction, minusItemOrderAction } from '../../redux/orders/actions';
-// import { userSelector } from '../../redux/user/selectors';
 import { useRouter } from 'next/router';
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 
@@ -28,7 +28,8 @@ const OrderSummary = () => {
     } = useRouter();
 
     const order = useSelector(orderCheckoutSelector) || {};
-    // const user = useSelector(userSelector);
+    const waitItems = useSelector(waitItemsSelector);
+
     const showEmailNotice = useSelector(showEmailNoticeSelector);
     // const showEmailNotice = true;
 
@@ -82,6 +83,7 @@ const OrderSummary = () => {
 
         return formatCurrency(totalAmount - vatAmount);
     };
+    console.log(order.order_items);
 
     return (
         <>
@@ -95,6 +97,21 @@ const OrderSummary = () => {
             )}
             {order.order_items?.length && (
                 <>
+                    {waitItems.length > 0 && (
+                        <div className="alert-success mb-5">
+                            <p className="inbline-block mb-2">
+                                The number of items added to your cart reflects stock availability
+                            </p>
+                            {waitItems.map((_waitProduct: any, key: number) => (
+                                <div key={`item_wait_${_waitProduct.id}_${key}`}>
+                                    {_waitProduct.configuration.name}&nbsp;
+                                    {`# ${_waitProduct.configuration.sku}`}&nbsp;
+                                    {_waitProduct.configuration.color_name}&nbsp;
+                                    {`${t('quantity_wait')} ${_waitProduct.quantity}`}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                     <div className="text-gray-350 font-normal text-lg">
                         {order.order_items?.length} {t('items in Cart')}
                     </div>
