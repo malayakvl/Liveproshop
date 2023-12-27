@@ -71,8 +71,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     }, [state, user]);
 
-    console.log('CURRENT USER', user);
-
     return (
         <>
             <Head>

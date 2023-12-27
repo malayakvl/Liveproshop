@@ -115,7 +115,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                                     onClick={() => {
                                         dispatch(toggleTextingMenuAction(false));
                                     }}
-                                    href="javascript:void(0)"
+                                    href="javascript:;"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Features')}
                                 </a>
@@ -128,7 +128,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                                     onClick={() => {
                                         dispatch(toggleTextingMenuAction(false));
                                     }}
-                                    href="javascript:void(0)"
+                                    href="javascript:;"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Pricing')}
                                 </a>
@@ -141,7 +141,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                                     onClick={() => {
                                         dispatch(toggleTextingMenuAction(false));
                                     }}
-                                    href="javascript:void(0)"
+                                    href="javascript:;"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Case Studies')}
                                 </a>
@@ -154,7 +154,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                                     onClick={() => {
                                         dispatch(toggleTextingMenuAction(false));
                                     }}
-                                    href="javascript:void(0)"
+                                    href="javascript:;"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('FAQ')}
                                 </a>
@@ -164,7 +164,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                         {/*    <Link href={'/customer-story'}>*/}
                         {/*        /!* eslint-disable-next-line jsx-a11y/anchor-is-valid *!/*/}
                         {/*        <a*/}
-                        {/*            href="javascript:void(0)"*/}
+                        {/*            href="javascript:;"*/}
                         {/*            className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">*/}
                         {/*            {t('Testimonials')}*/}
                         {/*        </a>*/}
@@ -177,7 +177,7 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                                     onClick={() => {
                                         dispatch(toggleTextingMenuAction(false));
                                     }}
-                                    href="javascript:void(0)"
+                                    href="javascript:;"
                                     className="m-2 cursor-pointer hover:text-purple-400 drop-top-menu-item">
                                     {t('Contact Us')}
                                 </a>

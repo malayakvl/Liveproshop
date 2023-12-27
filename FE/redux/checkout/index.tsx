@@ -14,6 +14,7 @@ const initialState: {
     shippingMethods: ShippingMethod[];
     redirectUrl: any;
     paymentStatus: string | null;
+    itemsWait: any[];
 } = {
     isFetched: false,
     loading: false,
@@ -21,7 +22,8 @@ const initialState: {
     address: null,
     shippingMethods: [],
     redirectUrl: null,
-    paymentStatus: null
+    paymentStatus: null,
+    itemsWait: []
 };
 
 const ACTION_HANDLERS: any = {

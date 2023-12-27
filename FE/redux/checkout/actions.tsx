@@ -21,7 +21,6 @@ export const fetchCheckoutAction: any = createAction(
         }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            console.log('BBBBBBBBB', state.user);
             return axios
                 .get(
                     `${baseUrl}/checkout?${queryString.stringify({
@@ -35,10 +34,12 @@ export const fetchCheckoutAction: any = createAction(
                 )
                 .then((res: any) => {
                     dispatch(showLoaderAction(false));
+                    console.log(res.data);
                     return {
                         order: res.data.order,
                         address: res.data.address,
-                        shippingMethods: res.data.shippingMethods
+                        shippingMethods: res.data.shippingMethods,
+                        itemsWait: res.data.orderItemsWait.productsWaiting
                     };
                 });
         }

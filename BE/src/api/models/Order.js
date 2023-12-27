@@ -955,15 +955,14 @@ class Order {
         const client = await pool.connect();
         try {
             let orderNumber;let orderId;
-            const SQL = `SELECT order_id, order_number, data.orders.live_sessions_id, order_amount, total_amount, quantity
+            const SQL = `SELECT order_id, order_number, data.orders.live_sessions_id, 
+                    order_amount, total_amount, quantity, data.order_items.status
                 FROM data.order_items 
                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
-                WHERE message_id='${commentId}'`;
-            console.log(SQL);
+                WHERE message_id='${commentId}' ORDER BY data.order_items.order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
-            orderId = res.rows[0].id;
-            console.log("1", res.rows[0].order_id);
+            orderId = res.rows[0].order_id;
             console.log(`SELECT id FROM data.orders WHERE user_id='${userId}' 
                 AND status='new' AND id != '${res.rows[0].order_id}' 
                 AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
@@ -974,37 +973,64 @@ class Order {
             if (existNonPayedOrder.rows[0]?.id) {
                 orderNumber = existNonPayedOrder.rows[0].order_number;
                 orderId = existNonPayedOrder.rows[0].id;
-                // before add new items check if this item already aexist in order, if yes only change quantity
-                const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}'`;
+
+                // before add new items check if this item already aexist in order,
+                // if yes only change quantity for current configuration
+                const updateExistItemsSQL = `UPDATE data.order_items 
+                    SET order_id='${existNonPayedOrder.rows[0].id}' 
+                    WHERE message_id='${commentId}' AND status IS NULL`;
                 await client.query(updateExistItemsSQL);
                 // update amounts for order splited order
+                const productConfigQuery = `SELECT product_configuration_id 
+                        FROM data.order_items 
+                        WHERE 
+                            order_id='${existNonPayedOrder.rows[0].id}' AND 
+                            message_id='${commentId}' AND status IS NULL`;
+                const productConfigRes = await client.query(productConfigQuery);
+                const productConfigId = productConfigRes.rows[0].product_configuration_id;
                 const updateAmountSQL = `UPDATE data.orders 
                     SET order_amount = order_amount + ${res.rows[0].order_amount},
                     total_amount = total_amount +  ${res.rows[0].total_amount}
                     WHERE id='${existNonPayedOrder.rows[0].id}'`;
                 await client.query(updateAmountSQL);
                 // delete unused order
-                await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
 
                 // combined same rows in order_items
                 const combinedSQL = await client.query(`
                     SELECT product_configuration_id, SUM(quantity) AS resultsQty
                     FROM data.order_items
-                    WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                    WHERE order_id=${existNonPayedOrder.rows[0]?.id} 
+                        AND data.order_items.status IS NULL
                     GROUP BY product_configuration_id`);
                 const realOrderItems = await client.query(`SELECT id 
-                    FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
+                    FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id} AND status IS NULL`);
+                // console.log(combinedSQL.rows);
+                // exit;
+
+                /**** UNCOMMENT THIS AFTER FIX ****/
+                await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
+
                 // need to combine two rows into one
                 if (combinedSQL.rows.length < realOrderItems.rows.length) {
                     const combinedData = [];
                     combinedSQL.rows.forEach(_item => {
                         combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
-                    })
-                    const _dataResCombine = await client.query(`SELECT product_configuration_id, 
-                        SUM(quantity) AS resultsQty, array_agg(id) as products
-                        FROM data.order_items
-                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                        GROUP BY product_configuration_id;`)
+                    });
+                    // console.log(`SELECT product_configuration_id,
+                    //         SUM(quantity) AS resultsQty, array_agg(id) as products
+                    //     FROM data.order_items
+                    //     WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                    //             AND status IS NULL
+                    //             AND product_configuration_id='${productConfigId}'
+                    //     GROUP BY product_configuration_id;`);
+                    const _dataResCombine = await client.query(
+                        `SELECT product_configuration_id, 
+                                            SUM(quantity) AS resultsQty, array_agg(id) as products
+                                         FROM data.order_items
+                                         WHERE order_id=${existNonPayedOrder.rows[0]?.id} 
+                                            AND status IS NULL
+                                            AND product_configuration_id='${productConfigId}'
+                                         GROUP BY product_configuration_id;`);
                     _dataResCombine.rows.forEach(_row => {
                         if (_row.products.length > 1) {
                             _row.products.forEach(async (_itemId, _key) => {
@@ -1023,10 +1049,10 @@ class Order {
                 }
             } else {
                 const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
-                    total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
-                console.log(orderSQL);
+                    total_amount=order_amount WHERE id='${orderId}'`;
                 await client.query(orderSQL);
             }
+
 
             console.log("=============");
             console.log("RETURNED DATA");
@@ -1181,8 +1207,8 @@ class Order {
                 // console.log(sellerData.rows[0].user_id);
                 // console.log(hourDiff)
             } else {
-                console.log(`SELECT order_amount, live_sessions_id FROM 
-                    data.orders WHERE order_number='${orderNumber}'`);
+                // console.log(`SELECT order_amount, live_sessions_id FROM
+                //     data.orders WHERE order_number='${orderNumber}'`);
                 const currOrder = await client.query(`SELECT order_amount, live_sessions_id FROM 
                     data.orders WHERE order_number='${orderNumber}'`);
                 sellerData = await client.query(`SELECT user_id 
