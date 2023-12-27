@@ -1485,12 +1485,29 @@ class User {
                         auth_provider_expiration_time=to_timestamp(${data.data_access_expiration_time})
                        WHERE id=${userData.id}
                         `;
+        console.log(data.data_access_expiration_time);
         const userFbId = data.userID;
+
+        // need to get user long live token
+        // console.log('GET LONG LIVE USER TOKEN RESPONSE');
+        // console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`)
+        // getting long live token
+        const longToken = await axios
+            .get(
+                `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`
+            )
+            .then(async (responseLongToken) => {
+                console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+                await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+
+                return responseLongToken.data.access_token
+            });
+
         try {
             if (data.accessToken) {
                 await axios
                     .get(
-                        `https://graph.facebook.com/v18.0/me/accounts?fields=picture{url},name,fan_count,access_token&access_token=${data.accessToken}`
+                        `https://graph.facebook.com/v18.0/me/accounts?fields=picture{url},name,fan_count,access_token&access_token=${longToken}`
                     )
                     .then(async (responsePages) => {
                         if (responsePages.data.error) {
@@ -1500,22 +1517,9 @@ class User {
                             // getting picture for store
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
-                                const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                // const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                 const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                 if (queryStore.rows.length === 0) {
-                                    console.log(`
-                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
-                                                    VALUES
-                                                    (
-                                                        '${userFbId}',
-                                                        '${store.id}',
-                                                        '${store.access_token}',
-                                                        '${store.name}',
-                                                        '${userData.id}',
-                                                        '${store.fan_count}',
-                                                        true,
-                                                        '${store.picture.data.url}'
-                                                    );`);
                                     await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
                                                     VALUES
@@ -1540,9 +1544,20 @@ class User {
                                                         synchronized=true
                                                     WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                     );
+                                    // console.log('GET LONG LIVE USER TOKEN RESPONSE');
+                                    // console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${store.access_token}`)
+                                    // // getting long live token
+                                    // await axios
+                                    //     .get(
+                                    //         `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${store.access_token}`
+                                    //     )
+                                    //     .then(async (responseLongToken) => {
+                                    //         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+                                    //     });
                                 }
                             })
                         }
+
                         const { data } = responsePages;
                         // console.log("Users account connected pages", dataPages);
                         if (data.error) {
