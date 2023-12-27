@@ -12,7 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     addressCheckoutSelector,
     orderCheckoutSelector,
-    redirectMerchantUrlSelector, shippingMethodsCheckoutSelector
+    redirectMerchantUrlSelector,
+    shippingMethodsCheckoutSelector
 } from '../../redux/checkout/selectors';
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
 import {
@@ -28,7 +29,7 @@ import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 import Link from 'next/link';
 import { userSelector } from '../../redux/user/selectors';
 import { showEmailNotificationAction } from '../../redux/layouts';
-import shippingMethod from "../../components/checkout/ShippingMethod";
+// import shippingMethod from "../../components/checkout/ShippingMethod";
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
