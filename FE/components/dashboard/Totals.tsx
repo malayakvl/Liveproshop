@@ -10,7 +10,6 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
 }) => {
     const t = useTranslations();
     const user = useSelector(userSelector);
-
     return (
         <>
             <div className="w-full border-b md:border-b-0 mb-4 md:mb-0 flex flex-col w-full md:w-full  lg:w-1/4 xl:w-1/5 justify-center align-middle">

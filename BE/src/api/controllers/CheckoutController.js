@@ -1,6 +1,7 @@
 import checkoutModel from '../models/Checkout.js';
 import userModel from '../models/User.js';
 import orderModel from '../models/Order.js';
+import order from "../models/Order.js";
 
 class CheckoutController {
     /**
@@ -21,7 +22,7 @@ class CheckoutController {
         //     console.log(_item.message_id);
         // })
         console.log(orderData.order.order_items);
-        const orderItemsWait = await checkoutModel.fetchWaitInOrder(orderData.order.order_items);
+        const orderItemsWait = await checkoutModel.fetchWaitInOrder(orderData.order.order_items, orderData.order.id);
         // console.log("wait products", orderItemsWait);
         // get latest order amount
         const freeSheppingData = await orderModel.isFreeShipping(req.user.id, orderNumber);

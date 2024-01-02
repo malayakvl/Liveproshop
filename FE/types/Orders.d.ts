@@ -36,6 +36,7 @@ declare namespace Orders {
         total_amount: number;
         order_number: number;
         status: OrderStatus;
+        status_waiting: string;
         seller_id: number;
         seller_first_name: string;
         seller_photo: string;
@@ -53,6 +54,7 @@ declare namespace Orders {
         order_items: any;
         country_json: any;
         freeShipping: number;
+        waiting_products: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

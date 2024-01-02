@@ -609,7 +609,8 @@
   "Apply Countries": "Appliquer les pays",
   "Must be less {charNumber} characters": "Must be less",
   "Statuses have been changed for all shippings": "Les statuts ont été modifiés pour toutes les expéditions",
-  "quantity_wait": "quantité"
+  "quantity_wait": "quantité",
+  "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available"
 
 
 }
