@@ -19,7 +19,7 @@ class Checkout {
             });
 
             const ordersQuery = `SELECT * FROM data.get_orders(1, 0, '${filter}');`;
-            // console.log(ordersQuery)
+            console.log("AAAA", ordersQuery)
             const res = await client.query(ordersQuery);
             order = res.rows.length > 0 ? res.rows[0] : [];
             // console.log(res.rows[0].id)
@@ -41,6 +41,56 @@ class Checkout {
             client.release();
             return {
                 order,
+                error
+            };
+        }
+    }
+
+
+    async fetchWaitInOrder(orderItems, orderId) {
+        const client = await pool.connect();
+
+        let productsWaiting = null;
+        let error = null;
+        console.log(orderItems);
+
+        try {
+            const waitingProductsMessagesIds = [];
+            await orderItems.forEach(async (_item) => {
+                // const productWaiting = await client.query(`SELECT * FROM data.order_items WHERE
+                //     message_id = '${_item.message_id}' AND status='waiting'`);
+                waitingProductsMessagesIds.push(`'${_item.message_id}'`);
+                // productWaiting.rows.forEach(_waitProduct => {
+                //     console.log("waiting", _waitProduct);
+                //     waitingProducts.push(_waitProduct);
+                // })
+
+            });
+            console.log('ORDER ID', orderId);
+            console.log(waitingProductsMessagesIds)
+            console.log(`SELECT * FROM data.order_items WHERE
+                message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`)
+            const productWaitingRes = await client.query(`SELECT * FROM data.order_items WHERE
+                message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`);
+            productsWaiting = productWaitingRes.rows.length ? productWaitingRes.rows : [];
+            // return {success: true, waitingProducts: productWaiting.rows.length ? productWaiting.rows : []}
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Checkout fetchOrder):',
+                    { message: e.message }
+                );
+            }
+            error = {
+                code: 500,
+                message: 'Error get order'
+            };
+
+        } finally {
+            client.release();
+            return {
+                productsWaiting,
                 error
             };
         }

@@ -10,10 +10,10 @@ const { publicRuntimeConfig } = getConfig();
 const siteUrl = publicRuntimeConfig.siteUrl;
 import {
     orderCheckoutSelector,
-    shippingMethodsCheckoutSelector
+    shippingMethodsCheckoutSelector,
+    waitItemsSelector
 } from '../../redux/checkout/selectors';
 import { removeItemOrderAction, minusItemOrderAction } from '../../redux/orders/actions';
-// import { userSelector } from '../../redux/user/selectors';
 import { useRouter } from 'next/router';
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 
@@ -28,9 +28,8 @@ const OrderSummary = () => {
     } = useRouter();
 
     const order = useSelector(orderCheckoutSelector) || {};
-    // const user = useSelector(userSelector);
+    const waitItems = useSelector(waitItemsSelector);
     const showEmailNotice = useSelector(showEmailNoticeSelector);
-    // const showEmailNotice = true;
 
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
     const selectedShippingMethod = useMemo(
@@ -62,6 +61,9 @@ const OrderSummary = () => {
         recalculateTotal(order);
         if (order?.order_items) {
             order.order_items.sort((a: any, b: any) => (a.id > b.id ? 1 : -1));
+        }
+        if (order?.waiting_products) {
+            console.log('CURRENT WAITING', JSON.parse(order.waiting_products));
         }
         // console.log(order.order_items.sort(compare));
     }, [order]);
@@ -95,6 +97,24 @@ const OrderSummary = () => {
             )}
             {order.order_items?.length && (
                 <>
+                    {waitItems.length > 0 && (
+                        <div className="alert-success mb-5">
+                            <p className="inbline-block mb-2 text-[14px]">
+                                The number of items added to your cart reflects stock availability
+                            </p>
+                            {waitItems.map((_waitProduct: any, key: number) => (
+                                <div
+                                    key={`item_wait_${_waitProduct.id}_${key}`}
+                                    className="font-bold">
+                                    {_waitProduct.configuration.name}&nbsp;
+                                    {`# ${_waitProduct.configuration.sku}`}&nbsp;
+                                    {_waitProduct.configuration.color_name}&nbsp;
+                                    {`${t('quantity_wait')} ${_waitProduct.quantity}`}
+                                </div>
+                            ))}
+                            <span className=" text-[14px] mt-2 block">{t('msg_add_wait')}</span>
+                        </div>
+                    )}
                     <div className="text-gray-350 font-normal text-lg">
                         {order.order_items?.length} {t('items in Cart')}
                     </div>

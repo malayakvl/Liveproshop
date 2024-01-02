@@ -2,7 +2,8 @@ export const OrderStatus = {
     NEW: 'new',
     PAYED: 'payed',
     SHIPPED: 'shipped',
-    CANCELED: 'canceled'
+    CANCELED: 'canceled',
+    WAITING: 'waiting'
 }
 
 export const UserRole = {

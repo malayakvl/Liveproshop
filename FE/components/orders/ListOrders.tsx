@@ -171,12 +171,24 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                         onClick={() => handleShowMore(item.id)}
                                     />
                                 </td>
-                                <td className="order-number">
-                                    {user.role_id === 1 && (
+                                <td
+                                    className={`${
+                                        user.role_id === 1 && item.status_waiting
+                                            ? ''
+                                            : 'order-number'
+                                    }`}>
+                                    {user.role_id === 1 && !item.status_waiting && (
                                         <Link
                                             href={`/orders/${item.order_number}?locale=${locale}`}>
                                             <a>{item.order_number}</a>
                                         </Link>
+                                    )}
+                                    {user.role_id === 1 && item.status_waiting && (
+                                        <span
+                                            className="f-12 number-waiting"
+                                            style={{ color: 'black !important' }}>
+                                            {item.order_number}
+                                        </span>
                                     )}
                                     {user.role_id === 2 && item.status === 'new' && (
                                         <>
@@ -193,14 +205,20 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 </td>
                                 <td className="order-status">
                                     <div className="flex flex-row items-center justify-center">
-                                        <span className={`order-status ${item.status}`}>
-                                            {t(item.status)}
-                                        </span>
+                                        {!item.status_waiting ? (
+                                            <span className={`order-status ${item.status}`}>
+                                                {t(item.status)}
+                                            </span>
+                                        ) : (
+                                            <span className={`order-status waiting`}>
+                                                {t('waiting')}
+                                            </span>
+                                        )}
                                     </div>
                                 </td>
                                 <td>
                                     <span className="inline-block w-[20px] h-[20px]">
-                                        {item.status != 'new' && (
+                                        {item.status != 'new' && item.status != 'waiting' && (
                                             <div className="status-dropdown">
                                                 <DropdownStatusAction
                                                     onChange={(v: any) => {
@@ -295,19 +313,21 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     item.status === 'new' &&
                                     item.total_amount != 0 && (
                                         <td style={{ paddingTop: 0, paddingBottom: 0 }}>
-                                            <Link href={`/checkout/${item.order_number}`}>
-                                                <div
-                                                    className="gradient-btn-small cursor-pointer"
-                                                    style={{
-                                                        paddingTop: '3px',
-                                                        paddingBottom: '3px',
-                                                        minWidth: '60px'
-                                                    }}>
-                                                    <span className="text-white bg-none font-bold">
-                                                        {t('Pay')}
-                                                    </span>
-                                                </div>
-                                            </Link>
+                                            {!item.status_waiting && (
+                                                <Link href={`/checkout/${item.order_number}`}>
+                                                    <div
+                                                        className="gradient-btn-small cursor-pointer"
+                                                        style={{
+                                                            paddingTop: '3px',
+                                                            paddingBottom: '3px',
+                                                            minWidth: '60px'
+                                                        }}>
+                                                        <span className="text-white bg-none font-bold">
+                                                            {t('Pay')}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            )}
                                         </td>
                                     )}
                             </tr>
