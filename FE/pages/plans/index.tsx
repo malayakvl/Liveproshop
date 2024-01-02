@@ -164,7 +164,7 @@ export default function Index({ locale }: { locale: any }) {
                                     </span>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
-                                        href="javascript:void(0)"
+                                        href="javascript:;"
                                         onClick={() => {
                                             if (user?.email) {
                                                 Router.push(
@@ -265,7 +265,7 @@ export default function Index({ locale }: { locale: any }) {
                                                     );
                                                 }
                                             }}
-                                            href="javascript:void(0)"
+                                            href="javascript:;"
                                             className="flex justify-center items-center bg-indigo-600 rounded-xl py-6 px-4 text-center text-white text-2xl gradient-btn mt-5 mb-5">
                                             {t('Choose Plan')}
                                             <img
@@ -279,7 +279,7 @@ export default function Index({ locale }: { locale: any }) {
                                 </div>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a
-                                    href="javascript:void(0)"
+                                    href="javascript:;"
                                     onClick={() => {
                                         if (user?.email) {
                                             Router.push(
@@ -338,7 +338,7 @@ export default function Index({ locale }: { locale: any }) {
                                         </span>
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
-                                            href="javascript:void(0)"
+                                            href="javascript:;"
                                             onClick={() => {
                                                 if (user?.email) {
                                                     Router.push(
@@ -361,7 +361,7 @@ export default function Index({ locale }: { locale: any }) {
                                         {parsePlanValues(2, locale)}
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
-                                            href="javascript:void(0)"
+                                            href="javascript:;"
                                             onClick={() => {
                                                 if (user?.email) {
                                                     Router.push(

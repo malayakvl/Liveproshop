@@ -1,12 +1,15 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSelector } from 'react-redux';
 import { ListStores } from '../../components/stores';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
 import { accountService } from '../../_services';
-// import { userSelector } from '../../redux/user/selectors';
+import { userSelector } from '../../redux/user/selectors';
+import moment from 'moment';
+// import {showLoaderAction} from "../../redux/layouts/actions";
+// import {fetchOrderPdfAction} from "../../redux/orders";
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -14,11 +17,17 @@ export default function Index({ session, locale }: { session: any; locale: strin
     // const dispatch = useDispatch();
     const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
     // const hiddenFileInput = useRef(null);
-    // const user = useSelector(userSelector);
+    const user = useSelector(userSelector);
 
     const fbSync = () => {
         accountService.syncFB();
     };
+
+    // useEffect(() => {
+    //     if (user?.id) {
+    //         console.log(user?.auth_provider_expiration_time);
+    //     }
+    // }, [user]);
 
     return (
         <>
@@ -35,6 +44,12 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         <button className="btn-sync-fb" onClick={() => fbSync()}>
                             <span>{t('Sync account')}</span>
                         </button>
+                        <span className="inline-block ml-3 text-green-250 font-bold">
+                            Expire in{' '}
+                            {moment(user?.auth_provider_expiration_time).format(
+                                'DD/MM/YYYY H:mm:ss'
+                            )}
+                        </span>
                     </div>
                     <div className="clear-both" />
                 </div>

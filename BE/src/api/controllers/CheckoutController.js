@@ -42,7 +42,6 @@ class CheckoutController {
 
     async fetchShippingMethodsByCountry(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
-
         const { orderId, countryId } = req.query;
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderId, countryId);
 
