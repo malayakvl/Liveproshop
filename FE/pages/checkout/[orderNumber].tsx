@@ -3,9 +3,18 @@ import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { fetchCheckoutAction, submitCheckoutAction } from '../../redux/checkout';
+import {
+    fetchCheckoutAction,
+    fetchShippingMethodsByCountryCheckoutAction,
+    submitCheckoutAction
+} from '../../redux/checkout';
 import { useDispatch, useSelector } from 'react-redux';
-import { orderCheckoutSelector, redirectMerchantUrlSelector } from '../../redux/checkout/selectors';
+import {
+    addressCheckoutSelector,
+    orderCheckoutSelector,
+    redirectMerchantUrlSelector,
+    shippingMethodsCheckoutSelector
+} from '../../redux/checkout/selectors';
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
 import {
     clearOrderByCommentAction,
@@ -20,6 +29,7 @@ import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 import Link from 'next/link';
 import { userSelector } from '../../redux/user/selectors';
 import { showEmailNotificationAction } from '../../redux/layouts';
+// import shippingMethod from "../../components/checkout/ShippingMethod";
 // import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
@@ -34,6 +44,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
     } = useRouter();
     const dispatch = useDispatch();
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
+    const address = useSelector(addressCheckoutSelector);
+    const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
 
     const validateEmail = (email: string) => {
         if (!email) {
@@ -55,6 +67,23 @@ export default function Index({ session, locale }: { session: any; locale: any }
         dispatch(clearOrderByCommentAction(null));
         window.localStorage.removeItem('orderCommentId');
     }, [user.email]);
+
+    useEffect(() => {
+        if (address?.country_id && order?.id) {
+            if (shippingMethods.length == 0) {
+                console.log('COUNTRY', address.country_id);
+                dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
+            }
+        }
+        // if (address.country_id)
+        // dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
+        // if (shippingMethods.length > 0) {
+        //     setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false);
+        // } else if (address.country_id && shippingMethods.length === 0) {
+        //     console.log(address.country_id, shippingMethods.length);
+        //     // dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
+        // }
+    }, [address?.country_id]);
 
     useEffect(() => {
         if (redirectMerchantUrl) {

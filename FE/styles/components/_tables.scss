@@ -223,6 +223,10 @@ td.order-status {
   .new {
     @apply rounded-lg p-1.5 text-green-250 bg-green-100 border-green-250;
   }
+
+  .waiting {
+    @apply rounded-lg p-1.5 text-gray-350 bg-gray-100 border-gray-550;
+  }
 }
 
 span.closed {
@@ -241,7 +245,18 @@ span.trial-subscription {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-blue-600 bg-blue-100 border-blue-600;
 }
 
+.number-waiting {
+  color: #000 !important;
+  font-size: 9px;
+  font-weight: bold;
+}
+
 span.new {
+  line-height: 14px !important;
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
+}
+span.waiting {
+  line-height: 14px !important;
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
 }
 span.payed, span.paid {

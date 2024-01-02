@@ -28,7 +28,7 @@ const SchedulePopup: React.FC<any> = () => {
     const [selectedStore, setSelectedStore] = useState(null);
     const feature_fb_schedule = useSelector(userSelector)?.plan_options?.feature_fb_schedule;
 
-    console.log(useSelector(userSelector)?.plan_options);
+    // console.log(useSelector(userSelector)?.plan_options);
 
     // const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());

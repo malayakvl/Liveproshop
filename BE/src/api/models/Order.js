@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import * as zipLib from "zip-a-folder";
 import { generateRndPrefix } from "../lib/utils.js";
+import shell from "shelljs";
 
 async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
@@ -327,10 +328,22 @@ class Order {
         const client = await pool.connect();
         try {
             const updtQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
-            await client.query(updtQuery);
+            // await client.query(updtQuery);
+console.log('HHHHHH');
+            shell.exec(`pm2 start jobStoreWaiting.js --name "jobStoreWaiting 46" -- sessionId=46 configId=290 accessToken=${session.auth_provider_access_token} providerId=${session.auth_provider_id}`, function(code, output) {
+                console.log('Exit code:', code);
+                console.log('Program output:', output);
+            });
+            exit;
 
             // run workflow for update waiting items
+            const waitingItemsQuery = `SELECT * FROM data.order_items WHERE product_configuration_id=${configId} AND status='waiting'`;
+console.log(waitingItemsQuery);
+            exit;
+
             const waitListQuery = `SELECT * FROM data.set_orders_from_waiting_list_by_product(${sessionId}, ${configId});`;
+            console.log(waitListQuery);
+            eixit;
             await client.query(waitListQuery);
 
         } catch (e) {
@@ -464,7 +477,7 @@ class Order {
             }
             if (_filters.status?.length === 0) {
                 if (user.role_id === UserRole.BUYER) {
-                    _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW];
+                    _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW, OrderStatus.WAITING];
                 } else {
                     _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED];
                 }
@@ -486,7 +499,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            // console.log(ordersQuery);
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -522,7 +535,7 @@ class Order {
                     WHERE TRUE
                         AND (order_statuses.order_id IN (${_orderIds.join(',')}))
                 `;
-               orderStatusesRes = await client.query(orderStatuses);
+                orderStatusesRes = await client.query(orderStatuses);
             }
 //             console.log(orderStatuses);
 //             const orderStatusesRes = await client.query(orderStatuses);
@@ -756,7 +769,7 @@ class Order {
                         country: coutryRes.rows[0].nicename
                     },
                     seller: {
-                      data: sellerData.rows[0]
+                        data: sellerData.rows[0]
                     },
                     status: res.rows[0].status,
                     items: res.rows[0].order_items,
@@ -954,28 +967,40 @@ class Order {
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            let orderNumber;let orderId;
-            const SQL = `SELECT order_id, order_number, data.orders.live_sessions_id, order_amount, total_amount, quantity
-                FROM data.order_items 
-                LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
-                WHERE message_id='${commentId}'`;
-            console.log(SQL);
+            let orderNumber;let orderId;let copyOrderData;
+            const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId,
+                        data.orders.live_sessions_id, order_amount, total_amount, quantity
+                                FROM data.order_items 
+                                LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
+                                WHERE message_id='${commentId}' ORDER BY order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
-            orderId = res.rows[0].id;
-            console.log("1", res.rows[0].order_id);
-            console.log(`SELECT id FROM data.orders WHERE user_id='${userId}' 
-                AND status='new' AND id != '${res.rows[0].order_id}' 
-                AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
+            // console.log(orderNumber);
+            const _tmpOrderNumber = res.rows[0].order_number.split('-');
+            const prefixWait = Math.floor(Date.now()/1000);
+            // console.log(_tmpOrderNumber);
+            // exit;
+
+            copyOrderData = res.rows[0];
+            // copyOrderData.order_number = `${_tmpOrderNumber[0]}-WO-${_tmpOrderNumber[1]}`;
+            copyOrderData.order_number = `${res.rows[0].order_number}-WO-${prefixWait}`;
+            orderId = res.rows[0].orderId;
+            // console.log(`SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
+            //     AND status='new' AND id != '${res.rows[0].order_id}'
+            //     AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+            // exit;
             const existNonPayedOrder = await client.query(
                 `SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
                 AND status='new' AND id != '${res.rows[0].order_id}'
-                AND live_sessions_id='${res.rows[0].live_sessions_id}'`);
+                AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
             if (existNonPayedOrder.rows[0]?.id) {
                 orderNumber = existNonPayedOrder.rows[0].order_number;
+                // copyOrderData.user_id = userId;
+                // copyOrderData.order_number = `${res.rows[0].order_number}-WO-$prefixWait}`;
                 orderId = existNonPayedOrder.rows[0].id;
                 // before add new items check if this item already aexist in order, if yes only change quantity
-                const updateExistItemsSQL = `UPDATE data.order_items SET order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}'`;
+                const updateExistItemsSQL = `UPDATE data.order_items SET 
+                        order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}' AND status IS NULL `;
                 await client.query(updateExistItemsSQL);
                 // update amounts for order splited order
                 const updateAmountSQL = `UPDATE data.orders 
@@ -983,6 +1008,7 @@ class Order {
                     total_amount = total_amount +  ${res.rows[0].total_amount}
                     WHERE id='${existNonPayedOrder.rows[0].id}'`;
                 await client.query(updateAmountSQL);
+
                 // delete unused order
                 await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
 
@@ -995,6 +1021,7 @@ class Order {
                 const realOrderItems = await client.query(`SELECT id 
                     FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
                 // need to combine two rows into one
+                console.log(combinedSQL.rows.length, realOrderItems.rows.length);
                 if (combinedSQL.rows.length < realOrderItems.rows.length) {
                     const combinedData = [];
                     combinedSQL.rows.forEach(_item => {
@@ -1022,11 +1049,50 @@ class Order {
                     });
                 }
             } else {
+                orderId = res.rows[0].order_id;
                 const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
                     total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
-                console.log(orderSQL);
                 await client.query(orderSQL);
             }
+            console.log('ORDERID', orderId);
+
+            // find waiting products in order
+            const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE
+                message_id='${commentId}' AND status='waiting'`);
+
+            // create separate order for each wait item
+            waitingItems.rows.forEach(async (_item, key) => {
+                const insertOrder = await client.query(`INSERT INTO data.orders
+                    (user_id, live_sessions_id, order_amount, total_amount, order_number, status, status_waiting)
+                    VALUES ('${userId}', '${copyOrderData.live_sessions_id}', ${_item.price}, ${_item.price}, '${copyOrderData.order_number}', 'waiting', true) RETURNING id;`);
+
+                // console.log("ITEM CONFIG", _item.configuration);
+                await client.query(`INSERT INTO data.order_items (order_id, message_id, product_id,
+                                    product_configuration_id, color_id, size_id, price, quantity, status,
+                                    configuration, user_id, live_sessions_id) VALUES (
+                                    ${insertOrder.rows[0].id}, '${_item.message_id}',
+                                    '${_item.product_id}', '${_item.product_configuration_id}',
+                                    '${_item.color_id}', '${_item.size_id}',
+                                    ${_item.price}, ${_item.quantity}, 'waiting',
+                                    '${JSON.stringify(_item.configuration)}', ${userId}, ${_item.live_sessions_id}
+
+                )`);
+                console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                // await client.query(`INSERT INTO data.order_items (order_id, message_id, product_id,
+                //                     product_configuration_id, color_id, size_id, price, quantity, status,
+                //                     configuration, user_id, live_sessions_id) VALUES (
+                //                     {insertOrder.rows[0].id}, '${_item.message_id}',
+                //                     '${_item.product_id}', '${_item.product_configuration_id}',
+                //                     '${_item.color_id}', '${_item.size_id}',
+                //                     '{${_item.price}}', ${_item.quantity}, 'waiting',
+                //                     '${_item.configuration}', {userId}, {_item.live_sessions_id}
+                //
+                // )`);
+                // console.log("BBBBB", insertOrder.rows[0].id);
+            })
+
+            await client.query(`UPDATE data.orders SET waiting_products='${JSON.stringify(waitingItems.rows)}' WHERE id=${orderId}`)
 
             console.log("=============");
             console.log("RETURNED DATA");
@@ -1120,7 +1186,7 @@ class Order {
             try {
                 await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
             } catch (e) {
-               console.log(e.message)
+                console.log(e.message)
             }
             await setTimeout(4000);
             return {

@@ -30,3 +30,7 @@ export const paymentStatusSelector = createSelector(
     rootSelector,
     (checkout: State.Checkout): any => checkout.paymentStatus
 );
+export const waitItemsSelector = createSelector(
+    rootSelector,
+    (checkout: State.Checkout): any => checkout.itemsWait
+);

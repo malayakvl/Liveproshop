@@ -7,5 +7,6 @@ declare namespace Checkout {
         loading: boolean;
         redirectUrl: string | null;
         paymentStatus: string | null;
+        itemsWait: any[];
     }
 }

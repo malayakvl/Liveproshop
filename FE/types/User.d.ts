@@ -16,6 +16,7 @@ declare namespace User {
     interface User {
         id: number;
         role_id: number;
+        auth_provider_expiration_time: any;
         subscription_expired: boolean;
         email: string;
         email_real: string;

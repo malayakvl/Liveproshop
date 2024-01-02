@@ -29,8 +29,8 @@ export default function MainLayout({ children }: { children: any }) {
                 }
             } else {
                 const localUser = JSON.parse(window.localStorage.getItem('user') || '{}');
-                console.log('SESSION EMAIL', session?.user?.email);
-                console.log('LOCAL EMAIL', localUser.email);
+                // console.log('SESSION EMAIL', session?.user?.email);
+                // console.log('LOCAL EMAIL', localUser.email);
                 if (session?.user?.email !== localUser.email) {
                     // WTF я не помню зачем я ето делала
                     // window.localStorage.setItem('user', JSON.stringify({}));

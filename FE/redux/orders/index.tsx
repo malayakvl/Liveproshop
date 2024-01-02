@@ -20,7 +20,8 @@ import {
     setupReturnedUrlAction,
     redirectCheckoutAction,
     updateOrderStatusAction,
-    redirectOrderNumberAction
+    redirectOrderNumberAction,
+    setupConnectedOrderIdAction
 } from './actions';
 
 const initialState: {
@@ -223,6 +224,12 @@ const ACTION_HANDLERS: any = {
             connectedOrderNumber: action.payload
         })
     },
+    [setupConnectedOrderIdAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            connectedOrderNumber: action.payload
+        })
+    },
     [clearOrderByCommentAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
@@ -264,7 +271,8 @@ export {
     setupReturnedUrlAction,
     redirectCheckoutAction,
     updateOrderStatusAction,
-    redirectOrderNumberAction
+    redirectOrderNumberAction,
+    setupConnectedOrderIdAction
 };
 
 // ------------------------------------

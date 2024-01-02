@@ -1,6 +1,7 @@
 import checkoutModel from '../models/Checkout.js';
 import userModel from '../models/User.js';
 import orderModel from '../models/Order.js';
+import order from "../models/Order.js";
 
 class CheckoutController {
     /**
@@ -15,6 +16,14 @@ class CheckoutController {
         const { orderNumber } = req.query;
 
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
+        // getting waiting products from current order
+        // (e.g. seller have 1 buyer want 3, and we create order for 1 qnt and need to show how not available)
+        // orderData.order.order_items.forEach(_item => {
+        //     console.log(_item.message_id);
+        // })
+        console.log(orderData.order.order_items);
+        const orderItemsWait = await checkoutModel.fetchWaitInOrder(orderData.order.order_items, orderData.order.id);
+        // console.log("wait products", orderItemsWait);
         // get latest order amount
         const freeSheppingData = await orderModel.isFreeShipping(req.user.id, orderNumber);
 
@@ -26,13 +35,13 @@ class CheckoutController {
             order: orderData.order,
             address,
             shippingMethods: shippingMethodsData.shippingMethods,
-            freeShepping: freeSheppingData?.freeShipping || 0
+            freeShepping: freeSheppingData?.freeShipping || 0,
+            orderItemsWait: orderItemsWait
         });
     }
 
     async fetchShippingMethodsByCountry(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
-
         const { orderId, countryId } = req.query;
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderId, countryId);
 
