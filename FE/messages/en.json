@@ -608,5 +608,6 @@
   "Must be less {charNumber} characters": "Must be less {charNumber} characters",
   "Statuses have been changed for all shippings": "Statuses have been changed for all shippings",
   "quantity_wait": "qantity",
-  "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available"
+  "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available",
+  "My Documents": "My Documents"
 }
