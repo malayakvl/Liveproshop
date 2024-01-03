@@ -135,7 +135,7 @@ export const skipExistUserSubscriptionAction: any = createAction(
         }
 );
 export const skipExistUserSubscriptionNewAction: any = createAction(
-    'user/SKIP_EXIST_USER_SUBSCRIPTION',
+    'user/NEW_SKIP_EXIST_USER_SUBSCRIPTION',
     async (redirectUrl: string, locale: string) =>
         async (
             dispatch: Type.Dispatch,
@@ -155,7 +155,8 @@ export const skipExistUserSubscriptionNewAction: any = createAction(
             if (res.status) {
                 dispatch(showLoaderAction(false));
             }
-            if (res.data.user.subscription.status === 'skipping') {
+            console.log(res.data.user.subscription);
+            if (res.data.user.status === 'skipping') {
                 window.localStorage.removeItem('user');
                 window.localStorage.setItem('user', JSON.stringify(res.data.user));
                 dispatch(setUserAction(res.data.user));

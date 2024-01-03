@@ -332,7 +332,15 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                 )}
                                 {subscriptionInfo.is_fake && (
                                     <tr>
-                                        <td>{t('Try for free')}</td>
+                                        <td>
+                                            {subscriptionInfo.customer_id.indexOf('us_')
+                                                ? subscriptionInfo.plan_id == 2
+                                                    ? t('Business')
+                                                    : subscriptionInfo.plan_id == 1
+                                                    ? t('Basic')
+                                                    : t('Platinum')
+                                                : t('Try for free')}
+                                        </td>
                                         <td style={{ textAlign: 'center' }}>
                                             <span className={`trial-subscription`}>
                                                 {t('trial subscription')}

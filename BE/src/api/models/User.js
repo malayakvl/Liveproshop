@@ -466,6 +466,7 @@ class User {
         const client = await pool.connect();
         try {
             // const subParam = userData.subscription_id.split('_');
+            // console.log(userData);
             // const existSubscrQuery = await client.query(`SELECT * FROM data.subscriptions WHERE customer_id='fake_subscription_${subParam[2]}'`);
             let userId = userData.id;
             const periodStart =  new Date();
@@ -488,7 +489,6 @@ class User {
             await client.query(_querySubscription);
             const dbUser = await client.query(`SELECT email FROM data.users WHERE id='${userId}'`);
             const _user = await this.findUserByEmail(dbUser.rows[0].email);
-            // console.log(_user);
             return { user: _user, error: null };
 
         } catch (e) {
@@ -594,7 +594,7 @@ class User {
                         payment_behavior: 'default_incomplete',
                         expand: ['latest_invoice.payment_intent'],
                     };
-                    subscriptionObject.trial_period_days = 20;
+                    subscriptionObject.trial_period_days = 30;
                     const subscription = await stripe.subscriptions.create(subscriptionObject);
 
                     // if subscription created add record to DB
@@ -607,7 +607,7 @@ class User {
                             status: subscription.status,
                             period_start: subscription.current_period_start,
                             period_end: subscription.current_period_end,
-                            is_trial: true
+                            is_trial: true,
                         }
                         // console.log("INSERT SUBSCRIPTION DATA", subscriptionData);
                         // console.log(`SELECT * FROM data.set_subscriptions('${JSON.stringify(subscriptionData)}');`);
