@@ -207,6 +207,40 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 </Link>
                                             </li>
                                         )}
+                                        {user.role_id === 2 && !redirectToPlan && (
+                                            <li>
+                                                <Link href="/stores">
+                                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                                    <a
+                                                        role="presentation"
+                                                        onClick={() =>
+                                                            setShowProfileMenu(!showProfileMenu)
+                                                        }>
+                                                        <i className="store" />
+                                                        <span className="s-caption">
+                                                            {t('My Stores')}
+                                                        </span>
+                                                    </a>
+                                                </Link>
+                                            </li>
+                                        )}
+                                        {user.role_id === 2 && !redirectToPlan && (
+                                            <li>
+                                                <Link href="/documents">
+                                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                                    <a
+                                                        role="presentation"
+                                                        onClick={() =>
+                                                            setShowProfileMenu(!showProfileMenu)
+                                                        }>
+                                                        <i className="documents" />
+                                                        <span className="s-caption">
+                                                            {t('My Documents')}
+                                                        </span>
+                                                    </a>
+                                                </Link>
+                                            </li>
+                                        )}
                                         {user.role_id === 1 && redirectToPlan && (
                                             <li>
                                                 <Link href="/pricing">

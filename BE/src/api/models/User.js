@@ -532,6 +532,9 @@ class User {
                         data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
             await client.query(_querySubscription);
             const dbUser = await client.query(`SELECT email FROM data.users WHERE id='${userId}'`);
+            console.log(`SELECT email FROM data.users WHERE id='${userId}'`)
+            console.log("DB USER", dbUser.rows[0])
+            // const _user = await this.findUserByEmail(dbUser.rows[0].email);
             const _user = await this.findUserByEmail(dbUser.rows[0].email);
             return { user: _user, error: null };
 
@@ -676,7 +679,7 @@ class User {
                         payment_behavior: 'default_incomplete',
                         expand: ['latest_invoice.payment_intent'],
                     };
-                    subscriptionObject.trial_period_days = 20;
+                    subscriptionObject.trial_period_days = 30;
                     // if (userData.type === 'trial') {
                     //     subscriptionObject.trial_period_days = resSettings.rows[0].trial_period;
                     // } else {

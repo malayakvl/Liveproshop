@@ -104,11 +104,11 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         // eslint-disable-next-line prefer-const
         // console.log(itemsStatuses);
         const orderStatus = itemsStatuses.find((_item: any) => _item.id === id);
-        let resultStatuses = '';
+        // let resultStatuses = '';
         const dataStatuses: any[] = [];
         if (orderStatus?.statuses?.length > 0) {
             orderStatus?.statuses?.map((_status: any) => {
-                resultStatuses += `${_status.status}<br/>`;
+                // resultStatuses += `${_status.status}<br/>`;
                 dataStatuses.push(
                     t(_status.status) +
                         ' ' +
@@ -125,10 +125,50 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     return (
         <div className="mt-7">
             <>
+                <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative">
+                    <h2 className="dark-blue-header mt-[75px] md:mt-auto">
+                        {t('Orders')}
+                        <span className="text-gray-180 font-normal text-sm"> {count} items</span>
+                    </h2>
+                    <Filters
+                        handleHideFilter={handleHideFilter}
+                        locale={locale}
+                        filterOpen={filterOpen}
+                    />
+                    <div className="">
+                        <button
+                            // style={{ right: '0px', top: '20px' }}
+                            className={`gradient-btn btn-download-orders`}
+                            onClick={() => dispatch(bulkDownloadAction())}>
+                            <div className="font-medium text-white ml-2 mr-2 py-[3px]">
+                                {t('Download Orders')}
+                            </div>
+                        </button>
+                        <button
+                            onClick={() => {
+                                if (filterOpen) {
+                                    dispatch(showDateSelectorAction(false));
+                                }
+                                setFilterOpen(!filterOpen);
+                            }}
+                            className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
+                            <Image width={16} height={16} src={'/images/filter.svg'} />
+                            <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                            <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                                {filters.country_id.length +
+                                    filters.payment_id.length +
+                                    filters.status.length +
+                                    filters.seller_id.length +
+                                    !!filters.total_amount.length +
+                                    !!filters.created_at.length +
+                                    filters.country_id.length}
+                            </div>
+                        </button>
+                    </div>
+                </div>
                 <div className="mb-5">
                     <FilterValues />
                 </div>
-
                 <DataTable
                     paginationType={PaginationType.ORDERS}
                     sendStatusRequest={sendStatusRequest}
@@ -241,12 +281,14 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                         <div className="invoice-dropdown">
                                             <DropdownPdfAction
                                                 onChange={(v: any) => {
-                                                    let type = '';
-                                                    if (v === 'invoice pdf') {
-                                                        type = 'invoice';
-                                                    } else {
-                                                        type = 'refund';
-                                                    }
+                                                    // let v =  type === 'invoice pdf' ? 'invoice' : 'refund';
+                                                    const type =
+                                                        v === 'invoice pdf' ? 'invoice' : 'refund';
+                                                    // if (v === 'invoice pdf') {
+                                                    //     type = 'invoice';
+                                                    // } else {
+                                                    //     type = 'refund';
+                                                    // }
 
                                                     Router.push(
                                                         `/orders/${item.order_number}?locale=${locale}&type=${type}`
