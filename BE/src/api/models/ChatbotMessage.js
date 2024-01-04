@@ -119,11 +119,13 @@ class ChatbotMessage {
     }
 
 
-    async updateMessageStatus(messageId) {
+    async updateMessageStatus(messageId, recipientId) {
         const client = await pool.connect();
         try {
             const query = await client.query(
-                `UPDATE data.live_sessions_messages SET reply_sended=true WHERE message_id='${messageId}'`
+                `UPDATE data.live_sessions_messages SET 
+                        reply_sended=true, recipient_id='${recipientId}'
+                    WHERE message_id='${messageId}'`
             );
             const result = query.rows.length > 0 ? query.rows : [];
             return {
