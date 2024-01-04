@@ -11,6 +11,7 @@ const tokenData = args[4].split('=');
 
 async function sessionLaunche() {
     // start parsing messages
+    console.log('here');
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
             response.data.data.forEach(async message => {
@@ -68,15 +69,15 @@ async function sessionLaunche() {
                         }
 
 
-                        await axios.get(
-                            `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}`
-                        )
-                            .then(async function (res) {
-                                console.log(orderFrom);
-                                return;
-                            }).catch(e => {
-                                console.log(e);
-                            });
+                        // await axios.get(
+                        //     `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}`
+                        // )
+                        //     .then(async function (res) {
+                        //         console.log(orderFrom);
+                        //         return;
+                        //     }).catch(e => {
+                        //         console.log(e);
+                        //     });
 
 
                         const responceResultMessage =  await axios.post(
@@ -92,11 +93,23 @@ async function sessionLaunche() {
                         )
                             .then(async function (responseSending) {
                                 // console.log(responseSending);
-                                return true;
+                                return responseSending;
                             }).catch(e => {
                                 console.log('Error Send Message Yobany v rot:');
                                 return false;
                             });
+                        if (responceResultMessage.data.recipient_id) {
+                            await axios.get(
+                                `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}&recipient_id=${responceResultMessage.data.recipient_id}`
+                            )
+                                .then(async function (res) {
+                                    console.log(orderFrom);
+                                    return;
+                                }).catch(e => {
+                                    console.log(e);
+                                });
+                        }
+                        console.log("AAAA", responceResultMessage.data.recipient_id);
                     } else {
                     }
                 }

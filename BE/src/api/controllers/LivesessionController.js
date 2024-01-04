@@ -36,7 +36,7 @@ class LivesessionController {
 
 
     async updateLiveMessage (req, res) {
-        const data = await chatbotMessageModel.updateMessageStatus(req.query.comment_id);
+        const data = await chatbotMessageModel.updateMessageStatus(req.query.comment_id, req.query.recipient_id);
         return res.status(200).json({ result: req.query.comment_id });
     }
 

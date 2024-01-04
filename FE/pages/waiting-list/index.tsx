@@ -4,7 +4,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { List } from '../../components/waitingList';
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
 
@@ -28,7 +28,7 @@ export default function Index({ session }: { session: any }) {
                 />
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
-                <List />
+                <List locale={locale} />
             </div>
         </>
     );
