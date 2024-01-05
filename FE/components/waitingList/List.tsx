@@ -25,7 +25,7 @@ import 'react-date-range/dist/theme/default.css';
 import { BanIcon } from '@heroicons/react/solid'; // theme css file
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { Filters } from '../waitingList';
-import { showDateSelectorAction } from '../../redux/orders/actions';
+import { showDateSelectorAction } from '../../redux/orders';
 import Image from 'next/image';
 
 const userProfileImg =
