@@ -33,7 +33,8 @@ export default function Signup({ locale }: { locale: string }) {
     const [isFbClicked, setIsFbClicked] = useState(false);
     const [hideForm, setHideForm] = useState(false);
     const [commentId, setCommentId] = useState('');
-    const [commentTmpId, setCommentTmpId] = useState('');
+    const [_, setCommentTmpId] = useState('');
+    const [showSellerRadio, setShowSellerRadio] = useState(true);
     // const { values, submitForm } = useFormikContext();
     // const { setFieldValue } = useFormikContext();
     // const params = new URLSearchParams(window.location.pathname);
@@ -56,6 +57,7 @@ export default function Signup({ locale }: { locale: string }) {
         const commentStr = dataParams[0].split('=');
         // const commentId = commentStr[1];
         setCommentId(commentStr[1]);
+        setShowSellerRadio(false);
         setRoleId(1);
     }, [typeof window !== 'undefined']);
 
@@ -73,9 +75,9 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        const parseCommentId = commentStr[1];
+        // const parseCommentId = commentStr[1];
         if (commentStr[0] == 'comment_id' && commentStr[1]) {
-            console.log(commentStr[1]);
+            // console.log(commentStr[1]);
             dispatch(setOrderCommentAction(commentStr[1]));
             window.localStorage.setItem('order_comment_id', commentStr[1]);
         }
@@ -89,7 +91,7 @@ export default function Signup({ locale }: { locale: string }) {
                 const urlParams = window.location.search.substring(1);
                 const dataParams = urlParams.split('&');
                 const commentStr = dataParams[0].split('=');
-                const parseCommentId = commentStr[1];
+                parseCommentId = commentStr[1];
                 // if (commentStr[0] == 'comment_id' && commentStr[1]) {
                 //     // setRoleId(1);
                 //     if (!commentId) {
@@ -107,6 +109,8 @@ export default function Signup({ locale }: { locale: string }) {
             actions.resetForm();
         }
     };
+
+    console.log('Comment ID', commentId)
 
     return (
         <>
@@ -128,8 +132,10 @@ export default function Signup({ locale }: { locale: string }) {
                     {(props) => (
                         <form
                             onSubmit={props.handleSubmit}
-                            className="w-80 mb-5 p-8 flex-col rounded-lg colored-shadow mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0">
-                            <div className="mt-0 w-full font-bold md:mt-8 md:pr-8 md:w-2/4 md:flex md:flex-col md:justify-center">
+                            className={`sign-up-form colored-shadow ${
+                                showSellerRadio ? '' : 'max-h-[350px] sign-up-fb'
+                            }`}>
+                            <div className="mt-0 w-full font-bold md:mt-0 md:pr-8 md:w-2/4 md:flex md:flex-col md:justify-center">
                                 <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
@@ -178,7 +184,10 @@ export default function Signup({ locale }: { locale: string }) {
                                                         {t('Shopper')}
                                                     </label>
                                                 </div>
-                                                <div className="text-gray-180 text-xs">
+                                                <div
+                                                    className={`text-gray-180 text-xs ${
+                                                        showSellerRadio ? '' : 'hidden'
+                                                    }`}>
                                                     <Field
                                                         onClick={() => setRoleId(2)}
                                                         id="seller-radio"
@@ -211,10 +220,15 @@ export default function Signup({ locale }: { locale: string }) {
                                                 </button>
                                                 <div
                                                     style={{ lineHeight: '0.1em' }}
-                                                    className="text-center border-b my-5">
+                                                    className={`text-center border-b my-5 ${
+                                                        showSellerRadio ? '' : 'hidden'
+                                                    }`}>
                                                     <span className="bg-white px-6">{t('or')}</span>
                                                 </div>
-                                                <div className="relative">
+                                                <div
+                                                    className={`relative ${
+                                                        showSellerRadio ? '' : 'hidden'
+                                                    }`}>
                                                     <i className="f-icon f-email" />
 
                                                     <input
@@ -287,7 +301,9 @@ export default function Signup({ locale }: { locale: string }) {
 
                                                 <button
                                                     type="submit"
-                                                    className="gradient-btn w-full mt-4">
+                                                    className={`gradient-btn w-full mt-4 ${
+                                                        showSellerRadio ? '' : 'hidden'
+                                                    }`}>
                                                     {t('Sign up')}
                                                 </button>
                                             </div>

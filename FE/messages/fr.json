@@ -611,5 +611,6 @@
   "Statuses have been changed for all shippings": "Les statuts ont été modifiés pour toutes les expéditions",
   "quantity_wait": "quantité",
   "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available",
-  "My Documents": "Mes documents"
+  "My Documents": "Mes documents",
+  "Change quantity": "Changer la quantité"
 }

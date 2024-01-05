@@ -163,6 +163,9 @@ class ChatbotMessage {
             let result;
             const queryExist = await client.query(`SELECT * FROM data.order_items WHERE message_id='${messageId}' AND status IS NULL`);
             result = !(queryExist.rows.length > 0 && query.rows.length > 0);
+            if (!result) {
+                await client.query(`UPDATE data.orders SET status='waiting' WHERE id='${query.rows[0].order_id}'`);
+            }
             // if (queryExist.rows.length > 0 && query.rows.length > 0) {
             //     // removing wait item from order
             //     // await client.query(`DELETE FROM data.order_items WHERE message_id='${messageId}' AND status='waiting'`);
