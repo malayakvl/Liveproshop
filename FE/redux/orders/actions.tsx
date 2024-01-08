@@ -361,6 +361,25 @@ export const setupOrderByCommentAction: any = createAction(
                 .catch((e) => console.log(e.message));
         }
 );
+export const setupExistOrderByCommentAction: any = createAction(
+    'order/FETCH_EXIST_USER_ORDER',
+    async (id: string, email: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            return axios
+                .get(`${baseUrl}/orders/find-order-by-db-id?orderId=${id}`, {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                })
+                .then((res) => {
+                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    res.data.orderNumber;
+                    // window.location.href = `/checkout/${}`;
+                })
+                .catch((e) => console.log(e.message));
+        }
+);
 export const setupWaitOrderByCommentAction: any = createAction(
     'order/FETCH_WAIT_USER_ORDER',
     async (commentId: string, email: string) =>
