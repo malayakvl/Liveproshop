@@ -114,7 +114,7 @@
   "Waiting List": "La liste d'attente",
   "Shipping": "Livraison",
   "shopper (s)": "client (s)",
-  "Shoppers in waiting for product Ref.": "Clients en attente d'une ref. produit",
+  "Shoppers in waiting": "Clients en attente d'une ref. produit",
   "Shopper name": "Nom du client",
   "Shopper details": "Details du client",
   "Pay": "Payer",
@@ -612,5 +612,6 @@
   "quantity_wait": "quantité",
   "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available",
   "My Documents": "Mes documents",
-  "Change quantity": "Changer la quantité"
+  "Change quantity": "Changer la quantité",
+  "Product Quantity": "La quantité de produit"
 }

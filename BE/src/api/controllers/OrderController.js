@@ -50,6 +50,40 @@ class OrderController {
         }
     }
 
+    async getProductConfigQty(req, res) {
+        const { configId } = req.query;
+        const data = await orderModel.getConfigQty(configId);
+
+        return res.status(200).json({ success: true, qty: data.qty });
+    }
+
+    async updateWaitingOrder(req, res) {
+        const { orderId } = req.query;
+        const data = await orderModel.updateWaitWithOrderId(orderId);
+
+        return res.status(200).json({ success: true });
+    }
+
+    async updateWaitingItemQty(req, res) {
+        const { itemId, qty, configId, orderId } = req.query;
+        await orderModel.updateWaitingItemQty(itemId, qty, configId, orderId);
+
+        return res.status(200).json({ success: true });
+    }
+
+    async waitingJobOrders(req, res) {
+        const { configId } = req.query;
+        const data = await orderModel.sendingMessageByWaiting(configId);
+
+        return res.status(200).json({ success:  true, data: data });
+        // if (!req.user) {
+        //     return res.status(401).json('Access deny');
+        // } else {
+        //     const data = await orderModel.sendingMessageByWaiting(configId);
+        //     return res.status(200).json({ success:  true, data: data });
+        // }
+    }
+
     async runWaitWorkflow(req, res) {
         const { sessionId, productConfigurationId } = req.body;
         if (!req.user) {

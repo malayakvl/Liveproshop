@@ -70,7 +70,7 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
         // dispatch(showDateSelectorAction(false));
     }, []);
 
-    console.log('FILTERS', filters);
+    // console.log('FILTERS', filters);
 
     return (
         <div className="mt-7">
@@ -118,7 +118,7 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
                     totalAmount={count}
                     sendRequest={sendRequest}>
                     {items?.map((item: any) => (
-                        <Fragment key={item.id}>
+                        <Fragment key={`${item.id}_${item.configuration.sku}`}>
                             <tr>
                                 {/* <td>
                                 <input
@@ -192,10 +192,11 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
                                     )}
                                 </td>
                                 <td>
+                                    {console.log(item.configuration)}
                                     <div
-                                        className="rounded-full w-3 h-3 inline-block mr-1"
+                                        className="rounded-full w-3 h-3 inline-block mr-1 border-black"
                                         style={{
-                                            backgroundColor: `${item.configuration.backgroundColor}`
+                                            backgroundColor: `${item.configuration.color_code}`
                                         }}
                                     />
                                 </td>
@@ -279,6 +280,7 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
                     ))}
                 </DataTable>
             </>
+            <ShowQtyModal />
         </div>
         // <div className="mt-7">
         //     <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 relative bg-yellow-100">
