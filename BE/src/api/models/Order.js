@@ -1165,9 +1165,10 @@ class Order {
             // get order items
             console.log(`SELECT price, quantity FROM data.order_items WHERE user_id='${res.rows[0].user_id}'`);
             const waitItems = await client.query(`SELECT price, quantity FROM data.order_items WHERE user_id='${res.rows[0].user_id}'`);
+            let totalWaitAmount = parseFloat(waitItems.rows[0].price)*parseInt(waitItems.rows[0].quantity);
             const updateAmountSQL = `UPDATE data.orders 
-                    SET order_amount = order_amount + ${waitItems.rows[0].price*waitItems.rows[0].quantity},
-                    total_amount = total_amount +  ${waitItems.rows[0].price*waitItems.rows[0].quantity},
+                    SET order_amount = ${totalWaitAmount},
+                    total_amount = ${totalWaitAmount},
                     user_id='${userId}'
                     WHERE id='${orderId}'`;
             console.log(updateAmountSQL);
