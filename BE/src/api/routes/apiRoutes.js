@@ -138,6 +138,7 @@ apiRoutes.route('/products/import').post(ProductController.import);
 apiRoutes.route('/products/find').get(ProductController.find);
 
 apiRoutes.route('/orders/find-order-by-comment').get(OrderController.findOrderByCommentId);
+apiRoutes.route('/orders/find-wait-order-by-comment').get(OrderController.findWaitOrderByCommentId);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 

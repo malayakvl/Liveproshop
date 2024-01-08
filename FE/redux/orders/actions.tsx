@@ -361,6 +361,26 @@ export const setupOrderByCommentAction: any = createAction(
                 .catch((e) => console.log(e.message));
         }
 );
+export const setupWaitOrderByCommentAction: any = createAction(
+    'order/FETCH_WAIT_USER_ORDER',
+    async (commentId: string, email: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            console.log(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`);
+            return axios
+                .get(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`, {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                })
+                .then((res) => {
+                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    res.data.orderNumber;
+                    // window.location.href = `/checkout/${}`;
+                })
+                .catch((e) => console.log(e.message));
+        }
+);
 export const removeItemOrderAction: any = createAction(
     'orders/REMOVE_ITEM_ACTION',
     async (itemId: number, orderNumber: string) =>
@@ -424,6 +444,9 @@ export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
 export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');
 // export const connectOrderAction: any = createAction('orders/CONNECT_ORDER_ACTION');
 export const clearOrderByCommentAction: any = createAction('orders/CLEAR_COMMENT_ORDER_NUMBER');
+export const clearWaitOrderByCommentAction: any = createAction(
+    'orders/CLEAR_WAIT_COMMENT_ORDER_NUMBER'
+);
 export const setupReturnedUrlAction: any = createAction('orders/SETUP_RETURNED_URL');
 export const redirectCheckoutAction: any = createAction('orders/REDIRECT_CHECKOUT_ACTION');
 export const redirectOrderNumberAction: any = createAction('orders/REDIRECT_ORDER_NUMBER');

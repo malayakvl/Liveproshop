@@ -19,7 +19,7 @@ async function updateWaitingJob() {
             await axios(`${apiUrl}/api/run-waiting-job?configId=${configData[1]}`)
                 .then((response) => {
                     response.data.data.items.forEach(async item => {
-                        // console.log(item);
+                        console.log(item);
                         await axios(`${apiUrl}/api/update-wait-item_qty?itemId=${item.wait_item_id}&qty=${item.quantity}&configId=${item.product_configuration_id}&orderId=${item.order_id}`)
                             .then( (responseItemUpd) => {
                                 return response.data.result;

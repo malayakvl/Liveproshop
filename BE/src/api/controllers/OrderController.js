@@ -185,6 +185,16 @@ class OrderController {
         return res.status(200).json({ success: true, orderNumber: null });
     }
 
+    async findWaitOrderByCommentId (req, res) {
+        if (req.user) {
+            console.log('getting wait order');
+            const data = await orderModel.findWaitByCommentId(req.query.commentId, req.user.id);
+            console.log('here wa are', data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
     async insertStatus (req, res) {
         if (req.user) {
             // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
