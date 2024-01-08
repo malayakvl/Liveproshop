@@ -464,6 +464,8 @@ class Order {
             console.log(updtQueryOrder);
             await client.query(updtQueryItem);
             await client.query(updtQueryOrder);
+
+            return { orderNuber: _newOrderNumber }
             // const orderData = await client.query(`SELECT`)
             // const updtQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
             // await client.query(updtQuery);
@@ -1156,7 +1158,7 @@ class Order {
                                 data.order_items.id as item_id
                                 FROM data.order_items 
                                 LEFT JOIN data.orders ON data.orders.user_id = data.order_items.user_id
-                                WHERE message_id='${commentId}' ORDER BY order_id`;
+                                WHERE message_id='${commentId}' AND order_number IS NOT null ORDER BY order_id`;
             console.log(SQL);
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
