@@ -381,7 +381,7 @@ export const setupExistOrderByCommentAction: any = createAction(
         }
 );
 export const setupWaitOrderByCommentAction: any = createAction(
-    'order/FETCH_WAIT_USER_ORDER',
+    'order/FETCH_EXIST_WAIT_USER_ORDER',
     async (commentId: string, email: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             console.log(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`);
