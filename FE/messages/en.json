@@ -113,7 +113,7 @@
   "Waiting List": "Waiting List",
   "Shipping": "Shipping",
   "shopper (s)": "shopper (s)",
-  "Shoppers in waiting for product Ref.": "Shoppers in waiting for product Ref.",
+  "Shoppers in waiting": "Shoppers in waiting for product Ref.",
   "Shopper name": "Shopper name",
   "Shopper details": "Shopper details",
   "Pay": "Pay",
@@ -610,5 +610,6 @@
   "quantity_wait": "qantity",
   "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available",
   "My Documents": "My Documents",
-  "Change quantity": "Change quantity"
+  "Change quantity": "Change quantity",
+  "Product Quantity": "Product Quantity"
 }

@@ -110,7 +110,7 @@ export default function Signup({ locale }: { locale: string }) {
         }
     };
 
-    console.log('Comment ID', commentId)
+    // console.log('Comment ID', commentId)
 
     return (
         <>

@@ -16,7 +16,7 @@ const ListItems: React.FC<any> = ({ items, productId, userProfileImg }) => {
                             style={{ borderBottom: 'solid 1px #EEF1F7' }}
                             className="pb-4">
                             <div className="text-[18px] text-bold text-gray-350">
-                                {t('Shoppers in waiting for product Ref.')}{' '}
+                                {t('Shoppers in waiting')}{' '}
                                 <span className="red-yellow-gradient-text">{productId}</span>
                             </div>
                         </th>
