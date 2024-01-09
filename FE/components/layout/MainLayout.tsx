@@ -26,6 +26,14 @@ export default function MainLayout({ children }: { children: any }) {
                         )
                     );
                 }
+                if (window.localStorage.getItem('order_wait_id')) {
+                    dispatch(
+                        fetchUserOrderAction(
+                            session?.user.email,
+                            window.localStorage.getItem('order_comment_id')
+                        )
+                    );
+                }
             } else {
                 const localUser = JSON.parse(window.localStorage.getItem('user') || '{}');
                 // console.log('SESSION EMAIL', session?.user?.email);

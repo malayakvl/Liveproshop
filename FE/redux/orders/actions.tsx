@@ -372,7 +372,7 @@ export const setupExistOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    alert(res.data.orderNumber);
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
                     res.data.orderNumber;
                     // window.location.href = `/checkout/${}`;
