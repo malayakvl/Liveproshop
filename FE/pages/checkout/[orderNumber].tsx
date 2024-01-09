@@ -68,6 +68,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
         dispatch(clearOrderByCommentAction(null));
         dispatch(clearWaitOrderByCommentAction(null));
         window.localStorage.removeItem('orderCommentId');
+        window.localStorage.removeItem('orderWaitCommentId');
     }, [user.email]);
 
     useEffect(() => {
