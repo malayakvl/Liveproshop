@@ -464,6 +464,8 @@ class Order {
             console.log(updtQueryOrder);
             await client.query(updtQueryItem);
             await client.query(updtQueryOrder);
+
+            return { orderNuber: _newOrderNumber }
             // const orderData = await client.query(`SELECT`)
             // const updtQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
             // await client.query(updtQuery);
@@ -1147,9 +1149,97 @@ class Order {
         }
     }
 
+    async findWaitByCommentId (commentId, userId) {
+        const client = await pool.connect();
+        try {
+            let orderNumber;let orderId;let waitItemId;
+            const SQL = `SELECT data.orders.id as order_wait_id, order_number, data.order_items.status, data.orders.id AS orderId,
+                        data.orders.live_sessions_id, order_amount, total_amount, quantity, data.order_items.user_id, 
+                                data.order_items.id as item_id
+                                FROM data.order_items 
+                                LEFT JOIN data.orders ON data.orders.user_id = data.order_items.user_id
+                                WHERE message_id='${commentId}' AND order_number IS NOT null ORDER BY order_id`;
+            console.log(SQL);
+            const res = await client.query(SQL);
+            orderNumber = res.rows[0].order_number;
+            orderId = res.rows[0].order_wait_id;
+            waitItemId = res.rows[0].item_id;
+            // get order items
+            console.log(`SELECT price, quantity FROM data.order_items WHERE user_id='${res.rows[0].user_id}'`);
+            const waitItems = await client.query(`SELECT price, quantity FROM data.order_items WHERE user_id='${res.rows[0].user_id}'`);
+            let totalWaitAmount = parseFloat(waitItems.rows[0].price)*parseInt(waitItems.rows[0].quantity);
+            const updateAmountSQL = `UPDATE data.orders 
+                    SET order_amount = ${totalWaitAmount},
+                    total_amount = ${totalWaitAmount},
+                    user_id='${userId}'
+                    WHERE id='${orderId}'`;
+            console.log(updateAmountSQL);
+            await client.query(updateAmountSQL);
+            console.log(`UPDATE data.order_items SET order_id=${orderId} WHERE id=${waitItemId}`);
+            await client.query(`UPDATE data.order_items SET order_id=${orderId} WHERE id=${waitItemId}`);
+
+            return {success: true, orderId: orderId, orderNumber: orderNumber };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async findWaitById (itemOrderId, userId) {
+        const client = await pool.connect();
+        try {
+            let orderNumber;let orderId;let waitItemId;
+            const SQL = `SELECT data.orders.id as order_wait_id, order_number, data.order_items.status, data.orders.id AS orderId,
+                        data.orders.live_sessions_id, order_amount, total_amount, quantity, data.order_items.user_id, 
+                                data.order_items.id as item_id
+                                FROM data.order_items 
+                                LEFT JOIN data.orders ON data.orders.user_id = data.order_items.user_id
+                                WHERE data.orders.id=${itemOrderId}`;
+            console.log(SQL);
+            const res = await client.query(SQL);
+            orderNumber = res.rows[0].order_number;
+            orderId = res.rows[0].order_wait_id;
+            waitItemId = res.rows[0].item_id;
+            // get order items
+            // console.log(`SELECT price, quantity FROM data.order_items WHERE user_id='${res.rows[0].user_id}'`);
+            // const waitItems = await client.query(`SELECT price, quantity FROM data.order_items WHERE user_id='${res.rows[0].user_id}'`);
+            // let totalWaitAmount = parseFloat(waitItems.rows[0].price)*parseInt(waitItems.rows[0].quantity);
+            // const updateAmountSQL = `UPDATE data.orders
+            //         SET order_amount = ${totalWaitAmount},
+            //         total_amount = ${totalWaitAmount},
+            //         user_id='${userId}'
+            //         WHERE id='${orderId}'`;
+            // console.log(updateAmountSQL);
+            // await client.query(updateAmountSQL);
+            // console.log(`UPDATE data.order_items SET order_id=${orderId} WHERE id=${waitItemId}`);
+            // await client.query(`UPDATE data.order_items SET order_id=${orderId} WHERE id=${waitItemId}`);
+
+            return {success: true, orderId: orderId, orderNumber: orderNumber };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
 
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
+        console.log('findByCommentId');
         try {
             let orderNumber;let orderId;let copyOrderData;
             const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId,
@@ -1159,10 +1249,11 @@ class Order {
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
+            console.log('orderNumber', orderNumber);
             // console.log(orderNumber);
             const _tmpOrderNumber = res.rows[0].order_number.split('-');
             const prefixWait = Math.floor(Date.now()/1000);
-            // console.log(_tmpOrderNumber);
+            console.log('prefixWait', prefixWait);
             // exit;
 
             copyOrderData = res.rows[0];

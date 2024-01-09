@@ -78,26 +78,83 @@ async function sessionLaunche() {
                         //     }).catch(e => {
                         //         console.log(e);
                         //     });
-
-
-                        const responceResultMessage =  await axios.post(
-                            `https://graph.facebook.com/v18.0/me/messages`,
-                            '',
-                            {
-                                params: {
-                                    "recipient": {"comment_id": `${orderFrom}`},
-                                    "message": {"text": `${lng === 'en' ? msgText : msgTextFr}`},
-                                    "access_token":`${tokenData[1]}`
+                        let responceResultMessage;
+                        if (statusWaitItem) {
+                            responceResultMessage =  await axios.post(
+                                `https://graph.facebook.com/v18.0/me/messages`,
+                                '',
+                                {
+                                    params: {
+                                        "recipient": {"comment_id": `${orderFrom}`},
+                                        "message": {
+                                            "attachment":{
+                                                "type":"template",
+                                                "payload":{
+                                                    "template_type":"button",
+                                                    "text": `${lng === 'en' ? msgText : msgTextFr}`,
+                                                    "buttons":[
+                                                        {
+                                                            "type": "postback",
+                                                            "title": `${lng === 'en' ? 'Confirm my order' : 'Confirmer ma commande'}`,
+                                                            "payload": "DEVELOPER_DEFINED_PAYLOAD"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "access_token":`${tokenData[1]}`
+                                    }
                                 }
-                            }
-                        )
-                            .then(async function (responseSending) {
-                                // console.log(responseSending);
-                                return responseSending;
-                            }).catch(e => {
-                                console.log('Error Send Message Yobany v rot:');
-                                return false;
-                            });
+                            )
+                                .then(async function (responseSending) {
+                                    // console.log(responseSending);
+                                    return responseSending;
+                                }).catch(e => {
+                                    console.log('Error with button:');
+                                    return false;
+                                });
+
+                        } else {
+                            responceResultMessage =  await axios.post(
+                                `https://graph.facebook.com/v18.0/me/messages`,
+                                '',
+                                {
+                                    params: {
+                                        "recipient": {"comment_id": `${orderFrom}`},
+                                        "message": {"text": `${lng === 'en' ? msgText : msgTextFr}`},
+                                        "access_token":`${tokenData[1]}`
+                                    }
+                                }
+                            )
+                                .then(async function (responseSending) {
+                                    // console.log(responseSending);
+                                    return responseSending;
+                                }).catch(e => {
+                                    console.log('Error Send Message Yobany v rot:');
+                                    return false;
+                                });
+                        }
+                        // responceResultMessage =  await axios.post(
+                        //     `https://graph.facebook.com/v18.0/me/messages`,
+                        //     '',
+                        //     {
+                        //         params: {
+                        //             "recipient": {"comment_id": `${orderFrom}`},
+                        //             "message": {"text": `${lng === 'en' ? msgText : msgTextFr}`},
+                        //             "access_token":`${tokenData[1]}`
+                        //         }
+                        //     }
+                        // )
+                        //     .then(async function (responseSending) {
+                        //         // console.log(responseSending);
+                        //         return responseSending;
+                        //     }).catch(e => {
+                        //         console.log('Error Send Message Yobany v rot:');
+                        //         return false;
+                        //     });
+                        console.log("Respionce send result", responceResultMessage.data);
+
+
                         if (responceResultMessage.data.recipient_id) {
                             await axios.get(
                                 `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}&recipient_id=${responceResultMessage.data.recipient_id}`

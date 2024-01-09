@@ -7,7 +7,11 @@ import Link from 'next/link';
 import * as Yup from 'yup';
 import { Field, Formik, ErrorMessage, useFormikContext, useField, FormikProps } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { inviteUserAction, setOrderCommentAction } from '../../redux/user/actions';
+import {
+    inviteUserAction,
+    setOrderCommentAction,
+    setWaitOrderIdAction
+} from '../../redux/user/actions';
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
 import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
@@ -80,6 +84,11 @@ export default function Signup({ locale }: { locale: string }) {
             // console.log(commentStr[1]);
             dispatch(setOrderCommentAction(commentStr[1]));
             window.localStorage.setItem('order_comment_id', commentStr[1]);
+        }
+        if (commentStr[0] == 'order_id' && commentStr[1]) {
+            console.log('BBBBBBB', commentStr[1]);
+            dispatch(setWaitOrderIdAction(commentStr[1]));
+            window.localStorage.setItem('order_wait_id', commentStr[1]);
         }
     }
 

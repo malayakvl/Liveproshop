@@ -66,9 +66,10 @@ class OrderController {
 
     async updateWaitingItemQty(req, res) {
         const { itemId, qty, configId, orderId } = req.query;
-        await orderModel.updateWaitingItemQty(itemId, qty, configId, orderId);
+        const data = await orderModel.updateWaitingItemQty(itemId, qty, configId, orderId);
+        console.log("WAIT DATA", data);
 
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, orderNumber: data.orderNuber });
     }
 
     async waitingJobOrders(req, res) {
@@ -184,6 +185,27 @@ class OrderController {
         }
         return res.status(200).json({ success: true, orderNumber: null });
     }
+
+    async findWaitOrderByCommentId (req, res) {
+        if (req.user) {
+            console.log('getting wait order by comment');
+            const data = await orderModel.findWaitByCommentId(req.query.commentId, req.user.id);
+            console.log('here wa are', data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
+    async findWaitOrderById (req, res) {
+        if (req.user) {
+            console.log('getting wait order by id');
+            const data = await orderModel.findWaitById(req.query.orderId, req.user.id);
+            console.log('here wa are', data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
 
     async insertStatus (req, res) {
         if (req.user) {
