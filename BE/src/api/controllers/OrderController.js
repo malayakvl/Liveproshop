@@ -201,7 +201,7 @@ class OrderController {
             console.log('getting wait order by id', req.query.orderId);
             const tmpWait = req.query.orderId?.split('_');
             let data;
-            if (tmpWait.length > 0) {
+            if (req.query.orderId?.hasOwnProperty('_')) {
                 data = await orderModel.findWaitByCommentId(req.query.orderId, req.user.id);
             } else {
                 console.log("here we are search by order id");
