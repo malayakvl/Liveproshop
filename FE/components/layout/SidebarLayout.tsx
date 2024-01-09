@@ -11,7 +11,11 @@ import {
     toggleSidebarAction
 } from '../../redux/layouts';
 import Router from 'next/router';
-import { setupOrderByCommentAction, setupWaitOrderByCommentAction } from '../../redux/orders';
+import {
+    setupExistOrderByCommentAction,
+    setupOrderByCommentAction,
+    setupWaitOrderByCommentAction
+} from '../../redux/orders';
 import { orderNumberSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
@@ -44,7 +48,7 @@ export default function SidebarLayout({ children }: { children: any }) {
         }
         if (user.email && user.role_id == 1 && window.localStorage.getItem('orderWaitCommentId')) {
             dispatch(
-                setupWaitOrderByCommentAction(
+                setupExistOrderByCommentAction(
                     window.localStorage.getItem('orderWaitCommentId'),
                     user?.email
                 )

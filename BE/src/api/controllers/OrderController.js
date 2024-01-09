@@ -188,7 +188,7 @@ class OrderController {
 
     async findWaitOrderByCommentId (req, res) {
         if (req.user) {
-            console.log('getting wait order');
+            console.log('getting wait order by comment');
             const data = await orderModel.findWaitByCommentId(req.query.commentId, req.user.id);
             console.log('here wa are', data);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
@@ -198,8 +198,8 @@ class OrderController {
 
     async findWaitOrderById (req, res) {
         if (req.user) {
-            console.log('getting wait order');
-            const data = await orderModel.findWaitById(req.query.commentId, req.user.id);
+            console.log('getting wait order by id');
+            const data = await orderModel.findWaitById(req.query.orderId, req.user.id);
             console.log('here wa are', data);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }

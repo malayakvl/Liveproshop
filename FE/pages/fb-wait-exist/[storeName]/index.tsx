@@ -24,10 +24,11 @@ export default function Index({ locale }: { locale: string }) {
 
     useEffect(() => {
         console.log('Order Id', order_id);
-        // if (typeof comment_id === 'string') {
-        //     window.localStorage.setItem('orderWaitCommentId', comment_id);
-        //     dispatch(setTmpFbCommentAction(comment_id));
-        // }
+        console.log('Type of', typeof order_id === 'string');
+        if (typeof order_id === 'string') {
+            window.localStorage.setItem('orderWaitCommentId', order_id);
+            dispatch(setTmpFbCommentAction(order_id));
+        }
         if (user?.email && user.role_id == 1) {
             setTimeout(() => {
                 dispatch(setupExistOrderByCommentAction(order_id, user?.email));
