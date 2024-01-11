@@ -198,8 +198,17 @@ class OrderController {
 
     async findWaitOrderById (req, res) {
         if (req.user) {
-            console.log('getting wait order by id');
-            const data = await orderModel.findWaitById(req.query.orderId, req.user.id);
+            console.log('getting wait order by id', req.query.orderId);
+            const tmpWait = req.query.orderId?.split('_');
+            let data;
+            if (req.query.orderId?.hasOwnProperty('_')) {
+                data = await orderModel.findWaitByCommentId(req.query.orderId, req.user.id);
+            } else {
+                console.log("here we are search by order id");
+                data = await orderModel.findWaitById(req.query.orderId, req.user.id);
+            }
+
+            // const data = await orderModel.findWaitById(req.query.orderId, req.user.id);
             console.log('here wa are', data);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }

@@ -47,12 +47,26 @@ export default function SidebarLayout({ children }: { children: any }) {
             );
         }
         if (user.email && user.role_id == 1 && window.localStorage.getItem('orderWaitCommentId')) {
-            dispatch(
-                setupExistOrderByCommentAction(
-                    window.localStorage.getItem('orderWaitCommentId'),
-                    user?.email
-                )
-            );
+            const waitData = window.localStorage.getItem('orderWaitCommentId');
+            const tmpWait = waitData?.split('_');
+            if (tmpWait) {
+                if (tmpWait?.length > 0) {
+                    // alert(window.localStorage.getItem('orderWaitCommentId'))
+                    dispatch(
+                        setupExistOrderByCommentAction(
+                            window.localStorage.getItem('orderWaitCommentId'),
+                            user?.email
+                        )
+                    );
+                } else {
+                    dispatch(
+                        setupOrderByCommentAction(
+                            window.localStorage.getItem('orderCommentId'),
+                            user?.email
+                        )
+                    );
+                }
+            }
         }
         if (user.email) {
             // console.log(user?.email, user?.email_real);
