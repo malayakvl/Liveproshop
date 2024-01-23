@@ -326,7 +326,6 @@ const ACTION_HANDLERS: any = {
             showEmailNotification: action.payload
         })
     }
-
 };
 
 export {

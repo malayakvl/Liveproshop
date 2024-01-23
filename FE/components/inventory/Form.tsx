@@ -503,7 +503,7 @@ function ProductForm({
                                 )}
 
                                 <InputSwitcher
-                                    label={'Publish'}
+                                    label={'Active'}
                                     name={'publish'}
                                     style={null}
                                     props={props}
@@ -511,7 +511,7 @@ function ProductForm({
                                 />
 
                                 <button type="submit" className="gradient-btn">
-                                    {props.values.id ? t('Update Product') : t('Add Product')}
+                                    {props.values.id ? t('Update Product') : t('Add a Product')}
                                 </button>
                             </div>
                         </div>

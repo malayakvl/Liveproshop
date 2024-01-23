@@ -24,6 +24,7 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { titleKey: null, className: 'option-switcher' },
         { titleKey: 'Photo' },
         { sortKey: 'products.name', titleKey: 'Reference | Name | Description' },
+        { titleKey: 'Active', className: 'inventory-publish' },
         { titleKey: null, className: 'inventory-color' },
         { titleKey: null, className: 'inventory-size' },
         { titleKey: null, className: 'inventory-qty' },

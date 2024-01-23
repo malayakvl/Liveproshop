@@ -611,5 +611,9 @@
   "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available",
   "My Documents": "My Documents",
   "Change quantity": "Change quantity",
-  "Product Quantity": "Product Quantity"
+  "Product Quantity": "Product Quantity",
+  "Download csv template here": "Download csv template here",
+  "Addproduct": "Add product",
+  "Active": "Active",
+  "Published products": "Active Products"
 }
