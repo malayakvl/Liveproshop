@@ -68,6 +68,10 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             <Link href={'/guides/rules-csv'}>
                                 {t('Read rules and download csv template here')}
                             </Link>
+                            <br />
+                            <Link href={'/guides/rules-csv'}>
+                                {t('Download csv template here')}
+                            </Link>
                         </span>
                     </div>
                     <div className="md:float-right md:text-right">

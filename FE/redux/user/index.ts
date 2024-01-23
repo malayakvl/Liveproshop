@@ -13,7 +13,8 @@ import {
     skipExistUserSubscriptionNewAction,
     setRedirectAfterSubscription,
     updateUserSubscriptionAction,
-    setOrderCommentAction, setWaitOrderIdAction
+    setOrderCommentAction,
+    setWaitOrderIdAction
 } from './actions';
 
 // const initialState: State.User = {

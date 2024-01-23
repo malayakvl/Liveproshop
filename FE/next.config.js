@@ -24,7 +24,8 @@ module.exports = {
         apiUrl: process.env.API_URL,
         siteUrl: process.env.API_SITE_URL,
         stripeKey: process.env.API_STRIPE,
-        facebookClientId: process.env.FACEBOOK_CLIENT_ID
+        facebookClientId: process.env.FACEBOOK_CLIENT_ID,
+        localUrl: process.env.LOCAL_PATH_REPLACE
     },
     sassOptions: {
         includePaths: [path.join(__dirname, 'styles')]

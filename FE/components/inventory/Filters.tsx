@@ -7,7 +7,8 @@ import {
     FilterSize,
     FilterPrice,
     FilterQuantity,
-    FilterMaterial
+    FilterMaterial,
+    FilterPublish
 } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { setPaginationAction } from '../../redux/layouts';
@@ -87,6 +88,8 @@ const Filters: React.FC<Props> = ({ handleHideFilter, filterOpen }) => {
             </div>
             <div>
                 <FilterSearch />
+
+                <FilterPublish />
 
                 <FilterPrice />
 

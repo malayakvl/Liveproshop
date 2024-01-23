@@ -262,8 +262,7 @@ const ACTION_HANDLERS: any = {
             ...state,
             redirectOrderNumber: action.payload
         })
-    },
-
+    }
 };
 
 export {
