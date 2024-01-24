@@ -488,7 +488,9 @@ class Product {
             userIds.push(userId);
             const _filters = JSON.parse(filters);
             _filters.user_id = userIds;
-            console.log(`SELECT count FROM data.get_products_count('${JSON.stringify(_filters)}');`);
+            if (!_filters.publish) {
+                delete _filters.publish;
+            }
             const _total = await client.query(`SELECT count FROM data.get_products_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;
@@ -498,7 +500,6 @@ class Product {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(productQuery);
             // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];

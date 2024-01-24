@@ -29,9 +29,9 @@ import { setActivePageAction } from '../../redux/layouts/actions';
 import Image from 'next/image';
 import { Filters, FilterValues } from './index';
 import { formatCurrency } from '../../lib/functions';
-// import getConfig from 'next/config';
-// const { publicRuntimeConfig } = getConfig();
-// const localImgUrl = publicRuntimeConfig.localUrl;
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const localImgUrl = publicRuntimeConfig.localUrl;
 
 const ListProducts: React.FC<any> = () => {
     const t = useTranslations();
@@ -232,8 +232,11 @@ const ListProducts: React.FC<any> = () => {
                                             <img
                                                 src={
                                                     /(http(s?)):\/\//i.test(item.previewphoto)
-                                                        ? item.previewphoto
-                                                        : `${baseApiUrl}/${item.previewphoto}`
+                                                        ? item.previewphoto.replace(localImgUrl, '')
+                                                        : `${baseApiUrl}/${item.previewphoto.replace(
+                                                              localImgUrl,
+                                                              ''
+                                                          )}`
                                                 }
                                                 alt=""
                                                 className="product-photo thumbnail inline-block zoom"
@@ -242,7 +245,7 @@ const ListProducts: React.FC<any> = () => {
                                     </div>
                                 )}
                                 {!item.previewphoto && (
-                                    <div className="border rounded-lg w-[85px] h-[95px] block flex items-center text-center">
+                                    <div className="border rounded-lg w-[60px] h-[90px] flex items-center text-center">
                                         <BanIcon
                                             width={30}
                                             height={30}

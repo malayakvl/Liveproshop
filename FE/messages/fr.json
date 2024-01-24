@@ -617,6 +617,7 @@
   "Download csv template here": "Téléchargez le modèle CSV ici",
   "Addproduct": "Ajouter un produit",
   "Active": "Active",
-  "Published products": "Produits actifs"
-
+  "Published products": "Produits actifs",
+  "Add a Product": "Ajouter un produit",
+  "Price, Quantity and SKU are mandatory fields": "Le prix, la quantité et le SKU sont des champs obligatoires"
 }

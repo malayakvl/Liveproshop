@@ -613,7 +613,9 @@
   "Change quantity": "Change quantity",
   "Product Quantity": "Product Quantity",
   "Download csv template here": "Download csv template here",
-  "Addproduct": "Add product",
+  "Addproduct": "Add a Product",
+  "Add a Product": "Add a Product",
   "Active": "Active",
-  "Published products": "Active Products"
+  "Published products": "Active Products",
+  "Price, Quantity and SKU are mandatory fields": "Price, Quantity and SKU are mandatory fields"
 }
