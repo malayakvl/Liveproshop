@@ -417,11 +417,13 @@ class UserController {
 
     async skipExistUserSubscriptionNew (req, res) {
         if (req.user) {
+            console.log("skipExistUserSubscriptionNew", req.user.subscription_id)
             // skipping subscription
             if (!req.user.subscription_id) {
                 const data = await userModel.createSkipSubscriptionNew(req.user);
                 return res.status(200).json({
                     success: true,
+                    tmp: 'tmp1',
                     user: data.user
                 });
             }
@@ -429,11 +431,13 @@ class UserController {
                 const data = await userModel.createSkipSubscription(req.user);
                 return res.status(200).json({
                     success: true,
+                    tmp: 'tmp2',
                     user: data.user
                 });
             } else {
                 return res.status(200).json({
                     success: true,
+                    tmp: 'tmp3',
                     data
                 });
             }

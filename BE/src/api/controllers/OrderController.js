@@ -50,6 +50,41 @@ class OrderController {
         }
     }
 
+    async getProductConfigQty(req, res) {
+        const { configId } = req.query;
+        const data = await orderModel.getConfigQty(configId);
+
+        return res.status(200).json({ success: true, qty: data.qty });
+    }
+
+    async updateWaitingOrder(req, res) {
+        const { orderId } = req.query;
+        const data = await orderModel.updateWaitWithOrderId(orderId);
+
+        return res.status(200).json({ success: true });
+    }
+
+    async updateWaitingItemQty(req, res) {
+        const { itemId, qty, configId, orderId } = req.query;
+        const data = await orderModel.updateWaitingItemQty(itemId, qty, configId, orderId);
+        console.log("WAIT DATA", data);
+
+        return res.status(200).json({ success: true, orderNumber: data.orderNuber });
+    }
+
+    async waitingJobOrders(req, res) {
+        const { configId } = req.query;
+        const data = await orderModel.sendingMessageByWaiting(configId);
+
+        return res.status(200).json({ success:  true, data: data });
+        // if (!req.user) {
+        //     return res.status(401).json('Access deny');
+        // } else {
+        //     const data = await orderModel.sendingMessageByWaiting(configId);
+        //     return res.status(200).json({ success:  true, data: data });
+        // }
+    }
+
     async runWaitWorkflow(req, res) {
         const { sessionId, productConfigurationId } = req.body;
         if (!req.user) {
@@ -150,6 +185,36 @@ class OrderController {
         }
         return res.status(200).json({ success: true, orderNumber: null });
     }
+
+    async findWaitOrderByCommentId (req, res) {
+        if (req.user) {
+            console.log('getting wait order by comment');
+            const data = await orderModel.findWaitByCommentId(req.query.commentId, req.user.id);
+            console.log('here wa are', data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
+    async findWaitOrderById (req, res) {
+        if (req.user) {
+            console.log('getting wait order by id', req.query.orderId);
+            const tmpWait = req.query.orderId?.split('_');
+            let data;
+            if (req.query.orderId?.hasOwnProperty('_')) {
+                data = await orderModel.findWaitByCommentId(req.query.orderId, req.user.id);
+            } else {
+                console.log("here we are search by order id");
+                data = await orderModel.findWaitById(req.query.orderId, req.user.id);
+            }
+
+            // const data = await orderModel.findWaitById(req.query.orderId, req.user.id);
+            console.log('here wa are', data);
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
 
     async insertStatus (req, res) {
         if (req.user) {

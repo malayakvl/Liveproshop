@@ -52,6 +52,8 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
         attrs.push(values.map((v: any) => ({ [attr]: v })));
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
+
+    console.log('Values', props);
     return (
         <div className="overflow-x-scroll md:overflow-x-visible">
             {(_colors.length > 0 || _sizes.length > 0) && (
@@ -102,8 +104,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         props={props}
                                         tips={null}
                                     />
-                                    {/* </td>
-                                <td> */}
                                     <InputText
                                         icon={null}
                                         label={t('Quantity')}
@@ -113,8 +113,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         props={props}
                                         tips={null}
                                     />
-                                    {/* </td>
-                                <td> */}
                                     <InputText
                                         icon={null}
                                         label={t('SKU')}
@@ -124,6 +122,17 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         props={props}
                                         tips={null}
                                     />
+                                    {!props[`configurePrice_${attr.color}_${attr.size}`] && (
+                                        <span
+                                            className="config-error"
+                                            id={`error_${attr.color}_${attr.size}`}>
+                                            {!props.values[
+                                                `configurePrice_${attr.color}_${attr.size}`
+                                            ] && props.isSubmitting
+                                                ? 'Price, Quantity and SKU are mandatory fields'
+                                                : ''}
+                                        </span>
+                                    )}
                                 </td>
                             </tr>
                         ))}

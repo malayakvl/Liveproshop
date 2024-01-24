@@ -13,7 +13,8 @@ import {
     skipExistUserSubscriptionNewAction,
     setRedirectAfterSubscription,
     updateUserSubscriptionAction,
-    setOrderCommentAction
+    setOrderCommentAction,
+    setWaitOrderIdAction
 } from './actions';
 
 // const initialState: State.User = {
@@ -56,6 +57,12 @@ const ACTION_HANDLERS: any = {
         })
     },
     [setOrderCommentAction]: {
+        next: (state: State.User, action: Action<any>): State.User => ({
+            ...state,
+            commentId: action.payload
+        })
+    },
+    [setWaitOrderIdAction]: {
         next: (state: State.User, action: Action<any>): State.User => ({
             ...state,
             commentId: action.payload

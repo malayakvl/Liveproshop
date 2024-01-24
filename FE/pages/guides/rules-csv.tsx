@@ -20,6 +20,44 @@ export default function Index() {
                         {t('Guides')} - {t('rules_csv')}
                     </h2>
                 </div>
+                <div className="video-responsive">
+                    <iframe
+                        width="983"
+                        height="542"
+                        src="https://www.youtube.com/embed/xh7l7wUIwVc"
+                        title="Import products from csv file"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                    />
+                </div>
+                <div className="block mt-3 f-14 mb-2">
+                    <a
+                        className="f-12 font-bold google-spread-import-icon"
+                        target="_blank"
+                        href="https://docs.google.com/spreadsheets/d/1jyJ7cCuzCIArnClQTZRNb29inIEdx4ulXbaiUV8mme0/edit?usp=sharing"
+                        rel="noreferrer">
+                        <span>{t('Google Sheets')}</span>
+                    </a>
+                </div>
+                <div className="block mt-0 f-14 mb-4">
+                    <a
+                        className="f-12 font-bold excel-import-icon"
+                        target="_blank"
+                        href="https://docs.google.com/spreadsheets/d/1jyJ7cCuzCIArnClQTZRNb29inIEdx4ulXbaiUV8mme0/edit?usp=sharing"
+                        rel="noreferrer">
+                        <span>{t('Excel')}</span>
+                    </a>
+                </div>
+                <div className="block mt-0 f-14 mb-4">
+                    <a
+                        className="f-12 font-bold csv-import-icon"
+                        target="_blank"
+                        href="https://docs.google.com/spreadsheets/d/1jyJ7cCuzCIArnClQTZRNb29inIEdx4ulXbaiUV8mme0/edit?usp=sharing"
+                        rel="noreferrer">
+                        <span>{t('Csv file')}</span>
+                    </a>
+                </div>
                 <table className="table-auto text-sm">
                     <thead>
                         <tr className="text-xs" style={{ borderBottom: 'solid 1px #EEF1F7' }}>
@@ -29,10 +67,7 @@ export default function Index() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr
-                            style={{
-                                borderBottom: 'solid 1px #EEF1F7'
-                            }}>
+                        <tr style={{ borderBottom: 'solid 1px #EEF1F7' }}>
                             <td className="font-bold">product_name</td>
                             <td className="py-4">{t('product_name')}</td>
                             <td>
@@ -45,10 +80,7 @@ export default function Index() {
                                 />
                             </td>
                         </tr>
-                        <tr
-                            style={{
-                                borderBottom: 'solid 1px #EEF1F7'
-                            }}>
+                        <tr style={{ borderBottom: 'solid 1px #EEF1F7' }}>
                             <td className="font-bold">description</td>
                             <td className="py-4">{t('description')}</td>
                             <td></td>

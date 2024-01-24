@@ -33,7 +33,7 @@ export function initFacebookSdk() {
         //     fjs.parentNode.insertBefore(js, fjs);
         // }(document, 'script', 'facebook-jssdk'));
 
-        (function (d, s, id){
+        (function (d, s, id) {
             var js,
                 fjs = d.getElementsByTagName(s)[0];
             if (d.getElementById(id)) {

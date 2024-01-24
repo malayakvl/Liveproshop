@@ -384,3 +384,20 @@ input:checked + .toggle-bg {
   top: -16px;
   left: -41px;
 }
+
+.sign-up-form {
+  @apply w-80 mb-5 p-8 flex-col rounded-lg
+      mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0;
+}
+
+.sign-up-fb {
+  margin-top: 10% !important;
+}
+
+.config-error {
+    width: 100%;
+    margin-top: -20px;
+    font-size: 11px;
+    color: red;
+    font-weight: normal;
+}

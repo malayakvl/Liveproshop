@@ -146,3 +146,75 @@
   }
 }
 
+.video-responsive {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+}
+
+.video-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.google-spread-import-icon span {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+  padding-left: 20px;
+
+  &:before {
+    content: " ";
+    background: url(../../public/images/google-spreadshit.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    display: block;
+    top:0;
+    left: 0;
+  }
+}
+.csv-import-icon span {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+  padding-left: 20px;
+
+  &:before {
+    content: " ";
+    background: url(../../public/images/csv-file.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    display: block;
+    top:0;
+    left: 0;
+  }
+}
+.excel-import-icon span {
+  position: relative;
+  display: inline-block;
+  font-size: 14px;
+  padding-left: 20px;
+
+  &:before {
+    content: " ";
+    background: url(../../public/images/csv-file.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    display: block;
+    top:0;
+    left: 0;
+  }
+}

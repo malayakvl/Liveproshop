@@ -29,6 +29,9 @@ import { setActivePageAction } from '../../redux/layouts/actions';
 import Image from 'next/image';
 import { Filters, FilterValues } from './index';
 import { formatCurrency } from '../../lib/functions';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const localImgUrl = publicRuntimeConfig.localUrl;
 
 const ListProducts: React.FC<any> = () => {
     const t = useTranslations();
@@ -126,7 +129,7 @@ const ListProducts: React.FC<any> = () => {
                         <tr
                             key={config.color_code}
                             className={i > 0 && !showMoreConfigs[productId] ? 'hidden' : ''}>
-                            <td style={{ textAlign: 'center', width: '25px', paddingLeft: '30px' }}>
+                            <td style={{ textAlign: 'center', width: '25px', paddingLeft: '0px' }}>
                                 <div
                                     className="rounded-full w-3 h-3 inline-block mr-1"
                                     style={{ backgroundColor: `${config.color_code}` }}
@@ -135,7 +138,7 @@ const ListProducts: React.FC<any> = () => {
                             <td
                                 style={{
                                     paddingTop: '0',
-                                    paddingLeft: '20px',
+                                    paddingLeft: '0px',
                                     paddingRight: '0',
                                     paddingBottom: '0'
                                 }}>
@@ -215,33 +218,34 @@ const ListProducts: React.FC<any> = () => {
                                     }
                                 />
                             </td>
-                            <td className="toggler-action">
+                            <td className="toggler-action" style={{ width: '70px' }}>
                                 <button
                                     className="dropdown-toggler"
                                     style={{ marginRight: '25px' }}
                                     onClick={() => handleShowMore(item.id)}
                                 />
                             </td>
-                            {/*<td style>*/}
-                            {/*    <button*/}
-                            {/*        className="dropdown-toggler"*/}
-                            {/*        onClick={() => handleShowMore(item.id)}*/}
-                            {/*    />*/}
-                            {/*</td>*/}
                             <td style={{ maxWidth: '150px' }}>
                                 {item.previewphoto && (
-                                    <img
-                                        src={
-                                            /(http(s?)):\/\//i.test(item.previewphoto)
-                                                ? item.previewphoto
-                                                : `${baseApiUrl}/${item.previewphoto}`
-                                        }
-                                        alt=""
-                                        className="product-photo"
-                                    />
+                                    <div className="productdetails">
+                                        <div className="productsdetail-image">
+                                            <img
+                                                src={
+                                                    /(http(s?)):\/\//i.test(item.previewphoto)
+                                                        ? item.previewphoto.replace(localImgUrl, '')
+                                                        : `${baseApiUrl}/${item.previewphoto.replace(
+                                                              localImgUrl,
+                                                              ''
+                                                          )}`
+                                                }
+                                                alt=""
+                                                className="product-photo thumbnail inline-block zoom"
+                                            />
+                                        </div>
+                                    </div>
                                 )}
                                 {!item.previewphoto && (
-                                    <div className="border rounded-lg w-[85px] h-[95px] block flex items-center text-center">
+                                    <div className="border rounded-lg w-[60px] h-[90px] flex items-center text-center">
                                         <BanIcon
                                             width={30}
                                             height={30}
@@ -250,7 +254,7 @@ const ListProducts: React.FC<any> = () => {
                                     </div>
                                 )}
                             </td>
-                            <td>
+                            <td style={{ width: '45%' }}>
                                 <span className="text-gray-180 text-sm">Ref.</span>{' '}
                                 <span className="text-blue-350">{item.id}</span> <br />
                                 <span className="text-[18px]">{item.name}</span>
@@ -265,8 +269,13 @@ const ListProducts: React.FC<any> = () => {
                                             dangerouslySetInnerHTML={{
                                                 __html: `${item.description.substring(0, 250)} ...`
                                             }}
-                                        />{' '}
+                                        />
                                     </div>
+                                )}
+                            </td>
+                            <td className="w-[70px]">
+                                {item.publish && (
+                                    <i className="icon-checked" style={{ marginLeft: '16px' }} />
                                 )}
                             </td>
                             <td className="w-[300px]" colSpan={4} style={{ padding: '0' }}>

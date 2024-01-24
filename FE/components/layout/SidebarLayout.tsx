@@ -11,7 +11,11 @@ import {
     toggleSidebarAction
 } from '../../redux/layouts';
 import Router from 'next/router';
-import { setupOrderByCommentAction } from '../../redux/orders';
+import {
+    setupExistOrderByCommentAction,
+    setupOrderByCommentAction,
+    setupWaitOrderByCommentAction
+} from '../../redux/orders';
 import { orderNumberSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
@@ -42,6 +46,28 @@ export default function SidebarLayout({ children }: { children: any }) {
                 )
             );
         }
+        if (user.email && user.role_id == 1 && window.localStorage.getItem('orderWaitCommentId')) {
+            const waitData = window.localStorage.getItem('orderWaitCommentId');
+            const tmpWait = waitData?.split('_');
+            if (tmpWait) {
+                if (tmpWait?.length > 0) {
+                    // alert(window.localStorage.getItem('orderWaitCommentId'))
+                    dispatch(
+                        setupExistOrderByCommentAction(
+                            window.localStorage.getItem('orderWaitCommentId'),
+                            user?.email
+                        )
+                    );
+                } else {
+                    dispatch(
+                        setupOrderByCommentAction(
+                            window.localStorage.getItem('orderCommentId'),
+                            user?.email
+                        )
+                    );
+                }
+            }
+        }
         if (user.email) {
             // console.log(user?.email, user?.email_real);
             if (
@@ -58,6 +84,7 @@ export default function SidebarLayout({ children }: { children: any }) {
     useEffect(() => {
         if (redirectOrderNumber && user?.email && user.role_id == 1) {
             dispatch(setupOrderByCommentAction(null));
+            dispatch(setupWaitOrderByCommentAction(null));
             if (user.email || user.email_real) {
                 setTimeout(() => {
                     window.location.href = `/en/checkout/${redirectOrderNumber}`;

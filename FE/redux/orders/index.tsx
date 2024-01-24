@@ -15,13 +15,16 @@ import {
     connectOrderAction,
     setFbCommentAction,
     setupOrderByCommentAction,
+    setupExistOrderByCommentAction,
     setTmpFbCommentAction,
     clearOrderByCommentAction,
     setupReturnedUrlAction,
     redirectCheckoutAction,
     updateOrderStatusAction,
     redirectOrderNumberAction,
-    setupConnectedOrderIdAction
+    setupConnectedOrderIdAction,
+    setupWaitOrderByCommentAction,
+    clearWaitOrderByCommentAction
 } from './actions';
 
 const initialState: {
@@ -224,6 +227,12 @@ const ACTION_HANDLERS: any = {
             connectedOrderNumber: action.payload
         })
     },
+    [setupWaitOrderByCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            connectedOrderNumber: action.payload
+        })
+    },
     [setupConnectedOrderIdAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
@@ -231,6 +240,12 @@ const ACTION_HANDLERS: any = {
         })
     },
     [clearOrderByCommentAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            connectedOrderNumber: null
+        })
+    },
+    [clearWaitOrderByCommentAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
             connectedOrderNumber: null
@@ -247,8 +262,7 @@ const ACTION_HANDLERS: any = {
             ...state,
             redirectOrderNumber: action.payload
         })
-    },
-
+    }
 };
 
 export {
@@ -266,13 +280,16 @@ export {
     connectOrderAction,
     setFbCommentAction,
     setupOrderByCommentAction,
+    setupExistOrderByCommentAction,
     setTmpFbCommentAction,
     clearOrderByCommentAction,
     setupReturnedUrlAction,
     redirectCheckoutAction,
     updateOrderStatusAction,
     redirectOrderNumberAction,
-    setupConnectedOrderIdAction
+    setupConnectedOrderIdAction,
+    setupWaitOrderByCommentAction,
+    clearWaitOrderByCommentAction
 };
 
 // ------------------------------------

@@ -53,6 +53,10 @@ apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSessi
 apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
 apiRoutes.route('/update-live-messages').get(LivesessionController.updateLiveMessage);
 apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitStatus);
+apiRoutes.route('/run-waiting-job').get(OrderController.waitingJobOrders);
+apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder);
+apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
+
 // apiRoutes.route('/check-order-status').get(LivesessionController.checkOrderStatus);
 // apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderStatus);
 // apiRoutes.route('/live-product-qty').get(OrderController.getLiveProductQty);
@@ -70,6 +74,8 @@ apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessag
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);
 apiRoutes.route('/orders/minus-item-order').get(OrderController.minusOrderItem);
+apiRoutes.route('/order/get-config-qty').get(OrderController.getProductConfigQty);
+
 
 apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
 apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);
@@ -132,6 +138,8 @@ apiRoutes.route('/products/import').post(ProductController.import);
 apiRoutes.route('/products/find').get(ProductController.find);
 
 apiRoutes.route('/orders/find-order-by-comment').get(OrderController.findOrderByCommentId);
+apiRoutes.route('/orders/find-wait-order-by-comment').get(OrderController.findWaitOrderByCommentId);
+apiRoutes.route('/orders/find-order-by-db-id').get(OrderController.findWaitOrderById);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 
@@ -157,7 +165,6 @@ apiRoutes.route('/orders/bulk-cancel').post(OrderController.bulkCancel);
 apiRoutes.route('/orders/bulk-download').post(OrderController.bulkDownload);
 apiRoutes.route('/orders/single-download').post(PaymentController.downloadInvoice);
 apiRoutes.route('/order/run-wait-workflow').post(OrderController.runWaitWorkflow);
-apiRoutes.route('/order/update-config-qty').post(OrderController.updateProductConfigQty);
 
 apiRoutes.route('/payments/fetch-items').get(PaymentController.fetchItems);
 apiRoutes.route('/payments/fetch-item').get(PaymentController.fetchItem);
@@ -194,6 +201,8 @@ apiRoutes.route('/update-settings').post(UserController.updateSettings);
 apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);
 apiRoutes.route('/payment-stripe-plans').get(PaymentPlanController.fetchStripeProducts);
 apiRoutes.route('/sync-stripe').post(PaymentPlanController.syncStripe);
+apiRoutes.route('/order/update-config-qty').post(OrderController.updateProductConfigQty);
+
 
 apiRoutes.route('/checkout').get(CheckoutController.fetch);
 apiRoutes.route('/checkout/fetch-shipping-methods').get(CheckoutController.fetchShippingMethodsByCountry);

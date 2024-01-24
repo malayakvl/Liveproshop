@@ -1,7 +1,5 @@
 import { Action, handleActions } from 'redux-actions';
-import {
-    fetchStoresAction,
-} from './actions';
+import { fetchStoresAction } from './actions';
 
 const initialState: {
     uploadedFiles: any[];
@@ -94,12 +92,10 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: false
         })
-    },
+    }
 };
 
-export {
-    fetchStoresAction,
-};
+export { fetchStoresAction };
 
 // ------------------------------------
 // Reducer

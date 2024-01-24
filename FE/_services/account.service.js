@@ -133,7 +133,9 @@ async function getAccountData(authResponse) {
     };
     axios
         .get(
-            `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`, loginOptions)
+            `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`,
+            loginOptions
+        )
         .then((response) => {
             const { data } = response;
             if (data.error) {

@@ -18,6 +18,7 @@ import {
 import { ShippingAddress, ShippingMethod, OrderSummary } from '../../components/checkout';
 import {
     clearOrderByCommentAction,
+    clearWaitOrderByCommentAction,
     redirectCheckoutAction,
     redirectOrderNumberAction,
     setupReturnedUrlAction
@@ -65,7 +66,9 @@ export default function Index({ session, locale }: { session: any; locale: any }
         }
         dispatch(fetchCheckoutAction(orderNumber));
         dispatch(clearOrderByCommentAction(null));
+        dispatch(clearWaitOrderByCommentAction(null));
         window.localStorage.removeItem('orderCommentId');
+        window.localStorage.removeItem('orderWaitCommentId');
     }, [user.email]);
 
     useEffect(() => {

@@ -113,7 +113,7 @@
   "Waiting List": "Waiting List",
   "Shipping": "Shipping",
   "shopper (s)": "shopper (s)",
-  "Shoppers in waiting for product Ref.": "Shoppers in waiting for product Ref.",
+  "Shoppers in waiting": "Shoppers in waiting for product Ref.",
   "Shopper name": "Shopper name",
   "Shopper details": "Shopper details",
   "Pay": "Pay",
@@ -608,5 +608,14 @@
   "Must be less {charNumber} characters": "Must be less {charNumber} characters",
   "Statuses have been changed for all shippings": "Statuses have been changed for all shippings",
   "quantity_wait": "qantity",
-  "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available"
+  "msg_add_wait": "has been added to the waiting list and you will be notified as soon as the product becomes available",
+  "My Documents": "My Documents",
+  "Change quantity": "Change quantity",
+  "Product Quantity": "Product Quantity",
+  "Download csv template here": "Download csv template here",
+  "Addproduct": "Add a Product",
+  "Add a Product": "Add a Product",
+  "Active": "Active",
+  "Published products": "Active Products",
+  "Price, Quantity and SKU are mandatory fields": "Price, Quantity and SKU are mandatory fields"
 }

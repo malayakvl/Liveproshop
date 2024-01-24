@@ -67,7 +67,6 @@ class Product {
                 }
             };
         } catch (e) {
-            console.log(e.message);
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -87,6 +86,8 @@ class Product {
     async import (data, userId) {
         const dataProduct = [];
         const tmpData = await createListFromCSV(`./public${data.file}`);
+        // console.log("Array product data", tmpData);
+        // exit;
         const client = await pool.connect();
         for (let i=0; i < tmpData.length; i++) {
             if (tmpData[i+1]) {
@@ -107,6 +108,7 @@ class Product {
                             })
                         }
                     }
+                    // console.log(tmpData[i].product_name);
                     if (tmpData[i].product_name) {
                         dataProduct.push({
                             user_id: userId,
@@ -115,7 +117,7 @@ class Product {
                             material_name: tmpData[i].material_value ? capitalizeFirstLetter(tmpData[i].material_value) : null,
                             photos: tmpData[i].photos ? tmpData[i].photos.split(',') : null,
                             tags: tmpData[i].hashtag ? tmpData[i].hashtag.replaceAll('#', '').split(',') : null,
-                            publish: tmpData[i].publish === 'TRUE',
+                            publish: parseInt(tmpData[i].publish) === 1,
                             configured: true,
                             configuration: configuration
                         });
@@ -169,7 +171,10 @@ class Product {
             }
         }
         try {
-            await client.query(`SELECT * FROM data.import_products('${JSON.stringify(dataProduct)}')`);
+            // console.log("Data Product FOR database", JSON.stringify(dataProduct));
+            // await client.query(`SELECT * FROM data.import_products('${JSON.stringify(dataProduct)}')`);
+            console.log(`SELECT * FROM data.import_products_new('${JSON.stringify(dataProduct)}')`);
+            await client.query(`SELECT * FROM data.import_products_new('${JSON.stringify(dataProduct)}')`);
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -483,6 +488,9 @@ class Product {
             userIds.push(userId);
             const _filters = JSON.parse(filters);
             _filters.user_id = userIds;
+            if (!_filters.publish) {
+                delete _filters.publish;
+            }
             const _total = await client.query(`SELECT count FROM data.get_products_count('${JSON.stringify(_filters)}');`);
             const size = _total.rows[0].count;
             let offset;

@@ -113,6 +113,7 @@ function ProductForm({
     const [suggestions, setSuggestions] = useState([]);
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
+    const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
@@ -214,8 +215,31 @@ function ProductForm({
             initialValues={productData.product}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
+                console.log('Values', values);
                 dispatch(setIdentAction(false));
-                if (!isIdent) {
+                console.log('Selected Colors', selectedColors);
+                console.log('Selected Sizes', selectedSizes);
+                let errorConfig = false;
+                setErrorConfigured([]);
+                selectedColors.forEach((_color: any) => {
+                    selectedSizes.forEach((_size: any) => {
+                        if (
+                            !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
+                            !values[`configureQty_${_color['label']}_${_size['label']}`] ||
+                            !values[`configureSKU_${_color['label']}_${_size['label']}`]
+                        ) {
+                            errorConfig = true;
+                            const tmpError = [];
+                            tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                            setErrorConfigured(tmpError);
+                            console.log(tmpError);
+                            // document
+                            //     .getElementById(`error_${_color['label']}_${_size['label']}`)
+                            //     .innerHTML('222');
+                        }
+                    });
+                });
+                if (!isIdent && !errorConfig) {
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
                         if (!['material_id', 'tags', 'description'].includes(key)) {
@@ -498,12 +522,13 @@ function ProductForm({
                                             sizes={selectedSizes}
                                             props={props}
                                             additional={additionalProps}
+                                            errors={errorConfigured}
                                         />
                                     </>
                                 )}
 
                                 <InputSwitcher
-                                    label={'Publish'}
+                                    label={'Active'}
                                     name={'publish'}
                                     style={null}
                                     props={props}
@@ -511,7 +536,7 @@ function ProductForm({
                                 />
 
                                 <button type="submit" className="gradient-btn">
-                                    {props.values.id ? t('Update Product') : t('Add Product')}
+                                    {props.values.id ? t('Update Product') : t('Add a Product')}
                                 </button>
                             </div>
                         </div>

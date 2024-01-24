@@ -11,6 +11,7 @@ const tokenData = args[4].split('=');
 
 async function sessionLaunche() {
     // start parsing messages
+    console.log('here');
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
             response.data.data.forEach(async message => {
@@ -54,7 +55,7 @@ async function sessionLaunche() {
                             msgText = `We are sorry, but the product ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} is no longer available.\n\nYou have been added to the waiting list and we will notify you as soon as it is available again in your cart!`;
                             msgTextFr = `Nous sommes désolés, mais le produit ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} n'est plus disponible.\n\nVous avez été rajouté(e) sur la liste d’attente et nous vous avertirons dès qu’il sera à nouveau disponible dans votre panier!`;
                         } else {
-                            if (message.order_status === true) {
+                            if (message.order_status === true && message.activeProduct === true) {
                                 // we can parce message and find product
                                 msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
                                 msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
@@ -68,35 +69,104 @@ async function sessionLaunche() {
                         }
 
 
-                        await axios.get(
-                            `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}`
-                        )
-                            .then(async function (res) {
-                                console.log(orderFrom);
-                                return;
-                            }).catch(e => {
-                                console.log(e);
-                            });
-
-
-                        const responceResultMessage =  await axios.post(
-                            `https://graph.facebook.com/v18.0/me/messages`,
-                            '',
-                            {
-                                params: {
-                                    "recipient": {"comment_id": `${orderFrom}`},
-                                    "message": {"text": `${lng === 'en' ? msgText : msgTextFr}`},
-                                    "access_token":`${tokenData[1]}`
+                        // await axios.get(
+                        //     `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}`
+                        // )
+                        //     .then(async function (res) {
+                        //         console.log(orderFrom);
+                        //         return;
+                        //     }).catch(e => {
+                        //         console.log(e);
+                        //     });
+                        let responceResultMessage;
+                        if (statusWaitItem) {
+                            responceResultMessage =  await axios.post(
+                                `https://graph.facebook.com/v18.0/me/messages`,
+                                '',
+                                {
+                                    params: {
+                                        "recipient": {"comment_id": `${orderFrom}`},
+                                        "message": {
+                                            "attachment":{
+                                                "type":"template",
+                                                "payload":{
+                                                    "template_type":"button",
+                                                    "text": `${lng === 'en' ? msgText : msgTextFr}`,
+                                                    "buttons":[
+                                                        {
+                                                            "type": "postback",
+                                                            "title": `${lng === 'en' ? 'Confirm my order' : 'Confirmer ma commande'}`,
+                                                            "payload": "DEVELOPER_DEFINED_PAYLOAD"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "access_token":`${tokenData[1]}`
+                                    }
                                 }
-                            }
-                        )
-                            .then(async function (responseSending) {
-                                // console.log(responseSending);
-                                return true;
-                            }).catch(e => {
-                                console.log('Error Send Message Yobany v rot:');
-                                return false;
-                            });
+                            )
+                                .then(async function (responseSending) {
+                                    // console.log(responseSending);
+                                    return responseSending;
+                                }).catch(e => {
+                                    console.log('Error with button:');
+                                    return false;
+                                });
+
+                        } else {
+                            responceResultMessage =  await axios.post(
+                                `https://graph.facebook.com/v18.0/me/messages`,
+                                '',
+                                {
+                                    params: {
+                                        "recipient": {"comment_id": `${orderFrom}`},
+                                        "message": {"text": `${lng === 'en' ? msgText : msgTextFr}`},
+                                        "access_token":`${tokenData[1]}`
+                                    }
+                                }
+                            )
+                                .then(async function (responseSending) {
+                                    // console.log(responseSending);
+                                    return responseSending;
+                                }).catch(e => {
+                                    console.log('Error Send Message Yobany v rot:');
+                                    return false;
+                                });
+                        }
+                        // responceResultMessage =  await axios.post(
+                        //     `https://graph.facebook.com/v18.0/me/messages`,
+                        //     '',
+                        //     {
+                        //         params: {
+                        //             "recipient": {"comment_id": `${orderFrom}`},
+                        //             "message": {"text": `${lng === 'en' ? msgText : msgTextFr}`},
+                        //             "access_token":`${tokenData[1]}`
+                        //         }
+                        //     }
+                        // )
+                        //     .then(async function (responseSending) {
+                        //         // console.log(responseSending);
+                        //         return responseSending;
+                        //     }).catch(e => {
+                        //         console.log('Error Send Message Yobany v rot:');
+                        //         return false;
+                        //     });
+                        console.log("Respionce send result", responceResultMessage.data);
+
+
+                        if (responceResultMessage.data.recipient_id) {
+                            await axios.get(
+                                `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}&recipient_id=${responceResultMessage.data.recipient_id}`
+                            )
+                                .then(async function (res) {
+                                    console.log(orderFrom);
+                                    return;
+                                }).catch(e => {
+                                    console.log(e);
+                                });
+                        }
+                        console.log("AAAA", responceResultMessage.data.recipient_id);
                     } else {
                     }
                 }

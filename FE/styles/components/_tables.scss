@@ -47,7 +47,7 @@
 
     div {
       justify-content: center;
-      margin-left: 22px;
+      margin-left: 0px;
       //border: solid 1px;
     }
   }
@@ -89,6 +89,15 @@
     @apply w-full flex justify-center cursor-pointer;
   }
 
+  .icon-checked {
+    background-image: url(../../public/images/icon-checked.svg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+  }
+
   .button_table_action {
     text-indent: -99999px;
     white-space: nowrap;
@@ -118,18 +127,21 @@
   background-repeat: no-repeat;
   background-position: center;
   background-image: url("../../public/images/inventory-color.svg");
+  background-position-y: 13px;
 }
 .inventory-size {
   width: 70px;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url("../../public/images/inventory-size.svg");
+  background-position-y: 13px;
 }
 .inventory-qty {
   width: 100px;
   background-repeat: no-repeat;
   background-position: center;
   background-image: url("../../public/images/inventory-qty.svg");
+  background-position-y: 13px;
 }
 .inventory-price {
   width: 100px;
@@ -303,4 +315,19 @@ span.canceled {
   width: 40px;
   height: 40px;
   background-size: contain;
+}
+.productdetails {
+  position: relative;
+}
+.zoom {
+  transition: transform .2s; /* Animation */
+  //width: 200px;
+  //height: 200px;
+  //margin: 0 auto;
+}
+
+.zoom:hover {
+  transform: scale(2.0); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  position: relative;
+  z-index: 999;
 }

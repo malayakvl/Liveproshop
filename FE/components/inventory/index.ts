@@ -13,4 +13,5 @@ export { default as FilterMaterial } from './filters/FilterMaterial';
 export { default as FilterSize } from './filters/FilterSize';
 export { default as FilterPrice } from './filters/FilterPrice';
 export { default as FilterQuantity } from './filters/FilterQuantity';
+export { default as FilterPublish } from './filters/FilterPublish';
 export { default as Filters } from './Filters';
