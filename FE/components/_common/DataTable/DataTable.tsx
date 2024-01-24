@@ -72,7 +72,7 @@ const DataTable: React.FC<Props> = ({
     if (paginationType === PaginationType.ORDERS && user.role_id === 2) {
         // dropdownOptions = ['shipped', 'cancel', 'download_pdf'];
         dropdownOptions = ['shipped', 'refund', 'download_pdf'];
-    } else {
+    } else if (paginationType === PaginationType.ORDERS && user.role_id === 1) {
         dropdownOptions = ['download_pdf'];
     }
 
