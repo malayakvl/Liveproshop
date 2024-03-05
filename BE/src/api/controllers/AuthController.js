@@ -146,7 +146,7 @@ class AuthController {
         }
         const { user, error } = await userModel.create(createUserData);
         // create trial subscription
-        user.subscription = null;
+        // user.subscription = null;
         if (invitation.is_skip) {
             await userModel.createDbSubscription(user.id, 'skip');
         }
