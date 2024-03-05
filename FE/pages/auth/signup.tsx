@@ -60,9 +60,11 @@ export default function Signup({ locale }: { locale: string }) {
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
         // const commentId = commentStr[1];
-        setCommentId(commentStr[1]);
-        setShowSellerRadio(false);
-        setRoleId(1);
+        if (commentStr[1]) {
+            setCommentId(commentStr[1]);
+            setShowSellerRadio(false);
+            setRoleId(1);
+        }
     }, [typeof window !== 'undefined']);
 
     useEffect(() => {
@@ -86,7 +88,6 @@ export default function Signup({ locale }: { locale: string }) {
             window.localStorage.setItem('order_comment_id', commentStr[1]);
         }
         if (commentStr[0] == 'order_id' && commentStr[1]) {
-            console.log('BBBBBBB', commentStr[1]);
             dispatch(setWaitOrderIdAction(commentStr[1]));
             window.localStorage.setItem('order_wait_id', commentStr[1]);
         }

@@ -7,13 +7,16 @@ import { List } from '../../components/liveselling';
 import { accountService } from '../../_services';
 import SchedulePopup from '../../components/liveselling/SchedulePopup';
 import { showPopupAction } from '../../redux/livesessions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchScenariosAction } from '../../redux/livesessions';
+import { userSelector } from '../../redux/user/selectors';
+import moment from 'moment';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
+    const user = useSelector(userSelector);
 
     const fbSync = () => {
         accountService.syncFB();
@@ -37,6 +40,10 @@ export default function Index({ session }: { session: any }) {
                         <button className="btn-sync-fb" onClick={() => fbSync()}>
                             <span>{t('Sync account')}</span>
                         </button>
+                    </div>
+                    <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
+                        {t('Expire in')}{' '}
+                        {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
                     </div>
                     <div className="clear-both" />
                 </div>

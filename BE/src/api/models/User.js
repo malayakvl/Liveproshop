@@ -1111,6 +1111,7 @@ class User {
             const user = await this.findUserByEmailOnly(userData.email);
             // console.log("USER BY EMAIL", user);
             if (user) {
+                user.subscription = null;
                 // add to user default chatbot scenarios
                 // buy+item+color+size+quantity
                 // buy+item+size+color+quantity
