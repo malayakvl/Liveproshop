@@ -343,10 +343,15 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
                                             <span className={`trial-subscription`}>
-                                                {t('trial subscription')}
+                                                {/*{t('trial subscription')} <br />*/}
+                                                {subscriptionInfo.plan_id == 2
+                                                    ? t('Business')
+                                                    : subscriptionInfo.plan_id == 1
+                                                    ? t('Basic')
+                                                    : t('Platinum')}
                                             </span>
                                         </td>
-                                        <td style={{ textAlign: 'center' }}>
+                                        <td style={{ textAlign: 'center' }}>AM-733
                                             {moment(subscriptionInfo.created_at).format(
                                                 'DD.MM.YYYY'
                                             )}

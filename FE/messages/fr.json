@@ -619,5 +619,6 @@
   "Active": "Active",
   "Published products": "Produits actifs",
   "Add a Product": "Ajouter un produit",
-  "Price, Quantity and SKU are mandatory fields": "Le prix, la quantité et le SKU sont des champs obligatoires"
+  "Price, Quantity and SKU are mandatory fields": "Le prix, la quantité et le SKU sont des champs obligatoires",
+  "Expire in": "Expire dans"
 }
