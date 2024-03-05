@@ -351,7 +351,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                     : t('Platinum')}
                                             </span>
                                         </td>
-                                        <td style={{ textAlign: 'center' }}>AM-733
+                                        <td style={{ textAlign: 'center' }}>
                                             {moment(subscriptionInfo.created_at).format(
                                                 'DD.MM.YYYY'
                                             )}
