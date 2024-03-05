@@ -10,7 +10,7 @@ import { showPopupAction } from '../../redux/livesessions';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchScenariosAction } from '../../redux/livesessions';
 import { userSelector } from '../../redux/user/selectors';
-import moment from "moment";
+import moment from 'moment';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
