@@ -401,3 +401,6 @@ input:checked + .toggle-bg {
     color: red;
     font-weight: normal;
 }
+.MuiInput-underline::before {
+  border-color: #CFD8DC !important;
+}

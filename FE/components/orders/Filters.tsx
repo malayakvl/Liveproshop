@@ -17,6 +17,7 @@ import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
 import { setPaginationAction } from '../../redux/layouts';
 import { PaginationType } from '../../constants';
+import FilterDropdownShoppers from './filters/FilterDropdownShoppers';
 
 interface Props {
     handleHideFilter: () => void;
@@ -107,7 +108,9 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
                 <FilterPayment />
 
-                <FilterShoppers locale={locale} />
+                {/*<FilterShoppers locale={locale} />*/}
+
+                <FilterDropdownShoppers locale={locale} />
 
                 <FilterCountry locale={locale} />
 
