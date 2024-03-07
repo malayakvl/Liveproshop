@@ -590,7 +590,12 @@ class Order {
                 case UserRole.ADMIN:
                     break;
                 case UserRole.CUSTOMER:
+                    // _filters.seller_id = [user.id];
                     _filters.seller_id = [user.id];
+                    if (_filters.shopper_id) {
+                        _filters.buyer_id = _filters.shopper_id;
+                        delete _filters.userIds;
+                    }
                     // if (_filters.userIds) {
                     //     _filters.buyer_id = _filters.userIds;
                     //     delete _filters.userIds;
@@ -653,14 +658,15 @@ class Order {
                     break;
                 case UserRole.CUSTOMER:
                     _filters.seller_id = [user.id];
-                    if (_filters.userIds) {
-                        _filters.buyer_id = _filters.userIds;
+                    if (_filters.shopper_id) {
+                        _filters.buyer_id = _filters.shopper_id;
                         delete _filters.userIds;
                     }
                     break;
                 case UserRole.BUYER:
                     _filters.buyer_id = [user.id];
             }
+            // _filters.buyer_id = [1095];
             if (_filters.status?.length === 0) {
                 if (user.role_id === UserRole.BUYER) {
                     _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW, OrderStatus.WAITING];
@@ -685,7 +691,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];

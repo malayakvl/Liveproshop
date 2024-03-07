@@ -620,5 +620,7 @@
   "Published products": "Produits actifs",
   "Add a Product": "Ajouter un produit",
   "Price, Quantity and SKU are mandatory fields": "Le prix, la quantité et le SKU sont des champs obligatoires",
-  "Expire in": "Expire dans"
+  "Expire in": "Expire dans",
+  "waiting": "en attendant"
+
 }

@@ -11,13 +11,12 @@ import {
     FilterDate,
     FilterSeller,
     FilterDateRange,
-    FilterShoppers
+    FilterDropdownShoppers
 } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
 import { setPaginationAction } from '../../redux/layouts';
 import { PaginationType } from '../../constants';
-import FilterDropdownShoppers from './filters/FilterDropdownShoppers';
 
 interface Props {
     handleHideFilter: () => void;
@@ -32,6 +31,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
     const node = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        console.log('AAAA');
         dispatch(fetchFilerItems());
         document.addEventListener('mousedown', handleClick);
 

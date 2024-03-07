@@ -215,10 +215,10 @@ function ProductForm({
             initialValues={productData.product}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                console.log('Values', values);
+                // console.log('Values', values);
                 dispatch(setIdentAction(false));
-                console.log('Selected Colors', selectedColors);
-                console.log('Selected Sizes', selectedSizes);
+                // console.log('Selected Colors', selectedColors);
+                // console.log('Selected Sizes', selectedSizes);
                 let errorConfig = false;
                 setErrorConfigured([]);
                 selectedColors.forEach((_color: any) => {

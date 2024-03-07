@@ -22,11 +22,15 @@ class PaymentController {
     }
 
     async fetchItem(req, res) {
-        const { orderNumber } = req.query;
+        const { orderNumber, limit, offset, queryFilter, column, sort } = req.query;
+        console.log("BBBB")
+        // const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            const data = await paymentModel.fetchItem(orderNumber, req.user.id);
+            // const data = await orderModel.fetchItems(1, limit, req.user, false, offset, queryFilter, column, sort);
+
+            const data = await paymentModel.fetchItem(orderNumber, req.user.id, offset, queryFilter, column, sort);
             return res.status(200).json({ item: data.item});
         }
     }
@@ -55,7 +59,7 @@ class PaymentController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
-            const items = await paymentModel.fetchFilters();
+            const items = await paymentModel.fetchFilters(req.user);
             return res.status(200).json({ items: items.res });
         }
     }

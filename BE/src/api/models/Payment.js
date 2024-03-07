@@ -11,10 +11,9 @@ class Payment {
             // console.log(_filters);
             // create main filters for seller
             if (user.role_id === 2) {
-                // sellerIds.push(user.id);
                 _filters.seller_id = [user.id];
-                if (_filters.userIds) {
-                    _filters.buyer_id = _filters.userIds;
+                if (_filters.shopper_id) {
+                    _filters.buyer_id = _filters.shopper_id;
                     delete _filters.userIds;
                 }
             }
@@ -65,17 +64,17 @@ class Payment {
         }
     }
 
-    async fetchItem (orderNumber, userId) {
+    async fetchItem (orderNumber, userId, queryFilter, column, sort) {
         const client = await pool.connect();
 
         let item = null;
         let error = null;
-
         try {
+            console.log("AAAAA FILTER", queryFilter);
             const filter = JSON.stringify({
                 status: ["payed"],
                 seller_id: userId,
-                order_number: orderNumber
+                order_number: orderNumber,
             });
 
             const ordersQuery = `SELECT id, order_items,
@@ -182,12 +181,26 @@ class Payment {
 
     }
 
-    async fetchFilters () {
+    async fetchFilters (user) {
         const client = await pool.connect();
 
         const filter = '\'{"status":["payed"]}\'';
         let res = {};
         let error = null;
+
+        const _filterBuyers = {};
+        if (user.role_id === 2) {
+            // sellerIds.push(user.id);
+            _filterBuyers.seller_id = [user.id];
+            if (_filterBuyers.userIds) {
+                _filterBuyers.seller_id = _filters.userIds;
+                delete _filterBuyers.userIds;
+            }
+        }
+        // const buyersQuery = `SELECT * FROM data.get_buyers(10000, 0, '${JSON.stringify(_filterBuyers)}', '${column} ${sort}');`;
+
+        const ordersQueryBuyers = await client.query(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`); // 'orders.created_at DESC'
+        res.buyers =  ordersQueryBuyers.rows;
 
         try {
             const payments = await client.query(`SELECT * FROM data.get_orders_payments(${filter});`);

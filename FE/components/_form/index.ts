@@ -6,4 +6,3 @@ export * from './InputSelectLocalize';
 export * from './InputSwitcher';
 export * from './InputTextarea';
 export * from './InputHidden';
-export * from './MultiselectDropdown';

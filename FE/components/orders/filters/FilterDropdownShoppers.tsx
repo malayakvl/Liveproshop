@@ -5,29 +5,22 @@ import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
-import MultiselectDropdown from '../../_form/MultiselectDropdown';
+// import MultiselectDropdown from '../../_form/MultiselectDropdown';
 import { filterDataSelector } from '../../../redux/orders/selectors';
+import { MultiSelect } from 'react-multi-select-component';
 
 type Props = {
     locale: string;
 };
 
-const FilterDropdownShoppers: React.FC<Props> = ({ locale }) => {
+const FilterDropdownShoppers: React.FC<Props> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.ORDERS)
     );
 
-    // const options = [
-    //     { label: 'foo', value: 'foo' },
-    //     { label: 'bar', value: 'bar' },
-    //     { label: 'jar', value: 'jar' },
-    //     { label: 'nar', value: 'nar' },
-    //     { label: 'mar', value: 'mar' },
-    //     { label: 'far', value: 'far' }
-    // ];
-    // const options: any[] = [];
+    const [selectedTest, setSelectedTest] = useState([]);
 
     const [selectedOptions, setSelectedOptions] = useState([]);
     const getOptionLabel = (option: any) => `${option.label}`;
@@ -60,55 +53,92 @@ const FilterDropdownShoppers: React.FC<Props> = ({ locale }) => {
         setOptions(tmpOptions);
     }, [filterData]);
 
-    const handleToggleOption = (option: any) => {
-        console.log('AAAAAA', option);
-        if (option.length > 0) {
-            setByerSelected([...byerSelected, parseInt(option[0].value)]);
+    useEffect(() => {
+        console.log('Filter data', filterData);
+
+        const _tmBuyer: any[] = [];
+        if (selectedTest.length > 0) {
+            selectedTest.forEach((option: any) => {
+                _tmBuyer.push(option.value);
+            });
+            setByerSelected(_tmBuyer);
             dispatch(
                 setPaginationAction({
                     type: PaginationType.ORDERS,
                     modifier: {
                         filters: {
                             ...filters,
-                            shopper_id: [...byerSelected, parseInt(option[0].value)]
+                            shopper_id: _tmBuyer
                         },
                         offset: 0
                     }
                 })
             );
         }
-        // if (e.target.checked) {
-        //     setByerSelected([...byerSelected, parseInt(e.target.value)]);
-        //     dispatch(
-        //         setPaginationAction({
-        //             type: PaginationType.ORDERS,
-        //             modifier: {
-        //                 filters: {
-        //                     ...filters,
-        //                     shopper_id: [...byerSelected, parseInt(e.target.value)]
-        //                 },
-        //                 offset: 0
-        //             }
-        //         })
-        //     );
-        // } else {
-        //     dispatch(
-        //         setPaginationAction({
-        //             type: PaginationType.ORDERS,
-        //             modifier: {
-        //                 filters: {
-        //                     ...filters,
-        //                     shopper_id: byerSelected.filter(
-        //                         (id: any) => id !== parseInt(e.target.value)
-        //                     )
-        //                 },
-        //                 offset: 0
-        //             }
-        //         })
-        //     );
-        //     setByerSelected(byerSelected.filter((id: any) => id !== parseInt(e.target.value)));
-        // }
-    };
+    }, [selectedTest]);
+
+    // const handleToggleOption = (option: any) => {
+    //     console.log('AAAA');
+    //     if (option.length > 0) {
+    //         setByerSelected([...byerSelected, parseInt(option[0].value)]);
+    //         dispatch(
+    //             setPaginationAction({
+    //                 type: PaginationType.ORDERS,
+    //                 modifier: {
+    //                     filters: {
+    //                         ...filters,
+    //                         shopper_id: [...byerSelected, parseInt(option[0].value)]
+    //                     },
+    //                     offset: 0
+    //                 }
+    //             })
+    //         );
+    //     } else {
+    //         dispatch(
+    //             setPaginationAction({
+    //                 type: PaginationType.ORDERS,
+    //                 modifier: {
+    //                     filters: {
+    //                         ...filters,
+    //                         shopper_id: []
+    //                     },
+    //                     offset: 0
+    //                 }
+    //             })
+    //         );
+    //     }
+    //     // if (e.target.checked) {
+    //     //     setByerSelected([...byerSelected, parseInt(e.target.value)]);
+    //     //     dispatch(
+    //     //         setPaginationAction({
+    //     //             type: PaginationType.ORDERS,
+    //     //             modifier: {
+    //     //                 filters: {
+    //     //                     ...filters,
+    //     //                     shopper_id: [...byerSelected, parseInt(e.target.value)]
+    //     //                 },
+    //     //                 offset: 0
+    //     //             }
+    //     //         })
+    //     //     );
+    //     // } else {
+    //     //     dispatch(
+    //     //         setPaginationAction({
+    //     //             type: PaginationType.ORDERS,
+    //     //             modifier: {
+    //     //                 filters: {
+    //     //                     ...filters,
+    //     //                     shopper_id: byerSelected.filter(
+    //     //                         (id: any) => id !== parseInt(e.target.value)
+    //     //                     )
+    //     //                 },
+    //     //                 offset: 0
+    //     //             }
+    //     //         })
+    //     //     );
+    //     //     setByerSelected(byerSelected.filter((id: any) => id !== parseInt(e.target.value)));
+    //     // }
+    // };
 
     return (
         <>
@@ -133,22 +163,29 @@ const FilterDropdownShoppers: React.FC<Props> = ({ locale }) => {
                             {byerSelected.length}
                         </div>
                     </div>
-                    <div className="mt-0 mb-4 pt-1 overflow-auto max-h-36 relative max-w-sm mx-auto">
+                    <div className="mt-0 mb-4 pt-1 overflow-auto max-h-36 max-w-sm mx-auto min-h-[150px]">
                         {showBlock && (
                             <>
-                                <MultiselectDropdown
-                                    noOptionsText={''}
-                                    items={options}
-                                    getOptionLabel={getOptionLabel}
-                                    // getOptionDisabled={null}
-                                    selectedValues={selectedOptions}
-                                    label="Select complex values"
-                                    placeholder="Placeholder for textbox"
-                                    selectAllLabel="Select all"
-                                    onToggleOption={handleToggleOption}
-                                    onClearOptions={handleClearOptions}
-                                    onSelectAll={handleSelectAll}
+                                <MultiSelect
+                                    options={options}
+                                    value={selectedTest}
+                                    onChange={setSelectedTest}
+                                    labelledBy="Select"
                                 />
+
+                                {/*<MultiselectDropdown*/}
+                                {/*    noOptionsText={''}*/}
+                                {/*    items={options}*/}
+                                {/*    getOptionLabel={getOptionLabel}*/}
+                                {/*    // getOptionDisabled={null}*/}
+                                {/*    selectedValues={selectedOptions}*/}
+                                {/*    label="Select complex values"*/}
+                                {/*    placeholder="Placeholder for textbox"*/}
+                                {/*    selectAllLabel="Select all"*/}
+                                {/*    onToggleOption={handleToggleOption}*/}
+                                {/*    onClearOptions={handleClearOptions}*/}
+                                {/*    onSelectAll={handleSelectAll}*/}
+                                {/*/>*/}
                             </>
                         )}
                     </div>

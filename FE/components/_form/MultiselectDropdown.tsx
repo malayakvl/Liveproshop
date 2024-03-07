@@ -49,6 +49,7 @@ const MultiSelect = ({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const optionRenderer = (option: any, { selected }) => {
+        // console.log(option)
         const selectAllProps =
             option.value === 'select-all' // To control the state of 'select-all' checkbox
                 ? { checked: allSelected }
@@ -56,27 +57,28 @@ const MultiSelect = ({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return (
-            <>
+            <div className="text-checkbox-d inline-block ml-[-10px]">
                 <Checkbox
-                    color="primary"
                     icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                     checkedIcon={<CheckBoxIcon fontSize="small" />}
                     style={{ marginRight: 8 }}
                     checked={selected}
+                    onClick={() => 'hello'}
                     {...selectAllProps}
                 />
                 <span
-                    className="text-[12px] text-blue-450 font-bold"
+                    className="text-[12px] text-blue-450 font-bold ml-[-10px]"
                     style={{ fontFamily: 'Montserrat' }}>
-                    {option.label}
+                    !!{option.label}!!
                 </span>
-            </>
+            </div>
         );
     };
     const inputRenderer = (params: any) => (
         <TextField
             {...params}
             label={label}
+            className="dropdown-filter-field"
             placeholder={`Select Shoppers`}
             style={{ fontSize: '10px !important', fontFamily: 'Montserrat' }}
         />
