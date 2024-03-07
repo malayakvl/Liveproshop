@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { InputText } from '../_form';
 import { useDispatch } from 'react-redux';
 import { setIdentAction } from '../../redux/products';
 
-const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
+const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors }) => {
     const t = useTranslations();
     const [checkedVariant, setCheckedVariant] = useState('');
+    const [errorQtys, setErrorQtys] = useState({});
+    const _tmpKeysError = {};
     const dispatch = useDispatch();
     const setupIdent = (variants: any[]) => {
         dispatch(setIdentAction(true));
@@ -21,6 +23,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
             });
         }
     };
+    // console.log('!!!! Errors !!!', errors)
 
     const _colors: any[] = [];
     const _sizes: any[] = [];
@@ -52,6 +55,32 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
         attrs.push(values.map((v: any) => ({ [attr]: v })));
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
+
+    console.log(errorQtys);
+
+    useEffect(() => {
+        // setErrorQtys([]);
+        // const _tmpKeysError = {};
+        if (errors.length > 0) {
+            console.log('Errors', errors);
+            errors.forEach((_key: any) => {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                _tmpKeysError[_key] = 'Error';
+            });
+            // if (_tmpKeysError.length) {
+            //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //     // @ts-ignore
+            //     setErrorQtys(_tmpKeysError);
+            //     console.log(Object.keys(errorQtys));
+            // }
+            setErrorQtys(_tmpKeysError);
+            console.log('222', errors[0]);
+            console.log('333', errors[1]);
+            // console.log(_tmpKeysError);
+        }
+        // console.log(_tmpKeysError);
+    }, [errors]);
 
     return (
         <div className="overflow-x-scroll md:overflow-x-visible">
@@ -121,17 +150,30 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         props={props}
                                         tips={null}
                                     />
-                                    {!props[`configurePrice_${attr.color}_${attr.size}`] && (
-                                        <span
-                                            className="config-error"
-                                            id={`error_${attr.color}_${attr.size}`}>
-                                            {!props.values[
-                                                `configurePrice_${attr.color}_${attr.size}`
-                                            ] && props.isSubmitting
-                                                ? 'Price, Quantity and SKU are mandatory fields'
-                                                : ''}
-                                        </span>
-                                    )}
+                                    <div className="relative w-full">
+                                        {!props[`configurePrice_${attr.color}_${attr.size}`] && (
+                                            <span
+                                                className="config-error"
+                                                id={`error_${attr.color}_${attr.size}`}>
+                                                {!props.values[
+                                                    `configurePrice_${attr.color}_${attr.size}`
+                                                ] && props.isSubmitting
+                                                    ? 'Price, Quantity are mandatory fields'
+                                                    : ''}
+                                            </span>
+                                        )}
+                                        {errors.length > 0 && (
+                                            <span className="config-error">
+                                                {errors.find(
+                                                    (_element: string) =>
+                                                        _element ==
+                                                        `error_${attr.color}_${attr.size}`
+                                                )
+                                                    ? 'Price, Quantity are mandatory fields'
+                                                    : ''}
+                                            </span>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}

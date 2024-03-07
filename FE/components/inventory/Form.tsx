@@ -218,27 +218,23 @@ function ProductForm({
             onSubmit={(values) => {
                 dispatch(setIdentAction(false));
                 let errorConfig = false;
+                const tmpError: any[] = [];
                 setErrorConfigured([]);
-                console.log('Data Active', values);
-
+                // let tmpError: string[] = [];
                 selectedColors.forEach((_color: any) => {
                     selectedSizes.forEach((_size: any) => {
                         if (
                             !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
-                            !values[`configureQty_${_color['label']}_${_size['label']}`] ||
-                            !values[`configureSKU_${_color['label']}_${_size['label']}`]
+                            !values[`configureQty_${_color['label']}_${_size['label']}`]
                         ) {
                             errorConfig = true;
-                            const tmpError = [];
                             tmpError.push(`error_${_color['label']}_${_size['label']}`);
-                            setErrorConfigured(tmpError);
-                            console.log(tmpError);
-                            // document
-                            //     .getElementById(`error_${_color['label']}_${_size['label']}`)
-                            //     .innerHTML('222');
                         }
                     });
                 });
+                if (tmpError.length > 0) {
+                    setErrorConfigured(tmpError);
+                }
                 if (!isIdent && !errorConfig) {
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
