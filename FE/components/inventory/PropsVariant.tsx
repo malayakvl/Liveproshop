@@ -53,7 +53,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
 
-    console.log('Values', props);
     return (
         <div className="overflow-x-scroll md:overflow-x-visible">
             {(_colors.length > 0 || _sizes.length > 0) && (

@@ -80,7 +80,8 @@ class ProductController {
                 });
             }
             dataProduct.photos = photos;
-
+console.log(dataProduct)
+            dataProduct['publish'] = dataProduct['isPublish'];
             if (!dataProduct.id) {
                 await productModel.create(dataProduct, req.user.id);
             } else {

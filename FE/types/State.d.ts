@@ -21,6 +21,7 @@ declare namespace State {
         paymentPlans: PaymentPlans;
         checkout: Checkout;
         mystores: Mystores;
+        documents: Documents;
     }
 
     type Address = Address.Root;
@@ -47,4 +48,5 @@ declare namespace State {
     type Settings = Settings.Root;
     type Checkout = Checkout.Root;
     type Mystores = Mystores.Root;
+    type Documents = Documents.Root;
 }
