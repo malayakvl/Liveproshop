@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { FilterAmount, FilterNumber, FilterDate } from './index';
+import { FilterAmount, FilterNumber, FilterDate, FilterDropdownShoppers } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
 import { setPaginationAction } from '../../redux/layouts';
@@ -89,7 +89,9 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
                 <FilterAmount />
 
-                <FilterShoppers locale={locale} />
+                {/*<FilterDropdownShoppers locale={locale} />*/}
+
+                {/*<FilterShoppers locale={locale} />*/}
             </div>
         </div>
     );

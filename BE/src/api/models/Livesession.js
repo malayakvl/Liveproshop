@@ -76,8 +76,7 @@ class Livesession {
             // const currTime = currDateTime.getHours()+':'+currDateTime.getMinutes()+':'+currDateTime.getSeconds();
             // const currDate = currDateTime.getFullYear()+'-'+currDateTime.getMonth()+'-'+currDateTime.getUTCDay();
             // console.log(moment().format("YYYY-MM-DD"));
-            const durationQuery = await client.query(`SELECT * FROm data.live_sessions WHERE id='${itemId}' AND user_id=${userId}`);
-            console.log(durationQuery.rows[0].order_timer);
+            const durationQuery = await client.query(`SELECT * FROM data.live_sessions WHERE id='${itemId}' AND user_id=${userId}`);
             let endPeriod;
             if (durationQuery.rows[0].order_timer.minutes) {
                 endPeriod = moment().add(durationQuery.rows[0].order_timer.minutes, 'minutes');
@@ -86,9 +85,6 @@ class Livesession {
             } else {
                 endPeriod = moment().add(durationQuery.rows[0].order_timer.days, 'days');
             }
-            // console.log(endPeriod.format("YYYY-MM-DD"));
-            // console.log(endPeriod.format("HH:mm:ss"));
-            // exit;
             const query = await client.query(
                 `UPDATE data.live_sessions SET status='closed',
                     event_time_end = '${endPeriod.format("HH:mm:ss")}', event_date_end='${endPeriod.format("YYYY-MM-DD")}' WHERE id=${itemId} AND user_id=${userId}`

@@ -7,7 +7,8 @@ import {
     FilterNumber,
     FilterDate,
     FilterSeller,
-    FilterDateRange
+    FilterDateRange,
+    FilterDropdownShoppers
 } from './index';
 import { fetchFilerItems } from '../../redux/payments';
 import { userSelector } from '../../redux/user/selectors';
@@ -92,6 +93,8 @@ const Filters: React.FC<Props> = ({ handleHideFilter, filterOpen }) => {
                 <FilterAmount />
 
                 <FilterPayment />
+
+                <FilterDropdownShoppers locale={'en'} />
             </div>
         </div>
     );

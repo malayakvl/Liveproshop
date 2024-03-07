@@ -195,7 +195,16 @@ input:checked + .toggle-bg:after {
 input:checked + .toggle-bg {
   @apply bg-green-250 border-green-250;
 }
-
+input:focus, input:active {
+  border-color: #da1a9e;
+  --tw-ring-color: none !important;
+  --tw-ring-offset-shadow: none !important;
+  --tw-ring-shadow: none !important;
+  box-shadow: none !important;
+}
+.MuiFormLabel-root  {
+  display: none !important;
+}
 
 
 
@@ -400,4 +409,51 @@ input:checked + .toggle-bg {
     font-size: 11px;
     color: red;
     font-weight: normal;
+}
+.MuiInput-underline::before {
+  border-color: #CFD8DC !important;
+}
+.MuiInput-input::placeholder {
+  font-size: 14px !important;
+  font-family: Montserrat, serif !important;
+}
+.text-checkbox-d {
+  display: inline-block !important;
+  border: solid 1px !important;
+  margin: -10px 0px 0px -30px !important;
+
+  input[type="checkbox"] {
+    @apply relative appearance-none w-4 h-4 border-2 border-green-200 rounded-sm mt-1 bg-white
+    focus:outline-none focus:ring-offset-0 focus:ring-1 focus:ring-blue-100
+    checked:bg-green-600 checked:border-0
+    disabled:border-gray-550;
+  }
+}
+
+.dropdown-content {
+  .item-renderer {
+    position: relative;
+    span {
+        position: absolute;
+        top: 2px;
+        left: 30px;
+      }
+  }
+  label {
+    font-size: 12px !important;
+    color: #99ABCE !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+    width: 100% !important;
+  }
+
+  span {
+    font-size: 12px !important;
+    font-weight: bold !important;
+    display: flex !important;
+  }
+}
+
+.dropdown-heading-value {
+  font-size: 12px !important;
 }

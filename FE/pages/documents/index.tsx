@@ -7,9 +7,7 @@ import { ListStores } from '../../components/stores';
 import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
 import { accountService } from '../../_services';
 import { userSelector } from '../../redux/user/selectors';
-import moment from 'moment';
-// import {showLoaderAction} from "../../redux/layouts/actions";
-// import {fetchOrderPdfAction} from "../../redux/orders";
+import { DocumentForm } from '../../components/documents';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -36,7 +34,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     <h1 className="float-left">{t('My Documents')}</h1>
                     <div className="clear-both" />
                 </div>
-                <div className={`w-full ${activeTabLayout.tab !== 'products' ? 'hidden' : ''}`}>
+                <div className={`w-full`}>
+                    <DocumentForm locale={'en'} photos={[]} />
                     {/*<ListStores locale={locale} />*/}
                 </div>
             </div>
