@@ -21,15 +21,23 @@ export default function Index() {
                     </h2>
                 </div>
                 <div className="video-responsive">
+                    {/*<iframe*/}
+                    {/*    width="983"*/}
+                    {/*    height="542"*/}
+                    {/*    src="https://www.youtube.com/embed/xh7l7wUIwVc"*/}
+                    {/*    title="Import products from csv file"*/}
+                    {/*    frameBorder="0"*/}
+                    {/*    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"*/}
+                    {/*    allowFullScreen*/}
+                    {/*/>*/}
                     <iframe
-                        width="983"
-                        height="542"
-                        src="https://www.youtube.com/embed/xh7l7wUIwVc"
-                        title="Import products from csv file"
+                        width="100%"
+                        height="504"
+                        src="https://www.youtube.com/embed/N78d0l3_SgU"
+                        title="Upload Products to Liveproshop.com"
                         frameBorder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                    />
+                        allowFullScreen></iframe>
                 </div>
                 <div className="block mt-3 f-14 mb-2">
                     <a

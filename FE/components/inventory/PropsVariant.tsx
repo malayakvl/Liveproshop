@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { InputText } from '../_form';
 import { useDispatch } from 'react-redux';
@@ -7,8 +7,6 @@ import { setIdentAction } from '../../redux/products';
 const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors }) => {
     const t = useTranslations();
     const [checkedVariant, setCheckedVariant] = useState('');
-    const [errorQtys, setErrorQtys] = useState({});
-    const _tmpKeysError = {};
     const dispatch = useDispatch();
     const setupIdent = (variants: any[]) => {
         dispatch(setIdentAction(true));
@@ -23,7 +21,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
             });
         }
     };
-    // console.log('!!!! Errors !!!', errors)
 
     const _colors: any[] = [];
     const _sizes: any[] = [];
@@ -56,32 +53,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
 
-    console.log(errorQtys);
-
-    useEffect(() => {
-        // setErrorQtys([]);
-        // const _tmpKeysError = {};
-        if (errors.length > 0) {
-            console.log('Errors', errors);
-            errors.forEach((_key: any) => {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                _tmpKeysError[_key] = 'Error';
-            });
-            // if (_tmpKeysError.length) {
-            //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //     // @ts-ignore
-            //     setErrorQtys(_tmpKeysError);
-            //     console.log(Object.keys(errorQtys));
-            // }
-            setErrorQtys(_tmpKeysError);
-            console.log('222', errors[0]);
-            console.log('333', errors[1]);
-            // console.log(_tmpKeysError);
-        }
-        // console.log(_tmpKeysError);
-    }, [errors]);
-
     return (
         <div className="overflow-x-scroll md:overflow-x-visible">
             {(_colors.length > 0 || _sizes.length > 0) && (
@@ -106,6 +77,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                         onChange={() =>
                                             setCheckedVariant(`${attr.color}_${attr.size}`)
                                         }
+                                        checked={checkedVariant == `${attr.color}_${attr.size}`}
                                     />
                                 </td>
                                 <td className="sm:whitespace-nowrap" style={{ paddingTop: 2 }}>
