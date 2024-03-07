@@ -64,7 +64,7 @@ const initialState: {
     products: [],
     product: {
         product: {
-            publish: false,
+            isPublish: false,
             configured: false,
             name: '',
             description: '',

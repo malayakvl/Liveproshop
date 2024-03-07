@@ -116,11 +116,10 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                 );
             });
         }
-        // console.log(orderStatus);
 
         return dataStatuses;
     };
-    console.log('ITEMS', items);
+    // console.log('ITEMS', items);
 
     return (
         <div className="mt-7">

@@ -4,7 +4,7 @@ import { InputText } from '../_form';
 import { useDispatch } from 'react-redux';
 import { setIdentAction } from '../../redux/products';
 
-const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
+const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors }) => {
     const t = useTranslations();
     const [checkedVariant, setCheckedVariant] = useState('');
     const dispatch = useDispatch();
@@ -53,7 +53,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
 
-    console.log('Values', props);
     return (
         <div className="overflow-x-scroll md:overflow-x-visible">
             {(_colors.length > 0 || _sizes.length > 0) && (
@@ -78,6 +77,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         onChange={() =>
                                             setCheckedVariant(`${attr.color}_${attr.size}`)
                                         }
+                                        checked={checkedVariant == `${attr.color}_${attr.size}`}
                                     />
                                 </td>
                                 <td className="sm:whitespace-nowrap" style={{ paddingTop: 2 }}>
@@ -122,17 +122,30 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional }) => {
                                         props={props}
                                         tips={null}
                                     />
-                                    {!props[`configurePrice_${attr.color}_${attr.size}`] && (
-                                        <span
-                                            className="config-error"
-                                            id={`error_${attr.color}_${attr.size}`}>
-                                            {!props.values[
-                                                `configurePrice_${attr.color}_${attr.size}`
-                                            ] && props.isSubmitting
-                                                ? 'Price, Quantity and SKU are mandatory fields'
-                                                : ''}
-                                        </span>
-                                    )}
+                                    <div className="relative w-full">
+                                        {!props[`configurePrice_${attr.color}_${attr.size}`] && (
+                                            <span
+                                                className="config-error"
+                                                id={`error_${attr.color}_${attr.size}`}>
+                                                {!props.values[
+                                                    `configurePrice_${attr.color}_${attr.size}`
+                                                ] && props.isSubmitting
+                                                    ? 'Price, Quantity are mandatory fields'
+                                                    : ''}
+                                            </span>
+                                        )}
+                                        {errors.length > 0 && (
+                                            <span className="config-error">
+                                                {errors.find(
+                                                    (_element: string) =>
+                                                        _element ==
+                                                        `error_${attr.color}_${attr.size}`
+                                                )
+                                                    ? 'Price, Quantity are mandatory fields'
+                                                    : ''}
+                                            </span>
+                                        )}
+                                    </div>
                                 </td>
                             </tr>
                         ))}

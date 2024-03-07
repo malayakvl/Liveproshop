@@ -146,7 +146,7 @@
   background-repeat: no-repeat;
   width: 24px;
   height: 24px;
-  @apply absolute top-[12px] right-2;
+  @apply absolute top-[9px] right-2;
 }
 
 .input-eye {
@@ -195,7 +195,16 @@ input:checked + .toggle-bg:after {
 input:checked + .toggle-bg {
   @apply bg-green-250 border-green-250;
 }
-
+input:focus, input:active {
+  border-color: #da1a9e;
+  --tw-ring-color: none !important;
+  --tw-ring-offset-shadow: none !important;
+  --tw-ring-shadow: none !important;
+  box-shadow: none !important;
+}
+.MuiFormLabel-root  {
+  display: none !important;
+}
 
 
 
@@ -206,7 +215,7 @@ input:checked + .toggle-bg {
   @apply w-full;
 
   .dropzone {
-    @apply border border-gray-180 border-dashed p-10 rounded-lg text-xs text-gray-350 flex
+    @apply border border-gray-180 border-dashed rounded-lg text-xs text-gray-350 flex
       justify-center items-center max-h-[200px] h-[200px] p-2.5 cursor-pointer;
 
     p {
@@ -235,7 +244,7 @@ input:checked + .toggle-bg {
     ul {
       li {
         font-size: 10px;
-        @apply border border-gray-180 border-dashed relative font-bold text-gray-350
+        @apply border border-gray-180 border-dashed  font-bold text-gray-350
           pr-2.5 pl-6  py-1.5 rounded-lg mt-1.5 relative inline-block ml-2;
 
         i.close {
@@ -395,9 +404,59 @@ input:checked + .toggle-bg {
 }
 
 .config-error {
-    width: 100%;
-    margin-top: -20px;
-    font-size: 11px;
-    color: red;
-    font-weight: normal;
+  width: 100%;
+    //margin-top: -20px;
+  top:-15px;
+  left: 5px;
+  font-size: 11px;
+  color: red;
+  position: absolute;
+  font-weight: normal;
+}
+.MuiInput-underline::before {
+  border-color: #CFD8DC !important;
+}
+.MuiInput-input::placeholder {
+  font-size: 14px !important;
+  font-family: Montserrat, serif !important;
+}
+.text-checkbox-d {
+  display: inline-block !important;
+  border: solid 1px !important;
+  margin: -10px 0px 0px -30px !important;
+
+  input[type="checkbox"] {
+    @apply relative appearance-none w-4 h-4 border-2 border-green-200 rounded-sm mt-1 bg-white
+    focus:outline-none focus:ring-offset-0 focus:ring-1 focus:ring-blue-100
+    checked:bg-green-600 checked:border-0
+    disabled:border-gray-550;
+  }
+}
+
+.dropdown-content {
+  .item-renderer {
+    position: relative;
+    span {
+        position: absolute;
+        top: 2px;
+        left: 30px;
+      }
+  }
+  label {
+    font-size: 12px !important;
+    color: #99ABCE !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+    width: 100% !important;
+  }
+
+  span {
+    font-size: 12px !important;
+    font-weight: bold !important;
+    display: flex !important;
+  }
+}
+
+.dropdown-heading-value {
+  font-size: 12px !important;
 }

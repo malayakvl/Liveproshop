@@ -83,7 +83,7 @@ function Features() {
                             <div className="flex flex-col xl:flex-row lg:mb-[40px]">
                                 <div className="w-full mb-[20px]">
                                     <h4 className="text-[18px] md:text-[24px] text-gray-350 font-bold">
-                                        {t('Live InventoryAdd management')}
+                                        {t('Live Inventory')}
                                     </h4>
                                     <div className="text-blue-350 text-[14px] md:text-[16px] font-medium leading-[24px] mt-[16px] mr-[20px] lg:pr-[20px]">
                                         {t('text_3')}

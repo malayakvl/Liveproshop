@@ -114,6 +114,7 @@ function ProductForm({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
+    // const [publishTmp, setPublishTmp] = useState<boolean>(false);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
@@ -215,30 +216,25 @@ function ProductForm({
             initialValues={productData.product}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                console.log('Values', values);
                 dispatch(setIdentAction(false));
-                console.log('Selected Colors', selectedColors);
-                console.log('Selected Sizes', selectedSizes);
                 let errorConfig = false;
+                const tmpError: any[] = [];
                 setErrorConfigured([]);
+                // let tmpError: string[] = [];
                 selectedColors.forEach((_color: any) => {
                     selectedSizes.forEach((_size: any) => {
                         if (
                             !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
-                            !values[`configureQty_${_color['label']}_${_size['label']}`] ||
-                            !values[`configureSKU_${_color['label']}_${_size['label']}`]
+                            !values[`configureQty_${_color['label']}_${_size['label']}`]
                         ) {
                             errorConfig = true;
-                            const tmpError = [];
                             tmpError.push(`error_${_color['label']}_${_size['label']}`);
-                            setErrorConfigured(tmpError);
-                            console.log(tmpError);
-                            // document
-                            //     .getElementById(`error_${_color['label']}_${_size['label']}`)
-                            //     .innerHTML('222');
                         }
                     });
                 });
+                if (tmpError.length > 0) {
+                    setErrorConfigured(tmpError);
+                }
                 if (!isIdent && !errorConfig) {
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
@@ -247,6 +243,7 @@ function ProductForm({
                         }
                     });
                     formData.append('description', editorContent);
+                    formData.append('publish', values['isPublish']);
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append(
@@ -275,6 +272,10 @@ function ProductForm({
                 const onChangeConfigured = (e: any) => {
                     setSelectedColors([]);
                     setSelectedSizes([]);
+                    return handleChange(e);
+                };
+                const onChangeStatusPublish = (e: any) => {
+                    props.values['isPublish'] = true;
                     return handleChange(e);
                 };
                 return (
@@ -323,6 +324,13 @@ function ProductForm({
                                     )}
                                 </div>
 
+                                {/*<InputSwitcher*/}
+                                {/*    label={'Active'}*/}
+                                {/*    name={'active'}*/}
+                                {/*    style={null}*/}
+                                {/*    props={props}*/}
+                                {/*    onChange={props.handleChange}*/}
+                                {/*/>*/}
                                 <InputSwitcher
                                     label={'Configured'}
                                     name={'configured'}
@@ -526,13 +534,12 @@ function ProductForm({
                                         />
                                     </>
                                 )}
-
                                 <InputSwitcher
                                     label={'Active'}
-                                    name={'publish'}
+                                    name={'isPublish'}
                                     style={null}
                                     props={props}
-                                    onChange={props.handleChange}
+                                    onChange={onChangeStatusPublish}
                                 />
 
                                 <button type="submit" className="gradient-btn">

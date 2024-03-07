@@ -11,7 +11,7 @@ import {
     FilterDate,
     FilterSeller,
     FilterDateRange,
-    FilterShoppers
+    FilterDropdownShoppers
 } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
@@ -31,6 +31,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
     const node = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        console.log('AAAA');
         dispatch(fetchFilerItems());
         document.addEventListener('mousedown', handleClick);
 
@@ -107,7 +108,9 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
                 <FilterPayment />
 
-                <FilterShoppers locale={locale} />
+                {/*<FilterShoppers locale={locale} />*/}
+
+                <FilterDropdownShoppers locale={locale} />
 
                 <FilterCountry locale={locale} />
 
