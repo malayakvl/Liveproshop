@@ -48,7 +48,29 @@ export const fetchItemsAction: any = createAction(
         }
 );
 export const fetchFilerItems: any = createAction(
-    'orders/FETCH_FILTER_ITEMS',
+    'waiting/FETCH_FILTER_ITEMS',
+    async () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ fileterData: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/orders/fetch-filters?type=waiting`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                fileterData: res.data.items
+            };
+        }
+);
+export const fetchWaitingFilerItems: any = createAction(
+    'orders/FETCH_WAITING_FILTER_ITEMS',
     async () =>
         async (
             dispatch: Type.Dispatch,

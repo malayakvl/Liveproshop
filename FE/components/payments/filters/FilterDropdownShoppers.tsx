@@ -21,20 +21,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
 
     const [selectedTest, setSelectedTest] = useState([]);
 
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const getOptionLabel = (option: any) => `${option.label}`;
-    // const getOptionDisabled = (option: any) => option.value === 'foo';
-    // const handleToggleOption = (selectedOptions: any) => setSelectedOptions(selectedOptions);
-    const handleClearOptions = () => setSelectedOptions([]);
-    const handleSelectAll = (isSelected: any) => {
-        if (isSelected) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            setSelectedOptions(options);
-        } else {
-            handleClearOptions();
-        }
-    };
     const filterData = useSelector(filterDataSelector);
     const [byerSelected, setByerSelected] = useState<any>(filters.country_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
@@ -53,8 +39,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
     }, [filterData]);
 
     useEffect(() => {
-        console.log('Payment Filter data', filterData);
-
         const _tmBuyer: any[] = [];
         if (selectedTest.length > 0) {
             selectedTest.forEach((option: any) => {
@@ -68,6 +52,20 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                         filters: {
                             ...filters,
                             shopper_id: _tmBuyer
+                        },
+                        offset: 0
+                    }
+                })
+            );
+        } else {
+            setByerSelected([]);
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.PAYMENTS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            shopper_id: []
                         },
                         offset: 0
                     }
@@ -108,20 +106,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                                     onChange={setSelectedTest}
                                     labelledBy="Select"
                                 />
-
-                                {/*<MultiselectDropdown*/}
-                                {/*    noOptionsText={''}*/}
-                                {/*    items={options}*/}
-                                {/*    getOptionLabel={getOptionLabel}*/}
-                                {/*    // getOptionDisabled={null}*/}
-                                {/*    selectedValues={selectedOptions}*/}
-                                {/*    label="Select complex values"*/}
-                                {/*    placeholder="Placeholder for textbox"*/}
-                                {/*    selectAllLabel="Select all"*/}
-                                {/*    onToggleOption={handleToggleOption}*/}
-                                {/*    onClearOptions={handleClearOptions}*/}
-                                {/*    onSelectAll={handleSelectAll}*/}
-                                {/*/>*/}
                             </>
                         )}
                     </div>
