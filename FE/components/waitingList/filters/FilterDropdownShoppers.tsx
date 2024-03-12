@@ -73,55 +73,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
         }
     }, [selectedTest]);
 
-    // const handleToggleOption = (option: any) => {
-    //     if (option.length > 0) {
-    //         setByerSelected([...byerSelected, parseInt(option[0].value)]);
-    //         dispatch(
-    //             setPaginationAction({
-    //                 type: PaginationType.ORDERS,
-    //                 modifier: {
-    //                     filters: {
-    //                         ...filters,
-    //                         shopper_id: [...byerSelected, parseInt(option[0].value)]
-    //                     },
-    //                     offset: 0
-    //                 }
-    //             })
-    //         );
-    //     }
-    //     // if (e.target.checked) {
-    //     //     setByerSelected([...byerSelected, parseInt(e.target.value)]);
-    //     //     dispatch(
-    //     //         setPaginationAction({
-    //     //             type: PaginationType.ORDERS,
-    //     //             modifier: {
-    //     //                 filters: {
-    //     //                     ...filters,
-    //     //                     shopper_id: [...byerSelected, parseInt(e.target.value)]
-    //     //                 },
-    //     //                 offset: 0
-    //     //             }
-    //     //         })
-    //     //     );
-    //     // } else {
-    //     //     dispatch(
-    //     //         setPaginationAction({
-    //     //             type: PaginationType.ORDERS,
-    //     //             modifier: {
-    //     //                 filters: {
-    //     //                     ...filters,
-    //     //                     shopper_id: byerSelected.filter(
-    //     //                         (id: any) => id !== parseInt(e.target.value)
-    //     //                     )
-    //     //                 },
-    //     //                 offset: 0
-    //     //             }
-    //     //         })
-    //     //     );
-    //     //     setByerSelected(byerSelected.filter((id: any) => id !== parseInt(e.target.value)));
-    //     // }
-    // };
-
     return (
         <>
             {filterData?.buyers?.length && (
@@ -154,20 +105,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                                     onChange={setSelectedTest}
                                     labelledBy="Select"
                                 />
-
-                                {/*<MultiselectDropdown*/}
-                                {/*    noOptionsText={''}*/}
-                                {/*    items={options}*/}
-                                {/*    getOptionLabel={getOptionLabel}*/}
-                                {/*    // getOptionDisabled={null}*/}
-                                {/*    selectedValues={selectedOptions}*/}
-                                {/*    label="Select complex values"*/}
-                                {/*    placeholder="Placeholder for textbox"*/}
-                                {/*    selectAllLabel="Select all"*/}
-                                {/*    onToggleOption={handleToggleOption}*/}
-                                {/*    onClearOptions={handleClearOptions}*/}
-                                {/*    onSelectAll={handleSelectAll}*/}
-                                {/*/>*/}
                             </>
                         )}
                     </div>
