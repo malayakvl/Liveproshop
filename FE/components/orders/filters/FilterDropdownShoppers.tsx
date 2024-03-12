@@ -5,7 +5,6 @@ import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
-// import MultiselectDropdown from '../../_form/MultiselectDropdown';
 import { filterDataSelector } from '../../../redux/orders/selectors';
 import { MultiSelect } from 'react-multi-select-component';
 
@@ -22,20 +21,7 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
 
     const [selectedTest, setSelectedTest] = useState([]);
 
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const getOptionLabel = (option: any) => `${option.label}`;
-    // const getOptionDisabled = (option: any) => option.value === 'foo';
-    // const handleToggleOption = (selectedOptions: any) => setSelectedOptions(selectedOptions);
-    const handleClearOptions = () => setSelectedOptions([]);
-    const handleSelectAll = (isSelected: any) => {
-        if (isSelected) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            setSelectedOptions(options);
-        } else {
-            handleClearOptions();
-        }
-    };
+    const [_, setSelectedOptions] = useState([]);
     const filterData = useSelector(filterDataSelector);
     const [byerSelected, setByerSelected] = useState<any>(filters.country_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
@@ -54,8 +40,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
     }, [filterData]);
 
     useEffect(() => {
-        console.log('Filter data', filterData);
-
         const _tmBuyer: any[] = [];
         if (selectedTest.length > 0) {
             selectedTest.forEach((option: any) => {
@@ -74,71 +58,23 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                     }
                 })
             );
+        } else {
+            setByerSelected([]);
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.ORDERS,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            shopper_id: []
+                        },
+                        offset: 0
+                    }
+                })
+            );
+            console.log('clear');
         }
     }, [selectedTest]);
-
-    // const handleToggleOption = (option: any) => {
-    //     console.log('AAAA');
-    //     if (option.length > 0) {
-    //         setByerSelected([...byerSelected, parseInt(option[0].value)]);
-    //         dispatch(
-    //             setPaginationAction({
-    //                 type: PaginationType.ORDERS,
-    //                 modifier: {
-    //                     filters: {
-    //                         ...filters,
-    //                         shopper_id: [...byerSelected, parseInt(option[0].value)]
-    //                     },
-    //                     offset: 0
-    //                 }
-    //             })
-    //         );
-    //     } else {
-    //         dispatch(
-    //             setPaginationAction({
-    //                 type: PaginationType.ORDERS,
-    //                 modifier: {
-    //                     filters: {
-    //                         ...filters,
-    //                         shopper_id: []
-    //                     },
-    //                     offset: 0
-    //                 }
-    //             })
-    //         );
-    //     }
-    //     // if (e.target.checked) {
-    //     //     setByerSelected([...byerSelected, parseInt(e.target.value)]);
-    //     //     dispatch(
-    //     //         setPaginationAction({
-    //     //             type: PaginationType.ORDERS,
-    //     //             modifier: {
-    //     //                 filters: {
-    //     //                     ...filters,
-    //     //                     shopper_id: [...byerSelected, parseInt(e.target.value)]
-    //     //                 },
-    //     //                 offset: 0
-    //     //             }
-    //     //         })
-    //     //     );
-    //     // } else {
-    //     //     dispatch(
-    //     //         setPaginationAction({
-    //     //             type: PaginationType.ORDERS,
-    //     //             modifier: {
-    //     //                 filters: {
-    //     //                     ...filters,
-    //     //                     shopper_id: byerSelected.filter(
-    //     //                         (id: any) => id !== parseInt(e.target.value)
-    //     //                     )
-    //     //                 },
-    //     //                 offset: 0
-    //     //             }
-    //     //         })
-    //     //     );
-    //     //     setByerSelected(byerSelected.filter((id: any) => id !== parseInt(e.target.value)));
-    //     // }
-    // };
 
     return (
         <>

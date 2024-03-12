@@ -6,7 +6,7 @@ import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
 import { setPaginationAction } from '../../redux/layouts';
 import { PaginationType } from '../../constants';
-import { FilterShoppers } from '../orders';
+// import { FilterShoppers } from '../orders';
 
 interface Props {
     handleHideFilter: () => void;
@@ -89,7 +89,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
                 <FilterAmount />
 
-                {/*<FilterDropdownShoppers locale={locale} />*/}
+                <FilterDropdownShoppers locale={locale} />
 
                 {/*<FilterShoppers locale={locale} />*/}
             </div>

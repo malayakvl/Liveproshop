@@ -236,7 +236,7 @@ export const fetchItemAction: any = createAction(
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
-        ): Promise<{ item: Livesessions.DataItem }> => {
+        ): Promise<{ item: Orders.DataItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(`${baseUrl}/orders/${id}`, {

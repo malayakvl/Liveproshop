@@ -590,16 +590,7 @@ class Order {
                 case UserRole.ADMIN:
                     break;
                 case UserRole.CUSTOMER:
-                    // _filters.seller_id = [user.id];
                     _filters.seller_id = [user.id];
-                    if (_filters.shopper_id) {
-                        _filters.buyer_id = _filters.shopper_id;
-                        delete _filters.userIds;
-                    }
-                    // if (_filters.userIds) {
-                    //     _filters.buyer_id = _filters.userIds;
-                    //     delete _filters.userIds;
-                    // }
                     break;
                 case UserRole.BUYER:
                     _filters.buyer_id = [user.id];
@@ -615,7 +606,7 @@ class Order {
             }
             const ordersQuery = `SELECT
                     id_cnt, live_sessions_id, product_id, product_configuration_id, configuration, item_buyers, total_quantity, total_price
-                FROM data.get_orders_waiting_list(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+                FROM data.get_orders_waiting_list_new(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
@@ -823,7 +814,7 @@ class Order {
                 }
             }
             // const buyersQuery = `SELECT * FROM data.get_buyers(10000, 0, '${JSON.stringify(_filterBuyers)}', '${column} ${sort}');`;
-
+// console.log(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`);
             const ordersQueryBuyers = await client.query(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`); // 'orders.created_at DESC'
             res.buyers =  ordersQueryBuyers.rows;
             // res.shoppers = await client.query(`SELECT * FROM data.orders WHERE ('${JSON.stringify(_filters)}');`);
