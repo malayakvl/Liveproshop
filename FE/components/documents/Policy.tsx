@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useDispatch } from 'react-redux';
 import { removeProductFileAction } from '../../redux/products/actions';
 
-const InventoryPhotos: React.FC<any> = ({ title, productData, uploadedFiles, photos }) => {
+const PolicyDocument: React.FC<any> = ({ title, productData, uploadedFiles, photos }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
@@ -92,4 +92,4 @@ const InventoryPhotos: React.FC<any> = ({ title, productData, uploadedFiles, pho
     );
 };
 
-export default InventoryPhotos;
+export default PolicyDocument;

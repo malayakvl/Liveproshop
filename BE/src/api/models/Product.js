@@ -405,7 +405,7 @@ class Product {
                 res.rows[0].selectedSizes = [];
                 res.rows[0].selectedMaterials = [];
                 const resConfigs = await client.query(`SELECT * FROM data.product_configurations WHERE product_id=${id}`);
-                
+                res.rows[0].isPublish = res.rows[0].publish;
                 // build configured options
                 if (resConfigs.rows.length > 0) {
                     const colors = [];

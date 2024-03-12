@@ -621,6 +621,11 @@
   "Add a Product": "Ajouter un produit",
   "Price, Quantity and SKU are mandatory fields": "Le prix, la quantité et le SKU sont des champs obligatoires",
   "Expire in": "Expire dans",
-  "waiting": "en attendant"
+  "waiting": "en attendant",
+  "Upload Privacy and Policy": "Télécharger la confidentialité et la politique",
+  "Upload Terms & Conditions": "Télécharger les termes et conditions",
+  "Upload Delivery Terms": "Télécharger les conditions de livraison",
+  "Upload Return Policy": "Télécharger la politique de retour"
+
 
 }

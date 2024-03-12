@@ -5,7 +5,6 @@ import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
-// import MultiselectDropdown from '../../_form/MultiselectDropdown';
 import { filterDataSelector } from '../../../redux/orders/selectors';
 import { MultiSelect } from 'react-multi-select-component';
 
@@ -21,20 +20,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
     );
     const [selectedTest, setSelectedTest] = useState([]);
 
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const getOptionLabel = (option: any) => `${option.label}`;
-    // const getOptionDisabled = (option: any) => option.value === 'foo';
-    // const handleToggleOption = (selectedOptions: any) => setSelectedOptions(selectedOptions);
-    const handleClearOptions = () => setSelectedOptions([]);
-    const handleSelectAll = (isSelected: any) => {
-        if (isSelected) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            setSelectedOptions(options);
-        } else {
-            handleClearOptions();
-        }
-    };
     const filterData = useSelector(filterDataSelector);
     const [byerSelected, setByerSelected] = useState<any>(filters.country_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
@@ -65,7 +50,21 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                     modifier: {
                         filters: {
                             ...filters,
-                            shopper_id: _tmBuyer
+                            buyer_id: _tmBuyer
+                        },
+                        offset: 0
+                    }
+                })
+            );
+        } else {
+            setByerSelected(_tmBuyer);
+            dispatch(
+                setPaginationAction({
+                    type: PaginationType.WAITING,
+                    modifier: {
+                        filters: {
+                            ...filters,
+                            buyer_id: []
                         },
                         offset: 0
                     }

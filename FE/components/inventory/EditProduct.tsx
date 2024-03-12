@@ -14,7 +14,6 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
     const dispatch = useDispatch();
     const productData = useSelector(productItemSelector);
     const [dataFetched, setDataFetched] = useState(false);
-
     useEffect(() => {
         if (Object.keys(productData.product).length > 0) {
             const _sizes: any = prepareAdditionalDropdown(

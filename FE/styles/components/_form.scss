@@ -146,7 +146,7 @@
   background-repeat: no-repeat;
   width: 24px;
   height: 24px;
-  @apply absolute top-[12px] right-2;
+  @apply absolute top-[9px] right-2;
 }
 
 .input-eye {
@@ -215,7 +215,7 @@ input:focus, input:active {
   @apply w-full;
 
   .dropzone {
-    @apply border border-gray-180 border-dashed p-10 rounded-lg text-xs text-gray-350 flex
+    @apply border border-gray-180 border-dashed rounded-lg text-xs text-gray-350 flex
       justify-center items-center max-h-[200px] h-[200px] p-2.5 cursor-pointer;
 
     p {
@@ -244,7 +244,7 @@ input:focus, input:active {
     ul {
       li {
         font-size: 10px;
-        @apply border border-gray-180 border-dashed relative font-bold text-gray-350
+        @apply border border-gray-180 border-dashed  font-bold text-gray-350
           pr-2.5 pl-6  py-1.5 rounded-lg mt-1.5 relative inline-block ml-2;
 
         i.close {
@@ -404,11 +404,14 @@ input:focus, input:active {
 }
 
 .config-error {
-    width: 100%;
-    margin-top: -20px;
-    font-size: 11px;
-    color: red;
-    font-weight: normal;
+  width: 100%;
+    //margin-top: -20px;
+  top:-15px;
+  left: 5px;
+  font-size: 11px;
+  color: red;
+  position: absolute;
+  font-weight: normal;
 }
 .MuiInput-underline::before {
   border-color: #CFD8DC !important;

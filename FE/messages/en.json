@@ -619,5 +619,10 @@
   "Published products": "Active Products",
   "Price, Quantity and SKU are mandatory fields": "Price, Quantity and SKU are mandatory fields",
   "Expire in": "Expire in",
-  "waiting": "waiting"
+  "waiting": "waiting",
+  "Upload Privacy and Policy": "Upload Privacy and Policy",
+  "Upload Terms & Conditions": "Upload Terms & Conditions",
+  "Upload Delivery Terms": "Upload Delivery Terms",
+  "Upload Return Policy": "Upload Return Policy"
+
 }
