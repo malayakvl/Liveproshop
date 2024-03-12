@@ -21,7 +21,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
 
     const [selectedTest, setSelectedTest] = useState([]);
 
-    const [_, setSelectedOptions] = useState([]);
     const filterData = useSelector(filterDataSelector);
     const [byerSelected, setByerSelected] = useState<any>(filters.country_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
