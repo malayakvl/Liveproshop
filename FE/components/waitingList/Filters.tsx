@@ -2,11 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterAmount, FilterNumber, FilterDate, FilterDropdownShoppers } from './index';
-import { fetchFilerItems } from '../../redux/orders';
+import { fetchFilerItems } from '../../redux/waitingList';
 import { userSelector } from '../../redux/user/selectors';
 import { setPaginationAction } from '../../redux/layouts';
 import { PaginationType } from '../../constants';
-// import { FilterShoppers } from '../orders';
 
 interface Props {
     handleHideFilter: () => void;
@@ -39,7 +38,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
     const reset = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.ORDERS,
+                type: PaginationType.WAITING,
                 modifier: {
                     filters: {
                         order_number: '',

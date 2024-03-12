@@ -775,7 +775,7 @@ class Order {
         }
     }
 
-    async fetchFilters (user) {
+    async fetchFilters (user, type) {
         const client = await pool.connect();
         try {
             const _filters = {};
@@ -813,9 +813,14 @@ class Order {
                     delete _filterBuyers.userIds;
                 }
             }
+            let ordersQueryBuyers;
             // const buyersQuery = `SELECT * FROM data.get_buyers(10000, 0, '${JSON.stringify(_filterBuyers)}', '${column} ${sort}');`;
-// console.log(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`);
-            const ordersQueryBuyers = await client.query(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`); // 'orders.created_at DESC'
+            if (type === 'waiting') {
+                console.log(`SELECT * FROM data.get_buyers_waiting(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`);
+                ordersQueryBuyers = await client.query(`SELECT * FROM data.get_buyers_waiting(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`); // 'orders.created_at DESC'
+            } else {
+                ordersQueryBuyers = await client.query(`SELECT * FROM data.get_buyers(100000, 0, '${JSON.stringify(_filterBuyers)}', 'first_name ASC');`); // 'orders.created_at DESC'
+            }
             res.buyers =  ordersQueryBuyers.rows;
             // res.shoppers = await client.query(`SELECT * FROM data.orders WHERE ('${JSON.stringify(_filters)}');`);
 

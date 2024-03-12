@@ -5,7 +5,7 @@ import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
-import { filterDataSelector } from '../../../redux/orders/selectors';
+import { filterDataSelector } from '../../../redux/waitingList/selectors';
 import { MultiSelect } from 'react-multi-select-component';
 
 type Props = {
@@ -16,7 +16,7 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.WAITING)
     );
     const [selectedTest, setSelectedTest] = useState([]);
 
@@ -24,6 +24,8 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
     const [byerSelected, setByerSelected] = useState<any>(filters.country_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
     const [options, setOptions] = useState([]);
+
+    console.log('FILTER DATA', filterData);
 
     useEffect(() => {
         const tmpOptions: any[] = [];
