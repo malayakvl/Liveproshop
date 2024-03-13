@@ -1663,7 +1663,16 @@ class User {
                 free_shipping_timer: '',
                 free_shipping_status: '',
                 created_at: '',
-                updated_at: ''
+                updated_at: '',
+                doctype: false,
+                privacy_doc: '',
+                terms_doc: '',
+                delivery_doc: '',
+                return_doc: '',
+                privacy_link: '',
+                terms_link: '',
+                delivery_link: '',
+                return_link: ''
             }];
 
         } catch (e) {

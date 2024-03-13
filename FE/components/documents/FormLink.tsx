@@ -18,6 +18,7 @@ function FormLink() {
     const t = useTranslations();
     const dispatch = useDispatch();
     const initialValues = useSelector(itemSelector);
+    console.log(initialValues);
 
     const SubmitSchema = Yup.object().shape({});
     return (
