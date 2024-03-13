@@ -15,7 +15,7 @@ export interface ColourOption {
     readonly isDisabled?: boolean;
 }
 
-function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
+function FormUpload({ photos }: { photos: string[] }) {
     const t = useTranslations();
     const dispatch = useDispatch();
 
@@ -95,4 +95,4 @@ function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
     );
 }
 
-export default ProductForm;
+export default FormUpload;
