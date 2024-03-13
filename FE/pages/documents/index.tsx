@@ -25,7 +25,7 @@ export default function Index({ session }: { session: any }) {
     }, []);
 
     useEffect(() => {
-        console.log(settingsValues);
+        // console.log(settingsValues);
         if (settingsValues.doctype) {
             setLayoutType('link');
         }

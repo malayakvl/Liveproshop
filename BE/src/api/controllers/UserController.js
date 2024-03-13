@@ -91,6 +91,14 @@ class UserController {
         return res.status(200).json({ success: data.success });
     }
 
+    async updateLinkSettings (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);
+        return res.status(200).json({ success: data.success });
+    }
+
 
     async fetchSellers (req, res) {
         if (!req.user) {

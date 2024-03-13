@@ -33,6 +33,32 @@ export const submitFormAction: any = createAction(
                 });
         }
 );
+export const submitFormLinkAction: any = createAction(
+    'settings/ADD_UPDATE_LINK_DATA',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/update-link-settings`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async (response) => {
+                    if (response.data.success) {
+                        dispatch(fetchFormAction());
+                        dispatch(setSuccessToastAction('Record has been updated'));
+                    } else dispatch(setErrorToastAction('Something went wrong'));
+
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 export const fetchFormAction: any = createAction(
     'settings/FETCH_ITEM',
     async () =>

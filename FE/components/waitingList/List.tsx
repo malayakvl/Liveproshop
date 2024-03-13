@@ -12,18 +12,14 @@ import {
     setupConfiguarationIdAction,
     showPopupQtyAction
 } from '../../redux/waitingList';
-// import { runWatingAction } from '../../redux/waitingList/actions';
-// import moment from 'moment';
 import { baseApiUrl } from '../../constants';
-import { checkIdsAction, setPaginationAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
 import { FilterValues, ListItems, ShowQtyModal } from './index';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
-import { DateRange } from 'react-date-range';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
 import { BanIcon } from '@heroicons/react/solid'; // theme css file
-import { formatCurrency, parseTranslation } from '../../lib/functions';
+import { formatCurrency } from '../../lib/functions';
 import { Filters } from '../waitingList';
 import { showDateSelectorAction } from '../../redux/orders';
 import Image from 'next/image';
@@ -69,8 +65,6 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
         setFilterOpen(false);
         // dispatch(showDateSelectorAction(false));
     }, []);
-
-    console.log('FILTERS', filters);
 
     return (
         <div className="mt-7">

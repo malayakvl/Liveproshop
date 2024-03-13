@@ -629,5 +629,7 @@
   "Link Terms & Conditions": "Link Terms & Conditions",
   "Link Delivery Terms": "Link Delivery Terms",
   "Link Return Policy": "Link Return Policy",
-  "Link here": "Link here"
+  "Link here": "Link here",
+  "Fill in at least one field": "Fill in at least one field",
+  "Wrong url format for link": "Wrong url format for link"
 }

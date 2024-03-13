@@ -1655,7 +1655,6 @@ class User {
                     res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? res.rows[0].free_shipping_timer.minutes;
                 }
             }
-
             return res.rows[0] ? res.rows : [{
                 user_id: userId,
                 order_timer: '',
@@ -1992,6 +1991,36 @@ class User {
             client.release();
         }
     }
+
+    async updateSellerLinkSettings(userId, data) {
+        const client = await pool.connect();
+        try {
+            const query = `INSERT INTO data.seller_settings(user_id, privacy_link, terms_link, delivery_link, return_link)
+                VALUES ($1, $2, $3, $4, $5) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                    privacy_link = EXCLUDED.privacy_link,
+                    terms_link = EXCLUDED.terms_link,
+                    delivery_link = EXCLUDED.delivery_link,
+                    return_link = EXCLUDED.return_link;`;
+            await client.query(query, [userId, data.privacy_link, data.terms_link, data.delivery_link, data.return_link]);
+
+            return { success: true };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (updateUserSettings) error:',
+                    { message: e.message }
+                );
+                console.log('[User.updateSellerSettings] sql e.message = ', e.message);
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+
+        } finally {
+            client.release();
+        }
+    }
+
 
     async generatePdf(user) {
         try {
