@@ -25,9 +25,10 @@ export default function Index({ session }: { session: any }) {
     }, []);
 
     useEffect(() => {
-        // console.log(settingsValues);
         if (settingsValues.doctype) {
             setLayoutType('link');
+        } else {
+            setLayoutType('upload');
         }
     }, [settingsValues]);
 
@@ -51,15 +52,13 @@ export default function Index({ session }: { session: any }) {
                                 enableReinitialize
                                 initialValues={settingsValues}
                                 validationSchema={SubmitSchema}
-                                onSubmit={(values) => {
+                                onSubmit={() => {
                                     console.log(1);
                                 }}>
                                 {(props) => {
                                     const { handleChange } = props;
                                     const onChangeConfigured = (e: any) => {
-                                        // setSelectedColors([]);
                                         setLayoutType(layoutType == 'upload' ? 'link' : 'upload');
-                                        // setSelectedSizes([]);
                                         return handleChange(e);
                                     };
                                     return (

@@ -196,7 +196,8 @@ apiRoutes.route('/livesession/fetch-scenarios').get(LivesessionController.fetchS
 
 apiRoutes.route('/fetch-settings').get(UserController.fetchSettings);
 apiRoutes.route('/update-settings').post(UserController.updateSettings);
-apiRoutes.route('/update-link-settings').post(UserController.updateLinkSettings);
+apiRoutes.route('/update-link-settings').post(UserController.updateLinksSettings);
+apiRoutes.route('/update-file-settings').post(UserController.updateFilesSettings);
 
 // apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
 apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);

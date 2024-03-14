@@ -3,6 +3,10 @@ declare namespace Settings {
         item: SettingItem;
         loading: boolean;
         isFetched: boolean;
+        uploadedPolicyFiles: any;
+        uploadedTermsFiles: any;
+        uploadedDeliveryFiles: any;
+        uploadedReturnFiles: any;
     }
 
     interface SettingItem {

@@ -1,11 +1,29 @@
 import { handleActions } from 'redux-actions';
-import { fetchFormAction } from './actions';
+import {
+    fetchFormAction,
+    addUploadedPolicyFile,
+    removeUploadedPolicyFile,
+    addUploadedTermsAndCondFile,
+    removeUploadedTermsAndCondFile,
+    addUploadedDeliveryFile,
+    removeUploadedDeliveryFile,
+    addUploadedReturnFile,
+    removeUploadedReturnFile
+} from './actions';
 
 const initialState: {
     loading: boolean;
     item: Settings.SettingItem;
+    uploadedPolicyFiles: any[];
+    uploadedTermsFiles: any[];
+    uploadedDeliveryFiles: any[];
+    uploadedReturnFiles: any[];
 } = {
     loading: false,
+    uploadedPolicyFiles: [],
+    uploadedTermsFiles: [],
+    uploadedDeliveryFiles: [],
+    uploadedReturnFiles: [],
     item: {
         user_id: 0,
         cart_duration: '',
@@ -23,7 +41,6 @@ const initialState: {
         terms_link: '',
         delivery_link: '',
         return_link: ''
-
     }
 };
 
@@ -43,10 +60,92 @@ const ACTION_HANDLERS: any = {
             loading: false,
             isFetched: true
         })
-    }
+    },
+    [addUploadedPolicyFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedPolicyFiles: [action.payload]
+        };
+    },
+    [removeUploadedPolicyFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedPolicyFiles: []
+        };
+    },
+    [addUploadedTermsAndCondFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedTermsFiles: [action.payload]
+        };
+    },
+    [removeUploadedTermsAndCondFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedTermsFiles: []
+        };
+    },
+    [addUploadedDeliveryFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedDeliveryFiles: [action.payload]
+        };
+    },
+    [removeUploadedDeliveryFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedDeliveryFiles: []
+        };
+    },
+    [addUploadedReturnFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedReturnFiles: [action.payload]
+        };
+    },
+    [removeUploadedReturnFile]: (
+        state: State.Settings,
+        action: Type.ReduxAction<State.Settings>
+    ): State.Settings => {
+        return {
+            ...state,
+            uploadedReturnFiles: []
+        };
+    },
 };
 
-export { fetchFormAction };
+export {
+    fetchFormAction,
+    addUploadedPolicyFile,
+    removeUploadedPolicyFile,
+    addUploadedTermsAndCondFile,
+    removeUploadedTermsAndCondFile,
+    addUploadedDeliveryFile,
+    removeUploadedDeliveryFile,
+    addUploadedReturnFile,
+    removeUploadedReturnFile
+};
 
 // ------------------------------------
 // Reducer
