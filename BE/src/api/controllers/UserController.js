@@ -131,7 +131,7 @@ class UserController {
                         docsPolicy[0] = file.filename;
                     }
                 });
-                await userModel.uploadPolicies(docsPolicy, req.user.id);
+                await userModel.uploadSettingsDoc(docsPolicy, req.user.id, 'policy');
             }
 
             // dataProduct.photos = photos;
@@ -159,7 +159,7 @@ class UserController {
                     }
 
                 });
-                await userModel.uploadTerms(docsTerms, req.user.id);
+                await userModel.uploadSettingsDoc(docsTerms, req.user.id, 'terms');
             }
             // dataProduct.photos = photos;
             // dataProduct['publish'] = dataProduct['isPublish'];
@@ -208,7 +208,6 @@ class UserController {
             }
             // const dataProduct = req.body;
             const docsReturn = [];
-            console.log(req.files);
             if (req.files.length > 0) {
                 req.files.forEach(file => {
                     console.log(file);
@@ -217,7 +216,6 @@ class UserController {
                     }
 
                 });
-                console.log(docsReturn)
                 await userModel.uploadSettingsDoc(docsReturn, req.user.id, 'return');
             }
             // dataProduct.photos = photos;

@@ -2189,6 +2189,10 @@ class User {
                         fieldName = 'delivery_doc';
                     } else if (type === 'return') {
                         fieldName = 'return_doc';
+                    } else if (type === 'policy') {
+                        fieldName = 'privacy_doc';
+                    } else if (type === 'terms') {
+                        fieldName = 'terms_doc';
                     }
                     const queryUpdate = `
                         UPDATE data.seller_settings
@@ -2196,6 +2200,7 @@ class User {
                             ${fieldName} = '{${copyFiles}}',
                             doctype=false
                          WHERE user_id=${userId};`;
+                    console.log(queryUpdate);
                     await client.query(queryUpdate);
                 }
             }
