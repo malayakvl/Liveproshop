@@ -1,42 +1,26 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadedFilesSelector } from '../../redux/products/selectors';
+// import { uploadedFilesSelector } from '../../redux/products/selectors';
 import { TermsAndCond, DeliveryTerms, Policy, ReturnPolicy } from './index';
+import {
+    uploadedDeliveryFilesSelector,
+    uploadedPolicyFilesSelector,
+    uploadedReturnFilesSelector,
+    uploadedTermsFilesSelector
+} from '../../redux/settings/selectors';
+import { submitFormUploadAction } from '../../redux/settings/actions';
 
-export interface ColourOption {
-    readonly value: string;
-    readonly label: string;
-    readonly color: string;
-    readonly isFixed?: boolean;
-    readonly isDisabled?: boolean;
-}
-
-function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
+function FormUpload({ photos }: { photos: string[] }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-
-    const uploadedFiles = useSelector(uploadedFilesSelector);
-
-    const [tags, setTags] = useState<any[]>([]);
-    const [isBusy, setIsBusy] = useState(false);
-
-    const onDelete = useCallback(
-        (tagIndex: number) => {
-            setTags(tags.filter((_, i) => i !== tagIndex));
-        },
-        [tags]
-    );
-
-    const onAddition = useCallback(
-        (newTag) => {
-            setTags([...tags, newTag]);
-        },
-        [tags]
-    );
+    const policyDataFiles = useSelector(uploadedPolicyFilesSelector);
+    const termsDataFiles = useSelector(uploadedTermsFilesSelector);
+    const deliveryDataFiles = useSelector(uploadedDeliveryFilesSelector);
+    const returnDataFiles = useSelector(uploadedReturnFilesSelector);
 
     const SubmitSchema = Yup.object().shape({});
     return (
@@ -45,10 +29,28 @@ function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
             initialValues={{}}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                // console.log('Values', values);
-                // dispatch(setIdentAction(false));
-                // console.log('Selected Colors', selectedColors);
-                // console.log('Selected Sizes', selectedSizes);
+                const formData = new FormData();
+                if (policyDataFiles.length) {
+                    policyDataFiles.forEach((file: any) => {
+                        formData.append('policy', file);
+                    });
+                }
+                if (termsDataFiles.length) {
+                    termsDataFiles.forEach((file: any) => {
+                        formData.append('terms', file);
+                    });
+                }
+                if (deliveryDataFiles.length) {
+                    deliveryDataFiles.forEach((file: any) => {
+                        formData.append('delivery', file);
+                    });
+                }
+                if (returnDataFiles.length) {
+                    returnDataFiles.forEach((file: any) => {
+                        formData.append('returnPolicy', file);
+                    });
+                }
+                dispatch(submitFormUploadAction(formData));
             }}>
             {(props) => {
                 const { handleChange } = props;
@@ -58,7 +60,7 @@ function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
                             <div className="flex-col mb-4">
                                 <Policy
                                     title={'Upload Privacy and Policy'}
-                                    uploadedFiles={uploadedFiles}
+                                    uploadedFiles={policyDataFiles}
                                     photos={photos}
                                     productData={{}}
                                 />
@@ -66,15 +68,15 @@ function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
                             <div className="flex-col mb-4 ml-4">
                                 <TermsAndCond
                                     title={'Upload Terms & Conditions'}
-                                    uploadedFiles={uploadedFiles}
+                                    uploadedFiles={termsDataFiles}
                                     photos={photos}
                                     productData={{}}
                                 />
                             </div>
-                            <div className="flex-col mb-4 ml-4">
+                            <div className="flex-col mb-4">
                                 <DeliveryTerms
                                     title={'Upload Delivery Terms'}
-                                    uploadedFiles={uploadedFiles}
+                                    uploadedFiles={deliveryDataFiles}
                                     photos={photos}
                                     productData={{}}
                                 />
@@ -82,11 +84,16 @@ function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
                             <div className="flex-col mb-4 ml-4">
                                 <ReturnPolicy
                                     title={'Upload Return Policy'}
-                                    uploadedFiles={uploadedFiles}
+                                    uploadedFiles={returnDataFiles}
                                     photos={photos}
                                     productData={{}}
                                 />
                             </div>
+                        </div>
+                        <div>
+                            <button type="submit" className="gradient-btn">
+                                {t('Save')}
+                            </button>
                         </div>
                     </form>
                 );
@@ -95,4 +102,4 @@ function ProductForm({ locale, photos }: { locale: string; photos: string[] }) {
     );
 }
 
-export default ProductForm;
+export default FormUpload;

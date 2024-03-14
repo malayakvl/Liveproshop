@@ -33,6 +33,58 @@ export const submitFormAction: any = createAction(
                 });
         }
 );
+export const submitFormLinkAction: any = createAction(
+    'settings/ADD_UPDATE_LINK_DATA',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/update-link-settings`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async (response) => {
+                    if (response.data.success) {
+                        dispatch(fetchFormAction());
+                        dispatch(setSuccessToastAction('Record has been updated'));
+                    } else dispatch(setErrorToastAction('Something went wrong'));
+
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const submitFormUploadAction: any = createAction(
+    'settings/ADD_UPDATE_FILES_DATA',
+    async (data: any) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(`${baseUrl}/update-file-settings`, data, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async (response) => {
+                    if (response.data.success) {
+                        // dispatch(fetchFormAction());
+                        dispatch(setSuccessToastAction('Record has been updated'));
+                    } else dispatch(setErrorToastAction('Something went wrong'));
+
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 export const fetchFormAction: any = createAction(
     'settings/FETCH_ITEM',
     async () =>
@@ -55,3 +107,18 @@ export const fetchFormAction: any = createAction(
             };
         }
 );
+
+export const addUploadedPolicyFile: any = createAction('settings/ADD_UPLOADED_POLICY_FILE');
+export const removeUploadedPolicyFile: any = createAction('settings/REMOVE_UPLOADED_POLICY_FILE');
+export const addUploadedTermsAndCondFile: any = createAction(
+    'settings/ADD_UPLOADED_TERMSCOND_FILE'
+);
+export const removeUploadedTermsAndCondFile: any = createAction(
+    'settings/REMOVE_UPLOADED_TERMSCOND_FILE'
+);
+export const addUploadedDeliveryFile: any = createAction('settings/ADD_UPLOADED_DELIVERY_FILE');
+export const removeUploadedDeliveryFile: any = createAction(
+    'settings/REMOVE_UPLOADED_DELIVERY_FILE'
+);
+export const addUploadedReturnFile: any = createAction('settings/ADD_UPLOADED_RETURN_FILE');
+export const removeUploadedReturnFile: any = createAction('settings/REMOVE_UPLOADED_RETURN_FILE');

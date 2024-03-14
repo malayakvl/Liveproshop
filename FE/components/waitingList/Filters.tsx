@@ -39,7 +39,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
     const reset = () => {
         dispatch(
             setPaginationAction({
-                type: PaginationType.ORDERS,
+                type: PaginationType.WAITING,
                 modifier: {
                     filters: {
                         order_number: '',
@@ -89,9 +89,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
                 <FilterAmount />
 
-                <FilterDropdownShoppers locale={locale} />
-
-                {/*<FilterShoppers locale={locale} />*/}
+                <FilterDropdownShoppers />
             </div>
         </div>
     );

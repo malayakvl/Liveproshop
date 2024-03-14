@@ -91,6 +91,149 @@ class UserController {
         return res.status(200).json({ success: data.success });
     }
 
+    async updateLinksSettings (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);
+        return res.status(200).json({ success: data.success });
+    }
+
+    async updateFilesSettings (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, `${process.env.DOWNLOAD_FOLDER}/tmp`);
+            },
+            filename: function (req, file, cb) {
+                cb(null, Date.now() + '-' + file.originalname);
+            }
+        });
+        const uploadPolicy = multer({ storage: storage }).any('policy');
+        const uploadTerms = multer({ storage: storage }).any('terms');
+        const uploadDelivery = multer({ storage: storage }).any('delivery');
+        const uploadReturn = multer({ storage: storage }).any('returnPolicy');
+
+        await uploadPolicy(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsPolicy = [];
+
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    if (file.fieldname === 'policy' && file?.size) {
+                        docsPolicy[0] = file.filename;
+                    }
+                });
+                await userModel.uploadPolicies(docsPolicy, req.user.id);
+            }
+
+            // dataProduct.photos = photos;
+            // dataProduct['publish'] = dataProduct['isPublish'];
+            // if (!dataProduct.id) {
+            //     await productModel.create(dataProduct, req.user.id);
+            // } else {
+            //     await productModel.update(dataProduct, req.user.id);
+            // }
+            return ;
+        });
+
+        await uploadTerms(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsTerms = [];
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    if (file.fieldname === 'terms' && file?.size) {
+                        docsTerms[0] = file.filename;
+                    }
+
+                });
+                await userModel.uploadTerms(docsTerms, req.user.id);
+            }
+            // dataProduct.photos = photos;
+            // dataProduct['publish'] = dataProduct['isPublish'];
+            // if (!dataProduct.id) {
+            //     await productModel.create(dataProduct, req.user.id);
+            // } else {
+            //     await productModel.update(dataProduct, req.user.id);
+            // }
+            return;
+            // return res.status(200).json({ success: true });
+        });
+
+        await uploadDelivery(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsDelivery = [];
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    if (file.fieldname === 'delivery' && file?.size) {
+                        docsDelivery[0] = file.filename;
+                    }
+
+                });
+                await userModel.uploadSettingsDoc(docsDelivery, req.user.id, 'delivery');
+            }
+            // dataProduct.photos = photos;
+            // dataProduct['publish'] = dataProduct['isPublish'];
+            // if (!dataProduct.id) {
+            //     await productModel.create(dataProduct, req.user.id);
+            // } else {
+            //     await productModel.update(dataProduct, req.user.id);
+            // }
+            return;
+            // return res.status(200).json({ success: true });
+        });
+
+        await uploadReturn(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsReturn = [];
+            console.log(req.files);
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    console.log(file);
+                    if (file.fieldname === 'returnPolicy' && file?.size) {
+                        docsReturn[0] = file.filename;
+                    }
+
+                });
+                console.log(docsReturn)
+                await userModel.uploadSettingsDoc(docsReturn, req.user.id, 'return');
+            }
+            // dataProduct.photos = photos;
+            // dataProduct['publish'] = dataProduct['isPublish'];
+            // if (!dataProduct.id) {
+            //     await productModel.create(dataProduct, req.user.id);
+            // } else {
+            //     await productModel.update(dataProduct, req.user.id);
+            // }
+            return;
+            // return res.status(200).json({ success: true });
+        });
+
+        // const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);
+        return res.status(200).json({ success: true });
+    }
 
     async fetchSellers (req, res) {
         if (!req.user) {

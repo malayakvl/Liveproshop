@@ -1,25 +1,36 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useSelector } from 'react-redux';
-import { ListStores } from '../../components/stores';
-import { activeTabSelectorFactory } from '../../redux/layouts/selectors';
-import { accountService } from '../../_services';
-import { userSelector } from '../../redux/user/selectors';
-import { DocumentForm } from '../../components/documents';
+import { FormUpload, FormLink } from '../../components/documents';
+import { InputSwitcher } from '../../components/_form';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { showLoaderAction } from '../../redux/layouts/actions';
+import { fetchFormAction } from '../../redux/settings';
+import { itemSelector } from '../../redux/settings/selectors';
 
-export default function Index({ session, locale }: { session: any; locale: string }) {
+export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
-    // const dispatch = useDispatch();
-    const activeTabLayout = useSelector(activeTabSelectorFactory('inventory'));
-    // const hiddenFileInput = useRef(null);
-    const user = useSelector(userSelector);
+    const [layoutType, setLayoutType] = useState<string>('upload');
+    const SubmitSchema = Yup.object().shape({});
+    const dispatch = useDispatch();
+    const settingsValues = useSelector(itemSelector);
 
-    const fbSync = () => {
-        accountService.syncFB();
-    };
+    useEffect(() => {
+        dispatch(showLoaderAction(true));
+        dispatch(fetchFormAction());
+    }, []);
+
+    useEffect(() => {
+        if (settingsValues.doctype) {
+            setLayoutType('link');
+        } else {
+            setLayoutType('upload');
+        }
+    }, [settingsValues]);
 
     return (
         <>
@@ -34,10 +45,43 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     <h1 className="float-left">{t('My Documents')}</h1>
                     <div className="clear-both" />
                 </div>
-                <div className={`w-full`}>
-                    <DocumentForm locale={'en'} photos={[]} />
-                    {/*<ListStores locale={locale} />*/}
-                </div>
+                {settingsValues && (
+                    <>
+                        <div>
+                            <Formik
+                                enableReinitialize
+                                initialValues={settingsValues}
+                                validationSchema={SubmitSchema}
+                                onSubmit={() => {
+                                    console.log(1);
+                                }}>
+                                {(props) => {
+                                    const { handleChange } = props;
+                                    const onChangeConfigured = (e: any) => {
+                                        setLayoutType(layoutType == 'upload' ? 'link' : 'upload');
+                                        return handleChange(e);
+                                    };
+                                    return (
+                                        <form onSubmit={props.handleSubmit} className="mt-5">
+                                            <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
+                                                <InputSwitcher
+                                                    label={'Do you have ypur own website'}
+                                                    name={'doctype'}
+                                                    style={null}
+                                                    props={props}
+                                                    onChange={onChangeConfigured}
+                                                />
+                                            </div>
+                                        </form>
+                                    );
+                                }}
+                            </Formik>
+                        </div>
+                        <div className={`w-full`}>
+                            {layoutType == 'upload' ? <FormUpload photos={[]} /> : <FormLink />}
+                        </div>
+                    </>
+                )}
             </div>
         </>
     );

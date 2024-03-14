@@ -8,20 +8,16 @@ import Image from 'next/image';
 import { filterDataSelector } from '../../../redux/orders/selectors';
 import { MultiSelect } from 'react-multi-select-component';
 
-type Props = {
-    locale: string;
-};
-
-const FilterDropdownShoppers: React.FC<Props> = () => {
+const FilterDropdownShoppers: React.FC = () => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.WAITING)
     );
     const [selectedTest, setSelectedTest] = useState([]);
 
     const filterData = useSelector(filterDataSelector);
-    const [byerSelected, setByerSelected] = useState<any>(filters.country_id);
+    const [buyerSelected, setBuyerSelected] = useState<any>(filters.buyer_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
     const [options, setOptions] = useState([]);
 
@@ -43,7 +39,7 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
             selectedTest.forEach((option: any) => {
                 _tmBuyer.push(option.value);
             });
-            setByerSelected(_tmBuyer);
+            setBuyerSelected(_tmBuyer);
             dispatch(
                 setPaginationAction({
                     type: PaginationType.WAITING,
@@ -57,7 +53,7 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                 })
             );
         } else {
-            setByerSelected(_tmBuyer);
+            setBuyerSelected(_tmBuyer);
             dispatch(
                 setPaginationAction({
                     type: PaginationType.WAITING,
@@ -142,7 +138,7 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                             </span>
                         </div>
                         <div className="font-bold rounded-full text-center p-[2px] bg-green-250 text-xs h-5 w-5 text-white">
-                            {byerSelected.length}
+                            {buyerSelected.length}
                         </div>
                     </div>
                     <div className="mt-0 mb-4 pt-1 overflow-auto max-h-36 max-w-sm mx-auto min-h-[150px]">

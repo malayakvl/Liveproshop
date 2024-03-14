@@ -33,7 +33,8 @@ const initialState: {
         payments: [],
         countries: [],
         shippings: [],
-        amounts: []
+        amounts: [],
+        buyer_id: []
     },
     showDateSelector: false,
     orderFetched: false,
