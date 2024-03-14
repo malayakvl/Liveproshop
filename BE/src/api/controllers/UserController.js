@@ -144,13 +144,6 @@ class UserController {
                 await userModel.uploadSettingsDoc(docsPolicy, req.user.id, 'policy');
             }
 
-            // dataProduct.photos = photos;
-            // dataProduct['publish'] = dataProduct['isPublish'];
-            // if (!dataProduct.id) {
-            //     await productModel.create(dataProduct, req.user.id);
-            // } else {
-            //     await productModel.update(dataProduct, req.user.id);
-            // }
             return ;
         });
 
@@ -171,15 +164,7 @@ class UserController {
                 });
                 await userModel.uploadSettingsDoc(docsTerms, req.user.id, 'terms');
             }
-            // dataProduct.photos = photos;
-            // dataProduct['publish'] = dataProduct['isPublish'];
-            // if (!dataProduct.id) {
-            //     await productModel.create(dataProduct, req.user.id);
-            // } else {
-            //     await productModel.update(dataProduct, req.user.id);
-            // }
             return;
-            // return res.status(200).json({ success: true });
         });
 
         await uploadDelivery(req, res, async function (err) {
@@ -199,15 +184,7 @@ class UserController {
                 });
                 await userModel.uploadSettingsDoc(docsDelivery, req.user.id, 'delivery');
             }
-            // dataProduct.photos = photos;
-            // dataProduct['publish'] = dataProduct['isPublish'];
-            // if (!dataProduct.id) {
-            //     await productModel.create(dataProduct, req.user.id);
-            // } else {
-            //     await productModel.update(dataProduct, req.user.id);
-            // }
             return;
-            // return res.status(200).json({ success: true });
         });
 
         await uploadReturn(req, res, async function (err) {
@@ -228,15 +205,7 @@ class UserController {
                 });
                 await userModel.uploadSettingsDoc(docsReturn, req.user.id, 'return');
             }
-            // dataProduct.photos = photos;
-            // dataProduct['publish'] = dataProduct['isPublish'];
-            // if (!dataProduct.id) {
-            //     await productModel.create(dataProduct, req.user.id);
-            // } else {
-            //     await productModel.update(dataProduct, req.user.id);
-            // }
             return;
-            // return res.status(200).json({ success: true });
         });
 
         // const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);

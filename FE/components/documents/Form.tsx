@@ -82,11 +82,11 @@ function FormUpload({ photos }: { photos: string[] }) {
                                 />
                             </div>
                         </div>
-                        <div>
-                            <button type="submit" className="gradient-btn">
-                                {t('Save')}
-                            </button>
-                        </div>
+                        {/*<div>*/}
+                        {/*    <button type="submit" className="gradient-btn">*/}
+                        {/*        {t('Save')}*/}
+                        {/*    </button>*/}
+                        {/*</div>*/}
                     </form>
                 );
             }}
