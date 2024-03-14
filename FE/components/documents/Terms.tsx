@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react';
-// import { baseApiUrl } from '../../constants';
+import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { addUploadedTermsAndCondFile, removeUploadedTermsAndCondFile } from '../../redux/settings';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadedTermsFilesSelector } from '../../redux/settings/selectors';
+import { itemSelector, uploadedTermsFilesSelector } from '../../redux/settings/selectors';
+import { submitFormUploadAction } from '../../redux/settings/actions';
+import { userSelector } from '../../redux/user/selectors';
+import getConfig from 'next/config';
+const { publicRuntimeConfig } = getConfig();
+const replaceUrl = publicRuntimeConfig.localUrl;
 
-const TermsDocument: React.FC<any> = ({ title, productData, photos }) => {
+const TermsDocument: React.FC<any> = ({ title }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-    const [productPhotos, setProductPhotos] = useState(photos);
     const termsAndCondDataFiles = useSelector(uploadedTermsFilesSelector);
-    const removeFile = (file: File) => {
-        dispatch(removeUploadedTermsAndCondFile(file));
+    const settingsValues = useSelector(itemSelector);
+    const user = useSelector(userSelector);
+
+    const removeFile = () => {
+        dispatch(removeUploadedTermsAndCondFile());
     };
 
     useEffect(() => {
@@ -23,14 +29,19 @@ const TermsDocument: React.FC<any> = ({ title, productData, photos }) => {
     }, [acceptedFiles]);
 
     useEffect(() => {
-        // setProductPhotos(photos);
-    }, [photos]);
+        if (termsAndCondDataFiles.length > 0) {
+            const formData = new FormData();
+            termsAndCondDataFiles.forEach((file: any) => {
+                formData.append('terms', file);
+            });
+            dispatch(submitFormUploadAction(formData));
+        }
+    }, [termsAndCondDataFiles]);
 
-    const removeProductFile = (file: string) => {
-        let _photos = productPhotos;
-        _photos = _photos.filter((_file: string) => _file !== file);
-        dispatch(removeUploadedTermsAndCondFile(file, productData.product.id));
-        setProductPhotos(_photos);
+    const showUploadedFile = () => {
+        const regExpDelBrackets = /[({})]/g;
+        const fullReplace = `${replaceUrl}uploads/users/${user.id}/`;
+        return settingsValues.terms_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
     };
 
     return (
@@ -41,7 +52,7 @@ const TermsDocument: React.FC<any> = ({ title, productData, photos }) => {
                     <input {...getInputProps()} />
                     <p>{t('Drag_and_drop_files')}</p>
                 </div>
-                {termsAndCondDataFiles.length > 0 && (
+                {(termsAndCondDataFiles.length > 0 || settingsValues.terms_doc) && (
                     <aside>
                         <h4>Uploaded Files</h4>
                         <ul style={{ minWidth: '300px', marginLeft: '-10px' }}>
@@ -52,34 +63,23 @@ const TermsDocument: React.FC<any> = ({ title, productData, photos }) => {
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile(_file);
+                                            removeFile();
                                         }}
                                     />
                                 </li>
                             ))}
-                            {/*{productPhotos.map(*/}
-                            {/*    (_file: string, _index: React.Key | null | undefined) => (*/}
-                            {/*        <li key={_index}>*/}
-                            {/*            <img*/}
-                            {/*                src={*/}
-                            {/*                    /(http(s?)):\/\//i.test(_file)*/}
-                            {/*                        ? _file*/}
-                            {/*                        : `${baseApiUrl}/${_file}`*/}
-                            {/*                }*/}
-                            {/*                alt=""*/}
-                            {/*                className="object-cover h-[85px]"*/}
-                            {/*            />*/}
-                            {/*            <span>{_file}</span> <em>&nbsp;</em>{' '}*/}
-                            {/*            <i*/}
-                            {/*                className="close"*/}
-                            {/*                role="presentation"*/}
-                            {/*                onClick={() => {*/}
-                            {/*                    removeProductFile(_file);*/}
-                            {/*                }}*/}
-                            {/*            />*/}
-                            {/*        </li>*/}
-                            {/*    )*/}
-                            {/*)}*/}
+                            {settingsValues.terms_doc && (
+                                <li key="ex_policy" style={{ minWidth: '300px' }}>
+                                    <span>{showUploadedFile()}</span>
+                                    <i
+                                        className="close"
+                                        role="presentation"
+                                        onClick={() => {
+                                            removeFile();
+                                        }}
+                                    />
+                                </li>
+                            )}
                         </ul>
                     </aside>
                 )}

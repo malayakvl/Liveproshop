@@ -198,6 +198,7 @@ apiRoutes.route('/fetch-settings').get(UserController.fetchSettings);
 apiRoutes.route('/update-settings').post(UserController.updateSettings);
 apiRoutes.route('/update-link-settings').post(UserController.updateLinksSettings);
 apiRoutes.route('/update-file-settings').post(UserController.updateFilesSettings);
+apiRoutes.route('/remove-settings-file').get(UserController.removeFilesSettings);
 
 // apiRoutes.route('/payment-plans').get(PaymentPlanController.fetchItems);
 apiRoutes.route('/payment-plans').post(PaymentPlanController.updateStatus);

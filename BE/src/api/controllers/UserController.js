@@ -99,6 +99,16 @@ class UserController {
         return res.status(200).json({ success: data.success });
     }
 
+    async removeFilesSettings(req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const { type } = req.query;
+        await userModel.removeSettingsFile(type, req.user.id);
+        const data = await userModel.fetchUserSettings(req.user.id);
+        return res.status(200).json({ item: data[0]});
+    }
+
     async updateFilesSettings (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -114,7 +124,7 @@ class UserController {
         const uploadPolicy = multer({ storage: storage }).any('policy');
         const uploadTerms = multer({ storage: storage }).any('terms');
         const uploadDelivery = multer({ storage: storage }).any('delivery');
-        const uploadReturn = multer({ storage: storage }).any('returnPolicy');
+        const uploadReturn = multer({ storage: storage }).any('return');
 
         await uploadPolicy(req, res, async function (err) {
             if (err instanceof multer.MulterError) {
