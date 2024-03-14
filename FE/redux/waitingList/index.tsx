@@ -5,6 +5,7 @@ import {
     setEmptyFormAction,
     showPopupAction,
     fetchFilerItems,
+    fetchWaitingFilerItems,
     showDateSelectorAction,
     showPopupQtyAction,
     setupConfiguarationIdAction
@@ -35,6 +36,7 @@ const initialState: {
         shippings: [],
         amounts: [],
         buyer_id: []
+        buyers: []
     },
     showDateSelector: false,
     orderFetched: false,
@@ -123,6 +125,7 @@ export {
     showPopupAction,
     setEmptyFormAction,
     fetchFilerItems,
+    fetchWaitingFilerItems,
     showDateSelectorAction,
     showPopupQtyAction,
     setupConfiguarationIdAction

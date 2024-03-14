@@ -5,7 +5,7 @@ import { paginationSelectorFactory } from '../../../redux/layouts/selectors';
 import { PaginationType } from '../../../constants';
 import { setPaginationAction } from '../../../redux/layouts';
 import Image from 'next/image';
-import { filterDataSelector } from '../../../redux/orders/selectors';
+import { filterDataSelector } from '../../../redux/waitingList/selectors';
 import { MultiSelect } from 'react-multi-select-component';
 
 const FilterDropdownShoppers: React.FC = () => {
@@ -20,6 +20,8 @@ const FilterDropdownShoppers: React.FC = () => {
     const [buyerSelected, setBuyerSelected] = useState<any>(filters.buyer_id);
     const [showBlock, setShowBlock] = useState<boolean>(true);
     const [options, setOptions] = useState([]);
+
+    console.log('FILTER DATA', filterData);
 
     useEffect(() => {
         const tmpOptions: any[] = [];
@@ -69,55 +71,6 @@ const FilterDropdownShoppers: React.FC = () => {
         }
     }, [selectedTest]);
 
-    // const handleToggleOption = (option: any) => {
-    //     if (option.length > 0) {
-    //         setByerSelected([...byerSelected, parseInt(option[0].value)]);
-    //         dispatch(
-    //             setPaginationAction({
-    //                 type: PaginationType.ORDERS,
-    //                 modifier: {
-    //                     filters: {
-    //                         ...filters,
-    //                         shopper_id: [...byerSelected, parseInt(option[0].value)]
-    //                     },
-    //                     offset: 0
-    //                 }
-    //             })
-    //         );
-    //     }
-    //     // if (e.target.checked) {
-    //     //     setByerSelected([...byerSelected, parseInt(e.target.value)]);
-    //     //     dispatch(
-    //     //         setPaginationAction({
-    //     //             type: PaginationType.ORDERS,
-    //     //             modifier: {
-    //     //                 filters: {
-    //     //                     ...filters,
-    //     //                     shopper_id: [...byerSelected, parseInt(e.target.value)]
-    //     //                 },
-    //     //                 offset: 0
-    //     //             }
-    //     //         })
-    //     //     );
-    //     // } else {
-    //     //     dispatch(
-    //     //         setPaginationAction({
-    //     //             type: PaginationType.ORDERS,
-    //     //             modifier: {
-    //     //                 filters: {
-    //     //                     ...filters,
-    //     //                     shopper_id: byerSelected.filter(
-    //     //                         (id: any) => id !== parseInt(e.target.value)
-    //     //                     )
-    //     //                 },
-    //     //                 offset: 0
-    //     //             }
-    //     //         })
-    //     //     );
-    //     //     setByerSelected(byerSelected.filter((id: any) => id !== parseInt(e.target.value)));
-    //     // }
-    // };
-
     return (
         <>
             {filterData?.buyers?.length && (
@@ -150,20 +103,6 @@ const FilterDropdownShoppers: React.FC = () => {
                                     onChange={setSelectedTest}
                                     labelledBy="Select"
                                 />
-
-                                {/*<MultiselectDropdown*/}
-                                {/*    noOptionsText={''}*/}
-                                {/*    items={options}*/}
-                                {/*    getOptionLabel={getOptionLabel}*/}
-                                {/*    // getOptionDisabled={null}*/}
-                                {/*    selectedValues={selectedOptions}*/}
-                                {/*    label="Select complex values"*/}
-                                {/*    placeholder="Placeholder for textbox"*/}
-                                {/*    selectAllLabel="Select all"*/}
-                                {/*    onToggleOption={handleToggleOption}*/}
-                                {/*    onClearOptions={handleClearOptions}*/}
-                                {/*    onSelectAll={handleSelectAll}*/}
-                                {/*/>*/}
                             </>
                         )}
                     </div>

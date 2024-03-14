@@ -106,20 +106,6 @@ const FilterDropdownShoppers: React.FC<Props> = () => {
                                     onChange={setSelectedTest}
                                     labelledBy="Select"
                                 />
-
-                                {/*<MultiselectDropdown*/}
-                                {/*    noOptionsText={''}*/}
-                                {/*    items={options}*/}
-                                {/*    getOptionLabel={getOptionLabel}*/}
-                                {/*    // getOptionDisabled={null}*/}
-                                {/*    selectedValues={selectedOptions}*/}
-                                {/*    label="Select complex values"*/}
-                                {/*    placeholder="Placeholder for textbox"*/}
-                                {/*    selectAllLabel="Select all"*/}
-                                {/*    onToggleOption={handleToggleOption}*/}
-                                {/*    onClearOptions={handleClearOptions}*/}
-                                {/*    onSelectAll={handleSelectAll}*/}
-                                {/*/>*/}
                             </>
                         )}
                     </div>

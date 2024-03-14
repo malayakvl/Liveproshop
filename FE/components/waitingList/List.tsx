@@ -36,9 +36,9 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
     const items = useSelector(paginatedItemsSelector);
     const count = useSelector(itemsCountSelector);
     // const checkedIds = useSelector(checkedIdsSelector);
-    const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.WAITING)
-    );
+    // const { filters }: Layouts.Pagination = useSelector(
+    //     paginationSelectorFactory(PaginationType.WAITING)
+    // );
     const [state, setState] = useState<any>([
         {
             startDate: new Date(),
@@ -47,7 +47,7 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
         }
     ]);
     const showDatePopup = useSelector(showDatePopupSelector);
-
+    // console.log(filters);
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
     const [filterOpen, setFilterOpen] = useState(false);
 
