@@ -73,7 +73,7 @@ const FilterDropdownShoppers: React.FC = () => {
 
     return (
         <>
-            {filterData?.buyers?.length && (
+            {filterData?.buyers?.length > 0 && (
                 <>
                     <div
                         role="presentation"

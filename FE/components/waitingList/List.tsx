@@ -74,9 +74,9 @@ const ListWaiting: React.FC<Props> = ({ locale }) => {
                         {t('Waiting List')}
                         <span className="text-gray-180 font-normal text-sm"> {count} items</span>
                     </h2>
-                    <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                        {filters.buyer_id.length}
-                    </div>
+                    {/*<div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">*/}
+                    {/*    {filters.buyer_id.length}*/}
+                    {/*</div>*/}
                     <Filters
                         handleHideFilter={handleHideFilter}
                         locale={locale}
