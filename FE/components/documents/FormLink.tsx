@@ -15,35 +15,6 @@ function FormLink() {
     const [showMatchErrorBlock, setShowMatchErrorBlock] = useState(false);
 
     const SubmitSchema = Yup.object().shape({});
-    // const SubmitSchema = Yup.object().shape({
-    //     privacy_link: Yup.string().matches(
-    //         /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-    //         'Enter correct url!'
-    //     ),
-    //     terms_link: Yup.string().matches(
-    //         /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-    //         'Enter correct url!'
-    //     ),
-    //     delivery_link: Yup.string().matches(
-    //         /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-    //         'Enter correct url!'
-    //     ),
-    //     return_link: Yup.string().matches(
-    //         /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-    //         'Enter correct url!'
-    //     )
-    // });
-
-    // useEffect(() => {
-    //     if (
-    //         initialValues.privacy_link ||
-    //         initialValues.terms_link ||
-    //         initialValues.delivery_link ||
-    //         initialValues.return_link
-    //     ) {
-    //         setOneOfField(true);
-    //     }
-    // }, [initialValues]);
 
     return (
         <Formik

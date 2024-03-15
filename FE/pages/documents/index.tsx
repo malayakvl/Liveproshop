@@ -77,9 +77,11 @@ export default function Index({ session }: { session: any }) {
                                 }}
                             </Formik>
                         </div>
-                        <div className={`w-full`}>
-                            {layoutType == 'upload' ? <FormUpload photos={[]} /> : <FormLink />}
-                        </div>
+                        {settingsValues && (
+                            <div className={`w-full`}>
+                                {layoutType == 'upload' ? <FormUpload photos={[]} /> : <FormLink />}
+                            </div>
+                        )}
                     </>
                 )}
             </div>

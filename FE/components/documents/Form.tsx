@@ -29,28 +29,28 @@ function FormUpload({ photos }: { photos: string[] }) {
             initialValues={{}}
             validationSchema={SubmitSchema}
             onSubmit={(values) => {
-                const formData = new FormData();
-                if (policyDataFiles.length) {
-                    policyDataFiles.forEach((file: any) => {
-                        formData.append('policy', file);
-                    });
-                }
-                if (termsDataFiles.length) {
-                    termsDataFiles.forEach((file: any) => {
-                        formData.append('terms', file);
-                    });
-                }
-                if (deliveryDataFiles.length) {
-                    deliveryDataFiles.forEach((file: any) => {
-                        formData.append('delivery', file);
-                    });
-                }
-                if (returnDataFiles.length) {
-                    returnDataFiles.forEach((file: any) => {
-                        formData.append('returnPolicy', file);
-                    });
-                }
-                dispatch(submitFormUploadAction(formData));
+                // const formData = new FormData();
+                // if (policyDataFiles.length) {
+                //     policyDataFiles.forEach((file: any) => {
+                //         formData.append('policy', file);
+                //     });
+                // }
+                // if (termsDataFiles.length) {
+                //     termsDataFiles.forEach((file: any) => {
+                //         formData.append('terms', file);
+                //     });
+                // }
+                // if (deliveryDataFiles.length) {
+                //     deliveryDataFiles.forEach((file: any) => {
+                //         formData.append('delivery', file);
+                //     });
+                // }
+                // if (returnDataFiles.length) {
+                //     returnDataFiles.forEach((file: any) => {
+                //         formData.append('returnPolicy', file);
+                //     });
+                // }
+                // dispatch(submitFormUploadAction(formData));
             }}>
             {(props) => {
                 const { handleChange } = props;
@@ -61,40 +61,32 @@ function FormUpload({ photos }: { photos: string[] }) {
                                 <Policy
                                     title={'Upload Privacy and Policy'}
                                     uploadedFiles={policyDataFiles}
-                                    photos={photos}
-                                    productData={{}}
                                 />
                             </div>
                             <div className="flex-col mb-4 ml-4">
                                 <TermsAndCond
                                     title={'Upload Terms & Conditions'}
                                     uploadedFiles={termsDataFiles}
-                                    photos={photos}
-                                    productData={{}}
                                 />
                             </div>
                             <div className="flex-col mb-4">
                                 <DeliveryTerms
                                     title={'Upload Delivery Terms'}
                                     uploadedFiles={deliveryDataFiles}
-                                    photos={photos}
-                                    productData={{}}
                                 />
                             </div>
                             <div className="flex-col mb-4 ml-4">
                                 <ReturnPolicy
                                     title={'Upload Return Policy'}
                                     uploadedFiles={returnDataFiles}
-                                    photos={photos}
-                                    productData={{}}
                                 />
                             </div>
                         </div>
-                        <div>
-                            <button type="submit" className="gradient-btn">
-                                {t('Save')}
-                            </button>
-                        </div>
+                        {/*<div>*/}
+                        {/*    <button type="submit" className="gradient-btn">*/}
+                        {/*        {t('Save')}*/}
+                        {/*    </button>*/}
+                        {/*</div>*/}
                     </form>
                 );
             }}

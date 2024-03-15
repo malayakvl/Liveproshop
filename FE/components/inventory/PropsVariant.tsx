@@ -61,9 +61,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                         <tr>
                             <th colSpan={5}>
                                 <button
-                                    className="float-left action-dublicate action cursor-pointer"
+                                    className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
                                     onClick={() => setupIdent(attrs)}>
-                                    <span>Replace all values with selected</span>
+                                    <span>{t('Replace all values with selected')}</span>
                                 </button>
                             </th>
                         </tr>

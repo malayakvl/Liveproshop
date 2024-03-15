@@ -108,17 +108,102 @@ export const fetchFormAction: any = createAction(
         }
 );
 
+export const removeUploadedPolicyFile: any = createAction(
+    'settings/REMOVE_UPLOADED_POLICY_FILE',
+    async () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Settings.SettingItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=privacy`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                dispatch(fetchFormAction());
+            }
+            return {
+                item: res.data.item
+            };
+        }
+);
+export const removeUploadedTermsAndCondFile: any = createAction(
+    'settings/REMOVE_UPLOADED_TERMSCOND_FILE',
+    async () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Settings.SettingItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=terms`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                dispatch(fetchFormAction());
+            }
+            return {
+                item: res.data.item
+            };
+        }
+);
+export const removeUploadedDeliveryFile: any = createAction(
+    'settings/REMOVE_UPLOADEDDELIVERY_FILE',
+    async () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Settings.SettingItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=delivery`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                dispatch(fetchFormAction());
+            }
+            return {
+                item: res.data.item
+            };
+        }
+);
+export const removeUploadedReturnFile: any = createAction(
+    'settings/REMOVE_UPLOADED_RETURN_FILE',
+    async () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Settings.SettingItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=return`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+                dispatch(fetchFormAction());
+            }
+            return {
+                item: res.data.item
+            };
+        }
+);
+
 export const addUploadedPolicyFile: any = createAction('settings/ADD_UPLOADED_POLICY_FILE');
-export const removeUploadedPolicyFile: any = createAction('settings/REMOVE_UPLOADED_POLICY_FILE');
 export const addUploadedTermsAndCondFile: any = createAction(
     'settings/ADD_UPLOADED_TERMSCOND_FILE'
 );
-export const removeUploadedTermsAndCondFile: any = createAction(
-    'settings/REMOVE_UPLOADED_TERMSCOND_FILE'
-);
 export const addUploadedDeliveryFile: any = createAction('settings/ADD_UPLOADED_DELIVERY_FILE');
-export const removeUploadedDeliveryFile: any = createAction(
-    'settings/REMOVE_UPLOADED_DELIVERY_FILE'
-);
 export const addUploadedReturnFile: any = createAction('settings/ADD_UPLOADED_RETURN_FILE');
-export const removeUploadedReturnFile: any = createAction('settings/REMOVE_UPLOADED_RETURN_FILE');

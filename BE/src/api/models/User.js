@@ -1632,7 +1632,6 @@ class User {
         }
     }
 
-
     /**
      *
      * @param userId
@@ -2031,6 +2030,44 @@ class User {
         });
     }
 
+    /**
+     *
+     * @param type
+     * @param userId
+     * @returns {Promise<*|[{order_timer: string, free_shipping_timer: string, updated_at: string, user_id, created_at: string, free_shipping_status: string, type: string}]|{success: boolean, error: {code: number, message: string}}>}
+     */
+    async removeSettingsFile(type, userId) {
+        const client = await pool.connect();
+        try {
+            const settingsQuery = await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
+            switch (type) {
+                case 'privacy':
+                    fs.unlink(`${settingsQuery.rows[0].privacy_doc}`,function(err){
+                        if(err) return console.log(err);
+                    });
+                    break;
+            }
+            // {/Users/viktoriakorogod/WEB/SolidSolution/Liveproshop.v0.01/BE/uploads/users/286/1710418057750-Policy.docx}
+            const queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            ${type}_doc = null
+                         WHERE user_id=${userId};`;
+            await client.query(queryUpdate);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+
+    }
 
     async uploadPolicies (dataFiles, userId) {
         const client = await pool.connect();
