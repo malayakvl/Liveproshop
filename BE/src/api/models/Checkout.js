@@ -64,10 +64,10 @@ class Checkout {
                 // })
 
             });
-            console.log('ORDER ID', orderId);
-            console.log(waitingProductsMessagesIds)
-            console.log(`SELECT * FROM data.order_items WHERE
-                message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`)
+            // console.log('ORDER ID', orderId);
+            // console.log(waitingProductsMessagesIds)
+            // console.log(`SELECT * FROM data.order_items WHERE
+            //     message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`)
             const productWaitingRes = await client.query(`SELECT * FROM data.order_items WHERE
                 message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`);
             productsWaiting = productWaitingRes.rows.length ? productWaitingRes.rows : [];
@@ -151,9 +151,9 @@ class Checkout {
                 // })
 
             });
-            console.log(waitingProductsMessagesIds)
-            console.log(`SELECT * FROM data.order_items WHERE
-                message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`)
+            // console.log(waitingProductsMessagesIds)
+            // console.log(`SELECT * FROM data.order_items WHERE
+            //     message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`)
             const productWaitingRes = await client.query(`SELECT * FROM data.order_items WHERE
                 message_id IN (${waitingProductsMessagesIds.join(',')}) AND status='waiting'`);
             productsWaiting = productWaitingRes.rows.length ? productWaitingRes.rows : []

@@ -87,6 +87,8 @@ const OrderSummary = () => {
         return formatCurrency(totalAmount - vatAmount);
     };
 
+    console.log('ORDER', order.seller_settings);
+
     return (
         <>
             {!order.order_items?.length && (
@@ -241,55 +243,51 @@ const OrderSummary = () => {
                             htmlFor="isAgreeTerms"
                             className="ml-3 text-sm font-medium text-gray-700">
                             {t('I’ve read and agree with the')}{' '}
-                            {order.termsDoc ? (
+                            {order.seller_settings.terms_doc && (
                                 <a
-                                    href={`${order.termsDoc}`}
+                                    href={`${order.seller_settings.terms_doc}`}
                                     target="_blank"
                                     className="red-yellow-gradient-text"
                                     rel="noreferrer">
                                     {t('Terms of Service')}
                                 </a>
-                            ) : (
-                                <a
-                                    href={`${siteUrl}/terms-and-conditions`}
-                                    target="_blank"
-                                    className="red-yellow-gradient-text"
-                                    rel="noreferrer">
-                                    {t('Terms of Service')}
-                                </a>
-                            )}
-                            {/*<a*/}
-                            {/*    href={`${siteUrl}/terms-and-conditions`}*/}
-                            {/*    target="_blank"*/}
-                            {/*    className="red-yellow-gradient-text"*/}
-                            {/*    rel="noreferrer">*/}
-                            {/*    {t('Terms of Service')}*/}
-                            {/*</a>{' '}*/}
+                            )}{' '}
                             and{' '}
-                            {order.privacyDoc ? (
+                            {order.seller_settings.privacy_doc && (
                                 <a
-                                    href={`${order.privacyDoc}`}
-                                    target="_blank"
-                                    className="red-yellow-gradient-text"
-                                    rel="noreferrer">
-                                    {t('Privacy Terms')}
-                                </a>
-                            ) : (
-                                <a
-                                    href={`${siteUrl}/terms-and-conditions`}
+                                    href={`${order.seller_settings.privacy_doc}`}
                                     target="_blank"
                                     className="red-yellow-gradient-text"
                                     rel="noreferrer">
                                     {t('Privacy Terms')}
                                 </a>
                             )}
-                            {/*<a*/}
-                            {/*    className="red-yellow-gradient-text"*/}
-                            {/*    href={`${siteUrl}/privacy`}*/}
-                            {/*    target="_blank"*/}
-                            {/*    rel="noreferrer">*/}
-                            {/*    {t('Privacy Terms')}*/}
-                            {/*</a>*/}.
+                            {order.seller_settings.delivery_doc && (
+                                <>
+                                    {' '}
+                                    and{' '}
+                                    <a
+                                        href={`${order.seller_settings.delivery_doc}`}
+                                        target="_blank"
+                                        className="red-yellow-gradient-text"
+                                        rel="noreferrer">
+                                        {t('Delivery Terms')}
+                                    </a>
+                                </>
+                            )}
+                            {order.seller_settings.return_doc && (
+                                <>
+                                    {' '}
+                                    and{' '}
+                                    <a
+                                        href={`${order.seller_settings.return_doc}`}
+                                        target="_blank"
+                                        className="red-yellow-gradient-text"
+                                        rel="noreferrer">
+                                        {t('Return Policy')}
+                                    </a>
+                                </>
+                            )}
                         </label>
                         <ErrorMessage name="isAgreeTerms" component="div" className="error-el" />
                     </div>

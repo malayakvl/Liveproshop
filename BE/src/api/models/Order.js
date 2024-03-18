@@ -1525,8 +1525,8 @@ class Order {
                 // console.log(sellerData.rows[0].user_id);
                 // console.log(hourDiff)
             } else {
-                console.log(`SELECT order_amount, live_sessions_id FROM 
-                    data.orders WHERE order_number='${orderNumber}'`);
+                // console.log(`SELECT order_amount, live_sessions_id FROM
+                //     data.orders WHERE order_number='${orderNumber}'`);
                 const currOrder = await client.query(`SELECT order_amount, live_sessions_id FROM 
                     data.orders WHERE order_number='${orderNumber}'`);
                 sellerData = await client.query(`SELECT user_id 
