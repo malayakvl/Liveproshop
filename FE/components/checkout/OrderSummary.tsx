@@ -8,6 +8,7 @@ import { baseApiUrl, OrderStatus } from '../../constants';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 const siteUrl = publicRuntimeConfig.siteUrl;
+// const localUrl = `${publicRuntimeConfig.localUrl.replace('{')}/uploads/users/`;
 import {
     orderCheckoutSelector,
     shippingMethodsCheckoutSelector,
@@ -62,10 +63,12 @@ const OrderSummary = () => {
         if (order?.order_items) {
             order.order_items.sort((a: any, b: any) => (a.id > b.id ? 1 : -1));
         }
-        if (order?.waiting_products) {
-            console.log('CURRENT WAITING', JSON.parse(order.waiting_products));
-        }
-        // console.log(order.order_items.sort(compare));
+        // console.log('CURRENT SETTINGS',
+        //     order.seller_settings?.privacy_doc.replace(regExpDelBrackets, '').replace()
+        // );
+        // if (order?.waiting_products) {
+        //     console.log('CURRENT WAITING', JSON.parse(order.waiting_products));
+        // }
     }, [order]);
 
     const removeItemOrder = (itemId: number) => {
@@ -78,7 +81,6 @@ const OrderSummary = () => {
     const recalculateVat = (total: any, shipping: any) => {
         let vatAmount = 0;
         let totalAmount = 0;
-        // (parseInt(order.order_amount) + 10) - ((parseInt(order.order_amount) + 10)/1.2)
         totalAmount = parseFloat(total) + parseFloat(shipping);
         vatAmount = (parseFloat(total) + parseFloat(shipping)) / 1.2;
 
@@ -239,22 +241,55 @@ const OrderSummary = () => {
                             htmlFor="isAgreeTerms"
                             className="ml-3 text-sm font-medium text-gray-700">
                             {t('I’ve read and agree with the')}{' '}
-                            <a
-                                href={`${siteUrl}/terms-and-conditions`}
-                                target="_blank"
-                                className="red-yellow-gradient-text"
-                                rel="noreferrer">
-                                {t('Terms of Service')}
-                            </a>{' '}
+                            {order.termsDoc ? (
+                                <a
+                                    href={`${order.termsDoc}`}
+                                    target="_blank"
+                                    className="red-yellow-gradient-text"
+                                    rel="noreferrer">
+                                    {t('Terms of Service')}
+                                </a>
+                            ) : (
+                                <a
+                                    href={`${siteUrl}/terms-and-conditions`}
+                                    target="_blank"
+                                    className="red-yellow-gradient-text"
+                                    rel="noreferrer">
+                                    {t('Terms of Service')}
+                                </a>
+                            )}
+                            {/*<a*/}
+                            {/*    href={`${siteUrl}/terms-and-conditions`}*/}
+                            {/*    target="_blank"*/}
+                            {/*    className="red-yellow-gradient-text"*/}
+                            {/*    rel="noreferrer">*/}
+                            {/*    {t('Terms of Service')}*/}
+                            {/*</a>{' '}*/}
                             and{' '}
-                            <a
-                                className="red-yellow-gradient-text"
-                                href={`${siteUrl}/privacy`}
-                                target="_blank"
-                                rel="noreferrer">
-                                {t('Privacy Terms')}
-                            </a>
-                            .
+                            {order.privacyDoc ? (
+                                <a
+                                    href={`${order.privacyDoc}`}
+                                    target="_blank"
+                                    className="red-yellow-gradient-text"
+                                    rel="noreferrer">
+                                    {t('Privacy Terms')}
+                                </a>
+                            ) : (
+                                <a
+                                    href={`${siteUrl}/terms-and-conditions`}
+                                    target="_blank"
+                                    className="red-yellow-gradient-text"
+                                    rel="noreferrer">
+                                    {t('Privacy Terms')}
+                                </a>
+                            )}
+                            {/*<a*/}
+                            {/*    className="red-yellow-gradient-text"*/}
+                            {/*    href={`${siteUrl}/privacy`}*/}
+                            {/*    target="_blank"*/}
+                            {/*    rel="noreferrer">*/}
+                            {/*    {t('Privacy Terms')}*/}
+                            {/*</a>*/}.
                         </label>
                         <ErrorMessage name="isAgreeTerms" component="div" className="error-el" />
                     </div>

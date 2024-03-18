@@ -55,6 +55,8 @@ declare namespace Orders {
         country_json: any;
         freeShipping: number;
         waiting_products: any;
+        privacyDoc: any;
+        termsDoc: any;
         // user_id: number;
         // user_name: string;
         // photo: string;
