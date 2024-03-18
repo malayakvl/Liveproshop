@@ -1999,24 +1999,44 @@ class User {
                     VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                         privacy_link = EXCLUDED.privacy_link;`;
                 await client.query(query, [userId, data.privacy_link]);
+            } else {
+                const query = `INSERT INTO data.seller_settings(user_id, privacy_link)
+                    VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                        privacy_link = EXCLUDED.privacy_link;`;
+                await client.query(query, [userId, '']);
             }
             if (data.terms_link) {
                 const query = `INSERT INTO data.seller_settings(user_id, terms_link)
                     VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                         terms_link = EXCLUDED.terms_link;`;
                 await client.query(query, [userId, data.terms_link]);
+            } else {
+                const query = `INSERT INTO data.seller_settings(user_id, terms_link)
+                    VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                        terms_link = EXCLUDED.terms_link;`;
+                await client.query(query, [userId, '']);
             }
             if (data.delivery_link) {
                 const query = `INSERT INTO data.seller_settings(user_id, delivery_link)
                     VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                         delivery_link = EXCLUDED.delivery_link;`;
                 await client.query(query, [userId, data.delivery_link]);
+            } else {
+                const query = `INSERT INTO data.seller_settings(user_id, delivery_link)
+                    VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                        delivery_link = EXCLUDED.delivery_link;`;
+                await client.query(query, [userId, '']);
             }
             if (data.delivery_link) {
                 const query = `INSERT INTO data.seller_settings(user_id, return_link)
                     VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                         return_link = EXCLUDED.return_link;`;
                 await client.query(query, [userId, data.return_link]);
+            } else {
+                const query = `INSERT INTO data.seller_settings(user_id, return_link)
+                    VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                        return_link = EXCLUDED.return_link;`;
+                await client.query(query, [userId, '']);
             }
 
             // const query = `INSERT INTO data.seller_settings(user_id, privacy_link, terms_link, delivery_link, return_link)
