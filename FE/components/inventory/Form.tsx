@@ -531,6 +531,7 @@ function ProductForm({
                                             props={props}
                                             additional={additionalProps}
                                             errors={errorConfigured}
+                                            locale={locale}
                                         />
                                     </>
                                 )}

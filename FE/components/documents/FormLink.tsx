@@ -70,7 +70,7 @@ function FormLink() {
                             </div>
                         )}
                         <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
-                            <div className="flex-col mb-4">
+                            <div className="flex-col md:mb-4">
                                 <InputText
                                     icon={null}
                                     label={'Link Privacy and Policy'}
@@ -86,7 +86,7 @@ function FormLink() {
                                     }}
                                 />
                             </div>
-                            <div className="flex-col mb-4 ml-4">
+                            <div className="flex-col mb-4 md:ml-4">
                                 <InputText
                                     icon={null}
                                     label={'Link Terms & Conditions'}
@@ -116,7 +116,7 @@ function FormLink() {
                                     }}
                                 />
                             </div>
-                            <div className="flex-col mb-4 ml-4">
+                            <div className="flex-col mb-4 md:ml-4">
                                 <InputText
                                     icon={null}
                                     label={'Link Return Policy'}

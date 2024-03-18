@@ -4,7 +4,7 @@ import { InputText } from '../_form';
 import { useDispatch } from 'react-redux';
 import { setIdentAction } from '../../redux/products';
 
-const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors }) => {
+const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors, locale }) => {
     const t = useTranslations();
     const [checkedVariant, setCheckedVariant] = useState('');
     const dispatch = useDispatch();
@@ -53,6 +53,8 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return (
         <div className="overflow-x-scroll md:overflow-x-visible">
             {(_colors.length > 0 || _sizes.length > 0) && (
@@ -60,11 +62,28 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                     <thead>
                         <tr>
                             <th colSpan={5}>
-                                <button
-                                    className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
-                                    onClick={() => setupIdent(attrs)}>
-                                    <span>{t('Replace all values with selected')}</span>
-                                </button>
+                                {locale == 'en' ? (
+                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                                    <a
+                                        title={`1) Put the price and quantity values in the row.
+2) Put the checkmark into the checkbox
+3) Click the "Replace all values with selected" button and these values will be applied to all product variations`}
+                                        className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
+                                        onClick={() => setupIdent(attrs)}>
+                                        <span>{t('Replace all values with selected')}</span>
+                                    </a>
+                                ) : (
+                                    // eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                                    <a
+                                        title={`1) Placez les valeurs de prix et de quantité
+2) Cochez la case de référence
+3) Cliquez sur le bouton "Remplacer toutes les valeurs par celles sélectionnées" et ces valeurs seront appliquées à toutes les variations de produits`}
+                                        className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
+                                        onClick={() => setupIdent(attrs)}>
+                                        <span>{t('Replace all values with selected')}</span>
+                                    </a>
+                                )}
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events */}
                             </th>
                         </tr>
                     </thead>

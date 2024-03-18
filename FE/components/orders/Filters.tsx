@@ -31,7 +31,6 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
     const node = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        console.log('AAAA');
         dispatch(fetchFilerItems());
         document.addEventListener('mousedown', handleClick);
 
@@ -107,8 +106,6 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
                 <FilterStatus />
 
                 <FilterPayment />
-
-                {/*<FilterShoppers locale={locale} />*/}
 
                 <FilterDropdownShoppers locale={locale} />
 

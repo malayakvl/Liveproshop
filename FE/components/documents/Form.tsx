@@ -63,7 +63,7 @@ function FormUpload({ photos }: { photos: string[] }) {
                                     uploadedFiles={policyDataFiles}
                                 />
                             </div>
-                            <div className="flex-col mb-4 ml-4">
+                            <div className="flex-col mb-4 rigt-upload">
                                 <TermsAndCond
                                     title={'Upload Terms & Conditions'}
                                     uploadedFiles={termsDataFiles}
@@ -75,7 +75,7 @@ function FormUpload({ photos }: { photos: string[] }) {
                                     uploadedFiles={deliveryDataFiles}
                                 />
                             </div>
-                            <div className="flex-col mb-4 ml-4">
+                            <div className="flex-col mb-4 rigt-upload">
                                 <ReturnPolicy
                                     title={'Upload Return Policy'}
                                     uploadedFiles={returnDataFiles}
