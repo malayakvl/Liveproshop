@@ -151,7 +151,10 @@ export const bulkDownloadAction: any = createAction(
                 return axios
                     .post(
                         `${baseUrl}/orders/bulk-download`,
-                        { data: JSON.stringify(state.layouts.checkedIds) },
+                        {
+                            data: JSON.stringify(state.layouts.checkedIds),
+                            locale: state.layouts.selectedLng
+                        },
                         {
                             headers: {
                                 ...authHeader(state.user.user.email)
