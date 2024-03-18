@@ -1,35 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { baseApiUrl } from '../../constants';
+import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { addUploadedFile, removeUploadedFile } from '../../redux/products';
+import { addUploadedDeliveryFile, removeUploadedDeliveryFile } from '../../redux/settings';
 import { useTranslations } from 'next-intl';
-import { useDispatch } from 'react-redux';
-import { removeProductFileAction } from '../../redux/products/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { itemSelector, uploadedDeliveryFilesSelector } from '../../redux/settings/selectors';
+import getConfig from 'next/config';
+import { userSelector } from '../../redux/user/selectors';
+import { submitFormUploadAction } from '../../redux/settings/actions';
+const { publicRuntimeConfig } = getConfig();
+const replaceUrl = publicRuntimeConfig.localUrl;
 
-const InventoryPhotos: React.FC<any> = ({ title, productData, uploadedFiles, photos }) => {
+const DeliveryDocument: React.FC<any> = ({ title }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-    const [productPhotos, setProductPhotos] = useState(photos);
-    const removeFile = (file: File) => {
-        dispatch(removeUploadedFile(file));
+    const deliveryDataFiles = useSelector(uploadedDeliveryFilesSelector);
+    const settingsValues = useSelector(itemSelector);
+    const user = useSelector(userSelector);
+    const removeFile = () => {
+        dispatch(removeUploadedDeliveryFile('delivery'));
     };
 
     useEffect(() => {
         acceptedFiles.forEach((file: File) => {
-            dispatch(addUploadedFile(file));
+            dispatch(addUploadedDeliveryFile(file));
         });
     }, [acceptedFiles]);
 
     useEffect(() => {
-        setProductPhotos(photos);
-    }, [photos]);
+        if (deliveryDataFiles.length > 0) {
+            const formData = new FormData();
+            deliveryDataFiles.forEach((file: any) => {
+                formData.append('delivery', file);
+            });
+            dispatch(submitFormUploadAction(formData));
+        }
+    }, [deliveryDataFiles]);
 
-    const removeProductFile = (file: string) => {
-        let _photos = productPhotos;
-        _photos = _photos.filter((_file: string) => _file !== file);
-        dispatch(removeProductFileAction(file, productData.product.id));
-        setProductPhotos(_photos);
+    const showUploadedFile = () => {
+        const regExpDelBrackets = /[({})]/g;
+        const fullReplace = `${replaceUrl}uploads/users/${user.id}/`;
+
+        return settingsValues.delivery_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
     };
 
     return (
@@ -40,49 +52,33 @@ const InventoryPhotos: React.FC<any> = ({ title, productData, uploadedFiles, pho
                     <input {...getInputProps()} />
                     <p>{t('Drag_and_drop_files')}</p>
                 </div>
-                {(uploadedFiles.length > 0 || photos.length > 0) && (
+                {(deliveryDataFiles.length > 0 || settingsValues.delivery_doc) && (
                     <aside>
                         <h4>Uploaded Files</h4>
-                        <ul>
-                            {uploadedFiles.map((_file: File) => (
-                                <li key={_file.lastModified}>
-                                    <img
-                                        src={URL.createObjectURL(_file)}
-                                        alt=""
-                                        className="object-cover h-[85px]"
-                                    />
+                        <ul style={{ minWidth: '300px', marginLeft: '-10px' }}>
+                            {deliveryDataFiles.map((_file: File) => (
+                                <li key={_file.lastModified} style={{ minWidth: '300px' }}>
                                     <span>{_file.name}</span> <em>{_file.size} bytes</em>{' '}
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile(_file);
+                                            removeFile();
                                         }}
                                     />
                                 </li>
                             ))}
-                            {productPhotos.map(
-                                (_file: string, _index: React.Key | null | undefined) => (
-                                    <li key={_index}>
-                                        <img
-                                            src={
-                                                /(http(s?)):\/\//i.test(_file)
-                                                    ? _file
-                                                    : `${baseApiUrl}/${_file}`
-                                            }
-                                            alt=""
-                                            className="object-cover h-[85px]"
-                                        />
-                                        <span>{_file}</span> <em>&nbsp;</em>{' '}
-                                        <i
-                                            className="close"
-                                            role="presentation"
-                                            onClick={() => {
-                                                removeProductFile(_file);
-                                            }}
-                                        />
-                                    </li>
-                                )
+                            {settingsValues.delivery_doc && (
+                                <li key="ex_policy" style={{ minWidth: '300px' }}>
+                                    <span>{showUploadedFile()}</span>
+                                    <i
+                                        className="close"
+                                        role="presentation"
+                                        onClick={() => {
+                                            removeFile();
+                                        }}
+                                    />
+                                </li>
                             )}
                         </ul>
                     </aside>
@@ -92,4 +88,4 @@ const InventoryPhotos: React.FC<any> = ({ title, productData, uploadedFiles, pho
     );
 };
 
-export default InventoryPhotos;
+export default DeliveryDocument;

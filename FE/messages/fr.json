@@ -625,7 +625,13 @@
   "Upload Privacy and Policy": "Télécharger la confidentialité et la politique",
   "Upload Terms & Conditions": "Télécharger les termes et conditions",
   "Upload Delivery Terms": "Télécharger les conditions de livraison",
-  "Upload Return Policy": "Télécharger la politique de retour"
-
-
+  "Upload Return Policy": "Télécharger la politique de retour",
+  "Do you have ypur own website": "Avez-vous votre propre site Web",
+  "Link Privacy and Policy": "Lien Confidentialité et Politique",
+  "Link Terms & Conditions": "Conditions générales du lien",
+  "Link Delivery Terms": "Conditions de livraison du lien",
+  "Link Return Policy": "Politique de retour des liens",
+  "Link here": "Lien ici",
+  "Fill in at least one field": "Remplissez au moins un champ",
+  "Replace all values with selected": "Remplacer toutes les valeurs par sélectionnées"
 }

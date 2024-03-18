@@ -106,7 +106,8 @@ const initialState: State.Layouts = {
                 product_search: '',
                 total_amount: [],
                 total_qty: [],
-                created_at: []
+                created_at: [],
+                buyer_id: []
             }
         },
         [PaginationType.DASHBOARD]: {

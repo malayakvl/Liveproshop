@@ -35,6 +35,7 @@ const initialState: {
         countries: [],
         shippings: [],
         amounts: [],
+        buyer_id: [],
         buyers: []
     },
     showDateSelector: false,

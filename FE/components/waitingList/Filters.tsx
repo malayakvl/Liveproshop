@@ -88,9 +88,7 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
                 <FilterAmount />
 
-                <FilterDropdownShoppers locale={locale} />
-
-                {/*<FilterShoppers locale={locale} />*/}
+                <FilterDropdownShoppers />
             </div>
         </div>
     );

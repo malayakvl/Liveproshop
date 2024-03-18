@@ -91,6 +91,126 @@ class UserController {
         return res.status(200).json({ success: data.success });
     }
 
+    async updateLinksSettings (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);
+        return res.status(200).json({ success: data.success });
+    }
+
+    async removeFilesSettings(req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const { type } = req.query;
+        await userModel.removeSettingsFile(type, req.user.id);
+        const data = await userModel.fetchUserSettings(req.user.id);
+        return res.status(200).json({ item: data[0]});
+    }
+
+    async updateFilesSettings (req, res) {
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const storage = multer.diskStorage({
+            destination: function (req, file, cb) {
+                cb(null, `${process.env.DOWNLOAD_FOLDER}/tmp`);
+            },
+            filename: function (req, file, cb) {
+                cb(null, Date.now() + '-' + file.originalname);
+            }
+        });
+        const uploadPolicy = multer({ storage: storage }).any('policy');
+        const uploadTerms = multer({ storage: storage }).any('terms');
+        const uploadDelivery = multer({ storage: storage }).any('delivery');
+        const uploadReturn = multer({ storage: storage }).any('return');
+
+        await uploadPolicy(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsPolicy = [];
+
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    if (file.fieldname === 'policy' && file?.size) {
+                        docsPolicy[0] = file.filename;
+                    }
+                });
+                await userModel.uploadSettingsDoc(docsPolicy, req.user.id, 'policy');
+            }
+
+            return ;
+        });
+
+        await uploadTerms(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsTerms = [];
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    if (file.fieldname === 'terms' && file?.size) {
+                        docsTerms[0] = file.filename;
+                    }
+
+                });
+                await userModel.uploadSettingsDoc(docsTerms, req.user.id, 'terms');
+            }
+            return;
+        });
+
+        await uploadDelivery(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsDelivery = [];
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    if (file.fieldname === 'delivery' && file?.size) {
+                        docsDelivery[0] = file.filename;
+                    }
+
+                });
+                await userModel.uploadSettingsDoc(docsDelivery, req.user.id, 'delivery');
+            }
+            return;
+        });
+
+        await uploadReturn(req, res, async function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.status(500).json(err);
+            } else if (err) {
+                return res.status(500).json(err);
+            }
+            // const dataProduct = req.body;
+            const docsReturn = [];
+            if (req.files.length > 0) {
+                req.files.forEach(file => {
+                    console.log(file);
+                    if (file.fieldname === 'returnPolicy' && file?.size) {
+                        docsReturn[0] = file.filename;
+                    }
+
+                });
+                await userModel.uploadSettingsDoc(docsReturn, req.user.id, 'return');
+            }
+            return;
+        });
+
+        // const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);
+        return res.status(200).json({ success: true });
+    }
 
     async fetchSellers (req, res) {
         if (!req.user) {

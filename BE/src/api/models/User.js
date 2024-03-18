@@ -4,12 +4,11 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
 import axios from "axios";
-// import moment, {now} from "moment";
 import paymentPlanModel from "./PaymentPlan.js";
 import { confirmSubscriptionEmail, confirmSubscriptionPaymentEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 import moment from 'moment';
-// import {query} from "winston";
+import fs from "fs";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -1186,7 +1185,7 @@ class User {
         const client = await pool.connect();
         try {
             const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${userId});`;
-            console.log(query);
+            // console.log(query);
             await client.query(query);
             // const query1 = `// UPDATE data.users SET photo='${userData.photo}' WHERE id=${userId};`;
             // await client.query(query1);
@@ -1633,7 +1632,6 @@ class User {
         }
     }
 
-
     /**
      *
      * @param userId
@@ -1655,7 +1653,6 @@ class User {
                     res.rows[0].free_shipping_timer = res.rows[0].free_shipping_timer.hours ?? res.rows[0].free_shipping_timer.days ?? res.rows[0].free_shipping_timer.minutes;
                 }
             }
-
             return res.rows[0] ? res.rows : [{
                 user_id: userId,
                 order_timer: '',
@@ -1663,7 +1660,16 @@ class User {
                 free_shipping_timer: '',
                 free_shipping_status: '',
                 created_at: '',
-                updated_at: ''
+                updated_at: '',
+                doctype: false,
+                privacy_doc: '',
+                terms_doc: '',
+                delivery_doc: '',
+                return_doc: '',
+                privacy_link: '',
+                terms_link: '',
+                delivery_link: '',
+                return_link: ''
             }];
 
         } catch (e) {
@@ -1983,6 +1989,274 @@ class User {
             client.release();
         }
     }
+
+    async updateSellerLinkSettings(userId, data) {
+        const client = await pool.connect();
+        try {
+            const query = `INSERT INTO data.seller_settings(user_id, privacy_link, terms_link, delivery_link, return_link)
+                VALUES ($1, $2, $3, $4, $5) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
+                    privacy_link = EXCLUDED.privacy_link,
+                    terms_link = EXCLUDED.terms_link,
+                    delivery_link = EXCLUDED.delivery_link,
+                    return_link = EXCLUDED.return_link;`;
+            await client.query(query, [userId, data.privacy_link, data.terms_link, data.delivery_link, data.return_link]);
+
+            return { success: true };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (updateUserSettings) error:',
+                    { message: e.message }
+                );
+                console.log('[User.updateSellerSettings] sql e.message = ', e.message);
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+
+        } finally {
+            client.release();
+        }
+    }
+
+    async copyFiles(sourceDir, dirUpload, photo) {
+        fs.copyFile(`${sourceDir}/${photo}`, `${dirUpload}/${photo}`, (err) => {
+            if (err) {
+                throw err;
+            }
+            fs.unlink(`${sourceDir}/${photo}`,function(err){
+                if(err) return console.log(err);
+            });
+        });
+    }
+
+    /**
+     *
+     * @param type
+     * @param userId
+     * @returns {Promise<*|[{order_timer: string, free_shipping_timer: string, updated_at: string, user_id, created_at: string, free_shipping_status: string, type: string}]|{success: boolean, error: {code: number, message: string}}>}
+     */
+    async removeSettingsFile(type, userId) {
+        const client = await pool.connect();
+        try {
+            const settingsQuery = await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
+            switch (type) {
+                case 'privacy':
+                    fs.unlink(`${settingsQuery.rows[0].privacy_doc}`,function(err){
+                        if(err) return console.log(err);
+                    });
+                    break;
+            }
+            // {/Users/viktoriakorogod/WEB/SolidSolution/Liveproshop.v0.01/BE/uploads/users/286/1710418057750-Policy.docx}
+            const queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            ${type}_doc = null
+                         WHERE user_id=${userId};`;
+            await client.query(queryUpdate);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+
+    }
+
+    async uploadPolicies (dataFiles, userId) {
+        const client = await pool.connect();
+        try {
+            const copyFiles = [];
+            const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+            const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}`;
+            const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/users/${userId}`;
+            if (!fs.existsSync(dirUpload)) {
+                fs.mkdirSync(dirUpload);
+            }
+            if (dataFiles.length > 0) {
+                const promisesDocs = [];
+                dataFiles.forEach(doc => {
+                    promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));
+                });
+                await Promise.all(promisesDocs);
+                dataFiles.forEach(doc => {
+                    copyFiles.push(`${dirDBUpload}/${doc}`);
+                })
+                if (copyFiles.length > 0) {
+                    const queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            privacy_doc = '{${copyFiles}}'
+                         WHERE user_id=${userId};`;
+                    await client.query(queryUpdate);
+                }
+            }
+
+            return { success: true };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async uploadTerms (dataFiles, userId) {
+        const client = await pool.connect();
+        try {
+            const copyFiles = [];
+            const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+            const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}`;
+            const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/users/${userId}`;
+            if (!fs.existsSync(dirUpload)) {
+                fs.mkdirSync(dirUpload);
+            }
+            if (dataFiles.length > 0) {
+                const promisesDocs = [];
+                dataFiles.forEach(doc => {
+                    promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));
+                });
+                await Promise.all(promisesDocs);
+                dataFiles.forEach(doc => {
+                    copyFiles.push(`${dirDBUpload}/${doc}`);
+                })
+                if (copyFiles.length > 0) {
+                    const queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            terms_doc = '{${copyFiles}}'
+                         WHERE user_id=${userId};`;
+                    await client.query(queryUpdate);
+                }
+            }
+
+            return { success: true };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async uploadDelivery (dataFiles, userId) {
+        const client = await pool.connect();
+        try {
+            const copyFiles = [];
+            const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+            const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}`;
+            const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/users/${userId}`;
+            if (!fs.existsSync(dirUpload)) {
+                fs.mkdirSync(dirUpload);
+            }
+            if (dataFiles.length > 0) {
+                const promisesDocs = [];
+                dataFiles.forEach(doc => {
+                    promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));
+                });
+                await Promise.all(promisesDocs);
+                dataFiles.forEach(doc => {
+                    copyFiles.push(`${dirDBUpload}/${doc}`);
+                })
+                if (copyFiles.length > 0) {
+                    const queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            delivery_doc = '{${copyFiles}}'
+                         WHERE user_id=${userId};`;
+                    await client.query(queryUpdate);
+                }
+            }
+
+            return { success: true };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async uploadSettingsDoc (dataFiles, userId, type) {
+        const client = await pool.connect();
+        try {
+            const copyFiles = [];
+            const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+            const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}`;
+            const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/users/${userId}`;
+            if (!fs.existsSync(dirUpload)) {
+                fs.mkdirSync(dirUpload);
+            }
+            if (dataFiles.length > 0) {
+                const promisesDocs = [];
+                dataFiles.forEach(doc => {
+                    promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));
+                });
+                await Promise.all(promisesDocs);
+                dataFiles.forEach(doc => {
+                    copyFiles.push(`${dirDBUpload}/${doc}`);
+                })
+                if (copyFiles.length > 0) {
+                    let fieldName = '';
+                    if (type === 'delivery') {
+                        fieldName = 'delivery_doc';
+                    } else if (type === 'return') {
+                        fieldName = 'return_doc';
+                    } else if (type === 'policy') {
+                        fieldName = 'privacy_doc';
+                    } else if (type === 'terms') {
+                        fieldName = 'terms_doc';
+                    }
+                    const queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            ${fieldName} = '{${copyFiles}}',
+                            doctype=false
+                         WHERE user_id=${userId};`;
+                    console.log(queryUpdate);
+                    await client.query(queryUpdate);
+                }
+            }
+
+            return { success: true };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
 
     async generatePdf(user) {
         try {
