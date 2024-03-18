@@ -57,6 +57,8 @@ declare namespace Orders {
         waiting_products: any;
         privacyDoc: any;
         termsDoc: any;
+        policyDoc: any;
+        returnDoc: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

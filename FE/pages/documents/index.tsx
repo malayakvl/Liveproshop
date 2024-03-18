@@ -2,14 +2,21 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { FormUpload, FormLink } from '../../components/documents';
-import { InputSwitcher } from '../../components/_form';
+import { Policy, TermsAndCond, DeliveryTerms, ReturnPolicy } from '../../components/documents';
+import { InputText } from '../../components/_form';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { fetchFormAction } from '../../redux/settings';
-import { itemSelector } from '../../redux/settings/selectors';
+import {
+    itemSelector,
+    uploadedDeliveryFilesSelector,
+    uploadedPolicyFilesSelector,
+    uploadedReturnFilesSelector,
+    uploadedTermsFilesSelector
+} from '../../redux/settings/selectors';
+import { submitFormLinkAction } from '../../redux/settings/actions';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
@@ -18,6 +25,13 @@ export default function Index({ session }: { session: any }) {
     const SubmitSchema = Yup.object().shape({});
     const dispatch = useDispatch();
     const settingsValues = useSelector(itemSelector);
+    const policyDataFiles = useSelector(uploadedPolicyFilesSelector);
+    const termsDataFiles = useSelector(uploadedTermsFilesSelector);
+    const deliveryDataFiles = useSelector(uploadedDeliveryFilesSelector);
+    const returnDataFiles = useSelector(uploadedReturnFilesSelector);
+    const [showErrorBlock, setShowErrorBlock] = useState(false);
+    const [showMatchErrorBlock, setShowMatchErrorBlock] = useState(false);
+    const [showErrorDublicateBlock, setErrorDublicateBlock] = useState(false);
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
@@ -48,40 +62,252 @@ export default function Index({ session }: { session: any }) {
                 {settingsValues && (
                     <>
                         <div>
+                            {showErrorBlock && (
+                                <div className="alert-danger mb-6">
+                                    {t('Fill in at least one field')}
+                                </div>
+                            )}
+                            {showMatchErrorBlock && (
+                                <div className="alert-danger mb-6">
+                                    {t('Wrong url format for link')}
+                                </div>
+                            )}
+                            {showErrorDublicateBlock && (
+                                <div className="alert-danger mb-6">
+                                    {t(
+                                        'Please note - you need to add at least one item - either a document or a link.'
+                                    )}
+                                </div>
+                            )}
                             <Formik
                                 enableReinitialize
                                 initialValues={settingsValues}
                                 validationSchema={SubmitSchema}
-                                onSubmit={() => {
-                                    console.log(1);
+                                onSubmit={(values) => {
+                                    setShowErrorBlock(false);
+                                    setShowMatchErrorBlock(false);
+                                    setErrorDublicateBlock(false);
+                                    if (
+                                        !values.privacy_link &&
+                                        !values.terms_link &&
+                                        !values.delivery_link &&
+                                        !values.return_link &&
+                                        policyDataFiles.length == 0 &&
+                                        termsDataFiles.length == 0 &&
+                                        deliveryDataFiles.length == 0 &&
+                                        returnDataFiles.length == 0
+                                    ) {
+                                        setShowErrorBlock(true);
+                                    } else if (
+                                        (values.privacy_link && policyDataFiles.length > 0) ||
+                                        (values.terms_link && termsDataFiles.length > 0) ||
+                                        (values.delivery_link && deliveryDataFiles.length > 0) ||
+                                        (values.return_link && returnDataFiles.length > 0)
+                                    ) {
+                                        setErrorDublicateBlock(true);
+                                    } else {
+                                        const expression =
+                                            /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/gi;
+                                        const regex = new RegExp(expression);
+                                        let hasErrors = false;
+                                        const fieldsName = [
+                                            'privacy_link',
+                                            'terms_link',
+                                            'delivery_link',
+                                            'return_link'
+                                        ];
+                                        fieldsName.forEach((_name) => {
+                                            if (values[_name]) {
+                                                if (!values[_name].match(regex)) {
+                                                    setShowMatchErrorBlock(true);
+                                                    hasErrors = true;
+                                                }
+                                            }
+                                        });
+                                        if (!hasErrors) {
+                                            const formData = new FormData();
+                                            if (policyDataFiles.length) {
+                                                policyDataFiles.forEach((file: any) => {
+                                                    formData.append('policy', file);
+                                                });
+                                            } else {
+                                                formData.append(
+                                                    'policy_link',
+                                                    values['policy_link']
+                                                );
+                                            }
+                                            if (termsDataFiles.length) {
+                                                termsDataFiles.forEach((file: any) => {
+                                                    formData.append('terms', file);
+                                                });
+                                            } else {
+                                                formData.append('terms_link', values['terms_link']);
+                                            }
+                                            if (deliveryDataFiles.length) {
+                                                deliveryDataFiles.forEach((file: any) => {
+                                                    formData.append('delivery', file);
+                                                });
+                                            } else {
+                                                formData.append(
+                                                    'delivery_link',
+                                                    values['delivery_link']
+                                                );
+                                            }
+                                            if (returnDataFiles.length) {
+                                                returnDataFiles.forEach((file: any) => {
+                                                    formData.append('returnPolicy', file);
+                                                });
+                                            } else {
+                                                formData.append(
+                                                    'return_link',
+                                                    values['return_link']
+                                                );
+                                            }
+
+                                            dispatch(submitFormLinkAction(values));
+                                        }
+                                    }
                                 }}>
                                 {(props) => {
                                     const { handleChange } = props;
-                                    const onChangeConfigured = (e: any) => {
-                                        setLayoutType(layoutType == 'upload' ? 'link' : 'upload');
-                                        return handleChange(e);
-                                    };
                                     return (
                                         <form onSubmit={props.handleSubmit} className="mt-5">
-                                            <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
-                                                <InputSwitcher
-                                                    label={'Do you have ypur own website'}
-                                                    name={'doctype'}
-                                                    style={null}
-                                                    props={props}
-                                                    onChange={onChangeConfigured}
-                                                />
-                                            </div>
+                                            {settingsValues && (
+                                                <>
+                                                    <div className={`w-full`}>
+                                                        <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
+                                                            <div className="flex-col mb-4">
+                                                                <Policy
+                                                                    title={
+                                                                        'Upload Privacy and Policy'
+                                                                    }
+                                                                    uploadedFiles={policyDataFiles}
+                                                                />
+                                                            </div>
+                                                            <div className="flex-col mb-4 rigt-upload">
+                                                                <TermsAndCond
+                                                                    title={
+                                                                        'Upload Terms & Conditions'
+                                                                    }
+                                                                    uploadedFiles={termsDataFiles}
+                                                                />
+                                                            </div>
+                                                            <div className="flex-col mb-4">
+                                                                <DeliveryTerms
+                                                                    title={'Upload Delivery Terms'}
+                                                                    uploadedFiles={
+                                                                        deliveryDataFiles
+                                                                    }
+                                                                />
+                                                            </div>
+                                                            <div className="flex-col mb-4 rigt-upload">
+                                                                <ReturnPolicy
+                                                                    title={'Upload Return Policy'}
+                                                                    uploadedFiles={returnDataFiles}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="mt-4 mb-4 text-gray-350 font-bold">
+                                                        {t(
+                                                            'Or you specify the links to your website:'
+                                                        )}
+                                                    </div>
+                                                    <div className={`w-full mt-6`}>
+                                                        <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
+                                                            <div className="flex-col md:mb-4">
+                                                                <InputText
+                                                                    icon={null}
+                                                                    label={
+                                                                        'Link Privacy and Policy'
+                                                                    }
+                                                                    name={'privacy_link'}
+                                                                    placeholder={'Link here'}
+                                                                    style={null}
+                                                                    props={props}
+                                                                    tips={t('count_characters', {
+                                                                        charNumber: 340
+                                                                    })}
+                                                                    onChange={(event) => {
+                                                                        event.target.value =
+                                                                            event.target.value.trimStart();
+                                                                        props.handleChange(event);
+                                                                        setShowErrorBlock(false);
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div className="flex-col mb-4 md:ml-4">
+                                                                <InputText
+                                                                    icon={null}
+                                                                    label={
+                                                                        'Link Terms & Conditions'
+                                                                    }
+                                                                    name={'terms_link'}
+                                                                    placeholder={'Link here'}
+                                                                    style={null}
+                                                                    props={props}
+                                                                    tips={t('count_characters', {
+                                                                        charNumber: 340
+                                                                    })}
+                                                                    onChange={(event) => {
+                                                                        event.target.value =
+                                                                            event.target.value.trimStart();
+                                                                        props.handleChange(event);
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div className="flex-col mb-4">
+                                                                <InputText
+                                                                    icon={null}
+                                                                    label={'Link Delivery Terms'}
+                                                                    name={'delivery_link'}
+                                                                    placeholder={'Link here'}
+                                                                    style={null}
+                                                                    props={props}
+                                                                    tips={t('count_characters', {
+                                                                        charNumber: 340
+                                                                    })}
+                                                                    onChange={(event) => {
+                                                                        event.target.value =
+                                                                            event.target.value.trimStart();
+                                                                        props.handleChange(event);
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div className="flex-col mb-4 md:ml-4">
+                                                                <InputText
+                                                                    icon={null}
+                                                                    label={'Link Return Policy'}
+                                                                    name={'return_link'}
+                                                                    placeholder={'Link here'}
+                                                                    style={null}
+                                                                    props={props}
+                                                                    tips={t('count_characters', {
+                                                                        charNumber: 340
+                                                                    })}
+                                                                    onChange={(event) => {
+                                                                        event.target.value =
+                                                                            event.target.value.trimStart();
+                                                                        props.handleChange(event);
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <button
+                                                            type="submit"
+                                                            className="gradient-btn">
+                                                            {t('Save')}
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            )}
                                         </form>
                                     );
                                 }}
                             </Formik>
                         </div>
-                        {settingsValues && (
-                            <div className={`w-full`}>
-                                {layoutType == 'upload' ? <FormUpload photos={[]} /> : <FormLink />}
-                            </div>
-                        )}
                     </>
                 )}
             </div>

@@ -47,6 +47,9 @@ export const submitFormLinkAction: any = createAction(
                 })
                 .then(async (response) => {
                     if (response.data.success) {
+                        // window.location.reload();
+                        // dispatch(removeUploadedTermsAndCondFile());
+                        // dispatch(removeUploadedPolicyFile());
                         dispatch(fetchFormAction());
                         dispatch(setSuccessToastAction('Record has been updated'));
                     } else dispatch(setErrorToastAction('Something went wrong'));
@@ -73,8 +76,8 @@ export const submitFormUploadAction: any = createAction(
                 })
                 .then(async (response) => {
                     if (response.data.success) {
-                        // dispatch(fetchFormAction());
-                        dispatch(setSuccessToastAction('Record has been updated'));
+                        dispatch(fetchFormAction());
+                        // dispatch(setSuccessToastAction('Record has been updated'));
                     } else dispatch(setErrorToastAction('Something went wrong'));
 
                     dispatch(showLoaderAction(false));

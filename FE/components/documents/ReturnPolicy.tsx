@@ -68,7 +68,7 @@ const ReturnDocument: React.FC<any> = ({ title }) => {
                                     />
                                 </li>
                             ))}
-                            {settingsValues.return_doc && (
+                            {settingsValues.return_doc && !returnDataFiles.length && (
                                 <li key="ex_policy" style={{ minWidth: '300px' }}>
                                     <span>{showUploadedFile()}</span>
                                     <i

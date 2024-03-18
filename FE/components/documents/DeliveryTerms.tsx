@@ -68,7 +68,7 @@ const DeliveryDocument: React.FC<any> = ({ title }) => {
                                     />
                                 </li>
                             ))}
-                            {settingsValues.delivery_doc && (
+                            {settingsValues.delivery_doc && !deliveryDataFiles.length && (
                                 <li key="ex_policy" style={{ minWidth: '300px' }}>
                                     <span>{showUploadedFile()}</span>
                                     <i
