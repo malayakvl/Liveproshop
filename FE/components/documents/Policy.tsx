@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { addUploadedPolicyFile, removeUploadedPolicyFile } from '../../redux/settings';
+import {addUploadedPolicyFile, removeUploadedPolicyFile, removeUploadedTermsAndCondFile} from '../../redux/settings';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemSelector, uploadedPolicyFilesSelector } from '../../redux/settings/selectors';
@@ -17,9 +17,17 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
     const policyDataFiles = useSelector(uploadedPolicyFilesSelector);
     const settingsValues = useSelector(itemSelector);
     const user = useSelector(userSelector);
+
     const removeFile = (type = '', ext = '') => {
         dispatch(removeUploadedPolicyFile(type, ext));
     };
+
+    const showUploadedFileExt = () => {
+        const regExpDelBrackets = /[({})]/g;
+        const fullReplace = `policy.`;
+        return settingsValues.terms_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
+    };
+
 
     useEffect(() => {
         acceptedFiles.forEach((file: File) => {
@@ -37,18 +45,6 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
         }
     }, [policyDataFiles]);
 
-    const showUploadedFile = () => {
-        const regExpDelBrackets = /[({})]/g;
-        const fullReplace = `${replaceUrl}uploads/users/${user.id}/`;
-
-        return settingsValues.privacy_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
-    };
-
-    const showUploadedFileExt = () => {
-        const regExpDelBrackets = /[({})]/g;
-        const fullReplace = `policy.`;
-        return settingsValues.privacy_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
-    };
 
     return (
         <>
