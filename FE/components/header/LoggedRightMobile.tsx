@@ -100,6 +100,7 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
     };
 
     const toggleSidebar = () => {
+        console.log(toggleSideClass);
         setToggleSideClass(
             toggleSideClass !== 'left-side-open' ? 'left-side-open' : 'left-side-close'
         );
@@ -213,9 +214,10 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                     <a
                                                         role="presentation"
-                                                        onClick={() =>
-                                                            setShowProfileMenu(!showProfileMenu)
-                                                        }>
+                                                        onClick={() => {
+                                                            setShowProfileMenu(!showProfileMenu);
+                                                            toggleSidebar();
+                                                        }}>
                                                         <i className="store" />
                                                         <span className="s-caption">
                                                             {t('My Stores')}
@@ -230,9 +232,10 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                     <a
                                                         role="presentation"
-                                                        onClick={() =>
-                                                            setShowProfileMenu(!showProfileMenu)
-                                                        }>
+                                                        onClick={() => {
+                                                            setShowProfileMenu(!showProfileMenu);
+                                                            toggleSidebar();
+                                                        }}>
                                                         <i className="documents" />
                                                         <span className="s-caption">
                                                             {t('My Documents')}

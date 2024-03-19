@@ -59,6 +59,12 @@ export default function Index({ session }: { session: any }) {
                     <h1 className="float-left">{t('My Documents')}</h1>
                     <div className="clear-both" />
                 </div>
+                <div className="alert-info mb-3">
+                    {t(
+                        'Please note - you need to add at least one item - either a document or a link.'
+                    )}
+                </div>
+
                 {settingsValues && (
                     <>
                         <div>
