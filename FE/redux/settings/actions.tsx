@@ -120,11 +120,14 @@ export const removeUploadedPolicyFile: any = createAction(
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=privacy&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=privacy&tmpfile=${type}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
+                    }
                 }
-            });
+            );
             if (res.status) {
                 dispatch(showLoaderAction(false));
                 dispatch(fetchFormAction());
@@ -143,7 +146,9 @@ export const removeUploadedTermsAndCondFile: any = createAction(
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=terms&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=terms&tmpfile=${type}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
@@ -167,7 +172,9 @@ export const removeUploadedDeliveryFile: any = createAction(
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=delivery&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=delivery&tmpfile=${type}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
@@ -191,7 +198,9 @@ export const removeUploadedReturnFile: any = createAction(
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=return&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=return&tmpfile=${type}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
