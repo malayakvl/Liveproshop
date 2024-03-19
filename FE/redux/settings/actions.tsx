@@ -47,6 +47,9 @@ export const submitFormLinkAction: any = createAction(
                 })
                 .then(async (response) => {
                     if (response.data.success) {
+                        window.location.reload();
+                        // dispatch(removeUploadedTermsAndCondFile());
+                        // dispatch(removeUploadedPolicyFile());
                         dispatch(fetchFormAction());
                         dispatch(setSuccessToastAction('Record has been updated'));
                     } else dispatch(setErrorToastAction('Something went wrong'));
@@ -73,8 +76,8 @@ export const submitFormUploadAction: any = createAction(
                 })
                 .then(async (response) => {
                     if (response.data.success) {
-                        // dispatch(fetchFormAction());
-                        dispatch(setSuccessToastAction('Record has been updated'));
+                        dispatch(fetchFormAction());
+                        // dispatch(setSuccessToastAction('Record has been updated'));
                     } else dispatch(setErrorToastAction('Something went wrong'));
 
                     dispatch(showLoaderAction(false));
@@ -110,16 +113,16 @@ export const fetchFormAction: any = createAction(
 
 export const removeUploadedPolicyFile: any = createAction(
     'settings/REMOVE_UPLOADED_POLICY_FILE',
-    async () =>
+    async (type: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=privacy`, {
-                headers: {
-                    ...authHeader(state.user.user.email)
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=privacy&tmpfile=${type}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
                 }
             });
             if (res.status) {
@@ -133,18 +136,19 @@ export const removeUploadedPolicyFile: any = createAction(
 );
 export const removeUploadedTermsAndCondFile: any = createAction(
     'settings/REMOVE_UPLOADED_TERMSCOND_FILE',
-    async () =>
+    async (type: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=terms`, {
-                headers: {
-                    ...authHeader(state.user.user.email)
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=terms&tmpfile=${type}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
                 }
-            });
+            );
             if (res.status) {
                 dispatch(showLoaderAction(false));
                 dispatch(fetchFormAction());
@@ -156,18 +160,19 @@ export const removeUploadedTermsAndCondFile: any = createAction(
 );
 export const removeUploadedDeliveryFile: any = createAction(
     'settings/REMOVE_UPLOADEDDELIVERY_FILE',
-    async () =>
+    async (type: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=delivery`, {
-                headers: {
-                    ...authHeader(state.user.user.email)
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=delivery&tmpfile=${type}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
                 }
-            });
+            );
             if (res.status) {
                 dispatch(showLoaderAction(false));
                 dispatch(fetchFormAction());
@@ -179,18 +184,19 @@ export const removeUploadedDeliveryFile: any = createAction(
 );
 export const removeUploadedReturnFile: any = createAction(
     'settings/REMOVE_UPLOADED_RETURN_FILE',
-    async () =>
+    async (type: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=return`, {
-                headers: {
-                    ...authHeader(state.user.user.email)
+            const res = await axios.get(`${baseUrl}/remove-settings-file?type=return&tmpfile=${type}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
                 }
-            });
+            );
             if (res.status) {
                 dispatch(showLoaderAction(false));
                 dispatch(fetchFormAction());

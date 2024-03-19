@@ -17,8 +17,8 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
     const policyDataFiles = useSelector(uploadedPolicyFilesSelector);
     const settingsValues = useSelector(itemSelector);
     const user = useSelector(userSelector);
-    const removeFile = () => {
-        dispatch(removeUploadedPolicyFile('privacy'));
+    const removeFile = (type = '') => {
+        dispatch(removeUploadedPolicyFile(type));
     };
 
     useEffect(() => {
@@ -58,17 +58,17 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
                         <ul style={{ minWidth: '300px', marginLeft: '-10px' }}>
                             {policyDataFiles.map((_file: File) => (
                                 <li key={_file.lastModified} style={{ minWidth: '300px' }}>
-                                    <span>{_file.name}</span> <em>{_file.size} bytes</em>{' '}
+                                    <span>New {_file.name}</span> <em>{_file.size} bytes</em>{' '}
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile();
+                                            removeFile('tmp');
                                         }}
                                     />
                                 </li>
                             ))}
-                            {settingsValues.privacy_doc && (
+                            {settingsValues.privacy_doc && !policyDataFiles.length && (
                                 <li key="ex_policy" style={{ minWidth: '300px' }}>
                                     <span>{showUploadedFile()}</span>
                                     <i

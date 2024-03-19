@@ -633,5 +633,9 @@
   "Link Return Policy": "Politique de retour des liens",
   "Link here": "Lien ici",
   "Fill in at least one field": "Remplissez au moins un champ",
-  "Replace all values with selected": "Remplacer toutes les valeurs par sélectionnées"
+  "Replace all values with selected": "Remplacer toutes les valeurs par sélectionnées",
+  "Or you specify the links to your website:": "Ou spécifiez le(s) lien(s) vers votre site web :",
+  "Please note - you need to add at least one item - either a document or a link.": "Attention : vous devez ajouter au moins un élément - soit un document, soit un lien.",
+  "Delivery Terms": "Conditions de livraison",
+  "Return Policy": "Politique de retour"
 }
