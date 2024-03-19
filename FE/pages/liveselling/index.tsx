@@ -10,19 +10,25 @@ import { showPopupAction } from '../../redux/livesessions';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchScenariosAction } from '../../redux/livesessions';
 import { userSelector } from '../../redux/user/selectors';
+import { fetchFormAction } from '../../redux/settings';
+import { itemSelector } from '../../redux/settings/selectors';
 import moment from 'moment';
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any, locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
+    const settingsValues = useSelector(itemSelector);
+
+    console.log(locale);
 
     const fbSync = () => {
         accountService.syncFB();
     };
     useEffect(() => {
         dispatch(fetchScenariosAction());
+        dispatch(fetchFormAction());
     }, []);
 
     return (
@@ -48,16 +54,55 @@ export default function Index({ session }: { session: any }) {
                     <div className="clear-both" />
                 </div>
                 <div className="block">
+                    {!settingsValues.delivery_doc &&
+                        !settingsValues.privacy_doc &&
+                        !settingsValues.terms_doc &&
+                        !settingsValues.return_doc &&
+                        !settingsValues.terms_link &&
+                        !settingsValues.privacy_link &&
+                        !settingsValues.return_link &&
+                        !settingsValues.delivery_link && (
+                            <div className="alert-danger mb-6">
+                                {locale == 'en' ? (
+                                    <p>
+                                        Note! You must add your documents before going live -
+                                        <Link href={'/documents'}> here</Link>
+                                    </p>
+                                ) : (
+                                    <p>
+                                        Remarque : Il est impératif d`abater vos documents avant de commencer vos diffusions en direct.
+                                        <Link href={'/documents'}> ici</Link>
+                                    </p>
+                                )}
+                            </div>
+                        )}
                     <div className="w-full bg-white">
                         <div className="flex flex-wrap justify-between">
                             <p className="text-blue-400 underline text-base mb-4">
                                 <Link href={'/guides/liveselling'}>{t('liveselling_descr')}</Link>
                             </p>
-                            <button
-                                className="btn-big xl:ml-4 mt-4 md:mt-0"
-                                onClick={() => dispatch(showPopupAction(true))}>
-                                {t('Schedule new session')}
-                            </button>
+                            {!settingsValues.delivery_doc &&
+                            !settingsValues.privacy_doc &&
+                            !settingsValues.terms_doc &&
+                            !settingsValues.return_doc &&
+                            !settingsValues.terms_link &&
+                            !settingsValues.privacy_link &&
+                            !settingsValues.return_link &&
+                            !settingsValues.delivery_link ? (
+                                <div />
+                            ) : (
+                                <div>
+                                    <button
+                                        className="btn-big xl:ml-4 mt-4 md:mt-0"
+                                        onClick={() => dispatch(showPopupAction(true))}>
+                                        {t('Schedule new session')}
+                                    </button>
+                                </div>
+                            )}
+                            {/*    className="btn-big xl:ml-4 mt-4 md:mt-0"*/}
+                            {/*    onClick={() => dispatch(showPopupAction(true))}>*/}
+                            {/*    {t('Schedule new session')}*/}
+                            {/*</button>*/}
                         </div>
                     </div>
                     <div className="clear-both" />

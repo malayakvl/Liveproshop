@@ -68,7 +68,7 @@ const TermsDocument: React.FC<any> = ({ title }) => {
                                     />
                                 </li>
                             ))}
-                            {settingsValues.terms_doc && (
+                            {settingsValues.terms_doc && !termsAndCondDataFiles.length && (
                                 <li key="ex_policy" style={{ minWidth: '300px' }}>
                                     <span>{showUploadedFile()}</span>
                                     <i

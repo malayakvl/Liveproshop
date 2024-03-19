@@ -876,6 +876,7 @@ class Order {
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const orderId = res.rows[0].id;
             let historyRes;
@@ -1449,9 +1450,11 @@ class Order {
     }
 
     async bulkDownload(ids, user, locale) {
+        console.log('LOCALE', locale);
         const client = await pool.connect();
         try {
             const promisesQueries = [];
+            console.log(ids);
             ids.forEach(async (id) => {
                 const order = await client.query(`SELECT * FROM data.orders WHERE id=${id};`);
                 promisesQueries.push(this.generatePdf(order.rows[0].order_number, user.id, user, locale, 'download'));
@@ -1525,8 +1528,8 @@ class Order {
                 // console.log(sellerData.rows[0].user_id);
                 // console.log(hourDiff)
             } else {
-                console.log(`SELECT order_amount, live_sessions_id FROM 
-                    data.orders WHERE order_number='${orderNumber}'`);
+                // console.log(`SELECT order_amount, live_sessions_id FROM
+                //     data.orders WHERE order_number='${orderNumber}'`);
                 const currOrder = await client.query(`SELECT order_amount, live_sessions_id FROM 
                     data.orders WHERE order_number='${orderNumber}'`);
                 sellerData = await client.query(`SELECT user_id 

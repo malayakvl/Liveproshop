@@ -103,8 +103,8 @@ class UserController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
-        const { type } = req.query;
-        await userModel.removeSettingsFile(type, req.user.id);
+        const { type, tmpfile } = req.query;
+        await userModel.removeSettingsFile(type, tmpfile, req.user.id);
         const data = await userModel.fetchUserSettings(req.user.id);
         return res.status(200).json({ item: data[0]});
     }

@@ -32,17 +32,68 @@ class CheckoutController {
         const address = await userModel.findUserAddress(req.user.id);
         const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, true);
         orderData.order.freeShipping = freeSheppingData?.freeShipping || 0;
-        if ((sellerSettingsData[0].privacy_doc || sellerSettingsData[0].terms_doc || sellerSettingsData[0].delivery_doc || sellerSettingsData[0].return_doc) && !sellerSettingsData[0].doctype) {
-            let termsDoc = sellerSettingsData[0].terms_doc ? sellerSettingsData[0].terms_doc : (
-                sellerSettingsData[0].privacy_doc || sellerSettingsData[0].return_doc || sellerSettingsData.delivery_doc
-            );
-            let privacyDoc = sellerSettingsData[0].terms_doc ? sellerSettingsData[0].terms_doc : (
-                sellerSettingsData[0].privacy_doc || sellerSettingsData[0].return_doc || sellerSettingsData.delivery_doc
-            )
-            const regExpDelBrackets = /[({})]/g;
-            orderData.order.termsDoc = process.env.API_URL + termsDoc.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
-            orderData.order.privacyDoc = process.env.API_URL + privacyDoc.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+        const regExpDelBrackets = /[({})]/g;
+        let privacyLink = '';
+        let termsLink = '';
+        let returnLink = '';
+        let deliveryLink = '';
+        if (sellerSettingsData[0].privacy_doc || sellerSettingsData[0].privacy_link) {
+            let docParced1 = sellerSettingsData[0].privacy_doc
+            if (sellerSettingsData[0].privacy_doc) {
+                privacyLink = process.env.API_URL + docParced1.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+            } else {
+                privacyLink = sellerSettingsData[0].privacy_link
+            }
+            termsLink = privacyLink;
+            delete sellerSettingsData[0].privacy_link;
         }
+        if (sellerSettingsData[0].terms_doc || sellerSettingsData[0].terms_link) {
+            let docParced2 = sellerSettingsData[0].terms_doc
+            if (sellerSettingsData[0].terms_doc) {
+                termsLink = process.env.API_URL + docParced2.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+            } else {
+                termsLink = sellerSettingsData[0].terms_link
+            }
+            delete sellerSettingsData[0].terms_link;
+        }
+        if (sellerSettingsData[0].delivery_doc || sellerSettingsData[0].delivery_link) {
+            let docParced3 = sellerSettingsData[0].delivery_doc
+            if (sellerSettingsData[0].delivery_doc) {
+                deliveryLink = process.env.API_URL + docParced3.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+            } else {
+                deliveryLink = sellerSettingsData[0].delivery_link
+            }
+            delete sellerSettingsData[0].delivery_link;
+        }
+        if (sellerSettingsData[0].return_doc || sellerSettingsData[0].return_link) {
+            let docParced4 = sellerSettingsData[0].return_doc
+            if (sellerSettingsData[0].return_doc) {
+                returnLink = process.env.API_URL + docParced4.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+            } else {
+                returnLink = sellerSettingsData[0].return_link
+            }
+            delete sellerSettingsData[0].return_link;
+        }
+        // let privacyLink = '';
+        // let termsLink = '';
+        // let returnLink = '';
+        // let deliveryLink = '';
+        sellerSettingsData[0].privacy_doc = privacyLink;
+        sellerSettingsData[0].terms_doc = termsLink;
+        sellerSettingsData[0].delivery_doc = deliveryLink;
+        sellerSettingsData[0].return_doc = returnLink;
+
+        // if ((sellerSettingsData[0].privacy_doc || sellerSettingsData[0].terms_doc || sellerSettingsData[0].delivery_doc || sellerSettingsData[0].return_doc) && !sellerSettingsData[0].doctype) {
+        //     let termsDoc = sellerSettingsData[0].terms_doc ? sellerSettingsData[0].terms_doc : (
+        //         sellerSettingsData[0].privacy_doc || sellerSettingsData[0].return_doc || sellerSettingsData.delivery_doc
+        //     );
+        //     let privacyDoc = sellerSettingsData[0].terms_doc ? sellerSettingsData[0].terms_doc : (
+        //         sellerSettingsData[0].privacy_doc || sellerSettingsData[0].return_doc || sellerSettingsData.delivery_doc
+        //     )
+        //     const regExpDelBrackets = /[({})]/g;
+        //     orderData.order.termsDoc = process.env.API_URL + termsDoc.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+        //     orderData.order.privacyDoc = process.env.API_URL + privacyDoc.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+        // }
         orderData.order.seller_settings = sellerSettingsData[0];
         return res.status(200).json({
             order: orderData.order,
