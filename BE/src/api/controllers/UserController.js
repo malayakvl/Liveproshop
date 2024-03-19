@@ -103,8 +103,8 @@ class UserController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
-        const { type, tmpfile } = req.query;
-        await userModel.removeSettingsFile(type, tmpfile, req.user.id);
+        const { type, tmpfile, ext } = req.query;
+        await userModel.removeSettingsFile(type, tmpfile, ext, req.user.id);
         const data = await userModel.fetchUserSettings(req.user.id);
         return res.status(200).json({ item: data[0]});
     }
@@ -113,71 +113,148 @@ class UserController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
-        const type = '';
-        const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}/documents`;
+        const type = req.query.typedoc;
+        const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}/documents/tmp`;
         if (!fs.existsSync(dirUpload)) {
             fs.mkdirSync(dirUpload);
         }
+        let tmpFileName;
+        // var multipartUpload = multer({storage: multer.diskStorage({
+        //         destination: function (req, file, callback) { callback(null, './uploads');},
+        //         filename: function (req, file, callback) { callback(null, file.fieldname + '-' + Date.now());}})
+        // }).single('policy');
+        // console.log(multipartUpload)
+
+        // var ext = file.originalname.substr(file.originalname.lastIndexOf('.') + 1);
+
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
                 cb(null, `${dirUpload}`);
             },
             filename: function (req, file, cb) {
-                cb(null, Date.now() + '-' + file.originalname);
+                cb(null, type+'.'+file.originalname.substr(file.originalname.lastIndexOf('.') + 1));
             }
         });
         if (req.query.typedoc === 'policy') {
-            const uploadPolicy = multer({storage: storage}).any('policy');
-            await uploadPolicy(req, res, async function (err) {
+            const uploadPolicy = multer({storage: storage, limits: { fileSize: '100000000' /* bytes */ }}).any('policy');
+            const resUpl = await uploadPolicy(req, res, async function (err) {
                 if (err instanceof multer.MulterError) {
                     return res.status(500).json(err);
                 } else if (err) {
                     return res.status(500).json(err);
                 }
-                // const dataProduct = req.body;
-                let docsPolicy = '';
-                if (req.files.length > 0) {
-                    req.files.forEach(file => {
-                        console.log(file)
-                        if (file.fieldname === 'policy') {
-                            docsPolicy = file.filename;
-
-                        }
-                    });
-                    await userModel.uploadSettingsNewDoc(docsPolicy, req.user.id, 'policy', 'tmp');
-                }
-
-                return;
+                return true;
             });
         }
-
         if (req.query.typedoc === 'terms') {
-            const uploadTerms = multer({storage: storage}).any('terms');
-            await uploadTerms(req, res, async function (err) {
-                console.log('here we are');
+            const uploadPolicy = multer({storage: storage, limits: { fileSize: '100000000' /* bytes */ }}).any('terms');
+            const resUpl = await uploadPolicy(req, res, async function (err) {
                 if (err instanceof multer.MulterError) {
-                    console.log(err);
                     return res.status(500).json(err);
                 } else if (err) {
-                    console.log(err);
                     return res.status(500).json(err);
                 }
-                // const dataProduct = req.body;
-                console.log('here', req.files.length);
-                let docsTerms = '';
-                if (req.files.length > 0) {
-                    req.files.forEach(file => {
-                        console.log(file)
-                        if (file.fieldname === 'terms') {
-                            docsTerms = file.filename;
-                        }
-                    });
-                    await userModel.uploadSettingsNewDoc(docsTerms, req.user.id, 'terms', 'tmp');
-                }
-
-                return;
+                return true;
             });
         }
+        if (req.query.typedoc === 'delivery') {
+            const uploadPolicy = multer({storage: storage, limits: { fileSize: '100000000' /* bytes */ }}).any('delivery');
+            const resUpl = await uploadPolicy(req, res, async function (err) {
+                if (err instanceof multer.MulterError) {
+                    return res.status(500).json(err);
+                } else if (err) {
+                    return res.status(500).json(err);
+                }
+                return true;
+            });
+        }
+        if (req.query.typedoc === 'return') {
+            const uploadPolicy = multer({storage: storage, limits: { fileSize: '100000000' /* bytes */ }}).any('return');
+            const resUpl = await uploadPolicy(req, res, async function (err) {
+                if (err instanceof multer.MulterError) {
+                    return res.status(500).json(err);
+                } else if (err) {
+                    return res.status(500).json(err);
+                }
+                return true;
+            });
+        }
+
+
+
+        // await userModel.uploadSettingsNewDoc(docsPolicy, req.user.id, 'policy', 'tmp');
+
+
+        // if (req.query.typedoc === 'delivery') {
+        //     const uploadTerms = multer({storage: storage}).any('delivery');
+        //     await uploadTerms(req, res, async function (err) {
+        //         console.log('55555', req.files);
+        //         if (err instanceof multer.MulterError) {
+        //             return res.status(500).json(err);
+        //         } else if (err) {
+        //             return res.status(500).json(err);
+        //         }
+        //         let docsDelivery = '';
+        //         if (req.files.length > 0) {
+        //             req.files.forEach(file => {
+        //                 if (file.fieldname === 'delivery') {
+        //                     docsDelivery = file.filename;
+        //                 }
+        //             });
+        //             await userModel.uploadSettingsNewDoc(docsDelivery, req.user.id, 'delivery', 'tmp');
+        //         }
+        //
+        //         return;
+        //     });
+        // }
+        // if (req.query.typedoc === 'terms') {
+        //     const uploadTerms = multer({storage: storage}).any('terms');
+        //     await uploadTerms(req, res, async function (err) {
+        //         console.log('55555', req.files);
+        //         if (err instanceof multer.MulterError) {
+        //             return res.status(500).json(err);
+        //         } else if (err) {
+        //             return res.status(500).json(err);
+        //         }
+        //         let docsPolicy = '';
+        //         if (req.files.length > 0) {
+        //             req.files.forEach(file => {
+        //                 if (file.fieldname === 'terms') {
+        //                     docsPolicy = file.filename;
+        //
+        //                 }
+        //             });
+        //             await userModel.uploadSettingsNewDoc(docsPolicy, req.user.id, 'terms', 'tmp');
+        //         }
+        //
+        //         return;
+        //     });
+        // }
+        // if (req.query.typedoc === 'return') {
+        //     const uploadReturn = multer({storage: storage}).any('return');
+        //     await uploadReturn(req, res, async function (err) {
+        //         console.log('55555', req.files);
+        //         if (err instanceof multer.MulterError) {
+        //             return res.status(500).json(err);
+        //         } else if (err) {
+        //             return res.status(500).json(err);
+        //         }
+        //         let returnPolicy = '';
+        //         if (req.files.length > 0) {
+        //             req.files.forEach(file => {
+        //                 if (file.fieldname === 'returnPolicy') {
+        //                     returnPolicy = file.filename;
+        //
+        //                 }
+        //             });
+        //             await userModel.uploadSettingsNewDoc(returnPolicy, req.user.id, 'return', 'tmp');
+        //         }
+        //
+        //         return;
+        //     });
+        // }
+
+
         // if (req.query.typedoc === 'terms') {
         //     const uploadPolicy = multer({storage: storage}).any('policy');
         //     await uploadPolicy(req, res, async function (err) {

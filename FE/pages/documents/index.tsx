@@ -80,9 +80,7 @@ export default function Index({ session }: { session: any }) {
                             )}
                             {showErrorDublicateBlock && (
                                 <div className="alert-danger mb-6">
-                                    {t(
-                                        'Please note - you need to add at least one item - either a document or a link.'
-                                    )}
+                                    {t('Select a document or a link.')}
                                 </div>
                             )}
                             <Formik

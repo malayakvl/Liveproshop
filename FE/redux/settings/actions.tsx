@@ -113,7 +113,7 @@ export const fetchFormAction: any = createAction(
 
 export const removeUploadedPolicyFile: any = createAction(
     'settings/REMOVE_UPLOADED_POLICY_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -121,7 +121,7 @@ export const removeUploadedPolicyFile: any = createAction(
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(
-                `${baseUrl}/remove-settings-file?type=privacy&tmpfile=${type}`,
+                `${baseUrl}/remove-settings-file?type=policy&tmpfile=${type}&ext=${ext}`,
                 {
                     headers: {
                         ...authHeader(state.user.user.email)
@@ -139,7 +139,7 @@ export const removeUploadedPolicyFile: any = createAction(
 );
 export const removeUploadedTermsAndCondFile: any = createAction(
     'settings/REMOVE_UPLOADED_TERMSCOND_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -147,7 +147,7 @@ export const removeUploadedTermsAndCondFile: any = createAction(
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(
-                `${baseUrl}/remove-settings-file?type=terms&tmpfile=${type}`,
+                `${baseUrl}/remove-settings-file?type=terms&tmpfile=${type}&ext=${ext}`,
                 {
                     headers: {
                         ...authHeader(state.user.user.email)
@@ -165,7 +165,7 @@ export const removeUploadedTermsAndCondFile: any = createAction(
 );
 export const removeUploadedDeliveryFile: any = createAction(
     'settings/REMOVE_UPLOADEDDELIVERY_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -173,7 +173,7 @@ export const removeUploadedDeliveryFile: any = createAction(
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(
-                `${baseUrl}/remove-settings-file?type=delivery&tmpfile=${type}`,
+                `${baseUrl}/remove-settings-file?type=delivery&tmpfile=${type}&ext=${ext}`,
                 {
                     headers: {
                         ...authHeader(state.user.user.email)
@@ -191,7 +191,7 @@ export const removeUploadedDeliveryFile: any = createAction(
 );
 export const removeUploadedReturnFile: any = createAction(
     'settings/REMOVE_UPLOADED_RETURN_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -199,7 +199,7 @@ export const removeUploadedReturnFile: any = createAction(
             const state = getState();
             dispatch(showLoaderAction(true));
             const res = await axios.get(
-                `${baseUrl}/remove-settings-file?type=return&tmpfile=${type}`,
+                `${baseUrl}/remove-settings-file?type=return&tmpfile=${type}&ext=${ext}`,
                 {
                     headers: {
                         ...authHeader(state.user.user.email)
