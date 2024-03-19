@@ -17,8 +17,8 @@ const DeliveryDocument: React.FC<any> = ({ title }) => {
     const deliveryDataFiles = useSelector(uploadedDeliveryFilesSelector);
     const settingsValues = useSelector(itemSelector);
     const user = useSelector(userSelector);
-    const removeFile = () => {
-        dispatch(removeUploadedDeliveryFile('delivery'));
+    const removeFile = (type = '') => {
+        dispatch(removeUploadedDeliveryFile(type));
     };
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const DeliveryDocument: React.FC<any> = ({ title }) => {
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile();
+                                            removeFile('tmp');
                                         }}
                                     />
                                 </li>

@@ -1993,7 +1993,6 @@ class User {
     async updateSellerLinkSettings(userId, data) {
         const client = await pool.connect();
         try {
-            console.log(data);
             if (data.privacy_link) {
                 const query = `INSERT INTO data.seller_settings(user_id, privacy_link)
                     VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
@@ -2037,6 +2036,27 @@ class User {
                     VALUES ($1, $2) ON CONFLICT ON CONSTRAINT seller_settings__pkey DO UPDATE SET
                         return_link = EXCLUDED.return_link;`;
                 await client.query(query, [userId, '']);
+            }
+            const _settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
+            if (_settings.rows[0].tmp_privacy_doc) {
+                await client.query(`UPDATE data.seller_settings SET 
+                    privacy_doc='${_settings.rows[0].tmp_privacy_doc}', tmp_privacy_doc=null WHERE 
+                    user_id=${userId}`);
+            }
+            if (_settings.rows[0].tmp_delivery_doc) {
+                await client.query(`UPDATE data.seller_settings SET 
+                    delivery_doc='${_settings.rows[0].tmp_delivery_doc}', tmp_delivery_doc=null WHERE 
+                    user_id=${userId}`);
+            }
+            if (_settings.rows[0].tmp_return_doc) {
+                await client.query(`UPDATE data.seller_settings SET 
+                    return_doc='${_settings.rows[0].tmp_return_doc}', tmp_return_doc=null WHERE 
+                    user_id=${userId}`);
+            }
+            if (_settings.rows[0].tmp_terms_doc) {
+                await client.query(`UPDATE data.seller_settings SET 
+                    terms_doc='${_settings.rows[0].tmp_terms_doc}', tmp_terms_doc=null WHERE 
+                    user_id=${userId}`);
             }
 
             // const query = `INSERT INTO data.seller_settings(user_id, privacy_link, terms_link, delivery_link, return_link)
@@ -2083,7 +2103,7 @@ class User {
      * @param userId
      * @returns {Promise<*|[{order_timer: string, free_shipping_timer: string, updated_at: string, user_id, created_at: string, free_shipping_status: string, type: string}]|{success: boolean, error: {code: number, message: string}}>}
      */
-    async removeSettingsFile(type, userId) {
+    async removeSettingsFile(type, tmpfile, userId) {
         const client = await pool.connect();
         try {
             const settingsQuery = await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
@@ -2095,11 +2115,22 @@ class User {
                     break;
             }
             // {/Users/viktoriakorogod/WEB/SolidSolution/Liveproshop.v0.01/BE/uploads/users/286/1710418057750-Policy.docx}
-            const queryUpdate = `
+            let queryUpdate;
+            if (tmpfile) {
+                queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            tmp_${type}_doc = null
+                         WHERE user_id=${userId};`;
+
+            } else {
+                queryUpdate = `
                         UPDATE data.seller_settings
                         SET
                             ${type}_doc = null
                          WHERE user_id=${userId};`;
+            }
+            console.log(queryUpdate);
             await client.query(queryUpdate);
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -2270,21 +2301,19 @@ class User {
                 if (copyFiles.length > 0) {
                     let fieldName = '';
                     if (type === 'delivery') {
-                        fieldName = 'delivery_doc';
+                        fieldName = 'tmp_delivery_doc';
                     } else if (type === 'return') {
-                        fieldName = 'return_doc';
+                        fieldName = 'tmp_return_doc';
                     } else if (type === 'policy') {
-                        fieldName = 'privacy_doc';
+                        fieldName = 'tmp_privacy_doc';
                     } else if (type === 'terms') {
-                        fieldName = 'terms_doc';
+                        fieldName = 'tmp_terms_doc';
                     }
                     const queryUpdate = `
                         UPDATE data.seller_settings
                         SET
-                            ${fieldName} = '{${copyFiles}}',
-                            doctype=false
+                            ${fieldName} = '{${copyFiles}}'
                          WHERE user_id=${userId};`;
-                    console.log(queryUpdate);
                     await client.query(queryUpdate);
                 }
             }
