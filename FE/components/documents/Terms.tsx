@@ -34,7 +34,7 @@ const TermsDocument: React.FC<any> = ({ title }) => {
             termsAndCondDataFiles.forEach((file: any) => {
                 formData.append('terms', file);
             });
-            dispatch(submitFormUploadAction(formData));
+            dispatch(submitFormUploadAction(formData, 'terms'));
         }
     }, [termsAndCondDataFiles]);
 

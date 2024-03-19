@@ -33,7 +33,7 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
             policyDataFiles.forEach((file: any) => {
                 formData.append('policy', file);
             });
-            dispatch(submitFormUploadAction(formData));
+            dispatch(submitFormUploadAction(formData, 'policy'));
         }
     }, [policyDataFiles]);
 

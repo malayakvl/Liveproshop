@@ -2107,13 +2107,13 @@ class User {
         const client = await pool.connect();
         try {
             const settingsQuery = await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
-            switch (type) {
-                case 'privacy':
-                    fs.unlink(`${settingsQuery.rows[0].privacy_doc}`,function(err){
-                        if(err) return console.log(err);
-                    });
-                    break;
-            }
+            // switch (type) {
+            //     case 'privacy':
+            //         fs.unlink(`${settingsQuery.rows[0].privacy_doc}`,function(err){
+            //             if(err) return console.log(err);
+            //         });
+            //         break;
+            // }
             // {/Users/viktoriakorogod/WEB/SolidSolution/Liveproshop.v0.01/BE/uploads/users/286/1710418057750-Policy.docx}
             let queryUpdate;
             if (tmpfile) {
@@ -2170,8 +2170,9 @@ class User {
                     const queryUpdate = `
                         UPDATE data.seller_settings
                         SET
-                            privacy_doc = '{${copyFiles}}'
+                            tmp_privacy_doc = '{${copyFiles}}'
                          WHERE user_id=${userId};`;
+                    console.log(queryUpdate);
                     await client.query(queryUpdate);
                 }
             }
@@ -2279,11 +2280,48 @@ class User {
         }
     }
 
+    async uploadSettingsNewDoc (filename, userId, type) {
+        const client = await pool.connect();
+        try {
+            let fieldName = '';
+            if (type === 'delivery') {
+                fieldName = 'tmp_delivery_doc';
+            } else if (type === 'return') {
+                fieldName = 'tmp_return_doc';
+            } else if (type === 'policy') {
+                fieldName = 'tmp_privacy_doc';
+            } else if (type === 'terms') {
+                fieldName = 'tmp_terms_doc';
+            }
+            const queryUpdate = `
+                        UPDATE data.seller_settings
+                        SET
+                            ${fieldName} = '{${filename}}'
+                         WHERE user_id=${userId};`;
+            console.log(queryUpdate)
+            await client.query(queryUpdate);
+            return true;
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
     async uploadSettingsDoc (dataFiles, userId, type) {
         const client = await pool.connect();
         try {
+
             const copyFiles = [];
-            const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
+            const sourceDir = `${process.env.DOWNLOAD_FOLDER}/users/${userId}`;
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}`;
             const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/users/${userId}`;
             if (!fs.existsSync(dirUpload)) {
@@ -2291,13 +2329,16 @@ class User {
             }
             if (dataFiles.length > 0) {
                 const promisesDocs = [];
+                console.log('here');
                 dataFiles.forEach(doc => {
-                    promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));
+                    console.log("DOC", doc);
+                    // promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));
                 });
                 await Promise.all(promisesDocs);
                 dataFiles.forEach(doc => {
                     copyFiles.push(`${dirDBUpload}/${doc}`);
                 })
+                console.log('Uploaded files', copyFiles)
                 if (copyFiles.length > 0) {
                     let fieldName = '';
                     if (type === 'delivery') {
@@ -2314,6 +2355,7 @@ class User {
                         SET
                             ${fieldName} = '{${copyFiles}}'
                          WHERE user_id=${userId};`;
+                    // console.log(queryUpdate)
                     await client.query(queryUpdate);
                 }
             }

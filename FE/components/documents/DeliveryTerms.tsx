@@ -33,7 +33,8 @@ const DeliveryDocument: React.FC<any> = ({ title }) => {
             deliveryDataFiles.forEach((file: any) => {
                 formData.append('delivery', file);
             });
-            dispatch(submitFormUploadAction(formData));
+            // dispatch(submitFormUploadAction(formData));
+            dispatch(submitFormUploadAction(formData, 'delivery'));
         }
     }, [deliveryDataFiles]);
 

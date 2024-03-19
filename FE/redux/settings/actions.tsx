@@ -64,12 +64,12 @@ export const submitFormLinkAction: any = createAction(
 );
 export const submitFormUploadAction: any = createAction(
     'settings/ADD_UPDATE_FILES_DATA',
-    async (data: any) =>
+    async (data: any, type = '') =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             return axios
-                .post(`${baseUrl}/update-file-settings`, data, {
+                .post(`${baseUrl}/update-file-settings?typedoc=${type}`, data, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }

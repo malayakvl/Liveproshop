@@ -33,7 +33,7 @@ const ReturnDocument: React.FC<any> = ({ title }) => {
             returnDataFiles.forEach((file: any) => {
                 formData.append('returnPolicy', file);
             });
-            dispatch(submitFormUploadAction(formData));
+            dispatch(submitFormUploadAction(formData, 'return'));
         }
     }, [returnDataFiles]);
 
