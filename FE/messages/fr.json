@@ -638,6 +638,6 @@
   "error_empty_settings_file": "Attention : vous devez ajouter au moins un élément - soit un document, soit un lien.",
   "Delivery Terms": "Conditions de livraison",
   "Return Policy": "Politique de retour",
-  "Select a document or a link.": "Sélectionnez un document ou un lien."
-
+  "Select a document or a link.": "Sélectionnez un document ou un lien.",
+  "Payment Settings": "Paramètres de paiement"
 }

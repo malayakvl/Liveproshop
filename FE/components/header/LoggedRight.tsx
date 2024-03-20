@@ -147,6 +147,21 @@ const LoggedRight: React.FC = () => {
                             )}
                             {user.role_id === 2 && !redirectToPlan && (
                                 <li>
+                                    <Link href="/payment-setting">
+                                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                        <a
+                                            role="presentation"
+                                            onClick={() => setShowProfileMenu(!showProfileMenu)}>
+                                            <i className="payment-settings" />
+                                            <span className="s-caption">
+                                                {t('Payment Settings')}
+                                            </span>
+                                        </a>
+                                    </Link>
+                                </li>
+                            )}
+                            {user.role_id === 2 && !redirectToPlan && (
+                                <li>
                                     <Link href="/documents">
                                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                         <a
