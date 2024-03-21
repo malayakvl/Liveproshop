@@ -6,6 +6,7 @@ import fs from 'fs';
 import unzipper from 'unzipper';
 import { trialSubscriptionEmail, unsubscriberFromEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
+import pool from "../models/connect.js";
 // import * as decompress from 'decompress'
 class UserController {
 
@@ -609,8 +610,11 @@ class UserController {
 
     async getSubscription(req, res) {
         if (req.user) {
-            const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id, req.user.is_trial);
-            // console.log('DATA SUBSCRIPTION', data);
+            // OLD VERSION
+            // const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id, req.user.is_trial);
+            // NEW VERSION
+            const data = await userModel.fetchSubscription(req.user, req.user.subscription_id, req.user.customer_id, req.user.is_trial);
+            // console.log('DATA SUBSCRIPTION PAYMENTS', data.subscription.paymentMethods);
             if (data.subscription) {
                 return res.status(200).json({
                     subscription: data.subscription,
@@ -720,6 +724,26 @@ class UserController {
     //         return res.status(402).json('Something wend wrong');
     //     }
     // }
+
+    async cancelSubscription(req, res) {
+        if (req.user) {
+            const data = await userModel.cancelSubscription(req.user, req.body.planId);
+            if (data.success) {
+                return res.status(200).json({
+                    success: data.success
+                });
+            } else {
+                return res.status(402).json({
+                    success: data.success,
+                    error: data.error
+                });
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+
+    }
+
 
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
@@ -862,6 +886,8 @@ class UserController {
     async unsubscribe (req, res) {
         if (req.user) {
             // send email to support about unsubscribe
+            await userModel.cancelSubscription(req.user);
+
             const settings = paymentPlanModel.fetchSettings();
             const mail = await unsubscriberFromEmail(req.user.email, "User want unsubscribe from plan", 'fr');
 

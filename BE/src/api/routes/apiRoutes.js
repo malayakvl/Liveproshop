@@ -109,7 +109,8 @@ apiRoutes.post('/profile/add-payment-method-from-subscription', UserController.a
 apiRoutes.post('/profile/add-payment-method-after-registration', UserController.addPaymentMethodAfterRegistration);
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
 apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
-apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
+// apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
+apiRoutes.get('/profile/unsubscription', UserController.cancelSubscription);
 apiRoutes.get('/profile/generate-stripe-invoice', UserController.generateInvoice);
 apiRoutes.route('/profile/order-comment')
     .get(OrderController.fetchOrderByComment);
