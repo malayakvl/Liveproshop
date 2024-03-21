@@ -252,7 +252,10 @@ const OrderSummary = () => {
                                     {t('Terms of Service')}
                                 </a>
                             )}{' '}
-                            and{' '}
+                            {order.seller_settings.privacy_doc &&
+                                order.seller_settings.privacy_doc &&
+                                t('and')}
+                            &nbsp;
                             {order.seller_settings.privacy_doc && (
                                 <a
                                     href={`${order.seller_settings.privacy_doc}`}

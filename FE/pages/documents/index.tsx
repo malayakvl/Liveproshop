@@ -64,21 +64,23 @@ export default function Index({ session }: { session: any }) {
                 {settingsValues && (
                     <>
                         <div>
-                            {showErrorBlock && (
-                                <div className="alert-danger mb-6">
-                                    {t('Fill in at least one field')}
-                                </div>
-                            )}
-                            {showMatchErrorBlock && (
-                                <div className="alert-danger mb-6">
-                                    {t('Wrong url format for link')}
-                                </div>
-                            )}
-                            {showErrorDublicateBlock && (
-                                <div className="alert-danger mb-6">
-                                    {t('Select a document or a link.')}
-                                </div>
-                            )}
+                            <div id="errorBlock">
+                                {showErrorBlock && (
+                                    <div className="alert-danger mb-6">
+                                        {t('Fill in at least one field')}
+                                    </div>
+                                )}
+                                {showMatchErrorBlock && (
+                                    <div className="alert-danger mb-6">
+                                        {t('Wrong url format for link')}
+                                    </div>
+                                )}
+                                {showErrorDublicateBlock && (
+                                    <div className="alert-danger mb-6">
+                                        {t('Select a document or a link.')}
+                                    </div>
+                                )}
+                            </div>
                             <Formik
                                 enableReinitialize
                                 initialValues={settingsValues}
@@ -104,6 +106,13 @@ export default function Index({ session }: { session: any }) {
                                             !settingsValues.return_doc
                                         ) {
                                             setShowErrorBlock(true);
+                                            if (document.getElementById('errorBlock')) {
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                document
+                                                    .getElementById('errorBlock')
+                                                    .scrollIntoView();
+                                            }
                                         } else {
                                             setShowErrorBlock(false);
                                         }

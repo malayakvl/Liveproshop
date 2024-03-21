@@ -190,24 +190,6 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 </a>
                                             </Link>
                                         </li>
-                                        {user.role_id === 1 && !redirectToPlan && (
-                                            <li>
-                                                <Link href="/account/plan">
-                                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                                    <a
-                                                        role="presentation"
-                                                        onClick={() => {
-                                                            setShowProfileMenu(!showProfileMenu);
-                                                            toggleSidebar();
-                                                        }}>
-                                                        <i className="plan" />
-                                                        <span className="s-caption">
-                                                            {t('My Plan')}
-                                                        </span>
-                                                    </a>
-                                                </Link>
-                                            </li>
-                                        )}
                                         {user.role_id === 2 && !redirectToPlan && (
                                             <li>
                                                 <Link href="/stores">
@@ -246,7 +228,7 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                         )}
                                         {user.role_id === 2 && !redirectToPlan && (
                                             <li>
-                                                <Link href="/documents">
+                                                <Link href="/account/plan">
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                     <a
                                                         role="presentation"
@@ -262,7 +244,26 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 </Link>
                                             </li>
                                         )}
-                                        {user.role_id === 1 && redirectToPlan && (
+                                        {user.role_id === 2 && !redirectToPlan && (
+                                            <li>
+                                                <Link href="/account/plan">
+                                                    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                                    <a
+                                                        role="presentation"
+                                                        onClick={() => {
+                                                            setShowProfileMenu(!showProfileMenu);
+                                                            toggleSidebar();
+                                                        }}>
+                                                        <i className="plan" />
+                                                        <span className="s-caption">
+                                                            {t('My Plan')}
+                                                        </span>
+                                                    </a>
+                                                </Link>
+                                            </li>
+                                        )}
+
+                                        {user.role_id === 2 && redirectToPlan && (
                                             <li>
                                                 <Link href="/pricing">
                                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
@@ -280,24 +281,6 @@ const LoggedRightMobile: React.FC<Props> = (type) => {
                                                 </Link>
                                             </li>
                                         )}
-                                        <li>
-                                            <Link href="/payment-setting">
-                                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                                <a
-                                                    role="presentation"
-                                                    onClick={() => {
-                                                        setShowProfileMenu(!showProfileMenu);
-                                                        toggleSidebar();
-                                                    }}>
-                                                    <i className="settings-pay" />
-                                                    <span
-                                                        className="s-caption"
-                                                        style={{ whiteSpace: 'normal' }}>
-                                                        {t('My payment settings')}
-                                                    </span>
-                                                </a>
-                                            </Link>
-                                        </li>
                                         <li>
                                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                             <Link href="/support">

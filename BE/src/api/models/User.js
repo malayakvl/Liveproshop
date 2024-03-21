@@ -1903,17 +1903,32 @@ class User {
 
     async updateSubscriptionPlan(user, planId) {
         try {
+            const periodStart =  new Date();
+            const timestampStart = periodStart.getTime();
             // const paymentMethods = await  stripe.paymentMethods.list({ customer: user.customer_id, type: 'card' });
             const subscription = await stripe.subscriptions.retrieve(user.subscription_id);
-            await stripe.subscriptions.update(user.subscription_id, {
-                cancel_at_period_end: false,
-                proration_behavior: 'create_prorations',
-                items: [{
-                    id: subscription.items.data[0].id,
-                    price: planId,
-                }]
+            console.log({
+                id: subscription.items.data[0].id,
+                price: planId,
             });
-            return { success: true, error: null };
+            try {
+                await stripe.subscriptions.update(user.subscription_id, {
+                    cancel_at_period_end: false,
+                    proration_behavior: 'create_prorations',
+                    billing_cycle_anchor: 'now',
+                    // proration_date: timestampStart,
+                    items: [{
+                        id: subscription.items.data[0].id,
+                        price: 'price_1KjNVmDBSh7ykoyWOD6K7Fci',
+                    }]
+                });
+                return { success: true, error: null };
+
+            } catch(e) {
+                console.log(e.message)
+                return { success: false, error: e.message };
+            }
+            // return { success: true, error: null };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

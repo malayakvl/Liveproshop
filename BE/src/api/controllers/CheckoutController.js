@@ -37,6 +37,7 @@ class CheckoutController {
         let termsLink = '';
         let returnLink = '';
         let deliveryLink = '';
+        console.log(sellerSettingsData[0])
         if (sellerSettingsData[0].privacy_doc || sellerSettingsData[0].privacy_link) {
             if (sellerSettingsData[0].privacy_doc) {
                 privacyLink = process.env.API_URL + `/uploads/users/${orderData.order.seller_id}/documents/${sellerSettingsData[0].privacy_doc}`;
@@ -47,7 +48,7 @@ class CheckoutController {
                     privacyLink = 'https://'+sellerSettingsData[0].privacy_link
                 }
             }
-            termsLink = privacyLink;
+            // termsLink = privacyLink;
             delete sellerSettingsData[0].privacy_link;
         }
         if (sellerSettingsData[0].terms_doc || sellerSettingsData[0].terms_link) {
@@ -92,10 +93,12 @@ class CheckoutController {
             }
             delete sellerSettingsData[0].return_link;
         }
-        sellerSettingsData[0].privacy_doc = privacyLink ? privacyLink : (termsLink ? termsLink : deliveryLink ? deliveryLink : returnLink);
-        sellerSettingsData[0].terms_doc = termsLink ? termsLink : (privacyLink ? privacyLink : deliveryLink ? deliveryLink : returnLink);
+        // console.log('Terms LINK', termsLink)
+        sellerSettingsData[0].privacy_doc = privacyLink ? privacyLink : '';
+        sellerSettingsData[0].terms_doc = termsLink ? termsLink : '';
         sellerSettingsData[0].delivery_doc = deliveryLink ? deliveryLink : '';
         sellerSettingsData[0].return_doc = returnLink ? returnLink : '';
+        // console.log(sellerSettingsData[0]);
 
         orderData.order.seller_settings = sellerSettingsData[0];
         return res.status(200).json({
