@@ -81,6 +81,16 @@ const SidebarShipping = function () {
                     </a>
                 </Link>
             </li>
+            <li className={`submenu ${currRoute === '/payment-setting' ? 'active' : ''}`}>
+                <Link href={'/payment-setting'}>
+                    <a>
+                        <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
+                        <span className="s-caption" style={{ whiteSpace: 'normal' }}>
+                            {t('Payment Settings')}
+                        </span>
+                    </a>
+                </Link>
+            </li>
             {user.role_id === 3 && (
                 <li className={`submenu ${currRoute === 'shipping/add-method' ? 'active' : ''}`}>
                     <Link href={'/shipping/add-method'}>

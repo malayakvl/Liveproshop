@@ -17,8 +17,14 @@ const ReturnDocument: React.FC<any> = ({ title }) => {
     const returnDataFiles = useSelector(uploadedReturnFilesSelector);
     const settingsValues = useSelector(itemSelector);
     const user = useSelector(userSelector);
-    const removeFile = () => {
-        dispatch(removeUploadedReturnFile());
+    const removeFile = (type = '', ext = '') => {
+        dispatch(removeUploadedReturnFile(type, ext));
+    };
+
+    const showUploadedFileExt = () => {
+        const regExpDelBrackets = /[({})]/g;
+        const fullReplace = `return.`;
+        return settingsValues.return_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
     };
 
     useEffect(() => {
@@ -33,7 +39,7 @@ const ReturnDocument: React.FC<any> = ({ title }) => {
             returnDataFiles.forEach((file: any) => {
                 formData.append('returnPolicy', file);
             });
-            dispatch(submitFormUploadAction(formData));
+            dispatch(submitFormUploadAction(formData, 'return'));
         }
     }, [returnDataFiles]);
 
@@ -57,25 +63,45 @@ const ReturnDocument: React.FC<any> = ({ title }) => {
                         <h4>Uploaded Files</h4>
                         <ul style={{ minWidth: '300px', marginLeft: '-10px' }}>
                             {returnDataFiles.map((_file: File) => (
-                                <li key={_file.lastModified} style={{ minWidth: '300px' }}>
-                                    <span>{_file.name}</span> <em>{_file.size} bytes</em>{' '}
+                                <li
+                                    key={_file.lastModified}
+                                    style={{
+                                        minWidth: '300px',
+                                        background: '#d5efca',
+                                        display: 'block'
+                                    }}>
+                                    <span style={{ minWidth: '300px' }}>
+                                        New: delivery.
+                                        {_file.name.substr(_file.name.lastIndexOf('.') + 1)}
+                                    </span>{' '}
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile();
+                                            removeFile(
+                                                'tmp',
+                                                _file.name.substr(_file.name.lastIndexOf('.') + 1)
+                                            );
                                         }}
                                     />
                                 </li>
                             ))}
-                            {settingsValues.return_doc && !returnDataFiles.length && (
-                                <li key="ex_policy" style={{ minWidth: '300px' }}>
-                                    <span>{showUploadedFile()}</span>
+                            {settingsValues.return_doc && (
+                                <li
+                                    key="ex_policy"
+                                    style={{
+                                        minWidth: '300px',
+                                        background: '#e7ebf3',
+                                        display: 'block'
+                                    }}>
+                                    <span style={{ minWidth: '300px' }}>
+                                        {settingsValues.return_doc}{' '}
+                                    </span>
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile();
+                                            removeFile('old', showUploadedFileExt());
                                         }}
                                     />
                                 </li>

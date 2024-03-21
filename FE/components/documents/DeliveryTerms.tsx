@@ -17,8 +17,14 @@ const DeliveryDocument: React.FC<any> = ({ title }) => {
     const deliveryDataFiles = useSelector(uploadedDeliveryFilesSelector);
     const settingsValues = useSelector(itemSelector);
     const user = useSelector(userSelector);
-    const removeFile = (type = '') => {
-        dispatch(removeUploadedDeliveryFile(type));
+    const removeFile = (type = '', ext = '') => {
+        dispatch(removeUploadedDeliveryFile(type, ext));
+    };
+
+    const showUploadedFileExt = () => {
+        const regExpDelBrackets = /[({})]/g;
+        const fullReplace = `delivery.`;
+        return settingsValues.delivery_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
     };
 
     useEffect(() => {
@@ -33,7 +39,8 @@ const DeliveryDocument: React.FC<any> = ({ title }) => {
             deliveryDataFiles.forEach((file: any) => {
                 formData.append('delivery', file);
             });
-            dispatch(submitFormUploadAction(formData));
+            // dispatch(submitFormUploadAction(formData));
+            dispatch(submitFormUploadAction(formData, 'delivery'));
         }
     }, [deliveryDataFiles]);
 
@@ -57,25 +64,45 @@ const DeliveryDocument: React.FC<any> = ({ title }) => {
                         <h4>Uploaded Files</h4>
                         <ul style={{ minWidth: '300px', marginLeft: '-10px' }}>
                             {deliveryDataFiles.map((_file: File) => (
-                                <li key={_file.lastModified} style={{ minWidth: '300px' }}>
-                                    <span>{_file.name}</span> <em>{_file.size} bytes</em>{' '}
+                                <li
+                                    key={_file.lastModified}
+                                    style={{
+                                        minWidth: '300px',
+                                        background: '#d5efca',
+                                        display: 'block'
+                                    }}>
+                                    <span style={{ minWidth: '300px' }}>
+                                        New: delivery.
+                                        {_file.name.substr(_file.name.lastIndexOf('.') + 1)}
+                                    </span>{' '}
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile('tmp');
+                                            removeFile(
+                                                'tmp',
+                                                _file.name.substr(_file.name.lastIndexOf('.') + 1)
+                                            );
                                         }}
                                     />
                                 </li>
                             ))}
-                            {settingsValues.delivery_doc && !deliveryDataFiles.length && (
-                                <li key="ex_policy" style={{ minWidth: '300px' }}>
-                                    <span>{showUploadedFile()}</span>
+                            {settingsValues.delivery_doc && (
+                                <li
+                                    key="ex_policy"
+                                    style={{
+                                        minWidth: '300px',
+                                        background: '#e7ebf3',
+                                        display: 'block'
+                                    }}>
+                                    <span style={{ minWidth: '300px' }}>
+                                        {settingsValues.delivery_doc}{' '}
+                                    </span>
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile();
+                                            removeFile('old', showUploadedFileExt());
                                         }}
                                     />
                                 </li>

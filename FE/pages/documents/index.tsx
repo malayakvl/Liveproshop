@@ -59,26 +59,28 @@ export default function Index({ session }: { session: any }) {
                     <h1 className="float-left">{t('My Documents')}</h1>
                     <div className="clear-both" />
                 </div>
+                <div className="alert-info mb-3">{t('error_empty_settings_file')}</div>
+
                 {settingsValues && (
                     <>
                         <div>
-                            {showErrorBlock && (
-                                <div className="alert-danger mb-6">
-                                    {t('Fill in at least one field')}
-                                </div>
-                            )}
-                            {showMatchErrorBlock && (
-                                <div className="alert-danger mb-6">
-                                    {t('Wrong url format for link')}
-                                </div>
-                            )}
-                            {showErrorDublicateBlock && (
-                                <div className="alert-danger mb-6">
-                                    {t(
-                                        'Please note - you need to add at least one item - either a document or a link.'
-                                    )}
-                                </div>
-                            )}
+                            <div id="errorBlock">
+                                {showErrorBlock && (
+                                    <div className="alert-danger mb-6">
+                                        {t('Fill in at least one field')}
+                                    </div>
+                                )}
+                                {showMatchErrorBlock && (
+                                    <div className="alert-danger mb-6">
+                                        {t('Wrong url format for link')}
+                                    </div>
+                                )}
+                                {showErrorDublicateBlock && (
+                                    <div className="alert-danger mb-6">
+                                        {t('Select a document or a link.')}
+                                    </div>
+                                )}
+                            </div>
                             <Formik
                                 enableReinitialize
                                 initialValues={settingsValues}
@@ -97,7 +99,23 @@ export default function Index({ session }: { session: any }) {
                                         deliveryDataFiles.length == 0 &&
                                         returnDataFiles.length == 0
                                     ) {
-                                        setShowErrorBlock(true);
+                                        if (
+                                            !settingsValues.privacy_doc &&
+                                            !settingsValues.delivery_doc &&
+                                            !settingsValues.terms_doc &&
+                                            !settingsValues.return_doc
+                                        ) {
+                                            setShowErrorBlock(true);
+                                            if (document.getElementById('errorBlock')) {
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                document
+                                                    .getElementById('errorBlock')
+                                                    .scrollIntoView();
+                                            }
+                                        } else {
+                                            setShowErrorBlock(false);
+                                        }
                                     } else if (
                                         (values.privacy_link && policyDataFiles.length > 0) ||
                                         (values.terms_link && termsDataFiles.length > 0) ||
