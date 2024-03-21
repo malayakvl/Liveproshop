@@ -99,6 +99,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     };
 
+    console.log(subscriptionInfo);
+
     const validationSchema = Yup.object({
         card_number: Yup.string()
             .strict(true)
@@ -147,25 +149,24 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
-                    <h1>Subscription Plan</h1>
+                    <h1>{t('Subscription Plan')}</h1>
                     <div className="clear-both" />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 mt-10">
                     <div className="flex flex-wrap justify-between">
-                        <div className="flex-auto lg:flex-1">
-                            <div className="text-2xl font-bold text-gray-350 mb-6">
-                                {t('Exist Payment Method')}
-                            </div>
-                            {subscriptionInfo && (
+                        {subscriptionInfo && (
+                            <div className="flex-auto lg:flex-1">
+                                <div className="text-2xl font-bold text-gray-350 mb-6">
+                                    {t('Exist Payment Method')}
+                                </div>
                                 <table className="w-full float-table">
                                     <tbody>
                                         {subscriptionInfo.paymentMethods.map((method: any) => (
-                                            <tr key={method.id} className="py-2">
+                                            <tr key={method.id}>
                                                 <td>
-                                                    ****{method.card.last4}
-                                                    {method.card.brand}
+                                                    ****{method.card.last4} {method.card.brand}
                                                 </td>
                                                 <td>
                                                     {method.card.exp_month}/{method.card.exp_year}
@@ -194,33 +195,70 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                         <span>Default</span>
                                                     )}
                                                 </td>
-                                                <td
-                                                    style={{
-                                                        paddingBottom: '10px'
-                                                    }}>
-                                                    {method.id !==
-                                                        subscriptionInfo.defaultPayment && (
-                                                        <span
-                                                            style={{ paddingTop: '2px' }}
-                                                            className="cursor-pointer disabled-btn-small h-[30px] pt-[1px] mt-[-5px]"
-                                                            role="presentation"
-                                                            onClick={() =>
-                                                                dispatch(
-                                                                    stripeDeletetPaymentAction(
-                                                                        method.id
-                                                                    )
-                                                                )
-                                                            }>
-                                                            Delete
-                                                        </span>
-                                                    )}
-                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            )}
-                        </div>
+                                {/*    {subscriptionInfo.paymentMethods.map((method: any) => (*/}
+                                {/*        <tr key={method.id} className="py-2">*/}
+                                {/*            <td>*/}
+                                {/*                ****{method.card.last4}*/}
+                                {/*                {method.card.brand}*/}
+                                {/*            </td>*/}
+                                {/*            <td>*/}
+                                {/*                {method.card.exp_month}/{method.card.exp_year}*/}
+                                {/*            </td>*/}
+                                {/*            <td*/}
+                                {/*                style={{*/}
+                                {/*                    paddingBottom: '10px'*/}
+                                {/*                }}>*/}
+                                {/*                {method.id !==*/}
+                                {/*                    subscriptionInfo.defaultPayment && (*/}
+                                {/*                        <span*/}
+                                {/*                            className=" cursor-pointer gradient-btn-small whitespace-nowrap"*/}
+                                {/*                            role="presentation"*/}
+                                {/*                            onClick={() =>*/}
+                                {/*                                dispatch(*/}
+                                {/*                                    stripeDefaultPaymentAction(*/}
+                                {/*                                        method.id*/}
+                                {/*                                    )*/}
+                                {/*                                )*/}
+                                {/*                            }>*/}
+                                {/*                                {t('Setup Default')}*/}
+                                {/*                            </span>*/}
+                                {/*                    )}*/}
+                                {/*                {method.id ===*/}
+                                {/*                    subscriptionInfo.defaultPayment && (*/}
+                                {/*                        <span>Default</span>*/}
+                                {/*                    )}*/}
+                                {/*            </td>*/}
+                                {/*            <td*/}
+                                {/*                style={{*/}
+                                {/*                    paddingBottom: '10px'*/}
+                                {/*                }}>*/}
+                                {/*                {method.id !==*/}
+                                {/*                    subscriptionInfo.defaultPayment && (*/}
+                                {/*                        <span*/}
+                                {/*                            style={{paddingTop: '2px'}}*/}
+                                {/*                            className="cursor-pointer disabled-btn-small h-[30px] pt-[1px] mt-[-5px]"*/}
+                                {/*                            role="presentation"*/}
+                                {/*                            onClick={() =>*/}
+                                {/*                                dispatch(*/}
+                                {/*                                    stripeDeletetPaymentAction(*/}
+                                {/*                                        method.id*/}
+                                {/*                                    )*/}
+                                {/*                                )*/}
+                                {/*                            }>*/}
+                                {/*                                Delete*/}
+                                {/*                            </span>*/}
+                                {/*                    )}*/}
+                                {/*            </td>*/}
+                                {/*        </tr>*/}
+                                {/*    ))}*/}
+                                {/*    </tbody>*/}
+                                {/*</table>*/}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 mt-10 ">
@@ -269,8 +307,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                 {!subscriptionInfo.is_fake && (
                                     <tr>
                                         <td>
-                                            {subscriptionInfo.DBName}
-                                            <br />
+                                            {t(subscriptionInfo.dbUserPlan.name)}
                                             <a
                                                 className="cursor-pointer text-xs gradient-btn-small block max-w-max mt-5"
                                                 href={subscriptionInfo.invoicePdf}
@@ -282,50 +319,33 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                         <td style={{ textAlign: 'center' }}>
                                             <span
                                                 className={`${subscriptionInfo.status}-subscription`}>
-                                                {subscriptionInfo.status}
+                                                {t(subscriptionInfo.status)}
                                             </span>
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
-                                            {moment
-                                                .unix(subscriptionInfo.created)
-                                                .format('DD.MM.YYYY')}
-                                        </td>
-                                        <td style={{ textAlign: 'center' }}>{preparePeriod()}</td>
-                                        <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
-                                        <td>
-                                            {subscriptionInfo.is_trial && (
-                                                <span
-                                                    className="cursor-pointer gradient-btn-small block max-w-max"
-                                                    role="presentation"
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            showChangeSubscriptionFormAction(true)
-                                                        )
-                                                    }>
-                                                    {t('Change Plan')}
-                                                </span>
-                                            )}
-                                            {!subscriptionInfo.is_trial && (
-                                                <span
-                                                    className="cursor-pointer gradient-btn-small block max-w-max"
-                                                    role="presentation"
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            showChangeSubscriptionFormAction(true)
-                                                        )
-                                                    }>
-                                                    {t('Change Plan')}
-                                                </span>
-                                            )}
+                                            {subscriptionInfo.viewCreate}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
+                                            {subscriptionInfo.periodStart} -{' '}
+                                            {subscriptionInfo.periodEnd}
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            {subscriptionInfo.daysLeft}
+                                        </td>
+                                        <td style={{ textAlign: 'right' }}>
                                             <span
+                                                className="cursor-pointer gradient-btn-small inline-block max-w-max"
                                                 role="presentation"
-                                                className="cursor-pointer border border-gray-300 text-gray-300 py-1.5 rounded-lg px-1 inline-block"
-                                                onClick={() => {
-                                                    dispatch(unsubscribeAction());
-                                                }}>
-                                                {t('Unsubscribe')}
+                                                onClick={() =>
+                                                    dispatch(showChangeSubscriptionFormAction(true))
+                                                }>
+                                                {t('Change Plan')}
+                                            </span>
+                                            <span
+                                                className="cursor-pointer disabled-btn-small inline-block ml-4"
+                                                role="presentation"
+                                                onClick={() => dispatch(unsubscribeAction(true))}>
+                                                {t('Cancel')}
                                             </span>
                                         </td>
                                     </tr>
@@ -382,7 +402,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     <p>{t('No Payment info yet')}</p>
                 )}
             </div>
-            <ChangeSubscription locale={locale} />
+            {subscriptionInfo?.id && <ChangeSubscription locale={locale} />}
         </>
     );
 }

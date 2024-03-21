@@ -593,8 +593,16 @@ class User {
                         payment_behavior: 'default_incomplete',
                         expand: ['latest_invoice.payment_intent'],
                     };
-                    subscriptionObject.trial_period_days = 30;
-                    const subscription = await stripe.subscriptions.create(subscriptionObject);
+                    const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
+                    // update subscription
+                    const subscriptionUpdate = await stripe.subscriptions.update(
+                        'sub_49ty4767H20z6a',
+                        {
+                            payment_settings: {
+                                payment_method_types: ['card', 'customer_balance'],
+                            },
+                        }
+                    );
 
                     // if subscription created add record to DB
                     if (subscription?.id) {
@@ -760,7 +768,7 @@ class User {
 
     async setupDefaultPayment(user, paymentId) {
         try {
-            await stripe.customers.update(
+            const resChangeMethod = await stripe.customers.update(
                 user.customer_id,
                 {
                     invoice_settings: {
@@ -768,7 +776,8 @@ class User {
                     }
                 }
             );
-            return this.getSubscriptionInfo(user.subscription_id, user.customer_id);
+console.log("METHOD RESULT", resChangeMethod);
+            return this.fetchSubscription(user.subscription_id, user.customer_id);
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -781,11 +790,198 @@ class User {
         }
     }
 
+    // daysBetween(StartDate, EndDate) {
+    //     // The number of milliseconds in all UTC days (no DST)
+    //     const oneDay = 1000 * 60 * 60 * 24;
+    //
+    //     // A day in UTC always lasts 24 hours (unlike in other time formats)
+    //     const start = Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate());
+    //     const end = Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate());
+    //
+    //     // so it's safe to divide by 24 hours
+    //     return (start - end) / oneDay;
+    // }
+
+    async fetchSubscription(user, subscriptionId, customerId, isTrial = false) {
+        const client = await pool.connect();
+        try {
+            let subscription;
+            const currentSubscription = await stripe.subscriptions.retrieve(
+                subscriptionId
+            );
+            const paymentMethods = await stripe.customers.listPaymentMethods(
+                customerId,
+                {type: 'card'}
+            );
+            const customer = await stripe.customers.retrieve(
+                customerId
+            );
+            currentSubscription.paymentMethods = paymentMethods.data;
+// console.log("Customer", customer);
+// console.log("Pyament Methods", paymentMethods.data);
+
+            // getting all plans
+            const dbPlansRes = await client.query('SELECT * FROM data.subscription_plans WHERE stripe_id IS NOT NULL');
+            currentSubscription.dbPlans = dbPlansRes.rows;
+            // getting current plan
+            if (currentSubscription.plan.id) {
+                console.log(`SELECT * FROM data.subscription_plans WHERE stripe_id = '${currentSubscription.plan.id}'`);
+                const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id = '${currentSubscription.plan.id}'`);
+                currentSubscription.dbUserPlan = dbPlan.rows[0];
+            }
+
+            const endDate = new Date(currentSubscription.current_period_end * 1000);
+            const startDate = new Date(currentSubscription.current_period_start * 1000);
+            currentSubscription.viewCreate = new Date(currentSubscription.created * 1000).toLocaleDateString();
+            currentSubscription.periodStart = startDate.toLocaleDateString();
+            currentSubscription.periodEnd = endDate.toLocaleDateString();
+
+            const ONE_DAY = 1000 * 60 * 60 * 24;
+            const differenceMs = Math.abs(new Date(currentSubscription.current_period_end * 1000) - new Date(currentSubscription.current_period_start * 1000));
+            currentSubscription.daysLeft = Math.round(differenceMs / ONE_DAY) - 1;
+
+            currentSubscription.customer = customer;
+            currentSubscription.defaultPayment = currentSubscription.customer.invoice_settings.default_payment_method;
+            let invoices = await stripe.invoices.list({
+                limit: 3,
+                customer: customerId
+            });
+            if (!invoices.data.length ) {
+                await stripe.invoices.create({
+                    customer: user.customer_id,
+                });
+                invoices = await stripe.invoices.list({
+                    limit: 1,
+                    customer: user.curstomer_id
+                });
+            }
+            let invoicePdf = '';
+            invoices.data.forEach(_invoice => {
+                if (_invoice.invoice_pdf) {
+                    invoicePdf = _invoice.invoice_pdf;
+                    return;
+                }
+            });
+            currentSubscription.invoicePdf = invoicePdf;
+
+
+            return { subscription: currentSubscription };
+
+// if (customerId.includes('fake_subscription') || isTrial) {
+            //     // getting subscription fron db
+            //     const subscriptionRow = await client.query(`SELECT * FROM data.subscriptions WHERE customer_id='${customerId}'`);
+            //     const subscriptionFakeData = subscriptionRow.rows[0];
+            //     subscriptionFakeData.is_fake = true;
+            //     subscriptionFakeData.paymentMethods = [];
+            //     if (customerId.includes('cus_')) {
+            //         const paymentMethods = await stripe.customers.listPaymentMethods(
+            //             customerId,
+            //             {type: 'card'}
+            //         );
+            //         const customer = await stripe.customers.retrieve(
+            //             customerId
+            //         );
+            //         subscriptionFakeData.defaultPayment = customer.invoice_settings.default_payment_method;
+            //         subscriptionFakeData.defaultPlanId = 1;
+            //         subscriptionFakeData.dbPlans = dbPlansRes.rows;
+            //         subscriptionFakeData.paymentMethods = paymentMethods.data;
+            //         subscriptionFakeData.paymentPlanList = await paymentPlanModel.fetchItems();
+            //
+            //         const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionFakeData.plan_id}'`);
+            //         subscriptionFakeData.plan = resSubscription.rows[0];
+            //     }
+            //     return { subscription: subscriptionFakeData };
+            // } else if (customerId.includes('cus_')) {
+            //     console.log('here');
+            //     const paymentMethods = await stripe.customers.listPaymentMethods(
+            //         customerId,
+            //         {type: 'card'}
+            //     );
+            //     const customer = await stripe.customers.retrieve(
+            //         customerId
+            //     );
+            //     subscriptionFakeData.defaultPayment = customer.invoice_settings.default_payment_method;
+            //     subscriptionFakeData.defaultPlanId = 1;
+            //     subscriptionFakeData.dbPlans = dbPlansRes.rows;
+            //     subscriptionFakeData.paymentMethods = paymentMethods.data;
+            //     const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionId}'`);
+            //     subscriptionFakeData.plan = resSubscription.rows[0];
+            //     // subscriptionFakeData.plan.id = "dsadasd";
+            //     // console.log("FAKE SUBSCRIPTION WITH REAL STRIPE CUSTOMER", subscriptionFakeData);
+            // }
+            // else {
+            //     subscription = await stripe.subscriptions.retrieve(
+            //         subscriptionId
+            //     );
+            // }
+            // const paymentMethods = await stripe.customers.listPaymentMethods(
+            //     customerId,
+            //     {type: 'card'}
+            // );
+            // const customer = await stripe.customers.retrieve(
+            //     customerId
+            // );
+            // const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${subscription.plan.id}'`);
+            // subscription.DBName = resSubscription.rows.length ? resSubscription.rows[0].name : '';
+            // subscription.paymentMethods = paymentMethods.data;
+            // subscription.defaultPayment = customer.invoice_settings.default_payment_method;
+            // subscription.defaultPlanId = subscription.items.data[0].plan.id;
+            // subscription.dbPlans = dbPlansRes.rows;
+            //
+            // // const paymentPlansInfo = await paymentPlanModel.fetchItems();
+            // subscription.paymentPlanList = await paymentPlanModel.fetchItems();
+            //
+            // let invoices = await stripe.invoices.list({
+            //     limit: 3,
+            //     customer: customerId
+            // });
+            // if (!invoices.data.length ) {
+            //     await stripe.invoices.create({
+            //         customer: user.customer_id,
+            //     });
+            //     invoices = await stripe.invoices.list({
+            //         limit: 1,
+            //         customer: user.curstomer_id
+            //     });
+            // }
+            // let invoicePdf = '';
+            // invoices.data.forEach(_invoice => {
+            //     if (_invoice.invoice_pdf) {
+            //         invoicePdf = _invoice.invoice_pdf;
+            //         return;
+            //     }
+            // });
+            // subscription.invoicePdf = invoicePdf;
+            // return { subscription: subscription };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'User[getSubscriptionInfo]:',
+                    { message: e.message }
+                );
+            }
+            return { subscription: null };
+        }
+    }
+
+
+
     async getSubscriptionInfo(subscriptionId, customerId, isTrial = false) {
         const client = await pool.connect();
         try {
             const dbPlansRes = await client.query('SELECT * FROM data.subscription_plans WHERE stripe_id IS NOT NULL');
             let subscription;
+            // console.log(dbPlansRes.rows);
+            const stripeSubscription = await stripe.subscriptions.retrieve(
+                subscriptionId
+            );
+            const nDate = new Date(stripeSubscription.current_period_start * 1000);
+            console.log(stripeSubscription.current_period_start, nDate);
+            console.log(customerId);
+
+
+
             if (customerId.includes('fake_subscription') || isTrial) {
                 // getting subscription fron db
                 const subscriptionRow = await client.query(`SELECT * FROM data.subscriptions WHERE customer_id='${customerId}'`);
@@ -810,7 +1006,8 @@ class User {
                     subscriptionFakeData.plan = resSubscription.rows[0];
                 }
                 return { subscription: subscriptionFakeData };
-            } else if (isTrial && customerId.includes('cus_')) {
+            } else if (customerId.includes('cus_')) {
+                console.log('here');
                 const paymentMethods = await stripe.customers.listPaymentMethods(
                     customerId,
                     {type: 'card'}
@@ -1898,37 +2095,97 @@ class User {
             }
             return { success: false, error: { code: 404, message: 'Cannot add payment method to customer' } };
         }
+    }
 
+    async cancelSubscription(user) {
+        const client = await pool.connect();
+        const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
+        const customerId = dbSubscriptionInfo.rows[0].customer_id;
+        const subscription = await stripe.subscriptions.retrieve(user.subscription_id);
+        const upcomingInvoice = await stripe.invoices.retrieveUpcoming({
+            customer: subscription.customer,
+            subscription: subscription.id
+        });
+        // find prorated amount
+        const paymentIntents = await stripe.paymentIntents.list({
+            limit: 3,
+            customer: subscription.customer,
+        });
+        const paymentIntent = paymentIntents.data[0].id;
+        const amountRemaining = upcomingInvoice.amount_remaining;
+        console.log('amountRemaining', amountRemaining)
+
+        return { success: true, error: null };
     }
 
     async updateSubscriptionPlan(user, planId) {
+        const client = await pool.connect();
         try {
-            const periodStart =  new Date();
-            const timestampStart = periodStart.getTime();
+            const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
+            const customerId = dbSubscriptionInfo.rows[0].customer_id;
+
+            // REFUNDING METHANIZM
+            // const periodStart =  new Date();
+            // const timestampStart = periodStart.getTime();
             // const paymentMethods = await  stripe.paymentMethods.list({ customer: user.customer_id, type: 'card' });
             const subscription = await stripe.subscriptions.retrieve(user.subscription_id);
-            console.log({
-                id: subscription.items.data[0].id,
-                price: planId,
-            });
-            try {
-                await stripe.subscriptions.update(user.subscription_id, {
-                    cancel_at_period_end: false,
-                    proration_behavior: 'create_prorations',
-                    billing_cycle_anchor: 'now',
-                    // proration_date: timestampStart,
-                    items: [{
-                        id: subscription.items.data[0].id,
-                        price: 'price_1KjNVmDBSh7ykoyWOD6K7Fci',
-                    }]
-                });
-                return { success: true, error: null };
+            // getting how days left
+            // const ONE_DAY = 1000 * 60 * 60 * 24;
+            // const differenceMs = Math.abs(new Date(subscription.current_period_end * 1000) - new Date(subscription.current_period_start * 1000));
+            // const daysLeft = Math.round(differenceMs / ONE_DAY) - 2;
 
-            } catch(e) {
-                console.log(e.message)
-                return { success: false, error: e.message };
+            // getting upcoming invoces
+            const upcomingInvoice = await stripe.invoices.retrieveUpcoming({
+                customer: subscription.customer,
+                subscription: subscription.id
+            });
+            // find prorated amount
+            const paymentIntents = await stripe.paymentIntents.list({
+                limit: 3,
+                customer: subscription.customer,
+            });
+            // const invoicePayment = paymentIntents.data[0].invoice;
+            // const paymentIntentMethod = paymentIntents.data[0].payment_method;
+            // const amountPayed = upcomingInvoice.amount_due;
+            const paymentIntent = paymentIntents.data[0].id;
+            const amountRemaining = upcomingInvoice.amount_remaining;
+
+            if (amountRemaining > 0 && paymentIntent) {
+                // refund payement
+                await stripe.refunds.create({
+                    payment_intent: paymentIntent,
+                    amount: amountRemaining,
+                });
+                const subscriptionObject = {
+                    customer: customerId,
+                    items: [{
+                        plan: planId
+                    }],
+                    collection_method: 'charge_automatically',
+                };
+                const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
+                console.log("NEW SUBSCRIPTION", subscriptionNew);
+
+                // update subscription DB
+                const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
+                const periodStartNew =  new Date();
+                const periodEndNew  = new Date();
+                periodEndNew.setMonth(periodEndNew.getMonth() + 1);
+                const timestampStartNew = periodStartNew.getTime();
+                const timestampEndNew = periodEndNew.getTime();
+                const dbSubscription = {
+                    user_id: user.id,
+                    plan_id: dbPlan.rows[0].id,
+                    subscription_id: `${subscriptionNew.id}`,
+                    status: 'active',
+                    period_start: timestampStartNew/1000,
+                    period_end: timestampEndNew/1000,
+                    is_trial: true
+                }
+                const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                await client.query(_querySubscription);
             }
-            // return { success: true, error: null };
+            return { success: true, error: null };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -1937,15 +2194,17 @@ class User {
                     {message: e.message}
                 );
             }
-            return { success: false, error: { code: 404, message: 'Cannot add payment method to customer' } };
+            return { success: false, error: e.message };
         }
     }
+
 
     async unsubscribe() {
         const client = await pool.connect();
         try {
             const userRes = await client.query(`SELECT subscription_id FROM data.users
                     LEFT JOIN data.subscriptions ON data.subscriptions.user_id = data.users.id WHERE data.users.email = 'plan@123.com'`);
+            return { success: true, error: null };
             if (userRes.rows.length) {
                 const unsubscribeRes = await stripe.subscriptions.update(userRes.rows[0].subscription_id, {cancel_at_period_end: true});
                 if (unsubscribeRes.id){

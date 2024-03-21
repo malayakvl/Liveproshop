@@ -22,6 +22,8 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
     const [dropdownPlanId, setDropdownPlanId] = useState<any>(null);
     const [dropdownPlanName, setDropdownPlanName] = useState<any>(null);
 
+console.log(subscriptionInfo);
+
     useEffect(() => {
         if (showModal) {
             toggleModalPopup('.modal-seller-change-subscription');
@@ -238,7 +240,7 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                                     }
                                                 }}>
                                                 <option>{t('Select Plan')}</option>
-                                                {subscriptionInfo.dbPlans.map((plan: any) => (
+                                                {subscriptionInfo?.dbPlans.map((plan: any) => (
                                                     <Fragment key={plan.stripe_id}>
                                                         {plan.stripe_id !==
                                                             subscriptionInfo.plan.id && (
