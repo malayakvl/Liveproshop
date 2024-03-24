@@ -4,11 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userSubscriptionSelector } from '../../../redux/user/selectors';
 import { fetchUserSubscriptionAction, showChangeSubscriptionFormAction } from '../../../redux/user';
-import {
-    unsubscribeAction,
-    addPyamentMethodActions,
-    stripeDeletetPaymentAction
-} from '../../../redux/user/actions';
+import { unsubscribeAction, addPyamentMethodActions } from '../../../redux/user/actions';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import ChangeSubscription from './ChangeSubscription';
@@ -49,7 +45,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                 .unix(subscriptionInfo.trial_end)
                 .format('DD.MM.YYYY')}
                   `;
-            // tr.appendChild(createTD(`<span class="days w3-center w3-block">${dayLeft}</span>`));
         } else {
             return `
                     ${moment
@@ -57,7 +52,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                         .format('DD.MM.YYYY')} - ${moment
                 .unix(subscriptionInfo.current_period_end)
                 .format('DD.MM.YYYY')}
-                    
                 `;
         }
     };
@@ -199,64 +193,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                         ))}
                                     </tbody>
                                 </table>
-                                {/*    {subscriptionInfo.paymentMethods.map((method: any) => (*/}
-                                {/*        <tr key={method.id} className="py-2">*/}
-                                {/*            <td>*/}
-                                {/*                ****{method.card.last4}*/}
-                                {/*                {method.card.brand}*/}
-                                {/*            </td>*/}
-                                {/*            <td>*/}
-                                {/*                {method.card.exp_month}/{method.card.exp_year}*/}
-                                {/*            </td>*/}
-                                {/*            <td*/}
-                                {/*                style={{*/}
-                                {/*                    paddingBottom: '10px'*/}
-                                {/*                }}>*/}
-                                {/*                {method.id !==*/}
-                                {/*                    subscriptionInfo.defaultPayment && (*/}
-                                {/*                        <span*/}
-                                {/*                            className=" cursor-pointer gradient-btn-small whitespace-nowrap"*/}
-                                {/*                            role="presentation"*/}
-                                {/*                            onClick={() =>*/}
-                                {/*                                dispatch(*/}
-                                {/*                                    stripeDefaultPaymentAction(*/}
-                                {/*                                        method.id*/}
-                                {/*                                    )*/}
-                                {/*                                )*/}
-                                {/*                            }>*/}
-                                {/*                                {t('Setup Default')}*/}
-                                {/*                            </span>*/}
-                                {/*                    )}*/}
-                                {/*                {method.id ===*/}
-                                {/*                    subscriptionInfo.defaultPayment && (*/}
-                                {/*                        <span>Default</span>*/}
-                                {/*                    )}*/}
-                                {/*            </td>*/}
-                                {/*            <td*/}
-                                {/*                style={{*/}
-                                {/*                    paddingBottom: '10px'*/}
-                                {/*                }}>*/}
-                                {/*                {method.id !==*/}
-                                {/*                    subscriptionInfo.defaultPayment && (*/}
-                                {/*                        <span*/}
-                                {/*                            style={{paddingTop: '2px'}}*/}
-                                {/*                            className="cursor-pointer disabled-btn-small h-[30px] pt-[1px] mt-[-5px]"*/}
-                                {/*                            role="presentation"*/}
-                                {/*                            onClick={() =>*/}
-                                {/*                                dispatch(*/}
-                                {/*                                    stripeDeletetPaymentAction(*/}
-                                {/*                                        method.id*/}
-                                {/*                                    )*/}
-                                {/*                                )*/}
-                                {/*                            }>*/}
-                                {/*                                Delete*/}
-                                {/*                            </span>*/}
-                                {/*                    )}*/}
-                                {/*            </td>*/}
-                                {/*        </tr>*/}
-                                {/*    ))}*/}
-                                {/*    </tbody>*/}
-                                {/*</table>*/}
                             </div>
                         )}
                     </div>
@@ -326,8 +262,9 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                             {subscriptionInfo.viewCreate}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
-                                            {subscriptionInfo.periodStart} -{' '}
-                                            {subscriptionInfo.periodEnd}
+                                            3/22/2024 - 4/22/2024
+                                            {/*{subscriptionInfo.periodStart} -{' '}*/}
+                                            {/*{subscriptionInfo.periodEnd}*/}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
                                             {subscriptionInfo.daysLeft}
