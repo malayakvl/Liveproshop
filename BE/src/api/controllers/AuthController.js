@@ -4,7 +4,7 @@ import invitationModel from '../models/Invitation.js'
 import countryModel from '../models/Country.js';
 import { getTokensAndSetCookies } from '../lib/token.js';
 import { sendMail } from '../lib/sendMail.js';
-import { welcomeEmail, restoreEmail, registerEmail } from '../sender/templates.js';
+import {welcomeEmail, restoreEmail, registerEmail, confirmVerificationEmail} from '../sender/templates.js';
 
 
 class AuthController {
@@ -113,6 +113,7 @@ class AuthController {
     async authRegister(req, res) {
         let formData = req.body;
         let email = formData.email;
+        let locale = formData.locale;
 
         let invitation = await invitationModel.findByEmail(email);
 
@@ -128,6 +129,13 @@ class AuthController {
         if (_user) {
             return res.status(403).json({ user: null, error: 'Email present' });
         }
+        const mail = await confirmVerificationEmail(email, '', locale);
+        sendMail(
+            email,
+            mail.subject,
+            mail.body
+        );
+        console.log(mail)
 
         const { country_id, state, city, post_code, address_line_1, address_line_2, address_type, forFree } = formData;
         const countryName = (await countryModel.findById(country_id))?.nicename;
@@ -187,14 +195,10 @@ class AuthController {
         if (errorAddress) {
             return res.status(errorAddress.code).json(errorAddress);
         }
-        invitationModel.deactivate(invitation.id)
-        const mail = await registerEmail(user.email, req.query.locale);
+        invitationModel.deactivate(invitation.id);
 
-        sendMail(
-            user.email,
-            mail.subject,
-            mail.body
-        );
+
+        // const mail = await registerEmail(user.email, req.query.locale);
 
         // sendMail(
         //     user.email,
@@ -311,7 +315,8 @@ class AuthController {
     }
 
     async activateHash(req, res) {
-        const user = await userModel.activateByHash(req.params.hash);
+        console.log(req.params.locale);
+        const user = await userModel.activateByHash(req.params.hash, req.params);
         if (user) {
             res.status(200).json({ user: user });
         } else {

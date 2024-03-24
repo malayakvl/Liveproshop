@@ -1,10 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUserLocaleAction } from '../../redux/user/actions';
 
 export default function LangSwitcher({ type }: { type: string | null | boolean }) {
     const { locale, locales, defaultLocale }: any = useRouter();
     const router = useRouter();
     const node = useRef<HTMLDivElement>(null);
+    const dispatch = useDispatch();
     // const [isMobile, setIsMobile] = useState(false);
 
     const [showLangMenu, setShowLangMenu] = useState(false);
@@ -12,6 +15,7 @@ export default function LangSwitcher({ type }: { type: string | null | boolean }
         const { pathname, asPath, query } = router;
         const target = event.target as HTMLSpanElement;
         const _locale: string = target.getAttribute('data-lang') || defaultLocale;
+        dispatch(setUserLocaleAction(_locale));
         router.push({ pathname, query }, asPath, { locale: _locale });
         setShowLangMenu(false);
     };

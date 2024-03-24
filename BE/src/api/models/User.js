@@ -5,7 +5,11 @@ import { logger } from '../../common/logger.js';
 import Stripe from 'stripe';
 import axios from "axios";
 import paymentPlanModel from "./PaymentPlan.js";
-import { confirmSubscriptionEmail, confirmSubscriptionPaymentEmail } from "../sender/templates.js";
+import {
+    confirmSubscriptionEmail,
+    confirmSubscriptionPaymentEmail,
+    confirmVerificationEmail
+} from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 import moment from 'moment';
 import fs from "fs";
@@ -1227,14 +1231,13 @@ console.log("METHOD RESULT", resChangeMethod);
 
                     if (subscriptionRes.rows.length) {
                         paymentIntentResult.email = subscriptionRes.rows[0].email;
-
                         // send email about success payment and subscription
-                        const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
-                        sendMail(
-                            subscriptionRes.rows[0].email,
-                            mail.subject,
-                            mail.body
-                        );
+                        // const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
+                        // sendMail(
+                        //     subscriptionRes.rows[0].email,
+                        //     mail.subject,
+                        //     mail.body
+                        // );
 
                         const mailPayment = await confirmSubscriptionPaymentEmail(subscriptionRes.rows[0].email, 'fr', subscriptionRes.rows[0].price);
                         sendMail(
@@ -1632,8 +1635,9 @@ console.log("METHOD RESULT", resChangeMethod);
      * @param hash
      * @returns {Promise<{error: {code: number, message: string}, user: null}|*|null>}
      */
-    async activateByHash(hash) {
+    async activateByHash(hash, params) {
         const client = await pool.connect();
+        const locale = params.locale;
         const query = `SELECT * FROM data.find_user_by_hash('${hash}', false);`;
         try {
             const res = await client.query(query);
@@ -1641,6 +1645,15 @@ console.log("METHOD RESULT", resChangeMethod);
             if (res.rows.length > 0) {
                 const user = res.rows[0];
                 await client.query(`UPDATE data.users SET hash = null WHERE id = $1`, [user.id]);
+console.log('LOCALE', locale);
+                // send email about verification
+                const mail = await confirmVerificationEmail(subscriptionRes.rows[0].email, locale);
+                sendMail(
+                    subscriptionRes.rows[0].email,
+                    mail.subject,
+                    mail.body
+                );
+
                 return user;
             }
 
@@ -1922,6 +1935,15 @@ console.log("METHOD RESULT", resChangeMethod);
                         }
                     }
                 );
+
+                // send mail about subscription
+                const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
+                sendMail(
+                    userData.rows[0].email,
+                    mail.subject,
+                    mail.body
+                );
+
                 return { success: true, user: user };
             }
 
@@ -2263,6 +2285,28 @@ console.log("METHOD RESULT", resChangeMethod);
         }
     }
 
+    async setLocale(userId, locale) {
+        const client = await pool.connect();
+        try {
+            const query = `UPDATE data.users SET selected_locale='${locale}' WHERE id=${userId};`;
+            await client.query(query);
+            return { success: true };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (updateUserSettings) error:',
+                    { message: e.message }
+                );
+                console.log('[User.updateSellerSettings] sql e.message = ', e.message);
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+
+        } finally {
+            client.release();
+        }
+    }
 
     async updateSellerSettings(userId, data) {
         const client = await pool.connect();

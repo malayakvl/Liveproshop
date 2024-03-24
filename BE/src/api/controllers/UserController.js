@@ -686,6 +686,14 @@ class UserController {
         }
     }
 
+    async setUserLocale(req, res) {
+        if (req.user) {
+            const dataLocale = userModel.setLocale(req.user.id, req.query.locale);
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
 
     async addPaymentMethod(req, res) {
         if (req.user) {

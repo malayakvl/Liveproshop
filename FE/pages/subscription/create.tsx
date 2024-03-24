@@ -121,7 +121,9 @@ export default function ExistSubscription({ locale }: { locale: string }) {
                 <div className="rounded-lg border shadow-xl mt-10 flex w-[1000px] bg-white px-20 py-14">
                     <div className="font-bold mt-[170px] pr-12 w-2/4">
                         <div className="text-2xl line-height-105percent mb-9 w-full">
-                            You will not be charged not, but in the end of your 30-day trial period
+                            {t(
+                                'You will not be charged not, but in the end of your 30-day trial period'
+                            )}
                         </div>
                     </div>
 

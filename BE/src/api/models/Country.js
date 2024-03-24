@@ -7,6 +7,16 @@ class Country {
         try {
             const query = 'SELECT table_translation FROM common__tools._get_translation(\'data\', \'countries\', \'id\', \'nicename\');';
             const res = await client.query(query);
+
+            res.rows[0].table_translation.sort(function(a, b) {
+                var keyA = parseInt(a.id),
+                    keyB = parseInt(b.id);
+                // Compare the 2 dates
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+            });
+
             return res.rows.length ? res.rows[0].table_translation : null;
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

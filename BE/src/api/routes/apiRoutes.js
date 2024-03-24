@@ -107,6 +107,8 @@ apiRoutes.post('/profile/default-payment-method', UserController.defaultPaymentS
 apiRoutes.post('/profile/add-payment-method-from-subscription', UserController.addPaymentMethodFromSubscription);
 apiRoutes.post('/profile/add-payment-method-after-registration', UserController.addPaymentMethodAfterRegistration);
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
+apiRoutes.get('/profile/set-locale', UserController.setUserLocale);
+apiRoutes.post('/profile/set-locale', UserController.setUserLocale);
 apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
 // apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
 apiRoutes.get('/profile/unsubscription', UserController.cancelSubscription);
