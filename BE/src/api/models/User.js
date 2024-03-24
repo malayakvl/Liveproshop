@@ -2113,7 +2113,22 @@ console.log("METHOD RESULT", resChangeMethod);
         });
         const paymentIntent = paymentIntents.data[0].id;
         const amountRemaining = upcomingInvoice.amount_remaining;
+
+        const ONE_DAY = 1000 * 60 * 60 * 24;
+        const differenceMs = Math.abs(new Date(subscription.current_period_end * 1000) - new Date(subscription.current_period_start * 1000));
+        const daysLeft = Math.round(differenceMs / ONE_DAY) - 2;
+        const refundAmount = parseInt(amountRemaining/30)*daysLeft;
+
         console.log('amountRemaining', amountRemaining)
+        console.log('dayLeft', daysLeft);
+        console.log(parseInt(amountRemaining/30)*daysLeft)
+
+        if (refundAmount > 0  && paymentIntent) {
+            await stripe.refunds.create({
+                payment_intent: paymentIntent,
+                amount: refundAmount,
+            });
+        }
 
         return { success: true, error: null };
     }
@@ -2123,6 +2138,7 @@ console.log("METHOD RESULT", resChangeMethod);
         try {
             const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
             const customerId = dbSubscriptionInfo.rows[0].customer_id;
+            const oldSubscriptionId = dbSubscriptionInfo.rows[0].customer_id;
 
             // REFUNDING METHANIZM
             // const periodStart =  new Date();
@@ -2130,15 +2146,18 @@ console.log("METHOD RESULT", resChangeMethod);
             // const paymentMethods = await  stripe.paymentMethods.list({ customer: user.customer_id, type: 'card' });
             const subscription = await stripe.subscriptions.retrieve(user.subscription_id);
             // getting how days left
-            // const ONE_DAY = 1000 * 60 * 60 * 24;
-            // const differenceMs = Math.abs(new Date(subscription.current_period_end * 1000) - new Date(subscription.current_period_start * 1000));
-            // const daysLeft = Math.round(differenceMs / ONE_DAY) - 2;
-
             // getting upcoming invoces
             const upcomingInvoice = await stripe.invoices.retrieveUpcoming({
                 customer: subscription.customer,
                 subscription: subscription.id
             });
+            const amountRemaining = upcomingInvoice.amount_remaining;
+            const ONE_DAY = 1000 * 60 * 60 * 24;
+            const differenceMs = Math.abs(new Date(subscription.current_period_end * 1000) - new Date(subscription.current_period_start * 1000));
+            const daysLeft = Math.round(differenceMs / ONE_DAY) - 2;
+            const refundAmount = parseInt(amountRemaining/30)*daysLeft;
+
+            console.log(refundAmount);
             // find prorated amount
             const paymentIntents = await stripe.paymentIntents.list({
                 limit: 3,
@@ -2148,14 +2167,24 @@ console.log("METHOD RESULT", resChangeMethod);
             // const paymentIntentMethod = paymentIntents.data[0].payment_method;
             // const amountPayed = upcomingInvoice.amount_due;
             const paymentIntent = paymentIntents.data[0].id;
-            const amountRemaining = upcomingInvoice.amount_remaining;
 
-            if (amountRemaining > 0 && paymentIntent) {
+            // const amountRemaining = upcomingInvoice.amount_remaining;
+            if (refundAmount > 0 && paymentIntent) {
                 // refund payement
-                await stripe.refunds.create({
-                    payment_intent: paymentIntent,
-                    amount: amountRemaining,
-                });
+                // try {
+                //     await stripe.refunds.create({
+                //         payment_intent: paymentIntent,
+                //         amount: refundAmount,
+                //     });
+                // } catch (e) {
+                //     console.log(e.message);
+                // }
+                try {
+                    const cancelSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
+                } catch (e) {
+                    console.log(e.message);
+                }
+
                 const subscriptionObject = {
                     customer: customerId,
                     items: [{
@@ -2163,27 +2192,33 @@ console.log("METHOD RESULT", resChangeMethod);
                     }],
                     collection_method: 'charge_automatically',
                 };
-                const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
-                console.log("NEW SUBSCRIPTION", subscriptionNew);
+                try {
+                    const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
+                    console.log("NEW SUBSCRIPTION", subscriptionNew);
 
-                // update subscription DB
-                const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
-                const periodStartNew =  new Date();
-                const periodEndNew  = new Date();
-                periodEndNew.setMonth(periodEndNew.getMonth() + 1);
-                const timestampStartNew = periodStartNew.getTime();
-                const timestampEndNew = periodEndNew.getTime();
-                const dbSubscription = {
-                    user_id: user.id,
-                    plan_id: dbPlan.rows[0].id,
-                    subscription_id: `${subscriptionNew.id}`,
-                    status: 'active',
-                    period_start: timestampStartNew/1000,
-                    period_end: timestampEndNew/1000,
-                    is_trial: true
+                    // update subscription DB
+                    const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
+                    const periodStartNew =  new Date();
+                    const periodEndNew  = new Date();
+                    periodEndNew.setMonth(periodEndNew.getMonth() + 1);
+                    const timestampStartNew = periodStartNew.getTime();
+                    const timestampEndNew = periodEndNew.getTime();
+                    const dbSubscription = {
+                        user_id: user.id,
+                        customer_id: customerId,
+                        plan_id: dbPlan.rows[0].id,
+                        subscription_id: `${subscriptionNew.id}`,
+                        status: 'active',
+                        period_start: timestampStartNew/1000,
+                        period_end: timestampEndNew/1000,
+                        is_trial: true
+                    }
+                    const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                    console.log(_querySubscription);
+                    await client.query(_querySubscription);
+                } catch (e) {
+                    console.log(e.message);
                 }
-                const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                await client.query(_querySubscription);
             }
             return { success: true, error: null };
         } catch (e) {
