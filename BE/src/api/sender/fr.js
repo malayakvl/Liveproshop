@@ -80,4 +80,14 @@ export default {
   //requestDemoFromEmail
   "Request Demo from": "Demandez use demo",
 
+  "Email confirmation": "Confirmation de votre inscription",
+  "Thank you for joining Live Pro Shop. Your account has been created.": "Merci d’avoir rejoint Live Pro Shop. Votre compte a bien été créé.",
+  "To access your account and complete your profile, click on the link below:": "Pour accéder à votre compte et compléter votre profile, cliquez sur le lien ci-dessous: ",
+  "If you are having trouble logging into your account, contact us at ": "Si vous rencontrez des difficultés pour vous connecter à votre compte, contactez-nous à ",
+  "See you soon,": "À bientôt,",
+
+  "We confirm that your order has been shipped": "Nous vous confirmons l’expédition de votre commande",
+  "You can track your order at any time by clicking on the tracking number or by contacting your merchant.": "Vous pouvez suivre sa progression à tout moment en cliquant sur le numéro de suivi ou en contactant votre commerçant.",
+  "Your order has been shipped": "Votre commande a été expédiée"
+
 };

@@ -78,4 +78,15 @@ export default {
 
   //requestDemoFromEmail
   "Request Demo from": "Request Demo from",
+
+  "Email confirmation": "Email confirmation",
+  "Thank you for joining Live Pro Shop. Your account has been created.": "Thank you for joining Live Pro Shop. Your account has been created.",
+  "To access your account and complete your profile, click on the link below:": "To access your account and complete your profile, click on the link below:",
+  "If you are having trouble logging into your account, contact us at ": "If you are having trouble logging into your account, contact us at ",
+  "See you soon,": "See you soon,",
+
+
+  "We confirm that your order has been shipped": "We confirm that your order has been shipped",
+  "You can track your order at any time by clicking on the tracking number or by contacting your merchant.": "You can track your order at any time by clicking on the tracking number or by contacting your merchant.",
+  "Your order has been shipped": "Your order has been shipped"
 };

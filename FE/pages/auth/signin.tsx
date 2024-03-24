@@ -54,6 +54,7 @@ function Signin({ locale }: { locale: string }) {
                         onSubmit={(values) => {
                             signIn('credentials_login', {
                                 email: (values as any).email,
+                                locale: locale,
                                 password: (values as any).password,
                                 callbackUrl: `${window.location.origin}${
                                     locale === 'fr' ? '' : `/${locale}`

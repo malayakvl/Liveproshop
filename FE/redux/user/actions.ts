@@ -511,6 +511,28 @@ export const generateInvoiceStripeAction: any = createAction(
                 });
         }
 );
+export const setUserLocaleAction: any = createAction(
+    'user/SET_USER_LOCALE',
+    async (locale: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/profile/set-locale?locale=${locale}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(() => {
+                    // dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    // dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 
 export const setUserAction: any = createAction('user/SET_USER');
 export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM');

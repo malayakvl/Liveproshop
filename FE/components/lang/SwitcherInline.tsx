@@ -6,6 +6,7 @@ import {
     toggleTextingMenuAction
 } from '../../redux/layouts';
 import { useDispatch } from 'react-redux';
+import { setUserLocaleAction } from '../../redux/user/actions';
 
 export default function LangSwitcherInline() {
     const { locale, locales, defaultLocale }: any = useRouter();
@@ -21,6 +22,7 @@ export default function LangSwitcherInline() {
         setShowLangMenu(false);
         dispatch(toggleTextingMenuAction(false));
         dispatch(setLngAction(_locale));
+        dispatch(setUserLocaleAction(_locale));
         dispatch(toggleProfileMenuAction(false));
     };
 
