@@ -1090,11 +1090,9 @@ class Order {
                     mail.subject,
                     mail.body
                 );
-                console.log(_order.email);
             })
-            console.log(emailSql);
-            // const SQL = `UPDATE data.orders SET status='shipped' WHERE id IN (${orderIds.join(',')})`;
-            // await client.query(SQL);
+            const SQL = `UPDATE data.orders SET status='shipped' WHERE id IN (${orderIds.join(',')})`;
+            await client.query(SQL);
             return {success: true, error: null};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

@@ -642,27 +642,7 @@ class UserController {
         // console.log("FORM DATA", formData);
 
         // for incoming user create free month subscription
-
-
-
         return res.status(402).json('Something wend wrong');
-
-        // if (formData.subscription.id) {
-        //     const data = await userModel.addPaymentMethodBySubscription(req.body);
-        //     if (data.success) {
-        //         return res.status(200).json({
-        //             success: data.success,
-        //             user: data.user
-        //         });
-        //     } else {
-        //         return res.status(402).json({
-        //             success: data.success,
-        //             error: data.error
-        //         });
-        //     }
-        // } else {
-        //     return res.status(402).json('Something wend wrong');
-        // }
     }
 
 
@@ -737,18 +717,23 @@ class UserController {
 
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
-            console.log('here');
-            const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
-            if (data.success) {
-                return res.status(200).json({
-                    success: data.success
-                });
-            } else {
-                return res.status(402).json({
-                    success: data.success,
-                    error: data.error
-                });
-            }
+            // create upgrade row about subscription
+            const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+            return res.status(200).json({
+                success: true
+            });
+
+            // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
+            // if (data.success) {
+            //     return res.status(200).json({
+            //         success: data.success
+            //     });
+            // } else {
+            //     return res.status(402).json({
+            //         success: data.success,
+            //         error: data.error
+            //     });
+            // }
         } else {
             return res.status(402).json('Something wend wrong');
         }

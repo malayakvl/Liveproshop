@@ -13,6 +13,7 @@ import {
 import { sendMail } from "../lib/sendMail.js";
 import moment from 'moment';
 import fs from "fs";
+import db from "node-pg-migrate/dist/db.js";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -780,7 +781,6 @@ class User {
                     }
                 }
             );
-console.log("METHOD RESULT", resChangeMethod);
             return this.fetchSubscription(user.subscription_id, user.customer_id);
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -793,18 +793,6 @@ console.log("METHOD RESULT", resChangeMethod);
             return { user: null, error: { code: 404, message: 'User Not found' } };
         }
     }
-
-    // daysBetween(StartDate, EndDate) {
-    //     // The number of milliseconds in all UTC days (no DST)
-    //     const oneDay = 1000 * 60 * 60 * 24;
-    //
-    //     // A day in UTC always lasts 24 hours (unlike in other time formats)
-    //     const start = Date.UTC(EndDate.getFullYear(), EndDate.getMonth(), EndDate.getDate());
-    //     const end = Date.UTC(StartDate.getFullYear(), StartDate.getMonth(), StartDate.getDate());
-    //
-    //     // so it's safe to divide by 24 hours
-    //     return (start - end) / oneDay;
-    // }
 
     async fetchSubscription(user, subscriptionId, customerId, isTrial = false) {
         const client = await pool.connect();
@@ -821,27 +809,47 @@ console.log("METHOD RESULT", resChangeMethod);
                 customerId
             );
             currentSubscription.paymentMethods = paymentMethods.data;
-// console.log("Customer", customer);
 // console.log("Pyament Methods", paymentMethods.data);
 
             // getting all plans
             const dbPlansRes = await client.query('SELECT * FROM data.subscription_plans WHERE stripe_id IS NOT NULL');
             currentSubscription.dbPlans = dbPlansRes.rows;
-            // getting current plan
+            // getting current user plan
             if (currentSubscription.plan.id) {
-                console.log(`SELECT * FROM data.subscription_plans WHERE stripe_id = '${currentSubscription.plan.id}'`);
+                // console.log(`SELECT * FROM data.subscription_plans WHERE stripe_id = '${currentSubscription.plan.id}'`);
                 const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id = '${currentSubscription.plan.id}'`);
                 currentSubscription.dbUserPlan = dbPlan.rows[0];
+                const userSubscrPlan = await client.query(`SELECT upgradet_at FROM data.subscriptions WHERE user_id=${user.id}`);
+                currentSubscription.upgradet_at = userSubscrPlan.rows.length > 0 ?  userSubscrPlan.rows[0].upgradet_at : null;
+                if (currentSubscription.upgradet_at) {
+                    console.log(`SELECT data.subscriptions_upgrade.*,
+                            data.subscription_plans.name AS plan_name
+                            FROM data.subscriptions_upgrade
+                            LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions_upgrade.plan_id
+                            WHERE user_id=${user.id}`);
+                    const dbResUpgrade = await client.query(`SELECT data.subscriptions_upgrade.*,
+                            data.subscription_plans.name AS plan_name
+                            FROM data.subscriptions_upgrade
+                            LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions_upgrade.plan_id
+                            WHERE user_id=${user.id}`);
+                    if (dbResUpgrade.rows[0].status === 'cancel') {
+                        currentSubscription.nameUpgrade = 'Cancel'
+                    } else {
+                        currentSubscription.nameUpgrade = dbResUpgrade.rows[0].plan_name;
+                    }
+                    currentSubscription.periodUpgrade = dbResUpgrade.rows[0].period_start;
+                }
             }
 
             const endDate = new Date(currentSubscription.current_period_end * 1000);
             const startDate = new Date(currentSubscription.current_period_start * 1000);
+            // const upgradeDate = currentSubscription.current_period_start ? new Date(currentSubscription.current_period_start * 1000) : '';
             currentSubscription.viewCreate = new Date(currentSubscription.created * 1000).toLocaleDateString();
             currentSubscription.periodStart = startDate.toLocaleDateString();
             currentSubscription.periodEnd = endDate.toLocaleDateString();
 
             const ONE_DAY = 1000 * 60 * 60 * 24;
-            const differenceMs = Math.abs(new Date(currentSubscription.current_period_end * 1000) - new Date(currentSubscription.current_period_start * 1000));
+            const differenceMs = Math.abs(new Date(currentSubscription.current_period_end * 1000) - new Date());
             currentSubscription.daysLeft = Math.round(differenceMs / ONE_DAY) - 1;
 
             currentSubscription.customer = customer;
@@ -867,96 +875,8 @@ console.log("METHOD RESULT", resChangeMethod);
                 }
             });
             currentSubscription.invoicePdf = invoicePdf;
-
-
             return { subscription: currentSubscription };
 
-// if (customerId.includes('fake_subscription') || isTrial) {
-            //     // getting subscription fron db
-            //     const subscriptionRow = await client.query(`SELECT * FROM data.subscriptions WHERE customer_id='${customerId}'`);
-            //     const subscriptionFakeData = subscriptionRow.rows[0];
-            //     subscriptionFakeData.is_fake = true;
-            //     subscriptionFakeData.paymentMethods = [];
-            //     if (customerId.includes('cus_')) {
-            //         const paymentMethods = await stripe.customers.listPaymentMethods(
-            //             customerId,
-            //             {type: 'card'}
-            //         );
-            //         const customer = await stripe.customers.retrieve(
-            //             customerId
-            //         );
-            //         subscriptionFakeData.defaultPayment = customer.invoice_settings.default_payment_method;
-            //         subscriptionFakeData.defaultPlanId = 1;
-            //         subscriptionFakeData.dbPlans = dbPlansRes.rows;
-            //         subscriptionFakeData.paymentMethods = paymentMethods.data;
-            //         subscriptionFakeData.paymentPlanList = await paymentPlanModel.fetchItems();
-            //
-            //         const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionFakeData.plan_id}'`);
-            //         subscriptionFakeData.plan = resSubscription.rows[0];
-            //     }
-            //     return { subscription: subscriptionFakeData };
-            // } else if (customerId.includes('cus_')) {
-            //     console.log('here');
-            //     const paymentMethods = await stripe.customers.listPaymentMethods(
-            //         customerId,
-            //         {type: 'card'}
-            //     );
-            //     const customer = await stripe.customers.retrieve(
-            //         customerId
-            //     );
-            //     subscriptionFakeData.defaultPayment = customer.invoice_settings.default_payment_method;
-            //     subscriptionFakeData.defaultPlanId = 1;
-            //     subscriptionFakeData.dbPlans = dbPlansRes.rows;
-            //     subscriptionFakeData.paymentMethods = paymentMethods.data;
-            //     const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionId}'`);
-            //     subscriptionFakeData.plan = resSubscription.rows[0];
-            //     // subscriptionFakeData.plan.id = "dsadasd";
-            //     // console.log("FAKE SUBSCRIPTION WITH REAL STRIPE CUSTOMER", subscriptionFakeData);
-            // }
-            // else {
-            //     subscription = await stripe.subscriptions.retrieve(
-            //         subscriptionId
-            //     );
-            // }
-            // const paymentMethods = await stripe.customers.listPaymentMethods(
-            //     customerId,
-            //     {type: 'card'}
-            // );
-            // const customer = await stripe.customers.retrieve(
-            //     customerId
-            // );
-            // const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${subscription.plan.id}'`);
-            // subscription.DBName = resSubscription.rows.length ? resSubscription.rows[0].name : '';
-            // subscription.paymentMethods = paymentMethods.data;
-            // subscription.defaultPayment = customer.invoice_settings.default_payment_method;
-            // subscription.defaultPlanId = subscription.items.data[0].plan.id;
-            // subscription.dbPlans = dbPlansRes.rows;
-            //
-            // // const paymentPlansInfo = await paymentPlanModel.fetchItems();
-            // subscription.paymentPlanList = await paymentPlanModel.fetchItems();
-            //
-            // let invoices = await stripe.invoices.list({
-            //     limit: 3,
-            //     customer: customerId
-            // });
-            // if (!invoices.data.length ) {
-            //     await stripe.invoices.create({
-            //         customer: user.customer_id,
-            //     });
-            //     invoices = await stripe.invoices.list({
-            //         limit: 1,
-            //         customer: user.curstomer_id
-            //     });
-            // }
-            // let invoicePdf = '';
-            // invoices.data.forEach(_invoice => {
-            //     if (_invoice.invoice_pdf) {
-            //         invoicePdf = _invoice.invoice_pdf;
-            //         return;
-            //     }
-            // });
-            // subscription.invoicePdf = invoicePdf;
-            // return { subscription: subscription };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -2119,11 +2039,42 @@ console.log('LOCALE', locale);
         }
     }
 
-    async cancelSubscription(user) {
+    async cancelSubscription(user, planId) {
+        const client = await pool.connect();
+        const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
+        const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${dbSubscriptionInfo.rows[0].plan_id}'`);
+        const customerId = dbSubscriptionInfo.rows[0].customer_id;
+        try {
+            const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
+            const ts = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-MM-DD HH:mm").unix();
+            const m = moment.unix(ts);
+            const upgradeSubscription = {
+                user_id: user.id,
+                plan_id: dbPlan.rows[0].id,
+                customer_id: customerId,
+                subscription_id: dbSubscriptionInfo.rows[0].subscription_id,
+                period_start: m / 1000,
+                period_end: m / 1000,
+                status: 'cancel'
+            }
+            // console.log(upgradeSubscription);
+            const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
+            await client.query(_querySubscription);
+            await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
+
+            return { success: true, error: null };
+        } catch (e) {
+            console.log(e.message);
+        }
+    }
+
+    async cancelSubscriptionOld(user) {
         const client = await pool.connect();
         const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
         const customerId = dbSubscriptionInfo.rows[0].customer_id;
         const subscription = await stripe.subscriptions.retrieve(user.subscription_id);
+
+
         const upcomingInvoice = await stripe.invoices.retrieveUpcoming({
             customer: subscription.customer,
             subscription: subscription.id
@@ -2153,6 +2104,111 @@ console.log('LOCALE', locale);
         }
 
         return { success: true, error: null };
+    }
+
+    async updateSubscriptionUpgradePlan(user, planId) {
+        const client = await pool.connect();
+        try {
+            const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
+            const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
+            const customerId = dbSubscriptionInfo.rows[0].customer_id;
+            // const oldSubscriptionId = dbSubscriptionInfo.rows[0].customer_id;
+            // const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+            // const subscription = await stripe.subscriptions.retrieve(user.subscription_id);
+            // console.log(dbSubscriptionInfo.rows[0]);
+            try {
+                const upgrDate =  moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
+                const ts = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-MM-DD HH:mm").unix();
+                const m = moment.unix(ts);
+                const upgradeSubscription = {
+                    user_id: user.id,
+                    plan_id: dbPlan.rows[0].id,
+                    customer_id: customerId,
+                    subscription_id: dbSubscriptionInfo.rows[0].subscription_id,
+                    period_start: m/1000,
+                    period_end: m/1000,
+                    status: 'upgrade'
+                }
+                const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
+                console.log(_querySubscription);
+                await client.query(_querySubscription);
+                await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`)
+            } catch (e) {
+                console.log(e.message)
+            }
+
+            // // getting how days left
+            // // getting upcoming invoces
+            // const upcomingInvoice = await stripe.invoices.retrieveUpcoming({
+            //     customer: subscription.customer,
+            //     subscription: subscription.id
+            // });
+            // const amountRemaining = upcomingInvoice.amount_remaining;
+            // const ONE_DAY = 1000 * 60 * 60 * 24;
+            // const differenceMs = Math.abs(new Date(subscription.current_period_end * 1000) - new Date(subscription.current_period_start * 1000));
+            // const daysLeft = Math.round(differenceMs / ONE_DAY) - 2;
+            // const refundAmount = parseInt(amountRemaining/30)*daysLeft;
+            //
+            // const paymentIntents = await stripe.paymentIntents.list({
+            //     limit: 3,
+            //     customer: subscription.customer,
+            // });
+            // const paymentIntent = paymentIntents.data[0].id;
+
+            // const amountRemaining = upcomingInvoice.amount_remaining;
+            // if (refundAmount > 0 && paymentIntent) {
+            //     try {
+            //         const cancelSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
+            //     } catch (e) {
+            //         console.log(e.message);
+            //     }
+            //
+            //     const subscriptionObject = {
+            //         customer: customerId,
+            //         items: [{
+            //             plan: planId
+            //         }],
+            //         collection_method: 'charge_automatically',
+            //     };
+            //     try {
+            //         const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
+            //         console.log("NEW SUBSCRIPTION", subscriptionNew);
+            //
+            //         // update subscription DB
+            //         const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
+            //         const periodStartNew =  new Date();
+            //         const periodEndNew  = new Date();
+            //         periodEndNew.setMonth(periodEndNew.getMonth() + 1);
+            //         const timestampStartNew = periodStartNew.getTime();
+            //         const timestampEndNew = periodEndNew.getTime();
+            //         const dbSubscription = {
+            //             user_id: user.id,
+            //             customer_id: customerId,
+            //             plan_id: dbPlan.rows[0].id,
+            //             subscription_id: `${subscriptionNew.id}`,
+            //             status: 'active',
+            //             period_start: timestampStartNew/1000,
+            //             period_end: timestampEndNew/1000,
+            //             is_trial: true
+            //         }
+            //         const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+            //         console.log(_querySubscription);
+            //         await client.query(_querySubscription);
+            //     } catch (e) {
+            //         console.log(e.message);
+            //     }
+            // }
+            return { success: true, error: null };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Stripe Add Payment Method Error:',
+                    {message: e.message}
+                );
+            }
+            return { success: false, error: e.message };
+        }
     }
 
     async updateSubscriptionPlan(user, planId) {
