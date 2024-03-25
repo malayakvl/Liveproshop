@@ -315,6 +315,7 @@ export const unsubscribeAction: any = createAction(
                 })
                 .then(() => {
                     dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(fetchUserSubscriptionAction());
                     dispatch(showLoaderAction(false));
                 })
                 .catch((e) => {
