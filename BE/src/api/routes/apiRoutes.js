@@ -37,7 +37,6 @@ apiRoutes.route('/upload').post(TestController.uploadFile);
 apiRoutes.route('/invoice').get(OrderController.generateInvoice);
 
 apiRoutes.route('/countries').get(CountryController.getAll);
-
 /*********************************************
  /***************JOB ROUTES********************
  /*********************************************/
@@ -57,9 +56,10 @@ apiRoutes.route('/run-waiting-job').get(OrderController.waitingJobOrders);
 apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder);
 apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
 
-// apiRoutes.route('/check-order-status').get(LivesessionController.checkOrderStatus);
-// apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderStatus);
-// apiRoutes.route('/live-product-qty').get(OrderController.getLiveProductQty);
+apiRoutes.route('/check-subscription-for-update').get(UserController.fetchSubscriptionsForUpdate);
+apiRoutes.post('/update-subscription-plan-job', UserController.updateSubscriptionPlanJob);
+apiRoutes.get('/update-subscription-plan-job', UserController.updateSubscriptionPlanJob);
+
 
 apiRoutes.route('/pages/all').get(PageController.getAll);
 apiRoutes.route('/pages').get(PageController.getPage);
