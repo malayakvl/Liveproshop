@@ -704,6 +704,7 @@ class UserController {
 
     async upgradeSubscription(req, res) {
         if (req.user) {
+            console.log('here');
             const data = await userModel.upgradeSubscription(req.user, req.body.planId);
             if (data.success) {
                 return res.status(200).json({

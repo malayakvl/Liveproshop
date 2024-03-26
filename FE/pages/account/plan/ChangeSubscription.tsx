@@ -11,6 +11,9 @@ import { updateSubscriptionAction } from '../../../redux/user/actions';
 import Image from 'next/image';
 import Head from 'next/head';
 import { setModalCalendlyMetaAction } from '../../../redux/layouts';
+import { itemsSelector } from '../../../redux/paymentPlans/selectors';
+import { fetchFormAction } from '../../../redux/paymentPlans';
+import { showLoaderAction } from '../../../redux/layouts/actions';
 
 const ChangeSubscription: React.FC<any> = ({ locale }) => {
     const t = useTranslations();
@@ -21,6 +24,14 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
     const [selectedPlanDbId, setSelectedPlanDbId] = useState<any>(null);
     const [dropdownPlanId, setDropdownPlanId] = useState<any>(null);
     const [dropdownPlanName, setDropdownPlanName] = useState<any>(null);
+    const paymentPlans = useSelector(itemsSelector);
+
+    useEffect(() => {
+        dispatch(showLoaderAction(true));
+        dispatch(fetchFormAction());
+    }, []);
+
+    console.log('PLANS', paymentPlans);
 
     useEffect(() => {
         if (showModal) {
@@ -258,24 +269,22 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                     {!subscriptionInfo?.defaultPayment && (
                                         <p>{t('Add and setup default payment first')}</p>
                                     )}
-                                    {subscriptionInfo?.paymentPlanList?.values && selectedPlanDbId && (
+                                    {paymentPlans?.values && selectedPlanDbId && (
                                         <Fragment>
-                                            {subscriptionInfo.paymentPlanList.values.map(
-                                                (values: any) => (
-                                                    <Fragment key={values.group.id}>
-                                                        <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                                                            <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">
-                                                                {parseTranslation(
-                                                                    values.group,
-                                                                    'name',
-                                                                    locale
-                                                                )}
-                                                            </div>
+                                            {paymentPlans?.values.map((values: any) => (
+                                                <Fragment key={values.group.id}>
+                                                    <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
+                                                        <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">
+                                                            {parseTranslation(
+                                                                values.group,
+                                                                'name',
+                                                                locale
+                                                            )}
                                                         </div>
-                                                        {parseOptions(values.values, locale)}
-                                                    </Fragment>
-                                                )
-                                            )}
+                                                    </div>
+                                                    {parseOptions(values.values, locale)}
+                                                </Fragment>
+                                            ))}
                                         </Fragment>
                                     )}
                                 </div>

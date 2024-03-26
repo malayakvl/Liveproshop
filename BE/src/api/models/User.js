@@ -2048,7 +2048,7 @@ console.log('LOCALE', locale);
     async upgradeSubscription(user, planId) {
         const client = await pool.connect();
         const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
-        const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${dbSubscriptionInfo.rows[0].plan_id}'`);
+        const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
         const customerId = dbSubscriptionInfo.rows[0].customer_id;
         try {
             const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
@@ -2056,17 +2056,17 @@ console.log('LOCALE', locale);
             const m = moment.unix(ts);
             const upgradeSubscription = {
                 user_id: user.id,
-                plan_id: planId,
+                plan_id: dbPlan.rows[0].id,
                 customer_id: customerId,
                 subscription_id: dbSubscriptionInfo.rows[0].subscription_id,
                 period_start: m / 1000,
                 period_end: m / 1000,
                 status: 'change'
             }
-            console.log(upgradeSubscription);
-            // const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
-            // await client.query(_querySubscription);
-            // await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
+            const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
+console.log(_querySubscription);
+            await client.query(_querySubscription);
+            await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
 
             return { success: true, error: null };
         } catch (e) {
