@@ -2128,7 +2128,8 @@ console.log(subscriptionData.rows);
                 try {
                     const cancelSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
                     await client.query(`UPDATE data.subscriptions 
-                            SET status='cancel', upgradet_at=null WHERE user_id=${userId}`)
+                            SET status='cancel', upgradet_at=null WHERE user_id=${userId}`);
+                    await client.query(`DELETE FROM data.subscriptions_upgrade WHERE user_id=${userId}`);
                 } catch (e) {
                     console.log(e.message);
                 }
