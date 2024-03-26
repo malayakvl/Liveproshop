@@ -641,7 +641,9 @@
   "Select a document or a link.": "Sélectionnez un document ou un lien.",
   "Payment Settings": "Paramètres de paiement",
   "Subscription Plan": "Plan d'abonnement",
-  "You will not be charged not, but in the end of your 30-day trial period": "Vous ne serez pas facturé, mais à la fin de votre période d'essai de 30 jours"
+  "You will not be charged not, but in the end of your 30-day trial period": "Vous ne serez pas facturé, mais à la fin de votre période d'essai de 30 jours",
+  "Cancel Subscription": "Annuler l'abonnement",
+  "Are you sure you want to cancel subscription?": "Êtes-vous sûr de vouloir annuler l'abonnement ?"
 
 
 }

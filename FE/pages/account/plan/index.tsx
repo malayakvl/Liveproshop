@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userSubscriptionSelector } from '../../../redux/user/selectors';
 import { fetchUserSubscriptionAction, showChangeSubscriptionFormAction } from '../../../redux/user';
@@ -14,6 +14,7 @@ import { stripeDefaultPaymentAction } from '../../../redux/user/actions';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import CardValidator from 'card-validator';
+import ConfirmDialog from '../../../components/_common/ConfirmDialog';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -22,6 +23,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const [hideBtn, setHideBtn] = useState(false);
     const user = useSelector(userSelector);
     const subscriptionInfo = useSelector(userSubscriptionSelector);
+    const [selectedItem, setSelectedItem] = useState<any | null>();
 
     useEffect(() => {
         // Create PaymentIntent and Plan Price as soon as the page loads
@@ -38,23 +40,12 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     }, [subscriptionInfo]);
 
-    const preparePeriod = () => {
-        if (subscriptionInfo.trial_end && subscriptionInfo.status != 'active') {
-            return `
-                    ${moment.unix(subscriptionInfo.trial_start).format('DD-MM-YYYY')} - ${moment
-                .unix(subscriptionInfo.trial_end)
-                .format('DD.MM.YYYY')}
-                  `;
-        } else {
-            return `
-                    ${moment
-                        .unix(subscriptionInfo.current_period_start)
-                        .format('DD.MM.YYYY')} - ${moment
-                .unix(subscriptionInfo.current_period_end)
-                .format('DD.MM.YYYY')}
-                `;
-        }
-    };
+    const handlerConfirmCancel = useCallback(() => {
+        if (!selectedItem) return;
+        dispatch(unsubscribeAction(true));
+        setSelectedItem(null);
+    }, [selectedItem]);
+
     const preparePeriodFake = () => {
         return `
                     ${moment(subscriptionInfo.period_start).format('DD.MM.YYYY')} - ${moment(
@@ -69,21 +60,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
         const end = moment();
         const dayLeft = moment.duration(start.diff(end)).asDays().toFixed(0);
         if (subscriptionInfo.is_fake) {
-            return dayLeft;
-        } else {
-            const a = moment();
-            const b = moment(moment.unix(subscriptionInfo.current_period_end).format('YYYY-MM-DD'));
-            dDiff = b.diff(a, 'days');
-            return dDiff < 0 ? `expired ${-dDiff} days ago` : dDiff;
-        }
-    };
-
-    const prepareDayLeft = () => {
-        let dDiff = 0;
-        const start = moment.unix(subscriptionInfo.current_period_end);
-        const end = moment();
-        const dayLeft = moment.duration(start.diff(end)).asDays().toFixed(0);
-        if (subscriptionInfo.trial_end && subscriptionInfo.status != 'active') {
             return dayLeft;
         } else {
             const a = moment();
@@ -134,6 +110,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     .required(t('Required field'))
             })
     });
+
+    console.log(subscriptionInfo);
 
     return (
         <>
@@ -244,6 +222,22 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                     <tr>
                                         <td>
                                             {t(subscriptionInfo.dbUserPlan.name)}
+                                            {subscriptionInfo.upgradet_at && (
+                                                <em
+                                                    className={`block text-[12px] text-${
+                                                        subscriptionInfo.nameUpgrade != 'Cancel'
+                                                            ? 'green-250'
+                                                            : 'orange-450'
+                                                    } font-bold`}
+                                                    style={{ fontStyle: 'normal' }}>
+                                                    {subscriptionInfo.upgradet_at
+                                                        ? `Upgr: ${moment(
+                                                              subscriptionInfo.upgradet_at
+                                                          ).format('MM/DD/YYYY')}`
+                                                        : ''}{' '}
+                                                    {t('to')} {t(subscriptionInfo.nameUpgrade)}
+                                                </em>
+                                            )}
                                             <a
                                                 className="cursor-pointer text-xs gradient-btn-small block max-w-max mt-5"
                                                 href={subscriptionInfo.invoicePdf}
@@ -262,9 +256,13 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                             {subscriptionInfo.viewCreate}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
-                                            3/22/2024 - 4/22/2024
-                                            {/*{subscriptionInfo.periodStart} -{' '}*/}
-                                            {/*{subscriptionInfo.periodEnd}*/}
+                                            {moment
+                                                .unix(subscriptionInfo.current_period_start)
+                                                .format('MM/DD/YYYY')}
+                                            {' - '}
+                                            {moment
+                                                .unix(subscriptionInfo.current_period_end)
+                                                .format('MM/DD/YYYY')}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
                                             {subscriptionInfo.daysLeft}
@@ -281,7 +279,10 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                             <span
                                                 className="cursor-pointer disabled-btn-small inline-block ml-4"
                                                 role="presentation"
-                                                onClick={() => dispatch(unsubscribeAction(true))}>
+                                                onClick={() => {
+                                                    setSelectedItem(!selectedItem);
+                                                    // dispatch(unsubscribeAction(true))
+                                                }}>
                                                 {t('Cancel')}
                                             </span>
                                         </td>
@@ -340,6 +341,17 @@ export default function Index({ session, locale }: { session: any; locale: strin
                 )}
             </div>
             {subscriptionInfo?.id && <ChangeSubscription locale={locale} />}
+            <ConfirmDialog
+                show={!!selectedItem}
+                text={t('Are you sure you want to cancel subscription?', {
+                    status: selectedItem ? t('enable') : t('disable'),
+                    name: t('Cancel Subscription')
+                })}
+                titleConfirm={t('Yes')}
+                titleCancel={t('Cancel')}
+                onConfirm={handlerConfirmCancel}
+                onClose={() => setSelectedItem(null)}
+            />
         </>
     );
 }
