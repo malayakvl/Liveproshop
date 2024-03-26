@@ -13,7 +13,6 @@ async function startProcess() {
     await axios(`${apiUrl}/api/check-subscription-for-update`)
         .then( (response) => {
             response.data.data.forEach(async subscription => {
-
                 await axios
                     .post(`${apiUrl}/api/update-subscription-plan-job`, subscription)
                     .then(() => {

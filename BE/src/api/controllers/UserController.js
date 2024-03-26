@@ -745,30 +745,33 @@ class UserController {
         const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.body.user_id, req.body);
 
 
-        return res.status(200).json('Done');
-        if (req.user) {
-            console.log(req.user);
-            // create upgrade row about subscription
-            const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
-            return res.status(200).json({
-                success: true
-            });
-
-            // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
-            // if (data.success) {
-            //     return res.status(200).json({
-            //         success: data.success
-            //     });
-            // } else {
-            //     return res.status(402).json({
-            //         success: data.success,
-            //         error: data.error
-            //     });
-            // }
-        } else {
-            return res.status(402).json('Something wend wrong for update subscription');
-        }
+        return res.status(200).json({
+            success: true
+        });
+        // if (req.user) {
+        //     console.log(req.user);
+        //     // create upgrade row about subscription
+        //     const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+        //     return res.status(200).json({
+        //         success: true
+        //     });
+        //
+        //     // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
+        //     // if (data.success) {
+        //     //     return res.status(200).json({
+        //     //         success: data.success
+        //     //     });
+        //     // } else {
+        //     //     return res.status(402).json({
+        //     //         success: data.success,
+        //     //         error: data.error
+        //     //     });
+        //     // }
+        // } else {
+        //     return res.status(402).json('Something wend wrong for update subscription');
+        // }
     }
+
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
             // create upgrade row about subscription

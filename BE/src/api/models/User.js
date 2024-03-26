@@ -6,6 +6,7 @@ import Stripe from 'stripe';
 import axios from "axios";
 import paymentPlanModel from "./PaymentPlan.js";
 import {
+    changeSubscriptionPlanEmail, confirmShippedEmail,
     confirmSubscriptionEmail,
     confirmSubscriptionPaymentEmail,
     confirmVerificationEmail
@@ -13,7 +14,6 @@ import {
 import { sendMail } from "../lib/sendMail.js";
 import moment from 'moment';
 import fs from "fs";
-import db from "node-pg-migrate/dist/db.js";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -2152,36 +2152,37 @@ console.log(_querySubscription);
             const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${userId}`);
 
             if (data.status === 'cancel') {
-                console.log('here cancel subscription')
                 try {
                     const cancelSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
                     await client.query(`UPDATE data.subscriptions 
                             SET status='cancel', upgradet_at=null WHERE user_id=${userId}`);
                     await client.query(`DELETE FROM data.subscriptions_upgrade WHERE user_id=${userId}`);
+
+                    return { success: true, error: null };
                 } catch (e) {
                     console.log(e.message);
                 }
             } else {
-                console.log('here change subscription');
                 const paymentIntents = await stripe.paymentIntents.list({
                     limit: 3,
                     customer: customerId,
                 });
+                const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${planId}'`);
+                const subscriptioPlanId = dbPlan.rows[0].stripe_id;
+
                 const subscriptionObject = {
                     customer: customerId,
                     items: [{
-                        plan: planId
+                        plan: subscriptioPlanId
                     }],
                     collection_method: 'charge_automatically',
                 };
                 const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
-                console.log("NEW SUBSCRIPTION", subscriptionNew);
 
                 // cancel old subscription
-                await stripe.subscriptions.cancel(oldSubscriptionId);
+                const cancelPrevSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
 
                 // update subscription DB
-                const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
                 const periodStartNew =  new Date();
                 const periodEndNew  = new Date();
                 periodEndNew.setMonth(periodEndNew.getMonth() + 1);
@@ -2198,12 +2199,20 @@ console.log(_querySubscription);
                     is_trial: false
                 }
                 const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                console.log(_querySubscription);
                 await client.query(_querySubscription);
-            }
-            try {
-            } catch (e) {
-                console.log(e.message)
+                await client.query(`DELETE FROM data.subscriptions_upgrade WHERE user_id=${userId}`);
+                await client.query(`UPDATE data.subscriptions 
+                            SET upgradet_at=null WHERE user_id=${userId}`);
+
+                const userInfo = await client.query(`SELECT * FROM data.users WHERE id=${userId}`)
+
+                const mail = await changeSubscriptionPlanEmail(userInfo.rows[0].email, userInfo.rows[0].selected_locale);
+                sendMail(
+                    _order.email,
+                    mail.subject,
+                    mail.body
+                );
+
             }
 
             return { success: true, error: null };
