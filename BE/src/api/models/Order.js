@@ -1075,7 +1075,7 @@ class Order {
             // send email about shipping
             console.log('SHIPPED status');
             const emailSql = `
-                SELECT data.users.*, data.user_stores.name AS store_name FROM data.orders 
+                SELECT data.users.*, data.user_stores.name AS store_name, data.orders.order_number FROM data.orders 
                     LEFT JOIN data.users ON data.users.id=data.orders.user_id 
                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id                   

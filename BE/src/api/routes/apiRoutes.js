@@ -109,8 +109,9 @@ apiRoutes.post('/profile/add-payment-method-after-registration', UserController.
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
 apiRoutes.get('/profile/set-locale', UserController.setUserLocale);
 apiRoutes.post('/profile/set-locale', UserController.setUserLocale);
-apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
+// apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
 // apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
+apiRoutes.post('/profile/update-subscription-plan', UserController.upgradeSubscription);
 apiRoutes.get('/profile/unsubscription', UserController.cancelSubscription);
 apiRoutes.get('/profile/generate-stripe-invoice', UserController.generateInvoice);
 apiRoutes.route('/profile/order-comment')

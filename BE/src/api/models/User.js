@@ -2042,8 +2042,36 @@ console.log('LOCALE', locale);
     async fetchSubscriptionsForUpdate() {
         const client = await pool.connect();
         const subscriptionData = await client.query(`SELECT * FROM data.subscriptions_upgrade LIMIT 20`);
-console.log(subscriptionData.rows);
         return {success: true, data: subscriptionData.rows.length > 0 ? subscriptionData.rows : []}
+    }
+
+    async upgradeSubscription(user, planId) {
+        const client = await pool.connect();
+        const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
+        const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${dbSubscriptionInfo.rows[0].plan_id}'`);
+        const customerId = dbSubscriptionInfo.rows[0].customer_id;
+        try {
+            const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
+            const ts = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-MM-DD HH:mm").unix();
+            const m = moment.unix(ts);
+            const upgradeSubscription = {
+                user_id: user.id,
+                plan_id: planId,
+                customer_id: customerId,
+                subscription_id: dbSubscriptionInfo.rows[0].subscription_id,
+                period_start: m / 1000,
+                period_end: m / 1000,
+                status: 'change'
+            }
+            console.log(upgradeSubscription);
+            // const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
+            // await client.query(_querySubscription);
+            // await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
+
+            return { success: true, error: null };
+        } catch (e) {
+            console.log(e.message);
+        }
     }
 
     async cancelSubscription(user, planId) {
@@ -2134,7 +2162,44 @@ console.log(subscriptionData.rows);
                     console.log(e.message);
                 }
             } else {
-                console.log('here change subscription')
+                console.log('here change subscription');
+                const paymentIntents = await stripe.paymentIntents.list({
+                    limit: 3,
+                    customer: customerId,
+                });
+                const subscriptionObject = {
+                    customer: customerId,
+                    items: [{
+                        plan: planId
+                    }],
+                    collection_method: 'charge_automatically',
+                };
+                const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
+                console.log("NEW SUBSCRIPTION", subscriptionNew);
+
+                // cancel old subscription
+                await stripe.subscriptions.cancel(oldSubscriptionId);
+
+                // update subscription DB
+                const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
+                const periodStartNew =  new Date();
+                const periodEndNew  = new Date();
+                periodEndNew.setMonth(periodEndNew.getMonth() + 1);
+                const timestampStartNew = periodStartNew.getTime();
+                const timestampEndNew = periodEndNew.getTime();
+                const dbSubscription = {
+                    user_id: userId,
+                    customer_id: customerId,
+                    plan_id: dbPlan.rows[0].id,
+                    subscription_id: `${subscriptionNew.id}`,
+                    status: 'active',
+                    period_start: timestampStartNew/1000,
+                    period_end: timestampEndNew/1000,
+                    is_trial: false
+                }
+                const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                console.log(_querySubscription);
+                await client.query(_querySubscription);
             }
             try {
             } catch (e) {

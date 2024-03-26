@@ -702,6 +702,25 @@ class UserController {
         });
     }
 
+    async upgradeSubscription(req, res) {
+        if (req.user) {
+            const data = await userModel.upgradeSubscription(req.user, req.body.planId);
+            if (data.success) {
+                return res.status(200).json({
+                    success: data.success
+                });
+            } else {
+                return res.status(402).json({
+                    success: data.success,
+                    error: data.error
+                });
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+
+    }
+
     async cancelSubscription(req, res) {
         if (req.user) {
             const data = await userModel.cancelSubscription(req.user, req.body.planId);
@@ -752,7 +771,9 @@ class UserController {
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
             // create upgrade row about subscription
-            const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+            console.log('AAAAA');
+            // const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+            const dataUpgrade = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
             return res.status(200).json({
                 success: true
             });
