@@ -2181,6 +2181,7 @@ console.log(_querySubscription);
 
                 // cancel old subscription
                 const cancelPrevSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
+                console.log('CANCEL SUBSCRIPTION', cancelPrevSubscription);
 
                 // update subscription DB
                 const periodStartNew =  new Date();
@@ -2205,10 +2206,9 @@ console.log(_querySubscription);
                             SET upgradet_at=null WHERE user_id=${userId}`);
 
                 const userInfo = await client.query(`SELECT * FROM data.users WHERE id=${userId}`)
-
                 const mail = await changeSubscriptionPlanEmail(userInfo.rows[0].email, userInfo.rows[0].selected_locale);
                 sendMail(
-                    _order.email,
+                    userInfo.rows[0].email,
                     mail.subject,
                     mail.body
                 );
