@@ -137,7 +137,7 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                     <div className="flex w-full">
                                         <select
                                             name="plan_id"
-                                            style={{ width: '250px' }}
+                                            style={{ width: '350px' }}
                                             value={3}
                                             className="form-control w-full"
                                             onChange={(e) => {
@@ -184,7 +184,9 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                                     );
                                                 } else {
                                                     setBtnCaption('Select');
-                                                    dispatch(updateSubscriptionAction(planId));
+                                                    dispatch(
+                                                        updateSubscriptionAction(planId, locale)
+                                                    );
                                                 }
                                             }}>
                                             {t(btnCaption)}
@@ -218,12 +220,12 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                         )}
                         {subscriptionInfo?.id && (
                             <div>
-                                <div className="flex flex-col w-[400px]">
+                                <div className="flex flex-col" style={{ width: '450px' }}>
                                     {subscriptionInfo.defaultPayment && (
                                         <div className="w-full flex">
                                             <select
                                                 name="plan_id"
-                                                style={{ width: '250px' }}
+                                                style={{ width: '350px' }}
                                                 value={planId}
                                                 className="form-control w-full"
                                                 onChange={(e) => {
@@ -263,7 +265,9 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                             <button
                                                 className="gradient-btn ml-4 min-w-[150px]"
                                                 onClick={() =>
-                                                    dispatch(updateSubscriptionAction(planId))
+                                                    dispatch(
+                                                        updateSubscriptionAction(planId, locale)
+                                                    )
                                                 }>
                                                 {t(btnCaption)}
                                             </button>

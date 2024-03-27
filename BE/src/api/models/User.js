@@ -2054,7 +2054,6 @@ console.log('LOCALE', locale);
         try {
             if (dbPlan.rows[0].name === 'Platinum') {
                 const mail = await sendPlatinumEmail(user, locale);
-                console.log(mail.subject);
                 sendMail(
                     process.env.EMAIL_PLATINUM,
                     mail.subject,

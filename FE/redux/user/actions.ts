@@ -326,10 +326,9 @@ export const unsubscribeAction: any = createAction(
 );
 export const updateSubscriptionAction: any = createAction(
     'user/UPDATE_SUBSCRIPTION_PLAN',
-    async (planId: string) =>
+    async (planId: string, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            const locale = state.layouts.selectedLng
             dispatch(showLoaderAction(true));
             return axios
                 .post(

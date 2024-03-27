@@ -650,10 +650,5 @@
   "Send me a Recovery Link": "Envoyer un lien de réinitialisation",
   "Select": "Sélectionner",
   "Send Request": "Envoyer la demande",
-  "msg_request":  "Votre demande a été envoyée avec succès. Proshop vous contactera bientôt !",
-
-  "Platinum Plan Request": "Demande de plan Platine",
-  "User Info": "informations utilisateur",
-  "User Email": "Sir Email"
-
+  "msg_request":  "Votre demande a été envoyée avec succès. Proshop vous contactera bientôt !"
 }

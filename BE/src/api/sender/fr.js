@@ -90,6 +90,11 @@ export default {
 
   "We confirm that your order has been shipped": "Nous vous confirmons l’expédition de votre commande",
   "You can track your order at any time by clicking on the tracking number or by contacting your merchant.": "Vous pouvez suivre sa progression à tout moment en cliquant sur le numéro de suivi ou en contactant votre commerçant.",
-  "Your order has been shipped": "Votre commande a été expédiée"
+  "Your order has been shipped": "Votre commande a été expédiée",
+
+  "Platinum Plan Request": "Demande de plan Platine",
+  "User Info": "informations utilisateur",
+  "User Email": "Sir Email"
+
 
 };

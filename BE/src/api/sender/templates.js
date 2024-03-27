@@ -13,10 +13,7 @@ export const sendPlatinumEmail = async (user = '', locale) => {
       ${t['Platinum Plan Request']}: 
     </p>
     <p>
-      ${t['User Info']}
-    </p>
-    <p>
-      ${t['Email']}: <a href="mailto:${user.email}">${user.email}</a>, 
+      <a href="mailto:${user.email}">${user.email}</a>, 
     </p>
     <p>
       ${user.first_name} ${user.last_name}
