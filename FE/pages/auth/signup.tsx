@@ -5,7 +5,7 @@ import { providers, getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Link from 'next/link';
 import * as Yup from 'yup';
-import { Field, Formik, ErrorMessage, useFormikContext, useField, FormikProps } from 'formik';
+import { Field, Formik, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     inviteUserAction,
@@ -181,7 +181,9 @@ export default function Signup({ locale }: { locale: string }) {
                                                 </div>
                                                 <div className="text-gray-180 text-xs mb-2">
                                                     <Field
-                                                        onClick={() => setRoleId(1)}
+                                                        onClick={() => {
+                                                            setRoleId(1);
+                                                        }}
                                                         id="buyer-radio"
                                                         type="radio"
                                                         className="radio mr-2.5"
@@ -231,13 +233,17 @@ export default function Signup({ locale }: { locale: string }) {
                                                 <div
                                                     style={{ lineHeight: '0.1em' }}
                                                     className={`text-center border-b my-5 ${
-                                                        showSellerRadio ? '' : 'hidden'
+                                                        showSellerRadio && roleId != 1
+                                                            ? ''
+                                                            : 'hidden'
                                                     }`}>
                                                     <span className="bg-white px-6">{t('or')}</span>
                                                 </div>
                                                 <div
                                                     className={`relative ${
-                                                        showSellerRadio ? '' : 'hidden'
+                                                        showSellerRadio && roleId != 1
+                                                            ? ''
+                                                            : 'hidden'
                                                     }`}>
                                                     <i className="f-icon f-email" />
 

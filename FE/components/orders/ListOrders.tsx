@@ -13,6 +13,7 @@ import {
     clearBase64Action,
     fetchItemsAction,
     showCancelConfirmationModalAction,
+    showShippedConfirmationModalAction,
     showDateSelectorAction
 } from '../../redux/orders';
 import moment from 'moment';
@@ -20,14 +21,11 @@ import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { checkIdsAction, initIdsAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
-import { Filters, FilterValues, ListItems, CancelConfirmation } from './index';
+import { Filters, FilterValues, ListItems, CancelConfirmation, ShippedConfirmation } from './index';
 import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
-// import { DateRangePicker } from 'react-date-range';
-// import 'react-date-range/dist/styles.css'; // main css file
-// import 'react-date-range/dist/theme/default.css';
 import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
-import { bulkShippingAction, bulkDownloadAction } from '../../redux/orders/actions';
+import { bulkDownloadAction } from '../../redux/orders/actions';
 import Router from 'next/router';
 
 const userProfileImg =
@@ -78,7 +76,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     const sendStatusRequest = useCallback(
         (status: string) => {
             if (status === 'shipped') {
-                return dispatch(bulkShippingAction());
+                return dispatch(showShippedConfirmationModalAction(true));
             } else if (status === 'cancel' || status === 'refund') {
                 return dispatch(showCancelConfirmationModalAction(true));
             } else {
@@ -176,20 +174,6 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                     {items?.map((item: any) => (
                         <Fragment key={item.id}>
                             <tr>
-                                {/*{user.role_id === 2 && (*/}
-                                {/*    <td>*/}
-                                {/*        <input*/}
-                                {/*            className="float-checkbox"*/}
-                                {/*            type="checkbox"*/}
-                                {/*            onChange={() => dispatch(checkIdsAction(item.id))}*/}
-                                {/*            value={item.id}*/}
-                                {/*            checked={*/}
-                                {/*                checkedIds.find((data: any) => data.id === item.id)*/}
-                                {/*                    ?.checked || false*/}
-                                {/*            }*/}
-                                {/*        />*/}
-                                {/*    </td>*/}
-                                {/*)}*/}
                                 <td>
                                     <input
                                         className="float-checkbox"
@@ -280,15 +264,8 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                         <div className="invoice-dropdown">
                                             <DropdownPdfAction
                                                 onChange={(v: any) => {
-                                                    // let v =  type === 'invoice pdf' ? 'invoice' : 'refund';
                                                     const type =
                                                         v === 'invoice pdf' ? 'invoice' : 'refund';
-                                                    // if (v === 'invoice pdf') {
-                                                    //     type = 'invoice';
-                                                    // } else {
-                                                    //     type = 'refund';
-                                                    // }
-
                                                     Router.push(
                                                         `/orders/${item.order_number}?locale=${locale}&type=${type}`
                                                     );
@@ -386,6 +363,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                 </DataTable>
             </>
             <CancelConfirmation />
+            <ShippedConfirmation />
             <a
                 href={achiveName}
                 className="hidden"

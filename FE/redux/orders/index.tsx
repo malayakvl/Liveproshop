@@ -9,6 +9,7 @@ import {
     showDateSelectorAction,
     findSellersAction,
     showCancelConfirmationModalAction,
+    showShippedConfirmationModalAction,
     clearBase64Action,
     setAchiveNameAction,
     setSingleFileNameAction,
@@ -42,6 +43,7 @@ const initialState: {
     base64Data: string | null;
     tagSellersSuggestions: any[];
     showCancelPopup: boolean;
+    showShippedPopup: boolean;
     achiveName: string | null;
     commentIdOrder: string | null;
     tmpCommentOrderId: string | null;
@@ -69,6 +71,7 @@ const initialState: {
     base64Data: null,
     tagSellersSuggestions: [],
     showCancelPopup: false,
+    showShippedPopup: false,
     achiveName: null,
     commentIdOrder: null,
     tmpCommentOrderId: null,
@@ -167,6 +170,12 @@ const ACTION_HANDLERS: any = {
         next: (state: State.Orders, action: Action<boolean>): State.Orders => ({
             ...state,
             showCancelPopup: action.payload
+        })
+    },
+    [showShippedConfirmationModalAction]: {
+        next: (state: State.Orders, action: Action<boolean>): State.Orders => ({
+            ...state,
+            showShippedPopup: action.payload
         })
     },
     [showDateSelectorAction]: {
@@ -275,6 +284,7 @@ export {
     fetchOrderPdfAction,
     findSellersAction,
     showCancelConfirmationModalAction,
+    showShippedConfirmationModalAction,
     clearBase64Action,
     setSingleFileNameAction,
     connectOrderAction,

@@ -120,7 +120,9 @@ export const bulkShippingAction: any = createAction(
                 )
                 .then(async () => {
                     dispatch(showLoaderAction(false));
-                    dispatch(setSuccessToastAction('Products has been deleted'));
+                    dispatch(setSuccessToastAction('Products has been shipped'));
+                    dispatch(showShippedConfirmationModalAction(false));
+                    toggleModalPopup('.modal-shipped-confirmation');
                     dispatch(fetchItemsAction());
                 })
                 .catch((e) => {
@@ -460,6 +462,9 @@ export const showDateSelectorAction: any = createAction('orders/SHOW_DATE_POPUP'
 export const setEmptyFormAction: any = createAction('orders/EMPTY_FORM');
 export const showCancelConfirmationModalAction: any = createAction(
     'orders/CANCEL_CONFIRMATION_ORDER'
+);
+export const showShippedConfirmationModalAction: any = createAction(
+    'orders/SHIPPED_CONFIRMATION_ORDER'
 );
 export const setAchiveNameAction: any = createAction('orders/SET_ARCHIVE_NAME');
 export const setSingleFileNameAction: any = createAction('orders/SET_DOWNLOAD_SINGLE_NAME');

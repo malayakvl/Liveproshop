@@ -639,7 +639,6 @@ class UserController {
                 user: _user
             });
         }
-        // console.log("FORM DATA", formData);
 
         // for incoming user create free month subscription
         return res.status(402).json('Something wend wrong');
@@ -702,6 +701,26 @@ class UserController {
         });
     }
 
+    async upgradeSubscription(req, res) {
+        if (req.user) {
+            const data = await userModel.upgradeSubscription(req.user, req.body.planId, req.query.locale);
+            if (data.success) {
+                return res.status(200).json({
+                    success: data.success,
+                    planId: data.planId
+                });
+            } else {
+                return res.status(402).json({
+                    success: data.success,
+                    error: data.error
+                });
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+
+    }
+
     async cancelSubscription(req, res) {
         if (req.user) {
             const data = await userModel.cancelSubscription(req.user, req.body.planId);
@@ -721,53 +740,55 @@ class UserController {
 
     }
 
+    async getSubscriptionRecurringPaymentJob (req, res) {
+        const dataResult = await userModel.recurringPaymentList(req.body.user_id, req.body);
+        console.log(dataResult);
+
+        return res.status(200).json({
+            success: true
+        });
+    }
+
     async updateSubscriptionPlanJob (req, res) {
         const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.body.user_id, req.body);
 
 
-        return res.status(200).json('Done');
-        if (req.user) {
-            console.log(req.user);
-            // create upgrade row about subscription
-            const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
-            return res.status(200).json({
-                success: true
-            });
-
-            // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
-            // if (data.success) {
-            //     return res.status(200).json({
-            //         success: data.success
-            //     });
-            // } else {
-            //     return res.status(402).json({
-            //         success: data.success,
-            //         error: data.error
-            //     });
-            // }
-        } else {
-            return res.status(402).json('Something wend wrong for update subscription');
-        }
+        return res.status(200).json({
+            success: true
+        });
+        // if (req.user) {
+        //     console.log(req.user);
+        //     // create upgrade row about subscription
+        //     const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+        //     return res.status(200).json({
+        //         success: true
+        //     });
+        //
+        //     // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
+        //     // if (data.success) {
+        //     //     return res.status(200).json({
+        //     //         success: data.success
+        //     //     });
+        //     // } else {
+        //     //     return res.status(402).json({
+        //     //         success: data.success,
+        //     //         error: data.error
+        //     //     });
+        //     // }
+        // } else {
+        //     return res.status(402).json('Something wend wrong for update subscription');
+        // }
     }
+
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
             // create upgrade row about subscription
-            const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+            console.log('AAAAA');
+            // const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+            const dataUpgrade = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
             return res.status(200).json({
                 success: true
             });
-
-            // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
-            // if (data.success) {
-            //     return res.status(200).json({
-            //         success: data.success
-            //     });
-            // } else {
-            //     return res.status(402).json({
-            //         success: data.success,
-            //         error: data.error
-            //     });
-            // }
         } else {
             return res.status(402).json('Something wend wrong');
         }
@@ -891,6 +912,14 @@ class UserController {
             });
         }
         return res.status(200).json('Something wend wrong');
+    }
+
+    async sendRequestPlatinum(req, res) {
+        if (req.user) {
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(403).json({error: 'Something wend wrong'});
+        }
     }
 
     async unsubscribe (req, res) {

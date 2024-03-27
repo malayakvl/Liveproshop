@@ -92,13 +92,15 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             !settingsValues.delivery_link ? (
                                 <div />
                             ) : (
-                                <div>
-                                    <button
-                                        className="btn-big xl:ml-4 mt-4 md:mt-0"
-                                        onClick={() => dispatch(showPopupAction(true))}>
-                                        {t('Schedule new session')}
-                                    </button>
-                                </div>
+                                <>
+                                    <div>
+                                        <button
+                                            className="btn-big xl:ml-4 mt-4 md:mt-0"
+                                            onClick={() => dispatch(showPopupAction(true))}>
+                                            {t('Schedule new session')}
+                                        </button>
+                                    </div>
+                                </>
                             )}
                             {/*    className="btn-big xl:ml-4 mt-4 md:mt-0"*/}
                             {/*    onClick={() => dispatch(showPopupAction(true))}>*/}

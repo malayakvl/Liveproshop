@@ -10,7 +10,10 @@ import { showChangeSubscriptionFormAction } from '../../../redux/user';
 import { updateSubscriptionAction } from '../../../redux/user/actions';
 import Image from 'next/image';
 import Head from 'next/head';
-import { setModalCalendlyMetaAction } from '../../../redux/layouts';
+// import { setModalCalendlyMetaAction } from '../../../redux/layouts';
+import { itemsSelector } from '../../../redux/paymentPlans/selectors';
+import { fetchFormAction } from '../../../redux/paymentPlans';
+import { showLoaderAction } from '../../../redux/layouts/actions';
 
 const ChangeSubscription: React.FC<any> = ({ locale }) => {
     const t = useTranslations();
@@ -21,6 +24,15 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
     const [selectedPlanDbId, setSelectedPlanDbId] = useState<any>(null);
     const [dropdownPlanId, setDropdownPlanId] = useState<any>(null);
     const [dropdownPlanName, setDropdownPlanName] = useState<any>(null);
+    const [btnCaption, setBtnCaption] = useState<any>('Select');
+    const paymentPlans = useSelector(itemsSelector);
+
+    useEffect(() => {
+        dispatch(showLoaderAction(true));
+        dispatch(fetchFormAction());
+    }, []);
+
+    console.log('PLANS', paymentPlans);
 
     useEffect(() => {
         if (showModal) {
@@ -99,7 +111,7 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                 <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" />
                 <div className="modal-container bg-white w-12/12 md:max-w-screen-xl mx-auto rounded shadow-lg z-50 overflow-y-auto">
                     <div
-                        className="modal-content py-4 text-left px-6 overflow-auto"
+                        className="modal-content py-4 text-left px-6 overflow-auto min-w-[320px]"
                         style={{ maxHeight: '90vh' }}>
                         <div className="flex justify-between items-center pb-3">
                             <p className="text-2xl font-bold">{t('Change Plan')}</p>
@@ -121,18 +133,15 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                         {/*Body*/}
                         {subscriptionInfo?.is_trial && (
                             <div>
-                                {/*{subscriptionInfo.defaultPayment && (*/}
-                                {/*    <>Default Payment</>*/}
-                                {/*)}*/}
                                 {subscriptionInfo?.defaultPayment && (
-                                    <div className="max-w-[320px] flex">
+                                    <div className="flex w-full">
                                         <select
                                             name="plan_id"
-                                            style={{ width: '250px' }}
+                                            style={{ width: '350px' }}
                                             value={3}
                                             className="form-control w-full"
                                             onChange={(e) => {
-                                                console.log('ONCHANGE');
+                                                console.log('ONCHANGE', e.target.value);
                                                 const filteredPlan =
                                                     subscriptionInfo.dbPlans.filter(
                                                         (_plan: any) =>
@@ -165,19 +174,22 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                             ))}
                                         </select>
                                         <button
-                                            className="gradient-btn ml-4"
+                                            className="gradient-btn ml-4 min-w-[150px]"
                                             onClick={() => {
-                                                console.log(dropdownPlanId);
                                                 if (dropdownPlanId === 3) {
-                                                    dispatch(setModalCalendlyMetaAction(true));
+                                                    setBtnCaption('Send Request');
+                                                    // dispatch(setModalCalendlyMetaAction(true));
                                                     dispatch(
                                                         showChangeSubscriptionFormAction(false)
                                                     );
                                                 } else {
-                                                    dispatch(updateSubscriptionAction(planId));
+                                                    setBtnCaption('Select');
+                                                    dispatch(
+                                                        updateSubscriptionAction(planId, locale)
+                                                    );
                                                 }
                                             }}>
-                                            {t('Save')}
+                                            {t(btnCaption)}
                                         </button>
                                     </div>
                                 )}
@@ -208,12 +220,12 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                         )}
                         {subscriptionInfo?.id && (
                             <div>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col" style={{ width: '450px' }}>
                                     {subscriptionInfo.defaultPayment && (
-                                        <div className="max-w-[320px] flex">
+                                        <div className="w-full flex">
                                             <select
                                                 name="plan_id"
-                                                style={{ width: '250px' }}
+                                                style={{ width: '350px' }}
                                                 value={planId}
                                                 className="form-control w-full"
                                                 onChange={(e) => {
@@ -223,8 +235,12 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                                             (_plan: any) =>
                                                                 _plan.stripe_id === e.target.value
                                                         );
-                                                    if (filteredPlan[0].id == 3) {
-                                                        dispatch(setModalCalendlyMetaAction(true));
+                                                    if (filteredPlan[0]?.id == 3) {
+                                                        setBtnCaption(t('Send Request'));
+                                                        // dispatch(sendEmailPlatinumAction());
+                                                        // dispatch(setModalCalendlyMetaAction(true));
+                                                    } else {
+                                                        setBtnCaption(t('Select'));
                                                     }
                                                     if (filteredPlan.length) {
                                                         setSelectedPlanDbId(filteredPlan[0].id);
@@ -247,35 +263,35 @@ const ChangeSubscription: React.FC<any> = ({ locale }) => {
                                                 ))}
                                             </select>
                                             <button
-                                                className="gradient-btn ml-4"
+                                                className="gradient-btn ml-4 min-w-[150px]"
                                                 onClick={() =>
-                                                    dispatch(updateSubscriptionAction(planId))
+                                                    dispatch(
+                                                        updateSubscriptionAction(planId, locale)
+                                                    )
                                                 }>
-                                                {t('Save')}
+                                                {t(btnCaption)}
                                             </button>
                                         </div>
                                     )}
                                     {!subscriptionInfo?.defaultPayment && (
                                         <p>{t('Add and setup default payment first')}</p>
                                     )}
-                                    {subscriptionInfo?.paymentPlanList?.values && selectedPlanDbId && (
+                                    {paymentPlans?.values && selectedPlanDbId && (
                                         <Fragment>
-                                            {subscriptionInfo.paymentPlanList.values.map(
-                                                (values: any) => (
-                                                    <Fragment key={values.group.id}>
-                                                        <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
-                                                            <div className="flex-grow font-bold text-2xl my-6 sm:mt-4">
-                                                                {parseTranslation(
-                                                                    values.group,
-                                                                    'name',
-                                                                    locale
-                                                                )}
-                                                            </div>
+                                            {paymentPlans?.values.map((values: any) => (
+                                                <Fragment key={values.group.id}>
+                                                    <div className="space-x-0 lg:space-x-10 flex justify-between lg:justify-end items-stretch">
+                                                        <div className="flex-grow font-bold text-xl my-6 sm:mt-4">
+                                                            {parseTranslation(
+                                                                values.group,
+                                                                'name',
+                                                                locale
+                                                            )}
                                                         </div>
-                                                        {parseOptions(values.values, locale)}
-                                                    </Fragment>
-                                                )
-                                            )}
+                                                    </div>
+                                                    {parseOptions(values.values, locale)}
+                                                </Fragment>
+                                            ))}
                                         </Fragment>
                                     )}
                                 </div>

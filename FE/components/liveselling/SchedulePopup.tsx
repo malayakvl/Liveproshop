@@ -27,10 +27,8 @@ const SchedulePopup: React.FC<any> = () => {
     const selectedStoreId = useSelector(storeSelector);
     const [selectedStore, setSelectedStore] = useState(null);
     const feature_fb_schedule = useSelector(userSelector)?.plan_options?.feature_fb_schedule;
+    const user = useSelector(userSelector);
 
-    // console.log(useSelector(userSelector)?.plan_options);
-
-    // const scenarios = useSelector(scenariosSelector);
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(moment().format('HH:mm'));
     const [listStores, setListStores] = useState([]);
@@ -147,120 +145,145 @@ const SchedulePopup: React.FC<any> = () => {
                                 </a>
                             </span>
                         </div>
-                        <div className="flex">
-                            {feature_fb_schedule ? (
-                                <Formik
-                                    initialValues={{ cart_duration: '', type: '' }}
-                                    validationSchema={SubmitSchema}
-                                    onSubmit={(values, { resetForm }) => {
-                                        const sessionData: any = {};
-                                        sessionData.event_date =
-                                            moment(startDate).format('YYYY-MM-DD');
-                                        // sessionData.event_time = moment(startTime).format('HH:mm');
-                                        sessionData.event_time = startTime;
-                                        // sessionData.scenarios = selectedScenarios;
-                                        if ((values as any).id) {
-                                            sessionData.id = (values as any).id;
-                                        }
-                                        sessionData.cart_duration = (values as any).cart_duration;
-                                        sessionData.type = (values as any).type;
-                                        sessionData.storeId = selectedStoreId;
-                                        dispatch(submitFormAction(sessionData));
-                                        resetForm();
-                                    }}>
-                                    {(props) => {
-                                        return (
-                                            <form onSubmit={props.handleSubmit}>
-                                                <div className="grid grid-cols-1">
-                                                    <div className="mb-3">
-                                                        <Select
-                                                            isClearable={true}
-                                                            className={'form-control-dropdown'}
-                                                            options={listStores}
-                                                            value={selectedStore}
-                                                            onChange={handleChangeStore}
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <span className="block text-gray-350 text-[18px] font-bold mb-5">
-                                                            Choose a date
-                                                        </span>
-                                                        <div className="flex">
-                                                            <div className="mb-4">
-                                                                <label className="control-label">
-                                                                    {t('Date')}
-                                                                </label>
-                                                                <DatePicker
-                                                                    className="form-control date-input"
-                                                                    selected={startDate}
-                                                                    onChange={(date: any) => {
-                                                                        if (moment(date).isValid())
-                                                                            setStartDate(date);
-                                                                    }}
-                                                                    dateFormat="dd/MM/yyyy"
-                                                                    minDate={new Date()}
-                                                                    required
+                        {user?.subscription_id && (
+                            <>
+                                <div className="flex">
+                                    {feature_fb_schedule &&
+                                    !user?.subscription_id.includes('skip_') ? (
+                                        <Formik
+                                            initialValues={{ cart_duration: '', type: '' }}
+                                            validationSchema={SubmitSchema}
+                                            onSubmit={(values, { resetForm }) => {
+                                                const sessionData: any = {};
+                                                sessionData.event_date =
+                                                    moment(startDate).format('YYYY-MM-DD');
+                                                // sessionData.event_time = moment(startTime).format('HH:mm');
+                                                sessionData.event_time = startTime;
+                                                // sessionData.scenarios = selectedScenarios;
+                                                if ((values as any).id) {
+                                                    sessionData.id = (values as any).id;
+                                                }
+                                                sessionData.cart_duration = (
+                                                    values as any
+                                                ).cart_duration;
+                                                sessionData.type = (values as any).type;
+                                                sessionData.storeId = selectedStoreId;
+                                                dispatch(submitFormAction(sessionData));
+                                                resetForm();
+                                            }}>
+                                            {(props) => {
+                                                return (
+                                                    <form onSubmit={props.handleSubmit}>
+                                                        <div className="grid grid-cols-1">
+                                                            <div className="mb-3">
+                                                                <Select
+                                                                    isClearable={true}
+                                                                    className={
+                                                                        'form-control-dropdown'
+                                                                    }
+                                                                    options={listStores}
+                                                                    value={selectedStore}
+                                                                    onChange={handleChangeStore}
                                                                 />
                                                             </div>
-                                                            <div className="mb-4 ml-5">
-                                                                <label className="control-label">
-                                                                    {t('Time Start')}
-                                                                </label>
-                                                                <div>
-                                                                    <InputMask
-                                                                        style={{ width: '100px' }}
-                                                                        className="form-control"
-                                                                        mask={[
-                                                                            /[0-2]/,
-                                                                            startTime[0] === '2'
-                                                                                ? /[0-3]/
-                                                                                : /[0-9]/,
-                                                                            ':',
-                                                                            /[0-5]/,
-                                                                            /[0-9]/
-                                                                        ]}
-                                                                        maskPlaceholder="00:00"
-                                                                        onChange={(e) =>
-                                                                            setStartTime(
-                                                                                e.target.value
-                                                                            )
-                                                                        }
-                                                                        onFocus={(e) =>
-                                                                            e.target.select()
-                                                                        }
-                                                                        value={startTime}
-                                                                    />
+                                                            <div>
+                                                                <span className="block text-gray-350 text-[18px] font-bold mb-5">
+                                                                    Choose a date
+                                                                </span>
+                                                                <div className="flex">
+                                                                    <div className="mb-4">
+                                                                        <label className="control-label">
+                                                                            {t('Date')}
+                                                                        </label>
+                                                                        <DatePicker
+                                                                            className="form-control date-input"
+                                                                            selected={startDate}
+                                                                            onChange={(
+                                                                                date: any
+                                                                            ) => {
+                                                                                if (
+                                                                                    moment(
+                                                                                        date
+                                                                                    ).isValid()
+                                                                                )
+                                                                                    setStartDate(
+                                                                                        date
+                                                                                    );
+                                                                            }}
+                                                                            dateFormat="dd/MM/yyyy"
+                                                                            minDate={new Date()}
+                                                                            required
+                                                                        />
+                                                                    </div>
+                                                                    <div className="mb-4 ml-5">
+                                                                        <label className="control-label">
+                                                                            {t('Time Start')}
+                                                                        </label>
+                                                                        <div>
+                                                                            <InputMask
+                                                                                style={{
+                                                                                    width: '100px'
+                                                                                }}
+                                                                                className="form-control"
+                                                                                mask={[
+                                                                                    /[0-2]/,
+                                                                                    startTime[0] ===
+                                                                                    '2'
+                                                                                        ? /[0-3]/
+                                                                                        : /[0-9]/,
+                                                                                    ':',
+                                                                                    /[0-5]/,
+                                                                                    /[0-9]/
+                                                                                ]}
+                                                                                maskPlaceholder="00:00"
+                                                                                onChange={(e) =>
+                                                                                    setStartTime(
+                                                                                        e.target
+                                                                                            .value
+                                                                                    )
+                                                                                }
+                                                                                onFocus={(e) =>
+                                                                                    e.target.select()
+                                                                                }
+                                                                                value={startTime}
+                                                                            />
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div className="flex justify-end">
-                                                    <button
-                                                        type="button"
-                                                        className="cancel mr-2.5"
-                                                        onClick={() => {
-                                                            dispatch(showPopupAction(false));
-                                                            toggleModalPopup('.modal-schedule');
-                                                            props.resetForm();
-                                                        }}>
-                                                        {t('Cancel')}
-                                                    </button>
-                                                    <button className="gradient-btn">
-                                                        {t('Save')}
-                                                    </button>
-                                                </div>
-                                            </form>
-                                        );
-                                    }}
-                                </Formik>
-                            ) : (
-                                <div>
-                                    <p className="mb-4">{t('liveselling_warning')}</p>
-                                    <Link href="/pricing">Pricing & Plans</Link>
+                                                        <div className="flex justify-end">
+                                                            <button
+                                                                type="button"
+                                                                className="cancel mr-2.5"
+                                                                onClick={() => {
+                                                                    dispatch(
+                                                                        showPopupAction(false)
+                                                                    );
+                                                                    toggleModalPopup(
+                                                                        '.modal-schedule'
+                                                                    );
+                                                                    props.resetForm();
+                                                                }}>
+                                                                {t('Cancel')}
+                                                            </button>
+                                                            <button className="gradient-btn">
+                                                                {t('Save')}
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                );
+                                            }}
+                                        </Formik>
+                                    ) : (
+                                        <div>
+                                            <p className="mb-4">{t('liveselling_warning')}</p>
+                                            <Link href="/pricing">Pricing & Plans</Link>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

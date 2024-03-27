@@ -71,11 +71,19 @@ error - Failed to load SWC binary, see more info here: https://nextjs.org/docs/m
 Desition - add .babelrc
 
 
-### Starting major task
+### Starting major fb task
 
 ```bash
-pm2 start _sessionsStart.js --name="Check started session"
+pm2 start jobStart.js
+pm2 start jobEnd.js
 ```
+
+### Starting major subscription task
+
+```bash
+pm2 start subscriptionsStart.js
+```
+
 
 ```bash
 pm2 start sessionsEvents.js --name="Create sessions events"

@@ -6,14 +6,15 @@ import Stripe from 'stripe';
 import axios from "axios";
 import paymentPlanModel from "./PaymentPlan.js";
 import {
+    changeSubscriptionPlanEmail,
     confirmSubscriptionEmail,
+    sendPlatinumEmail,
     confirmSubscriptionPaymentEmail,
     confirmVerificationEmail
 } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 import moment from 'moment';
 import fs from "fs";
-import db from "node-pg-migrate/dist/db.js";
 
 const stripe = Stripe(process.env.STRIPE_API_KEY);
 /**
@@ -601,7 +602,7 @@ class User {
                     const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
                     // update subscription
                     const subscriptionUpdate = await stripe.subscriptions.update(
-                        'sub_49ty4767H20z6a',
+                        subscriptionNew.id,
                         {
                             payment_settings: {
                                 payment_method_types: ['card', 'customer_balance'],
@@ -698,7 +699,7 @@ class User {
                     //     subscriptionObject.coupon =  'free-period';
                     // }
                     const subscription = await stripe.subscriptions.create(subscriptionObject);
-                    // console.log("CREATED SUBSCRIPTION", subscription);
+                    console.log("CREATED SUBSCRIPTION", subscription);
 
                     // if subscription created add record to DB
                     if (subscription?.id) {
@@ -1857,12 +1858,12 @@ console.log('LOCALE', locale);
                 );
 
                 // send mail about subscription
-                const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
-                sendMail(
-                    userData.rows[0].email,
-                    mail.subject,
-                    mail.body
-                );
+                // const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
+                // sendMail(
+                //     userData.rows[0].email,
+                //     mail.subject,
+                //     mail.body
+                // );
 
                 return { success: true, user: user };
             }
@@ -2042,8 +2043,47 @@ console.log('LOCALE', locale);
     async fetchSubscriptionsForUpdate() {
         const client = await pool.connect();
         const subscriptionData = await client.query(`SELECT * FROM data.subscriptions_upgrade LIMIT 20`);
-console.log(subscriptionData.rows);
         return {success: true, data: subscriptionData.rows.length > 0 ? subscriptionData.rows : []}
+    }
+
+    async upgradeSubscription(user, planId, locale) {
+        const client = await pool.connect();
+        const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
+        const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
+        const customerId = dbSubscriptionInfo.rows[0].customer_id;
+        try {
+            if (dbPlan.rows[0].name === 'Platinum') {
+                const mail = await sendPlatinumEmail(user, locale);
+                sendMail(
+                    process.env.EMAIL_PLATINUM,
+                    mail.subject,
+                    mail.body
+                );
+                return { success: true, error: null, planId: 'platinum' };
+            } else {
+                const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
+                const ts = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-MM-DD HH:mm").unix();
+                const m = moment.unix(ts);
+                const upgradeSubscription = {
+                    user_id: user.id,
+                    plan_id: dbPlan.rows[0].id,
+                    customer_id: customerId,
+                    subscription_id: dbSubscriptionInfo.rows[0].subscription_id,
+                    period_start: m / 1000,
+                    period_end: m / 1000,
+                    status: 'change'
+                }
+                const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
+// console.log(_querySubscription);
+                await client.query(_querySubscription);
+                await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
+
+                return { success: true, error: null, planId: null };
+            }
+
+        } catch (e) {
+            console.log(e.message);
+        }
     }
 
     async cancelSubscription(user, planId) {
@@ -2113,6 +2153,34 @@ console.log(subscriptionData.rows);
         return { success: true, error: null };
     }
 
+    async recurringPaymentList() {
+        const client = await pool.connect();
+        try {
+            const currentDay = parseInt(moment().format('DD'));
+            const queryStr = `SELECT  EXTRACT(month FROM period_start::date) as sub_month,
+                    EXTRACT(day FROM period_start::date) as sub_day, data.subscriptions.*,
+                    data.subscription_plans.price,
+                    data.users.email
+                    FROM data.subscriptions
+                    LEFT JOIN data.users ON data.users.id = data.subscriptions.user_id
+                    LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
+                    WHERE EXTRACT(day FROM period_start::date) = ${currentDay} 
+                    AND data.subscriptions.status='active' AND notice_send IS NULL;';`;
+            const res = await client.query(queryStr);
+            return { success: false, data: res.rows.length > 0 ? res.rows : [] };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                console.log(e.message)
+                logger.log(
+                    'error',
+                    'Stripe Add Payment Method Error:',
+                    {message: e.message}
+                );
+            }
+            return { success: false, error: e.message };
+        }
+    }
+
     async updateSubscriptionUpgradePlan(userId, data) {
         const client = await pool.connect();
         try {
@@ -2124,20 +2192,67 @@ console.log(subscriptionData.rows);
             const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${userId}`);
 
             if (data.status === 'cancel') {
-                console.log('here cancel subscription')
                 try {
                     const cancelSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
                     await client.query(`UPDATE data.subscriptions 
-                            SET status='cancel', upgradet_at=null WHERE user_id=${userId}`)
+                            SET status='cancel', upgradet_at=null WHERE user_id=${userId}`);
+                    await client.query(`DELETE FROM data.subscriptions_upgrade WHERE user_id=${userId}`);
+
+                    return { success: true, error: null };
                 } catch (e) {
                     console.log(e.message);
                 }
             } else {
-                console.log('here change subscription')
-            }
-            try {
-            } catch (e) {
-                console.log(e.message)
+                const paymentIntents = await stripe.paymentIntents.list({
+                    limit: 3,
+                    customer: customerId,
+                });
+                const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${planId}'`);
+                const subscriptioPlanId = dbPlan.rows[0].stripe_id;
+
+                const subscriptionObject = {
+                    customer: customerId,
+                    items: [{
+                        plan: subscriptioPlanId
+                    }],
+                    collection_method: 'charge_automatically',
+                };
+                const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
+
+                // cancel old subscription
+                const cancelPrevSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
+                console.log('CANCEL SUBSCRIPTION', cancelPrevSubscription);
+
+                // update subscription DB
+                const periodStartNew =  new Date();
+                const periodEndNew  = new Date();
+                periodEndNew.setMonth(periodEndNew.getMonth() + 1);
+                const timestampStartNew = periodStartNew.getTime();
+                const timestampEndNew = periodEndNew.getTime();
+                const dbSubscription = {
+                    user_id: userId,
+                    customer_id: customerId,
+                    plan_id: dbPlan.rows[0].id,
+                    subscription_id: `${subscriptionNew.id}`,
+                    status: 'active',
+                    period_start: timestampStartNew/1000,
+                    period_end: timestampEndNew/1000,
+                    is_trial: false
+                }
+                const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
+                await client.query(_querySubscription);
+                await client.query(`DELETE FROM data.subscriptions_upgrade WHERE user_id=${userId}`);
+                await client.query(`UPDATE data.subscriptions 
+                            SET upgradet_at=null WHERE user_id=${userId}`);
+
+                const userInfo = await client.query(`SELECT * FROM data.users WHERE id=${userId}`)
+                const mail = await changeSubscriptionPlanEmail(userInfo.rows[0].email, userInfo.rows[0].selected_locale);
+                sendMail(
+                    userInfo.rows[0].email,
+                    mail.subject,
+                    mail.body
+                );
+
             }
 
             return { success: true, error: null };

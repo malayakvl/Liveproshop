@@ -36,6 +36,7 @@ export default {
   "If you did not make this request, you can safely ignore this email": "If you did not make this request, you can safely ignore this email",
   "See you soon": "See you soon",
   "The Live Pro Shop Team": "The Live Pro Shop Team",
+  "Forgot password": "Forgot password",
 
   //register//
   "Confirmation registration": "Confirmation registration",
@@ -88,5 +89,9 @@ export default {
 
   "We confirm that your order has been shipped": "We confirm that your order has been shipped",
   "You can track your order at any time by clicking on the tracking number or by contacting your merchant.": "You can track your order at any time by clicking on the tracking number or by contacting your merchant.",
-  "Your order has been shipped": "Your order has been shipped"
+  "Your order has been shipped": "Your order has been shipped",
+
+  "Platinum Plan Request": "Platinum Plan Request",
+  "User Info": "User Info",
+  "User Email": "User Email"
 };

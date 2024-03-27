@@ -12,7 +12,7 @@ export const sendMail = async (to, subject, html) => {
     });
 
     const mailOptions = {
-        from: process.env.EMAIL_FROM,
+        from: 'noreply@liveproshop.com',
         to: to,
         subject: subject,
         html: html

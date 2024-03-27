@@ -305,7 +305,7 @@
   "scheduled": "scheduled",
   "live": "live",
   "liveselling_descr": "In order to learn more go to the \"live selling rules\" page",
-  "liveselling_warning": "Oups! Vous ne pouvez pas programmer de live car vous n'avez pas encore choisi votre formule d'abonnement mensuel. Allez dans les paramètres de votre profil pour sélectionner le plan qui vous convient",
+  "liveselling_warning": "Oops! Looks like you can't go live because you  have not yet selected your monthly subscription plan. \nGo to your profile settings to update your account",
   "Read rules and download csv template here": "Read rules and download csv template here",
   "Settings": "Settings",
   "Cart duration": "Cart duration",
@@ -642,5 +642,14 @@
   "Subscription Plan": "Subscription Plan",
   "You will not be charged not, but in the end of your 30-day trial period": "You will not be charged not, but in the end of your 30-day trial period",
   "Cancel Subscription": "Cancel Subscription",
-  "Are you sure you want to cancel subscription?": "Are you sure you want to cancel subscription?"
+  "Are you sure you want to cancel subscription?": "Are you sure you want to cancel subscription?",
+  "upgrade_subcription_msg": "You currently have a Business plan and it will be active for {dayCount} more days. In {dayCount} days your plan will be lowered to the",
+  "Forgot your Password?": "Forgot your Password?",
+  "forgot_descr": "No problem! just write your associated email and we will send you a recovery link.",
+  "Send me a Recovery Link": "Send me a Recovery Link",
+  "Select": "Select",
+  "Send Request": "Send Request",
+  "msg_request":  "Your request was successfully sent. Proshop will contact you soon!",
+  "Are you sure you want to shipped transaction?": "Are you sure you want to shipped transaction?",
+  "Products has been shipped": "Products has been shipped"
 }
