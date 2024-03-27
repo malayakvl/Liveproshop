@@ -266,7 +266,6 @@ class AuthController {
         if (invitation) {
             await invitationModel.delete(invitation.id)
         }
-        console.log(user)
 
         invitation = await invitationModel.create(user);
 

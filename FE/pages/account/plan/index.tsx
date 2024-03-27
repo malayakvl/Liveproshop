@@ -234,7 +234,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                         <>
                                                             {t('upgrade_subcription_msg', {
                                                                 dayCount: subscriptionInfo.daysLeft
-                                                            })}{t('to')}{' '}
+                                                            })}
+                                                            {t('to')}{' '}
                                                             {t(subscriptionInfo.nameUpgrade)}
                                                         </>
                                                     )}

@@ -643,5 +643,9 @@
   "You will not be charged not, but in the end of your 30-day trial period": "You will not be charged not, but in the end of your 30-day trial period",
   "Cancel Subscription": "Cancel Subscription",
   "Are you sure you want to cancel subscription?": "Are you sure you want to cancel subscription?",
-  "upgrade_subcription_msg": "You currently have a Business plan and it will be active for {dayCount} more days. In {dayCount} days your plan will be lowered to the"
+  "upgrade_subcription_msg": "You currently have a Business plan and it will be active for {dayCount} more days. In {dayCount} days your plan will be lowered to the",
+  "Forgot your Password?": "Forgot your Password?",
+  "forgot_descr": "No problem! just write your associated email and we will send you a recovery link.",
+  "Send me a Recovery Link": "Send me a Recovery Link"
+
 }

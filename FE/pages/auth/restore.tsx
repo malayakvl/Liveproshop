@@ -42,7 +42,7 @@ function Restore({ locale }: { locale: string }) {
                 <div className="rounded-lg colored-shadow obrder- mt-10 bg-white shadow-lg w-96 p-10 pb-16">
                     <div className="flex">
                         <div className="font-bold text-3xl line-height-105percent mb-2">
-                            Forgot your Password?
+                            {t('Forgot your Password?')}
                         </div>
                         <Image
                             className=""
@@ -54,10 +54,7 @@ function Restore({ locale }: { locale: string }) {
                         />
                     </div>
 
-                    <div className="text-sm mb-10">
-                        No problem! just write your associated email and we will send you a recovery
-                        link.
-                    </div>
+                    <div className="text-sm mb-10">{t('forgot_descr')}</div>
 
                     <Formik
                         initialValues={{ email: '' }}
@@ -86,7 +83,7 @@ function Restore({ locale }: { locale: string }) {
                                         type="submit"
                                         disabled={props.isSubmitting}
                                         className="mt-6 gradient-btn w-full">
-                                        Send me a Recovery Link
+                                        {t('Send me a Recovery Link')}
                                     </button>
                                 </form>
                             )
