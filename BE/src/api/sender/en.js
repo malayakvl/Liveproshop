@@ -36,6 +36,7 @@ export default {
   "If you did not make this request, you can safely ignore this email": "If you did not make this request, you can safely ignore this email",
   "See you soon": "See you soon",
   "The Live Pro Shop Team": "The Live Pro Shop Team",
+  "Forgot password": "Forgot password",
 
   //register//
   "Confirmation registration": "Confirmation registration",

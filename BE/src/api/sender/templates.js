@@ -7,7 +7,7 @@ export const restoreEmail = async (email = '', link = '', locale = localeDefault
   const { default: t } = await import(`../sender/${locale}.js`);
 
   return {
-    subject: t['Reset your password'],
+    subject: t['Forgot password'],
     body: emailHtml(t, `
     <p>${t['Hello']}</p>
     <p>${t['There was a request to change your password!']}</p>

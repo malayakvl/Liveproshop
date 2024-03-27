@@ -258,6 +258,7 @@ class AuthController {
 
     async restorePassword(req, res) {
         const data = req.body;
+        const { locale } = req.query;
 
         const user = await userModel.findUserByEmail(data.email);
         if (!user) return res.status(402).json({ status: false, error: 'wrong email' });
@@ -269,7 +270,7 @@ class AuthController {
 
         invitation = await invitationModel.create(user);
 
-        const link = `${process.env.APPLICATION_BASE_URL}/auth/restore/password?hash=${invitation.hash}`;
+        const link = `${process.env.APPLICATION_BASE_URL}${locale === 'en' ? '/en' : ''}/auth/restore/password?hash=${invitation.hash}`;
 
         const mail = await restoreEmail(data.email, link, req.query.locale);
 
