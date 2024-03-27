@@ -643,7 +643,8 @@
   "Subscription Plan": "Plan d'abonnement",
   "You will not be charged not, but in the end of your 30-day trial period": "Vous ne serez pas facturé, mais à la fin de votre période d'essai de 30 jours",
   "Cancel Subscription": "Annuler l'abonnement",
-  "Are you sure you want to cancel subscription?": "Êtes-vous sûr de vouloir annuler l'abonnement ?"
+  "Are you sure you want to cancel subscription?": "Êtes-vous sûr de vouloir annuler l'abonnement ?",
+  "upgrade_subcription_msg": "Vous avez actuellement un abonnement Entreprise qui sera actif pendant encore {dayCount}  jours. Dans {dayCount} ours, votre abonnement sera rétrogradé au plan"
 
 
 }

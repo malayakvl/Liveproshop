@@ -601,7 +601,7 @@ class User {
                     const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
                     // update subscription
                     const subscriptionUpdate = await stripe.subscriptions.update(
-                        'sub_49ty4767H20z6a',
+                        subscriptionNew.id,
                         {
                             payment_settings: {
                                 payment_method_types: ['card', 'customer_balance'],
@@ -698,7 +698,7 @@ class User {
                     //     subscriptionObject.coupon =  'free-period';
                     // }
                     const subscription = await stripe.subscriptions.create(subscriptionObject);
-                    // console.log("CREATED SUBSCRIPTION", subscription);
+                    console.log("CREATED SUBSCRIPTION", subscription);
 
                     // if subscription created add record to DB
                     if (subscription?.id) {
@@ -1857,12 +1857,12 @@ console.log('LOCALE', locale);
                 );
 
                 // send mail about subscription
-                const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
-                sendMail(
-                    userData.rows[0].email,
-                    mail.subject,
-                    mail.body
-                );
+                // const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
+                // sendMail(
+                //     userData.rows[0].email,
+                //     mail.subject,
+                //     mail.body
+                // );
 
                 return { success: true, user: user };
             }
@@ -2139,6 +2139,34 @@ console.log(_querySubscription);
         }
 
         return { success: true, error: null };
+    }
+
+    async recurringPaymentList() {
+        const client = await pool.connect();
+        try {
+            const currentDay = parseInt(moment().format('DD'));
+            const queryStr = `SELECT  EXTRACT(month FROM period_start::date) as sub_month,
+                    EXTRACT(day FROM period_start::date) as sub_day, data.subscriptions.*,
+                    data.subscription_plans.price,
+                    data.users.email
+                    FROM data.subscriptions
+                    LEFT JOIN data.users ON data.users.id = data.subscriptions.user_id
+                    LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
+                    WHERE EXTRACT(day FROM period_start::date) = ${currentDay} 
+                    AND data.subscriptions.status='active' AND notice_send IS NULL;';`;
+            const res = await client.query(queryStr);
+            return { success: false, data: res.rows.length > 0 ? res.rows : [] };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                console.log(e.message)
+                logger.log(
+                    'error',
+                    'Stripe Add Payment Method Error:',
+                    {message: e.message}
+                );
+            }
+            return { success: false, error: e.message };
+        }
     }
 
     async updateSubscriptionUpgradePlan(userId, data) {

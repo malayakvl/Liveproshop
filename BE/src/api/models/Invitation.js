@@ -25,7 +25,7 @@ class Invitation {
                     '${email}',
                     '${role_id}',
                     '${hash}',
-                    ${isFree},
+                    ${(!!isFree)},
                     ${isSkip}
                 )
                 ;

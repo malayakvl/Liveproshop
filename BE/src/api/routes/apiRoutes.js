@@ -59,6 +59,7 @@ apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQt
 apiRoutes.route('/check-subscription-for-update').get(UserController.fetchSubscriptionsForUpdate);
 apiRoutes.post('/update-subscription-plan-job', UserController.updateSubscriptionPlanJob);
 apiRoutes.get('/update-subscription-plan-job', UserController.updateSubscriptionPlanJob);
+apiRoutes.get('/subscription-recurring-payment', UserController.getSubscriptionRecurringPaymentJob);
 
 
 apiRoutes.route('/pages/all').get(PageController.getAll);

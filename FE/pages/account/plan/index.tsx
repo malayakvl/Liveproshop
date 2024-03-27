@@ -224,18 +224,28 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                             {t(subscriptionInfo.dbUserPlan.name)}
                                             {subscriptionInfo.upgradet_at && (
                                                 <em
-                                                    className={`block text-[12px] text-${
+                                                    className={`block text-[12px] max-w-[300px] text-${
                                                         subscriptionInfo.nameUpgrade != 'Cancel'
                                                             ? 'green-250'
                                                             : 'orange-450'
                                                     } font-bold`}
                                                     style={{ fontStyle: 'normal' }}>
-                                                    {subscriptionInfo.upgradet_at
-                                                        ? `Upgr: ${moment(
-                                                              subscriptionInfo.upgradet_at
-                                                          ).format('MM/DD/YYYY')}`
-                                                        : ''}{' '}
-                                                    {t('to')} {t(subscriptionInfo.nameUpgrade)}
+                                                    {subscriptionInfo.upgradet_at && (
+                                                        <>
+                                                            {t('upgrade_subcription_msg', {
+                                                                dayCount: subscriptionInfo.daysLeft
+                                                            })}{t('to')}{' '}
+                                                            {t(subscriptionInfo.nameUpgrade)}
+                                                        </>
+                                                    )}
+                                                    {/*{t('upgrade_subcription_msg')}*/}
+
+                                                    {/*{subscriptionInfo.upgradet_at*/}
+                                                    {/*    ? ${moment(*/}
+                                                    {/*          subscriptionInfo.upgradet_at*/}
+                                                    {/*      ).format('MM/DD/YYYY')}`*/}
+                                                    {/*    : ''}*/}
+                                                    {/*{t('to')} {t(subscriptionInfo.nameUpgrade)}*/}
                                                 </em>
                                             )}
                                             <a

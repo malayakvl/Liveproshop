@@ -639,7 +639,6 @@ class UserController {
                 user: _user
             });
         }
-        // console.log("FORM DATA", formData);
 
         // for incoming user create free month subscription
         return res.status(402).json('Something wend wrong');
@@ -741,6 +740,15 @@ class UserController {
 
     }
 
+    async getSubscriptionRecurringPaymentJob (req, res) {
+        const dataResult = await userModel.recurringPaymentList(req.body.user_id, req.body);
+        console.log(dataResult);
+
+        return res.status(200).json({
+            success: true
+        });
+    }
+
     async updateSubscriptionPlanJob (req, res) {
         const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.body.user_id, req.body);
 
@@ -781,18 +789,6 @@ class UserController {
             return res.status(200).json({
                 success: true
             });
-
-            // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
-            // if (data.success) {
-            //     return res.status(200).json({
-            //         success: data.success
-            //     });
-            // } else {
-            //     return res.status(402).json({
-            //         success: data.success,
-            //         error: data.error
-            //     });
-            // }
         } else {
             return res.status(402).json('Something wend wrong');
         }

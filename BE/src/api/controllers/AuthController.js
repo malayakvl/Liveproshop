@@ -260,14 +260,13 @@ class AuthController {
         const data = req.body;
 
         const user = await userModel.findUserByEmail(data.email);
-
         if (!user) return res.status(402).json({ status: false, error: 'wrong email' });
 
         let invitation = await invitationModel.findByEmail(data.email);
-
         if (invitation) {
             await invitationModel.delete(invitation.id)
         }
+        console.log(user)
 
         invitation = await invitationModel.create(user);
 
