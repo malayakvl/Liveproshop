@@ -650,5 +650,9 @@
   "Send me a Recovery Link": "Envoyer un lien de réinitialisation",
   "Select": "Sélectionner",
   "Send Request": "Envoyer la demande",
-  "msg_request":  "Votre demande a été envoyée avec succès. Proshop vous contactera bientôt !"
+  "msg_request":  "Votre demande a été envoyée avec succès. Proshop vous contactera bientôt !",
+  "Are you sure you want to shipped transaction?": "Êtes-vous sûr de vouloir expédier la transaction ?",
+  "Products has been shipped": "Les produits ont été expédiés"
+
+
 }

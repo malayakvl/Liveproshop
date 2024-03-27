@@ -649,6 +649,7 @@
   "Send me a Recovery Link": "Send me a Recovery Link",
   "Select": "Select",
   "Send Request": "Send Request",
-  "msg_request":  "Your request was successfully sent. Proshop will contact you soon!"
-
+  "msg_request":  "Your request was successfully sent. Proshop will contact you soon!",
+  "Are you sure you want to shipped transaction?": "Are you sure you want to shipped transaction?",
+  "Products has been shipped": "Products has been shipped"
 }

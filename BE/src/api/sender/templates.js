@@ -4,7 +4,7 @@ const localeDefault = 'fr';
 const frontUrl = process.env.APPLICATION_BASE_URL;
 
 export const sendPlatinumEmail = async (user = '', locale) => {
-  const { default: t } = await import(`../sender/${locale}.js`);
+  const { default: t } = await import(`../sender/${locale ? locale : 'fr'}.js`);
   return {
     subject: t['Platinum Plan Request'],
     body: emailHtml(t, `
