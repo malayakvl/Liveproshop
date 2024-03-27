@@ -329,10 +329,11 @@ export const updateSubscriptionAction: any = createAction(
     async (planId: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            const locale = state.layouts.selectedLng
             dispatch(showLoaderAction(true));
             return axios
                 .post(
-                    `${baseUrl}/profile/update-subscription-plan`,
+                    `${baseUrl}/profile/update-subscription-plan?locale=${locale}`,
                     { planId: planId },
                     {
                         headers: {
@@ -340,10 +341,14 @@ export const updateSubscriptionAction: any = createAction(
                         }
                     }
                 )
-                .then(() => {
-                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                .then((res) => {
+                    if (res.data.planId) {
+                        dispatch(setSuccessToastAction('msg_request'));
+                    } else {
+                        dispatch(setSuccessToastAction('Response was sent successfully'));
+                        dispatch(fetchUserSubscriptionAction());
+                    }
                     dispatch(showChangeSubscriptionFormAction(false));
-                    dispatch(fetchUserSubscriptionAction());
                     dispatch(showLoaderAction(false));
                     toggleModalPopup('.modal-seller-change-subscription');
                 })

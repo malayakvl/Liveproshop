@@ -239,14 +239,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                             {t(subscriptionInfo.nameUpgrade)}
                                                         </>
                                                     )}
-                                                    {/*{t('upgrade_subcription_msg')}*/}
-
-                                                    {/*{subscriptionInfo.upgradet_at*/}
-                                                    {/*    ? ${moment(*/}
-                                                    {/*          subscriptionInfo.upgradet_at*/}
-                                                    {/*      ).format('MM/DD/YYYY')}`*/}
-                                                    {/*    : ''}*/}
-                                                    {/*{t('to')} {t(subscriptionInfo.nameUpgrade)}*/}
                                                 </em>
                                             )}
                                             <a

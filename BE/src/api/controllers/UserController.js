@@ -703,11 +703,11 @@ class UserController {
 
     async upgradeSubscription(req, res) {
         if (req.user) {
-            console.log('here');
-            const data = await userModel.upgradeSubscription(req.user, req.body.planId);
+            const data = await userModel.upgradeSubscription(req.user, req.body.planId, req.query.locale);
             if (data.success) {
                 return res.status(200).json({
-                    success: data.success
+                    success: data.success,
+                    planId: data.planId
                 });
             } else {
                 return res.status(402).json({
@@ -912,6 +912,14 @@ class UserController {
             });
         }
         return res.status(200).json('Something wend wrong');
+    }
+
+    async sendRequestPlatinum(req, res) {
+        if (req.user) {
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(403).json({error: 'Something wend wrong'});
+        }
     }
 
     async unsubscribe (req, res) {

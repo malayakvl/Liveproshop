@@ -6,8 +6,9 @@ import Stripe from 'stripe';
 import axios from "axios";
 import paymentPlanModel from "./PaymentPlan.js";
 import {
-    changeSubscriptionPlanEmail, confirmShippedEmail,
+    changeSubscriptionPlanEmail,
     confirmSubscriptionEmail,
+    sendPlatinumEmail,
     confirmSubscriptionPaymentEmail,
     confirmVerificationEmail
 } from "../sender/templates.js";
@@ -2045,30 +2046,42 @@ console.log('LOCALE', locale);
         return {success: true, data: subscriptionData.rows.length > 0 ? subscriptionData.rows : []}
     }
 
-    async upgradeSubscription(user, planId) {
+    async upgradeSubscription(user, planId, locale) {
         const client = await pool.connect();
         const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
         const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
         const customerId = dbSubscriptionInfo.rows[0].customer_id;
         try {
-            const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
-            const ts = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-MM-DD HH:mm").unix();
-            const m = moment.unix(ts);
-            const upgradeSubscription = {
-                user_id: user.id,
-                plan_id: dbPlan.rows[0].id,
-                customer_id: customerId,
-                subscription_id: dbSubscriptionInfo.rows[0].subscription_id,
-                period_start: m / 1000,
-                period_end: m / 1000,
-                status: 'change'
-            }
-            const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
-console.log(_querySubscription);
-            await client.query(_querySubscription);
-            await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
+            if (dbPlan.rows[0].name === 'Platinum') {
+                const mail = await sendPlatinumEmail(user, locale);
+                console.log(mail.subject);
+                sendMail(
+                    process.env.EMAIL_PLATINUM,
+                    mail.subject,
+                    mail.body
+                );
+                return { success: true, error: null, planId: 'platinum' };
+            } else {
+                const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
+                const ts = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-MM-DD HH:mm").unix();
+                const m = moment.unix(ts);
+                const upgradeSubscription = {
+                    user_id: user.id,
+                    plan_id: dbPlan.rows[0].id,
+                    customer_id: customerId,
+                    subscription_id: dbSubscriptionInfo.rows[0].subscription_id,
+                    period_start: m / 1000,
+                    period_end: m / 1000,
+                    status: 'change'
+                }
+                const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
+// console.log(_querySubscription);
+                await client.query(_querySubscription);
+                await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
 
-            return { success: true, error: null };
+                return { success: true, error: null, planId: null };
+            }
+
         } catch (e) {
             console.log(e.message);
         }

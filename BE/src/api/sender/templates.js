@@ -3,6 +3,31 @@ import emailHtml from "./common-template.js";
 const localeDefault = 'fr';
 const frontUrl = process.env.APPLICATION_BASE_URL;
 
+export const sendPlatinumEmail = async (user = '', locale) => {
+  const { default: t } = await import(`../sender/${locale}.js`);
+  return {
+    subject: t['Platinum Plan Request'],
+    body: emailHtml(t, `
+    <p>${t['Hello']}</p>
+    <p>
+      ${t['Platinum Plan Request']}: 
+    </p>
+    <p>
+      ${t['User Info']}
+    </p>
+    <p>
+      ${t['Email']}: <a href="mailto:${user.email}">${user.email}</a>, 
+    </p>
+    <p>
+      ${user.first_name} ${user.last_name}
+    </p>
+    <p>
+      <br>
+      ${t['The Live Pro Shop Team']}
+    </p>`)
+  };
+};
+
 export const restoreEmail = async (email = '', link = '', locale = localeDefault) => {
   const { default: t } = await import(`../sender/${locale}.js`);
 

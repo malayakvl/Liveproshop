@@ -89,5 +89,9 @@ export default {
 
   "We confirm that your order has been shipped": "We confirm that your order has been shipped",
   "You can track your order at any time by clicking on the tracking number or by contacting your merchant.": "You can track your order at any time by clicking on the tracking number or by contacting your merchant.",
-  "Your order has been shipped": "Your order has been shipped"
+  "Your order has been shipped": "Your order has been shipped",
+
+  "Platinum Plan Request": "Platinum Plan Request",
+  "User Info": "User Info",
+  "User Email": "User Email"
 };
