@@ -202,7 +202,7 @@ export const confirmSubscriptionEmail = async (email = '', locale = localeDefaul
       ${t['Your subscription has been taken into account']}.
     </p>
     <p>
-      ${t['You can access features by connecting here']}: <a href='${frontUrl}'>${t['Click here']}</a>
+      ${t['You can access features by connecting here']}: <a href='${frontUrl+(locale === 'en' ? '/en' :'')}'>${t['Click here']}</a>
     </p>
     <p>
       ${t['See you soon']},

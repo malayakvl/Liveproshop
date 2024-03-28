@@ -1946,8 +1946,6 @@ console.log('LOCALE', locale);
                 // send mail about subscription
 console.log('LOCALE', locale)
                 const mail = await confirmSubscriptionEmail(user.email, locale ? locale : 'fr');
-console.log('SUBJECT', mail.subject)
-console.log('MAIL BODY', mail.body)
 
                 sendMail(
                     user.email,
