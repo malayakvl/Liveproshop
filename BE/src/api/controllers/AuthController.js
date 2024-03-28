@@ -135,7 +135,6 @@ class AuthController {
             mail.subject,
             mail.body
         );
-        console.log(mail)
 
         const { country_id, state, city, post_code, address_line_1, address_line_2, address_type, forFree } = formData;
         const countryName = (await countryModel.findById(country_id))?.nicename;
