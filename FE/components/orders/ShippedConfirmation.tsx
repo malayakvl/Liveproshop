@@ -52,7 +52,7 @@ const ShippedConfirmation: React.FC<any> = () => {
                                     className="cancel mr-2.5"
                                     onClick={() => {
                                         dispatch(showShippedConfirmationModalAction(false));
-                                        toggleModalPopup('.modal-cancel-confirmation');
+                                        toggleModalPopup('.modal-shipped-confirmation');
                                     }}>
                                     {t('Cancel')}
                                 </button>
