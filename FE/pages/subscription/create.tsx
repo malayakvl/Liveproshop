@@ -23,13 +23,19 @@ export default function ExistSubscription({ locale }: { locale: string }) {
 
     useEffect(() => {
         if (redirectAfter && user) {
-            signIn('credentials_login', {
-                email: loginData?.email,
-                password: loginData?.password,
-                callbackUrl: `${window.location.origin}${
-                    locale === 'fr' ? '' : `/${locale}`
-                }/dashboard`
-            });
+            // if (user.selected_locale === 'en') {
+            //     signIn('credentials_login', {
+            //         email: loginData?.email,
+            //         password: loginData?.password,
+            //         callbackUrl: `${window.location.origin}/en/dashboard999`
+            //     });
+            // } else {
+            //     signIn('credentials_login', {
+            //         email: loginData?.email,
+            //         password: loginData?.password,
+            //         callbackUrl: `${window.location.origin}/dashboard1999`
+            //     });
+            // }
         }
     }, [redirectAfter]);
 

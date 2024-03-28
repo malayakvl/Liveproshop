@@ -41,21 +41,15 @@ export default function Signup({
     const [hideForm, setHideForm] = useState(false);
 
     useEffect(() => {
-        // signIn('credentials_login', {
-        //     email: loginData?.email,
-        //     password: loginData?.password,
-        //     callbackUrl: `${window.location.origin}${
-        //         locale === 'fr' ? '' : `/${locale}`
-        //     }/dashboard`
-        // });
         if (redirectAfter) {
-            signIn('credentials_login_subscription', {
-                email: user.email,
-                subscriptionId: user.subscription.id,
-                callbackUrl: `${window.location.origin}${
-                    locale === 'fr' ? '' : `/${locale}`
-                }/dashboard`
-            });
+            console.log(user);
+            // signIn('credentials_login_subscription', {
+            //     email: user.email,
+            //     subscriptionId: user.subscription.id,
+            //     callbackUrl: `${window.location.origin}${
+            //         locale === 'fr' ? '' : `/${locale}`
+            //     }/dashboard`
+            // });
         }
     }, [redirectAfter, user]);
 
@@ -278,7 +272,8 @@ export default function Signup({
                                                 onSubmit={(values) => {
                                                     dispatch(
                                                         addPyamentMethodFromSubscriptionActions(
-                                                            values
+                                                            values,
+                                                            locale
                                                         )
                                                     );
                                                     // actions.setSubmitting(false);
@@ -287,7 +282,7 @@ export default function Signup({
                                                     <div className="flex flex-wrap justify-between">
                                                         <div className="flex-auto lg:flex-1">
                                                             <div className="text-2xl font-bold text-gray-350 mb-6">
-                                                                {t('Add Payment Method')}
+                                                                {t('Add Payment Method')}123
                                                             </div>
                                                             <PaymentMethodPlan />
                                                         </div>

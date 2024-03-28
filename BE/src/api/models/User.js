@@ -1295,7 +1295,7 @@ console.log('createExistUserSubscription');
         } = this.setPassword(userData.password);
         const client = await pool.connect();
         try {
-            const res = await client.query(`
+            await client.query(`
             INSERT INTO data.users (
                 email, password, salt, role_id, first_name, last_name, company_name,
                 phone, vat, identification_number, full_address
@@ -1312,9 +1312,10 @@ console.log('createExistUserSubscription');
                 userData.identification_number,
                 userData.full_address
             ]);
-            // const user = res ? await this.findUserByEmailOnly(userData.email) : null;
             const user = await this.findUserByEmailOnly(userData.email);
-            // console.log("USER BY EMAIL", user);
+            await client.query(`UPDATE data.users SET selected_locale='${userData.locale}' WHERE id=${user.id}`)
+            user.selected_locale = userData.locale;
+
             if (user) {
                 user.subscription = null;
                 // add to user default chatbot scenarios
@@ -1651,14 +1652,6 @@ console.log('createExistUserSubscription');
             if (res.rows.length > 0) {
                 const user = res.rows[0];
                 await client.query(`UPDATE data.users SET hash = null WHERE id = $1`, [user.id]);
-console.log('LOCALE', locale);
-                // send email about verification
-                const mail = await confirmVerificationEmail(subscriptionRes.rows[0].email, locale);
-                sendMail(
-                    subscriptionRes.rows[0].email,
-                    mail.subject,
-                    mail.body
-                );
 
                 return user;
             }

@@ -114,7 +114,6 @@ class AuthController {
         let formData = req.body;
         let email = formData.email;
         let locale = formData.locale;
-
         let invitation = await invitationModel.findByEmail(email);
 
         if (!invitation) {
@@ -129,16 +128,10 @@ class AuthController {
         if (_user) {
             return res.status(403).json({ user: null, error: 'Email present' });
         }
-        const mail = await confirmVerificationEmail(email, '', locale);
-        sendMail(
-            email,
-            mail.subject,
-            mail.body
-        );
 
         const { country_id, state, city, post_code, address_line_1, address_line_2, address_type, forFree } = formData;
         const countryName = (await countryModel.findById(country_id))?.nicename;
-        // exit;
+
         const createUserData = {
             email,
             password: formData.password,
@@ -149,33 +142,26 @@ class AuthController {
             full_address: [address_line_1, address_line_2, city, state, post_code, countryName].filter(Boolean).join(', '),
             company_name: formData.company_name,
             identification_number: formData.identification_number,
-            vat: formData.vat
+            vat: formData.vat,
+            locale: formData.locale
         }
         const { user, error } = await userModel.create(createUserData);
+console.log('USER', user);
+
+        // send email about verification
+        const link = `${process.env.APPLICATION_BASE_URL}${formData.locale === 'en' ? '/en' : ''}/auth/signin`
+        const mail = await confirmVerificationEmail(user.email, formData.locale, link);
+        sendMail(
+            user.email,
+            mail.subject,
+            mail.body
+        );
+
         // create trial subscription
         // user.subscription = null;
         if (invitation.is_skip) {
             await userModel.createDbSubscription(user.id, 'skip');
         }
-        // if (forFree === 0) {
-        //     user.subscription = null;
-        //     // await userModel.createDbSubscription(user.id);
-        // } else {
-        //     // free subscription
-        //     // create fake subscription data and store them to db
-        //     await userModel.createDbSubscription(user.id);
-        // }
-
-        // const userData = {
-        //     planId: 1,
-        //     type: 'trial',
-        //     user: {
-        //         email: email,
-        //         first_name: formData.first_name,
-        //         last_name: formData.last_name
-        //     }
-        // }
-        // await userModel.createExistUserSubscription(userData, user);
 
         if (error) {
             return res.status(error.code).json(error);
@@ -211,6 +197,7 @@ class AuthController {
 
     async authInvite(req, res) {
         const data = req.body;
+        data.locale = req.query.locale ? req.query.locale : 'fr';
         const user = await userModel.findUserByEmail(data.email);
         if (user) {
             return res.status(403).json({ message: 'Email present' });
@@ -228,28 +215,15 @@ class AuthController {
 
         let link = `${process.env.APPLICATION_BASE_URL}/${req.query.locale === 'en' ? 'en/' : ''}auth/registration?hash=${invitation.hash}&forFree=${data.forFree === 'skip' ? 'skip' :  data.forFree ? 'yes' : 'no'}`;
         // console.log("LOCALE", link);
-        console.log("LINK", link);
+console.log("LINK", link);
 
         const mail = await welcomeEmail(data.email, link, req.query.locale);
-
-        // console.log("MAIL BODY", mail.body)
 
         sendMail(
             data.email,
             mail.subject,
             mail.body
         );
-
-        // sendMail(
-        //     data.email,
-        //     'Proshop',
-        //     `
-        //     Welcome at Proshop, (${data.email})! \n
-        //     Here’s the verification link - <a href='${link}'>${link}</a> \n
-        //     Please, complete the registration via this link \n
-        //     Regards, Proshop Team
-        //     `
-        // );
 
         return res.status(200).json({ status: 'success' });
     }

@@ -19,7 +19,6 @@ export const sendPlatinumEmail = async (user = '', locale) => {
       ${user.first_name} ${user.last_name}
     </p>
     <p>
-      <br>
       ${t['The Live Pro Shop Team']}
     </p>`)
   };
@@ -41,7 +40,8 @@ export const restoreEmail = async (email = '', link = '', locale = localeDefault
     </p>
     <p>
       ${t['See you soon']},
-      <br>
+    </p>
+    <p>  
       ${t['The Live Pro Shop Team']}
     </p>`)
   };
@@ -86,15 +86,17 @@ export const changeSubscriptionPlanEmail = async (email = '', link = '', locale 
     </p>
     <p>
       ${t['See you soon']},
-      <br>
+    </p>
+    <p>
       ${t['The Live Pro Shop Team']}
     </p>`)
   };
 
 };
 
-export const confirmVerificationEmail = async (email = '', link = '', locale = localeDefault) => {
+export const confirmVerificationEmail = async (email = '', locale = localeDefault, link='') => {
   const { default: t } = await import(`../sender/${locale}.js`);
+
   return {
     subject: t['Email confirmation'],
     body: emailHtml(t, `
@@ -103,13 +105,19 @@ export const confirmVerificationEmail = async (email = '', link = '', locale = l
       ${t['Thank you for joining Live Pro Shop. Your account has been created.']}
     </p>
     <p>
-      ${t['To access your account and complete your profile, click on the link below:']}: <a href='${link}'>${t['Click here']}</a>
+      ${t['To access your account and complete your profile, click on the link below:']} 
     </p>
     <p>
-      ${t["If you are having trouble logging into your account, contact us at "]}. <a href="mailto:info@liveproshop.com">info@liveproshop.com</a></a>
+        <a href="${link}">${t['Click here']}</a>
     </p>
     <p>
-      ${t["See you soon,"]}.
+      ${t["If you are having trouble logging into your account, contact us at "]}
+    </p>
+    <p>
+       <a href="mailto:info@liveproshop.com">info@liveproshop.com</a></a>
+    </p>
+    <p>
+      ${t["See you soon,"]}
     </p>
     <p>
       ${t['The Live Pro Shop Team']}
@@ -133,7 +141,7 @@ export const subscriptionEmail = async (email = '', link = '', locale = localeDe
       ${t["If you are having trouble logging into your account, contact us at "]}. <a href="mailto:info@liveproshop.com">info@liveproshop.com</a></a>
     </p>
     <p>
-      ${t["See you soon,"]}.
+      ${t["See you soon,"]}
     </p>
     <p>
       ${t['The Live Pro Shop Team']}
@@ -199,11 +207,12 @@ export const confirmSubscriptionEmail = async (email = '', locale = localeDefaul
     body: emailHtml(t, `
     <p>${t['Hello']}</p>
     <p>
-      ${t['Your subscription has been taken into account']}.
+      ${t['Your subscription has been taken into account']}
     </p>
     <p>
       ${t['You can access features by connecting here']}: <a href='${frontUrl+(locale === 'en' ? '/en' :'')}'>${t['Click here']}</a>
     </p>
+    <p></p>
     <p>
       ${t['See you soon']},
       <br>
