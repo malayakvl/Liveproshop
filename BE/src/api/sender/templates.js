@@ -54,7 +54,7 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
     body: emailHtml(t, `
     <p>${t['Hi']}</p>
     <p>
-      ${t['Verify yourself below to sign in to your Liveproshop.com account for']} ${email}
+      ${t['Verify yourself below to sign in to your ']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}">Liveproshop.com</a> ${t['account for']} ${email}
     </p>
     <p>
       ${t['Here’s the verification link']}: <a href='${link}'>${t['Click here']}</a>
