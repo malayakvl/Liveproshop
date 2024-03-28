@@ -63,7 +63,7 @@ export default {
 
   // subscription confirm email
   "Subscription confirmed": "Confirmation d’abonnement",
-  "Your subscription has been taken into account":"Votre abonnement à bien été pris en compte",
+  "Your subscription has been taken into account": "Votre abonnement à bien été pris en compte",
   "You can access features by connecting here": "Vous pouvez accéder à ces fonctionnalités en vous connectant ici",
 
   // subscription confirm payment email

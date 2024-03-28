@@ -61,7 +61,7 @@ export default {
 
   // subscription confirm email
   "Subscription confirmed": "Subscription confirmed",
-  "Your subscription has been taken into account":"Your subscription has been taken into account",
+  "Your subscription has been taken into account":"Your subscription has been taken into account. ",
   "You can access features by connecting here": "You can access features by connecting here",
   "Recurring payment successful": "Recurring payment successful",
 

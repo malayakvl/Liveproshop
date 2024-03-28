@@ -359,13 +359,14 @@ export const updateSubscriptionAction: any = createAction(
 );
 export const addPyamentMethodFromRegisterActions: any = createAction(
     'user/ADD_PAYMENT_METHOD_FROM_REGISTRATION',
-    async (data: any, planId: number) =>
+    async (data: any, planId: number, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             // const user = state.user.user;
             // const subscription = state.user.subscription;
             data.user = state.user.user;
             data.user.planId = planId;
+            data.locale = locale;
             data.planId = planId;
             dispatch(showLoaderAction(true));
             return axios

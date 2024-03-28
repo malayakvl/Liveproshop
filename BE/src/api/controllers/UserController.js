@@ -441,7 +441,7 @@ class UserController {
     async addPaymentMethodAfterRegistration(req, res) {
         const formData = req.body;
 
-console.log('Add payment method')
+console.log('Add payment method', req.body)
         const data = await userModel.createExistUserTrialSubscription(formData);
         if (data.subscription) {
             req.body.subscription = data.subscription;

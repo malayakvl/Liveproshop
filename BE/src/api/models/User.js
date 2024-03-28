@@ -1907,6 +1907,7 @@ console.log('LOCALE', locale);
         const client = await pool.connect();
         try {
             const expPeriod = data.card_expire_date.split('/');
+            const locale = data.locale;
             let customerId;
             const dbSubscriptionData = await client.query(`SELECT * from data.subscriptions WHERE
                 subscription_id='${data.subscription.id}'`);
@@ -1943,8 +1944,11 @@ console.log('LOCALE', locale);
                 );
 
                 // send mail about subscription
-console.log('USER EMAIL', user.email)
-                const mail = await confirmSubscriptionEmail(user.email, 'fr');
+console.log('LOCALE', locale)
+                const mail = await confirmSubscriptionEmail(user.email, locale ? locale : 'fr');
+console.log('SUBJECT', mail.subject)
+console.log('MAIL BODY', mail.body)
+
                 sendMail(
                     user.email,
                     mail.subject,
