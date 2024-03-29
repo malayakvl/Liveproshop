@@ -438,6 +438,14 @@ class UserController {
         }
     }
 
+
+    async sessionReminder(req, res) {
+        const data = await userModel.getSessionReminderList();
+        return res.status(200).json({
+            data: data.data
+        });
+    }
+
     async addPaymentMethodAfterRegistration(req, res) {
         const formData = req.body;
 
@@ -747,11 +755,6 @@ class UserController {
                 mail.subject,
                 mail.body
             );
-            // const welcomeEmail = welcomeEmailHtml(req.user.email, '', '');
-            // sendMail(
-            //     settings.support_email,
-            //     'Proshop',
-            //     welcomeEmail);
             return res.status(200).json({success: true});
         } else {
             return res.status(403).json({error: 'Something wend wrong'});

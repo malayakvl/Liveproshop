@@ -3,7 +3,7 @@ BE/.env
 .DS_Store
 FE/node_modules
 FE/.env
-BE/userSubscription/.env
+BE/userMailingJobs/.env
 BE/combined.log
 BE/error.log
 /BE/public/uploads/orders/
@@ -37,3 +37,4 @@ BE/public/uploads/products/
 /BE/_stepByStepMigration/
 /BE/storeJobs/.env
 /BE/public/uploads/
+/BE/userMailingJobs/.env

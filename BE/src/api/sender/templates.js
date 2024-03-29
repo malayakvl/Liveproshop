@@ -68,6 +68,26 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
   };
 };
 
+export const sessionSyncEmail = async (data, locale) => {
+  const { default: t } = await import(`../sender/${locale}.js`);
+  return {
+    subject: t['Your account needs to be synchronized'],
+    body: emailHtml(t, `
+    <p>${t['Hi']}</p>
+    <p>${t['You have scheduled a live session and it`s about to start']}</p>
+    <p>${t['schtext_1']}</p>
+    <p>${t['schtext_2']}</p>
+    <p>${t['schtext_3']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}/full-guide/livesession" target="_blank">${t['schtext_4']}</a></p>
+    <p>
+      ${t['See you soon']},
+    </p>
+    <p>
+      ${t['The Live Pro Shop Team']}
+    </p>`)
+  };
+};
+
+
 export const changeSubscriptionPlanEmail = async (email = '', link = '', locale = localeDefault) => {
   const { default: t } = await import(`../sender/${locale}.js`);
 

@@ -10,7 +10,7 @@ import {
     confirmSubscriptionEmail,
     sendPlatinumEmail,
     confirmSubscriptionPaymentEmail,
-    confirmVerificationEmail
+    confirmVerificationEmail, unsubscriberFromEmail, sessionSyncEmail
 } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
 import moment from 'moment';
@@ -2391,6 +2391,54 @@ console.log('BROKEN 2')
                 );
             }
             return { success: false, error: { code: 404, message: 'Users not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async getSessionReminderList() {
+        const client = await pool.connect();
+        try {
+            const query = `SELECT data.live_sessions.id AS lsid, data.users.selected_locale, data.users.email, event_date, event_time,
+                (event_time - '${moment().format('HH:mm:ss')}') AS time_diff
+                FROM data.live_sessions 
+                LEFT JOIN data.users ON data.users.id = data.live_sessions.user_id
+                WHERE status='scheduled' AND event_date='${moment().format('YYYY-MM-DD')}' AND
+                event_time > '${moment().add(1, 'hours').format('HH:mm:ss')}'
+                 AND data.live_sessions.notice_sended IS NULL LIMIT 
+                ;`;
+            // console.log(query);
+            const data = await client.query(query);
+            if (data.rows.length > 0) {
+                await data.rows.forEach(async session => {
+                    // if (session.time_diff.hours === 1 && session.time_diff.minutes <= 10) {
+                    if (session.time_diff.hours === 1) {
+                        const mail = await sessionSyncEmail(session, session.selected_locale ? session.selected_locale : 'fr');
+
+                        sendMail(
+                            session.email,
+                            mail.subject,
+                            mail.body
+                        );
+
+                        await client.query(`UPDATE data.live_sessions SET notice_sended=true
+                            WHERE id='${session.lsid}'`)
+                    }
+                })
+            }
+            return { success: true };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model User (updateUserSettings) error:',
+                    { message: e.message }
+                );
+                console.log('[User.updateSellerSettings] sql e.message = ', e.message);
+            }
+            return { success: false, error: { code: 404, message: 'Users not found' } };
+
         } finally {
             client.release();
         }

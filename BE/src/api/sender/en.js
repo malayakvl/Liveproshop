@@ -50,7 +50,7 @@ export default {
   "Account Activation Required": "Account Activation Required",
   "Verify yourself below to sign in to your ": "Verify yourself below to sign in to your",
   "account for": " account for",
-  "Here’s the verification link": "Here’s the verification link",
+  "Here`s the verification link": "Here’s the verification link",
   "If you didn't request this verification link, you can safely ignore this email": "If you didn't request this verification link, you can safely ignore this email",
 
   //unsubscribe
@@ -94,5 +94,14 @@ export default {
 
   "Platinum Plan Request": "Platinum Plan Request",
   "User Info": "User Info",
-  "User Email": "User Email"
+  "User Email": "User Email",
+
+  "Your account needs to be synchronized": "Your account needs to be synchronized",
+  "You have scheduled a live session and it`s about to start": "You have scheduled a live session and it’s about to start.",
+  "schtext_1": "Please connect to your Live Pro Shop  account and synchronize with your respective Facebook account in order to use our services.",
+  "schtext_2": "If your account is not synchronized, Live Pro  Shop features will not be available during your live session.",
+  "schtext_3": "You can follow this ",
+  "schtext_4": "guide ",
+  "schtext_5": "to sync your account"
+
 };
