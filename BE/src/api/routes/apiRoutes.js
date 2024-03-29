@@ -55,6 +55,8 @@ apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitSt
 apiRoutes.route('/run-waiting-job').get(OrderController.waitingJobOrders);
 apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder);
 apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
+apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
+
 
 apiRoutes.route('/check-subscription-for-update').get(UserController.fetchSubscriptionsForUpdate);
 apiRoutes.post('/update-subscription-plan-job', UserController.updateSubscriptionPlanJob);

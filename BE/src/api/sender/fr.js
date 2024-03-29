@@ -95,7 +95,15 @@ export default {
 
   "Platinum Plan Request": "Demande de plan Platine",
   "User Info": "informations utilisateur",
-  "User Email": "Sir Email"
+  "User Email": "Sir Email",
+
+  "Your account needs to be synchronized": "Votre compte doit être synchronisé",
+  "You have scheduled a live session and it`s about to start": "Vous avez programmé une session en direct et elle est sur le point de commencer.",
+  "schtext_1": "Veuillez vous connecter à votre compte Live Pro Shop et le synchroniser avec votre compte Facebook respectif afin d'utiliser nos services.",
+  "schtext_2": "Si votre compte n'est pas synchronisé, les fonctionnalités de Live Pro Shop ne seront pas disponibles pendant votre live.",
+  "schtext_3": "Vous pouvez suivre ce ",
+  "schtext_4": "guide",
+  "schtext_5": "pour synchroniser votre compte. "
 
 
 };
