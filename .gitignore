@@ -38,3 +38,4 @@ BE/public/uploads/products/
 /BE/storeJobs/.env
 /BE/public/uploads/
 /BE/userMailingJobs/.env
+/BE/subscriptionChangeJobs/.env
