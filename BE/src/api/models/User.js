@@ -2405,9 +2405,9 @@ console.log('BROKEN 2')
                 LEFT JOIN data.users ON data.users.id = data.live_sessions.user_id
                 WHERE status='scheduled' AND event_date='${moment().format('YYYY-MM-DD')}' AND
                 event_time > '${moment().add(1, 'hours').format('HH:mm:ss')}'
-                 AND data.live_sessions.notice_sended IS NULL LIMIT 
+                 AND data.live_sessions.notice_sended IS NULL LIMIT 20
                 ;`;
-            // console.log(query);
+            console.log(query);
             const data = await client.query(query);
             if (data.rows.length > 0) {
                 await data.rows.forEach(async session => {

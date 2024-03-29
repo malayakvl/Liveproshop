@@ -1,7 +1,5 @@
 import 'dotenv/config';
 import axios from "axios";
-import shell from 'shelljs';
-import moment from "moment/moment.js";
 
 const apiUrl = process.env.API_URL;
 
@@ -9,7 +7,7 @@ const apiUrl = process.env.API_URL;
 // get list of session wich should be started for current time
 // ***************************************************************************
 async function startProcess() {
-    console.log(`Get list updated subscription: ${apiUrl}/api/check-subscription-for-update`);
+    console.log(`Get list updated subscription: ${apiUrl}/api/subscription-recurring-payment`);
     await axios(`${apiUrl}/api/subscription-recurring-payment`)
         .then( (response) => {
             if (response.data.data.length > 0) {

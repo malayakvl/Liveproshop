@@ -81,7 +81,7 @@ pm2 start jobEnd.js
 ### Starting major subscription task from  userMailingJobs folder
 
 ```bash
-pm2 start subscriptionsStart.js
+pm2 start subscriptionsUpdateStart.js
 pm2 start sessionNotifyReminderStart.js
 ```
 
