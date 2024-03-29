@@ -12,16 +12,6 @@ async function startProcess() {
     console.log(`Get list updated subscription: ${apiUrl}/api/session-reminder`);
     await axios(`${apiUrl}/api/session-reminder`)
         .then( (response) => {
-            // if (response.data.data.length > 0) {
-            //     response.data.data.forEach(async session => {
-            //         await axios
-            //             .post(`${apiUrl}/api/update-subscription-plan-job`, subscription)
-            //             .then(() => {
-            //             }).catch(function (_error) {
-            //                 console.log(_error.message);
-            //             });
-            //     })
-            // }
         });
 }
 setTimeout(await startProcess, 10000);

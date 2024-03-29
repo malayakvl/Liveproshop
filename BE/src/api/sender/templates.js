@@ -77,7 +77,7 @@ export const sessionSyncEmail = async (data, locale) => {
     <p>${t['You have scheduled a live session and it`s about to start']}</p>
     <p>${t['schtext_1']}</p>
     <p>${t['schtext_2']}</p>
-    <p>${t['schtext_3']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}/guides/liveselling" target="_blank">${t['schtext_4']}</a></p>
+    <p>${t['schtext_3']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}/full-guide/livesession" target="_blank">${t['schtext_4']}</a></p>
     <p>
       ${t['See you soon']},
     </p>

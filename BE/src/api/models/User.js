@@ -2405,26 +2405,25 @@ console.log('BROKEN 2')
                 LEFT JOIN data.users ON data.users.id = data.live_sessions.user_id
                 WHERE status='scheduled' AND event_date='${moment().format('YYYY-MM-DD')}' AND
                 event_time > '${moment().add(1, 'hours').format('HH:mm:ss')}'
-                 AND data.live_sessions.notice_sended IS NULL
+                 AND data.live_sessions.notice_sended IS NULL LIMIT 
                 ;`;
-            console.log(query);
+            // console.log(query);
             const data = await client.query(query);
             if (data.rows.length > 0) {
                 await data.rows.forEach(async session => {
-                    console.log('HERE', session.time_diff.hours);
-
                     // if (session.time_diff.hours === 1 && session.time_diff.minutes <= 10) {
-                    //     const mail = await sessionSyncEmail(session, session.selected_locale ? session.selected_locale : 'fr');
-                    //
-                    //     sendMail(
-                    //         session.email,
-                    //         mail.subject,
-                    //         mail.body
-                    //     );
-                    //
-                    //     await client.query(`UPDATE data.live_sessions SET notice_sended=true
-                    //         WHERE id='${session.lsid}'`)
-                    // }
+                    if (session.time_diff.hours === 1) {
+                        const mail = await sessionSyncEmail(session, session.selected_locale ? session.selected_locale : 'fr');
+
+                        sendMail(
+                            session.email,
+                            mail.subject,
+                            mail.body
+                        );
+
+                        await client.query(`UPDATE data.live_sessions SET notice_sended=true
+                            WHERE id='${session.lsid}'`)
+                    }
                 })
             }
             return { success: true };
