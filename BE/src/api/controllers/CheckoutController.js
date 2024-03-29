@@ -37,63 +37,69 @@ class CheckoutController {
         let termsLink = '';
         let returnLink = '';
         let deliveryLink = '';
+        console.log(sellerSettingsData[0])
         if (sellerSettingsData[0].privacy_doc || sellerSettingsData[0].privacy_link) {
-            let docParced1 = sellerSettingsData[0].privacy_doc
             if (sellerSettingsData[0].privacy_doc) {
-                privacyLink = process.env.API_URL + docParced1.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+                privacyLink = process.env.API_URL + `/uploads/users/${orderData.order.seller_id}/documents/${sellerSettingsData[0].privacy_doc}`;
             } else {
-                privacyLink = sellerSettingsData[0].privacy_link
+                if(/(http(s?)):\/\//i.test(sellerSettingsData[0].privacy_link)) {
+                    privacyLink = sellerSettingsData[0].privacy_link;
+                } else {
+                    privacyLink = 'https://'+sellerSettingsData[0].privacy_link
+                }
             }
-            termsLink = privacyLink;
+            // termsLink = privacyLink;
             delete sellerSettingsData[0].privacy_link;
         }
         if (sellerSettingsData[0].terms_doc || sellerSettingsData[0].terms_link) {
-            let docParced2 = sellerSettingsData[0].terms_doc
             if (sellerSettingsData[0].terms_doc) {
-                termsLink = process.env.API_URL + docParced2.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+                termsLink = process.env.API_URL + `/uploads/users/${orderData.order.seller_id}/documents/${sellerSettingsData[0].terms_doc}`;
             } else {
-                termsLink = sellerSettingsData[0].terms_link
+                if(/(http(s?)):\/\//i.test(sellerSettingsData[0].terms_link)) {
+                    termsLink = sellerSettingsData[0].terms_link;
+                } else {
+                    termsLink = 'https://'+sellerSettingsData[0].terms_link
+                }
+                // termsLink = sellerSettingsData[0].terms_link
             }
             delete sellerSettingsData[0].terms_link;
         }
         if (sellerSettingsData[0].delivery_doc || sellerSettingsData[0].delivery_link) {
-            let docParced3 = sellerSettingsData[0].delivery_doc
             if (sellerSettingsData[0].delivery_doc) {
-                deliveryLink = process.env.API_URL + docParced3.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+                deliveryLink = process.env.API_URL + `/uploads/users/${orderData.order.seller_id}/documents/${sellerSettingsData[0].delivery_doc}`;
+                // deliveryLink = process.env.API_URL + docParced3.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
             } else {
-                deliveryLink = sellerSettingsData[0].delivery_link
+                if(/(http(s?)):\/\//i.test(sellerSettingsData[0].delivery_link)) {
+                    deliveryLink = sellerSettingsData[0].delivery_link;
+                } else {
+                    deliveryLink = 'https://'+sellerSettingsData[0].delivery_link
+                }
+                // deliveryLink = sellerSettingsData[0].delivery_link
             }
             delete sellerSettingsData[0].delivery_link;
         }
         if (sellerSettingsData[0].return_doc || sellerSettingsData[0].return_link) {
-            let docParced4 = sellerSettingsData[0].return_doc
             if (sellerSettingsData[0].return_doc) {
-                returnLink = process.env.API_URL + docParced4.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
+                returnLink = process.env.API_URL + `/uploads/users/${orderData.order.seller_id}/documents/${sellerSettingsData[0].return_doc}`;
+                // returnLink = process.env.API_URL + docParced4.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
             } else {
-                returnLink = sellerSettingsData[0].return_link
+                if(/(http(s?)):\/\//i.test(sellerSettingsData[0].return_link)) {
+                    returnLink = sellerSettingsData[0].return_link;
+                } else {
+                    returnLink = 'https://'+sellerSettingsData[0].return_link
+                }
+
+                // returnLink = sellerSettingsData[0].return_link
             }
             delete sellerSettingsData[0].return_link;
         }
-        // let privacyLink = '';
-        // let termsLink = '';
-        // let returnLink = '';
-        // let deliveryLink = '';
-        sellerSettingsData[0].privacy_doc = privacyLink;
-        sellerSettingsData[0].terms_doc = termsLink;
-        sellerSettingsData[0].delivery_doc = deliveryLink;
-        sellerSettingsData[0].return_doc = returnLink;
+        // console.log('Terms LINK', termsLink)
+        sellerSettingsData[0].privacy_doc = privacyLink ? privacyLink : '';
+        sellerSettingsData[0].terms_doc = termsLink ? termsLink : '';
+        sellerSettingsData[0].delivery_doc = deliveryLink ? deliveryLink : '';
+        sellerSettingsData[0].return_doc = returnLink ? returnLink : '';
+        // console.log(sellerSettingsData[0]);
 
-        // if ((sellerSettingsData[0].privacy_doc || sellerSettingsData[0].terms_doc || sellerSettingsData[0].delivery_doc || sellerSettingsData[0].return_doc) && !sellerSettingsData[0].doctype) {
-        //     let termsDoc = sellerSettingsData[0].terms_doc ? sellerSettingsData[0].terms_doc : (
-        //         sellerSettingsData[0].privacy_doc || sellerSettingsData[0].return_doc || sellerSettingsData.delivery_doc
-        //     );
-        //     let privacyDoc = sellerSettingsData[0].terms_doc ? sellerSettingsData[0].terms_doc : (
-        //         sellerSettingsData[0].privacy_doc || sellerSettingsData[0].return_doc || sellerSettingsData.delivery_doc
-        //     )
-        //     const regExpDelBrackets = /[({})]/g;
-        //     orderData.order.termsDoc = process.env.API_URL + termsDoc.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
-        //     orderData.order.privacyDoc = process.env.API_URL + privacyDoc.replace(regExpDelBrackets, '').replace(process.env.DB_DOWNLOAD_FOLDER, '');
-        // }
         orderData.order.seller_settings = sellerSettingsData[0];
         return res.status(200).json({
             order: orderData.order,

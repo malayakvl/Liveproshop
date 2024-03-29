@@ -27,6 +27,7 @@ interface Props {
     hideBulk?: boolean;
     sendDeleteRequest?: () => Promise<void>;
     sendCopyRequest?: () => Promise<void>;
+    sendShippedRequest?: () => Promise<void>;
     switcherRequest?: () => Promise<void>;
     sendStatusRequest?: (status: string) => Promise<void>;
     hidePaginationBar?: boolean;
@@ -40,6 +41,7 @@ const DataTable: React.FC<Props> = ({
     sendRequest,
     switcherRequest,
     sendDeleteRequest,
+    sendShippedRequest,
     sendCopyRequest,
     sendStatusRequest,
     switcherOnClick,

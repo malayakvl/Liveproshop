@@ -64,12 +64,12 @@ export const submitFormLinkAction: any = createAction(
 );
 export const submitFormUploadAction: any = createAction(
     'settings/ADD_UPDATE_FILES_DATA',
-    async (data: any) =>
+    async (data: any, type = '') =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             return axios
-                .post(`${baseUrl}/update-file-settings`, data, {
+                .post(`${baseUrl}/update-file-settings?typedoc=${type}`, data, {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
@@ -113,18 +113,21 @@ export const fetchFormAction: any = createAction(
 
 export const removeUploadedPolicyFile: any = createAction(
     'settings/REMOVE_UPLOADED_POLICY_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=privacy&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=policy&tmpfile=${type}&ext=${ext}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
+                    }
                 }
-            });
+            );
             if (res.status) {
                 dispatch(showLoaderAction(false));
                 dispatch(fetchFormAction());
@@ -136,14 +139,16 @@ export const removeUploadedPolicyFile: any = createAction(
 );
 export const removeUploadedTermsAndCondFile: any = createAction(
     'settings/REMOVE_UPLOADED_TERMSCOND_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=terms&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=terms&tmpfile=${type}&ext=${ext}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
@@ -160,14 +165,16 @@ export const removeUploadedTermsAndCondFile: any = createAction(
 );
 export const removeUploadedDeliveryFile: any = createAction(
     'settings/REMOVE_UPLOADEDDELIVERY_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=delivery&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=delivery&tmpfile=${type}&ext=${ext}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }
@@ -184,14 +191,16 @@ export const removeUploadedDeliveryFile: any = createAction(
 );
 export const removeUploadedReturnFile: any = createAction(
     'settings/REMOVE_UPLOADED_RETURN_FILE',
-    async (type: string) =>
+    async (type: string, ext: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
         ): Promise<{ item: Settings.SettingItem }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
-            const res = await axios.get(`${baseUrl}/remove-settings-file?type=return&tmpfile=${type}`, {
+            const res = await axios.get(
+                `${baseUrl}/remove-settings-file?type=return&tmpfile=${type}&ext=${ext}`,
+                {
                     headers: {
                         ...authHeader(state.user.user.email)
                     }

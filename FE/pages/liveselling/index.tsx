@@ -14,7 +14,7 @@ import { fetchFormAction } from '../../redux/settings';
 import { itemSelector } from '../../redux/settings/selectors';
 import moment from 'moment';
 
-export default function Index({ session, locale }: { session: any, locale: string }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
@@ -70,7 +70,8 @@ export default function Index({ session, locale }: { session: any, locale: strin
                                     </p>
                                 ) : (
                                     <p>
-                                        Remarque : Il est impératif d`abater vos documents avant de commencer vos diffusions en direct.
+                                        Remarque : Il est impératif d`abater vos documents avant de
+                                        commencer vos diffusions en direct.
                                         <Link href={'/documents'}> ici</Link>
                                     </p>
                                 )}
@@ -91,13 +92,15 @@ export default function Index({ session, locale }: { session: any, locale: strin
                             !settingsValues.delivery_link ? (
                                 <div />
                             ) : (
-                                <div>
-                                    <button
-                                        className="btn-big xl:ml-4 mt-4 md:mt-0"
-                                        onClick={() => dispatch(showPopupAction(true))}>
-                                        {t('Schedule new session')}
-                                    </button>
-                                </div>
+                                <>
+                                    <div>
+                                        <button
+                                            className="btn-big xl:ml-4 mt-4 md:mt-0"
+                                            onClick={() => dispatch(showPopupAction(true))}>
+                                            {t('Schedule new session')}
+                                        </button>
+                                    </div>
+                                </>
                             )}
                             {/*    className="btn-big xl:ml-4 mt-4 md:mt-0"*/}
                             {/*    onClick={() => dispatch(showPopupAction(true))}>*/}

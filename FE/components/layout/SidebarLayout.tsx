@@ -10,12 +10,13 @@ import {
     toggleProfileMenuAction,
     toggleSidebarAction
 } from '../../redux/layouts';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import {
     setupExistOrderByCommentAction,
     setupOrderByCommentAction,
     setupWaitOrderByCommentAction
 } from '../../redux/orders';
+import { setUserLocaleAction } from '../../redux/user/actions';
 import { orderNumberSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
@@ -24,6 +25,7 @@ export default function SidebarLayout({ children }: { children: any }) {
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     const redirectOrderNumber = useSelector(orderNumberSelector);
+    const { locale }: any = useRouter();
     // const redirectOrderNumber = '';
 
     const isValidEmail = (email: any) => {
@@ -32,8 +34,11 @@ export default function SidebarLayout({ children }: { children: any }) {
 
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
-        // console.log('USER', user);
         if (user?.email && user.role_id == 2) {
+            console.log('USER SUBSCRIPTION', user.status);
+            if (user?.status === 'cancel') {
+                Router.push(`/pricing`);
+            }
             if (user.subscription_id?.includes('fake_sub_') || user?.subscription_expired) {
                 Router.push(`/pricing`);
             }
@@ -78,6 +83,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             } else {
                 dispatch(showEmailNotificationAction(false));
             }
+            dispatch(setUserLocaleAction(locale));
         }
     }, [user?.email]);
 

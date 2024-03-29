@@ -36,6 +36,7 @@ export default {
   "If you did not make this request, you can safely ignore this email": "If you did not make this request, you can safely ignore this email",
   "See you soon": "See you soon",
   "The Live Pro Shop Team": "The Live Pro Shop Team",
+  "Forgot password": "Forgot password",
 
   //register//
   "Confirmation registration": "Confirmation registration",
@@ -47,8 +48,9 @@ export default {
   //welcome//
   "Verification email":"Verification email",
   "Account Activation Required": "Account Activation Required",
-  "Verify yourself below to sign in to your Liveproshop.com account for": "Verify yourself below to sign in to your Liveproshop.com account for",
-  "Here’s the verification link": "Here’s the verification link",
+  "Verify yourself below to sign in to your ": "Verify yourself below to sign in to your",
+  "account for": " account for",
+  "Here`s the verification link": "Here’s the verification link",
   "If you didn't request this verification link, you can safely ignore this email": "If you didn't request this verification link, you can safely ignore this email",
 
   //unsubscribe
@@ -60,7 +62,7 @@ export default {
 
   // subscription confirm email
   "Subscription confirmed": "Subscription confirmed",
-  "Your subscription has been taken into account":"Your subscription has been taken into account",
+  "Your subscription has been taken into account":"Your subscription has been taken into account. ",
   "You can access features by connecting here": "You can access features by connecting here",
   "Recurring payment successful": "Recurring payment successful",
 
@@ -78,4 +80,28 @@ export default {
 
   //requestDemoFromEmail
   "Request Demo from": "Request Demo from",
+
+  "Email confirmation": "Email confirmation",
+  "Thank you for joining Live Pro Shop. Your account has been created.": "Thank you for joining Live Pro Shop. Your account has been created.",
+  "To access your account and complete your profile, click on the link below:": "To access your account and complete your profile, click on the link below:",
+  "If you are having trouble logging into your account, contact us at ": "If you are having trouble logging into your account, contact us at ",
+  "See you soon,": "See you soon,",
+
+
+  "We confirm that your order has been shipped": "We confirm that your order has been shipped",
+  "You can track your order at any time by clicking on the tracking number or by contacting your merchant.": "You can track your order at any time by clicking on the tracking number or by contacting your merchant.",
+  "Your order has been shipped": "Your order has been shipped",
+
+  "Platinum Plan Request": "Platinum Plan Request",
+  "User Info": "User Info",
+  "User Email": "User Email",
+
+  "Your account needs to be synchronized": "Your account needs to be synchronized",
+  "You have scheduled a live session and it`s about to start": "You have scheduled a live session and it’s about to start.",
+  "schtext_1": "Please connect to your Live Pro Shop  account and synchronize with your respective Facebook account in order to use our services.",
+  "schtext_2": "If your account is not synchronized, Live Pro  Shop features will not be available during your live session.",
+  "schtext_3": "You can follow this ",
+  "schtext_4": "guide ",
+  "schtext_5": "to sync your account"
+
 };

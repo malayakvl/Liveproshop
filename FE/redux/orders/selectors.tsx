@@ -52,6 +52,10 @@ export const cancelConfirmationModalSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.showCancelPopup
 );
+export const shippedConfirmationModalSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.showShippedPopup
+);
 export const achiveNameSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.achiveName

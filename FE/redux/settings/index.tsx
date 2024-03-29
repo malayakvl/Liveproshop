@@ -132,7 +132,7 @@ const ACTION_HANDLERS: any = {
             ...state,
             uploadedReturnFiles: []
         };
-    },
+    }
 };
 
 export {

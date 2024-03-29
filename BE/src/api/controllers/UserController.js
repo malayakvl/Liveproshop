@@ -3,9 +3,11 @@ import countryModel from '../models/Country.js';
 import paymentPlanModel from '../models/PaymentPlan.js';
 import multer from 'multer';
 import fs from 'fs';
+import unzipper from 'unzipper';
 import { trialSubscriptionEmail, unsubscriberFromEmail } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
-
+import pool from "../models/connect.js";
+// import * as decompress from 'decompress'
 class UserController {
 
     async generateInvoice (req, res) {
@@ -103,112 +105,142 @@ class UserController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
-        const { type, tmpfile } = req.query;
-        await userModel.removeSettingsFile(type, tmpfile, req.user.id);
+        const { type, tmpfile, ext } = req.query;
+        await userModel.removeSettingsFile(type, tmpfile, ext, req.user.id);
         const data = await userModel.fetchUserSettings(req.user.id);
         return res.status(200).json({ item: data[0]});
+    }
+
+    processFileData(fileData) {
+        fs.writeFile(`${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}/documents/tmp/output.txt`, fileData, (err) => {
+            if (err) {
+                console.error('Error writing file:', err);
+            } else {
+                console.log('File written successfully');
+            }
+        });
+    }
+
+
+
+    async processPDF(pdfFilePath, res) {
+        try {
+            // Parse the PDF content
+            const pdfBuffer = fs.readFileSync(pdfFilePath);
+            const data = await PDFParser(pdfBuffer);
+            const pdfText = data.text;
+
+            // Define the words to search and their initial count
+            const technologies = ['Node.js', 'React.js', 'Angular', 'Vue.js', 'JavaScript', 'TypeScript', 'HTML', 'CSS', 'Sass', 'Bootstrap', 'jQuery', 'Python', 'Java', 'Ruby', 'Go', 'PHP', 'Swift', 'Kotlin', 'Rust', 'SQL', 'MongoDB', 'Firebase', 'AWS', 'Azure', 'Docker', 'Kubernetes', 'Git', 'GitHub', 'Jenkins', 'CI/CD', 'REST API', 'GraphQL', 'OAuth', 'JSON', 'XML', 'Microservices', 'Artificial Intelligence', 'Machine Learning', 'Data Science', 'Big Data', 'Blockchain'];
+            let wordCounts = {};
+
+            // Count the occurrences of each search word
+            technologies.forEach((word) => {
+                const regex = new RegExp(word, 'gi');
+                const count = (pdfText.match(regex) || []).length;
+                wordCounts[word] = count;
+            });
+
+            // Return the word counts as the response
+            wordCounts = Object.fromEntries(Object.entries(wordCounts).filter(([key, value]) => value !== 0));
+            res.json({ wordCounts });
+        } catch (error) {
+            console.error('An error occurred while processing the PDF:', error);
+            res.status(500).json({ error: 'Failed to process the PDF' });
+        } finally {
+            // Clean up - delete the uploaded file and PDF file if needed
+        }
     }
 
     async updateFilesSettings (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
+        const type = req.query.typedoc;
+        const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}/documents/tmp`;
+        if (!fs.existsSync(dirUpload)) {
+            fs.mkdirSync(dirUpload);
+        }
+        let tmpFileName;
+
         const storage = multer.diskStorage({
             destination: function (req, file, cb) {
-                cb(null, `${process.env.DOWNLOAD_FOLDER}/tmp`);
+                cb(null, `${dirUpload}`);
             },
             filename: function (req, file, cb) {
-                cb(null, Date.now() + '-' + file.originalname);
+                cb(null, type+'.'+file.originalname.substr(file.originalname.lastIndexOf('.') + 1));
             }
         });
-        const uploadPolicy = multer({ storage: storage }).any('policy');
-        const uploadTerms = multer({ storage: storage }).any('terms');
-        const uploadDelivery = multer({ storage: storage }).any('delivery');
-        const uploadReturn = multer({ storage: storage }).any('return');
+        const upload = multer({ storage: storage });
 
-        await uploadPolicy(req, res, async function (err) {
-            if (err instanceof multer.MulterError) {
-                return res.status(500).json(err);
-            } else if (err) {
-                return res.status(500).json(err);
-            }
-            // const dataProduct = req.body;
-            const docsPolicy = [];
 
-            if (req.files.length > 0) {
-                req.files.forEach(file => {
-                    if (file.fieldname === 'policy' && file?.size) {
-                        docsPolicy[0] = file.filename;
-                    }
-                });
-                await userModel.uploadSettingsDoc(docsPolicy, req.user.id, 'policy');
-            }
+        if (req.query.typedoc === 'policy') {
+            const uploadPolicy = multer({storage: storage}).any('policy');
+            const resUpl = await uploadPolicy(req, res, async function (err) {
+                if (err instanceof multer.MulterError) {
+                    return res.status(500).json(err);
+                } else if (err) {
+                    return res.status(500).json(err);
+                }
+                if (req.files.length > 0) {
+                    req.files.forEach(async file => {
+                        // console.log(file)
+                        if (file.fieldname === 'policy') {
 
-            return ;
-        });
+                        }
+                    });
+                }
 
-        await uploadTerms(req, res, async function (err) {
-            if (err instanceof multer.MulterError) {
-                return res.status(500).json(err);
-            } else if (err) {
-                return res.status(500).json(err);
-            }
-            // const dataProduct = req.body;
-            const docsTerms = [];
-            if (req.files.length > 0) {
-                req.files.forEach(file => {
-                    if (file.fieldname === 'terms' && file?.size) {
-                        docsTerms[0] = file.filename;
-                    }
-
-                });
-                await userModel.uploadSettingsDoc(docsTerms, req.user.id, 'terms');
-            }
-            return;
-        });
-
-        await uploadDelivery(req, res, async function (err) {
-            if (err instanceof multer.MulterError) {
-                return res.status(500).json(err);
-            } else if (err) {
-                return res.status(500).json(err);
-            }
-            // const dataProduct = req.body;
-            const docsDelivery = [];
-            if (req.files.length > 0) {
-                req.files.forEach(file => {
-                    if (file.fieldname === 'delivery' && file?.size) {
-                        docsDelivery[0] = file.filename;
-                    }
-
-                });
-                await userModel.uploadSettingsDoc(docsDelivery, req.user.id, 'delivery');
-            }
-            return;
-        });
-
-        await uploadReturn(req, res, async function (err) {
-            if (err instanceof multer.MulterError) {
-                return res.status(500).json(err);
-            } else if (err) {
-                return res.status(500).json(err);
-            }
-            // const dataProduct = req.body;
-            const docsReturn = [];
-            if (req.files.length > 0) {
-                req.files.forEach(file => {
-                    console.log(file);
-                    if (file.fieldname === 'returnPolicy' && file?.size) {
-                        docsReturn[0] = file.filename;
-                    }
-
-                });
-                await userModel.uploadSettingsDoc(docsReturn, req.user.id, 'return');
-            }
-            return;
-        });
-
-        // const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);
+                // WORK WITH ZIP
+                // const zip = fs.createReadStream(`${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}/documents/tmp/policy.zip`).pipe(unzipper.Parse({forceStream: true}));
+                // for await (const entry of zip) {
+                //     const fileName = entry.path;
+                //     const type = entry.type; // 'Directory' or 'File'
+                //     const size = entry.vars.uncompressedSize; // There is also compressedSize;
+                //     // entry.pipe(fs.createWriteStream(`${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}/documents/tmp/`));
+                //     if (fileName === "policy.pdf") {
+                //         console.log("FILENAME", fileName)
+                //         entry.pipe(fs.createWriteStream(`${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}/documents/tmp/policy.pdf`));
+                //     } else {
+                //         entry.autodrain();
+                //     }
+                // }
+                return true;
+            });
+        }
+        if (req.query.typedoc === 'terms') {
+            const uploadTerms = multer({storage: storage}).any('terms');
+            const resUpl = await uploadTerms(req, res, async function (err) {
+                if (err instanceof multer.MulterError) {
+                    return res.status(500).json(err);
+                } else if (err) {
+                    return res.status(500).json(err);
+                }
+                return true;
+            });
+        }
+        if (req.query.typedoc === 'delivery') {
+            const uploadDelivery = multer({storage: storage, limits: { fileSize: '100000000' /* bytes */ }}).any('delivery');
+            const resUpl = await uploadDelivery(req, res, async function (err) {
+                if (err instanceof multer.MulterError) {
+                    return res.status(500).json(err);
+                } else if (err) {
+                    return res.status(500).json(err);
+                }
+                return true;
+            });
+        }
+        if (req.query.typedoc === 'return') {
+            const uploadReturn = multer({storage: storage, limits: { fileSize: '100000000' /* bytes */ }}).any('return');
+            const resUpl = await uploadReturn(req, res, async function (err) {
+                if (err instanceof multer.MulterError) {
+                    return res.status(500).json(err);
+                } else if (err) {
+                    return res.status(500).json(err);
+                }
+                return true;
+            });
+        }
         return res.status(200).json({ success: true });
     }
 
@@ -229,16 +261,9 @@ class UserController {
     }
 
     async updateProfile(req, res) {
-        // const _user = req.user;
-
         if (!req.user) {
             return res.status(402).json('Something wend wrong');
         }
-        // const dataUser = req.body;
-        // // delete dataUser.email;
-        // console.log(dataUser);
-        // await userModel.update(dataUser, req.user.id);
-
         const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`;
         if (!fs.existsSync(dirUpload)) {
             fs.mkdirSync(dirUpload, { recursive: true });
@@ -275,16 +300,7 @@ class UserController {
             if (req.file) {
                 await userModel.updateProfilePhoto(`/uploads/users/${req.user.id}/${req.file.filename}`, req.user.id);
             }
-            // const isValidEmail = (email: any) => {
-            //     return /\S+@\S+\.\S+/.test(email);
-            // };
-            // if (!/\S+@\S+\.\S+/.test(userEmail) && profileData.email_real) {
-            //     // req.user.email = profileData.email_real
-            //     // await userModel.updateEmail(profileData.email_real, req.user.id);
-            //     console.log("need update user email", profileData.email_real);
-            // }
             const user = await userModel.findUserByEmail(req.user.email);
-            // console.log(user);
             delete user.password;
             delete user.salt;
             delete user.hash;
@@ -405,8 +421,11 @@ class UserController {
 
     async getSubscription(req, res) {
         if (req.user) {
-            const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id, req.user.is_trial);
-            // console.log('DATA SUBSCRIPTION', data);
+            // OLD VERSION
+            // const data = await userModel.getSubscriptionInfo(req.user.subscription_id, req.user.customer_id, req.user.is_trial);
+            // NEW VERSION
+            const data = await userModel.fetchSubscription(req.user, req.user.subscription_id, req.user.customer_id, req.user.is_trial);
+            // console.log('DATA SUBSCRIPTION PAYMENTS', data.subscription.paymentMethods);
             if (data.subscription) {
                 return res.status(200).json({
                     subscription: data.subscription,
@@ -419,8 +438,17 @@ class UserController {
         }
     }
 
+
+    async sessionReminder(req, res) {
+        const data = await userModel.getSessionReminderList();
+        return res.status(200).json({
+            data: data.data
+        });
+    }
+
     async addPaymentMethodAfterRegistration(req, res) {
         const formData = req.body;
+
         const data = await userModel.createExistUserTrialSubscription(formData);
         if (data.subscription) {
             req.body.subscription = data.subscription;
@@ -431,30 +459,9 @@ class UserController {
                 user: _user
             });
         }
-        // console.log("FORM DATA", formData);
 
         // for incoming user create free month subscription
-
-
-
         return res.status(402).json('Something wend wrong');
-
-        // if (formData.subscription.id) {
-        //     const data = await userModel.addPaymentMethodBySubscription(req.body);
-        //     if (data.success) {
-        //         return res.status(200).json({
-        //             success: data.success,
-        //             user: data.user
-        //         });
-        //     } else {
-        //         return res.status(402).json({
-        //             success: data.success,
-        //             error: data.error
-        //         });
-        //     }
-        // } else {
-        //     return res.status(402).json('Something wend wrong');
-        // }
     }
 
 
@@ -478,6 +485,14 @@ class UserController {
         }
     }
 
+    async setUserLocale(req, res) {
+        if (req.user) {
+            const dataLocale = userModel.setLocale(req.user.id, req.query.locale);
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+    }
 
     async addPaymentMethod(req, res) {
         if (req.user) {
@@ -497,29 +512,38 @@ class UserController {
         }
     }
 
+    async fetchSubscriptionsForUpdate(req, res) {
+        const dataSubscription = await userModel.fetchSubscriptionsForUpdate();
+        // console.log(dataSubscription)
+        return res.status(200).json({
+            success: true,
+            data: dataSubscription.data
+        });
+    }
 
-    // async addPaymentMethod(req, res) {
-    //     if (req.user) {
-    //         console.log("here");
-    //         const data = await userModel.addPaymentMethod(req.user, req.body);
-    //         if (data.success) {
-    //             return res.status(200).json({
-    //                 success: data.success
-    //             });
-    //         } else {
-    //             return res.status(402).json({
-    //                 success: data.success,
-    //                 error: data.error
-    //             });
-    //         }
-    //     } else {
-    //         return res.status(402).json('Something wend wrong');
-    //     }
-    // }
-
-    async updateSubscriptionPlan (req, res) {
+    async upgradeSubscription(req, res) {
         if (req.user) {
-            const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
+            const data = await userModel.upgradeSubscription(req.user, req.body.planId, req.query.locale);
+            if (data.success) {
+                return res.status(200).json({
+                    success: data.success,
+                    planId: data.planId
+                });
+            } else {
+                return res.status(402).json({
+                    success: data.success,
+                    error: data.error
+                });
+            }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+
+    }
+
+    async cancelSubscription(req, res) {
+        if (req.user) {
+            const data = await userModel.cancelSubscription(req.user, req.body.planId);
             if (data.success) {
                 return res.status(200).json({
                     success: data.success
@@ -530,6 +554,61 @@ class UserController {
                     error: data.error
                 });
             }
+        } else {
+            return res.status(402).json('Something wend wrong');
+        }
+
+    }
+
+    async getSubscriptionRecurringPaymentJob (req, res) {
+        const dataResult = await userModel.recurringPaymentList(req.body.user_id, req.body);
+        console.log(dataResult);
+
+        return res.status(200).json({
+            success: true
+        });
+    }
+
+    async updateSubscriptionPlanJob (req, res) {
+        const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.body.user_id, req.body);
+
+
+        return res.status(200).json({
+            success: true
+        });
+        // if (req.user) {
+        //     console.log(req.user);
+        //     // create upgrade row about subscription
+        //     const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+        //     return res.status(200).json({
+        //         success: true
+        //     });
+        //
+        //     // const data = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
+        //     // if (data.success) {
+        //     //     return res.status(200).json({
+        //     //         success: data.success
+        //     //     });
+        //     // } else {
+        //     //     return res.status(402).json({
+        //     //         success: data.success,
+        //     //         error: data.error
+        //     //     });
+        //     // }
+        // } else {
+        //     return res.status(402).json('Something wend wrong for update subscription');
+        // }
+    }
+
+    async updateSubscriptionPlan (req, res) {
+        if (req.user) {
+            // create upgrade row about subscription
+            console.log('AAAAA');
+            // const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
+            const dataUpgrade = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
+            return res.status(200).json({
+                success: true
+            });
         } else {
             return res.status(402).json('Something wend wrong');
         }
@@ -655,9 +734,19 @@ class UserController {
         return res.status(200).json('Something wend wrong');
     }
 
+    async sendRequestPlatinum(req, res) {
+        if (req.user) {
+            return res.status(200).json({success: true});
+        } else {
+            return res.status(403).json({error: 'Something wend wrong'});
+        }
+    }
+
     async unsubscribe (req, res) {
         if (req.user) {
             // send email to support about unsubscribe
+            await userModel.cancelSubscription(req.user);
+
             const settings = paymentPlanModel.fetchSettings();
             const mail = await unsubscriberFromEmail(req.user.email, "User want unsubscribe from plan", 'fr');
 
@@ -666,11 +755,6 @@ class UserController {
                 mail.subject,
                 mail.body
             );
-            // const welcomeEmail = welcomeEmailHtml(req.user.email, '', '');
-            // sendMail(
-            //     settings.support_email,
-            //     'Proshop',
-            //     welcomeEmail);
             return res.status(200).json({success: true});
         } else {
             return res.status(403).json({error: 'Something wend wrong'});

@@ -37,7 +37,6 @@ apiRoutes.route('/upload').post(TestController.uploadFile);
 apiRoutes.route('/invoice').get(OrderController.generateInvoice);
 
 apiRoutes.route('/countries').get(CountryController.getAll);
-
 /*********************************************
  /***************JOB ROUTES********************
  /*********************************************/
@@ -56,10 +55,14 @@ apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitSt
 apiRoutes.route('/run-waiting-job').get(OrderController.waitingJobOrders);
 apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder);
 apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
+apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
 
-// apiRoutes.route('/check-order-status').get(LivesessionController.checkOrderStatus);
-// apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderStatus);
-// apiRoutes.route('/live-product-qty').get(OrderController.getLiveProductQty);
+
+apiRoutes.route('/check-subscription-for-update').get(UserController.fetchSubscriptionsForUpdate);
+apiRoutes.post('/update-subscription-plan-job', UserController.updateSubscriptionPlanJob);
+apiRoutes.get('/update-subscription-plan-job', UserController.updateSubscriptionPlanJob);
+apiRoutes.get('/subscription-recurring-payment', UserController.getSubscriptionRecurringPaymentJob);
+
 
 apiRoutes.route('/pages/all').get(PageController.getAll);
 apiRoutes.route('/pages').get(PageController.getPage);
@@ -75,7 +78,6 @@ apiRoutes.route('/create-orders').get(OrderController.createOrders);
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);
 apiRoutes.route('/orders/minus-item-order').get(OrderController.minusOrderItem);
 apiRoutes.route('/order/get-config-qty').get(OrderController.getProductConfigQty);
-
 
 apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
 apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);
@@ -101,6 +103,7 @@ apiRoutes.use(async (req, res, next) => {
         next();
     }
 });
+apiRoutes.post('/request-platinum', UserController.sendRequestPlatinum);
 apiRoutes.post('/changePassword', UserController.changePassword);
 apiRoutes.get('/profile/subscription', UserController.getSubscription);
 apiRoutes.post('/profile/delete-payment-method', UserController.deletePaymentMethod);
@@ -108,8 +111,10 @@ apiRoutes.post('/profile/default-payment-method', UserController.defaultPaymentS
 apiRoutes.post('/profile/add-payment-method-from-subscription', UserController.addPaymentMethodFromSubscription);
 apiRoutes.post('/profile/add-payment-method-after-registration', UserController.addPaymentMethodAfterRegistration);
 apiRoutes.post('/profile/add-payment-method', UserController.addPaymentMethod);
-apiRoutes.post('/profile/update-subscription-plan', UserController.updateSubscriptionPlan);
-apiRoutes.get('/profile/unsubscription', UserController.unsubscribe);
+apiRoutes.get('/profile/set-locale', UserController.setUserLocale);
+apiRoutes.post('/profile/set-locale', UserController.setUserLocale);
+apiRoutes.post('/profile/update-subscription-plan', UserController.upgradeSubscription);
+apiRoutes.get('/profile/unsubscription', UserController.cancelSubscription);
 apiRoutes.get('/profile/generate-stripe-invoice', UserController.generateInvoice);
 apiRoutes.route('/profile/order-comment')
     .get(OrderController.fetchOrderByComment);

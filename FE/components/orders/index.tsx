@@ -13,4 +13,5 @@ export { default as FilterDate } from './filters/FilterDate';
 export { default as FilterSeller } from './filters/FilterSeller';
 export { default as FilterDateRange } from './filters/FilterDateRange';
 export { default as CancelConfirmation } from './CancelConfirmation';
+export { default as ShippedConfirmation } from './ShippedConfirmation';
 export { default as FilterDropdownShoppers } from './filters/FilterDropdownShoppers';

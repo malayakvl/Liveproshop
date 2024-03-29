@@ -1,14 +1,10 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector, userSubscriptionSelector } from '../../../redux/user/selectors';
 import { fetchUserSubscriptionAction, showChangeSubscriptionFormAction } from '../../../redux/user';
-import {
-    unsubscribeAction,
-    addPyamentMethodActions,
-    stripeDeletetPaymentAction
-} from '../../../redux/user/actions';
+import { unsubscribeAction, addPyamentMethodActions } from '../../../redux/user/actions';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import ChangeSubscription from './ChangeSubscription';
@@ -18,6 +14,7 @@ import { stripeDefaultPaymentAction } from '../../../redux/user/actions';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import CardValidator from 'card-validator';
+import ConfirmDialog from '../../../components/_common/ConfirmDialog';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -26,6 +23,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const [hideBtn, setHideBtn] = useState(false);
     const user = useSelector(userSelector);
     const subscriptionInfo = useSelector(userSubscriptionSelector);
+    const [selectedItem, setSelectedItem] = useState<any | null>();
 
     useEffect(() => {
         // Create PaymentIntent and Plan Price as soon as the page loads
@@ -42,25 +40,12 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     }, [subscriptionInfo]);
 
-    const preparePeriod = () => {
-        if (subscriptionInfo.trial_end && subscriptionInfo.status != 'active') {
-            return `
-                    ${moment.unix(subscriptionInfo.trial_start).format('DD-MM-YYYY')} - ${moment
-                .unix(subscriptionInfo.trial_end)
-                .format('DD.MM.YYYY')}
-                  `;
-            // tr.appendChild(createTD(`<span class="days w3-center w3-block">${dayLeft}</span>`));
-        } else {
-            return `
-                    ${moment
-                        .unix(subscriptionInfo.current_period_start)
-                        .format('DD.MM.YYYY')} - ${moment
-                .unix(subscriptionInfo.current_period_end)
-                .format('DD.MM.YYYY')}
-                    
-                `;
-        }
-    };
+    const handlerConfirmCancel = useCallback(() => {
+        if (!selectedItem) return;
+        dispatch(unsubscribeAction(true));
+        setSelectedItem(null);
+    }, [selectedItem]);
+
     const preparePeriodFake = () => {
         return `
                     ${moment(subscriptionInfo.period_start).format('DD.MM.YYYY')} - ${moment(
@@ -84,20 +69,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
         }
     };
 
-    const prepareDayLeft = () => {
-        let dDiff = 0;
-        const start = moment.unix(subscriptionInfo.current_period_end);
-        const end = moment();
-        const dayLeft = moment.duration(start.diff(end)).asDays().toFixed(0);
-        if (subscriptionInfo.trial_end && subscriptionInfo.status != 'active') {
-            return dayLeft;
-        } else {
-            const a = moment();
-            const b = moment(moment.unix(subscriptionInfo.current_period_end).format('YYYY-MM-DD'));
-            dDiff = b.diff(a, 'days');
-            return dDiff < 0 ? `expired ${-dDiff} days ago` : dDiff;
-        }
-    };
+    console.log(subscriptionInfo);
 
     const validationSchema = Yup.object({
         card_number: Yup.string()
@@ -139,6 +111,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
             })
     });
 
+    console.log(subscriptionInfo);
+
     return (
         <>
             <Head>
@@ -147,25 +121,24 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title">
-                    <h1>Subscription Plan</h1>
+                    <h1>{t('Subscription Plan')}</h1>
                     <div className="clear-both" />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 mt-10">
                     <div className="flex flex-wrap justify-between">
-                        <div className="flex-auto lg:flex-1">
-                            <div className="text-2xl font-bold text-gray-350 mb-6">
-                                {t('Exist Payment Method')}
-                            </div>
-                            {subscriptionInfo && (
+                        {subscriptionInfo && (
+                            <div className="flex-auto lg:flex-1">
+                                <div className="text-2xl font-bold text-gray-350 mb-6">
+                                    {t('Exist Payment Method')}
+                                </div>
                                 <table className="w-full float-table">
                                     <tbody>
                                         {subscriptionInfo.paymentMethods.map((method: any) => (
-                                            <tr key={method.id} className="py-2">
+                                            <tr key={method.id}>
                                                 <td>
-                                                    ****{method.card.last4}
-                                                    {method.card.brand}
+                                                    ****{method.card.last4} {method.card.brand}
                                                 </td>
                                                 <td>
                                                     {method.card.exp_month}/{method.card.exp_year}
@@ -194,33 +167,12 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                         <span>Default</span>
                                                     )}
                                                 </td>
-                                                <td
-                                                    style={{
-                                                        paddingBottom: '10px'
-                                                    }}>
-                                                    {method.id !==
-                                                        subscriptionInfo.defaultPayment && (
-                                                        <span
-                                                            style={{ paddingTop: '2px' }}
-                                                            className="cursor-pointer disabled-btn-small h-[30px] pt-[1px] mt-[-5px]"
-                                                            role="presentation"
-                                                            onClick={() =>
-                                                                dispatch(
-                                                                    stripeDeletetPaymentAction(
-                                                                        method.id
-                                                                    )
-                                                                )
-                                                            }>
-                                                            Delete
-                                                        </span>
-                                                    )}
-                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 mt-10 ">
@@ -269,8 +221,26 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                 {!subscriptionInfo.is_fake && (
                                     <tr>
                                         <td>
-                                            {subscriptionInfo.DBName}
-                                            <br />
+                                            {t(subscriptionInfo.dbUserPlan.name)}
+                                            {subscriptionInfo.upgradet_at && (
+                                                <em
+                                                    className={`block text-[12px] max-w-[300px] text-${
+                                                        subscriptionInfo.nameUpgrade != 'Cancel'
+                                                            ? 'green-250'
+                                                            : 'orange-450'
+                                                    } font-bold`}
+                                                    style={{ fontStyle: 'normal' }}>
+                                                    {subscriptionInfo.upgradet_at && (
+                                                        <>
+                                                            {t('upgrade_subcription_msg', {
+                                                                dayCount: subscriptionInfo.daysLeft
+                                                            })}
+                                                            {t('to')}{' '}
+                                                            {t(subscriptionInfo.nameUpgrade)}
+                                                        </>
+                                                    )}
+                                                </em>
+                                            )}
                                             <a
                                                 className="cursor-pointer text-xs gradient-btn-small block max-w-max mt-5"
                                                 href={subscriptionInfo.invoicePdf}
@@ -282,50 +252,41 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                         <td style={{ textAlign: 'center' }}>
                                             <span
                                                 className={`${subscriptionInfo.status}-subscription`}>
-                                                {subscriptionInfo.status}
+                                                {t(subscriptionInfo.status)}
                                             </span>
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
-                                            {moment
-                                                .unix(subscriptionInfo.created)
-                                                .format('DD.MM.YYYY')}
-                                        </td>
-                                        <td style={{ textAlign: 'center' }}>{preparePeriod()}</td>
-                                        <td style={{ textAlign: 'center' }}>{prepareDayLeft()}</td>
-                                        <td>
-                                            {subscriptionInfo.is_trial && (
-                                                <span
-                                                    className="cursor-pointer gradient-btn-small block max-w-max"
-                                                    role="presentation"
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            showChangeSubscriptionFormAction(true)
-                                                        )
-                                                    }>
-                                                    {t('Change Plan')}
-                                                </span>
-                                            )}
-                                            {!subscriptionInfo.is_trial && (
-                                                <span
-                                                    className="cursor-pointer gradient-btn-small block max-w-max"
-                                                    role="presentation"
-                                                    onClick={() =>
-                                                        dispatch(
-                                                            showChangeSubscriptionFormAction(true)
-                                                        )
-                                                    }>
-                                                    {t('Change Plan')}
-                                                </span>
-                                            )}
+                                            {subscriptionInfo.viewCreate}
                                         </td>
                                         <td style={{ textAlign: 'center' }}>
+                                            {moment
+                                                .unix(subscriptionInfo.current_period_start)
+                                                .format('MM/DD/YYYY')}
+                                            {' - '}
+                                            {moment
+                                                .unix(subscriptionInfo.current_period_end)
+                                                .format('MM/DD/YYYY')}
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            {subscriptionInfo.daysLeft}
+                                        </td>
+                                        <td style={{ textAlign: 'right' }}>
                                             <span
+                                                className="cursor-pointer gradient-btn-small inline-block max-w-max"
                                                 role="presentation"
-                                                className="cursor-pointer border border-gray-300 text-gray-300 py-1.5 rounded-lg px-1 inline-block"
+                                                onClick={() =>
+                                                    dispatch(showChangeSubscriptionFormAction(true))
+                                                }>
+                                                {t('Change Plan')}
+                                            </span>
+                                            <span
+                                                className="cursor-pointer disabled-btn-small inline-block ml-4"
+                                                role="presentation"
                                                 onClick={() => {
-                                                    dispatch(unsubscribeAction());
+                                                    setSelectedItem(!selectedItem);
+                                                    // dispatch(unsubscribeAction(true))
                                                 }}>
-                                                {t('Unsubscribe')}
+                                                {t('Cancel')}
                                             </span>
                                         </td>
                                     </tr>
@@ -382,7 +343,18 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     <p>{t('No Payment info yet')}</p>
                 )}
             </div>
-            <ChangeSubscription locale={locale} />
+            {subscriptionInfo?.id && <ChangeSubscription locale={locale} />}
+            <ConfirmDialog
+                show={!!selectedItem}
+                text={t('Are you sure you want to cancel subscription?', {
+                    status: selectedItem ? t('enable') : t('disable'),
+                    name: t('Cancel Subscription')
+                })}
+                titleConfirm={t('Yes')}
+                titleCancel={t('Cancel')}
+                onConfirm={handlerConfirmCancel}
+                onClose={() => setSelectedItem(null)}
+            />
         </>
     );
 }

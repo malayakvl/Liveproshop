@@ -12,6 +12,11 @@ import axios from "axios";
 import * as zipLib from "zip-a-folder";
 import { generateRndPrefix } from "../lib/utils.js";
 import shell from "shelljs";
+import {
+    confirmShippedEmail, confirmSubscriptionEmail
+} from "../sender/templates.js";
+import { sendMail } from "../lib/sendMail.js";
+
 
 async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
@@ -1067,6 +1072,27 @@ class Order {
     async setupShippingStatus (orderIds) {
         const client = await pool.connect();
         try {
+            // send email about shipping
+            const emailSql = `
+                SELECT data.users.*, data.user_stores.name AS store_name, 
+                    data.orders.order_number, data.users.selected_locale 
+                FROM data.orders 
+                    LEFT JOIN data.users ON data.users.id=data.orders.user_id 
+                    LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                    LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id                   
+                    WHERE data.orders.id IN (${orderIds.join(',')})`;
+console.log(emailSql);
+            const emailRes = await client.query(emailSql);
+            let mail = '';
+
+            await emailRes.rows.forEach(async _order => {
+                mail = await confirmShippedEmail(_order.email, _order.selected_locale ? _order.selected_locale : 'fr', _order);
+                sendMail(
+                    _order.email,
+                    mail.subject,
+                    mail.body
+                );
+            })
             const SQL = `UPDATE data.orders SET status='shipped' WHERE id IN (${orderIds.join(',')})`;
             await client.query(SQL);
             return {success: true, error: null};

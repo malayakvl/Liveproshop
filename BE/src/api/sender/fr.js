@@ -35,6 +35,8 @@ export default {
   "If you did not make this request, you can safely ignore this email": "Si vous n'avez pas fait cette demande, vous pouvez ignorer cet e-mail en toute sécurité.",
   "See you soon": "À bientôt",
   "The Live Pro Shop Team": "L’équipe Live Pro Shop",
+  "Forgot password": "Mot de passe oublié ?",
+
 
   //register//
   "Confirmation registration": "Confirmation de votre inscription",
@@ -46,7 +48,8 @@ export default {
   //welcome//
   "Verification email": "Activation du compte requise",
   "Account Activation Required": "Activation de compte requise",
-  "Verify yourself below to sign in to your Liveproshop.com account for": "Vous venez de créer un compte sur  Liveproshop.com avec",
+  "Verify yourself below to sign in to your ": "Vous venez de créer un compte sur",
+  "account for": " avec",
   "Here’s the verification link": "Cliquez ci-dessous pour confirmer votre adresse e-mail",
   "If you didn't request this verification link, you can safely ignore this email": "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité",
 
@@ -61,7 +64,7 @@ export default {
 
   // subscription confirm email
   "Subscription confirmed": "Confirmation d’abonnement",
-  "Your subscription has been taken into account":"Votre abonnement à bien été pris en compte",
+  "Your subscription has been taken into account": "Votre abonnement à bien été pris en compte",
   "You can access features by connecting here": "Vous pouvez accéder à ces fonctionnalités en vous connectant ici",
 
   // subscription confirm payment email
@@ -79,5 +82,28 @@ export default {
 
   //requestDemoFromEmail
   "Request Demo from": "Demandez use demo",
+
+  "Email confirmation": "Confirmation de votre inscription",
+  "Thank you for joining Live Pro Shop. Your account has been created.": "Merci d’avoir rejoint Live Pro Shop. Votre compte a bien été créé.",
+  "To access your account and complete your profile, click on the link below:": "Pour accéder à votre compte et compléter votre profile, cliquez sur le lien ci-dessous: ",
+  "If you are having trouble logging into your account, contact us at ": "Si vous rencontrez des difficultés pour vous connecter à votre compte, contactez-nous à ",
+  "See you soon,": "À bientôt,",
+
+  "We confirm that your order has been shipped": "Nous vous confirmons l’expédition de votre commande",
+  "You can track your order at any time by clicking on the tracking number or by contacting your merchant.": "Vous pouvez suivre sa progression à tout moment en cliquant sur le numéro de suivi ou en contactant votre commerçant.",
+  "Your order has been shipped": "Votre commande a été expédiée",
+
+  "Platinum Plan Request": "Demande de plan Platine",
+  "User Info": "informations utilisateur",
+  "User Email": "Sir Email",
+
+  "Your account needs to be synchronized": "Votre compte doit être synchronisé",
+  "You have scheduled a live session and it`s about to start": "Vous avez programmé une session en direct et elle est sur le point de commencer.",
+  "schtext_1": "Veuillez vous connecter à votre compte Live Pro Shop et le synchroniser avec votre compte Facebook respectif afin d'utiliser nos services.",
+  "schtext_2": "Si votre compte n'est pas synchronisé, les fonctionnalités de Live Pro Shop ne seront pas disponibles pendant votre live.",
+  "schtext_3": "Vous pouvez suivre ce ",
+  "schtext_4": "guide",
+  "schtext_5": "pour synchroniser votre compte. "
+
 
 };

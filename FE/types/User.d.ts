@@ -36,6 +36,7 @@ declare namespace User {
         plan_id: number | null;
         is_trial: boolean;
         customer_id: string | null;
+        selected_locale: string | null;
         plan_options: {
             feature_fb: boolean;
             support_coach: boolean;

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { addUploadedPolicyFile, removeUploadedPolicyFile } from '../../redux/settings';
+import {addUploadedPolicyFile, removeUploadedPolicyFile, removeUploadedTermsAndCondFile} from '../../redux/settings';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemSelector, uploadedPolicyFilesSelector } from '../../redux/settings/selectors';
@@ -17,9 +17,17 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
     const policyDataFiles = useSelector(uploadedPolicyFilesSelector);
     const settingsValues = useSelector(itemSelector);
     const user = useSelector(userSelector);
-    const removeFile = (type = '') => {
-        dispatch(removeUploadedPolicyFile(type));
+
+    const removeFile = (type = '', ext = '') => {
+        dispatch(removeUploadedPolicyFile(type, ext));
     };
+
+    const showUploadedFileExt = () => {
+        const regExpDelBrackets = /[({})]/g;
+        const fullReplace = `policy.`;
+        return settingsValues.terms_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
+    };
+
 
     useEffect(() => {
         acceptedFiles.forEach((file: File) => {
@@ -33,16 +41,10 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
             policyDataFiles.forEach((file: any) => {
                 formData.append('policy', file);
             });
-            dispatch(submitFormUploadAction(formData));
+            dispatch(submitFormUploadAction(formData, 'policy'));
         }
     }, [policyDataFiles]);
 
-    const showUploadedFile = () => {
-        const regExpDelBrackets = /[({})]/g;
-        const fullReplace = `${replaceUrl}uploads/users/${user.id}/`;
-
-        return settingsValues.privacy_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
-    };
 
     return (
         <>
@@ -57,25 +59,45 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
                         <h4>Uploaded Files</h4>
                         <ul style={{ minWidth: '300px', marginLeft: '-10px' }}>
                             {policyDataFiles.map((_file: File) => (
-                                <li key={_file.lastModified} style={{ minWidth: '300px' }}>
-                                    <span>New {_file.name}</span> <em>{_file.size} bytes</em>{' '}
+                                <li
+                                    key={_file.lastModified}
+                                    style={{
+                                        minWidth: '300px',
+                                        background: '#d5efca',
+                                        display: 'block'
+                                    }}>
+                                    <span style={{ minWidth: '300px' }}>
+                                        New: policy.
+                                        {_file.name.substr(_file.name.lastIndexOf('.') + 1)}
+                                    </span>{' '}
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile('tmp');
+                                            removeFile(
+                                                'tmp',
+                                                _file.name.substr(_file.name.lastIndexOf('.') + 1)
+                                            );
                                         }}
                                     />
                                 </li>
                             ))}
-                            {settingsValues.privacy_doc && !policyDataFiles.length && (
-                                <li key="ex_policy" style={{ minWidth: '300px' }}>
-                                    <span>{showUploadedFile()}</span>
+                            {settingsValues.privacy_doc && (
+                                <li
+                                    key="ex_policy"
+                                    style={{
+                                        minWidth: '300px',
+                                        background: '#e7ebf3',
+                                        display: 'block'
+                                    }}>
+                                    <span style={{ minWidth: '300px' }}>
+                                        {settingsValues.privacy_doc}{' '}
+                                    </span>
                                     <i
                                         className="close"
                                         role="presentation"
                                         onClick={() => {
-                                            removeFile();
+                                            removeFile('old', showUploadedFileExt());
                                         }}
                                     />
                                 </li>

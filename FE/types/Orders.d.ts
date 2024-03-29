@@ -14,6 +14,7 @@ declare namespace Orders {
         base64Data: string | null;
         tagSellersSuggestions: any[];
         showCancelPopup: boolean;
+        showShippedPopup: boolean;
         achiveName: null | string;
         downloadFileName: null | string;
         commentIdOrder: null | any;

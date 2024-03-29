@@ -160,7 +160,7 @@ export const skipExistUserSubscriptionNewAction: any = createAction(
                 window.localStorage.removeItem('user');
                 window.localStorage.setItem('user', JSON.stringify(res.data.user));
                 dispatch(setUserAction(res.data.user));
-                window.location.href = (locale === 'en' ? '/en' : '') + '/dashboard';
+                window.location.href = (locale === 'en' ? '/en' : '') + '/dashboard999987787';
             }
             return {
                 subscription: res.data.subscription,
@@ -315,6 +315,7 @@ export const unsubscribeAction: any = createAction(
                 })
                 .then(() => {
                     dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(fetchUserSubscriptionAction());
                     dispatch(showLoaderAction(false));
                 })
                 .catch((e) => {
@@ -325,13 +326,13 @@ export const unsubscribeAction: any = createAction(
 );
 export const updateSubscriptionAction: any = createAction(
     'user/UPDATE_SUBSCRIPTION_PLAN',
-    async (planId: string) =>
+    async (planId: string, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
             return axios
                 .post(
-                    `${baseUrl}/profile/update-subscription-plan`,
+                    `${baseUrl}/profile/update-subscription-plan?locale=${locale}`,
                     { planId: planId },
                     {
                         headers: {
@@ -339,10 +340,14 @@ export const updateSubscriptionAction: any = createAction(
                         }
                     }
                 )
-                .then(() => {
-                    dispatch(setSuccessToastAction('Response was sent successfully'));
+                .then((res) => {
+                    if (res.data.planId) {
+                        dispatch(setSuccessToastAction('msg_request'));
+                    } else {
+                        dispatch(setSuccessToastAction('Response was sent successfully'));
+                        dispatch(fetchUserSubscriptionAction());
+                    }
                     dispatch(showChangeSubscriptionFormAction(false));
-                    dispatch(fetchUserSubscriptionAction());
                     dispatch(showLoaderAction(false));
                     toggleModalPopup('.modal-seller-change-subscription');
                 })
@@ -354,13 +359,14 @@ export const updateSubscriptionAction: any = createAction(
 );
 export const addPyamentMethodFromRegisterActions: any = createAction(
     'user/ADD_PAYMENT_METHOD_FROM_REGISTRATION',
-    async (data: any, planId: number) =>
+    async (data: any, planId: number, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             // const user = state.user.user;
             // const subscription = state.user.subscription;
             data.user = state.user.user;
             data.user.planId = planId;
+            data.locale = locale;
             data.planId = planId;
             dispatch(showLoaderAction(true));
             return axios
@@ -372,8 +378,12 @@ export const addPyamentMethodFromRegisterActions: any = createAction(
                 .then((res) => {
                     dispatch(setSuccessToastAction('Response was sent successfully'));
                     dispatch(setUserAction(res.data.user));
+                    window.location.href = `${
+                        res.data.user.selected_locale == 'en' ? '/en' : ''
+                    }/dashboard`;
+
                     // dispatch(updateUserSubscriptionAction(res.data.user.subscription));
-                    dispatch(setRedirectAfterSubscription(true));
+                    // dispatch(setRedirectAfterSubscription(true));
                     dispatch(showLoaderAction(false));
                 })
                 .catch((e) => {
@@ -384,13 +394,15 @@ export const addPyamentMethodFromRegisterActions: any = createAction(
 );
 export const addPyamentMethodFromSubscriptionActions: any = createAction(
     'user/ADD_PAYMENT_METHOD_FROM_SUBSCRIPTION',
-    async (data: any) =>
+    async (data: any, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             // const user = state.user.user;
             // const subscription = state.user.subscription;
             // data.subscription = state.user.subscription;
             data.subscription = state.user.subscription;
+            data.locale = locale;
+            alert(data.locale);
             dispatch(showLoaderAction(true));
             return axios
                 .post(`${baseUrl}/profile/add-payment-method-from-subscription`, data, {
@@ -507,6 +519,28 @@ export const generateInvoiceStripeAction: any = createAction(
                 })
                 .catch((e) => {
                     dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const setUserLocaleAction: any = createAction(
+    'user/SET_USER_LOCALE',
+    async (locale: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .get(`${baseUrl}/profile/set-locale?locale=${locale}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(() => {
+                    // dispatch(setSuccessToastAction('Response was sent successfully'));
+                    dispatch(showLoaderAction(false));
+                })
+                .catch((e) => {
+                    // dispatch(setErrorToastAction(e.response.data.error));
                     dispatch(showLoaderAction(false));
                 });
         }

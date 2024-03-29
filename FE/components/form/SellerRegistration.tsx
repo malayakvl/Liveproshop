@@ -100,6 +100,7 @@ export default function SellerRegistration({
         if (skip) {
             values['forFree'] = 'skipNow';
         }
+        values['locale'] = locale;
         fetch(`${baseUrl}/register?locale=${locale}`, {
             method: 'POST',
             body: JSON.stringify(values),
