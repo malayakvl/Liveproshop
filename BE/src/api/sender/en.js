@@ -5,7 +5,7 @@ export default {
   "Powered by": "Powered by",
   "Amadeo Proshop": "Live Pro Shop",
 
-  "Hi": "Hi",
+  "Hi": "Hello",
   "Hello": "Hello",
   "link": "link",
   "Click here": "Click here",

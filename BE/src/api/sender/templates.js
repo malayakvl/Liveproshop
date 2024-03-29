@@ -52,7 +52,7 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
   return {
     subject: t['Verification email'],
     body: emailHtml(t, `
-    <p>${t['Hi']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Verify yourself below to sign in to your ']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}">Liveproshop.com</a> ${t['account for']} ${email}
     </p>
@@ -73,11 +73,11 @@ export const sessionSyncEmail = async (data, locale) => {
   return {
     subject: t['Your account needs to be synchronized'],
     body: emailHtml(t, `
-    <p>${t['Hi']}</p>
+    <p>${t['Hello']},</p>
     <p>${t['You have scheduled a live session and it`s about to start']}</p>
     <p>${t['schtext_1']}</p>
     <p>${t['schtext_2']}</p>
-    <p>${t['schtext_3']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}/full-guide/livesession" target="_blank">${t['schtext_4']}</a></p>
+    <p>${t['schtext_3']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}/full-guide/livesession" target="_blank">${t['schtext_4']}</a> ${t['schtext_5']}</p>
     <p>
       ${t['See you soon']},
     </p>
@@ -94,7 +94,7 @@ export const changeSubscriptionPlanEmail = async (email = '', link = '', locale 
   return {
     subject: t['Subscription confirmed'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Your subscription has been taken into account.']}.
     </p>
@@ -120,7 +120,7 @@ export const confirmVerificationEmail = async (email = '', locale = localeDefaul
   return {
     subject: t['Email confirmation'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Thank you for joining Live Pro Shop. Your account has been created.']}
     </p>
@@ -150,7 +150,7 @@ export const subscriptionEmail = async (email = '', link = '', locale = localeDe
   return {
     subject: t['Email confirmation'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Thank you for joining Live Pro Shop. Your account has been created.']}
     </p>
@@ -179,7 +179,7 @@ export const registerEmail = async (email = '', locale = localeDefault) => {
   return {
     subject: t['Confirmation registration'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Thank you for joining Live Pro Shop']}. ${t['Your account has been created']}.
     </p>
@@ -201,7 +201,7 @@ export const trialSubscriptionEmail = async (email = '', locale = localeDefault)
   return {
     subject: t['Confirmation registration'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Thank you for joining Live Pro Shop']}. ${t['Your account has been created']}.
     </p>
@@ -225,7 +225,7 @@ export const confirmSubscriptionEmail = async (email = '', locale = localeDefaul
   return {
     subject: t['Subscription confirmed'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Your subscription has been taken into account']}
     </p>
@@ -270,7 +270,7 @@ export const confirmSubscriptionPaymentEmail = async (email = '', locale = local
   return {
     subject: t['Your recurring payment was successful'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['Your recurring payment was successful']}.
     </p>
@@ -301,7 +301,7 @@ export const declineSubscriptionPaymentEmail = async (email = '', locale = local
   return {
     subject: t['Your account payment has been declined'],
     body: emailHtml(t, `
-    <p>${t['Hello']}</p>
+    <p>${t['Hello']},</p>
     <p>
       ${t['decline_message'].replace('[amount]', amount)}: <a href='${frontUrl}/account/plan'>${t['Account Plan']}</a>
     </p>
@@ -323,7 +323,7 @@ export const supportEmail = async (email = '', locale = localeDefault) => {
   return {
     subject: t['Proshop'],
     body: emailHtml(t, `
-    <p>${t['Hi']}, ${email}!</p>
+    <p>${t['Hello']}, ${email}!</p>
     <p>
       ${t['Your message has been sent to support!']}
     </p>`)
