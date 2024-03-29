@@ -241,179 +241,6 @@ class UserController {
                 return true;
             });
         }
-
-
-
-        // await userModel.uploadSettingsNewDoc(docsPolicy, req.user.id, 'policy', 'tmp');
-
-
-        // if (req.query.typedoc === 'delivery') {
-        //     const uploadTerms = multer({storage: storage}).any('delivery');
-        //     await uploadTerms(req, res, async function (err) {
-        //         console.log('55555', req.files);
-        //         if (err instanceof multer.MulterError) {
-        //             return res.status(500).json(err);
-        //         } else if (err) {
-        //             return res.status(500).json(err);
-        //         }
-        //         let docsDelivery = '';
-        //         if (req.files.length > 0) {
-        //             req.files.forEach(file => {
-        //                 if (file.fieldname === 'delivery') {
-        //                     docsDelivery = file.filename;
-        //                 }
-        //             });
-        //             await userModel.uploadSettingsNewDoc(docsDelivery, req.user.id, 'delivery', 'tmp');
-        //         }
-        //
-        //         return;
-        //     });
-        // }
-        // if (req.query.typedoc === 'terms') {
-        //     const uploadTerms = multer({storage: storage}).any('terms');
-        //     await uploadTerms(req, res, async function (err) {
-        //         console.log('55555', req.files);
-        //         if (err instanceof multer.MulterError) {
-        //             return res.status(500).json(err);
-        //         } else if (err) {
-        //             return res.status(500).json(err);
-        //         }
-        //         let docsPolicy = '';
-        //         if (req.files.length > 0) {
-        //             req.files.forEach(file => {
-        //                 if (file.fieldname === 'terms') {
-        //                     docsPolicy = file.filename;
-        //
-        //                 }
-        //             });
-        //             await userModel.uploadSettingsNewDoc(docsPolicy, req.user.id, 'terms', 'tmp');
-        //         }
-        //
-        //         return;
-        //     });
-        // }
-        // if (req.query.typedoc === 'return') {
-        //     const uploadReturn = multer({storage: storage}).any('return');
-        //     await uploadReturn(req, res, async function (err) {
-        //         console.log('55555', req.files);
-        //         if (err instanceof multer.MulterError) {
-        //             return res.status(500).json(err);
-        //         } else if (err) {
-        //             return res.status(500).json(err);
-        //         }
-        //         let returnPolicy = '';
-        //         if (req.files.length > 0) {
-        //             req.files.forEach(file => {
-        //                 if (file.fieldname === 'returnPolicy') {
-        //                     returnPolicy = file.filename;
-        //
-        //                 }
-        //             });
-        //             await userModel.uploadSettingsNewDoc(returnPolicy, req.user.id, 'return', 'tmp');
-        //         }
-        //
-        //         return;
-        //     });
-        // }
-
-
-        // if (req.query.typedoc === 'terms') {
-        //     const uploadPolicy = multer({storage: storage}).any('policy');
-        //     await uploadPolicy(req, res, async function (err) {
-        //         if (err instanceof multer.MulterError) {
-        //             return res.status(500).json(err);
-        //         } else if (err) {
-        //             return res.status(500).json(err);
-        //         }
-        //         // const dataProduct = req.body;
-        //         let docsPolicy = '';
-        //         if (req.files.length > 0) {
-        //             req.files.forEach(file => {
-        //                 console.log(file)
-        //                 if (file.fieldname === 'policy') {
-        //                     docsPolicy = file.filename;
-        //
-        //                 }
-        //             });
-        //             await userModel.uploadSettingsNewDoc(docsPolicy, req.user.id, 'policy', 'tmp');
-        //         }
-        //
-        //         return;
-        //     });
-        // }
-
-
-        // const uploadPolicy = multer({ storage: storage }).any('policy');
-
-        // const uploadTerms = multer({ storage: storage }).any('terms');
-        // const uploadDelivery = multer({ storage: storage }).any('delivery');
-        // const uploadReturn = multer({ storage: storage }).any('return');
-        //
-        //
-        //
-        // await uploadTerms(req, res, async function (err) {
-        //     if (err instanceof multer.MulterError) {
-        //         return res.status(500).json(err);
-        //     } else if (err) {
-        //         return res.status(500).json(err);
-        //     }
-        //     // const dataProduct = req.body;
-        //     const docsTerms = [];
-        //     if (req.files.length > 0) {
-        //         req.files.forEach(file => {
-        //             if (file.fieldname === 'terms' && file?.size) {
-        //                 docsTerms[0] = file.filename;
-        //             }
-        //
-        //         });
-        //         await userModel.uploadSettingsDoc(docsTerms, req.user.id, 'terms', 'tmp');
-        //     }
-        //     return;
-        // });
-        //
-        // await uploadDelivery(req, res, async function (err) {
-        //     if (err instanceof multer.MulterError) {
-        //         return res.status(500).json(err);
-        //     } else if (err) {
-        //         return res.status(500).json(err);
-        //     }
-        //     // const dataProduct = req.body;
-        //     const docsDelivery = [];
-        //     if (req.files.length > 0) {
-        //         req.files.forEach(file => {
-        //             if (file.fieldname === 'delivery' && file?.size) {
-        //                 docsDelivery[0] = file.filename;
-        //             }
-        //
-        //         });
-        //         await userModel.uploadSettingsDoc(docsDelivery, req.user.id, 'delivery', 'tmp');
-        //     }
-        //     return;
-        // });
-        //
-        // await uploadReturn(req, res, async function (err) {
-        //
-        //     if (err instanceof multer.MulterError) {
-        //         return res.status(500).json(err);
-        //     } else if (err) {
-        //         return res.status(500).json(err);
-        //     }
-        //     // const dataProduct = req.body;
-        //     const docsReturn = [];
-        //     if (req.files.length > 0) {
-        //         req.files.forEach(file => {
-        //             console.log(file);
-        //             if (file.fieldname === 'returnPolicy' && file?.size) {
-        //                 docsReturn[0] = file.filename;
-        //             }
-        //
-        //         });
-        //         await userModel.uploadSettingsDoc(docsReturn, req.user.id, 'return', 'tmp');
-        //     }
-        //     return;
-        // });
-
-        // const data = await userModel.updateSellerLinkSettings(req.user.id, req.body);
         return res.status(200).json({ success: true });
     }
 
@@ -434,16 +261,9 @@ class UserController {
     }
 
     async updateProfile(req, res) {
-        // const _user = req.user;
-
         if (!req.user) {
             return res.status(402).json('Something wend wrong');
         }
-        // const dataUser = req.body;
-        // // delete dataUser.email;
-        // console.log(dataUser);
-        // await userModel.update(dataUser, req.user.id);
-
         const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${req.user.id}`;
         if (!fs.existsSync(dirUpload)) {
             fs.mkdirSync(dirUpload, { recursive: true });
@@ -480,16 +300,7 @@ class UserController {
             if (req.file) {
                 await userModel.updateProfilePhoto(`/uploads/users/${req.user.id}/${req.file.filename}`, req.user.id);
             }
-            // const isValidEmail = (email: any) => {
-            //     return /\S+@\S+\.\S+/.test(email);
-            // };
-            // if (!/\S+@\S+\.\S+/.test(userEmail) && profileData.email_real) {
-            //     // req.user.email = profileData.email_real
-            //     // await userModel.updateEmail(profileData.email_real, req.user.id);
-            //     console.log("need update user email", profileData.email_real);
-            // }
             const user = await userModel.findUserByEmail(req.user.email);
-            // console.log(user);
             delete user.password;
             delete user.salt;
             delete user.hash;
@@ -629,6 +440,7 @@ class UserController {
 
     async addPaymentMethodAfterRegistration(req, res) {
         const formData = req.body;
+
         const data = await userModel.createExistUserTrialSubscription(formData);
         if (data.subscription) {
             req.body.subscription = data.subscription;

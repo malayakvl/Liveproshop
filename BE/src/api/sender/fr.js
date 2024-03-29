@@ -48,7 +48,8 @@ export default {
   //welcome//
   "Verification email": "Activation du compte requise",
   "Account Activation Required": "Activation de compte requise",
-  "Verify yourself below to sign in to your Liveproshop.com account for": "Vous venez de créer un compte sur  Liveproshop.com avec",
+  "Verify yourself below to sign in to your ": "Vous venez de créer un compte sur",
+  "account for": " avec",
   "Here’s the verification link": "Cliquez ci-dessous pour confirmer votre adresse e-mail",
   "If you didn't request this verification link, you can safely ignore this email": "Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail en toute sécurité",
 
@@ -63,7 +64,7 @@ export default {
 
   // subscription confirm email
   "Subscription confirmed": "Confirmation d’abonnement",
-  "Your subscription has been taken into account":"Votre abonnement à bien été pris en compte",
+  "Your subscription has been taken into account": "Votre abonnement à bien été pris en compte",
   "You can access features by connecting here": "Vous pouvez accéder à ces fonctionnalités en vous connectant ici",
 
   // subscription confirm payment email

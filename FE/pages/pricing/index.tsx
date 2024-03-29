@@ -92,10 +92,14 @@ const PriceHeading = ({
                     <button
                         onClick={() => {
                             // dispatch(setSelectedPlanAction(planId));
-                            if (user?.email) {
-                                Router.push(`/subscription/create?planId=${planId}`);
+                            if (user?.subscription_id) {
+                                Router.push(`/account/plan`);
                             } else {
-                                Router.push(`/auth/subscription?planId=${planId}`);
+                                if (user?.email) {
+                                    Router.push(`/subscription/create?planId=${planId}`);
+                                } else {
+                                    Router.push(`/auth/subscription?planId=${planId}`);
+                                }
                             }
                         }}
                         className={`${
@@ -308,7 +312,7 @@ export default function Pricing({ locale }: { locale: any }) {
                     <div className="underline text-center mt-8 lg:mt-10">
                         {showTrial && (
                             <Fragment>
-                                {user?.email && (
+                                {user?.email && !user?.subscription_id && (
                                     <span
                                         className="cursor-pointer"
                                         role="presentation"

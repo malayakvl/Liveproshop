@@ -9,6 +9,7 @@ class Invitation {
         let hash = crypto.randomBytes(20).toString('hex');
         let isFree = userData.forFree === 'skip' ? false : userData.forFree;
         let isSkip = userData.forFree === 'skip';
+        let locale = userData.locale ? userData.locale : 'fr';
         const client = await pool.connect();
         try {
             await client.query(`
@@ -18,7 +19,8 @@ class Invitation {
                     role_id, 
                     hash,
                     is_free,
-                    is_skip
+                    is_skip,
+                    current_locale
                 )
                 VALUES
                 (
@@ -26,7 +28,8 @@ class Invitation {
                     '${role_id}',
                     '${hash}',
                     ${(!!isFree)},
-                    ${isSkip}
+                    ${isSkip},
+                    '${locale}'
                 )
                 ;
             `);
