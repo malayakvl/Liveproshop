@@ -73,7 +73,7 @@ export const sessionSyncEmail = async (data, locale) => {
   return {
     subject: t['Your account needs to be synchronized'],
     body: emailHtml(t, `
-    <p>${t['Hi']}</p>
+    <p>${t['Hello']}</p>
     <p>${t['You have scheduled a live session and it`s about to start']}</p>
     <p>${t['schtext_1']}</p>
     <p>${t['schtext_2']}</p>

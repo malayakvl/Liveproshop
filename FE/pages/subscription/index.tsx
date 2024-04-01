@@ -68,6 +68,7 @@ export default function Subscription({
             if (subscription.status === 'trialing') {
                 Router.push(`/${locale === 'fr' ? '' : `${locale}/`}dashboard`);
             } else {
+                console.log('SETUP CLIENT SECRET HERE', subscription);
                 setClientSecret(stripeClientSecret);
             }
         }

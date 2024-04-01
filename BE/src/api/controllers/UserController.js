@@ -448,15 +448,36 @@ class UserController {
 
     async addPaymentMethodAfterRegistration(req, res) {
         const formData = req.body;
-
-        const data = await userModel.createExistUserTrialSubscription(formData);
+        let intentSecret = '';
+        let data; let isIncomplete = false;
+        let paymentIntentResp;
+        let customerId = ''
+        if (formData.user?.subscription_id) {
+            if (formData.user?.subscription_id.includes('skip_')) {
+                data = await userModel.createExistUserFromSkipSubscription(formData);
+            }
+        } else {
+            data = await userModel.createExistUserTrialSubscription(formData);
+        }
+        // if (formData.user?.subscription_id.includes('skip_')) {
+        //     data = await userModel.createExistUserFromSkipSubscription(formData);
+        //     intentSecret = data.paymentIntentSecret;
+        //     // console.log('HHHHH', data.subscription)
+        //     customerId = data.subscription.customer;
+        //     paymentIntentResp = data.subscription.latest_invoice.payment_intent;
+        //     isIncomplete = true;
+        // } else {
+        //     data = await userModel.createExistUserTrialSubscription(formData);
+        // }
         if (data.subscription) {
             req.body.subscription = data.subscription;
             await userModel.addPaymentMethodBySubscription(req.body);
             const _user = await userModel.findUserByEmail(formData.user.email);
+
+            // trialSubscriptionEmail(_user.email, req.body.locale);
             return res.status(200).json({
                 success: true,
-                user: _user
+                user: _user,
             });
         }
 
@@ -616,7 +637,7 @@ class UserController {
 
     async skipExistUserSubscriptionNew (req, res) {
         if (req.user) {
-            console.log("skipExistUserSubscriptionNew", req.user.subscription_id)
+            // console.log("skipExistUserSubscriptionNew", req.user.subscription_id)
             // skipping subscription
             if (!req.user.subscription_id) {
                 const data = await userModel.createSkipSubscriptionNew(req.user);
