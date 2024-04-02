@@ -232,11 +232,32 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                                     style={{ fontStyle: 'normal' }}>
                                                     {subscriptionInfo.upgradet_at && (
                                                         <>
-                                                            {t('upgrade_subcription_msg', {
-                                                                dayCount: subscriptionInfo.daysLeft
-                                                            })}
-                                                            {t('to')}{' '}
-                                                            {t(subscriptionInfo.nameUpgrade)}
+                                                            {subscriptionInfo.nameUpgrade !=
+                                                            'Cancel' ? (
+                                                                <>
+                                                                    {t('upgrade_subcription_msg', {
+                                                                        dayCount:
+                                                                            subscriptionInfo.daysLeft,
+                                                                        planName:
+                                                                            subscriptionInfo
+                                                                                .dbUserPlan.name
+                                                                    })}
+                                                                    &nbsp;
+                                                                    {t(
+                                                                        subscriptionInfo.nameUpgrade
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    {t('cancel_subcription_msg', {
+                                                                        dayCount:
+                                                                            subscriptionInfo.daysLeft,
+                                                                        planName:
+                                                                            subscriptionInfo
+                                                                                .dbUserPlan.name
+                                                                    })}
+                                                                </>
+                                                            )}
                                                         </>
                                                     )}
                                                 </em>
