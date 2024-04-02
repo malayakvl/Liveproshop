@@ -57,7 +57,7 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
       ${t['Verify yourself below to sign in to your ']} <a href="https://liveproshop.com${locale=== 'en' ? '/en' : ''}">Liveproshop.com</a> ${t['account for']} ${email}
     </p>
     <p>
-      ${t['Here’s the verification link']}: <a href='${link}'>${t['Click here']}</a>
+      ${t['confirm_link']}: <a href='${link}'>${t['Click here']}</a>
     </p>
     <p>
       ${t["If you didn't request this verification link, you can safely ignore this email"]}.
@@ -73,7 +73,7 @@ export const sessionSyncEmail = async (data, locale) => {
   return {
     subject: t['Your account needs to be synchronized'],
     body: emailHtml(t, `
-    <p>${t['Hi']}</p>
+    <p>${t['Hello']}</p>
     <p>${t['You have scheduled a live session and it`s about to start']}</p>
     <p>${t['schtext_1']}</p>
     <p>${t['schtext_2']}</p>

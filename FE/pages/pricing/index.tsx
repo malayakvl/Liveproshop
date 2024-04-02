@@ -93,7 +93,11 @@ const PriceHeading = ({
                         onClick={() => {
                             // dispatch(setSelectedPlanAction(planId));
                             if (user?.subscription_id) {
-                                Router.push(`/account/plan`);
+                                if (user?.subscription_id.includes('skip')) {
+                                    Router.push(`/subscription/create?planId=${planId}`);
+                                } else {
+                                    Router.push(`/account/plan`);
+                                }
                             } else {
                                 if (user?.email) {
                                     Router.push(`/subscription/create?planId=${planId}`);
@@ -448,9 +452,10 @@ export default function Pricing({ locale }: { locale: any }) {
                     </div>
                 </div>
                 {/*FORM BLOCK*/}
-                {showTrial && (
+                {showTrial && !user.id && (
                     <div className="text-gray-350 mx-auto border-red-900">
                         <div className="clear-both" />
+                        {user.subscription_id}
                         <h3 className="hidden red-yellow-gradient-text mt-[30px] font-bold text-[24px] leading-[32px] md:text-[60px] md:leading-[72px] text-center md:mt-[80px]">
                             {t('Try it for free today!')}
                         </h3>

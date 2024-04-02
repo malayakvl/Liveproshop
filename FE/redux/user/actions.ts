@@ -160,7 +160,7 @@ export const skipExistUserSubscriptionNewAction: any = createAction(
                 window.localStorage.removeItem('user');
                 window.localStorage.setItem('user', JSON.stringify(res.data.user));
                 dispatch(setUserAction(res.data.user));
-                window.location.href = (locale === 'en' ? '/en' : '') + '/dashboard999987787';
+                window.location.href = (locale === 'en' ? '/en' : '') + '/dashboard';
             }
             return {
                 subscription: res.data.subscription,
@@ -376,11 +376,29 @@ export const addPyamentMethodFromRegisterActions: any = createAction(
                     }
                 })
                 .then((res) => {
+                    console.log('RESULT DATA', res.data.user);
                     dispatch(setSuccessToastAction('Response was sent successfully'));
                     dispatch(setUserAction(res.data.user));
                     window.location.href = `${
                         res.data.user.selected_locale == 'en' ? '/en' : ''
                     }/dashboard`;
+                    // if (res.data.user.subscription.status === 'incomplete') {
+                    //     console.log('COMPLETE SUBSCRIPTION HERE', res.data.user);
+                    //     // dispatch(
+                    //     //     checkPaymentStatusAction(
+                    //     //         setupIntent ? setupIntent : query.payment_intent,
+                    //     //         // setupIntentSecret ? setupIntentSecret : query.payment_intent_client_secret,
+                    //     //         query.payment_intent_client_secret,
+                    //     //         planId,
+                    //     //         type
+                    //     //     )
+                    //     // );
+                    //     console.log(res.data.user);
+                    // } else {
+                    //     window.location.href = `${
+                    //         res.data.user.selected_locale == 'en' ? '/en' : ''
+                    //     }/dashboard`;
+                    // }
 
                     // dispatch(updateUserSubscriptionAction(res.data.user.subscription));
                     // dispatch(setRedirectAfterSubscription(true));
@@ -402,7 +420,6 @@ export const addPyamentMethodFromSubscriptionActions: any = createAction(
             // data.subscription = state.user.subscription;
             data.subscription = state.user.subscription;
             data.locale = locale;
-            alert(data.locale);
             dispatch(showLoaderAction(true));
             return axios
                 .post(`${baseUrl}/profile/add-payment-method-from-subscription`, data, {
