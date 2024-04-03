@@ -192,9 +192,15 @@ class User {
             let user;
             // user = await this.findUserByEmail(userData.email);
             user = await this.findUserByProviderId(userData.id);
+            const fullFbName = userData.name.split(' ');
+            const firstName = fullFbName[0];
+            let lastName = '';
+            if (fullFbName.length > 1) {
+                lastName = fullFbName[1];
+            }
             if (!user) {
                 const query = `
-                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id, auth_provider_accounts)
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, last_name, role_id, auth_provider_accounts)
                     VALUES
                     (
                         '${userData.email ? userData.email : userData.id}',
@@ -202,12 +208,14 @@ class User {
                         '${userData.id}',
                         '${userData.accessToken}',
                         to_timestamp(${userData.expirationTime}),
-                        '${userData.name}',
+                        '${firstName}',
+                        '${lastName}',
                         '${userData.roleId}',
-                        '${(userData.accounts)}'
+                        '${(userData.accounts ? userData.accounts : null)}'
                     )
                     ;
                 `;
+                console.log(query);
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
