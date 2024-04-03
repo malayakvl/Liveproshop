@@ -47,7 +47,8 @@ class UserController {
             user.company_name = '';
         }
         if (!user.email_real) {
-            user.email_real = user.email;
+            // user.email_real = user.email;
+            user.email_real = '';
         }
 
         delete user.salt;
