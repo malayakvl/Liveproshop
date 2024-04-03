@@ -21,8 +21,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const user = useSelector(userSelector);
     const settingsValues = useSelector(itemSelector);
 
-    console.log(locale);
-
     const fbSync = () => {
         accountService.syncFB();
     };
@@ -47,10 +45,12 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             <span>{t('Sync account')}</span>
                         </button>
                     </div>
-                    <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
-                        {t('Expire in')}{' '}
-                        {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
-                    </div>
+                    {user.auth_provider_expiration_time && (
+                        <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
+                            {t('Expire in')}{' '}
+                            {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
+                        </div>
+                    )}
                     <div className="clear-both" />
                 </div>
                 <div className="block">
@@ -77,6 +77,17 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                 )}
                             </div>
                         )}
+                    {user.subscription_id?.includes('skip_') && (
+                        <div className="alert-danger mb-6">
+                            {t('text_plan_schedule')}{' '}
+                            <Link href={'/pricing'}>
+                                <span className="font-bold cursor-pointer">
+                                    {t('text_plan_schedule1')}
+                                </span>
+                            </Link>{' '}
+                            {t('text_plan_schedule2')}
+                        </div>
+                    )}
                     <div className="w-full bg-white">
                         <div className="flex flex-wrap justify-between">
                             <p className="text-blue-400 underline text-base mb-4">
@@ -93,13 +104,15 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                 <div />
                             ) : (
                                 <>
-                                    <div>
-                                        <button
-                                            className="btn-big xl:ml-4 mt-4 md:mt-0"
-                                            onClick={() => dispatch(showPopupAction(true))}>
-                                            {t('Schedule new session')}
-                                        </button>
-                                    </div>
+                                    {!user.subscription_id?.includes('skip_') && (
+                                        <div>
+                                            <button
+                                                className="btn-big xl:ml-4 mt-4 md:mt-0"
+                                                onClick={() => dispatch(showPopupAction(true))}>
+                                                !!{t('Schedule new session')}!!
+                                            </button>
+                                        </div>
+                                    )}
                                 </>
                             )}
                             {/*    className="btn-big xl:ml-4 mt-4 md:mt-0"*/}
