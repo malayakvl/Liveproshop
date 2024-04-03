@@ -58,8 +58,8 @@ const SidebarHeader: React.FC = () => {
             {showEmailNotice && (
                 <div className="p-[10px] items-center block-worning absolute rounded-lg text-center md:min-w-[480px]">
                     <div className="relative">
-                        <i className="icon-warning" style={{ marginTop: '12px' }} />
-                        <span className="inline-block ml-[25px]">
+                        {/*<i className="icon-warning" style={{ marginTop: '12px' }} />*/}
+                        <span className="inline-block mx-[10px]">
                             <span className="text-[20px] font-bold ">
                                 {t('Please add an email in your')}
                             </span>

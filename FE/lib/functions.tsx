@@ -27,6 +27,11 @@ export function prepareAdditionalDropdown(dataArr: any, locale: string) {
 export function prepareCountriesDropdown(dataArr: any, locale: string) {
     const _data: any = [];
     if (dataArr) {
+        if (locale == 'en') {
+            _data.push({ label: 'Select Country', value: null });
+        } else {
+            _data.push({ label: 'Choisissez le pays', value: null });
+        }
         dataArr.forEach((data: any) => {
             _data.push({ label: parseTranslation(data, 'nicename', locale), value: data.id });
         });

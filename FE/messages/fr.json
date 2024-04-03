@@ -657,7 +657,8 @@
   "profile": "profil",
   "text_plan_schedule": "Oups! Vous ne pouvez pas programmer de live car vous n'avez pas encore choisi votre formule d'abonnement mensuel.\nAllez dans les ",
   "text_plan_schedule1": "paramètres de votre profil ",
-  "text_plan_schedule2": "pour sélectionner le plan qui vous convient"
+  "text_plan_schedule2": "pour sélectionner le plan qui vous convient",
+  "Select Country": "Choisissez le pays"
 
 
 
