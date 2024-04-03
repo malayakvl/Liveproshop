@@ -227,16 +227,18 @@ function Profile() {
                     <div className="float-left ml-[20px] min-w-[300px]">
                         {user.role_id == 1 && !validateEmail(user.email) ? (
                             <>
-                                <InputText
-                                    disabled={true}
-                                    icon={'f-facebook'}
-                                    label={null}
-                                    name={'email'}
-                                    placeholder={t('FB account ID')}
-                                    style={'lg:w-full'}
-                                    props={props}
-                                    tips={null}
-                                />
+                                <div className="hidden">
+                                    <InputText
+                                        disabled={true}
+                                        icon={'f-facebook'}
+                                        label={null}
+                                        name={'email'}
+                                        placeholder={t('FB account ID')}
+                                        style={'lg:w-full'}
+                                        props={props}
+                                        tips={null}
+                                    />
+                                </div>
                                 <InputText
                                     // disabled={validateEmail(props.values['email_real'])}
                                     icon={'f-email'}
