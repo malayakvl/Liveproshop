@@ -142,7 +142,7 @@
 }
 
 .block-worning {
-  @apply bg-gradient-to-r from-red-400 to-red-50;
+  @apply bg-gradient-to-r from-red-400 to-red-50 left-[30%] top-[12px] text-blue-450;
 }
 
 @import "components/sidebar-header";

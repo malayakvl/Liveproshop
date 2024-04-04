@@ -68,6 +68,7 @@ export const welcomeEmail = async (email = '', link = '', locale = localeDefault
   };
 };
 
+
 export const sessionSyncEmail = async (data, locale) => {
   const { default: t } = await import(`../sender/${locale}.js`);
   return {

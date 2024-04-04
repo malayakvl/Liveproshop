@@ -192,9 +192,15 @@ class User {
             let user;
             // user = await this.findUserByEmail(userData.email);
             user = await this.findUserByProviderId(userData.id);
+            const fullFbName = userData.name.split(' ');
+            const firstName = fullFbName[0];
+            let lastName = '';
+            if (fullFbName.length > 1) {
+                lastName = fullFbName[1];
+            }
             if (!user) {
                 const query = `
-                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id, auth_provider_accounts)
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, last_name, role_id, auth_provider_accounts)
                     VALUES
                     (
                         '${userData.email ? userData.email : userData.id}',
@@ -202,12 +208,14 @@ class User {
                         '${userData.id}',
                         '${userData.accessToken}',
                         to_timestamp(${userData.expirationTime}),
-                        '${userData.name}',
+                        '${firstName}',
+                        '${lastName}',
                         '${userData.roleId}',
-                        '${(userData.accounts)}'
+                        '${(userData.accounts ? userData.accounts : null)}'
                     )
                     ;
                 `;
+                console.log(query);
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
@@ -2018,7 +2026,7 @@ console.log('createExistUserSubscription');
         try {
             const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
             const res = await client.query(query, [userId]);
-
+console.log(res.rows[0]);
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
                     res.rows[0].type = res.rows[0].order_timer.days ? 'd' : res.rows[0].order_timer.hours ? 'h' : 'm';
@@ -2719,46 +2727,88 @@ console.log('BROKEN 2')
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/documents/tmp`;
             const dirNewUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/documents`;
             fs.readdir(dirUpload, async (err, files) => {
-                files.forEach(async file => {
-                    let indexOfFirstPolicy = file.indexOf('policy');
-                    let indexOfFirstTerms = file.indexOf('terms');
-                    let indexOfFirstDelivery = file.indexOf('delivery');
-                    let indexOfFirstReturn = file.indexOf('return');
-                    if (indexOfFirstPolicy === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    if (indexOfFirstTerms === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    if (indexOfFirstDelivery === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    if (indexOfFirstReturn === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    // if (file.indexOf('policy111') > 0) {
-                    //     console.log('need update policy')
-                    //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                    //         if (err) throw err
-                    //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
-                    //         console.log(`${dirUpload}/${file}`)
-                    //         console.log('to')
-                    //         console.log(`${dirNewUpload}/${file}`)
-                    //     })
-                    // }
-                });
+                if (files) {
+                    files.forEach(async file => {
+                        let indexOfFirstPolicy = file.indexOf('policy');
+                        let indexOfFirstTerms = file.indexOf('terms');
+                        let indexOfFirstDelivery = file.indexOf('delivery');
+                        let indexOfFirstReturn = file.indexOf('return');
+                        if (indexOfFirstPolicy === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        if (indexOfFirstTerms === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        if (indexOfFirstDelivery === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        if (indexOfFirstReturn === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        // if (file.indexOf('policy111') > 0) {
+                        //     console.log('need update policy')
+                        //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                        //         if (err) throw err
+                        //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
+                        //         console.log(`${dirUpload}/${file}`)
+                        //         console.log('to')
+                        //         console.log(`${dirNewUpload}/${file}`)
+                        //     })
+                        // }
+                    });
+                }
+                // files.forEach(async file => {
+                //     let indexOfFirstPolicy = file.indexOf('policy');
+                //     let indexOfFirstTerms = file.indexOf('terms');
+                //     let indexOfFirstDelivery = file.indexOf('delivery');
+                //     let indexOfFirstReturn = file.indexOf('return');
+                //     if (indexOfFirstPolicy === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     if (indexOfFirstTerms === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     if (indexOfFirstDelivery === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     if (indexOfFirstReturn === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     // if (file.indexOf('policy111') > 0) {
+                //     //     console.log('need update policy')
+                //     //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //     //         if (err) throw err
+                //     //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
+                //     //         console.log(`${dirUpload}/${file}`)
+                //     //         console.log('to')
+                //     //         console.log(`${dirNewUpload}/${file}`)
+                //     //     })
+                //     // }
+                // });
             });
             // const fs = require('fs');
 
