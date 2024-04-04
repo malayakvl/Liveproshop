@@ -2026,7 +2026,6 @@ console.log('createExistUserSubscription');
         try {
             const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
             const res = await client.query(query, [userId]);
-console.log(res.rows[0]);
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
                     res.rows[0].type = res.rows[0].order_timer.days ? 'd' : res.rows[0].order_timer.hours ? 'h' : 'm';
