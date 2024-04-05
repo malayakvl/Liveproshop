@@ -12,7 +12,7 @@ import {
     confirmSubscriptionPaymentEmail,
     confirmVerificationEmail, unsubscriberFromEmail, sessionSyncEmail
 } from "../sender/templates.js";
-import { sendMail } from "../lib/sendMail.js";
+import { sendMail, sendMailPlatinum}  from "../lib/sendMail.js";
 import moment from 'moment';
 import fs from "fs";
 
@@ -610,12 +610,12 @@ console.log('here', subscriptionObjectSkip);
                         await client.query(querySubscription);
 
                         // send mail about subscriotion
-                        const mail = await confirmSubscriptionEmail(userData.email, 'fr');
-                        sendMail(
-                            userData.user.email,
-                            mail.subject,
-                            mail.body
-                        );
+                        // const mail = await confirmSubscriptionEmail(userData.email, 'fr');
+                        // sendMail(
+                        //     userData.user.email,
+                        //     mail.subject,
+                        //     mail.body
+                        // );
 
                     }
 
@@ -2226,7 +2226,7 @@ console.log('BROKEN 2');
         try {
             if (dbPlan.rows[0].name === 'Platinum') {
                 const mail = await sendPlatinumEmail(user, locale);
-                sendMail(
+                sendMailPlatinum(
                     process.env.EMAIL_PLATINUM,
                     mail.subject,
                     mail.body
