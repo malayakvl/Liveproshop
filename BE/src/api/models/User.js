@@ -591,7 +591,6 @@ class User {
                         expand: ['latest_invoice.payment_intent'],
                     };
                     subscriptionObjectSkip.trial_period_days = process.env.SUBSCRIPTION_TRIAL_PERIOD;
-console.log('here', subscriptionObjectSkip);
 
                     const subscriptionNewAfterSkip = await stripe.subscriptions.create(subscriptionObjectSkip);
 
