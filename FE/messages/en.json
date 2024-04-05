@@ -643,7 +643,8 @@
   "You will not be charged not, but in the end of your 30-day trial period": "You will not be charged not, but in the end of your 30-day trial period",
   "Cancel Subscription": "Cancel Subscription",
   "Are you sure you want to cancel subscription?": "Are you sure you want to cancel subscription?",
-  "upgrade_subcription_msg": "You currently have a Business plan and it will be active for {dayCount} more days. In {dayCount} days your plan will be lowered to the",
+  "upgrade_subcription_msg": "You currently have a {planName} plan and it will be active for {dayCount} more days. In {dayCount} days your plan will be changed to the",
+  "cancel_subcription_msg": "You currently have a {planName} plan and it will be active for {dayCount} more days. In {dayCount} days your plan your subscription will be cancelled",
   "Forgot your Password?": "Forgot your Password?",
   "forgot_descr": "No problem! just write your associated email and we will send you a recovery link.",
   "Send me a Recovery Link": "Send me a Recovery Link",
@@ -651,5 +652,11 @@
   "Send Request": "Send Request",
   "msg_request":  "Your request was successfully sent. Proshop will contact you soon!",
   "Are you sure you want to shipped transaction?": "Are you sure you want to shipped transaction?",
-  "Products has been shipped": "Products has been shipped"
+  "Products has been shipped": "Products has been shipped",
+  "profile": "profile",
+  "text_plan_schedule": "Oops! Looks like you can't go live because you have not yet selected your monthly subscription plan.\nGo to your ",
+  "text_plan_schedule1": "profile settings",
+  "text_plan_schedule2": " to update your account",
+  "Select Country": "Select Country",
+  "text_settings_params": "Please fill in the following information:"
 }

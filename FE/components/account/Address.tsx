@@ -12,7 +12,6 @@ import { countriesSelector } from '../../redux/countries/selectors';
 function Address({ locale, address }: { address: Profile.Address; locale: string }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-    // console.log('CURRENT LOCALE', locale);
     const countries = useSelector(countriesSelector);
     const addressTypeData = [
         { value: 'home address', label: t('home address') },
@@ -24,7 +23,10 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
         label: t('home address')
     };
 
-    const [selectedCountry, setSelectedCountry] = useState({ label: 'Afghanistan', value: 1 });
+    const [selectedCountry, setSelectedCountry] = useState({
+        label: t('Select Country'),
+        value: null
+    });
 
     const [selectedAddressType, setSelectedAddressType] = useState(defaultAddressType);
 
@@ -63,12 +65,6 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
             }}>
             {(props) => (
                 <form onSubmit={props.handleSubmit} className="mt-5">
-                    <>
-                        {Object.values(props.errors).map((error) => (
-                            // eslint-disable-next-line react/jsx-key
-                            <div>{error}</div>
-                        ))}
-                    </>
                     <div className="mb-4 lg:w-1/4">
                         <Select
                             className={'form-control-dropdown'}
@@ -82,6 +78,9 @@ function Address({ locale, address }: { address: Profile.Address; locale: string
                             value={selectedCountry}
                             options={preparedCountriesDropdown}
                         />
+                        {props.errors['country_id'] && (
+                            <div className="error-el">{t('Required field')}</div>
+                        )}
                     </div>
 
                     <InputText

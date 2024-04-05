@@ -12,7 +12,7 @@ import {
     confirmSubscriptionPaymentEmail,
     confirmVerificationEmail, unsubscriberFromEmail, sessionSyncEmail
 } from "../sender/templates.js";
-import { sendMail } from "../lib/sendMail.js";
+import { sendMail, sendMailPlatinum}  from "../lib/sendMail.js";
 import moment from 'moment';
 import fs from "fs";
 
@@ -192,9 +192,15 @@ class User {
             let user;
             // user = await this.findUserByEmail(userData.email);
             user = await this.findUserByProviderId(userData.id);
+            const fullFbName = userData.name.split(' ');
+            const firstName = fullFbName[0];
+            let lastName = '';
+            if (fullFbName.length > 1) {
+                lastName = fullFbName[1];
+            }
             if (!user) {
                 const query = `
-                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, role_id, auth_provider_accounts)
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, last_name, role_id, auth_provider_accounts)
                     VALUES
                     (
                         '${userData.email ? userData.email : userData.id}',
@@ -202,12 +208,14 @@ class User {
                         '${userData.id}',
                         '${userData.accessToken}',
                         to_timestamp(${userData.expirationTime}),
-                        '${userData.name}',
+                        '${firstName}',
+                        '${lastName}',
                         '${userData.roleId}',
-                        '${(userData.accounts)}'
+                        '${(userData.accounts ? userData.accounts : null)}'
                     )
                     ;
                 `;
+                console.log(query);
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
@@ -445,9 +453,8 @@ class User {
                     }
                     const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
                     await client.query(querySubscription);
-                    // console.log(setupIntent);
+
                     return { subscription: subscription, setupIntent: setupIntent, planId: planId };
-                    // return { subscription: {}, setupIntent: setupIntent, planId: userData.planId };
                 }
             } else {
                 return { subscription: null, error: { code: 404, message: 'User Not found' } };
@@ -537,8 +544,8 @@ class User {
                         data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
             await client.query(_querySubscription);
             const dbUser = await client.query(`SELECT email FROM data.users WHERE id='${userId}'`);
-            console.log(`SELECT email FROM data.users WHERE id='${userId}'`)
-            console.log("DB USER", dbUser.rows[0])
+            // console.log(`SELECT email FROM data.users WHERE id='${userId}'`)
+            // console.log("DB USER", dbUser.rows[0])
             // const _user = await this.findUserByEmail(dbUser.rows[0].email);
             const _user = await this.findUserByEmail(dbUser.rows[0].email);
             return { user: _user, error: null };
@@ -558,40 +565,24 @@ class User {
         }
     }
 
-    async createExistUserTrialSubscription(userData) {
+    async createExistUserFromSkipSubscription(userData) {
         const client = await pool.connect();
         try {
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
+            let paymentIntentSecret = '';
             if (resPlan.rows.length) {
                 if (resPlan.rows[0].stripe_id) {
+                    // we don't have any subscription in stripe
                     let customerId;
+                    // create stripe customer
+                    const customer = await stripe.customers.create({
+                        email: userData.user.email,
+                        name: `${userData.user.first_name} ${userData.user.last_name}`
+                    });
+                    customerId = customer.id;
 
-                    const uncompleteSubscr = await client.query(`SELECT * FROM data.subscriptions WHERE user_id=${userData.user.id} AND status='incomplete' ORDER BY updated_at DESC LIMIT 1`);
-                    if (uncompleteSubscr.rows.length > 0) {
-                        userData.user.customer_id = uncompleteSubscr.rows[0].customer_id;
-                    }
-                    if (userData.user.customer_id) {
-                        const customerStripe = await stripe.customers.retrieve(
-                            userData.user.customer_id
-                        );
-                        if (!customerStripe || customerStripe?.deleted) {
-                            userData.user.customer_id = null;
-                        }
-                    }
-                    // check customer id from stripe
-                    if (!userData.user.customer_id) {
-                        const customer = await stripe.customers.create({
-                            email: userData.user.email,
-                            name: `${userData.user.first_name} ${userData.user.last_name}`
-                        });
-                        customerId = customer.id;
-                    } else {
-                        customerId = userData.user.customer_id;
-                    }
-
-                    // generate subscription always new for receive secret key for payment form;
-                    const subscriptionObject = {
+                    const subscriptionObjectSkip = {
                         customer: customerId,
                         items: [{
                             plan: resPlan.rows[0].stripe_id
@@ -599,36 +590,49 @@ class User {
                         payment_behavior: 'default_incomplete',
                         expand: ['latest_invoice.payment_intent'],
                     };
-                    const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
-                    // update subscription
-                    const subscriptionUpdate = await stripe.subscriptions.update(
-                        subscriptionNew.id,
-                        {
-                            payment_settings: {
-                                payment_method_types: ['card', 'charge_automatically'],
-                            },
-                        }
-                    );
+                    subscriptionObjectSkip.trial_period_days = process.env.SUBSCRIPTION_TRIAL_PERIOD;
 
-                    // if subscription created add record to DB
-                    if (subscription?.id) {
+                    const subscriptionNewAfterSkip = await stripe.subscriptions.create(subscriptionObjectSkip);
+
+                    if (subscriptionNewAfterSkip?.id) {
                         const subscriptionData = {
                             user_id: userData.user.id,
                             plan_id: userData.planId,
                             customer_id: customerId,
-                            subscription_id: subscription.id,
-                            status: subscription.status,
-                            period_start: subscription.current_period_start,
-                            period_end: subscription.current_period_end,
+                            subscription_id: subscriptionNewAfterSkip.id,
+                            status: subscriptionNewAfterSkip.status,
+                            period_start: subscriptionNewAfterSkip.current_period_start,
+                            period_end: subscriptionNewAfterSkip.current_period_end,
                             is_trial: true,
                         }
-                        // console.log("INSERT SUBSCRIPTION DATA", subscriptionData);
-                        // console.log(`SELECT * FROM data.set_subscriptions('${JSON.stringify(subscriptionData)}');`);
                         const querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(subscriptionData)}');`;
                         await client.query(querySubscription);
+
+                        // send mail about subscriotion
+                        // const mail = await confirmSubscriptionEmail(userData.email, 'fr');
+                        // sendMail(
+                        //     userData.user.email,
+                        //     mail.subject,
+                        //     mail.body
+                        // );
+
                     }
-                    return { subscription: subscription, planId: userData.planId };
-                    // return { subscription: {}, setupIntent: setupIntent, planId: userData.planId };
+
+                    // SUBSCRIPTION CREATED AND HAS STATUS INCOMPLETE
+                    // const uncompleteSubscr = await client.query(`SELECT * FROM data.subscriptions WHERE user_id=${userData.user.id} AND status='incomplete' ORDER BY updated_at DESC LIMIT 1`);
+                    return { subscription: subscriptionNewAfterSkip, planId: userData.planId, paymentIntentSecret: paymentIntentSecret  };
+// +++++++++++++++++++++++++
+// +++++++++++++++++++++++++
+// +++++++++++++++++++++++++
+                    // update subscription
+                    // const subscriptionAfterSkip = await stripe.subscriptions.update(
+                    //     subscriptionNewAfterSkip.id,
+                    //     {
+                    //         payment_settings: {
+                    //             payment_method_types: ['card'],
+                    //         },
+                    //     }
+                    // );
                 }
             } else {
                 return { subscription: null, error: { code: 404, message: 'User Not found' } };
@@ -1120,9 +1124,7 @@ console.log('createExistUserSubscription');
             client.release();
         }
     }
-
-
-    async checkPayment(paymentIntent, paymentIntentSecret, planId, type, user = '') {
+    async checkPaymentOld(paymentIntent, paymentIntentSecret, planId, type, user = '') {
         const client = await pool.connect();
         try {
             let paymentIntentResult;
@@ -1138,7 +1140,7 @@ console.log('createExistUserSubscription');
                 // paymentIntentResult = await stripe.paymentIntents.retrieve(
                 //     paymentIntent
                 // );
-                console.log(paymentIntentResult)
+                console.log('paymentIntentResult:', paymentIntentResult)
             } else {
                 // =======================================================================
                 // =======================================================================
@@ -1253,6 +1255,178 @@ console.log('createExistUserSubscription');
                         );
 
                         // console.log('[User.checkPayment] paymentIntent = ', paymentIntentResult);
+
+                        return { paymentIntent: paymentIntentResult }
+                    }
+                }
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            console.log('[User.checkPayment] e.message = ', e.message);
+            return { user: null, error: { code: 404, message: 'Payment subscription error' } };
+
+        } finally {
+            client.release();
+        }
+    }
+
+    async checkPaymentAfterSkip(paymentIntent, paymentIntentSecret, planId, customerId = '') {
+        const client = await pool.connect();
+        try {
+            let paymentIntentResult;
+            paymentIntentResult = await stripe.paymentIntents.retrieve(
+                paymentIntent
+            );
+            console.log("STRIPE SECRET", paymentIntentResult.client_secret);
+            console.log("URL SECRET", paymentIntentSecret);
+            console.log("STRIPE INTENT", paymentIntentResult.client_secret);
+            console.log("URL INTENT", paymentIntentSecret);
+            if (paymentIntentResult.client_secret === paymentIntentSecret) {
+                console.log('paymentIntentResult:', paymentIntentResult);
+                const paymentMethods = await stripe.paymentMethods.list({
+                    type: 'card',
+                    limit: 3,
+                    customer: customerId,
+                });
+                console.log("Payment Methods ID", paymentMethods.data[0].id);
+                // const customer = await stripe.customers.update(
+                //     'cus_FOsk5sbh3ZQpAU',
+                //     {
+                //         invoice_settings: {
+                //             default_payment_method: 'pm_1F0c9v2eZvKYlo2CJDeTrB4n',
+                //         },
+                //     }
+                // );
+                const methodUpdateResult = await stripe.customers.update(
+                    customerId,
+                    {
+                        invoice_settings: {
+                            default_payment_method: paymentMethods.data[0].id
+                        }
+                    }
+                );
+                console.log('RESULT UPDATE', methodUpdateResult);
+                const stripeCustomer = await stripe.customers.retrieve(methodUpdateResult.id);
+
+
+
+
+
+
+                const dbUser = await this.findUserByEmail(stripeCustomer.email);
+
+
+                const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${dbUser.plan_id}'`);
+                const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
+                if (resPlan.rows.length) {
+                    const querySubscription = `UPDATE data.subscriptions SET status='${paymentIntentResult.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
+                    // console.log(paymentIntentResult.status)
+                    if (paymentIntentResult.status === 'succeeded') {
+                        console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
+                        await client.query(querySubscription);
+                    }
+                    const subscriptionRes = await client.query(`SELECT email, price FROM data.users
+                    LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
+                    LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
+                    WHERE customer_id='${paymentIntentResult.customer}'`);
+
+                    if (subscriptionRes.rows.length) {
+                        paymentIntentResult.email = subscriptionRes.rows[0].email;
+
+                        const mailPayment = await confirmSubscriptionPaymentEmail(subscriptionRes.rows[0].email, 'fr', subscriptionRes.rows[0].price);
+                        sendMail(
+                            subscriptionRes.rows[0].email,
+                            mailPayment.subject,
+                            mailPayment.body
+                        );
+
+                        return { paymentIntent: paymentIntentResult }
+                    }
+                }
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            console.log('[User.checkPayment] e.message = ', e.message);
+            return { user: null, error: { code: 404, message: 'Payment subscription error' } };
+
+        } finally {
+            client.release();
+        }
+    }
+
+    async checkPayment(paymentIntent, paymentIntentSecret, planId, type, user = '') {
+        const client = await pool.connect();
+        try {
+            let paymentIntentResult;
+            if (type === 'useSetup') {
+                console.log("paymentIntent", paymentIntent);
+                paymentIntentResult = await stripe.setupIntents.retrieve(
+                    paymentIntent
+                );
+                console.log('paymentIntentResult:', paymentIntentResult)
+            } else {
+                // =======================================================================
+                // =======================================================================
+                // payment intent after registration->select plan->add card (WORK VARIANT)
+                // =======================================================================
+                // =======================================================================
+                paymentIntentResult = await stripe.paymentIntents.retrieve(
+                    paymentIntent
+                );
+            }
+            // console.log("STRIPE SECRET", paymentIntentResult.client_secret);
+            // console.log("URL SECRET", paymentIntentSecret);
+            // console.log("STRIPE INTENT", paymentIntentResult.client_secret);
+            // console.log("URL INTENT", paymentIntentSecret);
+            if (paymentIntentResult.client_secret === paymentIntentSecret) {
+                // setup payment intent as default payment method
+                console.log('AAAAA', paymentIntentResult);
+                const x = await stripe.customers.update(
+                    paymentIntentResult.customer,
+                    {
+                        invoice_settings: {
+                            default_payment_method: paymentIntentResult.payment_method
+                        }
+                    }
+                );
+                console.log('RESULT UPDATE', paymentIntentResult);
+                const stripeCustomer = await stripe.customers.retrieve(paymentIntentResult.customer);
+                const dbUser = await this.findUserByEmail(stripeCustomer.email);
+                const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${dbUser.plan_id}'`);
+                const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
+                if (resPlan.rows.length) {
+                    const querySubscription = `UPDATE data.subscriptions SET status='${paymentIntentResult.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
+                    // console.log(paymentIntentResult.status)
+                    if (paymentIntentResult.status === 'succeeded') {
+                        console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
+                        await client.query(querySubscription);
+                    }
+                    const subscriptionRes = await client.query(`SELECT email, price FROM data.users
+                    LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
+                    LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
+                    WHERE customer_id='${paymentIntentResult.customer}'`);
+
+                    if (subscriptionRes.rows.length) {
+                        paymentIntentResult.email = subscriptionRes.rows[0].email;
+
+                        const mailPayment = await confirmSubscriptionPaymentEmail(subscriptionRes.rows[0].email, 'fr', subscriptionRes.rows[0].price);
+                        sendMail(
+                            subscriptionRes.rows[0].email,
+                            mailPayment.subject,
+                            mailPayment.body
+                        );
 
                         return { paymentIntent: paymentIntentResult }
                     }
@@ -1851,7 +2025,6 @@ console.log('createExistUserSubscription');
         try {
             const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
             const res = await client.query(query, [userId]);
-
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
                     res.rows[0].type = res.rows[0].order_timer.days ? 'd' : res.rows[0].order_timer.hours ? 'h' : 'm';
@@ -1937,7 +2110,6 @@ console.log('createExistUserSubscription');
                 );
 
                 // send mail about subscription
-console.log('LOCALE', locale)
                 const mail = await confirmSubscriptionEmail(user.email, locale ? locale : 'fr');
 
                 sendMail(
@@ -1946,7 +2118,7 @@ console.log('LOCALE', locale)
                     mail.body
                 );
 
-                return { success: true, user: user };
+                return { success: true, user: user,  };
             }
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -2053,7 +2225,7 @@ console.log('BROKEN 2');
         try {
             if (dbPlan.rows[0].name === 'Platinum') {
                 const mail = await sendPlatinumEmail(user, locale);
-                sendMail(
+                sendMailPlatinum(
                     process.env.EMAIL_PLATINUM,
                     mail.subject,
                     mail.body
@@ -2405,9 +2577,9 @@ console.log('BROKEN 2')
                 LEFT JOIN data.users ON data.users.id = data.live_sessions.user_id
                 WHERE status='scheduled' AND event_date='${moment().format('YYYY-MM-DD')}' AND
                 event_time > '${moment().add(1, 'hours').format('HH:mm:ss')}'
-                 AND data.live_sessions.notice_sended IS NULL LIMIT 
+                 AND data.live_sessions.notice_sended IS NULL LIMIT 20
                 ;`;
-            // console.log(query);
+            console.log(query);
             const data = await client.query(query);
             if (data.rows.length > 0) {
                 await data.rows.forEach(async session => {
@@ -2553,46 +2725,88 @@ console.log('BROKEN 2')
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/documents/tmp`;
             const dirNewUpload = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/documents`;
             fs.readdir(dirUpload, async (err, files) => {
-                files.forEach(async file => {
-                    let indexOfFirstPolicy = file.indexOf('policy');
-                    let indexOfFirstTerms = file.indexOf('terms');
-                    let indexOfFirstDelivery = file.indexOf('delivery');
-                    let indexOfFirstReturn = file.indexOf('return');
-                    if (indexOfFirstPolicy === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    if (indexOfFirstTerms === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    if (indexOfFirstDelivery === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    if (indexOfFirstReturn === 0) {
-                        fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                            if (err) throw err
-                            await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
-                        })
-                    }
-                    // if (file.indexOf('policy111') > 0) {
-                    //     console.log('need update policy')
-                    //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                    //         if (err) throw err
-                    //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
-                    //         console.log(`${dirUpload}/${file}`)
-                    //         console.log('to')
-                    //         console.log(`${dirNewUpload}/${file}`)
-                    //     })
-                    // }
-                });
+                if (files) {
+                    files.forEach(async file => {
+                        let indexOfFirstPolicy = file.indexOf('policy');
+                        let indexOfFirstTerms = file.indexOf('terms');
+                        let indexOfFirstDelivery = file.indexOf('delivery');
+                        let indexOfFirstReturn = file.indexOf('return');
+                        if (indexOfFirstPolicy === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        if (indexOfFirstTerms === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        if (indexOfFirstDelivery === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        if (indexOfFirstReturn === 0) {
+                            fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                                if (err) throw err
+                                await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
+                            })
+                        }
+                        // if (file.indexOf('policy111') > 0) {
+                        //     console.log('need update policy')
+                        //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                        //         if (err) throw err
+                        //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
+                        //         console.log(`${dirUpload}/${file}`)
+                        //         console.log('to')
+                        //         console.log(`${dirNewUpload}/${file}`)
+                        //     })
+                        // }
+                    });
+                }
+                // files.forEach(async file => {
+                //     let indexOfFirstPolicy = file.indexOf('policy');
+                //     let indexOfFirstTerms = file.indexOf('terms');
+                //     let indexOfFirstDelivery = file.indexOf('delivery');
+                //     let indexOfFirstReturn = file.indexOf('return');
+                //     if (indexOfFirstPolicy === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     if (indexOfFirstTerms === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     if (indexOfFirstDelivery === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     if (indexOfFirstReturn === 0) {
+                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //             if (err) throw err
+                //             await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
+                //         })
+                //     }
+                //     // if (file.indexOf('policy111') > 0) {
+                //     //     console.log('need update policy')
+                //     //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
+                //     //         if (err) throw err
+                //     //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
+                //     //         console.log(`${dirUpload}/${file}`)
+                //     //         console.log('to')
+                //     //         console.log(`${dirNewUpload}/${file}`)
+                //     //     })
+                //     // }
+                // });
             });
             // const fs = require('fs');
 

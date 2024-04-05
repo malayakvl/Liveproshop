@@ -7,12 +7,13 @@ import LoggedRight from './LoggedRight';
 import LoggedRightMobile from './LoggedRightMobile';
 import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
 const SidebarHeader: React.FC = () => {
-    // const t = useTranslations();
+    const t = useTranslations();
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -22,8 +23,6 @@ const SidebarHeader: React.FC = () => {
     const [isMobile, setIsMobile] = useState(false);
     const [toggleSideClass, setToggleSideClass] = useState('left-side-close');
     const showEmailNotice = useSelector(showEmailNoticeSelector);
-    // console.log(showEmailNotice);
-    // const showEmailNotice = true;
 
     useEffect(
         function () {
@@ -57,14 +56,16 @@ const SidebarHeader: React.FC = () => {
         <div className="shadow-lg pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle">
             <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center" />
             {showEmailNotice && (
-                <div className="p-[10px] items-center text-sm bg-gradient-to-r from-green-50 to-green-300 absolute rounded-lg left-[33%] top-[16px]">
+                <div className="p-[10px] items-center block-worning absolute rounded-lg text-center md:min-w-[480px]">
                     <div className="relative">
-                        <i className="icon-warning" />
-                        <span className="inline-block ml-[25px]">
-                            Please add an email in your{' '}
+                        {/*<i className="icon-warning" style={{ marginTop: '12px' }} />*/}
+                        <span className="inline-block mx-[10px]">
+                            <span className="text-[20px] font-bold ">
+                                {t('Please add an email in your')}
+                            </span>
                             <Link href={'/account'}>
-                                <a className="ml-auto text-sm font-bold red-yellow-gradient-text">
-                                    profile
+                                <a className="ml-auto text-sm font-bold text-black text-[20px] underline">
+                                    {t('profile')}
                                 </a>
                             </Link>
                         </span>

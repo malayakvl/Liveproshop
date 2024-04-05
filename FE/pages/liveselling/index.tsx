@@ -21,8 +21,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const user = useSelector(userSelector);
     const settingsValues = useSelector(itemSelector);
 
-    console.log(locale);
-
     const fbSync = () => {
         accountService.syncFB();
     };
@@ -30,6 +28,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
         dispatch(fetchScenariosAction());
         dispatch(fetchFormAction());
     }, []);
+
+    console.log('Settings Params', settingsValues);
 
     return (
         <>
@@ -47,69 +47,106 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             <span>{t('Sync account')}</span>
                         </button>
                     </div>
-                    <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
-                        {t('Expire in')}{' '}
-                        {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
-                    </div>
-                    <div className="clear-both" />
-                </div>
-                <div className="block">
-                    {!settingsValues.delivery_doc &&
-                        !settingsValues.privacy_doc &&
-                        !settingsValues.terms_doc &&
-                        !settingsValues.return_doc &&
-                        !settingsValues.terms_link &&
-                        !settingsValues.privacy_link &&
-                        !settingsValues.return_link &&
-                        !settingsValues.delivery_link && (
-                            <div className="alert-danger mb-6">
-                                {locale == 'en' ? (
-                                    <p>
-                                        Note! You must add your documents before going live -
-                                        <Link href={'/documents'}> here</Link>
-                                    </p>
-                                ) : (
-                                    <p>
-                                        Remarque : Il est impératif d`abater vos documents avant de
-                                        commencer vos diffusions en direct.
-                                        <Link href={'/documents'}> ici</Link>
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    <div className="w-full bg-white">
-                        <div className="flex flex-wrap justify-between">
-                            <p className="text-blue-400 underline text-base mb-4">
-                                <Link href={'/guides/liveselling'}>{t('liveselling_descr')}</Link>
-                            </p>
-                            {!settingsValues.delivery_doc &&
-                            !settingsValues.privacy_doc &&
-                            !settingsValues.terms_doc &&
-                            !settingsValues.return_doc &&
-                            !settingsValues.terms_link &&
-                            !settingsValues.privacy_link &&
-                            !settingsValues.return_link &&
-                            !settingsValues.delivery_link ? (
-                                <div />
-                            ) : (
-                                <>
-                                    <div>
-                                        <button
-                                            className="btn-big xl:ml-4 mt-4 md:mt-0"
-                                            onClick={() => dispatch(showPopupAction(true))}>
-                                            {t('Schedule new session')}
-                                        </button>
-                                    </div>
-                                </>
-                            )}
-                            {/*    className="btn-big xl:ml-4 mt-4 md:mt-0"*/}
-                            {/*    onClick={() => dispatch(showPopupAction(true))}>*/}
-                            {/*    {t('Schedule new session')}*/}
-                            {/*</button>*/}
+                    {user.auth_provider_expiration_time && (
+                        <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
+                            {t('Expire in')}{' '}
+                            {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
                         </div>
-                    </div>
+                    )}
                     <div className="clear-both" />
                 </div>
+                {(!settingsValues.delivery_doc &&
+                    !settingsValues.privacy_doc &&
+                    !settingsValues.terms_doc &&
+                    !settingsValues.return_doc &&
+                    !settingsValues.terms_link &&
+                    !settingsValues.privacy_link &&
+                    !settingsValues.return_link &&
+                    !settingsValues.delivery_link) ||
+                !settingsValues.order_timer ||
+                !settingsValues.multisafe_api_key ? (
+                    <div className="block alert-danger mb-6">
+                        {t('text_settings_params')}
+                        <ul className="mt-3">
+                            {!settingsValues.delivery_doc &&
+                                !settingsValues.privacy_doc &&
+                                !settingsValues.terms_doc &&
+                                !settingsValues.return_doc &&
+                                !settingsValues.terms_link &&
+                                !settingsValues.privacy_link &&
+                                !settingsValues.return_link &&
+                                !settingsValues.delivery_link &&
+                                !settingsValues.multisafe_api_key && (
+                                    <li>
+                                        {locale == 'en' ? (
+                                            <p>
+                                                Documents - <Link href={'/documents'}> here</Link>
+                                            </p>
+                                        ) : (
+                                            <p>
+                                                Vos documents
+                                                <Link href={'/documents'}> ici</Link>
+                                            </p>
+                                        )}
+                                    </li>
+                                )}
+                            {!settingsValues.multisafe_api_key && (
+                                <li>
+                                    {locale == 'en' ? (
+                                        <p>
+                                            Multisafe - <Link href={'/payment-setting'}> here</Link>
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            Multisafe
+                                            <Link href={'/payment-setting'}> ici</Link>
+                                        </p>
+                                    )}
+                                </li>
+                            )}
+                            {!settingsValues.order_timer && (
+                                <li>
+                                    {locale == 'en' ? (
+                                        <p>
+                                            Live session params -{' '}
+                                            <Link href={'/settings'}> here</Link>
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            Programmer un Live paramètres
+                                            <Link href={'/settings'}> ici</Link>
+                                        </p>
+                                    )}
+                                </li>
+                            )}
+                        </ul>
+                        <div className="clear-both" />
+                    </div>
+                ) : (
+                    <div>
+                        <button
+                            className="btn-big mt-4 md:mt-0 float-right"
+                            onClick={() => dispatch(showPopupAction(true))}>
+                            {t('Schedule new session')}
+                        </button>
+                        {/*    className="btn-big xl:ml-4 mt-4 md:mt-0"*/}
+                        {/*    onClick={() => dispatch(showPopupAction(true))}>*/}
+                        {/*    {t('Schedule new session')}*/}
+                        {/*</button>*/}
+                    </div>
+                )}
+                {user.subscription_id?.includes('skip_') && (
+                    <div className="alert-danger mb-6">
+                        {t('text_plan_schedule')}{' '}
+                        <Link href={'/pricing'}>
+                            <span className="font-bold cursor-pointer">
+                                {t('text_plan_schedule1')}
+                            </span>
+                        </Link>{' '}
+                        {t('text_plan_schedule2')}
+                    </div>
+                )}
+                <div className="clear-both" />
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">
                 <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 mt-10">
