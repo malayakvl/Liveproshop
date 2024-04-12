@@ -591,7 +591,7 @@ class User {
                         expand: ['latest_invoice.payment_intent'],
                     };
                     subscriptionObjectSkip.trial_period_days = process.env.SUBSCRIPTION_TRIAL_PERIOD;
-console.log('here', subscriptionObjectSkip);
+// console.log('here', subscriptionObjectSkip);
 
                     const subscriptionNewAfterSkip = await stripe.subscriptions.create(subscriptionObjectSkip);
 
@@ -741,7 +741,7 @@ console.log('here', subscriptionObjectSkip);
     async createExistUserSubscription(userData) {
         const client = await pool.connect();
         try {
-console.log('createExistUserSubscription');
+// console.log('createExistUserSubscription');
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
             if (resPlan.rows.length) {
@@ -913,11 +913,11 @@ console.log('createExistUserSubscription');
                 const userSubscrPlan = await client.query(`SELECT upgradet_at FROM data.subscriptions WHERE user_id=${user.id}`);
                 currentSubscription.upgradet_at = userSubscrPlan.rows.length > 0 ?  userSubscrPlan.rows[0].upgradet_at : null;
                 if (currentSubscription.upgradet_at) {
-                    console.log(`SELECT data.subscriptions_upgrade.*,
-                            data.subscription_plans.name AS plan_name
-                            FROM data.subscriptions_upgrade
-                            LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions_upgrade.plan_id
-                            WHERE user_id=${user.id}`);
+// console.log(`SELECT data.subscriptions_upgrade.*,
+//         data.subscription_plans.name AS plan_name
+//         FROM data.subscriptions_upgrade
+//         LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions_upgrade.plan_id
+//         WHERE user_id=${user.id}`);
                     const dbResUpgrade = await client.query(`SELECT data.subscriptions_upgrade.*,
                             data.subscription_plans.name AS plan_name
                             FROM data.subscriptions_upgrade
@@ -987,13 +987,10 @@ console.log('createExistUserSubscription');
         try {
             const dbPlansRes = await client.query('SELECT * FROM data.subscription_plans WHERE stripe_id IS NOT NULL');
             let subscription;
-            // console.log(dbPlansRes.rows);
             const stripeSubscription = await stripe.subscriptions.retrieve(
                 subscriptionId
             );
             const nDate = new Date(stripeSubscription.current_period_start * 1000);
-            console.log(stripeSubscription.current_period_start, nDate);
-            console.log(customerId);
 
 
 
@@ -1022,7 +1019,6 @@ console.log('createExistUserSubscription');
                 }
                 return { subscription: subscriptionFakeData };
             } else if (customerId.includes('cus_')) {
-                console.log('here');
                 const paymentMethods = await stripe.customers.listPaymentMethods(
                     customerId,
                     {type: 'card'}
@@ -1036,8 +1032,6 @@ console.log('createExistUserSubscription');
                 subscriptionFakeData.paymentMethods = paymentMethods.data;
                 const resSubscription = await client.query(`SELECT * FROM data.subscription_plans WHERE id='${subscriptionId}'`);
                 subscriptionFakeData.plan = resSubscription.rows[0];
-                // subscriptionFakeData.plan.id = "dsadasd";
-                // console.log("FAKE SUBSCRIPTION WITH REAL STRIPE CUSTOMER", subscriptionFakeData);
             }
             else {
                 subscription = await stripe.subscriptions.retrieve(
@@ -1134,14 +1128,13 @@ console.log('createExistUserSubscription');
             // );
 
             if (type === 'useSetup') {
-                console.log("paymentIntent", paymentIntent);
                 paymentIntentResult = await stripe.setupIntents.retrieve(
                     paymentIntent
                 );
                 // paymentIntentResult = await stripe.paymentIntents.retrieve(
                 //     paymentIntent
                 // );
-                console.log('paymentIntentResult:', paymentIntentResult)
+// console.log('paymentIntentResult:', paymentIntentResult)
             } else {
                 // =======================================================================
                 // =======================================================================
@@ -1154,31 +1147,6 @@ console.log('createExistUserSubscription');
             }
 
 
-            // ========================================================
-            // console.log("TYPE 2", paymentIntentResultType2);
-            // if (type === 'fromPricing') {
-            //     paymentIntentResult = await stripe.setupIntents.retrieve(
-            //         paymentIntent
-            //     );
-            // } else {
-            //     paymentIntentResult = await stripe.paymentIntents.retrieve(
-            //         paymentIntent
-            //     );
-            // }
-            // console.log("[paymentIntentResult]", paymentIntentResult.client_secret);
-            // console.log("[paymentIntentSecret]", paymentIntentSecret);
-            // console.log("[paymentIntentResult.client_secret]", paymentIntentSecret);
-            // const subscription = await stripe.subscriptions.retrieve(
-            //     'sub_1NYBa5DBSh7ykoyW6Qu4fGS4'
-            // );
-            // console.log(paymentIntentResult.client_secret, paymentIntentSecret);
-
-            // console.log('[User.checkPayment] STRIPE PAYMENT INTENT', paymentIntentResult);
-            // if (paymentIntentResult.client_secret === paymentIntentSecret) {
-            console.log("STRIPE SECRET", paymentIntentResult.client_secret);
-            console.log("URL SECRET", paymentIntentSecret);
-            console.log("STRIPE INTENT", paymentIntentResult.client_secret);
-            console.log("URL INTENT", paymentIntentSecret);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 // setup payment intent as default payment method
                 await stripe.customers.update(
@@ -1191,42 +1159,9 @@ console.log('createExistUserSubscription');
                 );
                 const stripeCustomer = await stripe.customers.retrieve(paymentIntentResult.customer);
                 const dbUser = await this.findUserByEmail(stripeCustomer.email);
-                // create subscription here
-                // console.log(`SELECT * FROM data.subscription_plans WHERE id = '${planId}'`);
-                // exit;
-                // const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${planId}'`);
                 const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${dbUser.plan_id}'`);
                 const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
                 if (resPlan.rows.length) {
-                    // const subscriptionObject = {
-                    //     customer: paymentIntentResult.customer,
-                    //     items: [{
-                    //         plan: resPlan.rows[0].stripe_id
-                    //     }],
-                    //     payment_behavior: 'default_incomplete',
-                    //     expand: ['latest_invoice.payment_intent'],
-                    // };
-                    // subscriptionObject.coupon =  'free-period';
-                    // if (type === 'trial') {
-                    //     subscriptionObject.trial_period_days = resSettings.rows[0].trial_period;
-                    // } else {
-                    //     subscriptionObject.coupon =  'free-period';
-                    // }
-                    // const subscription = await stripe.subscriptions.create(subscriptionObject);
-                    // const dbSubscription = {
-                    //     user_id: dbUser.id,
-                    //     plan_id: planId,
-                    //     customer_id: paymentIntentResult.customer,
-                    //     subscription_id: subscription.id,
-                    //     status: subscription.status,
-                    //     period_start: subscription.current_period_start,
-                    //     period_end: subscription.current_period_end,
-                    //     is_trial: type === 'trial'
-                    // }
-                    // const _querySubscription = `SELECT * FROM data.set_subscriptions('${JSON.stringify(dbSubscription)}');`;
-                    // await client.query(_querySubscription);
-                    //
-                    // const querySubscription = `UPDATE data.subscriptions SET status='${subscription.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
                     const querySubscription = `UPDATE data.subscriptions SET status='${paymentIntentResult.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
                     // console.log(paymentIntentResult.status)
                     if (paymentIntentResult.status === 'succeeded') {
@@ -1234,29 +1169,18 @@ console.log('createExistUserSubscription');
                         await client.query(querySubscription);
                     }
                     const subscriptionRes = await client.query(`SELECT email, price FROM data.users
-                    LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
-                    LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
-                    WHERE customer_id='${paymentIntentResult.customer}'`);
+                        LEFT JOIN data.subscriptions ON data.subscriptions.user_id=data.users.id
+                        LEFT JOIN data.subscription_plans ON data.subscription_plans.id = data.subscriptions.plan_id
+                        WHERE customer_id='${paymentIntentResult.customer}'`);
 
                     if (subscriptionRes.rows.length) {
                         paymentIntentResult.email = subscriptionRes.rows[0].email;
-                        // send email about success payment and subscription
-                        // const mail = await confirmSubscriptionEmail(subscriptionRes.rows[0].email, 'fr');
-                        // sendMail(
-                        //     subscriptionRes.rows[0].email,
-                        //     mail.subject,
-                        //     mail.body
-                        // );
-
                         const mailPayment = await confirmSubscriptionPaymentEmail(subscriptionRes.rows[0].email, 'fr', subscriptionRes.rows[0].price);
                         sendMail(
                             subscriptionRes.rows[0].email,
                             mailPayment.subject,
                             mailPayment.body
                         );
-
-                        // console.log('[User.checkPayment] paymentIntent = ', paymentIntentResult);
-
                         return { paymentIntent: paymentIntentResult }
                     }
                 }
@@ -1284,26 +1208,12 @@ console.log('createExistUserSubscription');
             paymentIntentResult = await stripe.paymentIntents.retrieve(
                 paymentIntent
             );
-            console.log("STRIPE SECRET", paymentIntentResult.client_secret);
-            console.log("URL SECRET", paymentIntentSecret);
-            console.log("STRIPE INTENT", paymentIntentResult.client_secret);
-            console.log("URL INTENT", paymentIntentSecret);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
-                console.log('paymentIntentResult:', paymentIntentResult);
                 const paymentMethods = await stripe.paymentMethods.list({
                     type: 'card',
                     limit: 3,
                     customer: customerId,
                 });
-                console.log("Payment Methods ID", paymentMethods.data[0].id);
-                // const customer = await stripe.customers.update(
-                //     'cus_FOsk5sbh3ZQpAU',
-                //     {
-                //         invoice_settings: {
-                //             default_payment_method: 'pm_1F0c9v2eZvKYlo2CJDeTrB4n',
-                //         },
-                //     }
-                // );
                 const methodUpdateResult = await stripe.customers.update(
                     customerId,
                     {
@@ -1312,24 +1222,14 @@ console.log('createExistUserSubscription');
                         }
                     }
                 );
-                console.log('RESULT UPDATE', methodUpdateResult);
                 const stripeCustomer = await stripe.customers.retrieve(methodUpdateResult.id);
-
-
-
-
-
-
                 const dbUser = await this.findUserByEmail(stripeCustomer.email);
-
 
                 const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${dbUser.plan_id}'`);
                 const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
                 if (resPlan.rows.length) {
                     const querySubscription = `UPDATE data.subscriptions SET status='${paymentIntentResult.status}' WHERE customer_id='${paymentIntentResult.customer}'`;
-                    // console.log(paymentIntentResult.status)
                     if (paymentIntentResult.status === 'succeeded') {
-                        console.log('[User.checkPayment] succeeded querySubscription = ', querySubscription);
                         await client.query(querySubscription);
                     }
                     const subscriptionRes = await client.query(`SELECT email, price FROM data.users
@@ -1372,11 +1272,9 @@ console.log('createExistUserSubscription');
         try {
             let paymentIntentResult;
             if (type === 'useSetup') {
-                console.log("paymentIntent", paymentIntent);
                 paymentIntentResult = await stripe.setupIntents.retrieve(
                     paymentIntent
                 );
-                console.log('paymentIntentResult:', paymentIntentResult)
             } else {
                 // =======================================================================
                 // =======================================================================
@@ -1387,13 +1285,8 @@ console.log('createExistUserSubscription');
                     paymentIntent
                 );
             }
-            // console.log("STRIPE SECRET", paymentIntentResult.client_secret);
-            // console.log("URL SECRET", paymentIntentSecret);
-            // console.log("STRIPE INTENT", paymentIntentResult.client_secret);
-            // console.log("URL INTENT", paymentIntentSecret);
             if (paymentIntentResult.client_secret === paymentIntentSecret) {
                 // setup payment intent as default payment method
-                console.log('AAAAA', paymentIntentResult);
                 const x = await stripe.customers.update(
                     paymentIntentResult.customer,
                     {
@@ -1402,7 +1295,6 @@ console.log('createExistUserSubscription');
                         }
                     }
                 );
-                console.log('RESULT UPDATE', paymentIntentResult);
                 const stripeCustomer = await stripe.customers.retrieve(paymentIntentResult.customer);
                 const dbUser = await this.findUserByEmail(stripeCustomer.email);
                 const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${dbUser.plan_id}'`);
@@ -1567,10 +1459,7 @@ console.log('createExistUserSubscription');
         const client = await pool.connect();
         try {
             const query = `SELECT common__tools._update_table_by_id('data', 'users', '${JSON.stringify(userData)}', ${userId});`;
-            // console.log(query);
             await client.query(query);
-            // const query1 = `// UPDATE data.users SET photo='${userData.photo}' WHERE id=${userId};`;
-            // await client.query(query1);
             if (user) {
                 return { user: userData, error: null };
             } else {
@@ -1872,12 +1761,8 @@ console.log('createExistUserSubscription');
                         auth_provider_expiration_time=to_timestamp(${data.data_access_expiration_time})
                        WHERE id=${userData.id}
                         `;
-        console.log(data.data_access_expiration_time);
         const userFbId = data.userID;
 
-        // need to get user long live token
-        // console.log('GET LONG LIVE USER TOKEN RESPONSE');
-        // console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`)
         // getting long live token
         const longToken = await axios
             .get(
@@ -1931,16 +1816,6 @@ console.log('createExistUserSubscription');
                                                         synchronized=true
                                                     WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                     );
-                                    // console.log('GET LONG LIVE USER TOKEN RESPONSE');
-                                    // console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${store.access_token}`)
-                                    // // getting long live token
-                                    // await axios
-                                    //     .get(
-                                    //         `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${store.access_token}`
-                                    //     )
-                                    //     .then(async (responseLongToken) => {
-                                    //         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
-                                    //     });
                                 }
                             })
                         }
@@ -2026,7 +1901,6 @@ console.log('createExistUserSubscription');
         try {
             const query = 'SELECT * FROM data.seller_settings WHERE user_id=$1;';
             const res = await client.query(query, [userId]);
-console.log(res.rows[0]);
             if (res.rows.length > 0) {
                 if (res.rows[0].order_timer) {
                     res.rows[0].type = res.rows[0].order_timer.days ? 'd' : res.rows[0].order_timer.hours ? 'h' : 'm';
@@ -2138,7 +2012,6 @@ console.log(res.rows[0]);
 
     async addPaymentMethod(user, data) {
         const client = await pool.connect();
-console.log('BROKEN 2');
         try {
             const expPeriod = data.card_expire_date.split('/');
             // if it fake subscription we need to create stripe customer and after add card to their account
@@ -2167,7 +2040,6 @@ console.log('BROKEN 2');
                         cvc: data.card_ccv,
                     },
                 });
-                console.log("CREATED PAYMENT METHOD", paymentMethodCreate.id);
                 await stripe.paymentMethods.attach(
                     paymentMethodCreate.id,
                     {customer: customerId}
@@ -2212,7 +2084,7 @@ console.log('BROKEN 2');
             return { success: false, error: { code: 404, message: 'Cannot add payment method to customer' } };
         }
     }
-
+    // sold 94 blue m 1
     async fetchSubscriptionsForUpdate() {
         const client = await pool.connect();
         const subscriptionData = await client.query(`SELECT * FROM data.subscriptions_upgrade LIMIT 20`);
@@ -2228,10 +2100,15 @@ console.log('BROKEN 2');
             if (dbPlan.rows[0].name === 'Platinum') {
                 const mail = await sendPlatinumEmail(user, locale);
                 sendMail(
-                    process.env.EMAIL_PLATINUM,
+                    'vladzavgor@gmail.com',
                     mail.subject,
                     mail.body
                 );
+                // sendMail(
+                //     process.env.EMAIL_PLATINUM,
+                //     mail.subject,
+                //     mail.body
+                // );
                 return { success: true, error: null, planId: 'platinum' };
             } else {
                 const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
@@ -2247,7 +2124,6 @@ console.log('BROKEN 2');
                     status: 'change'
                 }
                 const _querySubscription = `SELECT * FROM data.set_subscriptions_upgrade('${JSON.stringify(upgradeSubscription)}');`;
-// console.log(_querySubscription);
                 await client.query(_querySubscription);
                 await client.query(`UPDATE data.subscriptions SET upgradet_at='${upgrDate}' WHERE user_id=${user.id}`);
 

@@ -16,9 +16,13 @@ export default function MainLayout({ children }: { children: any }) {
 
     useEffect(
         function () {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const commentId = urlParams.getAll('comment_id')[0];
+            console.log('COMMENT ID', window.localStorage.getItem('orderCommentId'));
             if (session?.user?.email && !window.localStorage.getItem('user')) {
                 dispatch(fetchUserAction(session.user.email));
-                if (window.localStorage.getItem('order_comment_id')) {
+                if (window.localStorage.getItem('order_comment_id') || commentId) {
                     dispatch(
                         fetchUserOrderAction(
                             session?.user.email,
@@ -26,6 +30,7 @@ export default function MainLayout({ children }: { children: any }) {
                         )
                     );
                 }
+                console.log('EEEEEE');
                 if (window.localStorage.getItem('order_wait_id')) {
                     dispatch(
                         fetchUserOrderAction(
@@ -35,6 +40,7 @@ export default function MainLayout({ children }: { children: any }) {
                     );
                 }
             } else {
+                console.log('BBBBBB', commentId);
                 const localUser = JSON.parse(window.localStorage.getItem('user') || '{}');
                 // console.log('SESSION EMAIL', session?.user?.email);
                 // console.log('LOCAL EMAIL', localUser.email);
@@ -51,7 +57,8 @@ export default function MainLayout({ children }: { children: any }) {
                     // console.log(localUser.email);
                     // dispatch(fetchUserAction(localUser.email));
                     // dispatch(fetchUserAction(session?.user?.email));
-                    if (window.localStorage.getItem('orderCommentId')) {
+                    if (window.localStorage.getItem('orderCommentId') || commentId) {
+                        console.log('dksadjaksdjaksldjkasl');
                         // dispatch(
                         //     fetchUserOrderAction(
                         //         session?.user?.email,

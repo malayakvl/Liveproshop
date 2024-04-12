@@ -156,16 +156,24 @@ class ChatbotMessage {
     async checkWaitingItemStatus(messageId) {
         const client = await pool.connect();
         try {
+            // const query = await client.query(
+            //     `SELECT * FROM data.order_items WHERE message_id='${messageId}' AND status='waiting'`
+            // );
             const query = await client.query(
-                `SELECT * FROM data.order_items WHERE message_id='${messageId}' AND status='waiting'`
+                `SELECT * FROM data.order_items WHERE message_id='${messageId}'`
             );
             const itemInWait = query.rows[0].quantity;
             let result;
             const queryExist = await client.query(`SELECT * FROM data.order_items WHERE message_id='${messageId}' AND status IS NULL`);
             result = !(queryExist.rows.length > 0 && query.rows.length > 0);
-            if (!result) {
-                await client.query(`UPDATE data.orders SET status='waiting' WHERE id='${query.rows[0].order_id}'`);
-            }
+
+
+            // CHECK CODE CORRECTLY
+            // if (!result) {
+            //     await client.query(`UPDATE data.orders SET status='waiting' WHERE id='${query.rows[0].order_id}'`);
+            // }
+
+
             // if (queryExist.rows.length > 0 && query.rows.length > 0) {
             //     // removing wait item from order
             //     // await client.query(`DELETE FROM data.order_items WHERE message_id='${messageId}' AND status='waiting'`);
@@ -216,7 +224,8 @@ class ChatbotMessage {
             //         AND ls.id='${sessionId}'
             //         ORDER BY lsm.created_at DESC LIMIT 50`;
             const productQueryNew = `SELECT lsm.* , p.name AS product_name, ls.user_id, dss.order_timer, 
-                    dss.free_shipping_timer, foth.threshold, us.name as store_name, p.publish AS activeProduct
+                    dss.free_shipping_timer, foth.threshold, us.name as store_name, p.publish AS activeProduct,
+                    p.publish AS active_product
                     FROM data.live_sessions_messages lsm
                     LEFT JOIN data.products p ON (p.id = (lsm.parcer_data->>'item')::integer)
                     LEFT JOIN data.live_sessions ls ON lsm.live_sessions_id = ls.id
