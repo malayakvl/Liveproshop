@@ -87,10 +87,12 @@ async function updateWaitingJob() {
                                     return false;
                                 });
                         } else {
-                            msgText = `WHAT A LUCK!\n\nYou were on the waiting list for ${item.configuration.name} #${item.configuration.sku} ${item.configuration.color_name} ${item.configuration.size_name} quantity ${item.quantity} and we just added it to your cart!\n\nhttps://liveproshop.com/en/fb-wait/${slgStoreName}?comment_id=${item.message_id}&type=2\n\nEnjoy it now!`;
-                            msgTextFr = `QUELLE CHANCE!\n\nVous étiez sur la liste d’attente pour ${item.configuration.name} #${item.configuration.sku} ${item.configuration.color_name} ${item.configuration.size_name} quantité ${item.quantity} et nous venons de l’ajouter à votre panier !\n\nhttps://liveproshop.com/fb-wait/${slgStoreName}?comment_id=${item.message_id}&type=2\n\nProfitez en vite ! `;
-                            // msgText = `Congrats! ${item.configuration.name} #${item.configuration.sku} ${item.configuration.color_name} ${item.configuration.size_name} quantity ${item.quantity} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${item.message_id}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${item.threshold} €, shipping is free!`;
-                            // msgTextFr = `Bravo! ${item.configuration.name} #${item.configuration.sku} ${item.configuration.color_name} ${item.configuration.size_name} quantité ${item.quantity} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${item.message_id}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${item.threshold} €, ils sont offerts!`;
+                            // old message
+                            // msgText = `WHAT A LUCK!\n\nYou were on the waiting list for ${item.configuration.name} #${item.configuration.sku} ${item.configuration.color_name} ${item.configuration.size_name} quantity ${item.quantity} and we just added it to your cart!\n\nhttps://liveproshop.com/en/fb-wait/${slgStoreName}?comment_id=${item.message_id}&type=2\n\nEnjoy it now!`;
+                            // msgTextFr = `QUELLE CHANCE!\n\nVous étiez sur la liste d’attente pour ${item.configuration.name} #${item.configuration.sku} ${item.configuration.color_name} ${item.configuration.size_name} quantité ${item.quantity} et nous venons de l’ajouter à votre panier !\n\nhttps://liveproshop.com/fb-wait/${slgStoreName}?comment_id=${item.message_id}&type=2\n\nProfitez en vite ! `;
+                            // new message
+                            msgText = `WHAT A LUCK!\n\nYou were on the waiting list for ${item.configuration.name} #${item.id} ${item.configuration.color_name} ${item.configuration.size_name} quantity ${item.quantity} and we just added it to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${item.message_id}\n\nEnjoy it now!`;
+                            msgTextFr = `QUELLE CHANCE!\n\nVous étiez sur la liste d’attente pour ${item.configuration.name} #${item.id} ${item.configuration.color_name} ${item.configuration.size_name} quantité ${item.quantity} et nous venons de l’ajouter à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${item.message_id}\n\nProfitez en vite ! `;
                             const responceResultMessage =  await axios.post(
                                 `https://graph.facebook.com/v18.0/me/messages`,
                                 '',
@@ -112,6 +114,7 @@ async function updateWaitingJob() {
                                     return false;
                                 });
                         }
+
                         // if (item.message_id) {
                         //     const orderFrom = item.message_id;
                         //     if (item.order_id) {
