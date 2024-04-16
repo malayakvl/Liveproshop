@@ -461,4 +461,31 @@
   text-align: center;
   background: #f3e7cb;
   border: solid 1px #bd0505;
+
+}
+
+.countdown-value {
+  background: #F5F5F5;
+  display: inline-block;
+  margin: 10px;
+  border-radius: 6px;
+
+  @apply w-[55px] h-[56px] md:w-[100px] md:h-[102px] md:pt-[25px];
+
+
+}
+.counter-caption-time {
+  //font-size: 32px;
+  font-weight: 600;
+  line-height: 39.01px;
+  text-align: center;
+  display: block;
+
+  @apply text-[20px] md:text-[32px];
+}
+.counter-caption {
+  //font-size: 12px !important;
+  //margin-top: -15px;
+
+  @apply text-[9px] mt-[-8px] md:text-[12px] md:mt-[-5px];
 }

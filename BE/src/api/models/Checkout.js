@@ -198,8 +198,10 @@ class Checkout {
             } else {
                 query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
                 let resultPayed = 0;
+                console.log("USER ID", userId);
+                // fetching th
                 // if (userId) {
-                //     resultPayed = await orderModel.fetchPayedItems(req.user.id)
+                //     resultPayed = await orderModel.fetchPayedItems(userId)
                 // }
                 console.log("RESULT PAYED", resultPayed);
                 // console.log(orderId, countryId);

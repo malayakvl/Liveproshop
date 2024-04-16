@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
     fetchCheckoutAction,
@@ -23,6 +23,8 @@ import {
     redirectOrderNumberAction,
     setupReturnedUrlAction
 } from '../../redux/orders';
+// import Countdown from 'react-countdown';
+// import CountdownTimer from '../../hooks/useCountDown';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -47,6 +49,66 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
     const address = useSelector(addressCheckoutSelector);
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
+
+    const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
+    const NOW_IN_MS = new Date().getTime();
+    const [timerValueDays, setTimerValueDays] = useState(-1);
+    const [timerValueHours, setTimerValueHours] = useState(-1);
+    const [timerValueMunites, setTimerValueMinutes] = useState(-1);
+    const [timerValueSeconds, setTimerValueSeconds] = useState(-1);
+
+    // const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
+
+    const x = setInterval(function () {
+        // Get today's date and time
+        const now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        const countDownDate = new Date('Apr 30, 2024 15:37:25').getTime();
+        const distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        setTimerValueDays(days);
+        setTimerValueHours(hours);
+        setTimerValueMinutes(minutes);
+        setTimerValueSeconds(seconds);
+
+        // Output the result in an element with id="demo"
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        // setTimerValue(`<div className="flex flex-col">${days} d</div><div className="flex flex-col">${hours} h</div><div className="flex flex-col">${minutes} m</div><div className="flex flex-col">${seconds} s</div>`);
+
+        // document.getElementById(
+        //     'demo'
+        //     `<div className="flex flex-col">${days} d</div><div className="flex flex-col">${hours} h</div><div className="flex flex-col">${minutes} m</div><div className="flex flex-col">${seconds} s</div>`;
+
+        // If the count down is over, write some text
+        // if (distance < 0) {
+        //     clearInterval(x);
+        //     document.getElementById("demo").innerHTML = "EXPIRED";
+        // }
+    }, 1000);
+
+    const DateTimeDisplay = ({
+        value,
+        type,
+        isDanger
+    }: {
+        value: any;
+        type: any;
+        isDanger: any;
+    }) => {
+        return (
+            <div className={isDanger ? 'countdown danger' : 'countdown'}>
+                <p>{value}</p>
+                <span>{type}</span>
+            </div>
+        );
+    };
 
     const validateEmail = (email: string) => {
         if (!email) {
@@ -141,6 +203,34 @@ export default function Index({ session, locale }: { session: any; locale: any }
             </Head>
 
             <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10">
+                <div className="flex flex-wrap items-center">
+                    <div className="text-3xl text-center w-full">
+                        <div className="countdown-value">
+                            <span className="red-yellow-gradient-text counter-caption-time">
+                                {timerValueDays}
+                            </span>
+                            <span className="block color-black counter-caption">Days</span>
+                        </div>
+                        <div className="countdown-value">
+                            <span className="red-yellow-gradient-text counter-caption-time">
+                                {timerValueHours}
+                            </span>
+                            <span className="block color-black counter-caption">Hours</span>
+                        </div>
+                        <div className="countdown-value">
+                            <span className="red-yellow-gradient-text counter-caption-time">
+                                {timerValueMunites}
+                            </span>
+                            <span className="block color-black counter-caption">Minutes</span>
+                        </div>
+                        <div className="countdown-value">
+                            <span className="red-yellow-gradient-text counter-caption-time">
+                                {timerValueSeconds}
+                            </span>
+                            <span className="block color-black counter-caption">Seconds</span>
+                        </div>
+                    </div>
+                </div>
                 <div className="flex flex-wrap items-center">
                     <div className="text-3xl font-bold text-gray-350 p-4 lg:p-8 mr-4 lg:mr-8">
                         {t('lets_check_out')}
