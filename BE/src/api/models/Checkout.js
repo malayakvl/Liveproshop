@@ -2,6 +2,8 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import axios from "axios";
 import crypto from "crypto";
+import shippingModel from "./Shipping.js";
+import orderModel from "./Order.js";
 
 class Checkout {
 
@@ -181,7 +183,7 @@ class Checkout {
     }
 
 
-    async fetchShippingMethodsByCountry(orderId, countryId, checkFreeShipping = false) {
+    async fetchShippingMethodsByCountry(orderId, countryId, checkFreeShipping = false, userId='') {
         const client = await pool.connect();
 
         let shippingMethods = null;
@@ -195,6 +197,11 @@ class Checkout {
                 shippingMethods = []
             } else {
                 query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
+                let resultPayed = 0;
+                // if (userId) {
+                //     resultPayed = await orderModel.fetchPayedItems(req.user.id)
+                // }
+                console.log("RESULT PAYED", resultPayed);
                 // console.log(orderId, countryId);
                 res = await client.query(query, [orderId, countryId]);
                 // console.log(res.rows);

@@ -1451,6 +1451,30 @@ console.log(emailSql);
         }
     }
 
+    async fetchPayedItems (userId) {
+        const client = await pool.connect();
+        try {
+            const payedQuery = `SELECT * FROM orders WHERE status='payed' AND user_id=${userId}`;
+            const res = await client.query(payedQuery);
+            let totalPayed = 0;
+            res.rows.forEach(order => {
+                totalPayed += order.total_amount;
+            });
+            return {success: true, totalPayed: totalPayed };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+
+    }
 
     async insertOrderStatus (orderId, status) {
         const client = await pool.connect();

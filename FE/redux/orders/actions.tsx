@@ -347,6 +347,27 @@ export const fetchUserOrderAction: any = createAction(
             .catch((e) => console.log(e.message));
     }
 );
+export const fetchUserOrderWaitAction: any = createAction(
+    'order/FETCH_USER_WAIT_ORDER',
+    async (email: string) => {
+        return axios
+            .get(
+                `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
+                    'user'
+                )}commentId=${window.localStorage.getItem('orderWaitCommentId')}`,
+                {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                }
+            )
+            .then((res) => {
+                // window.localStorage.removeItem('orderCommentId');
+                res.data.user;
+            })
+            .catch((e) => console.log(e.message));
+    }
+);
 export const setupOrderByCommentAction: any = createAction(
     'order/FETCH_USER_ORDER',
     async (commentId: string, email: string) =>

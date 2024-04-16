@@ -2,6 +2,7 @@ import checkoutModel from '../models/Checkout.js';
 import userModel from '../models/User.js';
 import orderModel from '../models/Order.js';
 import order from "../models/Order.js";
+import user from "../models/User.js";
 
 class CheckoutController {
     /**
@@ -30,7 +31,7 @@ class CheckoutController {
 
         // const orderItems = await checkoutModel.fetchOrderItems(orderData.or);
         const address = await userModel.findUserAddress(req.user.id);
-        const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, true);
+        const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, true, req.user.id);
         orderData.order.freeShipping = freeSheppingData?.freeShipping || 0;
         const regExpDelBrackets = /[({})]/g;
         let privacyLink = '';
