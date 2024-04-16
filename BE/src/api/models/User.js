@@ -2099,16 +2099,16 @@ class User {
         try {
             if (dbPlan.rows[0].name === 'Platinum') {
                 const mail = await sendPlatinumEmail(user, locale);
-                sendMail(
-                    'vladzavgor@gmail.com',
-                    mail.subject,
-                    mail.body
-                );
                 // sendMail(
-                //     process.env.EMAIL_PLATINUM,
+                //     'vladzavgor@gmail.com',
                 //     mail.subject,
                 //     mail.body
                 // );
+                sendMail(
+                    process.env.EMAIL_PLATINUM,
+                    mail.subject,
+                    mail.body
+                );
                 return { success: true, error: null, planId: 'platinum' };
             } else {
                 const upgrDate = moment(dbSubscriptionInfo.rows[0].period_end, "YYYY-mm-dd HH:mm").format('YYYY-MM-DD HH:mm:ss');
