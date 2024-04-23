@@ -22,6 +22,8 @@ export default function MainLayout({ children }: { children: any }) {
             console.log('COMMENT ID', window.localStorage.getItem('orderCommentId'));
             if (session?.user?.email && !window.localStorage.getItem('user')) {
                 dispatch(fetchUserAction(session.user.email));
+                console.log('USER MAIL', session.user.email);
+                console.log('ORDER NUMBER', window.localStorage.getItem('order_comment_id'));
                 if (window.localStorage.getItem('order_comment_id') || commentId) {
                     dispatch(
                         fetchUserOrderAction(

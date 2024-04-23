@@ -89,6 +89,7 @@ export default function SidebarLayout({ children }: { children: any }) {
 
     useEffect(() => {
         if (redirectOrderNumber && user?.email && user.role_id == 1) {
+            console.log('REDIRET ORDER NUMBER', redirectOrderNumber);
             dispatch(setupOrderByCommentAction(null));
             dispatch(setupWaitOrderByCommentAction(null));
             if (user.email || user.email_real) {

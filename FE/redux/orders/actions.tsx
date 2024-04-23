@@ -379,7 +379,7 @@ export const setupOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    console.log('ORDER NUMBER SETUP', res.data.orderNumber);
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
                     res.data.orderNumber;
                     // window.location.href = `/checkout/${}`;
@@ -417,7 +417,7 @@ export const setupWaitOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    console.log('ORDER NUMBER WAIT', res.data.orderNumber);
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
                     res.data.orderNumber;
                     // window.location.href = `/checkout/${}`;
