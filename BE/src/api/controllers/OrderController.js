@@ -123,6 +123,7 @@ class OrderController {
     }
 
     async fetchOrderByComment (req, res) {
+        console.log("INCOMING QUERY COMMENT", req.query.commentId);
         // const data = await orderModel.checkOrderStatus(req.query.comment_id);
         return res.status(200).json({success: true});
     }

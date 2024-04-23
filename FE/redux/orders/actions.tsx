@@ -333,7 +333,7 @@ export const fetchUserOrderAction: any = createAction(
             .get(
                 `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
                     'user'
-                )}commentId=${window.localStorage.getItem('order_comment_id')}`,
+                )}&commentId=${window.localStorage.getItem('order_comment_id')}`,
                 {
                     headers: {
                         ...authHeader(email)
