@@ -203,7 +203,6 @@ class Checkout {
                 // if (userId) {
                 //     resultPayed = await orderModel.fetchPayedItems(userId)
                 // }
-                console.log("RESULT PAYED", resultPayed);
                 // console.log(orderId, countryId);
                 res = await client.query(query, [orderId, countryId]);
                 // console.log(res.rows);

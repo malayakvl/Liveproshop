@@ -118,14 +118,18 @@ class OrderController {
     }
 
     async checkOrderStatus (req, res) {
+        console.log('AAAAAA order with qty');
         const data = await orderModel.checkOrderStatus(req.query.comment_id);
         return res.status(200).json({success: true, data: data});
     }
 
     async fetchOrderByComment (req, res) {
         console.log("INCOMING QUERY COMMENT", req.query.commentId);
-        // const data = await orderModel.checkOrderStatus(req.query.comment_id);
-        return res.status(200).json({success: true});
+        console.log("INCOMING USER FB ID", req.query.userFbEmail);
+        const data = await orderModel.checkOrderStatus(req.query.commentId, req.query.userFbEmail);
+        // console.log("FETCHED DATA", data);
+        // console.log("INCOMING USER", req.query.commentId);
+        return res.status(200).json({success: true, data: data});
     }
 
     async getOrderQuantity(req, res) {

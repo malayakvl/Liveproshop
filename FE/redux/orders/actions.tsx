@@ -329,11 +329,14 @@ export const connectOrderAction: any = createAction(
 export const fetchUserOrderAction: any = createAction(
     'order/FETCH_USER_ORDER',
     async (email: string) => {
+        console.log('USER EMAIL FOR CONNECT', email);
         return axios
             .get(
                 `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
                     'user'
-                )}&commentId=${window.localStorage.getItem('order_comment_id')}`,
+                )}&commentId=${window.localStorage.getItem(
+                    'order_comment_id'
+                )}&userFbEmail=${email}`,
                 {
                     headers: {
                         ...authHeader(email)
@@ -341,6 +344,7 @@ export const fetchUserOrderAction: any = createAction(
                 }
             )
             .then((res) => {
+                // console.log('RETURNED DATA', res.data);
                 // window.localStorage.removeItem('orderCommentId');
                 res.data.user;
             })
