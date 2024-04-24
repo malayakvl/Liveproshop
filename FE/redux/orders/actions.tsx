@@ -329,11 +329,36 @@ export const connectOrderAction: any = createAction(
 export const fetchUserOrderAction: any = createAction(
     'order/FETCH_USER_ORDER',
     async (email: string) => {
+        console.log('USER EMAIL FOR CONNECT', email);
         return axios
             .get(
                 `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
                     'user'
-                )}commentId=${window.localStorage.getItem('order_comment_id')}`,
+                )}&commentId=${window.localStorage.getItem(
+                    'order_comment_id'
+                )}&userFbEmail=${email}`,
+                {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                }
+            )
+            .then((res) => {
+                // console.log('RETURNED DATA', res.data);
+                // window.localStorage.removeItem('orderCommentId');
+                res.data.user;
+            })
+            .catch((e) => console.log(e.message));
+    }
+);
+export const fetchUserOrderWaitAction: any = createAction(
+    'order/FETCH_USER_WAIT_ORDER',
+    async (email: string) => {
+        return axios
+            .get(
+                `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
+                    'user'
+                )}commentId=${window.localStorage.getItem('orderWaitCommentId')}`,
                 {
                     headers: {
                         ...authHeader(email)
@@ -358,7 +383,7 @@ export const setupOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    console.log('ORDER NUMBER SETUP', res.data.orderNumber);
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
                     res.data.orderNumber;
                     // window.location.href = `/checkout/${}`;
@@ -396,7 +421,7 @@ export const setupWaitOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    console.log('ORDER NUMBER WAIT', res.data.orderNumber);
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
                     res.data.orderNumber;
                     // window.location.href = `/checkout/${}`;

@@ -7,15 +7,17 @@ import { fetchItemsAction } from '../../redux/livesessions';
 import { stopSessionAction } from '../../redux/livesessions/actions';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
+import { itemSelector } from '../../redux/settings/selectors';
 
 const ListMessages: React.FC = () => {
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
     const count = useSelector(itemsCountSelector);
+    const settingsValues = useSelector(itemSelector);
+
     const t = useTranslations();
 
     const [closedSessions, setClosedSession] = useState<number[]>([]);
-
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);
@@ -60,7 +62,7 @@ const ListMessages: React.FC = () => {
                                 <span className="closed">{t('Closed')}</span>
                             )}
                         </td>
-                        <td>Store name</td>
+                        <td>{item.store_name}</td>
                         {/*<td>{item.user_cnt ? item.user_cnt : '-'}</td>*/}
                     </tr>
                 ))}

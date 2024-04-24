@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { getSession } from 'next-auth/client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { List } from '../../components/liveselling';
 import { accountService } from '../../_services';
@@ -20,6 +20,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const settingsValues = useSelector(itemSelector);
+    // const dataShowAlert = useState(true);
+    const [showAlert, setShowAlert] = useState(true);
 
     const fbSync = () => {
         accountService.syncFB();
@@ -28,6 +30,22 @@ export default function Index({ session, locale }: { session: any; locale: strin
         dispatch(fetchScenariosAction());
         dispatch(fetchFormAction());
     }, []);
+
+    useEffect(() => {
+        if (
+            (settingsValues.delivery_doc ||
+                settingsValues.delivery_link ||
+                settingsValues.privacy_link ||
+                settingsValues.privacy_doc ||
+                settingsValues.terms_doc ||
+                settingsValues.terms_link ||
+                settingsValues.return_doc ||
+                settingsValues.return_link) &&
+            settingsValues.multisafe_api_key
+        ) {
+            setShowAlert(false);
+        }
+    }, [settingsValues]);
 
     return (
         <>
@@ -53,7 +71,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     )}
                     <div className="clear-both" />
                 </div>
-                <div className="block alert-danger mb-6">
+                <div className={`block alert-danger mb-6 ${!showAlert ? 'hidden' : ''}`}>
                     {t('text_settings_params')}
                     <ul className="mt-3">
                         {!settingsValues.delivery_doc &&

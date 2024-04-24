@@ -59,13 +59,35 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
+        console.log('here', window.localStorage.getItem('orderCommentId'));
+        console.log('here', window.localStorage.getItem('orderWaitCommentId'));
         // const commentId = commentStr[1];
+        if (
+            window.localStorage.getItem('orderCommentId') ||
+            window.localStorage.getItem('orderWaitCommentId')
+        ) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (window.localStorage.getItem('orderCommentId')) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setCommentId(window.localStorage.getItem('orderCommentId'));
+            } else {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setCommentId(window.localStorage.getItem('orderWaitCommentId'));
+            }
+
+            setShowSellerRadio(false);
+            setRoleId(1);
+        }
         if (commentStr[1]) {
             setCommentId(commentStr[1]);
             setShowSellerRadio(false);
             setRoleId(1);
         }
     }, [typeof window !== 'undefined']);
+    // http://localhost:3000/en/fb-order/shoes-andrey?comment_id=2591818487666545_799575391545355
 
     useEffect(() => {
         if (tmpCommentOrderId) {
@@ -87,9 +109,26 @@ export default function Signup({ locale }: { locale: string }) {
             dispatch(setOrderCommentAction(commentStr[1]));
             window.localStorage.setItem('order_comment_id', commentStr[1]);
         }
+
         if (commentStr[0] == 'order_id' && commentStr[1]) {
             dispatch(setWaitOrderIdAction(commentStr[1]));
             window.localStorage.setItem('order_wait_id', commentStr[1]);
+        }
+        if (window.localStorage.getItem('orderCommentId')) {
+            // console.log(commentStr[1]);
+            const orderIdStorage = window.localStorage.getItem('orderCommentId');
+            dispatch(setOrderCommentAction(orderIdStorage));
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            window.localStorage.setItem('order_comment_id', orderIdStorage);
+        }
+        if (window.localStorage.getItem('orderWaitCommentId')) {
+            // console.log(commentStr[1]);
+            const orderIdStorage = window.localStorage.getItem('orderWaitCommentId');
+            dispatch(setOrderCommentAction(orderIdStorage));
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            window.localStorage.setItem('order_comment_id', orderIdStorage);
         }
     }
 
@@ -120,7 +159,7 @@ export default function Signup({ locale }: { locale: string }) {
         }
     };
 
-    // console.log('Comment ID', commentId)
+    console.log('Comment ID', commentId);
 
     return (
         <>
