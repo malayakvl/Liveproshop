@@ -19,6 +19,7 @@ class CheckoutController {
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
         const sellerSettingsData = await userModel.fetchUserSettings(orderData.order.seller_id);
 
+
         // getting waiting products from current order
         // (e.g. seller have 1 buyer want 3, and we create order for 1 qnt and need to show how not available)
         // orderData.order.order_items.forEach(_item => {
@@ -38,7 +39,25 @@ class CheckoutController {
         let termsLink = '';
         let returnLink = '';
         let deliveryLink = '';
-        console.log(sellerSettingsData[0])
+        let countDownDate;
+        if (sellerSettingsData[0]) {
+            console.log("EEEE", sellerSettingsData[0].type)
+            var d = new Date(orderData.order.created_at);
+            if (sellerSettingsData[0].type === 'd') {
+                // To add Days
+                d.setDate(d.getDate() + sellerSettingsData[0].order_timer);
+                orderData.order.countdownDate = d;
+            } else if (sellerSettingsData[0].type === 'h') {
+                // To add Hours
+                d.setDate(d.getHours() + sellerSettingsData[0].order_timer);
+            } else if (sellerSettingsData[0].type === 'm') {
+                // To add Hours
+                d.setDate(d.getMinutes() + sellerSettingsData[0].order_timer);
+            }
+            console.log("Created at", orderData.order.created_at);
+            console.log("Timer at", sellerSettingsData[0].order_timer);
+            console.log("Expire at", d.getTime());
+        }
         if (sellerSettingsData[0].privacy_doc || sellerSettingsData[0].privacy_link) {
             if (sellerSettingsData[0].privacy_doc) {
                 privacyLink = process.env.API_URL + `/uploads/users/${orderData.order.seller_id}/documents/${sellerSettingsData[0].privacy_doc}`;

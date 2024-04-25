@@ -1272,16 +1272,14 @@ class Order {
         try {
             let orderNumber;let orderId;let copyOrderData;
             const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId,
-                        data.orders.live_sessions_id, order_amount, total_amount, quantity
+                        data.orders.live_sessions_id, order_amount, total_amount, quantity, data.order_items.user_id AS tmp_user
                                 FROM data.order_items 
                                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
-            console.log('orderNumber', orderNumber);
             if (!orderNumber) {
-                //https://liveproshop.com/en/fb-order/fashion-haven?comment_id=728237336190518_757042843213662
-                console.log('orderNumber IS NULL', orderNumber);
+                //https://liveproshop.com/en/fb-order/fashion-haven?comment_id=1052644862890019_965909311796896
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
@@ -1293,8 +1291,9 @@ class Order {
                         orderNumber = existNonPayed.rows[0].order_number;
                     } else {
                         const existNonPayedEmpty = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' ORDER BY created_at DESC`);
-                        orderId = existNonPayed.rows[0].id;
-                        orderNumber = existNonPayed.rows[0].order_number;
+                        orderId = existNonPayedEmpty.rows[0].id;
+                        orderNumber = existNonPayedEmpty.rows[0].order_number;
+                        console.log(orderId, orderNumber)
                     }
                     let updateTotal = 0;
                     for (const _item of resWait.rows) {
@@ -1508,6 +1507,44 @@ class Order {
             if (_tmpRes.rows.length === 0) {
                 const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             }
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async removeUnpayedSessionOrder (sessionId) {
+        const client = await pool.connect();
+        try {
+            const _tmpRes = await client.query(`SELECT * FROM data.orders WHERE live_sessions_id='${sessionId}' AND status='new' LIMIT 20`);
+            if (_tmpRes.rows.length > 0) {
+                _tmpRes.rows.forEach(async _order => {
+                    const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
+                    if (tmpResItems.rows.length > 0) {
+                        tmpResItems.rows.forEach(async _item => {
+                            // return quntity for configuration
+                            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+                        })
+                    }
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`)
+                })
+            }
+
             return {success: true, error: null};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

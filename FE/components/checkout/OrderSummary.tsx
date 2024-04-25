@@ -63,12 +63,6 @@ const OrderSummary = () => {
         if (order?.order_items) {
             order.order_items.sort((a: any, b: any) => (a.id > b.id ? 1 : -1));
         }
-        // console.log('CURRENT SETTINGS',
-        //     order.seller_settings?.privacy_doc.replace(regExpDelBrackets, '').replace()
-        // );
-        // if (order?.waiting_products) {
-        //     console.log('CURRENT WAITING', JSON.parse(order.waiting_products));
-        // }
     }, [order]);
 
     const removeItemOrder = (itemId: number) => {
@@ -87,7 +81,7 @@ const OrderSummary = () => {
         return formatCurrency(totalAmount - vatAmount);
     };
 
-    console.log('ORDER', order.seller_settings);
+    // console.log('ORDER', order.seller_settings);
 
     return (
         <>

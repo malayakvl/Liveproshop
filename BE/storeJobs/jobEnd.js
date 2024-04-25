@@ -18,8 +18,8 @@ async function startProcess() {
     await axios(`${apiUrl}/api/fetch-store-session-for-end`)
         .then( (response) => {
             console.log(response.data.result);
+
             response.data.result.forEach(async session => {
-                console.log(session.id)
                 shell.exec(`pm2 delete "jobStoreEvent ${session.id}"`, function(code, output) {
                 });
 
@@ -30,6 +30,11 @@ async function startProcess() {
                 });
 
                 shell.exec(`pm2 delete "jobStoreParser ${session.id}"`, function(code, output) {
+                });
+
+                shell.exec(`pm2 start jobStoreClearOrders.js --name "jobStoreClearOrders ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
+                    console.log('Exit code:', code);
+                    console.log('Program output:', output);
                 });
 
                 await axios(`${apiUrl}/api/update-closed-session?sessionId=${session.id}`)
