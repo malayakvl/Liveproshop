@@ -1268,63 +1268,75 @@ class Order {
 
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
-        console.log('findByCommentId');
+        console.log('findByCommentId', commentId);
+        console.log('userId', userId);
         try {
             let orderNumber;let orderId;let copyOrderData;
-            const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId,
+            const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId, data.order_items.user_id AS tmp_user_id,
                         data.orders.live_sessions_id, order_amount, total_amount, quantity, data.order_items.user_id AS tmp_user
                                 FROM data.order_items 
                                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
+            const tmpUserId = res.rows[0].tmp_user_id;
+            console.log('orderNumber', orderNumber);
             if (!orderNumber) {
+                console.log('TYT')
                 //https://liveproshop.com/en/fb-order/fashion-haven?comment_id=1052644862890019_965909311796896
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
+                let updateTotal = 0;
                 if (!resWait.rows[0].order_id) {
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+console.log("EXIST NON PAYED", existNonPayed.rows.length)
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
                     } else {
                         const existNonPayedEmpty = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' ORDER BY created_at DESC`);
-                        orderId = existNonPayedEmpty.rows[0].id;
-                        orderNumber = existNonPayedEmpty.rows[0].order_number;
+                        if (existNonPayedEmpty.rows.length > 0) {
+                            orderId = existNonPayedEmpty.rows[0].id;
+                            orderNumber = existNonPayedEmpty.rows[0].order_number;
+                        } else {
+                            const emptyWaitRes = await client.query(`SELECT id, order_number FROM data.orders WHERE user_id='${tmpUserId}'`);
+                            orderId = emptyWaitRes.rows[0].id;
+                            orderNumber = emptyWaitRes.rows[0].order_number;
+                            await client.query(`UPDATE data.orders 
+                                SET user_id=${userId}, 
+                                total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price} 
+                                WHERE id=${emptyWaitRes.rows[0].id}`)
+                            await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
+                        }
                         console.log(orderId, orderNumber)
                     }
-                    let updateTotal = 0;
-                    for (const _item of resWait.rows) {
-                        if (!_item.order_id) {
-                            updateTotal += _item.price*_item.quantity;
-                            console.log('UPDATED TOTAL PRICE', _item.price)
-                            console.log('UPDATED TOTAL QTY', _item.quantity)
-                            await client.query(`UPDATE data.order_items SET order_id = ${orderId} WHERE message_id='${commentId}'`);
+                    if (resWait.rows.length > 0) {
+                        for (const _item of resWait.rows) {
+                            if (!_item.order_id) {
+                                updateTotal += _item.price*_item.quantity;
+                                await client.query(`UPDATE data.order_items SET order_id = ${orderId} WHERE message_id='${commentId}'`);
+                            }
                         }
+                        await client.query(`UPDATE data.orders 
+                                                    SET 
+                                            order_amount = order_amount + ${updateTotal}, 
+                                            total_amount = total_amount + ${updateTotal}
+                                             WHERE id='${orderId}'`)
                     }
-                    console.log(updateTotal);
-                    console.log(
-                        `UPDATE data.orders 
-                        SET 
-                        order_amount = order_amount + ${updateTotal}, 
-                        total_amount = total_amount + ${updateTotal}
-                        WHERE id='${orderId}'`
-                    )
-                    await client.query(`UPDATE data.orders 
-                        SET 
-                        order_amount = order_amount + ${updateTotal}, 
-                        total_amount = total_amount + ${updateTotal}
-                        WHERE id='${orderId}'`)
 
                     console.log('CONNECTD ORDER ID', orderId)
                     console.log('CONNECTD ORDER NUMBER', orderNumber)
+                } else {
+                    console.log('PRISHLI SUDA A TUT PUSTO')
                 }
                 // return {success: true, orderId: orderId, orderNumber: orderNumber };
                 return {success: true, orderId: orderId, orderNumber: orderNumber };
 
             } else {
+                console.log('EBAT POTEMKI')
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
                 const prefixWait = Math.floor(Date.now()/1000);
                 console.log('prefixWait', prefixWait);
