@@ -1525,7 +1525,7 @@ class Order {
     async removeUnpayedSessionOrder (sessionId) {
         const client = await pool.connect();
         try {
-            const _tmpRes = await client.query(`SELECT * FROM data.orders WHERE live_sessions_id='${sessionId}' AND status='new' LIMIT 20`);
+            const _tmpRes = await client.query(`SELECT * FROM data.orders WHERE live_sessions_id='${sessionId}' AND status='new' AND total_amount > 0 LIMIT 20`);
             if (_tmpRes.rows.length > 0) {
                 _tmpRes.rows.forEach(async _order => {
                     const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);

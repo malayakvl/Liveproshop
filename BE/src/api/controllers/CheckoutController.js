@@ -1,9 +1,7 @@
 import checkoutModel from '../models/Checkout.js';
 import userModel from '../models/User.js';
 import orderModel from '../models/Order.js';
-import order from "../models/Order.js";
-import user from "../models/User.js";
-
+import { addHoursToDate, addMinutesToDate, addDaysToDate } from '../lib/utils.js';
 class CheckoutController {
     /**
      *
@@ -11,6 +9,7 @@ class CheckoutController {
      * @param res
      * @returns {Promise<*>}
      */
+
 
     async fetch(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
@@ -40,20 +39,26 @@ class CheckoutController {
         let returnLink = '';
         let deliveryLink = '';
         let countDownDate;
+        // let convertedCreatedAt = orderData.order.created_at;
+        let convertedCreatedAt = addHoursToDate(orderData.order.created_at, -3);
+        console.log("Created at converted", addHoursToDate(orderData.order.created_at, -3));
         if (sellerSettingsData[0]) {
-            console.log("EEEE", sellerSettingsData[0].type)
             var d = new Date(orderData.order.created_at);
             if (sellerSettingsData[0].type === 'd') {
                 // To add Days
                 d.setDate(d.getDate() + sellerSettingsData[0].order_timer);
-                orderData.order.countdownDate = d;
+                orderData.order.countdownDate = addDaysToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             } else if (sellerSettingsData[0].type === 'h') {
                 // To add Hours
                 d.setDate(d.getHours() + sellerSettingsData[0].order_timer);
+                orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             } else if (sellerSettingsData[0].type === 'm') {
                 // To add Hours
                 d.setDate(d.getMinutes() + sellerSettingsData[0].order_timer);
+                orderData.order.countdownDate = addMinutesToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             }
+            // orderData.order.countdownDate = d;
+
             console.log("Created at", orderData.order.created_at);
             console.log("Timer at", sellerSettingsData[0].order_timer);
             console.log("Expire at", d.getTime());
