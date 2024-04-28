@@ -12,6 +12,8 @@ import {
     checkAllIdsAction,
     uncheckAllIdsAction,
     setModalConfirmationMetaAction,
+    setModalConfirmationPeriodMetaAction,
+    setPeriodForDeleteAction,
     setModalCalendlyMetaAction,
     setSwitchHeaderAction,
     showLoaderAction,
@@ -21,7 +23,8 @@ import {
     toggleTextingMenuAction,
     setLngAction,
     toggleProfileMenuAction,
-    showEmailNotificationAction
+    showEmailNotificationAction,
+    hideshowPeriodPopupAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 // import { showPopupAction } from '../dashboard';
@@ -146,6 +149,9 @@ const initialState: State.Layouts = {
     switchHeader: false,
     switchToggled: false,
     modalConfirmationMeta: null,
+    modalConfirmationPeriodMeta: null,
+    deletePeriodHidePopup: false,
+    deletePeriod: null,
     modalCalendlyMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
@@ -231,6 +237,10 @@ const ACTION_HANDLERS: any = {
         ...state,
         isSidebarOpen: !state.isSidebarOpen
     }),
+    [hideshowPeriodPopupAction]: (state: State.Layouts): State.Layouts => ({
+        ...state,
+        deletePeriodHidePopup: !state.deletePeriodHidePopup
+    }),
     [sidebarCloseAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
         isSidebarOpen: false
@@ -294,6 +304,22 @@ const ACTION_HANDLERS: any = {
             ...action.payload
         }
     }),
+    [setModalConfirmationPeriodMetaAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<Layouts.ModalPeriodMeta>
+    ): State.Layouts => ({
+        ...state,
+        modalConfirmationPeriodMeta: action.payload && {
+            ...action.payload
+        }
+    }),
+    [setPeriodForDeleteAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<any>
+    ): State.Layouts => ({
+        ...state,
+        deletePeriod: action.payload
+    }),
     [setModalCalendlyMetaAction]: (
         state: State.Layouts,
         action: Type.ReduxAction<Layouts.ModalCalendlyMeta>
@@ -342,13 +368,16 @@ export {
     setInfoToastAction,
     deleteToastAction,
     setModalConfirmationMetaAction,
+    setModalConfirmationPeriodMetaAction,
+    setPeriodForDeleteAction,
     setModalCalendlyMetaAction,
     setSwitchToggleAction,
     sidebarCloseAction,
     toggleTextingMenuAction,
     setLngAction,
     toggleProfileMenuAction,
-    showEmailNotificationAction
+    showEmailNotificationAction,
+    hideshowPeriodPopupAction
 };
 
 // ------------------------------------

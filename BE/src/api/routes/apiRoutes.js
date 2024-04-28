@@ -56,6 +56,7 @@ apiRoutes.route('/run-waiting-job').get(OrderController.waitingJobOrders);
 apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder);
 apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
 apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
+apiRoutes.route('/get-order-clear').get(OrderController.removeUnpayedOrder);
 
 
 apiRoutes.route('/check-subscription-for-update').get(UserController.fetchSubscriptionsForUpdate);
@@ -236,6 +237,9 @@ apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatus
 apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus);
 apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold);
 apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold);
+apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold);
+apiRoutes.route('/shipping/free-period').post(ShippingController.setShippingPeriod);
+apiRoutes.route('/shipping/clear-free-period').post(ShippingController.clearShippingPeriod);
 
 
 

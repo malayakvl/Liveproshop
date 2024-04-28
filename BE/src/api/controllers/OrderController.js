@@ -117,8 +117,12 @@ class OrderController {
         return res.status(200).json({success: true, message: 'creating orders'});
     }
 
+    async removeUnpayedOrder (req, res) {
+        const data = await orderModel.removeUnpayedSessionOrder(req.query.sessionId);
+        return res.status(200).json({success: true});
+    }
+
     async checkOrderStatus (req, res) {
-        console.log('AAAAAA order with qty');
         const data = await orderModel.checkOrderStatus(req.query.comment_id);
         return res.status(200).json({success: true, data: data});
     }

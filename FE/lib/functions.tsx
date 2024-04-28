@@ -65,6 +65,13 @@ export const toggleModalConfirmation = () => {
     (modal as any).classList.toggle('pointer-events-none');
     (modal as any).classList.toggle('modal-active');
 };
+export const toggleModalPeriodConfirmation = () => {
+    // const body = document.querySelector('body');
+    const modal = document.querySelector('.modal-period-confirmation');
+    (modal as any).classList.toggle('opacity-0');
+    (modal as any).classList.toggle('pointer-events-none');
+    (modal as any).classList.toggle('modal-active');
+};
 export const toggleCalendlyModalConfirmation = () => {
     // const body = document.querySelector('body');
     const modal = document.querySelector('.modal-calendly');

@@ -56,41 +56,31 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const [timerValueHours, setTimerValueHours] = useState(-1);
     const [timerValueMunites, setTimerValueMinutes] = useState(-1);
     const [timerValueSeconds, setTimerValueSeconds] = useState(-1);
+    // const [countDownDate, setCountDownDate] = useState(null);
 
     // const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
 
     const x = setInterval(function () {
         // Get today's date and time
         const now = new Date().getTime();
-
-        // Find the distance between now and the count down date
-        const countDownDate = new Date('Apr 30, 2024 15:37:25').getTime();
-        const distance = countDownDate - now;
-
-        // Time calculations for days, hours, minutes and seconds
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        setTimerValueDays(days);
-        setTimerValueHours(hours);
-        setTimerValueMinutes(minutes);
-        setTimerValueSeconds(seconds);
-
-        // Output the result in an element with id="demo"
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        // setTimerValue(`<div className="flex flex-col">${days} d</div><div className="flex flex-col">${hours} h</div><div className="flex flex-col">${minutes} m</div><div className="flex flex-col">${seconds} s</div>`);
+        if (order.countdownDate) {
+            const countDownDate = new Date(order.countdownDate);
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const distance = countDownDate - now;
 
-        // document.getElementById(
-        //     'demo'
-        //     `<div className="flex flex-col">${days} d</div><div className="flex flex-col">${hours} h</div><div className="flex flex-col">${minutes} m</div><div className="flex flex-col">${seconds} s</div>`;
-
-        // If the count down is over, write some text
-        // if (distance < 0) {
-        //     clearInterval(x);
-        //     document.getElementById("demo").innerHTML = "EXPIRED";
-        // }
+            // Time calculations for days, hours, minutes and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            setTimerValueDays(days);
+            setTimerValueHours(hours);
+            setTimerValueMinutes(minutes);
+            setTimerValueSeconds(seconds);
+        }
     }, 1000);
 
     const DateTimeDisplay = ({
@@ -140,14 +130,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
                 dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
             }
         }
-        // if (address.country_id)
-        // dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
-        // if (shippingMethods.length > 0) {
-        //     setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false);
-        // } else if (address.country_id && shippingMethods.length === 0) {
-        //     console.log(address.country_id, shippingMethods.length);
-        //     // dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
-        // }
     }, [address?.country_id]);
 
     useEffect(() => {

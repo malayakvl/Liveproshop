@@ -270,7 +270,7 @@ class Livesession {
         const client = await pool.connect();
         const queryStr = `SELECT
                     *
-                FROM data.get_live_sessions_store_ended('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+                FROM data.get_live_sessions_store_ended_new('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];

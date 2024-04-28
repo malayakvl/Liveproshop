@@ -1,9 +1,7 @@
 import checkoutModel from '../models/Checkout.js';
 import userModel from '../models/User.js';
 import orderModel from '../models/Order.js';
-import order from "../models/Order.js";
-import user from "../models/User.js";
-
+import { addHoursToDate, addMinutesToDate, addDaysToDate } from '../lib/utils.js';
 class CheckoutController {
     /**
      *
@@ -12,12 +10,14 @@ class CheckoutController {
      * @returns {Promise<*>}
      */
 
+
     async fetch(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
         const { orderNumber } = req.query;
 
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
         const sellerSettingsData = await userModel.fetchUserSettings(orderData.order.seller_id);
+
 
         // getting waiting products from current order
         // (e.g. seller have 1 buyer want 3, and we create order for 1 qnt and need to show how not available)
@@ -38,7 +38,31 @@ class CheckoutController {
         let termsLink = '';
         let returnLink = '';
         let deliveryLink = '';
-        console.log(sellerSettingsData[0])
+        let countDownDate;
+        // let convertedCreatedAt = orderData.order.created_at;
+        let convertedCreatedAt = addHoursToDate(orderData.order.created_at, -3);
+        console.log("Created at converted", addHoursToDate(orderData.order.created_at, -3));
+        if (sellerSettingsData[0]) {
+            var d = new Date(orderData.order.created_at);
+            if (sellerSettingsData[0].type === 'd') {
+                // To add Days
+                d.setDate(d.getDate() + sellerSettingsData[0].order_timer);
+                orderData.order.countdownDate = addDaysToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+            } else if (sellerSettingsData[0].type === 'h') {
+                // To add Hours
+                d.setDate(d.getHours() + sellerSettingsData[0].order_timer);
+                orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+            } else if (sellerSettingsData[0].type === 'm') {
+                // To add Hours
+                d.setDate(d.getMinutes() + sellerSettingsData[0].order_timer);
+                orderData.order.countdownDate = addMinutesToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+            }
+            // orderData.order.countdownDate = d;
+
+            console.log("Created at", orderData.order.created_at);
+            console.log("Timer at", sellerSettingsData[0].order_timer);
+            console.log("Expire at", d.getTime());
+        }
         if (sellerSettingsData[0].privacy_doc || sellerSettingsData[0].privacy_link) {
             if (sellerSettingsData[0].privacy_doc) {
                 privacyLink = process.env.API_URL + `/uploads/users/${orderData.order.seller_id}/documents/${sellerSettingsData[0].privacy_doc}`;

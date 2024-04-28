@@ -47,6 +47,11 @@ const ListMessages: React.FC = () => {
                         </td>
                         <td>
                             {item.status != 'closed' && !closedSessions.includes(item.id) && (
+                                <span title="Close" role="presentation" className={item.status}>
+                                    {t(item.status)}
+                                </span>
+                            )}
+                            {item.status == 'live' && !closedSessions.includes(item.id) && (
                                 <span
                                     title="Close"
                                     onClick={() => {
@@ -54,10 +59,11 @@ const ListMessages: React.FC = () => {
                                         setClosedSession([...closedSessions, item.id]);
                                     }}
                                     role="presentation"
-                                    className={item.status}>
-                                    {t(item.status)}
+                                    className="live-close">
+                                    {t('Close')}
                                 </span>
                             )}
+
                             {(item.status === 'closed' || closedSessions.includes(item.id)) && (
                                 <span className="closed">{t('Closed')}</span>
                             )}

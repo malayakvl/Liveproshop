@@ -659,5 +659,7 @@
   "text_plan_schedule1": "paramètres de votre profil ",
   "text_plan_schedule2": "pour sélectionner le plan qui vous convient",
   "Select Country": "Choisissez le pays",
-  "text_settings_params": "Veuillez remplir les informations suivantes :"
+  "text_settings_params": "Veuillez remplir les informations suivantes :",
+  "Do you want to delete period": "Voulez-vous désactiver la période du",
+  "for free shipping?": "pour la fenêtre de livraison gratuite?"
 }

@@ -242,13 +242,17 @@ td.order-status {
 }
 
 span.closed {
-  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-gray-200;
+  @apply text-[10px] rounded-lg p-1.5 bg-gray-200;
 }
 span.live {
-  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-green-200 cursor-pointer;
+  @apply text-[10px]  rounded-lg p-1.5 bg-green-200 cursor-pointer;
 }
+span.live-close {
+  @apply text-[10px] bg-blue-350 rounded-lg p-1.5  cursor-pointer ml-3;
+}
+
 span.scheduled {
-  @apply text-[10px] bg-green-200 rounded-lg p-1.5 bg-yellow-200 cursor-pointer;
+  @apply text-[10px]  rounded-lg p-1.5 bg-yellow-200 cursor-pointer;
 }
 span.active-subscription {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;

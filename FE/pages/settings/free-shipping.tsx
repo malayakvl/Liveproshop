@@ -1,0 +1,282 @@
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setShippingPeriodAction, setThresholdAction } from '../../redux/shipping/actions';
+import { useTranslations } from 'next-intl';
+import {
+    setPeriodForDeleteAction,
+    hideshowPeriodPopupAction,
+    setModalConfirmationPeriodMetaAction,
+    setSuccessToastAction
+} from '../../redux/layouts';
+import { clearShippingPeriodAction } from '../../redux/shipping/actions';
+import { ErrorMessage, Field, Formik } from 'formik';
+import { Form } from 'react-bootstrap';
+import { userSelector } from '../../redux/user/selectors';
+import axios from 'axios';
+import { authHeader } from '../../lib/functions';
+import getConfig from 'next/config';
+import * as Yup from 'yup';
+import { getSession } from 'next-auth/client';
+import Head from 'next/head';
+import Image from 'next/image';
+import { showDateSelectorAction } from '../../redux/dashboard';
+import { showDatePopupSelector } from '../../redux/dashboard/selectors';
+import { DateRangePicker } from 'react-date-range';
+import moment from 'moment';
+
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css';
+
+const { publicRuntimeConfig } = getConfig();
+const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
+
+export default function ShippingThreshold() {
+    const dispatch = useDispatch();
+    const t = useTranslations();
+    const user = useSelector(userSelector);
+    const [threshold, setThreshold] = useState('');
+    const [period, setPeriod] = useState({ free_shipping_from: null, free_shipping_to: null });
+    const showDatePopup = useSelector(showDatePopupSelector);
+    const [state, setState] = useState<any>([
+        {
+            startDate: moment().subtract(1, 'month').toDate(),
+            endDate: moment().toDate(),
+            key: 'selection'
+        }
+    ]);
+
+    useEffect(() => {
+        if (!user.email) return;
+
+        axios
+            .get(`${url}/threshold`, {
+                headers: {
+                    ...authHeader(user.email)
+                }
+            })
+            .then((result) => {
+                setThreshold(result.data.threshold);
+                setPeriod(result.data.period);
+                console.log('FREE PERIOD', result.data.period);
+            });
+    }, [user.email]);
+
+    const reverseDatePopup = useCallback(
+        (event) => {
+            if (event.target?.name === 'inputDate') {
+                dispatch(showDateSelectorAction(!showDatePopup));
+            } else if (showDatePopup) {
+                dispatch(showDateSelectorAction(false));
+            }
+        },
+        [showDatePopup]
+    );
+
+    if (!user.email) return null;
+
+    return (
+        <>
+            <Head>
+                <title>LiveProshop - Settings - Free shipping threshold</title>
+            </Head>
+
+            <div className="block-white-8 mr-10 white-shadow-big">
+                <div className="page-title">
+                    <h1>{t('Settings')}</h1>
+                </div>
+                {/*<div className="text-gray-400">{t('settings_theshold')}</div>*/}
+                {/*<div className="text-gray-400">{t('setting_window')}</div>*/}
+            </div>
+
+            <div className="md:flex mt-10 block-white-8 white-shadow-big">
+                {user.role_id !== 3 && (
+                    <>
+                        <div className="w-full md:w-96 p-4 bg-gray-100 rounded-lg shadow-inner">
+                            <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
+                                {t('Free shipping')}
+                            </div>
+                            <div className="text-sm text-gray-500 mt-12">
+                                {t('settings_theshold')}
+                            </div>
+                            <Formik
+                                onSubmit={(values) => {
+                                    dispatch(setThresholdAction(values));
+                                    dispatch(
+                                        setSuccessToastAction(
+                                            t(`Threshold has been saved: ${values.threshold}`)
+                                        )
+                                    );
+                                }}
+                                enableReinitialize
+                                initialValues={{ threshold }}
+                                validationSchema={Yup.object().shape({
+                                    threshold: Yup.number().typeError('Must be number')
+                                })}
+                                render={(props) => (
+                                    <Form onSubmit={props.handleSubmit}>
+                                        <Field
+                                            name="threshold"
+                                            className="w-[150px] float-left p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
+                                        />
+                                        <span className="float-left mt-[35px] ml-[15px] font-bold">
+                                            &euro;
+                                        </span>
+                                        <div className="error-el">
+                                            <ErrorMessage name="threshold" />
+                                        </div>
+                                        <button type="submit" className="w-full mt-8 gradient-btn">
+                                            {t('Save changes')}
+                                        </button>
+                                    </Form>
+                                )}
+                            />
+                        </div>
+                        <div className="w-full md:w-96 p-4 bg-gray-100 rounded-lg shadow-inner ml-10">
+                            <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
+                                {t('Free Shipping Window')}
+                            </div>
+                            <div className="text-sm text-gray-500 mt-12">{t('setting_window')}</div>
+
+                            <Formik
+                                onSubmit={(values) => {
+                                    dispatch(setThresholdAction(values));
+                                    dispatch(
+                                        setSuccessToastAction(
+                                            t(`Threshold has been saved: ${values.threshold}`)
+                                        )
+                                    );
+                                }}
+                                enableReinitialize
+                                initialValues={{ threshold }}
+                                validationSchema={Yup.object().shape({
+                                    threshold: Yup.number().typeError('Must be number')
+                                })}
+                                render={(props) => (
+                                    <Form onSubmit={props.handleSubmit}>
+                                        <div className="p-3 flex">
+                                            <Image
+                                                src="/images/calendar.svg"
+                                                width={20}
+                                                height={18}
+                                            />
+                                            <span className="font-bold text-sm text-blue-350 ml-2">
+                                                <input
+                                                    name="inputDate"
+                                                    className="w-full form-control"
+                                                    type="text"
+                                                    placeholder={t('Date')}
+                                                    readOnly={true}
+                                                    onClick={reverseDatePopup}
+                                                    value={``}
+                                                />
+                                            </span>
+                                            <div className="relative">
+                                                {showDatePopup && (
+                                                    <div
+                                                        id="divDate"
+                                                        className="dashbord-filter absolute shadow-xl rounded-3xl"
+                                                        style={{ zIndex: 10 }}>
+                                                        <DateRangePicker
+                                                            // editableDateInputs={true}
+                                                            onChange={(item) => {
+                                                                dispatch(
+                                                                    showDateSelectorAction(
+                                                                        !showDatePopup
+                                                                    )
+                                                                );
+                                                                dispatch(
+                                                                    setShippingPeriodAction(
+                                                                        item.selection
+                                                                    )
+                                                                );
+                                                                setState([item.selection]);
+                                                            }}
+                                                            moveRangeOnFirstSelection={false}
+                                                            months={1}
+                                                            ranges={state}
+                                                            direction="horizontal"
+                                                        />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {period.free_shipping_from && period.free_shipping_to && (
+                                            <div className="block text-[14px] font-bold">
+                                                <ul className="inline-block">
+                                                    <li className="float-left">
+                                                        <span className="inline-block mt-[2px] text-gray-350">
+                                                            {moment(
+                                                                period.free_shipping_from
+                                                            ).format('DD/MM/YYYY')}
+                                                            {' - '}
+                                                            {moment(period.free_shipping_to).format(
+                                                                'DD/MM/YYYY'
+                                                            )}
+                                                        </span>
+                                                    </li>
+                                                    <li className="float-left">
+                                                        {/* eslint-disable-next-line jsx-a11y/anchor-has-content,jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events */}
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            className="delete-period"
+                                                            onClick={() => {
+                                                                // dispatch(
+                                                                //     setPeriodForDeleteAction(period)
+                                                                // );
+                                                                dispatch(
+                                                                    setModalConfirmationPeriodMetaAction(
+                                                                        {
+                                                                            onConfirm: async () => {
+                                                                                dispatch(
+                                                                                    clearShippingPeriodAction()
+                                                                                );
+                                                                                setPeriod({
+                                                                                    free_shipping_from:
+                                                                                        null,
+                                                                                    free_shipping_to:
+                                                                                        null
+                                                                                });
+                                                                            }
+                                                                        }
+                                                                    )
+                                                                );
+                                                            }}
+                                                        />
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        )}
+                                        <button type="submit" className="w-full mt-8 gradient-btn">
+                                            {t('Save changes')}
+                                        </button>
+                                    </Form>
+                                )}
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
+        </>
+    );
+}
+
+export async function getServerSideProps(context: any) {
+    const { locale } = context;
+    const session = await getSession(context);
+
+    if (!session) {
+        return {
+            redirect: { destination: `/${locale === 'fr' ? '' : `${locale}/`}auth/signin` }
+        };
+    }
+
+    return {
+        props: {
+            session,
+            locale,
+            messages: {
+                ...require(`../../messages/${locale}.json`)
+            }
+        }
+    };
+}

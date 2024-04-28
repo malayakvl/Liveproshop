@@ -57,6 +57,7 @@ declare namespace Orders {
         freeShipping: number;
         waiting_products: any;
         seller_settings: any;
+        countdownDate: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

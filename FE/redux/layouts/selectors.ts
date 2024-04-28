@@ -60,6 +60,18 @@ export const modalConfirmationMetaSelector = createSelector(
     (layouts: State.Layouts): Layouts.ModalConfirmationMeta | null => layouts.modalConfirmationMeta
 );
 
+export const modalConfirmationPeriodMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalPeriodMeta | null => layouts.modalConfirmationPeriodMeta
+);
+export const deletePeriodSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): any => layouts.deletePeriod
+);
+export const deletePeriodPopupSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): any => layouts.deletePeriodHidePopup
+);
 export const modalCalendlyMetaSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): Layouts.ModalCalendlyMeta | null => layouts.modalCalendlyMeta
