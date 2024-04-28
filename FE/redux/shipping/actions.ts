@@ -6,7 +6,8 @@ import {
     setSuccessToastAction,
     setErrorToastAction,
     showLoaderAction,
-    hideshowPeriodPopupAction, setModalConfirmationPeriodMetaAction
+    hideshowPeriodPopupAction,
+    setModalConfirmationPeriodMetaAction
 } from '../layouts/actions';
 
 const { publicRuntimeConfig } = getConfig();
@@ -187,11 +188,15 @@ export const setShippingPeriodAction: any = createAction(
     async (values: any) => (dispatch: Type.Dispatch, getState: () => State.Root) => {
         const state = getState();
 
-        axios.post(`${url}/free-period`, values, {
-            headers: {
-                ...authHeader(state.user.user.email)
-            }
-        });
+        axios
+            .post(`${url}/free-period`, values, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            })
+            .then(() => {
+                window.location.reload();
+            });
     }
 );
 export const fetchShippingPeriodAction: any = createAction(
@@ -235,7 +240,6 @@ export const clearShippingPeriodAction: any = createAction(
             .then(() => {
                 dispatch(hideshowPeriodPopupAction(true));
                 dispatch(setModalConfirmationPeriodMetaAction(null));
-
                 // dispatch(fetchShippingAction(id)).then(() => dispatch(fetchShippingsAction()));
                 // dispatch(setSuccessToastAction('Counties of the shipping has been saved'));
             });
