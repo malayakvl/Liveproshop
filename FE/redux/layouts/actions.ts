@@ -38,10 +38,15 @@ export const deleteToastAction: any = createAction('layouts/DELETE_TOAST');
 export const setActivePageAction: any = createAction('layouts/SET_ACTIVE_TAB');
 
 export const sidebarCloseAction: any = createAction('layouts/CLOSE_SIDEBAR');
+export const hideshowPeriodPopupAction: any = createAction('layouts/DELETE_SHOW_PERIOD_POPUP');
 
 export const setModalConfirmationMetaAction: any = createAction(
     'layouts/SET_MODAL_DELETE_CONFIRMATION'
 );
+export const setModalConfirmationPeriodMetaAction: any = createAction(
+    'layouts/SET_MODAL_PERIOD_DELETE_CONFIRMATION'
+);
+export const setPeriodForDeleteAction: any = createAction('layouts/SET_MODAL_PERIOD_VALUE');
 export const setModalCalendlyMetaAction: any = createAction('layouts/SET_MODAL_CALENDLY');
 export const toggleTextingMenuAction: any = createAction('layouts/TOGGLE_TEXTING_MENU');
 export const toggleProfileMenuAction: any = createAction('layouts/TOGGLE_PROFILE_MENU');

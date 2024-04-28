@@ -237,6 +237,9 @@ apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatus
 apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus);
 apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold);
 apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold);
+apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold);
+apiRoutes.route('/shipping/free-period').post(ShippingController.setShippingPeriod);
+apiRoutes.route('/shipping/clear-free-period').post(ShippingController.clearShippingPeriod);
 
 
 

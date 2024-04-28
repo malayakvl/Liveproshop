@@ -119,7 +119,7 @@ console.log("active2", message.activeProduct);
                                                     "buttons":[
                                                         {
                                                             "type": "postback",
-                                                            "title": `${lng === 'en' ? 'Confirm my order' : 'Confirmer ma commande'}`,
+                                                            "title": `${lng === 'en' ? 'Confirm' : 'Confirmer'}`,
                                                             "payload": "DEVELOPER_DEFINED_PAYLOAD"
                                                         }
                                                     ]

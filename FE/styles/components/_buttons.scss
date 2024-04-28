@@ -253,3 +253,17 @@
 .burger-btn {
   @apply top-[-45px] md:top-[-25px] left-0;
 }
+.delete-period {
+  background-image: url(../../public/images/delete-period.svg);
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  margin-left: 20px;
+  display: inline-block;
+}
+.modal-close-period {
+  position: absolute;
+  right: -9px;
+  top: -4px;
+}

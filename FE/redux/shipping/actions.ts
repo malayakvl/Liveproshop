@@ -2,7 +2,12 @@ import axios from 'axios';
 import { createAction } from 'redux-actions';
 import { authHeader } from '../../lib/functions';
 import getConfig from 'next/config';
-import { setSuccessToastAction, setErrorToastAction, showLoaderAction } from '../layouts/actions';
+import {
+    setSuccessToastAction,
+    setErrorToastAction,
+    showLoaderAction,
+    hideshowPeriodPopupAction, setModalConfirmationPeriodMetaAction
+} from '../layouts/actions';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -175,5 +180,64 @@ export const setThresholdAction: any = createAction(
                 ...authHeader(state.user.user.email)
             }
         });
+    }
+);
+export const setShippingPeriodAction: any = createAction(
+    'SHIPPING/SET_SHIPPING_PERIOD',
+    async (values: any) => (dispatch: Type.Dispatch, getState: () => State.Root) => {
+        const state = getState();
+
+        axios.post(`${url}/free-period`, values, {
+            headers: {
+                ...authHeader(state.user.user.email)
+            }
+        });
+    }
+);
+export const fetchShippingPeriodAction: any = createAction(
+    'SHIPPING/FETCH_SHIPPING_PERIOD',
+    () =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ list: Pick<State.Shippings, 'list'> }> => {
+            const state = getState();
+
+            dispatch(showLoaderAction(true));
+            const response = await axios.get(`${url}/shipping/free-period`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+
+            const shippingsState = state.shippings;
+
+            const shippings: State.Shippings = response.data.shippings;
+            dispatch(showLoaderAction(false));
+            return { ...shippingsState, list: shippings };
+        }
+);
+export const clearShippingPeriodAction: any = createAction(
+    'SHIPPING/CLEAR_SHIPPING_PERIOD',
+    async () => (dispatch: Type.Dispatch, getState: () => State.Root) => {
+        const state = getState();
+
+        axios
+            .post(
+                `${url}/clear-free-period`,
+                {},
+                {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                }
+            )
+            .then(() => {
+                dispatch(hideshowPeriodPopupAction(true));
+                dispatch(setModalConfirmationPeriodMetaAction(null));
+
+                // dispatch(fetchShippingAction(id)).then(() => dispatch(fetchShippingsAction()));
+                // dispatch(setSuccessToastAction('Counties of the shipping has been saved'));
+            });
     }
 );

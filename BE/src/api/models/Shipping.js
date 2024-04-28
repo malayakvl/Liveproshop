@@ -384,6 +384,88 @@ class Shipping {
         }
     }
 
+
+    async setShippingPeriod(userId, dateFrom, dateTo) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.seller_settings SET free_shipping_from='${dateFrom}', free_shipping_to='${dateTo}' WHERE user_id=${userId}`);
+
+            return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async clearShippingPeriod(userId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.seller_settings SET free_shipping_from=null, free_shipping_to=null WHERE user_id=${userId}`);
+
+            return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async getShippingPeriod(userId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.seller_settings SET free_shipping_from='${dateFrom}', free_shipping_to='${dateTo}' WHERE user_id=${userId}`);
+
+            return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async fetchShippingPeriod(userId) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`SELECT free_shipping_from, free_shipping_to FROM data.seller_settings WHERE user_id=${userId}`);
+
+            return res.rows[0];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
     async fetchThreshold(userId) {
         const client = await pool.connect();
         try {

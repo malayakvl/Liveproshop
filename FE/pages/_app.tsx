@@ -12,6 +12,7 @@ import SidebarLayout from '../components/layout/SidebarLayout';
 import { Toasts, ConfirmationModal } from '../components/_common';
 import { CalendlyModal } from '../components/_common';
 import React from 'react';
+import ConfirmationPeriodModal from '../components/_common/modal/ConfirmationPeriodModal';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -86,6 +87,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                         </Layout>
                     </MainLayout>
                     <ConfirmationModal />
+                    <ConfirmationPeriodModal />
                     <CalendlyModal />
                 </NextIntlProvider>
             </Provider>
