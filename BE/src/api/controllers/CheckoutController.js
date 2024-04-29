@@ -49,7 +49,8 @@ class CheckoutController {
             var d = new Date(orderData.order.created_at);
             if (sellerSettingsData[0].type === 'd') {
                 // To add Days
-                orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'days').tz('UTC').format();
+                // orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'days').tz('UTC').format();
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add('3 hours').add(sellerSettingsData[0].order_timer, 'days').tz('UTC').format();
                 // d.setDate(d.getDate() + sellerSettingsData[0].order_timer);
                 // orderData.order.countdownDate = addDaysToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             } else if (sellerSettingsData[0].type === 'h') {
@@ -57,12 +58,12 @@ class CheckoutController {
                 // console.log('Time sync', moment(orderData.order.sync_at).format('DD/MM/YYYY HH:mm'));
                 // console.log('Time expire', moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').format('DD/MM/YYYY HH:mm'));
                 // console.log('Time expire necesssery format', moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format());
-                orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format();
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add(`${process.env.SERVER_TIME_DIFF} hours`).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format();
                 // orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
                 // d.setDate(d.getHours() + sellerSettingsData[0].order_timer);
                 // orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             } else if (sellerSettingsData[0].type === 'm') {
-                orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'minutes').tz('UTC').format();
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add('3 hours').add(sellerSettingsData[0].order_timer, 'minutes').tz('UTC').format();
 
                 // d.setDate(d.getMinutes() + sellerSettingsData[0].order_timer);
                 // orderData.order.countdownDate = addMinutesToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);

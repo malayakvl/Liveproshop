@@ -1272,7 +1272,7 @@ class Order {
             const order = await client.query(`SELECT * FROM data.orders WHERE id='${orderId}' AND user_id='${userId}'`);
             if (order.rows.length > 0) {
                 const orderItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
-                console.log(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
+    console.log(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
                 if (orderItems.rows.length > 0) {
                     orderItems.rows.forEach(async _item => {
                         // put qty back to product
@@ -1281,7 +1281,8 @@ class Order {
                         await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
                     });
                 }
-                await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_date=now(), status='expired' WHERE id=${order.rows[0].id}`)
+console.log(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_date=now(), status='expired' WHERE id=${order.rows[0].id}`);
+                await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_at=now(), status='expired' WHERE id=${order.rows[0].id}`)
             }
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
