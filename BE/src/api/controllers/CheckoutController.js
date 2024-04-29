@@ -21,7 +21,6 @@ class CheckoutController {
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
         const sellerSettingsData = await userModel.fetchUserSettings(orderData.order.seller_id);
 
-
         // getting waiting products from current order
         // (e.g. seller have 1 buyer want 3, and we create order for 1 qnt and need to show how not available)
         // orderData.order.order_items.forEach(_item => {

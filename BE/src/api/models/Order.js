@@ -401,7 +401,7 @@ class Order {
                         data.live_sessions.store_id, data.live_sessions_messages.recipient_id, 
                         data.order_items.id AS wait_item_id, access_token, data.live_sessions_messages.message,
                         data.seller_settings.order_timer, data.seller_settings.free_shipping_timer, threshold,
-                        data.user_stores.name as store_name
+                        data.user_stores.name as store_name, data.order_items.product_id
                     FROM data.order_items 
                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.order_items.live_sessions_id
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
