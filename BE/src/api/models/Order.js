@@ -1383,11 +1383,9 @@ console.log(`UPDATE data.orders
                 return {success: true, orderId: orderId, orderNumber: orderNumber };
 
             } else {
-                console.log('EBAT POTEMKI')
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
                 const prefixWait = Math.floor(Date.now()/1000);
-                console.log('prefixWait', prefixWait);
-                // exit;
+console.log('prefixWait', prefixWait);
 
                 copyOrderData = res.rows[0];
                 // copyOrderData.order_number = `${_tmpOrderNumber[0]}-WO-${_tmpOrderNumber[1]}`;
@@ -1399,8 +1397,8 @@ console.log(`UPDATE data.orders
                 // exit;
                 const existNonPayedOrder = await client.query(
                     `SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
-                AND status='new' AND id != '${res.rows[0].order_id}'
-                AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+                                        AND status='new' AND id != '${res.rows[0].order_id}'
+                                        AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 if (existNonPayedOrder.rows[0]?.id) {
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     // copyOrderData.user_id = userId;
@@ -1412,9 +1410,10 @@ console.log(`UPDATE data.orders
                     await client.query(updateExistItemsSQL);
                     // update amounts for order splited order
                     const updateAmountSQL = `UPDATE data.orders 
-                    SET order_amount = order_amount + ${res.rows[0].order_amount},
-                    total_amount = total_amount +  ${res.rows[0].total_amount}
-                    WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                        SET order_amount = order_amount + ${res.rows[0].order_amount},
+                        total_amount = total_amount +  ${res.rows[0].total_amount},
+                        sync_at=now()
+                        WHERE id='${existNonPayedOrder.rows[0].id}'`;
                     await client.query(updateAmountSQL);
 
                     // delete unused order
@@ -1422,10 +1421,10 @@ console.log(`UPDATE data.orders
 
                     // combined same rows in order_items
                     const combinedSQL = await client.query(`
-                    SELECT product_configuration_id, SUM(quantity) AS resultsQty
-                    FROM data.order_items
-                    WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                    GROUP BY product_configuration_id`);
+                        SELECT product_configuration_id, SUM(quantity) AS resultsQty
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id`);
                     const realOrderItems = await client.query(`SELECT id 
                     FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
                     // need to combine two rows into one
@@ -1458,8 +1457,8 @@ console.log(`UPDATE data.orders
                     }
                 } else {
                     orderId = res.rows[0].order_id;
-                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
-                    total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', sync_at=now(),
+                        total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                     await client.query(orderSQL);
                 }
                 console.log('ORDERID', orderId);
