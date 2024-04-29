@@ -2,6 +2,10 @@ import checkoutModel from '../models/Checkout.js';
 import userModel from '../models/User.js';
 import orderModel from '../models/Order.js';
 import { addHoursToDate, addMinutesToDate, addDaysToDate } from '../lib/utils.js';
+import moment from 'moment-timezone';
+// import moment from "moment";
+// import * from "moment-timezone"
+
 class CheckoutController {
     /**
      *
@@ -14,7 +18,6 @@ class CheckoutController {
     async fetch(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
         const { orderNumber } = req.query;
-
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
         const sellerSettingsData = await userModel.fetchUserSettings(orderData.order.seller_id);
 
@@ -39,29 +42,32 @@ class CheckoutController {
         let returnLink = '';
         let deliveryLink = '';
         let countDownDate;
-        // let convertedCreatedAt = orderData.order.created_at;
-        let convertedCreatedAt = addHoursToDate(orderData.order.created_at, -3);
-        console.log("Created at converted", addHoursToDate(orderData.order.created_at, -3));
+        let convertedCreatedAt = orderData.order.sync_at;
+
+        // for server add time duration
+        // let convertedCreatedAt = addHoursToDate(orderData.order.sync_at, -3);
         if (sellerSettingsData[0]) {
             var d = new Date(orderData.order.created_at);
             if (sellerSettingsData[0].type === 'd') {
                 // To add Days
-                d.setDate(d.getDate() + sellerSettingsData[0].order_timer);
-                orderData.order.countdownDate = addDaysToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'days').tz('UTC').format();
+                // d.setDate(d.getDate() + sellerSettingsData[0].order_timer);
+                // orderData.order.countdownDate = addDaysToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             } else if (sellerSettingsData[0].type === 'h') {
                 // To add Hours
-                d.setDate(d.getHours() + sellerSettingsData[0].order_timer);
-                orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+                // console.log('Time sync', moment(orderData.order.sync_at).format('DD/MM/YYYY HH:mm'));
+                // console.log('Time expire', moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').format('DD/MM/YYYY HH:mm'));
+                // console.log('Time expire necesssery format', moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format());
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format();
+                // orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+                // d.setDate(d.getHours() + sellerSettingsData[0].order_timer);
+                // orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             } else if (sellerSettingsData[0].type === 'm') {
-                // To add Hours
-                d.setDate(d.getMinutes() + sellerSettingsData[0].order_timer);
-                orderData.order.countdownDate = addMinutesToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
-            }
-            // orderData.order.countdownDate = d;
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'minutes').tz('UTC').format();
 
-            console.log("Created at", orderData.order.created_at);
-            console.log("Timer at", sellerSettingsData[0].order_timer);
-            console.log("Expire at", d.getTime());
+                // d.setDate(d.getMinutes() + sellerSettingsData[0].order_timer);
+                // orderData.order.countdownDate = addMinutesToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+            }
         }
         if (sellerSettingsData[0].privacy_doc || sellerSettingsData[0].privacy_link) {
             if (sellerSettingsData[0].privacy_doc) {

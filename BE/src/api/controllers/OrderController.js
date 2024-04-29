@@ -188,6 +188,15 @@ class OrderController {
         }
     }
 
+    async expireOrder (req, res) {
+        if (req.user) {
+            console.log('ORDER EXPIRE', req.query.orderId);
+            const data = await orderModel.expireOrder(req.query.orderId, req.user.id);
+            return res.status(200).json({ success: true });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
+    }
+
     async findOrderByCommentId (req, res) {
         if (req.user) {
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);

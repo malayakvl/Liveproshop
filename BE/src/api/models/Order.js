@@ -1266,6 +1266,37 @@ class Order {
         }
     }
 
+    async expireOrder(orderId, userId) {
+        const client = await pool.connect();
+        try {
+            const order = await client.query(`SELECT * FROM data.orders WHERE id='${orderId}' AND user_id='${userId}'`);
+            if (order.rows.length > 0) {
+                const orderItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
+                console.log(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
+                if (orderItems.rows.length > 0) {
+                    orderItems.rows.forEach(async _item => {
+                        // put qty back to product
+                        await client.query(`UPDATE data.product_configurations SET quantity=quantity+${_item.quantity} WHERE id=${_item.product_configuration_id}`);
+                        // remove item
+                        await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+                    });
+                }
+                await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_date=now(), status='expired' WHERE id=${order.rows[0].id}`)
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         console.log('findByCommentId', commentId);
@@ -1314,10 +1345,14 @@ console.log(`UPDATE data.orders
                                 sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`);
 
+                            // await client.query(`UPDATE data.orders
+                            //     SET user_id=${userId},
+                            //     total_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                            //     order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                            //     sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                            //     WHERE id=${emptyWaitRes.rows[0].id}`)
                             await client.query(`UPDATE data.orders 
                                 SET user_id=${userId}, 
-                                total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
-                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
                                 sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`)
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
