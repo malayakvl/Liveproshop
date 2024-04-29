@@ -687,7 +687,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -1289,6 +1289,8 @@ class Order {
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
+
+
                 if (!resWait.rows[0].order_id) {
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
 console.log("EXIST NON PAYED", existNonPayed.rows.length)
@@ -1301,13 +1303,22 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
                             orderId = existNonPayedEmpty.rows[0].id;
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
+console.log('here we are check sync');
                             const emptyWaitRes = await client.query(`SELECT id, order_number FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].order_number;
+console.log(`UPDATE data.orders 
+                                SET user_id=${userId}, 
+                                total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
+                                WHERE id=${emptyWaitRes.rows[0].id}`);
+
                             await client.query(`UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
-                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price} 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`)
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
                         }

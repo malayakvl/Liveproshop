@@ -39,8 +39,7 @@ const ConfirmationPeriodModal: React.FC = () => {
     } = meta || ({} as any);
 
     useEffect(() => {
-        console.log('Hideeeeee', hideShowPeriodPopup);
-        if (inputMeta || hideShowPeriodPopup) {
+        if (inputMeta) {
             toggleModalPeriodConfirmation();
             dispatch(hideshowPeriodPopupAction(false));
             return setMeta(inputMeta);
