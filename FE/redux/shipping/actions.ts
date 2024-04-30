@@ -238,6 +238,7 @@ export const clearShippingPeriodAction: any = createAction(
             )
             .then(() => {
                 dispatch(hideshowPeriodPopupAction(true));
+                window.location.reload();
                 // dispatch(setModalConfirmationPeriodMetaAction(null));
                 // dispatch(fetchShippingAction(id)).then(() => dispatch(fetchShippingsAction()));
                 // dispatch(setSuccessToastAction('Counties of the shipping has been saved'));

@@ -2,8 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
     deletePeriodPopupSelector,
-    deletePeriodSelector,
-    modalConfirmationPeriodSetupMetaSelector
+    modalConfirmationPeriodSetupMetaSelector,
+    setupPeriodSelector
 } from '../../../redux/layouts/selectors';
 import {
     setModalConfirmationSetupPeriodMetaAction,
@@ -20,16 +20,16 @@ const ConfirmationPeriodSetupModal: React.FC = () => {
     const inputMeta = useSelector(modalConfirmationPeriodSetupMetaSelector);
     const hideShowPeriodPopup = useSelector(deletePeriodPopupSelector);
     const [meta, setMeta] = useState<Layouts.ModalConfirmPeriodMeta | null>(null);
-    const periodDelete = useSelector(deletePeriodSelector);
+    const periodSetup = useSelector(setupPeriodSelector);
     const t = useTranslations();
 
     const {
         title = `${
             t('Do you want to set the period from ') +
             '' +
-            moment(periodDelete?.free_shipping_from).format('DD/MM/YYYY') +
+            moment(periodSetup?.free_shipping_from).format('DD/MM/YYYY') +
             ' - ' +
-            moment(periodDelete?.free_shipping_to).format('DD/MM/YYYY') +
+            moment(periodSetup?.free_shipping_to).format('DD/MM/YYYY') +
             ' ' +
             t(' for free shipping?')
         }`,

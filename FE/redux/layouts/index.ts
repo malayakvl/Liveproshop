@@ -25,7 +25,9 @@ import {
     setLngAction,
     toggleProfileMenuAction,
     showEmailNotificationAction,
-    hideshowPeriodPopupAction
+    hideshowPeriodPopupAction,
+    setupPeriodAction,
+    setPeriodDeleteValuesActions
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 // import { showPopupAction } from '../dashboard';
@@ -154,6 +156,7 @@ const initialState: State.Layouts = {
     modalConfirmationSetupPeriodMeta: null,
     deletePeriodHidePopup: false,
     deletePeriod: null,
+    setupPeriod: null,
     modalCalendlyMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
@@ -363,6 +366,18 @@ const ACTION_HANDLERS: any = {
             ...state,
             showEmailNotification: action.payload
         })
+    },
+    [setupPeriodAction]: {
+        next: (state: State.Layouts, action: Action<any>): State.Layouts => ({
+            ...state,
+            setupPeriod: action.payload
+        })
+    },
+    [setPeriodDeleteValuesActions]: {
+        next: (state: State.Layouts, action: Action<any>): State.Layouts => ({
+            ...state,
+            deletePeriod: action.payload
+        })
     }
 };
 
@@ -389,7 +404,9 @@ export {
     setLngAction,
     toggleProfileMenuAction,
     showEmailNotificationAction,
-    hideshowPeriodPopupAction
+    hideshowPeriodPopupAction,
+    setupPeriodAction,
+    setPeriodDeleteValuesActions
 };
 
 // ------------------------------------

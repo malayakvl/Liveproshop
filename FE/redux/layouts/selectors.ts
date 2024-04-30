@@ -74,6 +74,10 @@ export const deletePeriodSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): any => layouts.deletePeriod
 );
+export const setupPeriodSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): any => layouts.setupPeriod
+);
 export const deletePeriodPopupSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): any => layouts.deletePeriodHidePopup

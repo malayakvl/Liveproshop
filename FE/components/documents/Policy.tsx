@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
-import {addUploadedPolicyFile, removeUploadedPolicyFile, removeUploadedTermsAndCondFile} from '../../redux/settings';
+import {
+    addUploadedPolicyFile,
+    removeUploadedPolicyFile,
+    removeUploadedTermsAndCondFile
+} from '../../redux/settings';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemSelector, uploadedPolicyFilesSelector } from '../../redux/settings/selectors';
@@ -28,7 +32,6 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
         return settingsValues.terms_doc.replace(regExpDelBrackets, '').replace(fullReplace, '');
     };
 
-
     useEffect(() => {
         acceptedFiles.forEach((file: File) => {
             dispatch(addUploadedPolicyFile(file));
@@ -44,7 +47,6 @@ const PolicyDocument: React.FC<any> = ({ title }) => {
             dispatch(submitFormUploadAction(formData, 'policy'));
         }
     }, [policyDataFiles]);
-
 
     return (
         <>

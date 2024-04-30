@@ -5,7 +5,9 @@ import { useTranslations } from 'next-intl';
 import {
     setModalConfirmationDeletePeriodMetaAction,
     setModalConfirmationSetupPeriodMetaAction,
-    setSuccessToastAction
+    setSuccessToastAction,
+    setupPeriodAction,
+    setPeriodDeleteValuesActions
 } from '../../redux/layouts';
 import { clearShippingPeriodAction } from '../../redux/shipping/actions';
 import { ErrorMessage, Field, Formik } from 'formik';
@@ -49,6 +51,23 @@ export default function ShippingThreshold() {
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
 
+    const SP = (dateRange: any) => {
+        const st = moment(dateRange[0]).format('YYYY-MM-DD');
+        const ed = moment(dateRange[1]).format('YYYY-MM-DD');
+        const pd = {
+            startDate: st,
+            endDate: ed
+        };
+        dispatch(setupPeriodAction(pd));
+        dispatch(
+            setModalConfirmationSetupPeriodMetaAction({
+                onConfirm: async () => {
+                    dispatch(setShippingPeriodAction(pd));
+                }
+            })
+        );
+    };
+
     useEffect(() => {
         if (!user.email) return;
 
@@ -60,8 +79,8 @@ export default function ShippingThreshold() {
             })
             .then((result) => {
                 setThreshold(result.data.threshold);
+                setPeriodDeleteValuesActions(result.data.period);
                 setPeriod(result.data.period);
-                console.log('FREE PERIOD', result.data.period);
             });
     }, [user.email]);
 
@@ -169,27 +188,33 @@ export default function ShippingThreshold() {
                                                     startDate={startDate}
                                                     endDate={endDate}
                                                     onCalendarClose={() => {
-                                                        console.log('onclose', dateRange);
-                                                        dispatch(
-                                                            setModalConfirmationSetupPeriodMetaAction(
-                                                                {
-                                                                    onConfirm: async () => {
-                                                                        console.log('setup period');
-                                                                        dispatch(
-                                                                            setShippingPeriodAction(
-                                                                                dateRange
-                                                                            )
-                                                                        );
-                                                                        //     clearShippingPeriodAction()
-                                                                        // );
-                                                                        // setPeriod({
-                                                                        //     free_shipping_from: null,
-                                                                        //     free_shipping_to: null
-                                                                        // });
-                                                                    }
-                                                                }
-                                                            )
-                                                        );
+                                                        const r = dateRange;
+                                                        SP(r);
+                                                        // const p = {
+                                                        //     free_shipping_from: '',
+                                                        //     free_shipping_to: ''
+                                                        // };
+                                                        // dispatch(setupPeriodAction({
+                                                        //     free_shipping_from: moment(
+                                                        //         dateRange[0]
+                                                        //     ).format('YYYY-MM-DD'),
+                                                        //     free_shipping_to: moment(
+                                                        //         dateRange[1]
+                                                        //     ).format('YYYY-MM-DD')
+                                                        // }));
+                                                        // dispatch(
+                                                        //     setModalConfirmationSetupPeriodMetaAction(
+                                                        //         {
+                                                        //             onConfirm: async () => {
+                                                        //                 dispatch(
+                                                        //                     setShippingPeriodAction(
+                                                        //                         {startDate:moment(dateRange[0]).format('YYYY-MM-DD'), endDate:moment(dateRange[1]).format('YYYY-MM-DD')}
+                                                        //                     )
+                                                        //                 );
+                                                        //             }
+                                                        //         }
+                                                        //     )
+                                                        // );
                                                     }}
                                                     onSelect={() => {
                                                         console.log('onselect');
@@ -252,7 +277,7 @@ export default function ShippingThreshold() {
                                             </div>
                                         </div>
                                         {period.free_shipping_from && period.free_shipping_to && (
-                                            <div className="block text-[14px] font-bold">
+                                            <div className="block text-[14px] font-bold mt-[20px]">
                                                 <ul className="inline-block">
                                                     <li className="float-left">
                                                         <span className="inline-block mt-[2px] text-gray-350">
@@ -271,26 +296,17 @@ export default function ShippingThreshold() {
                                                             href="javascript:void(0)"
                                                             className="delete-period"
                                                             onClick={() => {
-                                                                // dispatch(
-                                                                //     setPeriodForDeleteAction(period)
-                                                                // );
-                                                                // dispatch(
-                                                                //     setModalConfirmationPeriodMetaAction(
-                                                                //         {
-                                                                //             onConfirm: async () => {
-                                                                //                 dispatch(
-                                                                //                     clearShippingPeriodAction()
-                                                                //                 );
-                                                                //                 setPeriod({
-                                                                //                     free_shipping_from:
-                                                                //                         null,
-                                                                //                     free_shipping_to:
-                                                                //                         null
-                                                                //                 });
-                                                                //             }
-                                                                //         }
-                                                                //     )
-                                                                // );
+                                                                dispatch(
+                                                                    setModalConfirmationDeletePeriodMetaAction(
+                                                                        {
+                                                                            onConfirm: async () => {
+                                                                                dispatch(
+                                                                                    clearShippingPeriodAction()
+                                                                                );
+                                                                            }
+                                                                        }
+                                                                    )
+                                                                );
                                                             }}
                                                         />
                                                     </li>
