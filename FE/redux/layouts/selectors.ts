@@ -60,9 +60,15 @@ export const modalConfirmationMetaSelector = createSelector(
     (layouts: State.Layouts): Layouts.ModalConfirmationMeta | null => layouts.modalConfirmationMeta
 );
 
-export const modalConfirmationPeriodMetaSelector = createSelector(
+export const modalConfirmationPeriodDeleteMetaSelector = createSelector(
     rootSelector,
-    (layouts: State.Layouts): Layouts.ModalPeriodMeta | null => layouts.modalConfirmationPeriodMeta
+    (layouts: State.Layouts): Layouts.ModalDeletePeriodMeta | null =>
+        layouts.modalConfirmationDeletePeriodMeta
+);
+export const modalConfirmationPeriodSetupMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalConfirmPeriodMeta | null =>
+        layouts.modalConfirmationSetupPeriodMeta
 );
 export const deletePeriodSelector = createSelector(
     rootSelector,

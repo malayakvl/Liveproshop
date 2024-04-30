@@ -6,8 +6,7 @@ import {
     setSuccessToastAction,
     setErrorToastAction,
     showLoaderAction,
-    hideshowPeriodPopupAction,
-    setModalConfirmationPeriodMetaAction
+    hideshowPeriodPopupAction
 } from '../layouts/actions';
 
 const { publicRuntimeConfig } = getConfig();
@@ -239,7 +238,7 @@ export const clearShippingPeriodAction: any = createAction(
             )
             .then(() => {
                 dispatch(hideshowPeriodPopupAction(true));
-                dispatch(setModalConfirmationPeriodMetaAction(null));
+                // dispatch(setModalConfirmationPeriodMetaAction(null));
                 // dispatch(fetchShippingAction(id)).then(() => dispatch(fetchShippingsAction()));
                 // dispatch(setSuccessToastAction('Counties of the shipping has been saved'));
             });

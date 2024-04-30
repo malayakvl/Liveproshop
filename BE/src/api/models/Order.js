@@ -1271,17 +1271,22 @@ class Order {
         try {
             const order = await client.query(`SELECT * FROM data.orders WHERE id='${orderId}' AND user_id='${userId}'`);
             if (order.rows.length > 0) {
+                const sessionId = order.rows[0].live_sessions_id;
                 const orderItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
-    console.log(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
                 if (orderItems.rows.length > 0) {
                     orderItems.rows.forEach(async _item => {
                         // put qty back to product
                         await client.query(`UPDATE data.product_configurations SET quantity=quantity+${_item.quantity} WHERE id=${_item.product_configuration_id}`);
                         // remove item
                         await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+
+                        // start wait job
+                        shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                            console.log('Exit code:', code);
+                            console.log('Program output:', output);
+                        });
                     });
                 }
-console.log(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_date=now(), status='expired' WHERE id=${order.rows[0].id}`);
                 await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_at=now(), status='expired' WHERE id=${order.rows[0].id}`)
             }
         } catch (e) {

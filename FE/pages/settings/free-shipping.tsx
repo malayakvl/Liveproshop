@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setShippingPeriodAction, setThresholdAction } from '../../redux/shipping/actions';
 import { useTranslations } from 'next-intl';
 import {
-    setPeriodForDeleteAction,
-    hideshowPeriodPopupAction,
-    setModalConfirmationPeriodMetaAction,
+    setModalConfirmationDeletePeriodMetaAction,
+    setModalConfirmationSetupPeriodMetaAction,
     setSuccessToastAction
 } from '../../redux/layouts';
 import { clearShippingPeriodAction } from '../../redux/shipping/actions';
@@ -23,6 +22,9 @@ import { showDateSelectorAction } from '../../redux/dashboard';
 import { showDatePopupSelector } from '../../redux/dashboard/selectors';
 import { DateRangePicker } from 'react-date-range';
 import moment from 'moment';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
@@ -44,6 +46,8 @@ export default function ShippingThreshold() {
             key: 'selection'
         }
     ]);
+    const [dateRange, setDateRange] = useState([null, null]);
+    const [startDate, endDate] = dateRange;
 
     useEffect(() => {
         if (!user.email) return;
@@ -95,7 +99,7 @@ export default function ShippingThreshold() {
                             <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                 {t('Free shipping')}
                             </div>
-                            <div className="text-sm text-gray-500 mt-12">
+                            <div className="text-sm text-gray-500 mt-6">
                                 {t('settings_theshold')}
                             </div>
                             <Formik
@@ -116,9 +120,9 @@ export default function ShippingThreshold() {
                                     <Form onSubmit={props.handleSubmit}>
                                         <Field
                                             name="threshold"
-                                            className="w-[150px] float-left p-2.5 shadow-inner rounded-lg border-2 text-gray-350 font-bold mt-6"
+                                            className="form-control max-w-[150px] float-left mt-4"
                                         />
-                                        <span className="float-left mt-[35px] ml-[15px] font-bold">
+                                        <span className="float-left mt-[23px] ml-[15px] font-bold rainbow-gradient-text">
                                             &euro;
                                         </span>
                                         <div className="error-el">
@@ -135,7 +139,7 @@ export default function ShippingThreshold() {
                             <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                 {t('Free Shipping Window')}
                             </div>
-                            <div className="text-sm text-gray-500 mt-12">{t('setting_window')}</div>
+                            <div className="text-sm text-gray-500 mt-6">{t('setting_window')}</div>
 
                             <Formik
                                 onSubmit={(values) => {
@@ -153,7 +157,54 @@ export default function ShippingThreshold() {
                                 })}
                                 render={(props) => (
                                     <Form onSubmit={props.handleSubmit}>
-                                        <div className="p-3 flex">
+                                        <div className="mt-4">
+                                            <Image
+                                                src="/images/calendar.svg"
+                                                width={20}
+                                                height={18}
+                                            />
+                                            <div className="ml-2 inline-block">
+                                                <DatePicker
+                                                    selectsRange={true}
+                                                    startDate={startDate}
+                                                    endDate={endDate}
+                                                    onCalendarClose={() => {
+                                                        console.log('onclose', dateRange);
+                                                        dispatch(
+                                                            setModalConfirmationSetupPeriodMetaAction(
+                                                                {
+                                                                    onConfirm: async () => {
+                                                                        console.log('setup period');
+                                                                        dispatch(
+                                                                            setShippingPeriodAction(
+                                                                                dateRange
+                                                                            )
+                                                                        );
+                                                                        //     clearShippingPeriodAction()
+                                                                        // );
+                                                                        // setPeriod({
+                                                                        //     free_shipping_from: null,
+                                                                        //     free_shipping_to: null
+                                                                        // });
+                                                                    }
+                                                                }
+                                                            )
+                                                        );
+                                                    }}
+                                                    onSelect={() => {
+                                                        console.log('onselect');
+                                                    }}
+                                                    onChange={(update) => {
+                                                        console.log(update);
+                                                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                        // @ts-ignore
+                                                        setDateRange(update);
+                                                    }}
+                                                    isClearable={true}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="p-3  hidden">
                                             <Image
                                                 src="/images/calendar.svg"
                                                 width={20}
@@ -223,23 +274,23 @@ export default function ShippingThreshold() {
                                                                 // dispatch(
                                                                 //     setPeriodForDeleteAction(period)
                                                                 // );
-                                                                dispatch(
-                                                                    setModalConfirmationPeriodMetaAction(
-                                                                        {
-                                                                            onConfirm: async () => {
-                                                                                dispatch(
-                                                                                    clearShippingPeriodAction()
-                                                                                );
-                                                                                setPeriod({
-                                                                                    free_shipping_from:
-                                                                                        null,
-                                                                                    free_shipping_to:
-                                                                                        null
-                                                                                });
-                                                                            }
-                                                                        }
-                                                                    )
-                                                                );
+                                                                // dispatch(
+                                                                //     setModalConfirmationPeriodMetaAction(
+                                                                //         {
+                                                                //             onConfirm: async () => {
+                                                                //                 dispatch(
+                                                                //                     clearShippingPeriodAction()
+                                                                //                 );
+                                                                //                 setPeriod({
+                                                                //                     free_shipping_from:
+                                                                //                         null,
+                                                                //                     free_shipping_to:
+                                                                //                         null
+                                                                //                 });
+                                                                //             }
+                                                                //         }
+                                                                //     )
+                                                                // );
                                                             }}
                                                         />
                                                     </li>

@@ -43,8 +43,11 @@ export const hideshowPeriodPopupAction: any = createAction('layouts/DELETE_SHOW_
 export const setModalConfirmationMetaAction: any = createAction(
     'layouts/SET_MODAL_DELETE_CONFIRMATION'
 );
-export const setModalConfirmationPeriodMetaAction: any = createAction(
+export const setModalConfirmationDeletePeriodMetaAction: any = createAction(
     'layouts/SET_MODAL_PERIOD_DELETE_CONFIRMATION'
+);
+export const setModalConfirmationSetupPeriodMetaAction: any = createAction(
+    'layouts/SET_MODAL_PERIOD_SETUP_CONFIRMATION'
 );
 export const setPeriodForDeleteAction: any = createAction('layouts/SET_MODAL_PERIOD_VALUE');
 export const setModalCalendlyMetaAction: any = createAction('layouts/SET_MODAL_CALENDLY');

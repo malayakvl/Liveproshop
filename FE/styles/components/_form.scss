@@ -463,3 +463,19 @@ input:focus, input:active {
 .rigt-upload {
   @apply ml-0 md:ml-4
 }
+
+.react-datepicker__input-container input {
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+  border-color: #CFD8DC !important;
+  color: #4F5B84 !important;
+  //@apply bg-white w-full rounded-lg p-2.5 text-xs text-gray-350
+  //font-medium border-gray-180 border placeholder-gray-180;
+}
+.react-datepicker__day {
+  font-family: Montserrat, serif !important;
+  font-size: 12px !important;
+}
+.react-datepicker-ignore-onclickoutside input, .react-datepicker__input-container input {
+  font-size: 13px !important;
+}

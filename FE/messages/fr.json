@@ -660,6 +660,10 @@
   "text_plan_schedule2": "pour sélectionner le plan qui vous convient",
   "Select Country": "Choisissez le pays",
   "text_settings_params": "Veuillez remplir les informations suivantes :",
-  "Do you want to delete period": "Voulez-vous désactiver la période du",
-  "for free shipping?": "pour la fenêtre de livraison gratuite?"
+  "Do you want to delete period": "Voulez-vous désactiver la période du ",
+  " for free shipping?": " pour la fenêtre de livraison gratuite?",
+  "for free shipping?": " pour la fenêtre de livraison gratuite?",
+  "Do you want to set the period from ": "Voulez-vous désactiver la période du ",
+  "Set the period": "Définir la période"
+
 }
