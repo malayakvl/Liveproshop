@@ -687,7 +687,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            // console.log(ordersQuery);
+            console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -1566,6 +1566,61 @@ console.log('prefixWait', prefixWait);
                 const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             }
             return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async removeUnpayedSessionsOrders () {
+        const client = await pool.connect();
+        try {
+            const expireDateNotSync = moment().add(-process.env.ORDER_REMOVE_DAYS, 'days').add(3, 'hours').format('YYYY-MM-DD HH:mm:ss');
+            const ordersNotSyncQuery = `SELECT * FROM data.orders WHERE status='new'
+                AND created_at <= '${expireDateNotSync}' AND sync_at IS NULL`;
+            const ordersSyncQuery = `SELECT * FROM data.orders WHERE status='new'
+                AND sync_at <= '${expireDateNotSync}'`;
+            const notSyncRes = await client.query(ordersNotSyncQuery);
+            const syncRes = await client.query(ordersSyncQuery);
+            if (notSyncRes.rows.length > 0) {
+                // store products back and set status expired
+                notSyncRes.rows.forEach(async _order => {
+                    const notSyncItems = await client.query(`SELECT * FROM data.order_items WHERE order_id=${_order.id}`);
+                    if (notSyncItems.rows.length > 0) {
+                        notSyncItems.rows.forEach(async _item => {
+                            // console.log(_item.product_configuration_id, _item.quantity);
+                            await client.query(`UPDATE data.product_configurations 
+                                SET quantity = quantity + ${parseInt(_item.quantity)} WHERE id='${_item.product_configuration_id}'`);
+                            await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+                        });
+                    }
+                    await client.query(`UPDATE data.orders SET status='expired' WHERE id=${_order.id}`)
+                })
+            }
+            if (syncRes.rows.length > 0) {
+                // store products back and set status expired
+                syncRes.rows.forEach(async _order => {
+                    const notSyncItems = await client.query(`SELECT * FROM data.order_items WHERE order_id=${_order.id}`);
+                    if (notSyncItems.rows.length > 0) {
+                        notSyncItems.rows.forEach(async _item => {
+                            // console.log(_item.product_configuration_id, _item.quantity);
+                            await client.query(`UPDATE data.product_configurations 
+                                SET quantity = quantity + ${parseInt(_item.quantity)} WHERE id='${_item.product_configuration_id}'`);
+                            await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+                        });
+                    }
+                    await client.query(`UPDATE data.orders SET status='expired' WHERE id=${_order.id}`)
+                })
+            }
+            return {success: true};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

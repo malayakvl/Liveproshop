@@ -117,6 +117,11 @@ class OrderController {
         return res.status(200).json({success: true, message: 'creating orders'});
     }
 
+    async removeSessionsOrders (req, res) {
+        const data = await orderModel.removeUnpayedSessionsOrders();
+        return res.status(200).json({success: true});
+    }
+
     async removeUnpayedOrder (req, res) {
         const data = await orderModel.removeUnpayedSessionOrder(req.query.sessionId);
         return res.status(200).json({success: true});

@@ -50,20 +50,15 @@ class CheckoutController {
             if (sellerSettingsData[0].type === 'd') {
                 // To add Days
                 // orderData.order.countdownDate = moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'days').tz('UTC').format();
-                orderData.order.countdownDate = moment(orderData.order.sync_at).add('3 hours').add(sellerSettingsData[0].order_timer, 'days').tz('UTC').format();
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add('3', 'hours').add(sellerSettingsData[0].order_timer, 'days').tz('UTC').format();
                 // d.setDate(d.getDate() + sellerSettingsData[0].order_timer);
                 // orderData.order.countdownDate = addDaysToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
             } else if (sellerSettingsData[0].type === 'h') {
                 // To add Hours
-                // console.log('Time sync', moment(orderData.order.sync_at).format('DD/MM/YYYY HH:mm'));
-                // console.log('Time expire', moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').format('DD/MM/YYYY HH:mm'));
-                // console.log('Time expire necesssery format', moment(orderData.order.sync_at).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format());
-                orderData.order.countdownDate = moment(orderData.order.sync_at).add(`${process.env.SERVER_TIME_DIFF} hours`).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format();
-                // orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
-                // d.setDate(d.getHours() + sellerSettingsData[0].order_timer);
-                // orderData.order.countdownDate = addHoursToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
+                // orderData.order.countdownDate = moment(orderData.order.sync_at).add(`${process.env.SERVER_TIME_DIFF} hours`).add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format();
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add(`${process.env.SERVER_TIME_DIFF}`, 'hours').add(sellerSettingsData[0].order_timer, 'hours').tz('UTC').format();
             } else if (sellerSettingsData[0].type === 'm') {
-                orderData.order.countdownDate = moment(orderData.order.sync_at).add('3 hours').add(sellerSettingsData[0].order_timer, 'minutes').tz('UTC').format();
+                orderData.order.countdownDate = moment(orderData.order.sync_at).add('3', 'hours').add(sellerSettingsData[0].order_timer, 'minutes').tz('UTC').format();
 
                 // d.setDate(d.getMinutes() + sellerSettingsData[0].order_timer);
                 // orderData.order.countdownDate = addMinutesToDate(convertedCreatedAt, sellerSettingsData[0].order_timer);
@@ -145,7 +140,7 @@ class CheckoutController {
     async fetchShippingMethodsByCountry(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
         const { orderId, countryId } = req.query;
-        const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderId, countryId);
+        const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderId, countryId, false, req.user.id);
 
         return res.status(200).json({
             shippingMethods: shippingMethodsData.shippingMethods
