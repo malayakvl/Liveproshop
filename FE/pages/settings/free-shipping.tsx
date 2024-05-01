@@ -79,7 +79,7 @@ export default function ShippingThreshold() {
             })
             .then((result) => {
                 setThreshold(result.data.threshold);
-                setPeriodDeleteValuesActions(result.data.period);
+                dispatch(setPeriodDeleteValuesActions(result.data.period));
                 setPeriod(result.data.period);
             });
     }, [user.email]);

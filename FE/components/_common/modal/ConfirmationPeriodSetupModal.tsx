@@ -27,9 +27,9 @@ const ConfirmationPeriodSetupModal: React.FC = () => {
         title = `${
             t('Do you want to set the period from ') +
             '' +
-            moment(periodSetup?.free_shipping_from).format('DD/MM/YYYY') +
+            moment(periodSetup?.startDate).format('DD/MM/YYYY') +
             ' - ' +
-            moment(periodSetup?.free_shipping_to).format('DD/MM/YYYY') +
+            moment(periodSetup?.endDate).format('DD/MM/YYYY') +
             ' ' +
             t(' for free shipping?')
         }`,
