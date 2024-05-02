@@ -13,3 +13,4 @@ export { default as FilterSeller } from './filters/FilterSeller';
 export { default as FilterDate } from './filters/FilterDate';
 export { default as FilterDateRange } from './filters/FilterDateRange';
 export { default as FilterDropdownShoppers } from './filters/FilterDropdownShoppers';
+export { default as Multisafe } from './Multisafe';

@@ -1269,14 +1269,19 @@ class Order {
     async expireOrder(orderId, userId) {
         const client = await pool.connect();
         try {
-            const order = await client.query(`SELECT * FROM data.orders WHERE id='${orderId}' AND user_id='${userId}'`);
+            console.log('EXPIRE ORDER');
+
+            const order = await client.query(`SELECT * FROM data.orders WHERE id='${orderId}' AND user_id='${userId}' AND status !='expired'`);
             if (order.rows.length > 0) {
+                await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_at=now(), status='expired' WHERE id=${order.rows[0].id}`)
                 const sessionId = order.rows[0].live_sessions_id;
                 const orderItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
                 if (orderItems.rows.length > 0) {
                     orderItems.rows.forEach(async _item => {
                         // put qty back to product
-                        await client.query(`UPDATE data.product_configurations SET quantity=quantity+${_item.quantity} WHERE id=${_item.product_configuration_id}`);
+                        console.log(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`);
+                        // await client.query(`UPDATE data.product_configurations SET quantity=1 WHERE id=${_item.product_configuration_id}`);
+                        await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`);
                         // remove item
                         await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
 
@@ -1287,7 +1292,6 @@ class Order {
                         });
                     });
                 }
-                await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_at=now(), status='expired' WHERE id=${order.rows[0].id}`)
             }
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

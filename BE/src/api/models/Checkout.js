@@ -221,15 +221,18 @@ class Checkout {
                 }
             }
             shippingMethods = [];
+            console.log('IS FREE SHIPPING', shippingFree)
             let query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
             const res = await client.query(query, [orderId, countryId]);
             if (res.rows.length > 0) {
                 if (shippingFree) {
                     res.rows.forEach(_method => {
+                        console.log('here we are');
                         _method.price = 0;
                     })
                 }
             }
+            console.log(res.rows);
 
             shippingMethods = res.rows;
         } catch (e) {

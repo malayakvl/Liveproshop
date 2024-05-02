@@ -57,6 +57,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const [timerValueHours, setTimerValueHours] = useState(0);
     const [timerValueMunites, setTimerValueMinutes] = useState(0);
     const [timerValueSeconds, setTimerValueSeconds] = useState(0);
+    const [timerExpire, setTimerExpire] = useState(false);
     // const [countDownDate, setCountDownDate] = useState(null);
 
     // const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
@@ -115,6 +116,12 @@ export default function Index({ session, locale }: { session: any; locale: any }
 
         return true;
     };
+
+    useEffect(() => {
+        if (order.status == 'expired') {
+            setTimerExpire(true);
+        }
+    }, [order]);
 
     useEffect(() => {
         if (validateEmail(user.email_real) && !validateEmail(user.email)) {

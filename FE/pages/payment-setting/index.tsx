@@ -9,8 +9,8 @@ import { itemSelector } from '../../redux/settings/selectors';
 import { fetchFormAction } from '../../redux/settings';
 import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
-// import ConfirmDialog from '../../components/_common/ConfirmDialog';
 import Head from 'next/head';
+import { Multisafe } from '../../components/payments';
 
 export default function PaymentSetting() {
     const t = useTranslations();
@@ -54,98 +54,39 @@ export default function PaymentSetting() {
                 <div className="page-title">
                     <h1>{t('Settings')}</h1>
                 </div>
-                {/*<div className="text-gray-400">{t('setting_page_description')}</div>*/}
-                {/*<div className="text-gray-400 block italic mt-3">*/}
-                {/*    {t('setting_page_description1')}*/}
-                {/*</div>*/}
             </div>
             {showForm && (
-                <div className="mt-10 block-white-8 white-shadow-big">
-                    <Formik
-                        enableReinitialize
-                        initialValues={initialValues}
-                        validationSchema={validationSchema}
-                        onSubmit={(values) => {
-                            dispatch(submitFormAction(values));
-                        }}>
-                        {(props) => {
-                            // const onChangeConfigured = () => {
-                            //     if (!selectedItem) {
-                            //         setSelectedItem({
-                            //             status: props.values.free_shipping_status,
-                            //             name: t('Free Shipping Settings')
-                            //         });
-                            //         return false;
-                            //     }
-                            // };
-                            return (
-                                <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
-                                    {/* <div className="font-bold text-gray-350 text-lg mb-8 border-gray-200">
-                                        {t('Live session Settings')}
-                                    </div>
-                                    <div className="flex">
-                                        <div className="max-w-[100px]">
-                                            <InputText
-                                                icon={null}
-                                                label={'Duration Cart'}
-                                                name={'order_timer'}
-                                                placeholder={'num_day_hour'}
-                                                style={null}
-                                                props={props}
-                                                tips={null}
-                                            />
-                                        </div>
-                                        <div className="ml-2">
-                                            <InputSelect
-                                                options={[
-                                                    { id: 'h', name: 'Hour(s)' },
-                                                    { id: 'd', name: 'Day(s)' }
-                                                ]}
-                                                label={'Type Interval'}
-                                                name={'type'}
-                                                style={null}
-                                                props={props}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="mt-8 font-bold text-gray-350 text-lg mb-8 border-gray-200">
-                                        {t('Free Shipping Settings')}
-                                    </div>
-                                    <InputSwitcher
-                                        label={'Free Shipping'}
-                                        name={'free_shipping_status'}
-                                        style={null}
-                                        props={props}
-                                        onChange={onChangeConfigured}
-                                    />
-                                    <div className="max-w-[300px]">
+                <>
+                    <div className="mt-10 block-white-8 white-shadow-big">
+                        <Formik
+                            enableReinitialize
+                            initialValues={initialValues}
+                            validationSchema={validationSchema}
+                            onSubmit={(values) => {
+                                dispatch(submitFormAction(values));
+                            }}>
+                            {(props) => {
+                                return (
+                                    <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
                                         <InputText
+                                            style={'w-1/2'}
                                             icon={null}
-                                            label={'Free Shipping Hour(s)'}
-                                            name={'free_shipping_timer'}
-                                            placeholder={'Free Shipping Hour(s)'}
-                                            style={null}
+                                            label={t('Multisafepay API')}
+                                            name={'multisafe_api_key'}
+                                            placeholder={'Multisafepay API'}
                                             props={props}
                                             tips={null}
                                         />
-                                    </div> */}
-                                    <InputText
-                                        style={'w-1/2'}
-                                        icon={null}
-                                        label={t('Multisafepay API')}
-                                        name={'multisafe_api_key'}
-                                        placeholder={'Multisafepay API'}
-                                        props={props}
-                                        tips={null}
-                                    />
-                                    <button type="submit" className="w-32 mt-8 gradient-btn">
-                                        {t('Save')}
-                                    </button>
-                                </form>
-                            );
-                        }}
-                    </Formik>
-                </div>
+                                        <button type="submit" className="w-32 mt-8 gradient-btn">
+                                            {t('Save')}
+                                        </button>
+                                    </form>
+                                );
+                            }}
+                        </Formik>
+                    </div>
+                    <Multisafe />
+                </>
             )}
             {/* <ConfirmDialog
                 show={!!selectedItem}
@@ -177,7 +118,8 @@ export async function getServerSideProps(context: any) {
             session,
             locale,
             messages: {
-                ...require(`../../messages/${locale}.json`)
+                ...require(`../../messages/${locale}.json`),
+                ...require(`../../messages/multisafe/${locale}.json`)
             }
         }
     };
