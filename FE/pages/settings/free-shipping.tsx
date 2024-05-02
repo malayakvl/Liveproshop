@@ -119,7 +119,12 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
-                                if (!calendarPeriod) {
+                                console.log(period);
+                                if (
+                                    !calendarPeriod &&
+                                    !period.free_shipping_from &&
+                                    !period.free_shipping_to
+                                ) {
                                     dispatch(setErrorToastAction('Please setup period'));
                                 } else {
                                     const formData = {
