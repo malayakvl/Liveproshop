@@ -119,7 +119,6 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
-                                console.log(period);
                                 if (
                                     !calendarPeriod &&
                                     !period.free_shipping_from &&
@@ -182,11 +181,7 @@ export default function ShippingThreshold() {
                                                         const r = dateRange;
                                                         SP(r);
                                                     }}
-                                                    onSelect={() => {
-                                                        console.log('onselect');
-                                                    }}
                                                     onChange={(update) => {
-                                                        console.log(update);
                                                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                                         // @ts-ignore
                                                         setDateRange(update);
