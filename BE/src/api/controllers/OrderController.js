@@ -117,6 +117,11 @@ class OrderController {
         return res.status(200).json({success: true, message: 'creating orders'});
     }
 
+    async removeSessionsOrders (req, res) {
+        const data = await orderModel.removeUnpayedSessionsOrders();
+        return res.status(200).json({success: true});
+    }
+
     async removeUnpayedOrder (req, res) {
         const data = await orderModel.removeUnpayedSessionOrder(req.query.sessionId);
         return res.status(200).json({success: true});
@@ -186,6 +191,15 @@ class OrderController {
             const data = await orderModel.bulkDownload(ids, req.user);
             return res.status(200).json({ data: data.success, achive: data.achive });
         }
+    }
+
+    async expireOrder (req, res) {
+        if (req.user) {
+            console.log('ORDER EXPIRE', req.query.orderId);
+            const data = await orderModel.expireOrder(req.query.orderId, req.user.id);
+            return res.status(200).json({ success: true });
+        }
+        return res.status(200).json({ success: true, orderNumber: null });
     }
 
     async findOrderByCommentId (req, res) {

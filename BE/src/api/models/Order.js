@@ -401,7 +401,7 @@ class Order {
                         data.live_sessions.store_id, data.live_sessions_messages.recipient_id, 
                         data.order_items.id AS wait_item_id, access_token, data.live_sessions_messages.message,
                         data.seller_settings.order_timer, data.seller_settings.free_shipping_timer, threshold,
-                        data.user_stores.name as store_name
+                        data.user_stores.name as store_name, data.order_items.product_id
                     FROM data.order_items 
                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.order_items.live_sessions_id
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
@@ -1266,6 +1266,47 @@ class Order {
         }
     }
 
+    async expireOrder(orderId, userId) {
+        const client = await pool.connect();
+        try {
+            console.log('EXPIRE ORDER');
+
+            const order = await client.query(`SELECT * FROM data.orders WHERE id='${orderId}' AND user_id='${userId}' AND status !='expired'`);
+            if (order.rows.length > 0) {
+                await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_at=now(), status='expired' WHERE id=${order.rows[0].id}`)
+                const sessionId = order.rows[0].live_sessions_id;
+                const orderItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
+                if (orderItems.rows.length > 0) {
+                    orderItems.rows.forEach(async _item => {
+                        // put qty back to product
+                        console.log(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`);
+                        // await client.query(`UPDATE data.product_configurations SET quantity=1 WHERE id=${_item.product_configuration_id}`);
+                        await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`);
+                        // remove item
+                        await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+
+                        // start wait job
+                        shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                            console.log('Exit code:', code);
+                            console.log('Program output:', output);
+                        });
+                    });
+                }
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         console.log('findByCommentId', commentId);
@@ -1289,6 +1330,8 @@ class Order {
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
+
+
                 if (!resWait.rows[0].order_id) {
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
 console.log("EXIST NON PAYED", existNonPayed.rows.length)
@@ -1301,13 +1344,26 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
                             orderId = existNonPayedEmpty.rows[0].id;
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
+console.log('here we are check sync');
                             const emptyWaitRes = await client.query(`SELECT id, order_number FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].order_number;
-                            await client.query(`UPDATE data.orders 
+console.log(`UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
-                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price} 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
+                                WHERE id=${emptyWaitRes.rows[0].id}`);
+
+                            // await client.query(`UPDATE data.orders
+                            //     SET user_id=${userId},
+                            //     total_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                            //     order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                            //     sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                            //     WHERE id=${emptyWaitRes.rows[0].id}`)
+                            await client.query(`UPDATE data.orders 
+                                SET user_id=${userId}, 
+                                sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`)
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
                         }
@@ -1336,11 +1392,9 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
                 return {success: true, orderId: orderId, orderNumber: orderNumber };
 
             } else {
-                console.log('EBAT POTEMKI')
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
                 const prefixWait = Math.floor(Date.now()/1000);
-                console.log('prefixWait', prefixWait);
-                // exit;
+console.log('prefixWait', prefixWait);
 
                 copyOrderData = res.rows[0];
                 // copyOrderData.order_number = `${_tmpOrderNumber[0]}-WO-${_tmpOrderNumber[1]}`;
@@ -1352,8 +1406,8 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
                 // exit;
                 const existNonPayedOrder = await client.query(
                     `SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
-                AND status='new' AND id != '${res.rows[0].order_id}'
-                AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+                                        AND status='new' AND id != '${res.rows[0].order_id}'
+                                        AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 if (existNonPayedOrder.rows[0]?.id) {
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     // copyOrderData.user_id = userId;
@@ -1365,9 +1419,10 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
                     await client.query(updateExistItemsSQL);
                     // update amounts for order splited order
                     const updateAmountSQL = `UPDATE data.orders 
-                    SET order_amount = order_amount + ${res.rows[0].order_amount},
-                    total_amount = total_amount +  ${res.rows[0].total_amount}
-                    WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                        SET order_amount = order_amount + ${res.rows[0].order_amount},
+                        total_amount = total_amount +  ${res.rows[0].total_amount},
+                        sync_at=now()
+                        WHERE id='${existNonPayedOrder.rows[0].id}'`;
                     await client.query(updateAmountSQL);
 
                     // delete unused order
@@ -1375,10 +1430,10 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
 
                     // combined same rows in order_items
                     const combinedSQL = await client.query(`
-                    SELECT product_configuration_id, SUM(quantity) AS resultsQty
-                    FROM data.order_items
-                    WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                    GROUP BY product_configuration_id`);
+                        SELECT product_configuration_id, SUM(quantity) AS resultsQty
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id`);
                     const realOrderItems = await client.query(`SELECT id 
                     FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
                     // need to combine two rows into one
@@ -1411,8 +1466,8 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
                     }
                 } else {
                     orderId = res.rows[0].order_id;
-                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
-                    total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', sync_at=now(),
+                        total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                     await client.query(orderSQL);
                 }
                 console.log('ORDERID', orderId);
@@ -1520,6 +1575,61 @@ console.log("EXIST NON PAYED", existNonPayed.rows.length)
                 const SQL = await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             }
             return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async removeUnpayedSessionsOrders () {
+        const client = await pool.connect();
+        try {
+            const expireDateNotSync = moment().add(-process.env.ORDER_REMOVE_DAYS, 'days').add(3, 'hours').format('YYYY-MM-DD HH:mm:ss');
+            const ordersNotSyncQuery = `SELECT * FROM data.orders WHERE status='new'
+                AND created_at <= '${expireDateNotSync}' AND sync_at IS NULL`;
+            const ordersSyncQuery = `SELECT * FROM data.orders WHERE status='new'
+                AND sync_at <= '${expireDateNotSync}'`;
+            const notSyncRes = await client.query(ordersNotSyncQuery);
+            const syncRes = await client.query(ordersSyncQuery);
+            if (notSyncRes.rows.length > 0) {
+                // store products back and set status expired
+                notSyncRes.rows.forEach(async _order => {
+                    const notSyncItems = await client.query(`SELECT * FROM data.order_items WHERE order_id=${_order.id}`);
+                    if (notSyncItems.rows.length > 0) {
+                        notSyncItems.rows.forEach(async _item => {
+                            // console.log(_item.product_configuration_id, _item.quantity);
+                            await client.query(`UPDATE data.product_configurations 
+                                SET quantity = quantity + ${parseInt(_item.quantity)} WHERE id='${_item.product_configuration_id}'`);
+                            await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+                        });
+                    }
+                    await client.query(`UPDATE data.orders SET status='expired' WHERE id=${_order.id}`)
+                })
+            }
+            if (syncRes.rows.length > 0) {
+                // store products back and set status expired
+                syncRes.rows.forEach(async _order => {
+                    const notSyncItems = await client.query(`SELECT * FROM data.order_items WHERE order_id=${_order.id}`);
+                    if (notSyncItems.rows.length > 0) {
+                        notSyncItems.rows.forEach(async _item => {
+                            // console.log(_item.product_configuration_id, _item.quantity);
+                            await client.query(`UPDATE data.product_configurations 
+                                SET quantity = quantity + ${parseInt(_item.quantity)} WHERE id='${_item.product_configuration_id}'`);
+                            await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+                        });
+                    }
+                    await client.query(`UPDATE data.orders SET status='expired' WHERE id=${_order.id}`)
+                })
+            }
+            return {success: true};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

@@ -3,8 +3,8 @@ import { ModalProps } from 'react-bootstrap';
 import { Button } from '../../components/_common';
 import { useTranslations } from 'next-intl';
 import { useDispatch } from 'react-redux';
-import { setModalConfirmationPeriodMetaAction } from '../../redux/layouts';
-import { toggleModalPeriodConfirmation } from '../../lib/functions';
+import { setModalConfirmationSetupPeriodMetaAction } from '../../redux/layouts';
+import { toggleModalPeriodSetupConfirmation } from '../../lib/functions';
 
 interface Props extends ModalProps {
     size?: 'sm' | 'lg' | 'xl';
@@ -28,7 +28,7 @@ interface Props extends ModalProps {
     };
 }
 
-const ModalPeriod: React.FC<Props> = ({
+const ModalPeriodSetup: React.FC<Props> = ({
     title = '',
     titleKey,
     children,
@@ -42,7 +42,7 @@ const ModalPeriod: React.FC<Props> = ({
 
     return (
         <div
-            className="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center modal-period-confirmation"
+            className="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center modal-period-setup"
             {...props}>
             <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" />
 
@@ -56,8 +56,8 @@ const ModalPeriod: React.FC<Props> = ({
                             role="presentation"
                             className="modal-close-period cursor-pointer z-50"
                             onClick={() => {
-                                dispatch(setModalConfirmationPeriodMetaAction(null));
-                                toggleModalPeriodConfirmation();
+                                dispatch(setModalConfirmationSetupPeriodMetaAction(null));
+                                toggleModalPeriodSetupConfirmation();
                             }}>
                             <img
                                 src="/images/close-modal.svg"
@@ -87,4 +87,4 @@ const ModalPeriod: React.FC<Props> = ({
     );
 };
 
-export default ModalPeriod;
+export default ModalPeriodSetup;

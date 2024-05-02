@@ -3,35 +3,35 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
     deletePeriodPopupSelector,
     deletePeriodSelector,
-    modalConfirmationPeriodMetaSelector
+    modalConfirmationPeriodDeleteMetaSelector
 } from '../../../redux/layouts/selectors';
 import {
-    setModalConfirmationPeriodMetaAction,
+    setModalConfirmationDeletePeriodMetaAction,
     hideshowPeriodPopupAction
 } from '../../../redux/layouts';
-import { ModalPeriod } from '../../_common';
-import { toggleModalPeriodConfirmation } from '../../../lib/functions';
+import { ModalPeriodDelete } from '../../_common';
+import { toggleModalPeriodDeleteConfirmation } from '../../../lib/functions';
 import { useTranslations } from 'next-intl';
 import moment from 'moment/moment';
 
-const ConfirmationPeriodModal: React.FC = () => {
+const ConfirmationPeriodSetupModal: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const dispatch = useDispatch();
-    const inputMeta = useSelector(modalConfirmationPeriodMetaSelector);
+    const inputMeta = useSelector(modalConfirmationPeriodDeleteMetaSelector);
     const hideShowPeriodPopup = useSelector(deletePeriodPopupSelector);
-    const [meta, setMeta] = useState<Layouts.ModalPeriodMeta | null>(null);
+    const [meta, setMeta] = useState<Layouts.ModalDeletePeriodMeta | null>(null);
     const periodDelete = useSelector(deletePeriodSelector);
     const t = useTranslations();
 
     const {
         title = `${
-            t('Do you want to delete period') +
+            t('Do you want to deactivate the period from ') +
             '' +
             moment(periodDelete?.free_shipping_from).format('DD/MM/YYYY') +
             ' - ' +
             moment(periodDelete?.free_shipping_to).format('DD/MM/YYYY') +
             ' ' +
-            t('for free shipping?')
+            t(' for free shipping?')
         }`,
         submitButtonProps,
         onConfirm,
@@ -39,9 +39,8 @@ const ConfirmationPeriodModal: React.FC = () => {
     } = meta || ({} as any);
 
     useEffect(() => {
-        console.log('Hideeeeee', hideShowPeriodPopup);
-        if (inputMeta || hideShowPeriodPopup) {
-            toggleModalPeriodConfirmation();
+        if (inputMeta) {
+            toggleModalPeriodDeleteConfirmation();
             dispatch(hideshowPeriodPopupAction(false));
             return setMeta(inputMeta);
         }
@@ -51,8 +50,8 @@ const ConfirmationPeriodModal: React.FC = () => {
     }, [inputMeta]);
 
     const handleCancelBtnClick = useCallback(() => {
-        dispatch(setModalConfirmationPeriodMetaAction(null));
-        toggleModalPeriodConfirmation();
+        dispatch(setModalConfirmationDeletePeriodMetaAction(null));
+        toggleModalPeriodDeleteConfirmation();
     }, [dispatch]);
 
     const handleSubmitBtnClick = useCallback(
@@ -64,14 +63,14 @@ const ConfirmationPeriodModal: React.FC = () => {
                 .then(handleCancelBtnClick)
                 .finally(() => {
                     setIsLoading(false);
-                    toggleModalPeriodConfirmation();
+                    toggleModalPeriodDeleteConfirmation();
                 });
         },
         [onConfirm, handleCancelBtnClick]
     );
 
     return (
-        <ModalPeriod
+        <ModalPeriodDelete
             title={title}
             titleKey={title}
             cancelButtonProps={{
@@ -91,4 +90,4 @@ const ConfirmationPeriodModal: React.FC = () => {
     );
 };
 
-export default ConfirmationPeriodModal;
+export default ConfirmationPeriodSetupModal;

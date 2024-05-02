@@ -157,6 +157,7 @@ export default new class ShippingController {
     }
 
     setShippingPeriod(req, res) {
+        console.log(req.body);
         shippingModel.setShippingPeriod(req.user.id, req.body.startDate, req.body.endDate)
         res.status(200).json({})
     }

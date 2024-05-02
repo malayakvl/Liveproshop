@@ -32,6 +32,7 @@ export const setErrorToastAction: any = createAction('layouts/SET_ERROR_TOAST');
 export const setSuccessToastAction: any = createAction('layouts/SET_SUCCESS_TOAST');
 
 export const setInfoToastAction: any = createAction('layouts/SET_INFO_TOAST');
+export const setupPeriodAction: any = createAction('layouts/SET_FREE_PERIOD_SHIPPING');
 
 export const deleteToastAction: any = createAction('layouts/DELETE_TOAST');
 
@@ -39,12 +40,16 @@ export const setActivePageAction: any = createAction('layouts/SET_ACTIVE_TAB');
 
 export const sidebarCloseAction: any = createAction('layouts/CLOSE_SIDEBAR');
 export const hideshowPeriodPopupAction: any = createAction('layouts/DELETE_SHOW_PERIOD_POPUP');
+export const setPeriodDeleteValuesActions: any = createAction('layouts/SAVED_PERIOD_FOR_DELETE');
 
 export const setModalConfirmationMetaAction: any = createAction(
     'layouts/SET_MODAL_DELETE_CONFIRMATION'
 );
-export const setModalConfirmationPeriodMetaAction: any = createAction(
+export const setModalConfirmationDeletePeriodMetaAction: any = createAction(
     'layouts/SET_MODAL_PERIOD_DELETE_CONFIRMATION'
+);
+export const setModalConfirmationSetupPeriodMetaAction: any = createAction(
+    'layouts/SET_MODAL_PERIOD_SETUP_CONFIRMATION'
 );
 export const setPeriodForDeleteAction: any = createAction('layouts/SET_MODAL_PERIOD_VALUE');
 export const setModalCalendlyMetaAction: any = createAction('layouts/SET_MODAL_CALENDLY');

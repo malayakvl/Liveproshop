@@ -2,6 +2,7 @@ import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import axios from "axios";
 import crypto from "crypto";
+import moment from 'moment';
 import shippingModel from "./Shipping.js";
 import orderModel from "./Order.js";
 
@@ -188,26 +189,52 @@ class Checkout {
 
         let shippingMethods = null;
         let error = null;
-
         try {
-            let query = 'SELECT is_free FROM data.get_shipping_is_free($1)';
-            let res = checkFreeShipping && (await client.query(query, [orderId])).rows[0].is_free;
-
-            if (res) {
-                shippingMethods = []
-            } else {
-                query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
-                let resultPayed = 0;
-                // fetching th
-                // if (userId) {
-                //     resultPayed = await orderModel.fetchPayedItems(userId)
-                // }
-                // console.log(orderId, countryId);
-                res = await client.query(query, [orderId, countryId]);
-                // console.log(res.rows);
-                shippingMethods = res.rows;
+            const orderQuerySeller = `SELECT data.live_sessions.user_id as seller_id FROM data.orders 
+                LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id 
+                WHERE data.orders.id=${orderId}`;
+            const sellerRes = await client.query(orderQuerySeller);
+            const sellerId = sellerRes.rows[0].seller_id;
+            let isFreePeriodActive = false;
+            let shippingFree = false;
+            let prevOrderAmount = 0;
+            const sellerSettingsRes = await client.query(`SELECT free_shipping_from, free_shipping_to FROM data.seller_settings WHERE user_id=${sellerId}`);
+            if (sellerSettingsRes.rows.length) {
+                if (sellerSettingsRes.rows[0].free_shipping_from) {
+                    const dateFrom = moment(sellerSettingsRes.rows[0].free_shipping_from);
+                    const dateTo = moment(sellerSettingsRes.rows[0].free_shipping_to);
+                    const now = moment();
+                    if (now >= dateFrom && now <= dateTo) {
+                        isFreePeriodActive = true;
+                    }
+                }
             }
+            // free shipping period active, get prev order amount
+            const resultThreshold = await shippingModel.fetchThreshold(sellerId);
+            if (isFreePeriodActive) {
+                const totalOrderQuery = `SELECT SUM(order_amount) as total_amount FROM data.orders
+                    WHERE user_id=${userId} AND status='payed'`;
+                const resTotalAmount = await client.query(totalOrderQuery);
+                prevOrderAmount = parseInt(resTotalAmount.rows[0].total_amount);
+                if (resultThreshold.threshold <= prevOrderAmount) {
+                    shippingFree = true;
+                }
+            }
+            shippingMethods = [];
+            console.log('IS FREE SHIPPING', shippingFree)
+            let query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
+            const res = await client.query(query, [orderId, countryId]);
+            if (res.rows.length > 0) {
+                if (shippingFree) {
+                    res.rows.forEach(_method => {
+                        console.log('here we are');
+                        _method.price = 0;
+                    })
+                }
+            }
+            console.log(res.rows);
 
+            shippingMethods = res.rows;
         } catch (e) {
 
             if (process.env.NODE_ENV === 'development') {

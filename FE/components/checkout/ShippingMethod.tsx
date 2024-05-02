@@ -41,6 +41,8 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
         }
     }, [shippingMethods]);
 
+    console.log(shippingMethods);
+
     return !shippingMethods.length ? null : (
         <div className={className}>
             <div className="">
@@ -52,9 +54,7 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
                             type="radio"
                             name="shippingMethodId"
                             value={String(shippingMethod.id)}
-                            title={formatCurrency(
-                                order.freeShipping != 1 ? shippingMethod.price : 0
-                            )}
+                            title={formatCurrency(shippingMethod.price)}
                             text={shippingMethod.name}
                             img={baseUrl + shippingMethod.image}
                             component={Radio}

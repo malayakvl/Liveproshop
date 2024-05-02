@@ -21,8 +21,10 @@ declare namespace Layouts {
         toasts: Toast[];
         checkedIds: checkedIds[];
         modalConfirmationMeta: ModalConfirmationMeta | null;
-        modalConfirmationPeriodMeta: ModalConfirmationMeta | null;
+        modalConfirmationDeletePeriodMeta: ModalDeletePeriodMeta | null;
+        modalConfirmationSetupPeriodMeta: ModalConfirmPeriodMeta | null;
         deletePeriod: null;
+        setupPeriod: null;
         deletePeriodHidePopup: boolean;
         modalCalendlyMeta: ModalCalendlyMeta | null;
         switchHeader: boolean;
@@ -86,7 +88,12 @@ declare namespace Layouts {
         onConfirm: () => void;
         onCancel?: () => void;
     }
-    interface ModalPeriodMeta {
+    interface ModalConfirmPeriodMeta {
+        titleKey?: string;
+        onConfirm: () => void;
+        onCancel?: () => void;
+    }
+    interface ModalDeletePeriodMeta {
         titleKey?: string;
         onConfirm: () => void;
         onCancel?: () => void;

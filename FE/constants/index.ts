@@ -161,7 +161,8 @@ export enum OrderStatus {
     NEW = 'new',
     PAYED = 'payed',
     SHIPPED = 'shipped',
-    CANCELED = 'canceled'
+    CANCELED = 'canceled',
+    EXPIRED = 'expired'
 }
 
 export enum UserRole {

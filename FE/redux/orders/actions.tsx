@@ -284,6 +284,29 @@ export const fetchOrderPdfAction: any = createAction(
             };
         }
 );
+export const expireOrderAction: any = createAction(
+    'orders/EXPIRE_ORDER',
+    async (orderId: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ fileterData: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/orders/expire?orderId=${orderId}`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            window.location.reload();
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                fileterData: res.data.items
+            };
+        }
+);
 export const findSellersAction: any = createAction(
     'orders/FIND_SELLER_AUTOSUGGEST',
     async (query: string) =>
