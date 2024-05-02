@@ -152,7 +152,9 @@ export default new class ShippingController {
     }
 
     setThreshold(req, res) {
-        shippingModel.setThreshold(req.user.id, req.body.threshold)
+        console.log(req.body);
+        shippingModel.setThreshold(req.user.id, req.body)
+        // shippingModel.setShippingPeriod(req.user.id, req.body.startDate, req.body.endDate)
         res.status(200).json({})
     }
 
