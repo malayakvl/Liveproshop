@@ -79,58 +79,40 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
     const shippingRefund = t["Shipping refund:"];
+    console.log("TYPE", paymentData.payment_details.type);
+    let transactionId = '';
     if (paymentData.payment_details.type === 'PAYPAL') {
-        doc
-            .fontSize(10)
-            .text(captionNumber, 50, customerInformationTop)
-            .font("Helvetica-Bold")
-            .text(invoice.invoice_nr, 150, customerInformationTop)
-            .font("Helvetica")
-            .text(captionDate, 50, customerInformationTop + 15)
-            .text(invoice.invoice_date, 150, customerInformationTop + 15)
-            .text(captionTotal, 50, customerInformationTop + 30)
-            .text(
-                formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
-                150,
-                customerInformationTop + 30
-            )
-            .text(shippingRefund, 50, customerInformationTop + 45)
-            .text(
-                formatCurrency(parseFloat(invoice.refund_amount)),
-                150,
-                customerInformationTop + 45
-            )
-            .font("Helvetica-Bold")
-            .text(invoice.shipping.name, 300, customerInformationTop)
-            .font("Helvetica")
-            .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
-            .text(t["Transaction ID"]+paymentData.payment_methods[0].external_transaction_id, 300, customerInformationTop + 40)
-            .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
-            .moveDown();
+        transactionId = paymentData.payment_methods[0].external_transaction_id
     } else {
-        doc
-            .fontSize(10)
-            .text(captionNumber, 50, customerInformationTop)
-            .font("Helvetica-Bold")
-            .text(invoice.invoice_nr, 150, customerInformationTop)
-            .font("Helvetica")
-            .text(captionDate, 50, customerInformationTop + 15)
-            .text(invoice.invoice_date, 150, customerInformationTop + 15)
-            .text(captionTotal, 50, customerInformationTop + 30)
-            .text(
-                formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
-                150,
-                customerInformationTop + 30
-            )
-            .font("Helvetica-Bold")
-            .text(shippingRefund, 50, customerInformationTop + 30)
-            .text(invoice.shipping.name, 300, customerInformationTop)
-            .font("Helvetica")
-            .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
-            .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 40)
-            .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
-            .moveDown();
+        transactionId = paymentData.costs[0].transaction_id;
     }
+
+    doc
+        .fontSize(10)
+        .text(captionNumber, 50, customerInformationTop)
+        .font("Helvetica-Bold")
+        .text(invoice.invoice_nr, 150, customerInformationTop)
+        .font("Helvetica")
+        .text(captionDate, 50, customerInformationTop + 15)
+        .text(invoice.invoice_date, 150, customerInformationTop + 15)
+        .text(captionTotal, 50, customerInformationTop + 30)
+        .text(
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
+            150,
+            customerInformationTop + 30
+        )
+        .font("Helvetica-Bold");
+console.log('REFUND SHIPPING', shippingRefund)
+    if (shippingRefund > 0) {
+        doc.text(shippingRefund, 50, customerInformationTop + 30)
+
+    }
+    doc.text(invoice.shipping.name, 300, customerInformationTop)
+        .font("Helvetica")
+        .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
+        .text(t["Transaction ID"]+transactionId, 300, customerInformationTop + 40)
+        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
+        .moveDown();
 
     generateHr(doc, 282);
 }
@@ -956,15 +938,17 @@ class Order {
                 }
             }
             if (res.rows.length > 0) {
-console.log('GENERATE PDF CODE');
                 // get buyer information
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
+
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+
                 // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
+
                 const multiSafePayClientRes = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
                         headers: { 'Content-Type': 'application/json' }
@@ -974,6 +958,7 @@ console.log('GENERATE PDF CODE');
                     }).catch(error => {
                         console.log("Merchant error", error);
                     });
+console.log('here')
 console.log('MULTISAFE DATA', multiSafePayClientRes)
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
@@ -1002,7 +987,7 @@ console.log('MULTISAFE DATA', multiSafePayClientRes)
                     orderId: orderId
                     // paymentDetails: {}
                 };
-// console.log('INVOICE DATA', invoice);
+console.log('INVOICE DATA', invoice);
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 await setTimeout(18000);
@@ -1763,12 +1748,16 @@ console.log('prefixWait', prefixWait);
             let settings;
 
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
+const currOrderId = currentOrder.rows[0].id;
+console.log('CURRENT ORDER', currOrderId);
             let compareAmountTherehold = 0;
             if (res.rows.length) {
                 const timeStart = (new Date(res.rows[0].updated_at));
                 const timeEnd = (new Date());
                 // const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
                 sellerData = await client.query(`SELECT user_id 
+                                FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
+console.log(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
 
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
@@ -1794,7 +1783,7 @@ console.log('THEREHOLD', threshold);
                         AND data.order_statuses.status = 'payed'
                         AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
                         WHERE data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
-console.log(prevOrdersQuery)
+// console.log(prevOrdersQuery)
                     const prevOrderRes = await client.query(prevOrdersQuery);
                     let prevTotal = 0;
                     let refundShipping = 0;
@@ -1813,6 +1802,10 @@ console.log('THRESHOLD', threshold);
                     }
 console.log('RETURNED SHIPPING', returnippSing);
                     amountRefund = returnippSing ? refundShipping : 0;
+                }
+                if (parseFloat(amountRefund) > 0) {
+console.log('EBANAYA HUYNYA', currOrderId)
+                    await client.query(`UPDATE data.orders SET refund_amount='${amountRefund}' WHERE id='${currOrderId}'`)
                 }
 console.log('REFUND AMOUNT', amountRefund);
 

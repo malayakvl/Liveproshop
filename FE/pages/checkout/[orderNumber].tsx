@@ -139,7 +139,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
     useEffect(() => {
         if (address?.country_id && order?.id) {
             if (shippingMethods.length == 0) {
-                console.log('COUNTRY', address.country_id);
+                // console.log('COUNTRY', address.country_id);
                 dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
             }
         }
