@@ -55,6 +55,9 @@ const OrderSummary = () => {
             // @ts-ignore
             totalOrder += parseInt(selectedShippingMethod.price);
         }
+        if (dataOrder.refund_amount > 0) {
+            totalOrder = totalOrder - parseInt(dataOrder.refund_amount);
+        }
         return formatCurrency(totalOrder);
     };
 
@@ -207,6 +210,14 @@ const OrderSummary = () => {
                             {t('Shipping')}
                             <span className="inline-block ml-4 font-bold min-w-[3rem]">
                                 {formatCurrency(0)}
+                            </span>
+                        </div>
+                    )}
+                    {order.refund_amount > 0 && (
+                        <div className="flex justify-between my-2 text-gray-350 text-[18px] text-right">
+                            {t('Shipping refund')}
+                            <span className="inline-block ml-4 font-bold min-w-[3rem]">
+                                {formatCurrency(order.refund_amount)}
                             </span>
                         </div>
                     )}

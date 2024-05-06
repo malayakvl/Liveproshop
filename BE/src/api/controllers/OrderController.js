@@ -35,6 +35,7 @@ class OrderController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
+            console.log('GENERATE INVOICE PDF');
             // check if file exist, then return true
             const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale, "", req.params.type);
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });

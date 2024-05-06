@@ -25,5 +25,6 @@ export default {
     "Payment Method": "Payment Method: ",
     "Refund": "Refund",
     "color": "color",
-    "size": "size"
+    "size": "size",
+    "Shipping refund:": "Shipping refund:"
 }

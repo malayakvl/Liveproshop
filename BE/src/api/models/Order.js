@@ -24,8 +24,9 @@ async function createInvoice (invoice, path, locale, ivoiceType) {
         await generateHeader(doc, invoice.seller.data, locale);
         let historyRes;
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
+console.log('HEADER GENERATED DONE');
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
-        await generateFooter(doc, locale);
+        // await generateFooter(doc, locale);
 
         doc.end();
         doc.pipe(fs.createWriteStream(path));
@@ -59,7 +60,6 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         .fontSize(20)
         .text(ivoiceType !== 'refund' ? t["Invoice"] : t["Refund"], 50, 160);
 
-
     generateHr(doc, 185);
     const customerInformationTop = 200;
     let deliveryAddress = [];
@@ -78,38 +78,59 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
-    doc
-        .fontSize(10)
-        .text(captionNumber, 50, customerInformationTop)
-        .font("Helvetica-Bold")
-        .text(invoice.invoice_nr, 150, customerInformationTop)
-        .font("Helvetica")
-        .text(captionDate, 50, customerInformationTop + 15)
-        .text(invoice.invoice_date, 150, customerInformationTop + 15)
-        .text(captionTotal, 50, customerInformationTop + 30)
-        .text(
-            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
-            150,
-            customerInformationTop + 30
-        )
-        .font("Helvetica-Bold")
-        .text(invoice.shipping.name, 300, customerInformationTop)
-        .font("Helvetica")
-        .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
-        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 40)
-        // .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
-        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
-        // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
-        // .text(
-        //     invoice.shipping.city +
-        //     ", " +
-        //     invoice.shipping.state +
-        //     ", " +
-        //     invoice.shipping.country,
-        //     300,
-        //     customerInformationTop + 30
-        // )
-        .moveDown();
+    const shippingRefund = t["Shipping refund:"];
+    if (paymentData.payment_details.type === 'PAYPAL') {
+        doc
+            .fontSize(10)
+            .text(captionNumber, 50, customerInformationTop)
+            .font("Helvetica-Bold")
+            .text(invoice.invoice_nr, 150, customerInformationTop)
+            .font("Helvetica")
+            .text(captionDate, 50, customerInformationTop + 15)
+            .text(invoice.invoice_date, 150, customerInformationTop + 15)
+            .text(captionTotal, 50, customerInformationTop + 30)
+            .text(
+                formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
+                150,
+                customerInformationTop + 30
+            )
+            .text(shippingRefund, 50, customerInformationTop + 45)
+            .text(
+                formatCurrency(parseFloat(invoice.refund_amount)),
+                150,
+                customerInformationTop + 45
+            )
+            .font("Helvetica-Bold")
+            .text(invoice.shipping.name, 300, customerInformationTop)
+            .font("Helvetica")
+            .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
+            .text(t["Transaction ID"]+paymentData.payment_methods[0].external_transaction_id, 300, customerInformationTop + 40)
+            .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
+            .moveDown();
+    } else {
+        doc
+            .fontSize(10)
+            .text(captionNumber, 50, customerInformationTop)
+            .font("Helvetica-Bold")
+            .text(invoice.invoice_nr, 150, customerInformationTop)
+            .font("Helvetica")
+            .text(captionDate, 50, customerInformationTop + 15)
+            .text(invoice.invoice_date, 150, customerInformationTop + 15)
+            .text(captionTotal, 50, customerInformationTop + 30)
+            .text(
+                formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
+                150,
+                customerInformationTop + 30
+            )
+            .font("Helvetica-Bold")
+            .text(shippingRefund, 50, customerInformationTop + 30)
+            .text(invoice.shipping.name, 300, customerInformationTop)
+            .font("Helvetica")
+            .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
+            .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 40)
+            .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
+            .moveDown();
+    }
 
     generateHr(doc, 282);
 }
@@ -461,13 +482,16 @@ class Order {
             //     data.orders WHERE order_number LIKE '${dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0]}-%'
             //     LIMIT 1 ORDER BY created_at DESC`);
             const updtQueryItem = `UPDATE data.order_items SET status=null WHERE id=${itemId};`;
-            const updtQueryOrder = `UPDATE data.orders SET 
-                        status='new', status_waiting=null, order_number='${_newOrderNumber}' 
-                        WHERE id=${orderId};`;
-
-            console.log(updtQueryItem);
-            console.log(updtQueryOrder);
             await client.query(updtQueryItem);
+            const waitItems = await client.query(`SELECT * FROM data.order_items WHERE id=${itemId}`);
+            let totalAmount = 0;
+            waitItems.rows.forEach(_item => {
+                totalAmount += parseFloat(_item.price)*parseInt(_item.quantity);
+            })
+            const updtQueryOrder = `UPDATE data.orders SET 
+                        status='new', status_waiting=null, order_number='${_newOrderNumber}',
+                        order_amount='${totalAmount}', total_amoint='${totalAmount}' 
+                        WHERE id=${orderId};`;
             await client.query(updtQueryOrder);
 
             return { orderNuber: _newOrderNumber }
@@ -881,7 +905,7 @@ class Order {
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-            console.log(ordersQuery);
+// console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const orderId = res.rows[0].id;
             let historyRes;
@@ -890,25 +914,24 @@ class Order {
             } else {
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-            console.log(historyRes.rows[0]);
+            // console.log(historyRes.rows[0]);
 
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
-            // if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
-            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
-            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
-            //     }
-            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`)) {
-            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
-            //     }
-            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
-            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
-            //     }
-            //     // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
-            //     // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
-            //     // fs.mkdirSync(dirArchiveFolder);
-            // }
-
+            if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
+                }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+                }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+                }
+                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+                // fs.mkdirSync(dirArchiveFolder);
+            }
             // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
@@ -933,6 +956,7 @@ class Order {
                 }
             }
             if (res.rows.length > 0) {
+console.log('GENERATE PDF CODE');
                 // get buyer information
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
@@ -950,6 +974,7 @@ class Order {
                     }).catch(error => {
                         console.log("Merchant error", error);
                     });
+console.log('MULTISAFE DATA', multiSafePayClientRes)
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
@@ -968,6 +993,7 @@ class Order {
                     status: res.rows[0].status,
                     items: res.rows[0].order_items,
                     subtotal: res.rows[0].order_amount,
+                    refund_amount: res.rows[0].refund_amount,
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number+(typeInvoice !== 'refund' ? '' : `-${res.rows[0].refund_prefix}`),
@@ -976,12 +1002,12 @@ class Order {
                     orderId: orderId
                     // paymentDetails: {}
                 };
-                console.log(invoice);
+// console.log('INVOICE DATA', invoice);
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
-                await setTimeout(8000);
+                await setTimeout(18000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
-                    await setTimeout(4000);
+                    await setTimeout(14000);
                 }
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -1734,29 +1760,83 @@ console.log('prefixWait', prefixWait);
             let settingsThreshold;
             let settings;
 
+            const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
+            let compareAmountTherehold = 0;
             if (res.rows.length) {
                 const timeStart = (new Date(res.rows[0].updated_at));
                 const timeEnd = (new Date());
-                const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
-
+                // const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
                 sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
+
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
                 settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
-                const freeShipping = settings.rows[0];
-                // const freeAmountOver = settingsThreshold.rows[0].threshold;
-                if (freeShipping) {
-                    if (freeShipping.free_shipping_status) {
-                        if (settingsThreshold.rows.length) {
-                            console.log(settings.rows[0].free_shipping_timer.hours)
-                            if (res.rows[0].order_amount > settingsThreshold.rows[0].threshold && settings.rows[0].free_shipping_timer.hours > hourDiff) {
-                                console.log('Discount delivery');
-                                return {success: true, freeShipping: 1}
-                            }
-                        }
-                    }
+                let threshold = 0;
+                if (settingsThreshold.rows.length > 0) {
+                    threshold = parseInt(settingsThreshold.rows[0].threshold) > 0 ? settingsThreshold.rows[0].threshold : 0;
                 }
-                return {success: true, freeShipping: 0}
+console.log('THEREHOLD', threshold);
+                const compareDate = moment(res.rows[0].updated_at, "DD/MM/YYYY");
+                const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
+                const endDate     = moment(settings.rows[0].free_shipping_to, "DD/MM/YYYY");
+                const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
+                const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
+                const inPeriod = compareDate.isBetween(startDate, endDate);
+                let freeShipping = false;
+                let amountRefund = 0;
+                if (inPeriod) freeShipping = true;
+                if (threshold > 0 && inPeriod) {
+                    const prevOrdersQuery = `SELECT * FROM data.orders 
+                        LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
+                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                        AND data.order_statuses.status = 'payed'
+                        AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
+                        WHERE data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+console.log(prevOrdersQuery)
+                    const prevOrderRes = await client.query(prevOrdersQuery);
+                    let prevTotal = 0;
+                    let refundShipping = 0;
+                    prevOrderRes.rows.forEach(_order => {
+                        prevTotal += parseFloat(_order.order_amount);
+                        refundShipping += parseFloat(_order.shipping_amount);
+                    });
+console.log('REFUND SHIPPING', refundShipping);
+                    compareAmountTherehold = prevTotal + parseFloat(currentOrder.rows[0].order_amount);
+console.log('COMPARE AMOUNT', compareAmountTherehold);
+console.log('THRESHOLD', threshold);
+                    // превисили сумму для бесплатной доставки
+                    let returnippSing = false;
+                    if (compareAmountTherehold >= threshold) {
+                        returnippSing = true;
+                    }
+console.log('RETURNED SHIPPING', returnippSing);
+                    amountRefund = returnippSing ? refundShipping : 0;
+                }
+console.log('REFUND AMOUNT', amountRefund);
+
+                return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}
+                // console.log('IN FREE PERIOD', inPeriod)
+                // console.log('AMOUNT REFUND', amountRefund)
+
+
+                // console.log('PERIOD FROM', settings.rows[0].free_shipping_from);
+                // console.log('PERIOD TO', settings.rows[0].free_shipping_to);
+                // console.log('ORDER DATE', res.rows[0].updated_at);
+
+                // const freeShipping = settings.rows[0];
+                // // const freeAmountOver = settingsThreshold.rows[0].threshold;
+                // if (freeShipping) {
+                //     if (freeShipping.free_shipping_status) {
+                //         if (settingsThreshold.rows.length) {
+                //             console.log(settings.rows[0].free_shipping_timer.hours)
+                //             if (res.rows[0].order_amount > settingsThreshold.rows[0].threshold && settings.rows[0].free_shipping_timer.hours > hourDiff) {
+                //                 console.log('Discount delivery');
+                //                 return {success: true, freeShipping: 1}
+                //             }
+                //         }
+                //     }
+                // }
+                // return {success: true, freeShipping: 0}
                 // console.log(settingsThreshold.rows[0]);
                 // console.log(sellerData.rows[0].user_id);
                 // console.log(hourDiff)
@@ -1770,11 +1850,10 @@ console.log('prefixWait', prefixWait);
                 // settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
 
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
-
-                if (currOrder.rows[0].order_amount > settingsThreshold.rows[0].threshold) {
-                    return {success: true, freeShipping: 1}
+                if (parseFloat(currOrder.rows[0].order_amount) > parseFloat(settingsThreshold.rows[0].threshold)) {
+                    return {success: true, amount_refund: 0, freeShipping: true}
                 }
-                return {success: true, freeShipping: 0}
+                return {success: true, amount_refund: 0, freeShipping: false}
             }
         } catch (e) {
             console.log(e.message)
