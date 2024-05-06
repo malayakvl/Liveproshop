@@ -1374,12 +1374,14 @@ console.log('here we are check sync');
                             const emptyWaitRes = await client.query(`SELECT id, order_number FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].order_number;
-console.log(`UPDATE data.orders 
+                            const updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
                                 sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
-                                WHERE id=${emptyWaitRes.rows[0].id}`);
+                                WHERE id=${emptyWaitRes.rows[0].id}`;
+console.log(updtQuery);
+                            await client.query(updtQuery);
 
                             // await client.query(`UPDATE data.orders
                             //     SET user_id=${userId},
@@ -1387,10 +1389,10 @@ console.log(`UPDATE data.orders
                             //     order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
                             //     sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
                             //     WHERE id=${emptyWaitRes.rows[0].id}`)
-                            await client.query(`UPDATE data.orders 
-                                SET user_id=${userId}, 
-                                sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
-                                WHERE id=${emptyWaitRes.rows[0].id}`)
+                            // await client.query(`UPDATE data.orders
+                            //     SET user_id=${userId},
+                            //     sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                            //     WHERE id=${emptyWaitRes.rows[0].id}`)
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
                         }
                         console.log(orderId, orderNumber)
@@ -1402,11 +1404,11 @@ console.log(`UPDATE data.orders
                                 await client.query(`UPDATE data.order_items SET order_id = ${orderId} WHERE message_id='${commentId}'`);
                             }
                         }
-                        await client.query(`UPDATE data.orders 
-                                                    SET 
-                                            order_amount = order_amount + ${updateTotal}, 
-                                            total_amount = total_amount + ${updateTotal}
-                                             WHERE id='${orderId}'`)
+                        // await client.query(`UPDATE data.orders
+                        //                             SET
+                        //                     order_amount = order_amount + ${updateTotal},
+                        //                     total_amount = total_amount + ${updateTotal}
+                        //                      WHERE id='${orderId}'`)
                     }
 
                     console.log('CONNECTD ORDER ID', orderId)
