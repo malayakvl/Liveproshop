@@ -346,7 +346,7 @@ class Checkout {
                 //     });
                 // generate unique code for check redirect from merchant
                 const hash = crypto.randomBytes(25).toString('hex');
-                const totalPayment = shippingPrice + parseFloat(orderRes.rows[0].order_amount);
+                const totalPayment = shippingPrice + parseFloat(orderRes.rows[0].order_amount - parseFloat(orderRes.rows[0].refund_amount));
                 await client.query(`UPDATE data.orders SET
                                         country_id=${data.country_id},
                                         state=$$${data.state ? data.state : ''}$$,
@@ -381,9 +381,10 @@ class Checkout {
                     //     post_code='${data.post_code}', city='${data.city}',
                     //     address_line_1='${data.address_line_1 ?  data.address_line_1 : data.shipping_address}'`);
                 }
+                console.log('ORDER PREFIX', process.env.MULTISAFE_ORDER_PREFIX)
                 const dataOrder = {
                     type: 'redirect',
-                    order_id: `LPTT-ID-${orderRes.rows[0].id}`,
+                    order_id: `${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}`,
                     gateway: '',
                     currency: 'EUR',
                     amount: (totalPayment)*100,

@@ -48,7 +48,7 @@ async function generateHeader(doc, seller, locale) {
         .text(`${seller.phone}`, 300, 75, { align: "right" })
         // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
         .text(seller.company_name, 300, 90, { align: "right" })
-        .text("VAT: "+seller.vat, 300, 105, { align: "right" })
+        .text("VAT: 20%", 300, 105, { align: "right" })
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
@@ -225,7 +225,7 @@ async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
             "",
             t[ivoiceType !== 'refund' ? "Total Payment" : "Refund Payment"],
             "",
-            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal))
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal) - parseFloat(invoice.refund_amount))
         );
         doc.font("Helvetica");
     }
@@ -1763,7 +1763,7 @@ console.log('prefixWait', prefixWait);
         const client = await pool.connect();
         try {
             const SQL = `SELECT * FROM data.orders WHERE 
-                user_id=${userId} AND status='payed' ORDER BY updated_at DESC LIMIT 1`;
+                user_id=${userId} AND status='payed' AND (refund_amount IS NULL OR refund_amount = 0) ORDER BY updated_at DESC LIMIT 1`;
             const res = await client.query(SQL);
 
             let sellerData;
