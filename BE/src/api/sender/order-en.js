@@ -26,5 +26,6 @@ export default {
     "Refund": "Refund",
     "color": "color",
     "size": "size",
-    "Shipping refund:": "Shipping refund:"
+    "Shipping refund": "Shipping refund:",
+    "Shipping refund1": ""
 }

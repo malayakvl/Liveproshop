@@ -24,9 +24,8 @@ async function createInvoice (invoice, path, locale, ivoiceType) {
         await generateHeader(doc, invoice.seller.data, locale);
         let historyRes;
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
-console.log('HEADER GENERATED DONE');
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
-        // await generateFooter(doc, locale);
+        await generateFooter(doc, locale);
 
         doc.end();
         doc.pipe(fs.createWriteStream(path));
@@ -79,10 +78,30 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
     const shippingRefund = t["Shipping refund:"];
-    console.log("TYPE", paymentData.payment_details.type);
+    // console.log("TYPE", paymentData.payment_details.type);
     let transactionId = '';
+    // console.log(paymentData.payment_details.type);
     if (paymentData.payment_details.type === 'PAYPAL') {
         transactionId = paymentData.payment_methods[0].external_transaction_id
+    } else if (paymentData.payment_details.type === 'IDEAL') {
+        transactionId = paymentData.costs[0].transaction_id;
+    } else if (paymentData.payment_details.type === 'BANKTRANS') {
+        transactionId = paymentData.payment_details.external_transaction_id;
+    } else if (paymentData.payment_details.type === 'ALIPAY') {
+        transactionId = paymentData.transaction_id;
+        // transactionId = '';
+    } else if (paymentData.payment_details.type === 'MAESTRO') {
+        transactionId = paymentData.transaction_id;
+        // transactionId = '';
+    } else if (paymentData.payment_details.type === 'WECHAT') {
+        transactionId = paymentData.transaction_id;
+        // transactionId = '';
+    } else if (paymentData.payment_details.type === 'TRUSTLY') {
+        transactionId = paymentData.transaction_id;
+        // transactionId = '';
+    } else if (paymentData.payment_details.type === 'CBC') {
+        transactionId = paymentData.transaction_id;
+        // transactionId = '';
     } else {
         transactionId = paymentData.costs[0].transaction_id;
     }
@@ -102,9 +121,12 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
             customerInformationTop + 30
         )
         .font("Helvetica-Bold");
-console.log('REFUND SHIPPING', shippingRefund)
-    if (shippingRefund > 0) {
-        doc.text(shippingRefund, 50, customerInformationTop + 30)
+// console.log(invoice.refund_amount);
+    if (parseFloat(invoice.refund_amount) > 0) {
+console.log('REFUND SHIPPING', invoice.refund_amount)
+        doc.text(t["Shipping refund"], 50, customerInformationTop + 45)
+        doc.text(formatCurrency(parseFloat(invoice.refund_amount)), 150, customerInformationTop + 45)
+        doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
 
     }
     doc.text(invoice.shipping.name, 300, customerInformationTop)
@@ -958,8 +980,9 @@ class Order {
                     }).catch(error => {
                         console.log("Merchant error", error);
                     });
-console.log('here')
-console.log('MULTISAFE DATA', multiSafePayClientRes)
+                const refundAmount = parseFloat(res.rows[0].refund_amount);
+// console.log('REFUND', res.rows[0].refund_amount)
+// console.log('MULTISAFE DATA', multiSafePayClientRes)
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
@@ -978,7 +1001,7 @@ console.log('MULTISAFE DATA', multiSafePayClientRes)
                     status: res.rows[0].status,
                     items: res.rows[0].order_items,
                     subtotal: res.rows[0].order_amount,
-                    refund_amount: res.rows[0].refund_amount,
+                    refund_amount: refundAmount,
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number+(typeInvoice !== 'refund' ? '' : `-${res.rows[0].refund_prefix}`),
@@ -987,7 +1010,7 @@ console.log('MULTISAFE DATA', multiSafePayClientRes)
                     orderId: orderId
                     // paymentDetails: {}
                 };
-console.log('INVOICE DATA', invoice);
+// console.log('INVOICE DATA', invoice);
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 await setTimeout(18000);

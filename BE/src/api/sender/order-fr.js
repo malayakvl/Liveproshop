@@ -26,5 +26,6 @@ export default {
     "Refund": "Remboursement",
     "color": "couleur",
     "size": "taille",
-    "Shipping refund:": "Remboursement des frais de port:"
+    "Shipping refund": "Remboursement",
+    "Shipping refund1": "des frais de port:"
 }
