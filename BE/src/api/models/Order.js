@@ -1763,7 +1763,8 @@ console.log('prefixWait', prefixWait);
         const client = await pool.connect();
         try {
             const SQL = `SELECT * FROM data.orders WHERE 
-                user_id=${userId} AND status='payed' AND (refund_amount IS NULL OR refund_amount = 0) ORDER BY updated_at DESC LIMIT 1`;
+                user_id=${userId} AND status='payed' AND (return_shipping IS NULL AND refund_amount = 0) ORDER BY updated_at DESC LIMIT 1`;
+console.log(SQL);
             const res = await client.query(SQL);
 
             let sellerData;
@@ -1771,24 +1772,31 @@ console.log('prefixWait', prefixWait);
             let settings;
 
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
+            sellerData = await client.query(`SELECT user_id 
+                                FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
+console.log(`SELECT user_id 
+                                FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
 const currOrderId = currentOrder.rows[0].id;
 console.log('CURRENT ORDER', currOrderId);
+console.log('SELLER DATA', sellerData.rows[0].user_id);
             let compareAmountTherehold = 0;
-            if (res.rows.length) {
+            settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
+            settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
+            let threshold = 0;
+console.log('HERE 1');
+            if (settingsThreshold.rows.length > 0) {
+                threshold = parseInt(settingsThreshold.rows[0].threshold) > 0 ? settingsThreshold.rows[0].threshold : 0;
+            }
+console.log('HERE 2');
+console.log('ORDERS LENTH', res.rows.length);
+
+            if (res.rows.length > 0) {
                 const timeStart = (new Date(res.rows[0].updated_at));
                 const timeEnd = (new Date());
                 // const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
-                sellerData = await client.query(`SELECT user_id 
-                                FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
-console.log(`SELECT user_id 
-                                FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
+// console.log(`SELECT user_id
+//                                 FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
 
-                settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
-                settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
-                let threshold = 0;
-                if (settingsThreshold.rows.length > 0) {
-                    threshold = parseInt(settingsThreshold.rows[0].threshold) > 0 ? settingsThreshold.rows[0].threshold : 0;
-                }
 console.log('THEREHOLD', threshold);
                 const compareDate = moment(res.rows[0].updated_at, "DD/MM/YYYY");
                 const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
@@ -1796,6 +1804,7 @@ console.log('THEREHOLD', threshold);
                 const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
                 const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
                 const inPeriod = compareDate.isBetween(startDate, endDate);
+console.log('IN PERIOD', inPeriod);
                 let freeShipping = false;
                 let amountRefund = 0;
                 if (inPeriod) freeShipping = true;
@@ -1827,7 +1836,6 @@ console.log('RETURNED SHIPPING', returnippSing);
                     amountRefund = returnippSing ? refundShipping : 0;
                 }
                 if (parseFloat(amountRefund) > 0) {
-console.log('EBANAYA HUYNYA', currOrderId)
                     await client.query(`UPDATE data.orders SET refund_amount='${amountRefund}' WHERE id='${currOrderId}'`)
                 }
 console.log('REFUND AMOUNT', amountRefund);
@@ -1859,16 +1867,30 @@ console.log('REFUND AMOUNT', amountRefund);
                 // console.log(sellerData.rows[0].user_id);
                 // console.log(hourDiff)
             } else {
+console.log('HERE WE ARE ')
                 // console.log(`SELECT order_amount, live_sessions_id FROM
                 //     data.orders WHERE order_number='${orderNumber}'`);
-                const currOrder = await client.query(`SELECT order_amount, live_sessions_id FROM 
+                const currOrder = await client.query(`SELECT order_amount, live_sessions_id, created_at, updated_at FROM 
                     data.orders WHERE order_number='${orderNumber}'`);
+
+                const compareDate = moment(currOrder.rows[0].updated_at, "DD/MM/YYYY");
+                const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
+                const endDate     = moment(settings.rows[0].free_shipping_to, "DD/MM/YYYY");
+console.log('PERIOD START', startDate);
+console.log('PERIOD END', endDate);
+console.log('ORDER DATE', currOrder.rows[0].updated_at);
+                const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
+                const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
+                const inPeriod = compareDate.isBetween(startDate, endDate);
+console.log('IN PERIOD', inPeriod);
+
                 sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currOrder.rows[0].live_sessions_id}`);
                 // settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
-
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
-                if (parseFloat(currOrder.rows[0].order_amount) > parseFloat(settingsThreshold.rows[0].threshold)) {
+// console.log('here', settingsThreshold);
+// console.log('free period', settingsThreshold);
+                if (parseFloat(currOrder.rows[0].order_amount) > parseFloat(settingsThreshold.rows[0].threshold) || inPeriod) {
                     return {success: true, amount_refund: 0, freeShipping: true}
                 }
                 return {success: true, amount_refund: 0, freeShipping: false}
