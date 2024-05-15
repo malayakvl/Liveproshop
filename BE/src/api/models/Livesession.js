@@ -271,6 +271,7 @@ class Livesession {
         const queryStr = `SELECT
                     *
                 FROM data.get_live_sessions_store_ended_new('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];

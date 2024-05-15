@@ -381,7 +381,8 @@ class Checkout {
                     //     post_code='${data.post_code}', city='${data.city}',
                     //     address_line_1='${data.address_line_1 ?  data.address_line_1 : data.shipping_address}'`);
                 }
-                console.log('ORDER PREFIX', process.env.MULTISAFE_ORDER_PREFIX)
+                console.log('ORDER PREFIX', process.env.MULTISAFE_ORDER_PREFIX);
+                console.log('TOTAL PAYMENT', totalPayment);
                 const dataOrder = {
                     type: 'redirect',
                     order_id: `${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}`,
@@ -410,7 +411,7 @@ class Checkout {
                         ]
                     }
                 }
-
+console.log('MULTISAFE', sellerSettingsRes.rows[0].multisafe_api_key)
                 const multiSafePayClientRes = await axios
                     .post(`${process.env.MULTISAFEPAY_URL}/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }
