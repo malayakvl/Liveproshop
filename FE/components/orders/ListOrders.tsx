@@ -322,11 +322,13 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     {item.order_items?.length ? item.order_items?.length : 0}x{' '}
                                     <span className="red-yellow-gradient-text">product (s)</span>
                                 </td>
+                                <td>{item.name}</td>
                                 <td>
                                     {formatCurrency(
                                         item.total_amount ? item.total_amount : item.order_amount
                                     )}
                                 </td>
+
                                 {user.role_id === 1 &&
                                     item.status === 'new' &&
                                     item.total_amount != 0 && (
