@@ -19,10 +19,6 @@ import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const tmpCommentOrderId = useSelector(orderTmpCommentIdSelector);
-    // const {
-    //     values: { roleId }
-    // } = useFormikContext();
-    // const { setFieldValue } = useFormikContext();
     const hideFormSelector = useSelector(hideRegisterFormSelector);
     const forFree = useSelector(userForFreeSelector);
     type FormData = {
@@ -39,10 +35,6 @@ export default function Signup({ locale }: { locale: string }) {
     const [commentId, setCommentId] = useState('');
     const [_, setCommentTmpId] = useState('');
     const [showSellerRadio, setShowSellerRadio] = useState(true);
-    // const { values, submitForm } = useFormikContext();
-    // const { setFieldValue } = useFormikContext();
-    // const params = new URLSearchParams(window.location.pathname);
-    // console.log(window.location.pathname);
 
     const validationSchema = Yup.object().shape({
         email: !isFbClicked
@@ -87,7 +79,6 @@ export default function Signup({ locale }: { locale: string }) {
             setRoleId(1);
         }
     }, [typeof window !== 'undefined']);
-    // http://localhost:3000/en/fb-order/shoes-andrey?comment_id=2591818487666545_799575391545355
 
     useEffect(() => {
         if (tmpCommentOrderId) {
@@ -103,9 +94,7 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        // const parseCommentId = commentStr[1];
         if (commentStr[0] == 'comment_id' && commentStr[1]) {
-            // console.log(commentStr[1]);
             dispatch(setOrderCommentAction(commentStr[1]));
             window.localStorage.setItem('order_comment_id', commentStr[1]);
         }
@@ -141,14 +130,6 @@ export default function Signup({ locale }: { locale: string }) {
                 const dataParams = urlParams.split('&');
                 const commentStr = dataParams[0].split('=');
                 parseCommentId = commentStr[1];
-                // if (commentStr[0] == 'comment_id' && commentStr[1]) {
-                //     // setRoleId(1);
-                //     if (!commentId) {
-                //         setCommentId(commentStr[1]);
-                //     }
-                //     // setCommentId(commentStr[1]);
-                //     // setFieldValue('roleId', '1');
-                // }
             }
             accountService.registerFB(`${roleId}_${locale}_${forFree ? 1 : 0}_${parseCommentId}`);
         } else {

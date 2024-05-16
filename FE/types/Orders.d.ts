@@ -23,6 +23,7 @@ declare namespace Orders {
         orderReturnedUrl: null | any;
         redirectCheckout: boolean;
         redirectOrderNumber: any;
+        storeName: any;
     }
 
     interface DataItem {

@@ -25,7 +25,8 @@ import {
     redirectOrderNumberAction,
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
-    clearWaitOrderByCommentAction
+    clearWaitOrderByCommentAction,
+    setupConnectedStoreNameAction
 } from './actions';
 
 const initialState: {
@@ -51,6 +52,7 @@ const initialState: {
     orderReturnedUrl: string | null;
     redirectCheckout: boolean;
     redirectOrderNumber: any;
+    storeName: any;
 } = {
     isFetched: false,
     loading: false,
@@ -78,7 +80,8 @@ const initialState: {
     connectedOrderNumber: null,
     orderReturnedUrl: null,
     redirectCheckout: false,
-    redirectOrderNumber: null
+    redirectOrderNumber: null,
+    storeName: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -271,6 +274,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             redirectOrderNumber: action.payload
         })
+    },
+    [setupConnectedStoreNameAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            storeName: action.payload
+        })
     }
 };
 
@@ -299,7 +308,8 @@ export {
     redirectOrderNumberAction,
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
-    clearWaitOrderByCommentAction
+    clearWaitOrderByCommentAction,
+    setupConnectedStoreNameAction
 };
 
 // ------------------------------------

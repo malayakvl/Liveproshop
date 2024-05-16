@@ -406,10 +406,12 @@ export const setupOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER SETUP', res.data.orderNumber);
+                    if (res.data.storeName) {
+                        dispatch(setupConnectedStoreNameAction(res.data.storeName));
+                    }
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    // dispatch(setupConnectedStoreNameAction(res.data.storeName));
                     res.data.orderNumber;
-                    // window.location.href = `/checkout/${}`;
                 })
                 .catch((e) => console.log(e.message));
         }
@@ -433,6 +435,26 @@ export const setupExistOrderByCommentAction: any = createAction(
         }
 );
 export const setupWaitOrderByCommentAction: any = createAction(
+    'order/FETCH_EXIST_WAIT_USER_ORDER',
+    async (commentId: string, email: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            console.log(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`);
+            return axios
+                .get(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`, {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                })
+                .then((res) => {
+                    console.log('ORDER NUMBER WAIT', res.data.orderNumber);
+                    dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    res.data.orderNumber;
+                    // window.location.href = `/checkout/${}`;
+                })
+                .catch((e) => console.log(e.message));
+        }
+);
+export const setupStoreNameByComment: any = createAction(
     'order/FETCH_EXIST_WAIT_USER_ORDER',
     async (commentId: string, email: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
@@ -525,3 +547,4 @@ export const setupReturnedUrlAction: any = createAction('orders/SETUP_RETURNED_U
 export const redirectCheckoutAction: any = createAction('orders/REDIRECT_CHECKOUT_ACTION');
 export const redirectOrderNumberAction: any = createAction('orders/REDIRECT_ORDER_NUMBER');
 export const setupConnectedOrderIdAction: any = createAction('orders/SETUP_CONNECTED_ORDER_ID');
+export const setupConnectedStoreNameAction: any = createAction('orders/SETUP_CONNECTED_STORE');

@@ -3,10 +3,7 @@ import FullLayout from '../../../components/layout/FullLayout';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Router, { useRouter } from 'next/router';
-// import { setFbCommentAction, findOrderByCommentAction } from '../../../redux/orders';
 import { userSelector } from '../../../redux/user/selectors';
-// import {findOrderByCommentUnregAction} from "../../../redux/orders/actions";
-// import { useNavigate } from 'react-router-dom';
 import { orderCommentIdSelector } from '../../../redux/orders/selectors';
 import { setTmpFbCommentAction } from '../../../redux/orders';
 import { setupOrderByCommentAction } from '../../../redux/orders';
@@ -15,8 +12,6 @@ export default function Index({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const orderId = useSelector(orderCommentIdSelector);
-    // const navigate = useNavigate();
-    // http://localhost:3000/en/fb-order/ahead-fashion?comment_id=372155932034821_1183669132590892
 
     const {
         query: { comment_id }
@@ -37,10 +32,8 @@ export default function Index({ locale }: { locale: string }) {
                     )
                 );
             }, 2000);
-            // window.location.href = `${locale == 'fr' ? '' : '/en'}/about-us`;
         } else {
             setTimeout(() => {
-                // window.location.href = `${locale == 'fr' ? '' : '/en'}/auth/signup`;
                 Router.push(`${locale == 'fr' ? '' : '/en'}/auth/signup`);
             }, 2000);
         }

@@ -72,6 +72,10 @@ export const orderNumberSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.connectedOrderNumber
 );
+export const storeNameSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.storeName
+);
 export const orderTmpCommentIdSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.tmpCommentOrderId

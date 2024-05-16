@@ -208,9 +208,9 @@ class OrderController {
     async findOrderByCommentId (req, res) {
         if (req.user) {
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
-            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber, storeName: data.storeName });
         }
-        return res.status(200).json({ success: true, orderNumber: null });
+        return res.status(200).json({ success: true, orderNumber: null, storeName: null });
     }
 
     async findWaitOrderByCommentId (req, res) {

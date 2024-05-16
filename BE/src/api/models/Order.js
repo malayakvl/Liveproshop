@@ -1358,22 +1358,21 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
 
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
-        console.log('findByCommentId', commentId);
-        console.log('userId', userId);
         try {
-            let orderNumber;let orderId;let copyOrderData;
+            let orderNumber;let orderId;let copyOrderData;let storeName;
             const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId, data.order_items.user_id AS tmp_user_id,
-                        data.orders.live_sessions_id, order_amount, total_amount, quantity, data.order_items.user_id AS tmp_user
+                        data.orders.live_sessions_id, order_amount, total_amount, 
+                        quantity, data.order_items.user_id AS tmp_user, data.user_stores.name AS store_name
                                 FROM data.order_items 
                                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
+                                LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                                LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
+            storeName = res.rows[0].store_name
             const tmpUserId = res.rows[0].tmp_user_id;
-            console.log('orderNumber', orderNumber);
             if (!orderNumber) {
-                console.log('TYT')
-                //https://liveproshop.com/en/fb-order/fashion-haven?comment_id=1052644862890019_965909311796896
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
@@ -1383,7 +1382,6 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
 
                 if (!resWait.rows[0].order_id) {
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
-                    console.log("EXIST NON PAYED", existNonPayed.rows.length)
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
@@ -1393,7 +1391,6 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                             orderId = existNonPayedEmpty.rows[0].id;
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
-                            console.log('here we are check sync');
                             const emptyWaitRes = await client.query(`SELECT id, order_number FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].order_number;
@@ -1406,19 +1403,8 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                             console.log(updtQuery);
                             await client.query(updtQuery);
 
-                            // await client.query(`UPDATE data.orders
-                            //     SET user_id=${userId},
-                            //     total_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
-                            //     order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
-                            //     sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
-                            //     WHERE id=${emptyWaitRes.rows[0].id}`)
-                            // await client.query(`UPDATE data.orders
-                            //     SET user_id=${userId},
-                            //     sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
-                            //     WHERE id=${emptyWaitRes.rows[0].id}`)
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
                         }
-                        console.log(orderId, orderNumber)
                     }
                     if (resWait.rows.length > 0) {
                         for (const _item of resWait.rows) {
@@ -1427,20 +1413,12 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                                 await client.query(`UPDATE data.order_items SET order_id = ${orderId} WHERE message_id='${commentId}'`);
                             }
                         }
-                        // await client.query(`UPDATE data.orders
-                        //                             SET
-                        //                     order_amount = order_amount + ${updateTotal},
-                        //                     total_amount = total_amount + ${updateTotal}
-                        //                      WHERE id='${orderId}'`)
                     }
-
-                    console.log('CONNECTD ORDER ID', orderId)
-                    console.log('CONNECTD ORDER NUMBER', orderNumber)
                 } else {
                     console.log('PRISHLI SUDA A TUT PUSTO')
                 }
                 // return {success: true, orderId: orderId, orderNumber: orderNumber };
-                return {success: true, orderId: orderId, orderNumber: orderNumber };
+                return {success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName };
 
             } else {
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
@@ -1455,14 +1433,27 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                 //     AND status='new' AND id != '${res.rows[0].order_id}'
                 //     AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 // exit;
-                const existNonPayedOrder = await client.query(
-                    `SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
+                console.log(`SELECT id, order_number FROM data.orders 
+                                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                                        LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id   
+                                        WHERE user_id='${userId}'
                                         AND status='new' AND id != '${res.rows[0].order_id}'
                                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+                // const existNonPayedOrder = await client.query(
+                //     `SELECT id, order_number FROM data.orders
+                //                      LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                //                         LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+                //                         WHERE user_id='${userId}'
+                //                         AND status='new' AND id != '${res.rows[0].order_id}'
+                //                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+                const existNonPayedOrder = await client.query(
+                    `SELECT data.orders.id, data.orders.order_number FROM data.orders LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+                     WHERE data.orders.user_id='${userId}'
+                     AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
+                      AND live_sessions_id='168' AND status_waiting IS NULL`);
                 if (existNonPayedOrder.rows[0]?.id) {
                     orderNumber = existNonPayedOrder.rows[0].order_number;
-                    // copyOrderData.user_id = userId;
-                    // copyOrderData.order_number = `${res.rows[0].order_number}-WO-$prefixWait}`;
                     orderId = existNonPayedOrder.rows[0].id;
                     // before add new items check if this item already aexist in order, if yes only change quantity
                     const updateExistItemsSQL = `UPDATE data.order_items SET 
@@ -1488,7 +1479,6 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                     const realOrderItems = await client.query(`SELECT id 
                     FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
                     // need to combine two rows into one
-                    console.log(combinedSQL.rows.length, realOrderItems.rows.length);
                     if (combinedSQL.rows.length < realOrderItems.rows.length) {
                         const combinedData = [];
                         combinedSQL.rows.forEach(_item => {
@@ -1545,28 +1535,16 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                                     '${JSON.stringify(_item.configuration)}', ${userId}, ${_item.live_sessions_id}
 
                 )`);
-                    console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
                     await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
-                    // await client.query(`INSERT INTO data.order_items (order_id, message_id, product_id,
-                    //                     product_configuration_id, color_id, size_id, price, quantity, status,
-                    //                     configuration, user_id, live_sessions_id) VALUES (
-                    //                     {insertOrder.rows[0].id}, '${_item.message_id}',
-                    //                     '${_item.product_id}', '${_item.product_configuration_id}',
-                    //                     '${_item.color_id}', '${_item.size_id}',
-                    //                     '{${_item.price}}', ${_item.quantity}, 'waiting',
-                    //                     '${_item.configuration}', {userId}, {_item.live_sessions_id}
-                    //
-                    // )`);
-                    // console.log("BBBBB", insertOrder.rows[0].id);
                 })
 
                 await client.query(`UPDATE data.orders SET waiting_products='${JSON.stringify(waitingItems.rows)}' WHERE id=${orderId}`)
 
                 console.log("=============");
                 console.log("RETURNED DATA");
-                console.log({success: true, orderId: orderId, orderNumber: orderNumber })
+                console.log({success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName })
                 console.log("=============");
-                return {success: true, orderId: orderId, orderNumber: orderNumber };
+                return {success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName };
             }
             // console.log(orderNumber);
         } catch (e) {
