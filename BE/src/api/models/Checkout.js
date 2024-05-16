@@ -306,6 +306,7 @@ class Checkout {
     async checkoutSubmit(data, user, freeShipping, lng) {
         const client = await pool.connect();
         try {
+console.log('Checkout Submit')
             const freeShippingData = await orderModel.isFreeShipping(user.id, data.orderNumber);
             const isFreeShipping = freeShippingData.freeShipping;
             // const isFreeShipping = freeShipping.freeShipping;
@@ -383,9 +384,10 @@ class Checkout {
                 }
                 console.log('ORDER PREFIX', process.env.MULTISAFE_ORDER_PREFIX);
                 console.log('TOTAL PAYMENT', totalPayment);
+                const orderNumberMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}`
                 const dataOrder = {
                     type: 'redirect',
-                    order_id: `${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}`,
+                    order_id: orderNumberMultisafe,
                     gateway: '',
                     currency: 'EUR',
                     amount: (totalPayment)*100,
@@ -411,12 +413,25 @@ class Checkout {
                         ]
                     }
                 }
-console.log('MULTISAFE', sellerSettingsRes.rows[0].multisafe_api_key)
+console.log('MULTISAFE API KEY FOR PAYMENT', sellerSettingsRes.rows[0].multisafe_api_key)
+console.log('DATA ORDER', dataOrder)
+console.log('MULTI LINK', dataOrder)
                 const multiSafePayClientRes = await axios
                     .post(`${process.env.MULTISAFEPAY_URL}/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
+console.log(res.data.data)
+                        const multiSafePayClientRes = await axios
+                            .get(`${process.env.MULTISAFEPAY_URL}/orders/${orderNumberMultisafe}?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, {
+                                headers: { 'Content-Type': 'application/json' }
+                            })
+                            .then(async (resM) => {
+                                return resM.data.data;
+                            }).catch(error => {
+                                console.log("Merchant error", error);
+                            });
+
                         // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
                         return {redirectUrl: res.data.data.payment_url, error: null}
                     }).catch(error => {
@@ -425,17 +440,29 @@ console.log('MULTISAFE', sellerSettingsRes.rows[0].multisafe_api_key)
                     });
 
 
-                // const multiSafePayClientRes = await axios
-                //     .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
-                //         headers: { 'Content-Type': 'application/json' }
-                //     })
-                //     .then(async (res) => {
-                //         // console.log("Res Data", res.data);
-                //         return {redirectUrl: res.data.data.payment_url, error: null}
-                //         // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
-                //     }).catch(error => {
-                //         return {redirectUrl: null, error: error.message}
-                //     });
+                const multiSafePayClientPaymentRes = await axios
+                    .post(`https://testapi.multisafepay.com/v1/json/orders?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(async (res) => {
+console.log("Res Multisafe Data", res.data);
+console.log("ORDER ID", res.data.data.order_id);
+
+                       const multiOrderDate = await axios
+                           .get(`https://testapi.multisafepay.com/v1/json/orders/${res.data.data.order_id}?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
+                               headers: { 'Content-Type': 'application/json' }
+                           })
+                           .then(async (res) => {
+                                console.log('POPALY', res.data.data);
+                           }).catch(error => {
+                               console.log('BLYAHA')
+                               return {error: error.message}
+                           });
+                        // return {redirectUrl: res.data.data.payment_url, error: null}
+                        // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
+                    }).catch(error => {
+                        return {error: error.message}
+                    });
                 // console.log('here we are', multiSafePayClientRes);
                 return {redirectUrl: multiSafePayClientRes.redirectUrl, error: multiSafePayClientRes.error}
             } else {

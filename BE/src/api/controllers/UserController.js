@@ -127,6 +127,7 @@ class UserController {
     async processPDF(pdfFilePath, res) {
         try {
             // Parse the PDF content
+console.log('GENERATE PD')
             const pdfBuffer = fs.readFileSync(pdfFilePath);
             const data = await PDFParser(pdfBuffer);
             const pdfText = data.text;

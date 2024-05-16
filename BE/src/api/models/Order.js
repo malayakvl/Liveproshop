@@ -16,6 +16,9 @@ import {
     confirmShippedEmail, confirmSubscriptionEmail
 } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
+import * as nodeFetch from "node-fetch";
+
+
 
 
 async function createInvoice (invoice, path, locale, ivoiceType) {
@@ -80,9 +83,8 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const shippingRefund = t["Shipping refund:"];
     // console.log("TYPE", paymentData.payment_details.type);
     let transactionId = '';
-    // console.log(paymentData.payment_details.type);
-    if (paymentData.payment_details.type === 'PAYPAL') {
-        transactionId = paymentData.payment_methods[0].external_transaction_id
+    if (invoice.paymentType === 'PAYPAL') {
+        transactionId = invoice.transaction_id;
     } else if (paymentData.payment_details.type === 'IDEAL') {
         transactionId = paymentData.costs[0].transaction_id;
     } else if (paymentData.payment_details.type === 'BANKTRANS') {
@@ -105,7 +107,6 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     } else {
         transactionId = paymentData.costs[0].transaction_id;
     }
-
     doc
         .fontSize(10)
         .text(captionNumber, 50, customerInformationTop)
@@ -121,7 +122,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
             customerInformationTop + 30
         )
         .font("Helvetica-Bold");
-// console.log(invoice.refund_amount);
+
     if (parseFloat(invoice.refund_amount) > 0) {
         console.log('REFUND SHIPPING', invoice.refund_amount)
         doc.text(t["Shipping refund"], 50, customerInformationTop + 45)
@@ -129,11 +130,13 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
 
     }
+    console.log('HERE WE ARE');
+    console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
     doc.text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
         .text(t["Transaction ID"]+transactionId, 300, customerInformationTop + 40)
-        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
+        .text(t["Payment Method"]+invoice.paymentType, 300, customerInformationTop + 55)
         .moveDown();
 
     generateHr(doc, 282);
@@ -970,19 +973,29 @@ class Order {
 
                 // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
+// console.log('HERE TUT', process.env.MULTISAFE_ORDER_PREFIX);
+// console.log('HERE TUT1', res.rows[0].id);
+const orderNuberForMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}`;
+// console.log(orderNuberForMultisafe)
+// console.log('HERE TUT3', `${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`);
+//                 const url = 'https://testapi.multisafepay.com/v1/json/orders/LPP-ID-1015?api_key=b7c29dc0749c3a134c7471c8ca19f5443222f71e';
+//                 const options = {method: 'GET', headers: {accept: 'application/json'}};
 
-                const multiSafePayClientRes = await axios
-                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
+                const multiOrderPaymentData = await axios
+                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
                         headers: { 'Content-Type': 'application/json' }
                     })
-                    .then(async (resM) => {
-                        return resM.data.data;
+                    .then(async (res) => {
+                        // console.log('PAYMENT METHODS', res.data.data);
+                        return {'success': true, paymentData: res.data.data}
                     }).catch(error => {
-                        console.log("Merchant error", error);
+                        console.log('BLYAHA')
+                        return {error: error.message}
                     });
+// console.log('MULTI PAYMENT DATA', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
 // console.log('REFUND', res.rows[0].refund_amount)
-// console.log('MULTISAFE DATA', multiSafePayClientRes)
+console.log('MULTISAFE PAYMENT METHOD', multiOrderPaymentData.paymentData.payment_methods[0].type)
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
@@ -1006,11 +1019,13 @@ class Order {
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number+(typeInvoice !== 'refund' ? '' : `-${res.rows[0].refund_prefix}`),
                     invoice_date: moment(historyRes.rows[0].created_at).format('DD/MM/YYYY'),
-                    paymentDetails: multiSafePayClientRes,
+                    paymentDetails: multiOrderPaymentData,
+                    transaction_id: multiOrderPaymentData.paymentData.payment_methods[0].external_transaction_id,
+                    paymentType: multiOrderPaymentData.paymentData.payment_methods[0].type,
                     orderId: orderId
                     // paymentDetails: {}
                 };
-// console.log('INVOICE DATA', invoice);
+console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 await setTimeout(18000);
