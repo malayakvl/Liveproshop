@@ -334,7 +334,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     item.total_amount != 0 && (
                                         <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                             {!item.status_waiting && (
-                                                <Link href={`/checkout/${item.order_number}`}>
+                                                <Link href={`/checkout/${item.order_number}?storeName=${item.name}`}>
                                                     <div
                                                         className="gradient-btn-small cursor-pointer"
                                                         style={{
