@@ -80,7 +80,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
-    const shippingRefund = t["Shipping refund:"];
+    // const shippingRefund = t["Shipping refund:"];
     // console.log("TYPE", paymentData.payment_details.type);
     let transactionId = '';
     if (invoice.paymentType === 'PAYPAL') {
@@ -117,19 +117,19 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
         .text(captionTotal, 50, customerInformationTop + 30)
         .text(
-            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal) - parseFloat(invoice.refund_amount)),
             150,
             customerInformationTop + 30
         )
         .font("Helvetica-Bold");
 
-    if (parseFloat(invoice.refund_amount) > 0) {
-        console.log('REFUND SHIPPING', invoice.refund_amount)
-        doc.text(t["Shipping refund"], 50, customerInformationTop + 45)
-        doc.text(formatCurrency(parseFloat(invoice.refund_amount)), 150, customerInformationTop + 45)
-        doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
-
-    }
+    // if (parseFloat(invoice.refund_amount) > 0) {
+    //     console.log('REFUND SHIPPING', invoice.refund_amount)
+    //     // doc.text(t["Shipping refund"], 50, customerInformationTop + 45)
+    //     doc.text(formatCurrency(parseFloat(invoice.refund_amount)), 150, customerInformationTop + 45)
+    //     doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
+    //
+    // }
     console.log('HERE WE ARE');
     console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
     doc.text(invoice.shipping.name, 300, customerInformationTop)
@@ -198,6 +198,21 @@ async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
             "",
             formatCurrency(invoice.shipping_amount)
         );
+        let refundToDatePosition = paidToDatePosition + 20;
+        if (invoice.refund_amount) {
+
+            generateTableRow(
+                doc,
+                refundToDatePosition,
+                "",
+                "",
+                t["Shipping refund"],
+                "",
+                formatCurrency(invoice.refund_amount)
+            );
+        } else {
+            refundToDatePosition - 20;
+        }
         // reacalculate vat
         let vatAmount = 0;
         let totalAmount = 0;
@@ -207,7 +222,7 @@ async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
 
         // console.log(formatCurrency(totalAmount - vatAmount));
 
-        const vatToDatePosition = paidToDatePosition + 20;
+        const vatToDatePosition = refundToDatePosition + 20;
         generateTableRow(
             doc,
             vatToDatePosition,
@@ -935,9 +950,6 @@ class Order {
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
                     fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 }
-                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
-                // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
-                // fs.mkdirSync(dirArchiveFolder);
             }
             // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
@@ -973,13 +985,7 @@ class Order {
 
                 // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
-// console.log('HERE TUT', process.env.MULTISAFE_ORDER_PREFIX);
-// console.log('HERE TUT1', res.rows[0].id);
-const orderNuberForMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}`;
-// console.log(orderNuberForMultisafe)
-// console.log('HERE TUT3', `${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`);
-//                 const url = 'https://testapi.multisafepay.com/v1/json/orders/LPP-ID-1015?api_key=b7c29dc0749c3a134c7471c8ca19f5443222f71e';
-//                 const options = {method: 'GET', headers: {accept: 'application/json'}};
+                const orderNuberForMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}`;
 
                 const multiOrderPaymentData = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
@@ -992,10 +998,8 @@ const orderNuberForMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows
                         console.log('BLYAHA')
                         return {error: error.message}
                     });
-// console.log('MULTI PAYMENT DATA', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
-// console.log('REFUND', res.rows[0].refund_amount)
-console.log('MULTISAFE PAYMENT METHOD', multiOrderPaymentData.paymentData.payment_methods[0].type)
+                console.log('MULTISAFE PAYMENT METHOD', multiOrderPaymentData.paymentData.payment_methods[0].type)
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
@@ -1025,7 +1029,6 @@ console.log('MULTISAFE PAYMENT METHOD', multiOrderPaymentData.paymentData.paymen
                     orderId: orderId
                     // paymentDetails: {}
                 };
-console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 await setTimeout(18000);
