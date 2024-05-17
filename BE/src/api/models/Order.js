@@ -1757,7 +1757,7 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
         try {
             const SQL = `SELECT * FROM data.orders WHERE 
                 user_id=${userId} AND status='payed' AND (return_shipping IS NULL AND refund_amount = 0) ORDER BY updated_at DESC LIMIT 1`;
-            console.log(SQL);
+console.log(SQL);
             const res = await client.query(SQL);
 
             let sellerData;
@@ -1767,22 +1767,14 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
             sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
-            console.log(`SELECT user_id 
-                                FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
             const currOrderId = currentOrder.rows[0].id;
-            console.log('CURRENT ORDER', currOrderId);
-            console.log('SELLER DATA', sellerData.rows[0].user_id);
             let compareAmountTherehold = 0;
             settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
             settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
             let threshold = 0;
-            console.log('HERE 1');
             if (settingsThreshold.rows.length > 0) {
                 threshold = parseInt(settingsThreshold.rows[0].threshold) > 0 ? settingsThreshold.rows[0].threshold : 0;
             }
-            console.log('HERE 2');
-            console.log('ORDERS LENTH', res.rows.length);
-            console.log('CURRENT ORDER AMOUNT', currentOrder.rows[0].total_amount);
 
             if (res.rows.length > 0) {
                 const timeStart = (new Date(res.rows[0].updated_at));
@@ -1791,14 +1783,14 @@ console.log('INVOICE PAYMENT METHOD', invoice.paymentType);
 // console.log(`SELECT user_id
 //                                 FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
 
-                console.log('THEREHOLD', threshold);
+console.log('THEREHOLD', threshold);
                 const compareDate = moment(res.rows[0].updated_at, "DD/MM/YYYY");
                 const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
                 const endDate     = moment(settings.rows[0].free_shipping_to, "DD/MM/YYYY");
                 const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
                 const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
                 const inPeriod = compareDate.isBetween(startDate, endDate);
-                console.log('IN PERIOD', inPeriod);
+console.log('IN PERIOD', inPeriod);
                 let freeShipping = false;
                 let amountRefund = 0;
                 if (inPeriod) freeShipping = true;
@@ -1807,11 +1799,11 @@ console.log('WE HAVE THEREHOLD')
                     const prevOrdersQuery = `SELECT * FROM data.orders 
                         LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
                         LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                        AND data.order_statuses.status = 'payed'
-                        AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
-                        WHERE data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
-                    console.log(prevOrdersQuery)
-                    console.log('TTTT1')
+                        WHERE 
+                            data.order_statuses.status = 'payed' AND
+                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND data.orders.user_id='${userId}' AND
+                            data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+console.log(prevOrdersQuery)
                     const prevOrderRes = await client.query(prevOrdersQuery);
                     let prevTotal = 0;
                     let refundShipping = 0;
@@ -1821,28 +1813,35 @@ console.log('WE HAVE THEREHOLD')
                         ordersCount++;
                         refundShipping += !_order.return_shipping ? 0 : parseFloat(_order.shipping_amount);
                     });
+console.log('PREV TOTAL', prevTotal)
                     ordersCount = ordersCount + 1;
-                    console.log('ORDERS COUNT', ordersCount + 1);
-                    console.log('REFUND SHIPPING', refundShipping);
                     const prevOrdersQuery1 = `SELECT * FROM data.orders 
                         LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
                         LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                        AND data.order_statuses.status = 'payed'
-                        AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
-                        WHERE data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+                        WHERE 
+                            data.order_statuses.status = 'payed' AND 
+                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND
+                            data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
 
-                    compareAmountTherehold = prevTotal + parseFloat(currentOrder.rows[0].order_amount);
-                    console.log('COMPARE AMOUNT', compareAmountTherehold);
-                    console.log('THRESHOLD', threshold);
-                    // превисили сумму для бесплатной доставки
-                    let returnippSing = false;
-                    if (compareAmountTherehold >= threshold) {
-                        returnippSing = true;
+                    let makeRefund = false;
+                    if (prevTotal + parseFloat(currentOrder.rows[0].order_amount) >= threshold) {
+console.log('HERE')
+                        makeRefund = true;
+                        // calculate refund amount
+console.log(`SELECT shipping_amount, id 
+                                FROM data.orders WHERE shipping_amount > 0 AND user_id=${userId} AND return_shipping IS NOT TRUE ORDER BY created_at DESC LIMIT 1`)
+                        const refundData = await client.query(`SELECT shipping_amount, id 
+                                FROM data.orders WHERE shipping_amount > 0 AND user_id=${userId} AND return_shipping IS NOT TRUE ORDER BY created_at DESC LIMIT 1`);
+console.log('HERE ERROR', refundData.rows[0].id);
+                        await client.query(`UPDATE data.orders SET return_shipping = true WHERE id='${refundData.rows[0].id}'`)
+                        amountRefund = parseFloat(refundData.rows[0].shipping_amount);
+console.log('Make refund', amountRefund)
+
+                        return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}
+                    } else {
+                        return {success: true, amount_refund: 0, freeShipping: freeShipping}
                     }
-                    console.log('RETURNED SHIPPING', returnippSing);
-                    amountRefund = returnippSing ? 20 : 0;
                 }
-                console.log('IDEM DALSE');
 
                 if (parseFloat(amountRefund) > 0) {
                     await client.query(`UPDATE data.orders SET refund_amount='${amountRefund}' WHERE id='${currOrderId}'`)
@@ -1851,64 +1850,20 @@ console.log('WE HAVE THEREHOLD')
                 if (!inPeriod) {
                     console.log('AAAAAA');
                 } else {
-                    console.log('BBBB');
                     const prevOrdersQuery1 = `SELECT * FROM data.orders 
                         LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
                         LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                        AND data.order_statuses.status = 'payed'
-                        AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
-                        WHERE data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
-
-                    console.log(prevOrdersQuery1);
+                        WHERE 
+                            data.order_statuses.status = 'payed' AND 
+                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND data.orders.user_id='${userId}' AND
+                            data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
                     prevOrderRes1 = await client.query(prevOrdersQuery1);
-
                 }
-                console.log('JEdsdksdjksds', typeof(prevOrderRes1));
-                // const prevOrdersQuery1 = `SELECT * FROM data.orders
-                //         LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id
-                //         LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                //         AND data.order_statuses.status = 'payed'
-                //         AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
-                //         WHERE data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
-                // console.log(prevOrdersQuery1);
-                // const prevOrderRes1 = await client.query(prevOrdersQuery1);
-                let i = 0;
-                let refundShipping1 = 0;
-                let ordersCount1 = 0;
-console.log('HERE INCOME', prevOrderRes1)
-let prevTotal1 = 0;
-                if (prevOrderRes1) {
-console.log('HERE INCOME 1')
-
-                    prevOrderRes1.rows.forEach(_order => {
-                        prevTotal1 += parseFloat(_order.order_amount);
-                        ordersCount1++;
-                        refundShipping1 += !_order.return_shipping ? 0 : parseFloat(_order.shipping_amount);
-                    });
-                } else {
-                    console.log('ИИИИИИИИ')
-                }
-                ordersCount1 = ordersCount1 + 1;
-                console.log('ORDERS COUNT NEW', ordersCount1);
-                if (ordersCount1 === 2) {
-                    amountRefund = 0;
-                }
-                if (ordersCount1 === 3) {
-                    amountRefund = 20;
-                    console.log('HERE', amountRefund)
-                }
-                if (ordersCount1 === 4) {
-                    amountRefund = 0;
-                }
-
-                console.log('REFUND AMOUNT', amountRefund);
 
                 return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}
-                console.log('HERE WE ARE THIS BLOCK1')
 
                 // console.log(hourDiff)
             } else {
-                console.log('HERE WE ARE THIS BLOCK 555');
                 // console.log(`SELECT order_amount, live_sessions_id FROM
                 //     data.orders WHERE order_number='${orderNumber}'`);
                 const currOrder = await client.query(`SELECT order_amount, user_id, live_sessions_id, created_at, updated_at FROM 

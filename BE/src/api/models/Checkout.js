@@ -226,7 +226,6 @@ class Checkout {
             if (res.rows.length > 0) {
                 if (freeShipping) {
                     res.rows.forEach(_method => {
-                        console.log('here we are');
                         _method.price = 0;
                     })
                 }
