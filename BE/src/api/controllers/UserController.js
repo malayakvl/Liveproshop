@@ -626,7 +626,6 @@ console.log('GENERATE PD')
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
             // create upgrade row about subscription
-            console.log('AAAAA');
             // const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
             const dataUpgrade = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
             return res.status(200).json({

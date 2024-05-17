@@ -1,5 +1,6 @@
 import multer from 'multer';
 import shippingModel from '../models/Shipping.js'
+import moment from "moment";
 
 export default new class ShippingController {
     create(req, res) {
@@ -152,7 +153,11 @@ export default new class ShippingController {
     }
 
     setThreshold(req, res) {
-        console.log(req.body);
+        const currentTime = moment(Date.now()).format('HH:mm:ss');
+        // console.log(req.body.dateFrom)
+        req.body.dateFrom = `${req.body.dateFrom} ${currentTime}`;
+        req.body.dateTo = `${req.body.dateTo} ${currentTime}`;
+        // console.log(req.body);
         shippingModel.setThreshold(req.user.id, req.body)
         // shippingModel.setShippingPeriod(req.user.id, req.body.startDate, req.body.endDate)
         res.status(200).json({})

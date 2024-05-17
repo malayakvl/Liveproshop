@@ -48,7 +48,6 @@ class CheckoutController {
         // for server add time duration
         // let convertedCreatedAt = addHoursToDate(orderData.order.sync_at, -3);
         if (sellerSettingsData[0]) {
-            console.log('AAAA')
             var d = new Date(orderData.order.created_at);
             if (sellerSettingsData[0].type === 'd') {
                 // To add Days

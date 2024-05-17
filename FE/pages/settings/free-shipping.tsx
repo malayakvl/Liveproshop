@@ -40,13 +40,6 @@ export default function ShippingThreshold() {
     const [threshold, setThreshold] = useState('');
     const [period, setPeriod] = useState({ free_shipping_from: null, free_shipping_to: null });
     const showDatePopup = useSelector(showDatePopupSelector);
-    // const [state, setState] = useState<any>([
-    //     {
-    //         startDate: moment().subtract(1, 'month').toDate(),
-    //         endDate: moment().toDate(),
-    //         key: 'selection'
-    //     }
-    // ]);
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
     const [calendarPeriod, setCalendarPeriod] = useState<any>(null);
@@ -88,17 +81,6 @@ export default function ShippingThreshold() {
                 setPeriod(result.data.period);
             });
     }, [user.email]);
-
-    // const reverseDatePopup = useCallback(
-    //     (event) => {
-    //         if (event.target?.name === 'inputDate') {
-    //             dispatch(showDateSelectorAction(!showDatePopup));
-    //         } else if (showDatePopup) {
-    //             dispatch(showDateSelectorAction(false));
-    //         }
-    //     },
-    //     [showDatePopup]
-    // );
 
     if (!user.email) return null;
 
@@ -197,10 +179,10 @@ export default function ShippingThreshold() {
                                                         <span className="inline-block mt-[2px] text-gray-350">
                                                             {moment(
                                                                 period.free_shipping_from
-                                                            ).format('DD/MM/YYYY')}
+                                                            ).format('DD/MM/YYYY HH:mm')}
                                                             {' - '}
                                                             {moment(period.free_shipping_to).format(
-                                                                'DD/MM/YYYY'
+                                                                'DD/MM/YYYY HH:mm'
                                                             )}
                                                         </span>
                                                     </li>
