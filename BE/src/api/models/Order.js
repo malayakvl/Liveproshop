@@ -1833,8 +1833,9 @@ console.log(`SELECT shipping_amount, id
                         const refundData = await client.query(`SELECT shipping_amount, id 
                                 FROM data.orders WHERE shipping_amount > 0 AND user_id=${userId} AND return_shipping IS NOT TRUE ORDER BY created_at DESC LIMIT 1`);
 console.log('HERE ERROR', refundData.rows[0].id);
-                        await client.query(`UPDATE data.orders SET return_shipping = true WHERE id='${refundData.rows[0].id}'`)
                         amountRefund = parseFloat(refundData.rows[0].shipping_amount);
+
+                        // await client.query(`UPDATE data.orders SET return_shipping = true WHERE id='${refundData.rows[0].id}'`)
 console.log('Make refund', amountRefund)
 
                         return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}

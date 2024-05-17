@@ -328,23 +328,6 @@ console.log('Checkout Submit')
                             AND country_id=${data.country_id}`);
                     shippingPrice = parseFloat(shippingRes.rows[0].price);
                 }
-                // if (data.shippingMethodId && parseInt(isFreeShipping) !== 1) {
-                //     const shippingRes = await client.query(`SELECT * FROM data.shipping_to_country
-                //         WHERE user_id=${sellerSettingsRes.rows[0].user_id}
-                //             AND shipping_id=${data.shippingMethodId}
-                //             AND country_id=${data.country_id}`);
-                //     shippingPrice = parseFloat(shippingRes.rows[0].price);
-                // }
-                // const multyData = await axios
-                //     .get(`${process.env.MULTISAFEPAY_URL}/orders/LP-ID-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
-                //         headers: { 'Content-Type': 'application/json' }
-                //     })
-                //     .then(async (resp) => {
-                //         console.log(resp);
-                //     }).catch(error => {
-                //         console.log("Merchant error", error);
-                //     });
-                // generate unique code for check redirect from merchant
                 const hash = crypto.randomBytes(25).toString('hex');
                 const totalPayment = shippingPrice + parseFloat(orderRes.rows[0].order_amount - parseFloat(orderRes.rows[0].refund_amount));
                 await client.query(`UPDATE data.orders SET
@@ -357,17 +340,10 @@ console.log('Checkout Submit')
                                         shipping_amount=${shippingPrice},
                                         shipping_address=$$${data.address_line_1 ?  data.address_line_1 : data.shipping_address}$$,
                                         hash='${hash}',
-                                        total_amount='${totalPayment}',
                                         refund_amount='${freeShippingData.amount_refund}'
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
-                // return {redirectUrl: null, error: 'No find order'}
-                // console.log(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
                 const bAddressRes = await client.query(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
                 if (bAddressRes.rows.length === 0) {
-                    // console.log(`INSERT INTO data.addresses SET user_id='${user.id}',
-                    //     country_id='${data.country_id}', state='${data.state ? data.state : ''}',
-                    //     post_code='${data.post_code}', city='${data.city}',
-                    //     address_line_1='${data.address_line_1 ?  data.address_line_1 : data.shipping_address}'`);
 
                     const queryAddress = `INSERT INTO data.addresses (
                         user_id, country_id, state, post_code, city, address_line_1, address_type) VALUES (
