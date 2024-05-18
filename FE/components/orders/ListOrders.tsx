@@ -282,25 +282,27 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 </td>
                                 <td className="">
                                     <div className="float-left">
-                                        <div className="flex flex-row">
-                                            <div className="user-photo" style={{ marginLeft: '0' }}>
-                                                <Image
-                                                    src={
-                                                        item.buyer_photo
-                                                            ? baseApiUrl + item.buyer_photo
-                                                            : userProfileImg
-                                                    }
-                                                    width={24}
-                                                    height={24}
-                                                    className="rounded-full cursor-pointer"
-                                                    alt=""
-                                                />
+                                        {user.role_id === 1 && <>{item.name}</>}
+                                        {user.role_id > 2 && (
+                                            <div className="flex flex-row">
+                                                <div
+                                                    className="user-photo"
+                                                    style={{ marginLeft: '0' }}>
+                                                    <Image
+                                                        src={
+                                                            item.buyer_photo
+                                                                ? baseApiUrl + item.buyer_photo
+                                                                : userProfileImg
+                                                        }
+                                                        width={24}
+                                                        height={24}
+                                                        className="rounded-full cursor-pointer"
+                                                        alt=""
+                                                    />
+                                                </div>
+                                                <div className="pl-3">{item.buyer_first_name}</div>
                                             </div>
-                                            <div className="pl-3">{item.buyer_first_name}</div>
-                                            <span className="absolute pt-[17px] font-[9px] store-style">
-                                                {item.name}
-                                            </span>
-                                        </div>
+                                        )}
                                     </div>
                                 </td>
                                 <td>{parseTranslation(item.country_json, 'name', locale)}</td>
@@ -336,7 +338,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 </td>
                                 <td>
                                     {formatCurrency(
-                                        item.total_amount ? item.total_amount : item.order_amount
+                                        item.total_amount
+                                            ? item.total_amount - item.refund_amount
+                                            : item.order_amount
                                     )}
                                 </td>
 
