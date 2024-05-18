@@ -1777,15 +1777,14 @@ console.log('HERE');
                 user_id=${userId} AND status='payed' 
                 AND (return_shipping IS NULL AND refund_amount = 0) 
                 ORDER BY updated_at DESC LIMIT 1`;
-console.log(SQL);
             const res = await client.query(SQL);
             let inPeriod = false;
             let freeShipping = false;
             let amountRefund = 0;
 
             if (res.rows.length > 0) {
-                const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
-                const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
+                const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD HH:mm:ss");
+                const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD HH:mm:ss");
 
                 // defined is period setup and yes, check whether the order arrived within the specified period
                 if (settings.rows[0].free_shipping_from) {
@@ -1799,19 +1798,28 @@ console.log(SQL);
                     let prevTotal = 0;
                     let refundShipping = 0;
                     let ordersCount = 0;
+                    // const prevOrdersQuery = `SELECT * FROM data.orders
+                    //     LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id
+                    //     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                    //     WHERE
+                    //         (data.order_statuses.status = 'payed' OR data.order_statuses.status = 'new')
+                    //         AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
+                    //         AND data.orders.user_id='${userId}'
+                    //         AND data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
                     const prevOrdersQuery = `SELECT * FROM data.orders 
-                        LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
-                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                        WHERE 
-                            (data.order_statuses.status = 'payed' OR data.order_statuses.status = 'new') 
-                            AND data.live_sessions.user_id = ${sellerData.rows[0].user_id} 
-                            AND data.orders.user_id='${userId}' 
-                            AND data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+                            LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                            WHERE  (data.orders.status = 'payed' OR data.orders.status = 'new') 
+                            AND data.orders.user_id='${userId}' AND 
+                            data.orders.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'
+                            `;
+console.log(prevOrdersQuery);
                     const prevOrderRes = await client.query(prevOrdersQuery);
                     prevOrderRes.rows.forEach(_order => {
                         prevTotal += parseFloat(_order.order_amount);
+                        amountRefund += parseFloat(_order.shipping_amount);
                         ordersCount++;
                     });
+console.log(ordersCount);
                     // scenario 1:
                     // Free shipping is active. User makes the first order and it does not reach the threshold
                     // Buyer pays for shipping regardless the price and shipping method
@@ -1822,8 +1830,23 @@ console.log(SQL);
                     } else if (ordersCount > 1) {
                         if (prevTotal < threshold) {
                             return {success: true, amount_refund: 0, freeShipping: true}
+                        } else {
+                            // check if user peayed for shipping
+console.log(settings.rows[0].free_shipping_from, settings.rows[0].free_shipping_to);
+                            const checkRefundQuery =  `SELECT SUM(shipping_amount) AS total_shipping 
+                                FROM data.orders
+                                WHERE 
+                                user_id='${userId}' AND
+                                status='payed' AND
+                                created_at 
+                                BETWEEN 
+                                '${startDateDb}' 
+                                AND 
+                                '${endDateDb}'`;
+                            const resRefundQuery = await client.query(checkRefundQuery);
+                            const refundAmount = resRefundQuery.rows[0].total_shipping ? resRefundQuery.rows[0].total_shipping : 0
+                            return {success: true, amount_refund: refundAmount, freeShipping: true}
                         }
-                        console.log('TOTAL ALL ORDER AMOUNT', prevTotal);
                     }
                 }
 
