@@ -1757,6 +1757,7 @@ class Order {
             let sellerData;
             let settingsThreshold;
             let settings;
+console.log('HERE');
 
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
             sellerData = await client.query(`SELECT user_id 
@@ -1776,29 +1777,71 @@ class Order {
                 user_id=${userId} AND status='payed' 
                 AND (return_shipping IS NULL AND refund_amount = 0) 
                 ORDER BY updated_at DESC LIMIT 1`;
-            console.log(SQL);
+console.log(SQL);
             const res = await client.query(SQL);
+            let inPeriod = false;
+            let freeShipping = false;
+            let amountRefund = 0;
 
             if (res.rows.length > 0) {
-                const compareDate = moment(res.rows[0].updated_at, "DD/MM/YYYY");
-                const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
-                const endDate     = moment(settings.rows[0].free_shipping_to, "DD/MM/YYYY");
                 const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
                 const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
-                const inPeriod = compareDate.isBetween(startDate, endDate);
-                let freeShipping = false;
-                let amountRefund = 0;
-                if (inPeriod) freeShipping = true;
 
+                // defined is period setup and yes, check whether the order arrived within the specified period
+                if (settings.rows[0].free_shipping_from) {
+                    const checkPeriodQuery = `SELECT 1 WHERE '${currentOrder.rows[0].created_at}' 
+                        BETWEEN '${settings.rows[0].free_shipping_from}' 
+                        AND '${settings.rows[0].free_shipping_to}'`;
+                    const checkPeriodRes = await client.query(checkPeriodQuery);
+                    inPeriod =  checkPeriodRes.rows.length > 0;
+                }
+                if (inPeriod) {
+                    let prevTotal = 0;
+                    let refundShipping = 0;
+                    let ordersCount = 0;
+                    const prevOrdersQuery = `SELECT * FROM data.orders 
+                        LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
+                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                        WHERE 
+                            (data.order_statuses.status = 'payed' OR data.order_statuses.status = 'new') 
+                            AND data.live_sessions.user_id = ${sellerData.rows[0].user_id} 
+                            AND data.orders.user_id='${userId}' 
+                            AND data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+                    const prevOrderRes = await client.query(prevOrdersQuery);
+                    prevOrderRes.rows.forEach(_order => {
+                        prevTotal += parseFloat(_order.order_amount);
+                        ordersCount++;
+                    });
+                    // scenario 1:
+                    // Free shipping is active. User makes the first order and it does not reach the threshold
+                    // Buyer pays for shipping regardless the price and shipping method
+                    if (ordersCount === 1 && prevTotal < threshold) {
+                        return {success: true, amount_refund: 0, freeShipping: false}
+                    } else if (ordersCount === 1 && prevTotal >= threshold) {
+                        return {success: true, amount_refund: 0, freeShipping: true}
+                    } else if (ordersCount > 1) {
+                        if (prevTotal < threshold) {
+                            return {success: true, amount_refund: 0, freeShipping: true}
+                        }
+                        console.log('TOTAL ALL ORDER AMOUNT', prevTotal);
+                    }
+                }
+
+
+
+
+
+console.log('THRESHOLD', threshold) ;
                 if (threshold > 0 && inPeriod) {
                     const prevOrdersQuery = `SELECT * FROM data.orders 
                         LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
                         LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                         WHERE 
                             data.order_statuses.status = 'payed' AND
-                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND data.orders.user_id='${userId}' AND
+                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} 
+                            AND data.orders.user_id='${userId}' 
+                            AND
                             data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
-console.log(prevOrdersQuery)
                     const prevOrderRes = await client.query(prevOrdersQuery);
                     let prevTotal = 0;
                     let refundShipping = 0;
@@ -1808,15 +1851,14 @@ console.log(prevOrdersQuery)
                         ordersCount++;
                         refundShipping += !_order.return_shipping ? 0 : parseFloat(_order.shipping_amount);
                     });
-                    console.log('PREV TOTAL', prevTotal)
                     ordersCount = ordersCount + 1;
-                    const prevOrdersQuery1 = `SELECT * FROM data.orders 
-                        LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
-                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                        WHERE 
-                            data.order_statuses.status = 'payed' AND 
-                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND
-                            data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+                    // const prevOrdersQuery1 = `SELECT * FROM data.orders
+                    //     LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id
+                    //     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                    //     WHERE
+                    //         data.order_statuses.status = 'payed' AND
+                    //         data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND
+                    //         data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
 
                     let makeRefund = false;
                     if (prevTotal + parseFloat(currentOrder.rows[0].order_amount) >= threshold) {
