@@ -1844,7 +1844,21 @@ console.log(settings.rows[0].free_shipping_from, settings.rows[0].free_shipping_
                                 AND 
                                 '${endDateDb}'`;
                             const resRefundQuery = await client.query(checkRefundQuery);
-                            const refundAmount = resRefundQuery.rows[0].total_shipping ? resRefundQuery.rows[0].total_shipping : 0
+                            let refundAmount = resRefundQuery.rows[0].total_shipping ? resRefundQuery.rows[0].total_shipping : 0;
+                            const checkPrevRefundQuery =  `SELECT SUM(shipping_amount) AS total_shipping 
+                                FROM data.orders
+                                WHERE 
+                                user_id='${userId}' AND
+                                status='payed' AND
+                                refund_amount > 0 AND
+                                created_at 
+                                BETWEEN 
+                                '${startDateDb}' 
+                                AND 
+                                '${endDateDb}'`;
+                            const checkPrevRefundQueryRes = await client.query(checkPrevRefundQuery);
+                            refundAmount = checkPrevRefundQueryRes.rows.length > 0 ? 0 : refundAmount;
+console.log('EBALA');
                             return {success: true, amount_refund: refundAmount, freeShipping: true}
                         }
                     }
