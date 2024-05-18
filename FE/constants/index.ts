@@ -105,7 +105,8 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { sortKey: 'shipping.name', iconClass: 'icon-tbl-sh-cart' },
         { sortKey: 'payments.name', iconClass: 'icon-tbl-card' },
         { titleKey: 'Products' },
-        { titleKey: 'Store Name' },
+        // { titleKey: 'Store Name' },
+        { iconClass: 'icon-tbl-total', titleKey: 'Shipping/Refund' },
         { iconClass: 'icon-tbl-total', sortKey: 'orders.order_amount', titleKey: 'Total' },
         { titleKey: '' }
     ],

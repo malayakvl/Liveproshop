@@ -201,10 +201,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             : 'order-number'
                                     }`}>
                                     {user.role_id === 1 && !item.status_waiting && (
-                                        <Link
-                                            href={`/orders/${item.order_number}?locale=${locale}`}>
-                                            <a>{item.order_number}</a>
-                                        </Link>
+                                        <>
+                                            <Link
+                                                href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                <a>{item.order_number}</a>
+                                            </Link>
+                                        </>
                                     )}
                                     {user.role_id === 1 && item.status_waiting && (
                                         <span
@@ -295,6 +297,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                 />
                                             </div>
                                             <div className="pl-3">{item.buyer_first_name}</div>
+                                            <span className="absolute pt-[17px] font-[9px] store-style">
+                                                {item.name}
+                                            </span>
                                         </div>
                                     </div>
                                 </td>
@@ -322,7 +327,13 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     {item.order_items?.length ? item.order_items?.length : 0}x{' '}
                                     <span className="red-yellow-gradient-text">product (s)</span>
                                 </td>
-                                <td>{item.name}</td>
+                                {/*<td>{item.name}</td>*/}
+                                <td>
+                                    {formatCurrency(
+                                        item.shipping_amount ? item.shipping_amount : 0
+                                    )}{' '}
+                                    / {formatCurrency(item.refund_amount ? item.refund_amount : 0)}
+                                </td>
                                 <td>
                                     {formatCurrency(
                                         item.total_amount ? item.total_amount : item.order_amount
