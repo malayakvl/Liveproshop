@@ -1785,12 +1785,15 @@ console.log('HERE');
             if (res.rows.length > 0) {
                 const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD HH:mm:ss");
                 const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD HH:mm:ss");
+                const orderCreatedAtDb= moment(currentOrder.rows[0].created_at).format("YYYY-MM-DD HH:mm:ss");
 
                 // defined is period setup and yes, check whether the order arrived within the specified period
                 if (settings.rows[0].free_shipping_from) {
-                    const checkPeriodQuery = `SELECT 1 WHERE '${currentOrder.rows[0].created_at}' 
-                        BETWEEN '${settings.rows[0].free_shipping_from}' 
-                        AND '${settings.rows[0].free_shipping_to}'`;
+console.log('SETTINGS FROM', settings.rows[0].free_shipping_from)
+                    const checkPeriodQuery = `SELECT 1 WHERE '${orderCreatedAtDb}' 
+                        BETWEEN '${startDateDb}' 
+                        AND '${endDateDb}'`;
+console.log(checkPeriodQuery);
                     const checkPeriodRes = await client.query(checkPeriodQuery);
                     inPeriod =  checkPeriodRes.rows.length > 0;
                 }
@@ -1832,7 +1835,6 @@ console.log(ordersCount);
                             return {success: true, amount_refund: 0, freeShipping: true}
                         } else {
                             // check if user peayed for shipping
-console.log(settings.rows[0].free_shipping_from, settings.rows[0].free_shipping_to);
                             const checkRefundQuery =  `SELECT SUM(shipping_amount) AS total_shipping 
                                 FROM data.orders
                                 WHERE 
@@ -1844,8 +1846,10 @@ console.log(settings.rows[0].free_shipping_from, settings.rows[0].free_shipping_
                                 AND 
                                 '${endDateDb}'`;
                             const resRefundQuery = await client.query(checkRefundQuery);
+                            // check do we refund before
                             let refundAmount = resRefundQuery.rows[0].total_shipping ? resRefundQuery.rows[0].total_shipping : 0;
-                            const checkPrevRefundQuery =  `SELECT SUM(shipping_amount) AS total_shipping 
+console.log('Refund Shipping', refundAmount);
+                            const existRefundQuery =  `SELECT SUM(refund_amount) AS total_refund
                                 FROM data.orders
                                 WHERE 
                                 user_id='${userId}' AND
@@ -1856,9 +1860,28 @@ console.log(settings.rows[0].free_shipping_from, settings.rows[0].free_shipping_
                                 '${startDateDb}' 
                                 AND 
                                 '${endDateDb}'`;
-                            const checkPrevRefundQueryRes = await client.query(checkPrevRefundQuery);
-                            refundAmount = checkPrevRefundQueryRes.rows.length > 0 ? 0 : refundAmount;
-console.log('EBALA');
+                            const existRefundQueryRes = await client.query(existRefundQuery);
+console.log('EXIST refund', )
+                            if (existRefundQueryRes.rows[0].total_refund > 0) {
+                                refundAmount = 0;
+                            }
+console.log(existRefundQuery);
+
+//                             const checkPrevRefundQuery =  `SELECT SUM(shipping_amount) AS total_shipping
+//                                 FROM data.orders
+//                                 WHERE
+//                                 user_id='${userId}' AND
+//                                 status='payed' AND
+//                                 refund_amount > 0 AND
+//                                 created_at
+//                                 BETWEEN
+//                                 '${startDateDb}'
+//                                 AND
+//                                 '${endDateDb}'`;
+// console.log(refundAmount);
+//                             const checkPrevRefundQueryRes = await client.query(checkPrevRefundQuery);
+//                             refundAmount = checkPrevRefundQueryRes.rows.length > 0 ? 0 : refundAmount;
+// console.log('EBALA');
                             return {success: true, amount_refund: refundAmount, freeShipping: true}
                         }
                     }
@@ -1867,7 +1890,7 @@ console.log('EBALA');
 
 
 
-
+console.log('IN PERIOD', inPeriod) ;
 console.log('THRESHOLD', threshold) ;
                 if (threshold > 0 && inPeriod) {
                     const prevOrdersQuery = `SELECT * FROM data.orders 

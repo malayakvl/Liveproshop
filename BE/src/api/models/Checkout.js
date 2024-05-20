@@ -305,7 +305,6 @@ class Checkout {
     async checkoutSubmit(data, user, freeShipping, lng) {
         const client = await pool.connect();
         try {
-console.log('Checkout Submit')
             const freeShippingData = await orderModel.isFreeShipping(user.id, data.orderNumber);
             const isFreeShipping = freeShippingData.freeShipping;
             // const isFreeShipping = freeShipping.freeShipping;
@@ -320,6 +319,8 @@ console.log('Checkout Submit')
                 if (sellerSettingsRes.rows.length === 0) {
                     return {redirectUrl: null, error: 'No key for payment'}
                 }
+console.log('TUT');
+
                 let shippingPrice = 0;
                 if (data.shippingMethodId && !isFreeShipping) {
                     const shippingRes = await client.query(`SELECT * FROM data.shipping_to_country
@@ -329,8 +330,25 @@ console.log('Checkout Submit')
                     shippingPrice = parseFloat(shippingRes.rows[0].price);
                 }
                 const hash = crypto.randomBytes(25).toString('hex');
-                const amountRefund = orderRes.rows[0].refund_amount ? orderRes.rows[0].refund_amount : 0;
+                const amountRefund = freeShippingData.amount_refund;
+                // const amountRefund = orderRes.rows[0].refund_amount ? orderRes.rows[0].refund_amount : 0;
+                // const amountRefund = freeShippingData.amount_refund;
                 const totalPayment = shippingPrice + parseFloat(orderRes.rows[0].order_amount - parseFloat(amountRefund));
+// console.log('Checkout submit1', freeShippingData.amount_refund);
+// console.log(`UPDATE data.orders SET
+//                                         country_id=${data.country_id},
+//                                         state=$$${data.state ? data.state : ''}$$,
+//                                         city=$$${data.city}$$,
+//                                         post_code=$$${data.post_code}$$,
+//                                         shipping_id=${data.shippingMethodId ? data.shippingMethodId : null},
+//                                         phone=$$${data.phone}$$,
+//                                         shipping_amount=${shippingPrice},
+//                                         shipping_address=$$${data.address_line_1 ?  data.address_line_1 : data.shipping_address}$$,
+//                                         hash='${hash}',
+//                                         refund_amount='${freeShippingData.amount_refund}'
+//                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`)
+// exit;
+console.log(shippingPrice);
                 await client.query(`UPDATE data.orders SET
                                         country_id=${data.country_id},
                                         state=$$${data.state ? data.state : ''}$$,
