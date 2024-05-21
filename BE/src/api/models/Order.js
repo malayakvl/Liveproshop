@@ -1771,16 +1771,15 @@ class Order {
             let sellerData;
             let settingsThreshold;
             let settings;
-
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
             sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
             const currOrderId = currentOrder.rows[0].id;
             let compareAmountTherehold = 0;
-
             // get seller settings
-            console.log(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
+            // console.log(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
             settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
+
             settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
             let threshold = 0;
             if (settingsThreshold.rows.length > 0) {
