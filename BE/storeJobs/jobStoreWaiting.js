@@ -16,6 +16,7 @@ async function updateWaitingJob() {
         if (parseInt(responseQty.data.qty) > 0) {
             await axios(`${apiUrl}/api/run-waiting-job?configId=${configData[1]}`)
                 .then((response) => {
+                    console.log('length wait', response.data.data.items.length);
                     if (response.data.data.items.length > 0) {
                         response.data.data.items.forEach(async item => {
                             const tmpOrderNum = await axios(`${apiUrl}/api/update-wait-item_qty?itemId=${item.wait_item_id}&qty=${item.quantity}&configId=${item.product_configuration_id}&orderId=${item.order_id}`)
