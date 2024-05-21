@@ -1163,6 +1163,14 @@ class Order {
         const client = await pool.connect();
         try {
             const itemRow = await client.query(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
+            const itemConfigurationId = itemRow.rows[0].product_configuration_id;
+
+            // start waiting when remove item from cart
+            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${itemConfigurationId}" -- configId=${itemConfigurationId}`, function(code, output) {
+                console.log('Exit code:', code);
+                console.log('Program output:', output);
+            });
+
             // console.log(`UPDATE data.orders SET
             //     order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
             //     total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
@@ -1211,6 +1219,12 @@ class Order {
             //     WHERE id='${itemRow.rows[0].product_configuration_id}'`);
             await client.query(`UPDATE data.product_configurations SET quantity = quantity + 1
                 WHERE id='${itemRow.rows[0].product_configuration_id}'`);
+
+            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${itemRow.rows[0].product_configuration_id}" -- configId=${itemRow.rows[0].product_configuration_id}`, function(code, output) {
+                console.log('Exit code:', code);
+                console.log('Program output:', output);
+            });
+
             return {success: true, error: null};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -1757,7 +1771,6 @@ class Order {
             let sellerData;
             let settingsThreshold;
             let settings;
-console.log('HERE');
 
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
             sellerData = await client.query(`SELECT user_id 
@@ -1766,6 +1779,7 @@ console.log('HERE');
             let compareAmountTherehold = 0;
 
             // get seller settings
+            console.log(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
             settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
             settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
             let threshold = 0;
@@ -1789,11 +1803,9 @@ console.log('HERE');
 
                 // defined is period setup and yes, check whether the order arrived within the specified period
                 if (settings.rows[0].free_shipping_from) {
-console.log('SETTINGS FROM', settings.rows[0].free_shipping_from)
                     const checkPeriodQuery = `SELECT 1 WHERE '${orderCreatedAtDb}' 
                         BETWEEN '${startDateDb}' 
                         AND '${endDateDb}'`;
-console.log(checkPeriodQuery);
                     const checkPeriodRes = await client.query(checkPeriodQuery);
                     inPeriod =  checkPeriodRes.rows.length > 0;
                 }
@@ -1801,14 +1813,6 @@ console.log(checkPeriodQuery);
                     let prevTotal = 0;
                     let refundShipping = 0;
                     let ordersCount = 0;
-                    // const prevOrdersQuery = `SELECT * FROM data.orders
-                    //     LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id
-                    //     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                    //     WHERE
-                    //         (data.order_statuses.status = 'payed' OR data.order_statuses.status = 'new')
-                    //         AND data.live_sessions.user_id = ${sellerData.rows[0].user_id}
-                    //         AND data.orders.user_id='${userId}'
-                    //         AND data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
                     const prevOrdersQuery = `SELECT * FROM data.orders 
                             LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                             WHERE  (data.orders.status = 'payed' OR data.orders.status = 'new') 
@@ -1867,28 +1871,10 @@ console.log('EXIST refund', )
                             }
 console.log(existRefundQuery);
 
-//                             const checkPrevRefundQuery =  `SELECT SUM(shipping_amount) AS total_shipping
-//                                 FROM data.orders
-//                                 WHERE
-//                                 user_id='${userId}' AND
-//                                 status='payed' AND
-//                                 refund_amount > 0 AND
-//                                 created_at
-//                                 BETWEEN
-//                                 '${startDateDb}'
-//                                 AND
-//                                 '${endDateDb}'`;
-// console.log(refundAmount);
-//                             const checkPrevRefundQueryRes = await client.query(checkPrevRefundQuery);
-//                             refundAmount = checkPrevRefundQueryRes.rows.length > 0 ? 0 : refundAmount;
-// console.log('EBALA');
                             return {success: true, amount_refund: refundAmount, freeShipping: true}
                         }
                     }
                 }
-
-
-
 
 console.log('IN PERIOD', inPeriod) ;
 console.log('THRESHOLD', threshold) ;
@@ -1912,13 +1898,6 @@ console.log('THRESHOLD', threshold) ;
                         refundShipping += !_order.return_shipping ? 0 : parseFloat(_order.shipping_amount);
                     });
                     ordersCount = ordersCount + 1;
-                    // const prevOrdersQuery1 = `SELECT * FROM data.orders
-                    //     LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id
-                    //     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                    //     WHERE
-                    //         data.order_statuses.status = 'payed' AND
-                    //         data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND
-                    //         data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
 
                     let makeRefund = false;
                     if (prevTotal + parseFloat(currentOrder.rows[0].order_amount) >= threshold) {
@@ -1971,24 +1950,19 @@ console.log('WE ARE NOT IN PERIOD');
                 }
 
                 return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}
-
-                // console.log(hourDiff)
             } else {
-                // console.log(`SELECT order_amount, live_sessions_id FROM
-                //     data.orders WHERE order_number='${orderNumber}'`);
                 const currOrder = await client.query(`SELECT order_amount, user_id, live_sessions_id, created_at, updated_at FROM 
                     data.orders WHERE order_number='${orderNumber}'`);
 
                 // const userOrdersQuery = await client.query()
                 const payedOrdersQuery = (`SELECT SUM(order_amount) as totalPayed FROM data.orders WHERE user_id='${currOrder.rows[0].user_id}'AND status='payed'`)
                 const payedOrdersQueryRes = await client.query(payedOrdersQuery)
-                console.log(payedOrdersQuery);
+                // console.log(payedOrdersQuery);
                 let amountPayed = 0;
                 if (payedOrdersQueryRes.rows[0].totalPayed) {
                     amountPayed = parseFloat(payedOrdersQueryRes.rows[0].totalPayed);
                 }
-                console.log('AMOUNT PAYED', amountPayed);
-
+                // console.log('AMOUNT PAYED', amountPayed);
 
                 const compareDate = moment(currOrder.rows[0].updated_at, "DD/MM/YYYY");
                 const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
@@ -2008,11 +1982,7 @@ console.log('WE ARE NOT IN PERIOD');
                         isFree = true;
                     }
                     // calculate refund
-                    const prevQuries =  await client.query(`SELECT * FROM  data.orders WHERE user_id=${userId} AND status='payed'`)
-
-
-
-
+                    // const prevQuries =  await client.query(`SELECT * FROM  data.orders WHERE user_id=${userId} AND status='payed'`)
                     // const prevQuries =  await client.query('SELECT * FROM  data.orders WHERE user_id=${}')
                     // if (parseFloat(currOrder.rows[0].order_amount)+amountPayed > parseFloat(settingsThreshold.rows[0].threshold)) {
                     //     // console.log('Amount OrderD', parseFloat(currOrder.rows[0].order_amount)

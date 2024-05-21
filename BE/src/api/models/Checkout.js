@@ -319,7 +319,6 @@ class Checkout {
                 if (sellerSettingsRes.rows.length === 0) {
                     return {redirectUrl: null, error: 'No key for payment'}
                 }
-console.log('TUT');
 
                 let shippingPrice = 0;
                 if (data.shippingMethodId && !isFreeShipping) {
@@ -348,7 +347,7 @@ console.log('TUT');
 //                                         refund_amount='${freeShippingData.amount_refund}'
 //                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`)
 // exit;
-console.log(shippingPrice);
+
                 await client.query(`UPDATE data.orders SET
                                         country_id=${data.country_id},
                                         state=$$${data.state ? data.state : ''}$$,
@@ -370,11 +369,6 @@ console.log(shippingPrice);
                         '${data.post_code}', '${data.city}', 
                         '${data.address_line_1 ?  data.address_line_1 : data.shipping_address}', 'home address')`;
                     await client.query(queryAddress);
-
-                    // await client.query(`INSERT INTO data.addresses SET user_id='${user.id}',
-                    //     country_id='${data.country_id}', state='${data.state ? data.state : ''}',
-                    //     post_code='${data.post_code}', city='${data.city}',
-                    //     address_line_1='${data.address_line_1 ?  data.address_line_1 : data.shipping_address}'`);
                 }
                 const orderNumberMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}`
                 const dataOrder = {

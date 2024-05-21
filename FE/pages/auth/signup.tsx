@@ -163,7 +163,7 @@ export default function Signup({ locale }: { locale: string }) {
                         <form
                             onSubmit={props.handleSubmit}
                             className={`sign-up-form colored-shadow ${
-                                showSellerRadio ? '' : 'max-h-[350px] sign-up-fb'
+                                showSellerRadio ? '' : 'sign-up-fb'
                             }`}>
                             <div className="mt-0 w-full font-bold md:mt-0 md:pr-8 md:w-2/4 md:flex md:flex-col md:justify-center">
                                 <div className="text-3xl md:text-4xl mb-9 text-gray-600">
