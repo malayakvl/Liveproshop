@@ -38,12 +38,6 @@ export default function PaymentSetting() {
         }
     }, [initialValues]);
 
-    // const handlerConfirm = useCallback(() => {
-    //     if (!selectedItem) return;
-    //     initialValues.free_shipping_status = !initialValues.free_shipping_status;
-    //     setSelectedItem(null);
-    // }, [selectedItem]);
-
     return (
         <>
             <Head>
