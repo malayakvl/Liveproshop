@@ -268,9 +268,17 @@ class Livesession {
 
     async getStoreSessionsForEnd() {
         const client = await pool.connect();
-        const queryStr = `SELECT
-                    *
-                FROM data.get_live_sessions_store_ended_new('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        // const queryStr = `SELECT
+        //             *
+        //         FROM data.get_live_sessions_store_ended_new('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        // console.log(queryStr);
+        const queryStr = `SELECT * FROM data.live_sessions ls INNER JOIN data.user_stores us ON (ls.store_id = us.id)
+                        WHERE TRUE
+                            AND (ls.status = 'closed')
+                            AND (ls.video_id IS NOT NULL)
+                            AND (ls.job_closed IS NULL)
+                            AND event_date_end = '${moment().format('YYYY-MM-DD')}'
+                            AND event_time_end <= '${moment().add(3, 'hours').format('HH:mm:ss')}'`;
         console.log(queryStr);
         try {
             const query = await client.query(queryStr);
