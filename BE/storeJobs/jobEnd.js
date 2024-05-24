@@ -17,9 +17,8 @@ async function startProcess() {
     // console.log(`${apiUrl}/api/fetch-store-session-for-end`);
     await axios(`${apiUrl}/api/fetch-store-session-for-end`)
         .then( (response) => {
-            console.log(response.data.result);
-
             response.data.result.forEach(async session => {
+
                 shell.exec(`pm2 delete "jobStoreEvent ${session.id}"`, function(code, output) {
                 });
 
