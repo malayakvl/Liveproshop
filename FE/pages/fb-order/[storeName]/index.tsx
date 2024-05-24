@@ -57,7 +57,7 @@ export default function Index({ locale }: { locale: string }) {
 
             <div className="main-layout">
                 <div className="connect-page-status">
-                    <div className="font-bold absolute top-[100px] left-[30%]">
+                    <div className="font-bold absolute top-[100px] left-[30%] hidden">
                         {detectedBrowswer}
                     </div>
                 </div>
