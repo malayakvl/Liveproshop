@@ -37,6 +37,7 @@ declare namespace Layouts {
         selectedLng: string;
         showEmailNotification: boolean;
         nativeBrowser: boolean;
+        openRealBrowser: boolean;
     }
 
     interface TabTypes {

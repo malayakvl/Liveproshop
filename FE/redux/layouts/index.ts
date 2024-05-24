@@ -28,7 +28,8 @@ import {
     hideshowPeriodPopupAction,
     setupPeriodAction,
     setPeriodDeleteValuesActions,
-    setNativeBrowserAction
+    setNativeBrowserAction,
+    setOpenRealBrowserAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 // import { showPopupAction } from '../dashboard';
@@ -166,7 +167,8 @@ const initialState: State.Layouts = {
     showProfileMenu: false,
     selectedLng: 'fr',
     showEmailNotification: false,
-    nativeBrowser: false
+    nativeBrowser: false,
+    openRealBrowser: false
 };
 
 // ------------------------------------
@@ -386,6 +388,12 @@ const ACTION_HANDLERS: any = {
             ...state,
             nativeBrowser: action.payload
         })
+    },
+    [setOpenRealBrowserAction]: {
+        next: (state: State.Layouts, action: Action<any>): State.Layouts => ({
+            ...state,
+            openRealBrowser: action.payload
+        })
     }
 };
 
@@ -415,7 +423,8 @@ export {
     hideshowPeriodPopupAction,
     setupPeriodAction,
     setPeriodDeleteValuesActions,
-    setNativeBrowserAction
+    setNativeBrowserAction,
+    setOpenRealBrowserAction
 };
 
 // ------------------------------------

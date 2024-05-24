@@ -15,12 +15,16 @@ import {
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
 import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
+import { nativeBrowserSelector, openRealBrowserSelector } from '../../redux/layouts/selectors';
+import { setOpenRealBrowserAction } from '../../redux/layouts';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const tmpCommentOrderId = useSelector(orderTmpCommentIdSelector);
     const hideFormSelector = useSelector(hideRegisterFormSelector);
     const forFree = useSelector(userForFreeSelector);
+    const nativeBrowser = useSelector(nativeBrowserSelector);
+    const openRealBrowser = useSelector(openRealBrowserSelector);
     type FormData = {
         email: string;
         acceptTerms: boolean;
@@ -86,6 +90,34 @@ export default function Signup({ locale }: { locale: string }) {
             setRoleId(1);
         }
     }, [tmpCommentOrderId]);
+
+    useEffect(() => {
+        if (nativeBrowser) {
+            dispatch(setOpenRealBrowserAction(true));
+            const a = window.document.createElement('a');
+            a.target = '_blank';
+            a.href = 'https://google.com';
+            const e = window.document.createEvent('MouseEvents');
+            e.initMouseEvent(
+                'click',
+                true,
+                true,
+                window,
+                0,
+                0,
+                0,
+                0,
+                0,
+                false,
+                false,
+                false,
+                false,
+                0,
+                null
+            );
+            a.dispatchEvent(e);
+        }
+    }, [nativeBrowser]);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -169,10 +201,17 @@ export default function Signup({ locale }: { locale: string }) {
                                 <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
-
+                                {nativeBrowser && (
+                                    <div className="alert-warning mb-6 block">
+                                        It looks like you are using the Facebook in-app browser. For
+                                        better experience, please open this link in your default
+                                        browser.
+                                    </div>
+                                )}
                                 <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>
+
                                 <div className="mb-6 text-sm line-height-105percent text-gray-600 italic">
                                     {t('You can cancel at any time before to avoid the charge')}
                                 </div>
