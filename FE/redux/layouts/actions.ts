@@ -57,3 +57,4 @@ export const toggleTextingMenuAction: any = createAction('layouts/TOGGLE_TEXTING
 export const toggleProfileMenuAction: any = createAction('layouts/TOGGLE_PROFILE_MENU');
 export const setLngAction: any = createAction('layouts/SET_LNG_ACTION');
 export const showEmailNotificationAction: any = createAction('dashboard/SHOW_EMAILNOTICE_POPUP');
+export const setNativeBrowserAction: any = createAction('layouts/NATIVE_BROWSER');

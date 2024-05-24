@@ -1,17 +1,19 @@
 import Head from 'next/head';
 import FullLayout from '../../../components/layout/FullLayout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Router, { useRouter } from 'next/router';
 import { userSelector } from '../../../redux/user/selectors';
 import { orderCommentIdSelector } from '../../../redux/orders/selectors';
 import { setTmpFbCommentAction } from '../../../redux/orders';
 import { setupOrderByCommentAction } from '../../../redux/orders';
+import { setNativeBrowserAction } from '../../../redux/layouts';
 
 export default function Index({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const orderId = useSelector(orderCommentIdSelector);
+    const [detectedBrowswer, setDetectedBrowser] = useState('');
 
     const {
         query: { comment_id }
@@ -20,6 +22,13 @@ export default function Index({ locale }: { locale: string }) {
     useEffect(() => {
         if (typeof comment_id === 'string') {
             window.localStorage.setItem('orderCommentId', comment_id);
+            const ua = navigator.userAgent || navigator.vendor;
+            console.log('Navigator FB', ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1);
+            setDetectedBrowser(
+                `Navigator FB: ${ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1}`
+            );
+            dispatch(setNativeBrowserAction(ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1));
+
             dispatch(setTmpFbCommentAction(comment_id));
         }
         if (user?.email && user.role_id == 1) {
@@ -47,7 +56,11 @@ export default function Index({ locale }: { locale: string }) {
             </Head>
 
             <div className="main-layout">
-                <div className="connect-page-status"></div>
+                <div className="connect-page-status">
+                    <div className="font-bold absolute top-[100px] left-[30%]">
+                        {detectedBrowswer}
+                    </div>
+                </div>
             </div>
         </div>
     );
