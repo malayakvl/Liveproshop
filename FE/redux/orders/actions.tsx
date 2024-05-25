@@ -506,6 +506,34 @@ export const minusItemOrderAction: any = createAction(
                 });
         }
 );
+export const openBrowserAction: any = createAction(
+    'orders/OPEN_BROWSER_PROG',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/open-browser`,
+                    {},
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async () => {
+                    // dispatch(
+                    //     setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
+                    // );
+                    // dispatch(setEmptyFormAction());
+                    // dispatch(fetchItemsAction());
+                    // dispatch(showPopupAction(false));
+                    dispatch(showLoaderAction(false));
+                    // toggleModalPopup('.modal-schedule');
+                });
+        }
+);
 
 // export const demoveItemOrderAction: any = createAction(
 //     'order/REMOVE_ITEM_ACTION',

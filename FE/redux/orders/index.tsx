@@ -26,7 +26,8 @@ import {
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
     clearWaitOrderByCommentAction,
-    setupConnectedStoreNameAction
+    setupConnectedStoreNameAction,
+    openBrowserAction
 } from './actions';
 
 const initialState: {
@@ -309,7 +310,8 @@ export {
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
     clearWaitOrderByCommentAction,
-    setupConnectedStoreNameAction
+    setupConnectedStoreNameAction,
+    openBrowserAction
 };
 
 // ------------------------------------

@@ -29,7 +29,6 @@ import {
     setupPeriodAction,
     setPeriodDeleteValuesActions,
     setNativeBrowserAction,
-    setOpenRealBrowserAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 // import { showPopupAction } from '../dashboard';
@@ -389,12 +388,6 @@ const ACTION_HANDLERS: any = {
             nativeBrowser: action.payload
         })
     },
-    [setOpenRealBrowserAction]: {
-        next: (state: State.Layouts, action: Action<any>): State.Layouts => ({
-            ...state,
-            openRealBrowser: action.payload
-        })
-    }
 };
 
 export {
@@ -424,7 +417,6 @@ export {
     setupPeriodAction,
     setPeriodDeleteValuesActions,
     setNativeBrowserAction,
-    setOpenRealBrowserAction
 };
 
 // ------------------------------------

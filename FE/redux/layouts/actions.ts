@@ -58,4 +58,3 @@ export const toggleProfileMenuAction: any = createAction('layouts/TOGGLE_PROFILE
 export const setLngAction: any = createAction('layouts/SET_LNG_ACTION');
 export const showEmailNotificationAction: any = createAction('dashboard/SHOW_EMAILNOTICE_POPUP');
 export const setNativeBrowserAction: any = createAction('layouts/NATIVE_BROWSER');
-export const setOpenRealBrowserAction: any = createAction('layouts/OPEN_REAL_BROWSER');

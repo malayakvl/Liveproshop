@@ -16,7 +16,7 @@ import { accountService } from '../../_services';
 import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
 import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
 import { nativeBrowserSelector, openRealBrowserSelector } from '../../redux/layouts/selectors';
-import { setOpenRealBrowserAction } from '../../redux/layouts';
+import { openBrowserAction } from '../../redux/orders';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
@@ -93,29 +93,7 @@ export default function Signup({ locale }: { locale: string }) {
 
     useEffect(() => {
         if (nativeBrowser) {
-            dispatch(setOpenRealBrowserAction(true));
-            const a = window.document.createElement('a');
-            a.target = '_blank';
-            a.href = 'https://google.com';
-            const e = window.document.createEvent('MouseEvents');
-            e.initMouseEvent(
-                'click',
-                true,
-                true,
-                window,
-                0,
-                0,
-                0,
-                0,
-                0,
-                false,
-                false,
-                false,
-                false,
-                0,
-                null
-            );
-            a.dispatchEvent(e);
+            // window.open('https://google.com', '_self');
         }
     }, [nativeBrowser]);
 
@@ -172,6 +150,14 @@ export default function Signup({ locale }: { locale: string }) {
         }
     };
 
+    const openSafaryBrowser = () => {
+        dispatch(openBrowserAction());
+        // console.log('open shell');
+        // shell.exec(`open -a Safari http://stackoverflow.com`, function (code, output) {
+        //     console.log('open shell');
+        // });
+    };
+
     console.log('Comment ID', commentId);
 
     return (
@@ -201,13 +187,32 @@ export default function Signup({ locale }: { locale: string }) {
                                 <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
-                                {nativeBrowser && (
-                                    <div className="alert-warning mb-6 block">
-                                        It looks like you are using the Facebook in-app browser. For
-                                        better experience, please open this link in your default
-                                        browser.
-                                    </div>
-                                )}
+                                <div className="alert-warning mb-6 block">
+                                    It looks like you are using the Facebook in-app browser. For
+                                    better experience, please open this link in your default
+                                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                    <span
+                                        onClick={openSafaryBrowser}
+                                        style={{ color: '#B45309' }}
+                                        className="underline cursor-pointer">
+                                        &nbsp;browser
+                                    </span>
+                                    .
+                                </div>
+                                {/*{nativeBrowser && (*/}
+                                {/*    <div className="alert-warning mb-6 block">*/}
+                                {/*        It looks like you are using the Facebook in-app browser. For*/}
+                                {/*        better experience, please open this link in your default*/}
+                                {/*        /!* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions *!/*/}
+                                {/*        <span*/}
+                                {/*            onClick={openSafaryBrowser}*/}
+                                {/*            style={{ color: '#B45309' }}*/}
+                                {/*            className="underline cursor-pointer">*/}
+                                {/*            &nbsp;browser*/}
+                                {/*        </span>*/}
+                                {/*        .*/}
+                                {/*    </div>*/}
+                                {/*)}*/}
                                 <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>

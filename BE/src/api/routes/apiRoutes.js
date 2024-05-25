@@ -88,6 +88,7 @@ apiRoutes.route('/get-plan-info').get(PaymentPlanController.fetchPlanInfo);
 apiRoutes.route('/create-payment-intent').post(PaymentPlanController.stripeClientSecret);
 apiRoutes.route('/contact-us').post(ContactUsController.sendMessage);
 apiRoutes.route('/request-demo').post(ContactUsController.requestDemo);
+apiRoutes.route('/open-browser').post(OrderController.openBrowser);
 
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
