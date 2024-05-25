@@ -152,6 +152,9 @@ export default function Signup({ locale }: { locale: string }) {
 
     const openSafaryBrowser = () => {
         dispatch(openBrowserAction());
+        // window.open('https://liveproshop.com', '_self');
+        // let shell = new ActiveXObject('WScript.Shell');
+        // shell.run("Safari http://www.google.com");
         // console.log('open shell');
         // shell.exec(`open -a Safari http://stackoverflow.com`, function (code, output) {
         //     console.log('open shell');
@@ -189,15 +192,7 @@ export default function Signup({ locale }: { locale: string }) {
                                 </div>
                                 <div className="alert-warning mb-6 block">
                                     It looks like you are using the Facebook in-app browser. For
-                                    better experience, please open this link in your default
-                                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                                    <span
-                                        onClick={openSafaryBrowser}
-                                        style={{ color: '#B45309' }}
-                                        className="underline cursor-pointer">
-                                        &nbsp;browser
-                                    </span>
-                                    .
+                                    better experience, please open this link in your default browser
                                 </div>
                                 {/*{nativeBrowser && (*/}
                                 {/*    <div className="alert-warning mb-6 block">*/}
