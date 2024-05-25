@@ -522,7 +522,15 @@ export const openBrowserAction: any = createAction(
                         }
                     }
                 )
-                .then(async () => {
+                .then(async (data: any) => {
+                    console.log('Returned data try shell', data);
+                    // data.data.shellObject.exec(
+                    //     `open -a Safari https://liveproshop.com/en/`,
+                    //     function (code: any, output: any) {
+                    //         console.log('Exit code:', code);
+                    //         console.log('Program output:', output);
+                    //     }
+                    // );
                     // dispatch(
                     //     setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
                     // );

@@ -190,24 +190,24 @@ export default function Signup({ locale }: { locale: string }) {
                                 <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
-                                <div className="alert-warning mb-6 block">
-                                    It looks like you are using the Facebook in-app browser. For
-                                    better experience, please open this link in your default browser
-                                </div>
-                                {/*{nativeBrowser && (*/}
-                                {/*    <div className="alert-warning mb-6 block">*/}
-                                {/*        It looks like you are using the Facebook in-app browser. For*/}
-                                {/*        better experience, please open this link in your default*/}
-                                {/*        /!* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions *!/*/}
-                                {/*        <span*/}
-                                {/*            onClick={openSafaryBrowser}*/}
-                                {/*            style={{ color: '#B45309' }}*/}
-                                {/*            className="underline cursor-pointer">*/}
-                                {/*            &nbsp;browser*/}
-                                {/*        </span>*/}
-                                {/*        .*/}
-                                {/*    </div>*/}
-                                {/*)}*/}
+                                {/*<div className="alert-warning mb-6 block">*/}
+                                {/*    It looks like you are using the Facebook in-app browser. For*/}
+                                {/*    better experience, please open this link in your default browser*/}
+                                {/*</div>*/}
+                                {nativeBrowser && (
+                                    <div className="alert-warning mb-6 block">
+                                        It looks like you are using the Facebook in-app browser. For
+                                        better experience, please open this link in your default
+                                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                        <span
+                                            onClick={openSafaryBrowser}
+                                            style={{ color: '#B45309' }}
+                                            className="underline cursor-pointer">
+                                            &nbsp;browser
+                                        </span>
+                                        .
+                                    </div>
+                                )}
                                 <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                     {t('registr_descr')}
                                 </div>

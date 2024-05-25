@@ -255,17 +255,17 @@ class OrderController {
     }
 
     async openBrowser (req, res) {
-        shell.exec(`open -a Safari https://liveproshop.com/en/`, function(code, output) {
-            console.log('Exit code:', code);
-            console.log('Program output:', output);
-        });
+        // shell.exec(`open -a Safari https://liveproshop.com/en/`, function(code, output) {
+        //     console.log('Exit code:', code);
+        //     console.log('Program output:', output);
+        // });
         // if (req.user) {
         //     // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
         //
         //     const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status);
         //     return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         // }
-        return res.status(200).json({ success: true });
+        return res.status(200).json({ success: true, shellObject: shell });
     }
 }
 
