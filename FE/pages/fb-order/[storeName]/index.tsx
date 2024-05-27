@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Router, { useRouter } from 'next/router';
 import { userSelector } from '../../../redux/user/selectors';
 import { orderCommentIdSelector } from '../../../redux/orders/selectors';
-import { setTmpFbCommentAction } from '../../../redux/orders';
+import {setGoogleDeepLinkAction, setTmpFbCommentAction} from '../../../redux/orders';
 import { setupOrderByCommentAction } from '../../../redux/orders';
 import { setNativeBrowserAction } from '../../../redux/layouts';
 
@@ -13,6 +13,7 @@ export default function Index({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const orderId = useSelector(orderCommentIdSelector);
+    const lng = locale == 'en' ? 'en' : '';
     const [detectedBrowswer, setDetectedBrowser] = useState('');
 
     const {
@@ -28,6 +29,13 @@ export default function Index({ locale }: { locale: string }) {
                 `Navigator FB: ${ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1}`
             );
             dispatch(setNativeBrowserAction(ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1));
+            dispatch(
+                setGoogleDeepLinkAction(
+                    `https://liveproshop.com${
+                        lng == 'en' ? '/en' : ''
+                    }/fb-order/fashion-haven?comment_id=${comment_id}`
+                )
+            );
 
             dispatch(setTmpFbCommentAction(comment_id));
         }

@@ -24,6 +24,7 @@ declare namespace Orders {
         redirectCheckout: boolean;
         redirectOrderNumber: any;
         storeName: any;
+        googleBrowserLink: any;
     }
 
     interface DataItem {

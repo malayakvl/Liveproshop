@@ -96,3 +96,7 @@ export const itemsStatusesSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.itemsStatuses
 );
+export const googleDeepLinkSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.googleBrowserLink
+);

@@ -14,7 +14,7 @@ import {
 } from '../../redux/user/actions';
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
-import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
+import { googleDeepLinkSelector, orderTmpCommentIdSelector } from '../../redux/orders/selectors';
 import { nativeBrowserSelector, openRealBrowserSelector } from '../../redux/layouts/selectors';
 import { openBrowserAction } from '../../redux/orders';
 
@@ -31,6 +31,7 @@ export default function Signup({ locale }: { locale: string }) {
         role_id: '1' | '2';
         forFree: any;
     };
+    const googleDeepLink = useSelector(googleDeepLinkSelector);
 
     const t = useTranslations();
     const [roleId, setRoleId] = useState(1);
@@ -39,6 +40,7 @@ export default function Signup({ locale }: { locale: string }) {
     const [commentId, setCommentId] = useState('');
     const [_, setCommentTmpId] = useState('');
     const [showSellerRadio, setShowSellerRadio] = useState(true);
+    const [chromeLink, setChromeLink] = useState('');
 
     const validationSchema = Yup.object().shape({
         email: !isFbClicked
@@ -55,8 +57,11 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        console.log('here', window.localStorage.getItem('orderCommentId'));
-        console.log('here', window.localStorage.getItem('orderWaitCommentId'));
+        console.log('comment Id', window.localStorage.getItem('orderCommentId'));
+        console.log('wait comment Id', window.localStorage.getItem('orderWaitCommentId'));
+        console.log('url params', window.location.search);
+        console.log('GOOGLE DEEP LINK', googleDeepLink);
+
         // const commentId = commentStr[1];
         if (
             window.localStorage.getItem('orderCommentId') ||
@@ -93,6 +98,10 @@ export default function Signup({ locale }: { locale: string }) {
 
     useEffect(() => {
         if (nativeBrowser) {
+            // const generatedLink = `googlechrome://liveproshop.com${locale == 'en' ? '/en' : ''}/`;
+            // setChromeLink(`googlechrome://liveproshop.com${locale == 'en' ? '/en' : ''}`);
+            // const link = '<a href="">'
+            console.log('GOOGLE DEEP LINK', googleDeepLink);
             // window.open('https://google.com', '_self');
         }
     }, [nativeBrowser]);
@@ -152,16 +161,7 @@ export default function Signup({ locale }: { locale: string }) {
 
     const openSafaryBrowser = () => {
         dispatch(openBrowserAction());
-        // window.open('https://liveproshop.com', '_self');
-        // let shell = new ActiveXObject('WScript.Shell');
-        // shell.run("Safari http://www.google.com");
-        // console.log('open shell');
-        // shell.exec(`open -a Safari http://stackoverflow.com`, function (code, output) {
-        //     console.log('open shell');
-        // });
     };
-
-    console.log('Comment ID', commentId);
 
     return (
         <>
@@ -190,6 +190,14 @@ export default function Signup({ locale }: { locale: string }) {
                                 <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
+                                <span className="mt-2 mb-4 hidden">
+                                    <a href="googlechrome://liveproshop.com">Chrome Liveproshop</a>
+                                </span>
+                                <span className="mt-2 mb-4 hidden">
+                                    <a href="com.apple.safari://open_url?url=[https://liveproshop]">
+                                        Safari Liveproshop
+                                    </a>
+                                </span>
                                 {/*<div className="alert-warning mb-6 block">*/}
                                 {/*    It looks like you are using the Facebook in-app browser. For*/}
                                 {/*    better experience, please open this link in your default browser*/}
@@ -198,14 +206,18 @@ export default function Signup({ locale }: { locale: string }) {
                                     <div className="alert-warning mb-6 block">
                                         It looks like you are using the Facebook in-app browser. For
                                         better experience, please open this link in your default
+                                        {/* eslint-disable-next-line react/no-unescaped-entities */}
+                                        browser. Press and hold the link and choose "Open in Safari"
+                                        or you can use this ${}
+                                        <a href="googlechrome://liveproshop.com${}">link</a> open in
+                                        open in Chrome browser
                                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                                        <span
-                                            onClick={openSafaryBrowser}
-                                            style={{ color: '#B45309' }}
-                                            className="underline cursor-pointer">
-                                            &nbsp;browser
-                                        </span>
-                                        .
+                                        {/*<span*/}
+                                        {/*    onClick={openSafaryBrowser}*/}
+                                        {/*    style={{ color: '#B45309' }}*/}
+                                        {/*    className="underline cursor-pointer">*/}
+                                        {/*    &nbsp;browser*/}
+                                        {/*</span>*/}.
                                     </div>
                                 )}
                                 <div className="mb-6 text-xl line-height-105percent text-gray-600">
