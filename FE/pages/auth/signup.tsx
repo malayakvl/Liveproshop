@@ -59,8 +59,9 @@ export default function Signup({ locale }: { locale: string }) {
         const commentStr = dataParams[0].split('=');
         console.log('comment Id', window.localStorage.getItem('orderCommentId'));
         console.log('wait comment Id', window.localStorage.getItem('orderWaitCommentId'));
-        console.log('url params', window.location.search);
+        console.log('google deep url', window.localStorage.getItem('googleDeepUrl'));
         console.log('GOOGLE DEEP LINK', googleDeepLink);
+        setChromeLink(googleDeepLink.replace('https://', ''));
 
         // const commentId = commentStr[1];
         if (
@@ -102,6 +103,8 @@ export default function Signup({ locale }: { locale: string }) {
             // setChromeLink(`googlechrome://liveproshop.com${locale == 'en' ? '/en' : ''}`);
             // const link = '<a href="">'
             console.log('GOOGLE DEEP LINK', googleDeepLink);
+            const linkGenerate = `<a href=${`googlechrome://${chromeLink}`}>link</a>`;
+            setChromeLink(linkGenerate);
             // window.open('https://google.com', '_self');
         }
     }, [nativeBrowser]);
@@ -208,9 +211,8 @@ export default function Signup({ locale }: { locale: string }) {
                                         better experience, please open this link in your default
                                         {/* eslint-disable-next-line react/no-unescaped-entities */}
                                         browser. Press and hold the link and choose "Open in Safari"
-                                        or you can use this ${}
-                                        <a href="googlechrome://liveproshop.com${}">link</a> open in
-                                        open in Chrome browser
+                                        or you can use this ${chromeLink} open in open in Chrome
+                                        browser
                                         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                                         {/*<span*/}
                                         {/*    onClick={openSafaryBrowser}*/}
