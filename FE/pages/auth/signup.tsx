@@ -97,12 +97,19 @@ export default function Signup({ locale }: { locale: string }) {
     useEffect(() => {
         if (nativeBrowser) {
             // console.log('GOOGLE DEEP LINK', googleDeepLink.replace('https://', ''));
-            const linkGenerate = `<a href=${`googlechrome://${googleDeepLink.replace(
-                'https://',
-                ''
-            )}`}>LINK</a>`;
+            let linkGenerate;
+            if (locale === 'en') {
+                linkGenerate = `<a href=${`googlechrome://${googleDeepLink.replace(
+                    'https://',
+                    ''
+                )}`}>LINK</a>`;
+            } else {
+                linkGenerate = `<a href=${`googlechrome://${googleDeepLink.replace(
+                    'https://',
+                    ''
+                )}`}>LE LIEN</a>`;
+            }
             setChromeLink(linkGenerate);
-            // window.open('https://google.com', '_self');
         }
     }, [nativeBrowser]);
 
@@ -159,9 +166,9 @@ export default function Signup({ locale }: { locale: string }) {
         }
     };
 
-    const openSafaryBrowser = () => {
-        dispatch(openBrowserAction());
-    };
+    // const openSafaryBrowser = () => {
+    //     dispatch(openBrowserAction());
+    // };
 
     return (
         <>
@@ -204,19 +211,39 @@ export default function Signup({ locale }: { locale: string }) {
                                 {/*</div>*/}
                                 {nativeBrowser && (
                                     <div className="alert-warning mb-6 block">
-                                        It looks like you are using the Facebook in-app browser. For
-                                        better experience, please open this link in your default
-                                        browser.
-                                        <br />
-                                        1) Press and hold the link and choose “Open in Safari”
-                                        <br />
-                                        2) Or you can use this{' '}
-                                        <span
-                                            className="underline text-yellow-500"
-                                            dangerouslySetInnerHTML={{
-                                                __html: `${chromeLink}`
-                                            }}></span>
-                                        &nbsp;and open it in Chrome browser
+                                        {locale == 'en' && (
+                                            <>
+                                                It looks like you are using the Facebook in-app
+                                                better experience, please open this link in your
+                                                default browser.
+                                                <br />
+                                                1) Press and hold the link and choose “Open in
+                                                Safari”
+                                                <br />
+                                                2) Or you can use this{' '}
+                                                <span
+                                                    className="underline text-yellow-500"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: `${chromeLink}`
+                                                    }}></span>
+                                                &nbsp;and open it in Chrome browser
+                                            </>
+                                        )}
+                                        {locale == 'fr' && (
+                                            <>
+                                                Il semble que vous utilisiez le navigateur intégré
+                                                de Facebook. Pour une meilleure expérience, veuillez
+                                                ouvrir ce lien dans votre navigateur par défaut:
+                                                Appuyez longuement sur le lien et choosiness
+                                                «Ocurrir dans Safari», ou ouvrez-le dans le
+                                                navigateur Chrome en copiant&nbsp;
+                                                <span
+                                                    className="underline text-yellow-500"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: `${chromeLink}`
+                                                    }}></span>
+                                            </>
+                                        )}
                                         {/*It looks like you are using the Facebook in-app browser. For*/}
                                         {/*better experience, please open this link in your default*/}
                                         {/*/!* eslint-disable-next-line react/no-unescaped-entities *!/*/}
