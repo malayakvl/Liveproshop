@@ -57,13 +57,10 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        console.log('comment Id', window.localStorage.getItem('orderCommentId'));
-        console.log('wait comment Id', window.localStorage.getItem('orderWaitCommentId'));
-        console.log('google deep url', window.localStorage.getItem('googleDeepUrl'));
-        console.log('GOOGLE DEEP LINK', googleDeepLink);
-        setChromeLink(googleDeepLink.replace('https://', ''));
+        if (googleDeepLink) {
+            setChromeLink(googleDeepLink.replace('https://', ''));
+        }
 
-        // const commentId = commentStr[1];
         if (
             window.localStorage.getItem('orderCommentId') ||
             window.localStorage.getItem('orderWaitCommentId')
@@ -99,7 +96,7 @@ export default function Signup({ locale }: { locale: string }) {
 
     useEffect(() => {
         if (nativeBrowser) {
-            console.log('GOOGLE DEEP LINK', googleDeepLink.replace('https://', ''));
+            // console.log('GOOGLE DEEP LINK', googleDeepLink.replace('https://', ''));
             const linkGenerate = `<a href=${`googlechrome://${googleDeepLink.replace(
                 'https://',
                 ''
