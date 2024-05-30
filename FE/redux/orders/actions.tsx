@@ -133,7 +133,7 @@ export const bulkShippingAction: any = createAction(
 );
 export const bulkDownloadAction: any = createAction(
     'products/BULK_DOWNLOAD',
-    async () =>
+    async (locale: string) =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
@@ -146,16 +146,18 @@ export const bulkDownloadAction: any = createAction(
                     countChecked++;
                 }
             });
+            const lng = locale;
+            console.log('Current locale', locale);
             if (countChecked == 0) {
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
                 dispatch(showLoaderAction(false));
             } else {
                 return axios
                     .post(
-                        `${baseUrl}/orders/bulk-download`,
+                        `${baseUrl}/orders/bulk-download?locale=${locale}`,
                         {
                             data: JSON.stringify(state.layouts.checkedIds),
-                            locale: state.layouts.selectedLng
+                            locale: locale
                         },
                         {
                             headers: {

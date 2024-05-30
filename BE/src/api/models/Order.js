@@ -903,6 +903,7 @@ class Order {
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
+        console.log('LOCALE', locale)
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -982,7 +983,6 @@ class Order {
                 // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const orderNuberForMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}`;
-
                 const multiOrderPaymentData = await axios
                     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
                         headers: { 'Content-Type': 'application/json' }
@@ -991,11 +991,10 @@ class Order {
                         // console.log('PAYMENT METHODS', res.data.data);
                         return {'success': true, paymentData: res.data.data}
                     }).catch(error => {
-                        console.log('BLYAHA')
                         return {error: error.message}
                     });
+
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
-                console.log('MULTISAFE PAYMENT METHOD', multiOrderPaymentData.paymentData.payment_methods[0].type)
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
@@ -1729,7 +1728,6 @@ class Order {
         const client = await pool.connect();
         try {
             const promisesQueries = [];
-            console.log(ids);
             ids.forEach(async (id) => {
                 const order = await client.query(`SELECT * FROM data.orders WHERE id=${id};`);
                 promisesQueries.push(this.generatePdf(order.rows[0].order_number, user.id, user, locale, 'download'));

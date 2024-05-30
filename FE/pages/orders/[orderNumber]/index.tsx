@@ -44,7 +44,7 @@ export default function Index({ locale }: { locale: string }) {
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
-        dispatch(fetchOrderPdfAction(orderNumber, locale, type));
+        dispatch(fetchOrderPdfAction(orderNumber, locale, type ? type : ''));
     }, []);
 
     useEffect(() => {

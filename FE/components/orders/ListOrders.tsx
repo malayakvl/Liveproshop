@@ -80,7 +80,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             } else if (status === 'cancel' || status === 'refund') {
                 return dispatch(showCancelConfirmationModalAction(true));
             } else {
-                return dispatch(bulkDownloadAction());
+                return dispatch(bulkDownloadAction(locale));
             }
         },
         [dispatch]

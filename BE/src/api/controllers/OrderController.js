@@ -187,12 +187,13 @@ class OrderController {
     }
 
     async bulkDownload (req, res) {
+        console.log('Current locale', req.query.locale);
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
             const ids = [];
             JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-            const data = await orderModel.bulkDownload(ids, req.user);
+            const data = await orderModel.bulkDownload(ids, req.user, req.query.locale ? req.query.locale : 'fr');
             return res.status(200).json({ data: data.success, achive: data.achive });
         }
     }
