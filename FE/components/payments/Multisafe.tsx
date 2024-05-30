@@ -9,32 +9,38 @@ const Multisafe: React.FC = () => {
     const { locale }: any = useRouter();
 
     return (
-        <div className="mt-10 block-white-8 white-shadow-big">
+        <div className="mt-10 block-white-8 block-white-8-multi white-shadow-big">
             <div className="block-white-8 mr-10 white-shadow-medium mt-10 text-xl max-w-4xl text-gray-350">
                 <div className="flex border border-l-0 border-r-0 border-t-0 pb-2.5 mb-10 ">
                     <h2 className="text-[16px] dark-blue-header dark-logged">
                         {t('Guide - Multisafepay - rules for sellers')}
                     </h2>
                 </div>
-                <div className="text-[20px] leading-[30px]">{t('mguide_1')}</div>
+                <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
+                    {t('mguide_1')}
+                </div>
                 <div className="block">
                     <Link href="https://merchant.multisafepay.com/signup?partnerid=10736441">
-                        <a target="_blank" className="font-bold text-[20px] font-blue-550">
+                        <a
+                            target="_blank"
+                            className="font-bold text-[16px] md:text-[20px] font-blue-550">
                             https://merchant.multisafepay.com/signup?partnerid=10736441
                         </a>
                     </Link>
                 </div>
-                <div className="text-[20px] leading-[30px] mt-4 block">{t('mtext_1')}</div>
-                <div className="text-[20px] leading-[30px] mt-4 block">{t('mguide_2')}</div>
+                <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] mt-4 block">
+                    {t('mtext_1')}
+                </div>
+                <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] mt-4 block">
+                    {t('mguide_2')}
+                </div>
                 <div className="my-12 mb-24 text-center">
                     <Image src="/images/multisafe/ms-1.png" width={994} height={425} />
                 </div>
                 <div className="p-4 my-12 font-medium bg-gray-75 rounded-lg text-[14px] md:text-base text-gray-550">
-                    <h2 className="dark-blue-header dark-logged-1 mb-4 md:text-[24px]">
-                        {t('Remarque!')}
-                    </h2>
+                    <h2 className="dark-blue-header mb-4 text-[18px]">{t('Remarque!')}</h2>
                     {locale == 'en' && (
-                        <div className="text-remarque">
+                        <div className="text-base font-medium text-gray-550">
                             <span className="block mb-3.5">
                                 Minimum value: Smallest expected amount
                             </span>
@@ -51,7 +57,7 @@ const Multisafe: React.FC = () => {
                         </div>
                     )}
                     {locale == 'fr' && (
-                        <div className="text-remarque">
+                        <div className="text-base font-medium text-gray-550">
                             <span className="block mb-3.5">
                                 Valeur minimale: Plus petit montant attendu
                             </span>
@@ -74,7 +80,7 @@ const Multisafe: React.FC = () => {
                     <Image src="/images/multisafe/msp-1.png" width={994} height={425} />
                 </div>
                 {locale == 'en' && (
-                    <div className="md:text-[20px]">
+                    <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                         <span className="block mb-3">
                             1.2. The most common company will be divided into shares.
                         </span>
@@ -92,7 +98,7 @@ const Multisafe: React.FC = () => {
                     </div>
                 )}
                 {locale == 'fr' && (
-                    <div className="md:text-[20px]">
+                    <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                         <span className="block mb-3">
                             1.2. La société la plus courante sera divisée en actions.
                         </span>
@@ -110,11 +116,11 @@ const Multisafe: React.FC = () => {
                         </span>
                     </div>
                 )}
-                <div>
+                <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                     <span className="block mb-3">
                         <a
                             href=" mailto:Jesse.Lingier@multisafepay.com"
-                            className="font-bold text-[20px]">
+                            className="font-bold text-[16px] md:text-[20px]">
                             Jesse.Lingier@multisafepay.com
                         </a>
                     </span>
@@ -132,16 +138,16 @@ const Multisafe: React.FC = () => {
                 <div className="my-12 mb-12 text-center">
                     <Image src="/images/multisafe/msp-2.png" width={994} height={425} />
                 </div>
-                <span>{t('mtext_2')}</span>
+                <span className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
+                    {t('mtext_2')}
+                </span>
                 <div className="my-12 mb-12 text-center">
                     <Image src="/images/multisafe/msp-3.png" width={994} height={425} />
                 </div>
                 <div className="p-4 my-12 font-medium bg-gray-75 rounded-lg text-[14px] md:text-base text-gray-550">
-                    <h2 className="dark-blue-header dark-logged-1 mb-4 md:text-[24px]">
-                        {t('Remarque!')}
-                    </h2>
+                    <h2 className="dark-blue-header mb-4 text-[18px]">{t('Remarque!')}</h2>
                     {locale == 'en' && (
-                        <div className="text-remarque">
+                        <div className="text-base font-medium text-gray-550">
                             PayPal is not activated immediately. You must send an e-mail to your
                             account manager to activate it. Once activated, you can configure your
                             Paypal in your payment method settings (
@@ -155,7 +161,7 @@ const Multisafe: React.FC = () => {
                         </div>
                     )}
                     {locale == 'fr' && (
-                        <div className="text-remarque">
+                        <div className="text-base font-medium text-gray-550">
                             PayPal n`est pas activé immédiatement. Vous devez envoyer un e-mail à
                             votre responsable de compte pour l`activer Une fois activé, dans vos
                             paramètres de mode de payments (
@@ -169,21 +175,29 @@ const Multisafe: React.FC = () => {
                         </div>
                     )}
                 </div>
-                <span>{t('mtext_3')}</span>
+                <span className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
+                    {t('mtext_3')}
+                </span>
                 <div className="my-12 mb-12 text-center">
                     <Image src="/images/multisafe/msp-4.png" width={994} height={425} />
                 </div>
-                <span className="block mb-1">{t('mtext_4')}</span>
-                <span className="block mb-1">{t('mtext_5')}</span>
-                <span className="block mb-1">
+                <span className="block mb-1 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
+                    {t('mtext_4')}
+                </span>
+                <span className="block mb-1 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
+                    {t('mtext_5')}
+                </span>
+                <span className="block mb-1 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                     {t('mtext_6')} <b>https://liveproshop.com</b>
                 </span>
-                <span className="block mt-8 mb-2">{t('mtext_7')}</span>
+                <span className="block mt-8 mb-2 text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
+                    {t('mtext_7')}
+                </span>
                 <div className="my-12 mb-12 text-center">
                     <Image src="/images/multisafe/msp-5.png" width={994} height={218} />
                 </div>
                 {locale == 'en' && (
-                    <div>
+                    <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
                         5. After that, go here{' '}
                         <a
                             className="font-bold"
