@@ -41,6 +41,7 @@ export default function Signup({ locale }: { locale: string }) {
     const [_, setCommentTmpId] = useState('');
     const [showSellerRadio, setShowSellerRadio] = useState(true);
     const [chromeLink, setChromeLink] = useState('');
+    const incomingOrderLink = useSelector(googleDeepLinkSelector);
 
     const validationSchema = Yup.object().shape({
         email: !isFbClicked
@@ -57,6 +58,7 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
+        console.log('messenger link', incomingOrderLink);
         if (googleDeepLink) {
             setChromeLink(googleDeepLink.replace('https://', ''));
         }
@@ -95,6 +97,7 @@ export default function Signup({ locale }: { locale: string }) {
     }, [tmpCommentOrderId]);
 
     useEffect(() => {
+        console.log('Order Link', incomingOrderLink);
         if (nativeBrowser) {
             // console.log('GOOGLE DEEP LINK', googleDeepLink.replace('https://', ''));
             let linkGenerate;
@@ -217,8 +220,12 @@ export default function Signup({ locale }: { locale: string }) {
                                                 better experience, please open this link in your
                                                 default browser.
                                                 <br />
-                                                1) Press and hold the link and choose “Open in
-                                                Safari”
+                                                1) Press and hold the{' '}
+                                                <a
+                                                    className="underline text-yellow-500"
+                                                    href={`${incomingOrderLink}`}>
+                                                    LINK
+                                                </a>{' '}
                                                 <br />
                                                 2) Or you can use this{' '}
                                                 <span
@@ -244,46 +251,32 @@ export default function Signup({ locale }: { locale: string }) {
                                                     }}></span>
                                             </>
                                         )}
-                                        {/*It looks like you are using the Facebook in-app browser. For*/}
-                                        {/*better experience, please open this link in your default*/}
-                                        {/*/!* eslint-disable-next-line react/no-unescaped-entities *!/*/}
-                                        {/*browser. Press and hold the link and choose "Open in Safari"*/}
-                                        {/*or you can use this{' '}*/}
-                                        {/*<span*/}
-                                        {/*    className="underline"*/}
-                                        {/*    dangerouslySetInnerHTML={{*/}
-                                        {/*        __html: `${chromeLink}`*/}
-                                        {/*    }}></span>*/}
-                                        {/*&nbsp;open in open in Chrome browser*/}
-                                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-                                        {/*<span*/}
-                                        {/*    onClick={openSafaryBrowser}*/}
-                                        {/*    style={{ color: '#B45309' }}*/}
-                                        {/*    className="underline cursor-pointer">*/}
-                                        {/*    &nbsp;browser*/}
-                                        {/*</span>*/}.
                                     </div>
                                 )}
-                                <div className="mb-6 text-xl line-height-105percent text-gray-600">
-                                    {t('registr_descr')}
-                                </div>
+                                <div className={`${nativeBrowser ? 'sign-up-form-disable' : ''}`}>
+                                    <div className="mb-6 text-xl line-height-105percent text-gray-600">
+                                        {t('registr_descr')}
+                                    </div>
+                                    <div className="mb-6 text-sm line-height-105percent text-gray-600 italic">
+                                        {t('You can cancel at any time before to avoid the charge')}
+                                    </div>
 
-                                <div className="mb-6 text-sm line-height-105percent text-gray-600 italic">
-                                    {t('You can cancel at any time before to avoid the charge')}
-                                </div>
+                                    <div className="font-normal mb-6 text-blue-350 hidden">
+                                        {t('registr_descr_small')}
+                                    </div>
 
-                                <div className="font-normal mb-6 text-blue-350 hidden">
-                                    {t('registr_descr_small')}
+                                    <Link href={'/auth/signin'}>
+                                        <a className="font-bold red-yellow-gradient-text mb-8 block">
+                                            {t('have_account_descr')}
+                                        </a>
+                                    </Link>
                                 </div>
-
-                                <Link href={'/auth/signin'}>
-                                    <a className="font-bold red-yellow-gradient-text mb-8 block">
-                                        {t('have_account_descr')}
-                                    </a>
-                                </Link>
                             </div>
 
-                            <div className="w-full md:pl-12 md:border-l md:w-2/4">
+                            <div
+                                className={`w-full md:pl-12 md:border-l md:w-2/4 ${
+                                    nativeBrowser ? 'sign-up-form-disable' : ''
+                                }`}>
                                 {!hideForm && (
                                     <>
                                         <div className="flex mb-10">

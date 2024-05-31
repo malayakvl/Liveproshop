@@ -79,6 +79,9 @@ export default function Payments({ session, locale }: { session: any; locale: st
                             {/*<Image width="20" height="18" src={'/images/download.svg'} />*/}
                             <span className="   pt-px">{t('Download Invoice')}</span>
                         </a>
+                        <Link href={`/orders/${orderNumber}?locale=${locale}`}>
+                            <span className="   pt-px">{t('Download Invoice')}</span>
+                        </Link>
                     </div>
 
                     <div className="overflow-x-scroll flex w-full">
