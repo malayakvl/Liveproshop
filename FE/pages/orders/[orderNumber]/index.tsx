@@ -39,7 +39,7 @@ export default function Index({ locale }: { locale: string }) {
     const [blobData, setBlobData] = useState<any>(null);
 
     const {
-        query: { orderNumber, type }
+        query: { orderNumber, type, backroute }
     } = useRouter();
 
     useEffect(() => {
@@ -75,9 +75,19 @@ export default function Index({ locale }: { locale: string }) {
 
             {base64Data && (
                 <div>
-                    <Link href={'/orders'}>
-                        <a className="view-back">{t('Go Back')}</a>
-                    </Link>
+                    {backroute === 'payment' ? (
+                        <>
+                            <Link href={'/orders'}>
+                                <a className="view-back">{t('Go Back To Transaction')}</a>
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link href={'/orders'}>
+                                <a className="view-back">{t('Go Back')}</a>
+                            </Link>
+                        </>
+                    )}
                     <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
                         <div style={{ height: '750px' }}>
                             <Viewer

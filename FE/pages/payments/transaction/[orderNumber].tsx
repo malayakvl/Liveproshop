@@ -71,16 +71,18 @@ export default function Payments({ session, locale }: { session: any; locale: st
                         {/*    <span className="pl-4 pt-px">{t('Download Invoice')}</span>*/}
                         {/*</a>*/}
                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a
-                            onClick={() => dispatch(singleDownloadAction(orderNumber, locale))}
-                            href="javascript:;"
-                            className="gradient-btn"
-                            rel="noreferrer">
-                            {/*<Image width="20" height="18" src={'/images/download.svg'} />*/}
-                            <span className="   pt-px">{t('Download Invoice')}</span>
-                        </a>
-                        <Link href={`/orders/${orderNumber}?locale=${locale}`}>
-                            <span className="   pt-px">{t('Download Invoice')}</span>
+                        {/*<a*/}
+                        {/*    onClick={() => dispatch(singleDownloadAction(orderNumber, locale))}*/}
+                        {/*    href="javascript:;"*/}
+                        {/*    className="gradient-btn"*/}
+                        {/*    rel="noreferrer">*/}
+                        {/*    /!*<Image width="20" height="18" src={'/images/download.svg'} />*!/*/}
+                        {/*    <span className="   pt-px">{t('Download Invoice')}</span>*/}
+                        {/*</a>*/}
+                        <Link href={`/orders/${orderNumber}?locale=${locale}&backroute=payment`}>
+                            <span className="gradient-btn pt-px cursor-pointer">
+                                {t('Download Invoice')}
+                            </span>
                         </Link>
                     </div>
 
