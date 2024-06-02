@@ -25,9 +25,6 @@ const ListTransactions: React.FC = () => {
     const count: number = useSelector(itemsCountSelector);
     const checkedIds = useSelector(checkedIdsSelector);
 
-    // const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
-    // const [filterOpen, setFilterOpen] = useState(false);
-
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);

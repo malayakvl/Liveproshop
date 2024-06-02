@@ -77,8 +77,11 @@ export default function Index({ locale }: { locale: string }) {
                 <div>
                     {backroute === 'payment' ? (
                         <>
-                            <Link href={'/orders'}>
-                                <a className="view-back">{t('Go Back To Transaction')}</a>
+                            <Link
+                                href={`${
+                                    locale == 'en' ? '/en' : ''
+                                }/payments/transaction/${orderNumber}`}>
+                                <a className="view-back">{t('Go Back')}</a>
                             </Link>
                         </>
                     ) : (
