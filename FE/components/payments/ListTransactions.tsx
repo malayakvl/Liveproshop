@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { itemsCountSelector, paginatedItemsSelector } from '../../redux/payments/selectors';
@@ -13,17 +13,23 @@ import { checkIdsAction, initIdsAction } from '../../redux/layouts';
 import { checkedIdsSelector } from '../../redux/layouts/selectors';
 import { showCancelConfirmationModalAction } from '../../redux/orders';
 import { bulkDownloadAction, bulkShippingAction } from '../../redux/orders/actions';
+import { achiveNameSelector } from '../../redux/orders/selectors';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
-const ListTransactions: React.FC = () => {
+type Props = {
+    locale: string;
+};
+
+const ListTransactions: React.FC<Props> = ({ locale }) => {
     const dispatch = useDispatch();
     const router = useRouter();
-
     const items: Payments.DataItem[] = useSelector(paginatedItemsSelector);
     const count: number = useSelector(itemsCountSelector);
     const checkedIds = useSelector(checkedIdsSelector);
+    const achiveName = useSelector(achiveNameSelector);
+    const achiveRefname = useRef(null);
 
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
@@ -36,7 +42,7 @@ const ListTransactions: React.FC = () => {
             } else if (status === 'cancel') {
                 return dispatch(showCancelConfirmationModalAction(true));
             } else {
-                return dispatch(bulkDownloadAction());
+                return dispatch(bulkDownloadAction(locale));
             }
         },
         [dispatch]
@@ -49,6 +55,14 @@ const ListTransactions: React.FC = () => {
         });
         dispatch(initIdsAction(setupChecked));
     }, [items]);
+
+    useEffect(() => {
+        if (achiveName) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            achiveRefname?.current.click();
+        }
+    }, [achiveName]);
 
     return (
         <div className="mt-7">
@@ -125,6 +139,15 @@ const ListTransactions: React.FC = () => {
                     </tr>
                 ))}
             </DataTable>
+            <a
+                href={achiveName}
+                className="hidden"
+                target="_blank"
+                download
+                ref={achiveRefname}
+                rel="noreferrer">
+                Download achive
+            </a>
         </div>
     );
 };
