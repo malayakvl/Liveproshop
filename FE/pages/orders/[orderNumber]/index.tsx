@@ -109,7 +109,7 @@ export default function Index({ locale }: { locale: string }) {
             <Head>
                 <title>LiveProshop - Order {orderNumber}</title>
             </Head>
-            <div ref={scrollDivRef} style={{ border: 'solid 1px' }}></div>
+            <div ref={scrollDivRef}></div>
             {base64Data && (
                 <div>
                     {backroute === 'payment' ? (
