@@ -94,7 +94,11 @@ export default function SidebarLayout({ children }: { children: any }) {
             dispatch(setupWaitOrderByCommentAction(null));
             if (user.email || user.email_real) {
                 setTimeout(() => {
-                    window.location.href = `/en/checkout/${redirectOrderNumber}?storeName=${redirectStoreName}`;
+                    if (locale == 'fr') {
+                        window.location.href = `/checkout/${redirectOrderNumber}?storeName=${redirectStoreName}`;
+                    } else {
+                        window.location.href = `/en/checkout/${redirectOrderNumber}?storeName=${redirectStoreName}`;
+                    }
                 }, 1000);
             }
         }
