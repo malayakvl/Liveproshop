@@ -17,17 +17,24 @@ const Multisafe: React.FC = () => {
                     </h2>
                 </div>
                 <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px]">
-                    {t('mguide_1')}
-                </div>
-                <div className="block">
+                    {t('mguide_1')}&nbsp;
                     <Link href="https://merchant.multisafepay.com/signup?partnerid=10736441">
                         <a
                             target="_blank"
                             className="font-bold text-[16px] md:text-[20px] font-blue-550">
-                            https://merchant.multisafepay.com/signup?partnerid=10736441
+                            {t('link_m1')}
                         </a>
                     </Link>
                 </div>
+                {/*<div className="block">*/}
+                {/*    <Link href="https://merchant.multisafepay.com/signup?partnerid=10736441">*/}
+                {/*        <a*/}
+                {/*            target="_blank"*/}
+                {/*            className="font-bold text-[16px] md:text-[20px] font-blue-550">*/}
+                {/*            {t('link_m1')}*/}
+                {/*        </a>*/}
+                {/*    </Link>*/}
+                {/*</div>*/}
                 <div className="text-[16px] leading-[24px] md:text-[20px] md:leading-[30px] mt-4 block">
                     {t('mtext_1')}
                 </div>
@@ -150,28 +157,29 @@ const Multisafe: React.FC = () => {
                         <div className="text-base font-medium text-gray-550">
                             PayPal is not activated immediately. You must send an e-mail to your
                             account manager to activate it. Once activated, you can configure your
-                            Paypal in your payment method settings (
+                            Paypal in your&nbsp;
                             <a
+                                className="cursor-pointer font-bold"
                                 href="https://merchant.multisafepay.com/payment-methods"
                                 target="_blank"
                                 rel="noreferrer">
-                                https://merchant.multisafepay.com/payment-methods
+                                payment method settings
                             </a>
-                            )
                         </div>
                     )}
                     {locale == 'fr' && (
                         <div className="text-base font-medium text-gray-550">
                             PayPal n`est pas activé immédiatement. Vous devez envoyer un e-mail à
                             votre responsable de compte pour l`activer Une fois activé, dans vos
-                            paramètres de mode de payments (
+                            paramètres de mode&nbsp;
                             <a
+                                className="cursor-pointer font-bold"
                                 href="https://merchant.multisafepay.com/payment-methods"
                                 target="_blank"
                                 rel="noreferrer">
-                                https://merchant.multisafepay.com/payment-methods
+                                de payments
                             </a>
-                            ) vous popover configurer votre Paypal.
+                            &nbsp;vous popover configurer votre Paypal.
                         </div>
                     )}
                 </div>
