@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getSession } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
@@ -34,6 +34,7 @@ export default function Index({ locale }: { locale: string }) {
     // const fileName: string = useSelector(orderFileNameFetchedSelector);
     const base64Data: string | null = useSelector(orderBase64DataSelector);
     const t = useTranslations();
+    const scrollDivRef = useRef(null);
 
     const [url, setUrl] = useState('');
     const [blobData, setBlobData] = useState<any>(null);
@@ -58,10 +59,46 @@ export default function Index({ locale }: { locale: string }) {
         }
     }, [orderFetched, base64Data]);
 
+    const scrollToTop = function () {
+        const currentPosition = window.scrollY;
+        console.log('here we are', currentPosition);
+        if (currentPosition != 0) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // safafi 적용을 위한 코드 예시 (미적용)
+            // setTimeout(function () {
+            //   window.scrollTo(0, currentPosition - 50);
+            //   scrollToTop();
+            // }, 10);
+            // scrollToTop();
+        }
+    };
+
     useEffect(() => {
         if (blobData) {
             setUrl(URL.createObjectURL(blobData));
             dispatch(showLoaderAction(false));
+
+            const button = document.getElementsByClassName('scroll-button');
+
+            const showScrollBtn = function () {
+                window.scrollY > window.innerHeight ? console.log(1) : console.log(2);
+            };
+            window.addEventListener('scroll', showScrollBtn);
+
+            // button.addEventListener('click', scrollToTop);
+
+            if (scrollDivRef) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // scrollDivRef?.current.scrollTo(0, 0);
+                window.scrollTo({ top: 100, left: 100, behavior: 'smooth' });
+                setTimeout(() => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    scrollDivRef?.current.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+                console.log('scroll up will be here');
+            }
         }
     }, [blobData]);
 
@@ -72,7 +109,7 @@ export default function Index({ locale }: { locale: string }) {
             <Head>
                 <title>LiveProshop - Order {orderNumber}</title>
             </Head>
-
+            <div ref={scrollDivRef} style={{ border: 'solid 1px' }}></div>
             {base64Data && (
                 <div>
                     {backroute === 'payment' ? (
@@ -99,6 +136,8 @@ export default function Index({ locale }: { locale: string }) {
                             />
                         </div>
                     </Worker>
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                    {/*<span className="cursor-pointer scroll-button " onClick={() => scrollToTop()}>Click to top</span>*/}
                 </div>
             )}
         </>
