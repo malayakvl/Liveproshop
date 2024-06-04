@@ -271,11 +271,12 @@ class Checkout {
                     //
                     //     });
                     await client.query(`UPDATE data.orders SET status='payed' WHERE id=${orderRes.rows[0].id}`);
+                    console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
                     // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
-                    const orderData = await client.query(`SELECT user_id FROM daata.orders WHERE id=${orderRes.rows[0].id}`)
+                    // const orderData = await client.query(`SELECT user_id FROM daata.orders WHERE id=${orderRes.rows[0].id}`)
 
                     // send email about success payment and generate pdf
-                    const userData = await client.query(`SELECT email FROM data.users WHERE id='${orderData.rows[0].user_id}'`);
+                    // const userData = await client.query(`SELECT email FROM data.users WHERE id='${orderData.rows[0].user_id}'`);
 
 
                     return { paymentStatus: 'success', error: null };
@@ -290,7 +291,7 @@ class Checkout {
                 return { paymentStatus: 'error', error: error };
             }
         } catch (e) {
-    
+console.log(e.message)
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -300,7 +301,7 @@ class Checkout {
             }
             error = {
                 code: 500,
-                message: 'Error get list of shippingMethods'
+                message: 'Error updateOrderStatus'
             };
             return { paymentStatus: 'error', error: error };
         } finally {
@@ -340,20 +341,6 @@ class Checkout {
                 // const amountRefund = orderRes.rows[0].refund_amount ? orderRes.rows[0].refund_amount : 0;
                 // const amountRefund = freeShippingData.amount_refund;
                 const totalPayment = shippingPrice + parseFloat(orderRes.rows[0].order_amount - parseFloat(amountRefund));
-// console.log('Checkout submit1', freeShippingData.amount_refund);
-// console.log(`UPDATE data.orders SET
-//                                         country_id=${data.country_id},
-//                                         state=$$${data.state ? data.state : ''}$$,
-//                                         city=$$${data.city}$$,
-//                                         post_code=$$${data.post_code}$$,
-//                                         shipping_id=${data.shippingMethodId ? data.shippingMethodId : null},
-//                                         phone=$$${data.phone}$$,
-//                                         shipping_amount=${shippingPrice},
-//                                         shipping_address=$$${data.address_line_1 ?  data.address_line_1 : data.shipping_address}$$,
-//                                         hash='${hash}',
-//                                         refund_amount='${freeShippingData.amount_refund}'
-//                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`)
-// exit;
 
                 await client.query(`UPDATE data.orders SET
                                         country_id=${data.country_id},
@@ -416,6 +403,7 @@ class Checkout {
                                 headers: { 'Content-Type': 'application/json' }
                             })
                             .then(async (resM) => {
+                                console.log('Merchant result', resM.data.data);
                                 return resM.data.data;
                             }).catch(error => {
                                 console.log("Merchant error", error);

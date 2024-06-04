@@ -49,10 +49,6 @@ const OrderSummary = () => {
             // @ts-ignore
             totalOrder += parseInt(order.order_amount * 1.2);
         }
-        // console.log('RECALCULATE');
-        // console.log('SHIPPING', selectedShippingMethod?.price);
-        // console.log('TOTAL', order.total_amount);
-        // totalOrder = totalOrder.toFixed();
         if (selectedShippingMethod?.price) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore

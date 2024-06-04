@@ -729,7 +729,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
+            // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -1433,8 +1433,6 @@ console.log(updtQuery);
                             }
                         }
                     }
-                } else {
-                    console.log('PRISHLI SUDA A TUT PUSTO')
                 }
                 // return {success: true, orderId: orderId, orderNumber: orderNumber };
                 return {success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName };
@@ -1451,12 +1449,12 @@ console.log(updtQuery);
                 //     AND status='new' AND id != '${res.rows[0].order_id}'
                 //     AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 // exit;
-                console.log(`SELECT data.orders.id, data.orders.order_number FROM data.orders 
-                                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                                        LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id   
-                                        WHERE data.orders.user_id='${userId}'
-                                        AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
-                                        AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+                // console.log(`SELECT data.orders.id, data.orders.order_number FROM data.orders
+                //                      LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                //                         LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+                //                         WHERE data.orders.user_id='${userId}'
+                //                         AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
+                //                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 // const existNonPayedOrder = await client.query(
                 //     `SELECT data.orders.id, data.orders.order_number FROM data.orders LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                 //      LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
@@ -1525,15 +1523,15 @@ console.log(updtQuery);
                     }
                 } else {
                     let nOrderNumber = sessionId+'-'+res.rows[0].order_number;
-console.log('dsaddasdasdadas');
+console.log('first order without any splitting');
                     orderId = res.rows[0].order_id;
                     const orderSQL = `UPDATE data.orders SET user_id='${userId}', sync_at=now(),
                         total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                     await client.query(orderSQL);
                     const oData = await client.query(`SELECT order_number FROM data.orders WHERE id='${res.rows[0].order_id}'`);
-                    const combineOrderNumber = sessionId+oData.rows[0].order_number;
-                    // await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
-                    // orderNumber = combineOrderNumber;
+                    const combineOrderNumber = sessionId+'-'+oData.rows[0].order_number.replace(sessionId+'-', '');
+                    await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
+                    orderNumber = combineOrderNumber;
                 }
                 console.log('ORDER NUMBER', orderNumber);
 

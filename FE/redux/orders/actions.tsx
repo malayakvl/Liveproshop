@@ -497,6 +497,7 @@ export const minusItemOrderAction: any = createAction(
     async (itemId: number, orderNumber: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .get(`${baseUrl}/orders/minus-item-order?orderItemId=${itemId}`, {
                     headers: {
@@ -504,7 +505,8 @@ export const minusItemOrderAction: any = createAction(
                     }
                 })
                 .then((res: any) => {
-                    dispatch(fetchCheckoutAction(orderNumber));
+                    window.location.reload();
+                    // dispatch(fetchCheckoutAction(orderNumber));
                 });
         }
 );
