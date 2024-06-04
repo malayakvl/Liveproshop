@@ -249,7 +249,7 @@ class OrderController {
         if (req.user) {
             // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
 
-            const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status);
+            const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status, req.query.locale);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }
         return res.status(200).json({ success: true, orderNumber: null });

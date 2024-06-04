@@ -325,13 +325,15 @@ export const findSellersAction: any = createAction(
 );
 export const updateOrderStatusAction: any = createAction(
     'orders/INSERT_ORDER_STATUS',
-    async (orderId: number, status: string) =>
+    async (orderId: number, status: string, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             return axios
-                .get(`${baseUrl}/orders/insert-status?orderId=${orderId}&status=${status}`, {
-                    headers: {
-                        ...authHeader(state.user.user.email)
+                .get(
+                    `${baseUrl}/orders/insert-status?orderId=${orderId}&status=${status}&locale=${locale}`,
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
                     }
                 })
                 .then((res: any) => res.data.result);

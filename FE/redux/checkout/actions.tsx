@@ -110,7 +110,7 @@ export const submitCheckoutAction: any = createAction(
 );
 export const checkPaymentStatusAction: any = createAction(
     'checkout/CHECK_PAYMENT_STATUS',
-    async (hash: string, type: string, orderId: any) =>
+    async (hash: string, type: string, orderId: any, locale: string) =>
         async (
             dispatch: Type.Dispatch,
             getState: () => State.Root
@@ -133,7 +133,7 @@ export const checkPaymentStatusAction: any = createAction(
                     dispatch(showLoaderAction(false));
                 }
                 if (res.data.paymentStatus === 'success') {
-                    dispatch(updateOrderStatusAction(orderId, 'payed'));
+                    dispatch(updateOrderStatusAction(orderId, 'payed', locale));
                 }
                 return {
                     paymentStatus: res.data.paymentStatus

@@ -251,33 +251,21 @@ class Checkout {
         }
     }
     
-    async updateOrderStatus(data, user) {
+    async updateOrderStatus(data, user, locale) {
         const client = await pool.connect();
         let error;
         try {
-            const orderRes = await client.query(`SELECT id FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
+            const orderRes = await client.query(`SELECT id, user_id FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
             if (orderRes.rows.length) {
                 if (data.type === 'redirect') {
-                    // setup payment details
-                    // await axios
-                    //     .get(`${process.env.MULTISAFEPAY_URL}/orders/LP-ID-${orderRes.rows[0].id}?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
-                    //         headers: { 'Content-Type': 'application/json' }
-                    //     })
-                    //     .then(async (res) => {
-                    //         // console.log("Res Data", res.data);
-                    //         console.log("MULTISAFE DATA", res.data);
-                    //         // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
-                    //     }).catch(error => {
-                    //
-                    //     });
+                    // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
                     await client.query(`UPDATE data.orders SET status='payed' WHERE id=${orderRes.rows[0].id}`);
-                    console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
-                    // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
-                    // const orderData = await client.query(`SELECT user_id FROM daata.orders WHERE id=${orderRes.rows[0].id}`)
 
                     // send email about success payment and generate pdf
-                    // const userData = await client.query(`SELECT email FROM data.users WHERE id='${orderData.rows[0].user_id}'`);
+                    const userData = await client.query(`SELECT email, email_real, last_name, first_name FROM data.users WHERE id='${orderRes.rows[0].user_id}'`);
+                    if (locale === 'en') {
 
+                    }
 
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {

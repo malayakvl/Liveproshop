@@ -1617,7 +1617,7 @@ console.log('first order without any splitting');
     }
 
 
-    async insertOrderStatus (orderId, status) {
+    async insertOrderStatus (orderId, status, locale) {
         const client = await pool.connect();
         try {
 console.log('here')

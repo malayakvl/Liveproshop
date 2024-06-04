@@ -8,7 +8,7 @@ import { checkPaymentStatusAction } from '../../redux/checkout';
 // import { updateOrderStatusAction } from '../../redux/orders';
 import { paymentStatusSelector } from '../../redux/checkout/selectors';
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return null;
     const paymentStatus = useSelector(paymentStatusSelector);
 
@@ -20,7 +20,7 @@ export default function Index({ session }: { session: any }) {
 
     useEffect(() => {
         window.localStorage.removeItem('orderCommentId');
-        dispatch(checkPaymentStatusAction(hash, type, orderId));
+        dispatch(checkPaymentStatusAction(hash, type, orderId, locale));
     }, []);
 
     useEffect(() => {

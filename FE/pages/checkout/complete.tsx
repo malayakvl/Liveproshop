@@ -9,7 +9,7 @@ import { updateOrderStatusAction } from '../../redux/orders';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return null;
     const t = useTranslations();
     const user = useSelector(userSelector);
@@ -26,7 +26,7 @@ export default function Index({ session }: { session: any }) {
 
     useEffect(() => {
         if (orderId) {
-            dispatch(updateOrderStatusAction(orderId, 'payed'));
+            dispatch(updateOrderStatusAction(orderId, 'payed', locale));
         }
     }, [orderId]);
 
