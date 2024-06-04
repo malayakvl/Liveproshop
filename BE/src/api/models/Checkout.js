@@ -5,6 +5,8 @@ import crypto from "crypto";
 import moment from 'moment';
 import shippingModel from "./Shipping.js";
 import orderModel from "./Order.js";
+import {confirmOrderPaymentEmail, confirmSubscriptionPaymentEmail} from "../sender/templates.js";
+import {sendMail} from "../lib/sendMail.js";
 
 class Checkout {
 
@@ -255,7 +257,11 @@ class Checkout {
         const client = await pool.connect();
         let error;
         try {
-            const orderRes = await client.query(`SELECT id, user_id FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
+            const orderRes = await client.query(`SELECT * FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
+            const sellerData = await client.query(`SELECT data.user_stores.name AS store_name 
+                FROM data.live_sessions 
+                LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id`);
+            const storeName = sellerData.rows[0].store_name
             if (orderRes.rows.length) {
                 if (data.type === 'redirect') {
                     // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
@@ -263,9 +269,15 @@ class Checkout {
 
                     // send email about success payment and generate pdf
                     const userData = await client.query(`SELECT email, email_real, last_name, first_name FROM data.users WHERE id='${orderRes.rows[0].user_id}'`);
-                    if (locale === 'en') {
-
-                    }
+                    const orderData = orderRes.rows[0];
+console.log('Order Data', orderData)
+console.log('User Data', userData.rows[0])
+                    const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0]);
+                    sendMail(
+                        userData.rows[0].email_real,
+                        mailConfirmPayment.subject,
+                        mailConfirmPayment.body
+                    );
 
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {
