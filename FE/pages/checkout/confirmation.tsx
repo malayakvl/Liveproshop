@@ -8,10 +8,10 @@ import { checkPaymentStatusAction } from '../../redux/checkout';
 // import { updateOrderStatusAction } from '../../redux/orders';
 import { paymentStatusSelector } from '../../redux/checkout/selectors';
 
-export default function Index({ session, locale }: { session: any; locale: string }) {
+export default function Index({ session }: { session: any }) {
     if (!session) return null;
     const paymentStatus = useSelector(paymentStatusSelector);
-
+    const { locale }: any = useRouter();
     const {
         query: { orderId, lang, hash, type }
     } = useRouter();
@@ -20,7 +20,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
     useEffect(() => {
         window.localStorage.removeItem('orderCommentId');
-        dispatch(checkPaymentStatusAction(hash, type, orderId, lang));
+        dispatch(checkPaymentStatusAction(hash, type, orderId, locale));
     }, []);
 
     useEffect(() => {
