@@ -5,7 +5,7 @@ import crypto from "crypto";
 import moment from 'moment';
 import shippingModel from "./Shipping.js";
 import orderModel from "./Order.js";
-import {confirmOrderPaymentEmail, confirmSubscriptionPaymentEmail} from "../sender/templates.js";
+import { confirmOrderPaymentEmail } from "../sender/templates.js";
 import {sendMail} from "../lib/sendMail.js";
 
 class Checkout {
@@ -270,8 +270,12 @@ class Checkout {
                     // send email about success payment and generate pdf
                     const userData = await client.query(`SELECT email, email_real, last_name, first_name FROM data.users WHERE id='${orderRes.rows[0].user_id}'`);
                     const orderData = orderRes.rows[0];
-console.log('Order Data', orderData)
-console.log('User Data', userData.rows[0])
+// console.log('Order Data', orderData)
+// console.log('User Data', userData.rows[0])
+                    console.log('GENERATE INVOICE PDF', locale);
+                    // check if file exist, then return true
+                    // const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
+
                     const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0]);
                     sendMail(
                         userData.rows[0].email_real,

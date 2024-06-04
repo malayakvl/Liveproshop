@@ -15,7 +15,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const {
-        query: { orderId }
+        query: { orderId, lang }
     } = useRouter();
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
     useEffect(() => {
         if (orderId) {
-            dispatch(updateOrderStatusAction(orderId, 'payed', locale));
+            dispatch(updateOrderStatusAction(orderId, 'payed', lang));
         }
     }, [orderId]);
 

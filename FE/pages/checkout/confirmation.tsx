@@ -20,7 +20,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
     useEffect(() => {
         window.localStorage.removeItem('orderCommentId');
-        dispatch(checkPaymentStatusAction(hash, type, orderId, locale));
+        dispatch(checkPaymentStatusAction(hash, type, orderId, lang));
     }, []);
 
     useEffect(() => {
