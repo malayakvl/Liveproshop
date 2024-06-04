@@ -543,6 +543,11 @@ export const openBrowserAction: any = createAction(
                     // dispatch(showPopupAction(false));
                     dispatch(showLoaderAction(false));
                     // toggleModalPopup('.modal-schedule');
+
+
+                    // sold 120 white m 2
+                    // sold 119 black m 1
+                    // sold 116 red xl 1
                 });
         }
 );
