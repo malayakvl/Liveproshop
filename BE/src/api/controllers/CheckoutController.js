@@ -170,12 +170,12 @@ class CheckoutController {
     
     async chechoutComfirmation(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
-        console.log('Query params', req.query);
+        console.log('Query params', req.query.locale);
         // exit;
-        // console.log('User Id', req.user.id);
+        console.log('User Id', req.user.id);
         // console.log('User', req.user);
         // await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale, "", req.params.type);
-        const data = await checkoutModel.updateOrderStatus(req.body, req.user, 'en');
+        const data = await checkoutModel.updateOrderStatus(req.body, req.user, req.query.locale);
         
         if (data.paymentStatus) {
             return res.status(200).json({ paymentStatus: data.paymentStatus, error: data.error });

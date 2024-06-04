@@ -275,15 +275,16 @@ class Checkout {
 // console.log('User Data', userData.rows[0])
                     console.log('GENERATE INVOICE PDF', locale);
                     // check if file exist, then return true
-                    // const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
-
-                    const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0]);
+                    const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${orderRes.rows[0].country_id}'`);
+                    const deliveryAddress = coutryRes.rows[0].nicename+', '+orderRes.rows[0].post_code+', '+orderRes.rows[0].city+', '+orderRes.rows[0].shipping_address
+                    const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0], deliveryAddress);
                     sendMail(
                         userData.rows[0].email_real,
                         mailConfirmPayment.subject,
                         mailConfirmPayment.body
                     );
-
+                    const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
+console.log('Order PDF', order);
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {
                     return { paymentStatus: 'cancel', error: 'Client cancel payment' };

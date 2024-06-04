@@ -381,7 +381,7 @@ export const requestDemoFromEmail = async (email = '', locale = localeDefault) =
 };
 
 
-export const confirmOrderPaymentEmail = async (locale = localeDefault, sellerName, order) => {
+export const confirmOrderPaymentEmail = async (locale = localeDefault, sellerName, order, deliveryAddress) => {
   const { default: t } = await import(`../sender/${locale}.js`);
 
   return {
@@ -398,7 +398,7 @@ export const confirmOrderPaymentEmail = async (locale = localeDefault, sellerNam
       ${t['Payment :']}&nbsp;${order.payment_method}
     </p>
     <p>
-      ${t['Delivery :']}&nbsp;[add query for fetch delivery method]
+      ${t['Delivery :']}&nbsp;${deliveryAddress}
     </p>
     <p>
       ${t['Please find the summary of your order and your invoice attached.']}
