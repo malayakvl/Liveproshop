@@ -256,6 +256,7 @@ class Checkout {
     async updateOrderStatus(data, user, locale) {
         const client = await pool.connect();
         let error;
+        console.log('locale', locale);
         try {
             const orderRes = await client.query(`SELECT * FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
             const sellerData = await client.query(`SELECT data.user_stores.name AS store_name 

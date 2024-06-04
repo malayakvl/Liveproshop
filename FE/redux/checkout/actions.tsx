@@ -120,7 +120,7 @@ export const checkPaymentStatusAction: any = createAction(
 
             try {
                 const res = await axios.post(
-                    `${baseUrl}/checkout/confirm`,
+                    `${baseUrl}/checkout/confirm?locale=${locale}`,
                     { hash: hash, type: type },
                     {
                         headers: {
