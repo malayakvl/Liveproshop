@@ -1371,7 +1371,7 @@ class Order {
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
         try {
-            let orderNumber;let orderId;let copyOrderData;let storeName;
+            let orderNumber;let orderId;let copyOrderData;let storeName;let sessionId;
             const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId, data.order_items.user_id AS tmp_user_id,
                         data.orders.live_sessions_id, order_amount, total_amount, 
                         quantity, data.order_items.user_id AS tmp_user, data.user_stores.name AS store_name
@@ -1382,7 +1382,9 @@ class Order {
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
-            storeName = res.rows[0].store_name
+            storeName = res.rows[0].store_name;
+            sessionId = res.rows[0].live_sessions_id;
+console.log('Session ID', sessionId);
             const tmpUserId = res.rows[0].tmp_user_id;
             if (!orderNumber) {
                 const SQLWait = `SELECT *
@@ -1390,29 +1392,34 @@ class Order {
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
-
+console.log(resWait.rows[0].order_id);
 
                 if (!resWait.rows[0].order_id) {
+console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     if (existNonPayed.rows.length > 0) {
+console.log('here we are 1');
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
                     } else {
+console.log('here we are 2');
                         const existNonPayedEmpty = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' ORDER BY created_at DESC`);
                         if (existNonPayedEmpty.rows.length > 0) {
                             orderId = existNonPayedEmpty.rows[0].id;
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
-                            const emptyWaitRes = await client.query(`SELECT id, order_number FROM data.orders WHERE user_id='${tmpUserId}'`);
+console.log('didnt find order for user')
+                            const emptyWaitRes = await client.query(`SELECT id, order_number, live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
-                            orderNumber = emptyWaitRes.rows[0].order_number;
+                            orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
                             const updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                order_number='${orderNumber}',
                                 sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
-                            console.log(updtQuery);
+console.log(updtQuery);
                             await client.query(updtQuery);
 
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
@@ -1435,7 +1442,6 @@ class Order {
             } else {
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
                 const prefixWait = Math.floor(Date.now()/1000);
-                console.log('prefixWait', prefixWait);
 
                 copyOrderData = res.rows[0];
                 // copyOrderData.order_number = `${_tmpOrderNumber[0]}-WO-${_tmpOrderNumber[1]}`;
@@ -1445,25 +1451,25 @@ class Order {
                 //     AND status='new' AND id != '${res.rows[0].order_id}'
                 //     AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 // exit;
-                console.log(`SELECT id, order_number FROM data.orders 
+                console.log(`SELECT data.orders.id, data.orders.order_number FROM data.orders 
                                      LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                                         LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id   
-                                        WHERE user_id='${userId}'
-                                        AND status='new' AND id != '${res.rows[0].order_id}'
+                                        WHERE data.orders.user_id='${userId}'
+                                        AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
                                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 // const existNonPayedOrder = await client.query(
-                //     `SELECT id, order_number FROM data.orders
-                //                      LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                //                         LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
-                //                         WHERE user_id='${userId}'
-                //                         AND status='new' AND id != '${res.rows[0].order_id}'
-                //                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+                //     `SELECT data.orders.id, data.orders.order_number FROM data.orders LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                //      LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+                //      WHERE data.orders.user_id='${userId}'
+                //      AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
+                //       AND live_sessions_id='168' AND status_waiting IS NULL`);
                 const existNonPayedOrder = await client.query(
-                    `SELECT data.orders.id, data.orders.order_number FROM data.orders LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
-                     WHERE data.orders.user_id='${userId}'
-                     AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
-                      AND live_sessions_id='168' AND status_waiting IS NULL`);
+                    `SELECT data.orders.id, data.orders.order_number, data.orders.live_sessions_id FROM data.orders 
+                                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                                        LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id   
+                                        WHERE data.orders.user_id='${userId}'
+                                        AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
+                                        AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 if (existNonPayedOrder.rows[0]?.id) {
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     orderId = existNonPayedOrder.rows[0].id;
@@ -1518,12 +1524,18 @@ class Order {
                         });
                     }
                 } else {
+                    let nOrderNumber = sessionId+'-'+res.rows[0].order_number;
+console.log('dsaddasdasdadas');
                     orderId = res.rows[0].order_id;
                     const orderSQL = `UPDATE data.orders SET user_id='${userId}', sync_at=now(),
                         total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                     await client.query(orderSQL);
+                    const oData = await client.query(`SELECT order_number FROM data.orders WHERE id='${res.rows[0].order_id}'`);
+                    const combineOrderNumber = sessionId+oData.rows[0].order_number;
+                    // await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
+                    // orderNumber = combineOrderNumber;
                 }
-                console.log('ORDERID', orderId);
+                console.log('ORDER NUMBER', orderNumber);
 
                 // find waiting products in order
                 const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE
@@ -1610,6 +1622,7 @@ class Order {
     async insertOrderStatus (orderId, status) {
         const client = await pool.connect();
         try {
+console.log('here')
             // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             const _tmpRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='${status}'`);
             if (_tmpRes.rows.length === 0) {
@@ -1816,14 +1829,14 @@ class Order {
                             AND data.orders.user_id='${userId}' AND 
                             data.orders.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'
                             `;
-console.log(prevOrdersQuery);
+// console.log(prevOrdersQuery);
                     const prevOrderRes = await client.query(prevOrdersQuery);
                     prevOrderRes.rows.forEach(_order => {
                         prevTotal += parseFloat(_order.order_amount);
                         amountRefund += parseFloat(_order.shipping_amount);
                         ordersCount++;
                     });
-console.log(ordersCount);
+// console.log(ordersCount);
                     // scenario 1:
                     // Free shipping is active. User makes the first order and it does not reach the threshold
                     // Buyer pays for shipping regardless the price and shipping method
@@ -1849,7 +1862,7 @@ console.log(ordersCount);
                             const resRefundQuery = await client.query(checkRefundQuery);
                             // check do we refund before
                             let refundAmount = resRefundQuery.rows[0].total_shipping ? resRefundQuery.rows[0].total_shipping : 0;
-console.log('Refund Shipping', refundAmount);
+// console.log('Refund Shipping', refundAmount);
                             const existRefundQuery =  `SELECT SUM(refund_amount) AS total_refund
                                 FROM data.orders
                                 WHERE 
@@ -1862,11 +1875,11 @@ console.log('Refund Shipping', refundAmount);
                                 AND 
                                 '${endDateDb}'`;
                             const existRefundQueryRes = await client.query(existRefundQuery);
-console.log('EXIST refund', )
+// console.log('EXIST refund', )
                             if (existRefundQueryRes.rows[0].total_refund > 0) {
                                 refundAmount = 0;
                             }
-console.log(existRefundQuery);
+// console.log(existRefundQuery);
 
                             return {success: true, amount_refund: refundAmount, freeShipping: true}
                         }

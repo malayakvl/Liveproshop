@@ -271,6 +271,13 @@ class Checkout {
                     //
                     //     });
                     await client.query(`UPDATE data.orders SET status='payed' WHERE id=${orderRes.rows[0].id}`);
+                    // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
+                    const orderData = await client.query(`SELECT user_id FROM daata.orders WHERE id=${orderRes.rows[0].id}`)
+
+                    // send email about success payment and generate pdf
+                    const userData = await client.query(`SELECT email FROM data.users WHERE id='${orderData.rows[0].user_id}'`);
+
+
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {
                     return { paymentStatus: 'cancel', error: 'Client cancel payment' };
