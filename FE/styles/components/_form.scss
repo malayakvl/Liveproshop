@@ -395,8 +395,12 @@ input:focus, input:active {
 }
 
 .sign-up-form {
-  @apply w-80 mb-5 p-8 flex-col rounded-lg
-      mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0;
+  @apply w-80 mb-5 p-8 flex-col rounded-lg mt-0
+      md:mt-10 flex md:flex-row md:w-[750px] lg:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0;
+}
+.sign-up-form-disable {
+  pointer-events: none;
+  opacity: 0.3;
 }
 
 .sign-up-fb {

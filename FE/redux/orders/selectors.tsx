@@ -72,6 +72,10 @@ export const orderNumberSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.connectedOrderNumber
 );
+export const storeNameSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.storeName
+);
 export const orderTmpCommentIdSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.tmpCommentOrderId
@@ -91,4 +95,8 @@ export const returnedUrlSelector = createSelector(
 export const itemsStatusesSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.itemsStatuses
+);
+export const googleDeepLinkSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.googleBrowserLink
 );

@@ -116,7 +116,7 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                     ? 'mb-10 md:mb-5 shadow-lg'
                     : ''
             }`}>
-            <div className="container relative mx-auto layout-header xl:max-w-[1400px]">
+            <div className="container relative mx-auto layout-header xl:max-w-[1400px]" id="aaaDiv">
                 <Link href={'/'}>
                     {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
                     <a className={`app-logo-f ${!user?.email ? 'app-logo-unreg' : ''}`} />
@@ -237,7 +237,6 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                         <TextLeftMobile type={null} visible={showTextingMenu} />
                     )}
                 </div>
-                {/*<div style={{border: 'solid 1px'}}><LangSwitcher type="layout" /></div>*/}
                 <div className="mt-[10px] right-header-block md:mt-auto">
                     {user?.email ? (
                         <>

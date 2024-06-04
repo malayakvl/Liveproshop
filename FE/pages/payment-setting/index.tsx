@@ -38,12 +38,6 @@ export default function PaymentSetting() {
         }
     }, [initialValues]);
 
-    // const handlerConfirm = useCallback(() => {
-    //     if (!selectedItem) return;
-    //     initialValues.free_shipping_status = !initialValues.free_shipping_status;
-    //     setSelectedItem(null);
-    // }, [selectedItem]);
-
     return (
         <>
             <Head>
@@ -69,7 +63,7 @@ export default function PaymentSetting() {
                                 return (
                                     <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
                                         <InputText
-                                            style={'w-1/2'}
+                                            style={'w-full md:w-1/2'}
                                             icon={null}
                                             label={t('Multisafepay API')}
                                             name={'multisafe_api_key'}

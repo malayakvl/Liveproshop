@@ -25,7 +25,10 @@ import {
     redirectOrderNumberAction,
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
-    clearWaitOrderByCommentAction
+    clearWaitOrderByCommentAction,
+    setupConnectedStoreNameAction,
+    openBrowserAction,
+    setGoogleDeepLinkAction
 } from './actions';
 
 const initialState: {
@@ -51,6 +54,8 @@ const initialState: {
     orderReturnedUrl: string | null;
     redirectCheckout: boolean;
     redirectOrderNumber: any;
+    storeName: any;
+    googleBrowserLink: any;
 } = {
     isFetched: false,
     loading: false,
@@ -78,7 +83,9 @@ const initialState: {
     connectedOrderNumber: null,
     orderReturnedUrl: null,
     redirectCheckout: false,
-    redirectOrderNumber: null
+    redirectOrderNumber: null,
+    storeName: null,
+    googleBrowserLink: null
 };
 
 const ACTION_HANDLERS: any = {
@@ -271,7 +278,20 @@ const ACTION_HANDLERS: any = {
             ...state,
             redirectOrderNumber: action.payload
         })
+    },
+    [setupConnectedStoreNameAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            storeName: action.payload
+        })
+    },
+    [setGoogleDeepLinkAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            googleBrowserLink: action.payload
+        })
     }
+
 };
 
 export {
@@ -299,7 +319,10 @@ export {
     redirectOrderNumberAction,
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
-    clearWaitOrderByCommentAction
+    clearWaitOrderByCommentAction,
+    setupConnectedStoreNameAction,
+    openBrowserAction,
+    setGoogleDeepLinkAction
 };
 
 // ------------------------------------

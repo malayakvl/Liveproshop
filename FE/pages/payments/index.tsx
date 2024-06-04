@@ -16,7 +16,7 @@ import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { PaginationType } from '../../constants';
 import { bulkDownloadAction } from '../../redux/orders/actions';
 
-export default function Payments({ session }: { session: any }) {
+export default function Payments({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
     // const dispatch = useDispatch();
@@ -65,8 +65,8 @@ export default function Payments({ session }: { session: any }) {
                             <button
                                 style={{ right: '145px' }}
                                 className={`gradient-btn absolute top-0 right-[145px] p-[5px]`}
-                                onClick={() => dispatch(bulkDownloadAction())}>
-                                <div className="font-medium text-white ml-2 font-bold">
+                                onClick={() => dispatch(bulkDownloadAction(locale))}>
+                                <div className="text-white ml-2 font-bold">
                                     {t('Download Orders')}
                                 </div>
                             </button>
@@ -93,7 +93,7 @@ export default function Payments({ session }: { session: any }) {
 
                         {/* <FilterValues /> */}
 
-                        <ListTransactions />
+                        <ListTransactions locale={locale} />
                     </div>
                 </div>
             </div>

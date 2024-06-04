@@ -133,7 +133,7 @@ export const bulkShippingAction: any = createAction(
 );
 export const bulkDownloadAction: any = createAction(
     'products/BULK_DOWNLOAD',
-    async () =>
+    async (locale: string) =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
@@ -146,16 +146,18 @@ export const bulkDownloadAction: any = createAction(
                     countChecked++;
                 }
             });
+            const lng = locale;
+            console.log('Current locale', locale);
             if (countChecked == 0) {
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
                 dispatch(showLoaderAction(false));
             } else {
                 return axios
                     .post(
-                        `${baseUrl}/orders/bulk-download`,
+                        `${baseUrl}/orders/bulk-download?locale=${locale}`,
                         {
                             data: JSON.stringify(state.layouts.checkedIds),
-                            locale: state.layouts.selectedLng
+                            locale: locale
                         },
                         {
                             headers: {
@@ -406,10 +408,12 @@ export const setupOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER SETUP', res.data.orderNumber);
+                    if (res.data.storeName) {
+                        dispatch(setupConnectedStoreNameAction(res.data.storeName));
+                    }
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    // dispatch(setupConnectedStoreNameAction(res.data.storeName));
                     res.data.orderNumber;
-                    // window.location.href = `/checkout/${}`;
                 })
                 .catch((e) => console.log(e.message));
         }
@@ -452,6 +456,26 @@ export const setupWaitOrderByCommentAction: any = createAction(
                 .catch((e) => console.log(e.message));
         }
 );
+export const setupStoreNameByComment: any = createAction(
+    'order/FETCH_EXIST_WAIT_USER_ORDER',
+    async (commentId: string, email: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            console.log(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`);
+            return axios
+                .get(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`, {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                })
+                .then((res) => {
+                    console.log('ORDER NUMBER WAIT', res.data.orderNumber);
+                    dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    res.data.orderNumber;
+                    // window.location.href = `/checkout/${}`;
+                })
+                .catch((e) => console.log(e.message));
+        }
+);
 export const removeItemOrderAction: any = createAction(
     'orders/REMOVE_ITEM_ACTION',
     async (itemId: number, orderNumber: string) =>
@@ -473,6 +497,7 @@ export const minusItemOrderAction: any = createAction(
     async (itemId: number, orderNumber: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .get(`${baseUrl}/orders/minus-item-order?orderItemId=${itemId}`, {
                     headers: {
@@ -480,7 +505,44 @@ export const minusItemOrderAction: any = createAction(
                     }
                 })
                 .then((res: any) => {
-                    dispatch(fetchCheckoutAction(orderNumber));
+                    window.location.reload();
+                    // dispatch(fetchCheckoutAction(orderNumber));
+                });
+        }
+);
+export const openBrowserAction: any = createAction(
+    'orders/OPEN_BROWSER_PROG',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/open-browser`,
+                    {},
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async (data: any) => {
+                    console.log('Returned data try shell', data);
+                    // data.data.shellObject.exec(
+                    //     `open -a Safari https://liveproshop.com/en/`,
+                    //     function (code: any, output: any) {
+                    //         console.log('Exit code:', code);
+                    //         console.log('Program output:', output);
+                    //     }
+                    // );
+                    // dispatch(
+                    //     setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
+                    // );
+                    // dispatch(setEmptyFormAction());
+                    // dispatch(fetchItemsAction());
+                    // dispatch(showPopupAction(false));
+                    dispatch(showLoaderAction(false));
+                    // toggleModalPopup('.modal-schedule');
                 });
         }
 );
@@ -525,3 +587,5 @@ export const setupReturnedUrlAction: any = createAction('orders/SETUP_RETURNED_U
 export const redirectCheckoutAction: any = createAction('orders/REDIRECT_CHECKOUT_ACTION');
 export const redirectOrderNumberAction: any = createAction('orders/REDIRECT_ORDER_NUMBER');
 export const setupConnectedOrderIdAction: any = createAction('orders/SETUP_CONNECTED_ORDER_ID');
+export const setupConnectedStoreNameAction: any = createAction('orders/SETUP_CONNECTED_STORE');
+export const setGoogleDeepLinkAction: any = createAction('orders/SET_GOOGLE_DEEP_LINK');

@@ -80,7 +80,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             } else if (status === 'cancel' || status === 'refund') {
                 return dispatch(showCancelConfirmationModalAction(true));
             } else {
-                return dispatch(bulkDownloadAction());
+                return dispatch(bulkDownloadAction(locale));
             }
         },
         [dispatch]
@@ -136,7 +136,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                         <button
                             // style={{ right: '0px', top: '20px' }}
                             className={`gradient-btn btn-download-orders`}
-                            onClick={() => dispatch(bulkDownloadAction())}>
+                            onClick={() => dispatch(bulkDownloadAction(locale))}>
                             <div className="font-medium text-white ml-2 mr-2 py-[3px]">
                                 {t('Download Orders')}
                             </div>
@@ -201,10 +201,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             : 'order-number'
                                     }`}>
                                     {user.role_id === 1 && !item.status_waiting && (
-                                        <Link
-                                            href={`/orders/${item.order_number}?locale=${locale}`}>
-                                            <a>{item.order_number}</a>
-                                        </Link>
+                                        <>
+                                            <Link
+                                                href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                <a>{item.order_number}</a>
+                                            </Link>
+                                        </>
                                     )}
                                     {user.role_id === 1 && item.status_waiting && (
                                         <span
@@ -294,7 +296,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                     alt=""
                                                 />
                                             </div>
-                                            <div className="pl-3">{item.buyer_first_name}</div>
+                                            <div className="pl-3">
+                                                {item.buyer_first_name} {item.buyer_last_name}
+                                            </div>
+                                            {/*<span className="absolute pt-[17px] font-[9px] store-style">*/}
+                                            {/*    {item.name}*/}
+                                            {/*</span>*/}
                                         </div>
                                     </div>
                                 </td>
@@ -322,17 +329,28 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     {item.order_items?.length ? item.order_items?.length : 0}x{' '}
                                     <span className="red-yellow-gradient-text">product (s)</span>
                                 </td>
+                                {/*<td>{item.name}</td>*/}
+                                {/*<td>*/}
+                                {/*    {formatCurrency(*/}
+                                {/*        item.shipping_amount ? item.shipping_amount : 0*/}
+                                {/*    )}{' '}*/}
+                                {/*    / {formatCurrency(item.refund_amount ? item.refund_amount : 0)}*/}
+                                {/*</td>*/}
                                 <td>
                                     {formatCurrency(
-                                        item.total_amount ? item.total_amount : item.order_amount
+                                        item.total_amount
+                                            ? item.total_amount - item.refund_amount
+                                            : item.order_amount
                                     )}
                                 </td>
+
                                 {user.role_id === 1 &&
                                     item.status === 'new' &&
                                     item.total_amount != 0 && (
                                         <td style={{ paddingTop: 0, paddingBottom: 0 }}>
                                             {!item.status_waiting && (
-                                                <Link href={`/checkout/${item.order_number}`}>
+                                                <Link
+                                                    href={`/checkout/${item.order_number}?storeName=${item.name}`}>
                                                     <div
                                                         className="gradient-btn-small cursor-pointer"
                                                         style={{

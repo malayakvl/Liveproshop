@@ -46,8 +46,16 @@
 }
 
 .cookies-btn-block {
-  position: absolute;
-  right: 0;
-  top: 0;
+  //position: absolute;
+  //right: 0;
+  //top: 0;
+
+  @apply md:absolute md:top-0 md:right-0;
   //background-color: #D1D1D1;
+}
+
+.CookieConsent {
+  -webkit-box-shadow: 0 4px 6px -6px #222;
+  -moz-box-shadow: 0 4px 6px -6px #222;
+  box-shadow: 0 4px 6px -6px #222;
 }

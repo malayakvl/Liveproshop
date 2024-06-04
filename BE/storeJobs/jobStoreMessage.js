@@ -50,10 +50,10 @@ async function sessionLaunche() {
                             }).catch(e => {
                                 console.log(e);
                             });
-console.log('STATUS WAIT', statusWaitItem);
-console.log('ORDER STATUS', message.order_status);
-console.log("active1", message.active_product);
-console.log("active2", message.activeProduct);
+// console.log('STATUS WAIT', statusWaitItem);
+// console.log('ORDER STATUS', message.order_status);
+// console.log("active1", message.active_product);
+// console.log("active2", message.activeProduct);
                         if (message.order_status === true && message.active_product === true) {
                             if (statusWaitItem) {
                                 msgText = `We are sorry, but the product ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} is no longer available.\n\nIn order to be added to the waiting list and be notified, click on the following button CONFIRM`;
@@ -132,7 +132,6 @@ console.log("active2", message.activeProduct);
                             )
                                 .then(async function (responseSending) {
                                     // console.log(responseSending);
-                                    // update status that message confirm
                                     return responseSending;
                                 }).catch(e => {
                                     console.log('Error with button:');

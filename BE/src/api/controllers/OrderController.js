@@ -1,4 +1,7 @@
 import orderModel from '../models/Order.js';
+// import * as nodeFetch from "node-fetch";
+import shell from "shelljs";
+
 
 class OrderController {
     /**
@@ -35,6 +38,7 @@ class OrderController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
+            console.log('GENERATE INVOICE PDF');
             // check if file exist, then return true
             const order = await orderModel.generatePdf(req.params.id, req.user.id, req.user, req.params.locale, "", req.params.type);
             return res.status(200).json({ fileName: order.filename, success: true, filebase64: order.fileEncoded });
@@ -183,12 +187,13 @@ class OrderController {
     }
 
     async bulkDownload (req, res) {
+        console.log('Current locale', req.query.locale);
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
             const ids = [];
             JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
-            const data = await orderModel.bulkDownload(ids, req.user);
+            const data = await orderModel.bulkDownload(ids, req.user, req.query.locale ? req.query.locale : 'fr');
             return res.status(200).json({ data: data.success, achive: data.achive });
         }
     }
@@ -205,9 +210,9 @@ class OrderController {
     async findOrderByCommentId (req, res) {
         if (req.user) {
             const data = await orderModel.findByCommentId(req.query.commentId, req.user.id);
-            return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+            return res.status(200).json({ success: true, orderNumber: data.orderNumber, storeName: data.storeName });
         }
-        return res.status(200).json({ success: true, orderNumber: null });
+        return res.status(200).json({ success: true, orderNumber: null, storeName: null });
     }
 
     async findWaitOrderByCommentId (req, res) {
@@ -248,6 +253,20 @@ class OrderController {
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }
         return res.status(200).json({ success: true, orderNumber: null });
+    }
+
+    async openBrowser (req, res) {
+        // shell.exec(`open -a Safari https://liveproshop.com/en/`, function(code, output) {
+        //     console.log('Exit code:', code);
+        //     console.log('Program output:', output);
+        // });
+        // if (req.user) {
+        //     // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
+        //
+        //     const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status);
+        //     return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        // }
+        return res.status(200).json({ success: true, shellObject: shell });
     }
 }
 

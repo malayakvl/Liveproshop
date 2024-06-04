@@ -174,12 +174,16 @@ export const setThresholdAction: any = createAction(
     'SHIPPING/SET_THRESHOLD',
     async (values: any) => (dispatch: Type.Dispatch, getState: () => State.Root) => {
         const state = getState();
-
-        axios.post(`${url}/threshold`, values, {
-            headers: {
-                ...authHeader(state.user.user.email)
-            }
-        });
+        console.log('FORM VALUES', values);
+        axios
+            .post(`${url}/threshold`, values, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            })
+            .then(() => {
+                window.location.reload();
+            });
     }
 );
 export const setShippingPeriodAction: any = createAction(

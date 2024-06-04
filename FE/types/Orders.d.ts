@@ -23,6 +23,8 @@ declare namespace Orders {
         orderReturnedUrl: null | any;
         redirectCheckout: boolean;
         redirectOrderNumber: any;
+        storeName: any;
+        googleBrowserLink: any;
     }
 
     interface DataItem {
@@ -58,6 +60,7 @@ declare namespace Orders {
         waiting_products: any;
         seller_settings: any;
         countdownDate: any;
+        refund_amount: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

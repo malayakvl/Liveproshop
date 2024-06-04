@@ -30,11 +30,13 @@ class CheckoutController {
         // console.log("wait products", orderItemsWait);
         // get latest order amount
         const freeSheppingData = await orderModel.isFreeShipping(req.user.id, orderNumber);
+        console.log('SHIPPING PARAMS', freeSheppingData);
 
         // const orderItems = await checkoutModel.fetchOrderItems(orderData.or);
         const address = await userModel.findUserAddress(req.user.id);
-        const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, true, req.user.id);
+        const shippingMethodsData = await checkoutModel.fetchShippingMethodsByCountry(orderData?.order?.id, orderData?.order?.country_id || address?.country_id, freeSheppingData.freeShipping, req.user.id);
         orderData.order.freeShipping = freeSheppingData?.freeShipping || 0;
+        orderData.order.refund_amount = freeSheppingData?.amount_refund;
         const regExpDelBrackets = /[({})]/g;
         let privacyLink = '';
         let termsLink = '';
@@ -125,6 +127,9 @@ class CheckoutController {
         sellerSettingsData[0].delivery_doc = deliveryLink ? deliveryLink : '';
         sellerSettingsData[0].return_doc = returnLink ? returnLink : '';
         // console.log(sellerSettingsData[0]);
+        // orderData.freeShipping = freeSheppingData?.freeShipping
+        orderData.freeShipping = freeSheppingData?.freeShipping
+        orderData.refund_ammount = freeSheppingData?.refundAmount
 
         orderData.order.seller_settings = sellerSettingsData[0];
         return res.status(200).json({
@@ -132,6 +137,7 @@ class CheckoutController {
             address,
             shippingMethods: shippingMethodsData.shippingMethods,
             freeShepping: freeSheppingData?.freeShipping || 0,
+            refundAmount: freeSheppingData?.amount_refund || 0,
             orderItemsWait: orderItemsWait,
             sellerSettings: sellerSettingsData[0]
         });

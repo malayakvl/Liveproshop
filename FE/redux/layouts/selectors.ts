@@ -105,3 +105,11 @@ export const showEmailNoticeSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): boolean => layouts.showEmailNotification
 );
+export const nativeBrowserSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.nativeBrowser
+);
+export const openRealBrowserSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.openRealBrowser
+);

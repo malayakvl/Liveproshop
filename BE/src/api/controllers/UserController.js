@@ -127,6 +127,7 @@ class UserController {
     async processPDF(pdfFilePath, res) {
         try {
             // Parse the PDF content
+console.log('GENERATE PD')
             const pdfBuffer = fs.readFileSync(pdfFilePath);
             const data = await PDFParser(pdfBuffer);
             const pdfText = data.text;
@@ -625,7 +626,6 @@ class UserController {
     async updateSubscriptionPlan (req, res) {
         if (req.user) {
             // create upgrade row about subscription
-            console.log('AAAAA');
             // const dataUpgrade = await userModel.updateSubscriptionUpgradePlan(req.user, req.body.planId);
             const dataUpgrade = await userModel.updateSubscriptionPlan(req.user, req.body.planId);
             return res.status(200).json({
