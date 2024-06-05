@@ -287,15 +287,24 @@ class Checkout {
                         }).catch(error => {
                             return {error: error.message}
                         });
-                    // const paymentMethod = multiOrderPaymentData.paymentData.payment_details.type;
-                    // const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0], deliveryAddress, paymentMethod);
-                    // sendMail(
-                    //     userData.rows[0].email_real,
-                    //     mailConfirmPayment.subject,
-                    //     mailConfirmPayment.body
-                    // );
+                    // generate pad
                     const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
-console.log('Order PDF', order);
+                    const filePathArr = order.filename.split('/');
+                    // console.log(filePathArr);
+                    const fileAttachment = {
+                        name: filePathArr[4],
+                        path: `${process.env.FULL_DOWNLOAD_FOLDER}${order.filename}`
+                    }
+                    console.log('File attachment', fileAttachment);
+
+                    const paymentMethod = multiOrderPaymentData.paymentData.payment_details.type;
+                    const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0], deliveryAddress, paymentMethod);
+                    sendMail(
+                        userData.rows[0].email_real,
+                        mailConfirmPayment.subject,
+                        mailConfirmPayment.body,
+                        fileAttachment
+                    );
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {
                     return { paymentStatus: 'cancel', error: 'Client cancel payment' };
