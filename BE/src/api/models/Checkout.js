@@ -277,14 +277,25 @@ class Checkout {
                     // check if file exist, then return true
                     const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${orderRes.rows[0].country_id}'`);
                     const deliveryAddress = coutryRes.rows[0].nicename+', '+orderRes.rows[0].post_code+', '+orderRes.rows[0].city+', '+orderRes.rows[0].shipping_address
-                    const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0], deliveryAddress);
+                    const multiOrderPaymentData = await axios
+                        .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
+                            headers: { 'Content-Type': 'application/json' }
+                        })
+                        .then(async (res) => {
+                            // console.log('PAYMENT METHODS', res.data.data);
+                            return {'success': true, paymentData: res.data.data}
+                        }).catch(error => {
+                            return {error: error.message}
+                        });
+                    const paymentMethod = multiOrderPaymentData.paymentData.payment_details.type;
+                    const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0], deliveryAddress, paymentMethod);
                     sendMail(
                         userData.rows[0].email_real,
                         mailConfirmPayment.subject,
                         mailConfirmPayment.body
                     );
-                    const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
-console.log('Order PDF', order);
+                    // const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
+// console.log('Order PDF', order);
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {
                     return { paymentStatus: 'cancel', error: 'Client cancel payment' };

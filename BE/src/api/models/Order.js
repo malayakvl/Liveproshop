@@ -903,7 +903,7 @@ class Order {
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
-        console.log('LOCALE', locale)
+console.log('LOCALE', locale)
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -924,7 +924,7 @@ class Order {
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-// console.log(ordersQuery);
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const orderId = res.rows[0].id;
             let historyRes;
@@ -933,9 +933,10 @@ class Order {
             } else {
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-            // console.log(historyRes.rows[0]);
+console.log(historyRes.rows[0]);
 
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
+console.log('Dir Upload', dirUpload);
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
@@ -1059,7 +1060,7 @@ class Order {
             }
             error = {
                 code: 500,
-                message: 'Error get list of users'
+                message: 'Model error (Generate PDF):'
             };
             return  {
                 fileName: '',
