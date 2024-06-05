@@ -13,7 +13,7 @@ export const sendMail = async (to, subject, html, attachment = '') => {
     if (attachment) {
         transporterDB.sendMail({
             from: 'noreply@liveproshop.com',
-            to: 'malaya.kvl@gmail.com',
+            to: to,
             subject: subject,
             html: html,
             attachments: [{

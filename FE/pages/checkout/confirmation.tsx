@@ -1,15 +1,16 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-// import { useTranslations } from 'next-intl';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkPaymentStatusAction } from '../../redux/checkout';
 import { updateOrderStatusAction } from '../../redux/orders';
 import { paymentStatusSelector } from '../../redux/checkout/selectors';
+import { useTranslations } from 'next-intl';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
+    const t = useTranslations();
     const paymentStatus = useSelector(paymentStatusSelector);
     const { locale }: any = useRouter();
     const {
@@ -52,13 +53,15 @@ export default function Index({ session }: { session: any }) {
             <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10">
                 <div className="flex flex-wrap items-center">
                     <div className="text-3xl font-bold text-gray-350 p-4 lg:p-8 mr-4 lg:mr-8">
-                        Checkout confirmation
+                        {t('Checkout confirmation')}
                     </div>
                 </div>
+                <div className="connect-page-status" />
             </div>
         </>
     );
 }
+
 export async function getServerSideProps(context: any) {
     const { locale } = context;
     const session = await getSession(context);
