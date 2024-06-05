@@ -933,10 +933,12 @@ console.log(ordersQuery);
             } else {
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-console.log(historyRes.rows[0]);
+            if (!historyRes.rows[0]) {
+                await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
+                historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
+            }
 
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
-console.log('Dir Upload', dirUpload);
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
