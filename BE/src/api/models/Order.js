@@ -25,7 +25,7 @@ async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        let historyRes;
+console.log('generate header done');
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
@@ -80,10 +80,12 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
-    // const shippingRefund = t["Shipping refund:"];
-    // console.log("TYPE", paymentData.payment_details.type);
+console.log('Ebat', invoice.paymentType);
+
     let transactionId = '';
-    if (invoice.paymentType === 'PAYPAL') {
+    if (invoice.paymentType === 'MASTERCARD' || invoice.paymentType === 'VISA') {
+       transactionId = invoice.paymentDetails.paymentData.costs[0].transaction_id;
+    } else if (invoice.paymentType === 'PAYPAL') {
         transactionId = invoice.transaction_id;
     } else if (paymentData.payment_details.type === 'IDEAL') {
         transactionId = paymentData.costs[0].transaction_id;
@@ -93,6 +95,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         transactionId = paymentData.transaction_id;
         // transactionId = '';
     } else if (paymentData.payment_details.type === 'MAESTRO') {
+        transactionId = paymentData.transaction_id;
         transactionId = paymentData.transaction_id;
         // transactionId = '';
     } else if (paymentData.payment_details.type === 'WECHAT') {
@@ -105,8 +108,10 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         transactionId = paymentData.transaction_id;
         // transactionId = '';
     } else {
-        transactionId = paymentData.costs[0].transaction_id;
+        // transactionId = "";
+        transactionId = invoice.paymentDetails.paymentData.costs[0].transaction_id;
     }
+console.log('Transaction ID', transactionId);    
     doc
         .fontSize(10)
         .text(captionNumber, 50, customerInformationTop)
@@ -937,7 +942,6 @@ console.log(ordersQuery);
                 await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
@@ -951,6 +955,7 @@ console.log(ordersQuery);
                     fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 }
             }
+
             // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
@@ -996,7 +1001,7 @@ console.log(ordersQuery);
                     }).catch(error => {
                         return {error: error.message}
                     });
-
+console.log('MS', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
@@ -1841,8 +1846,12 @@ console.log('here')
                     // scenario 1:
                     // Free shipping is active. User makes the first order and it does not reach the threshold
                     // Buyer pays for shipping regardless the price and shipping method
+console.log('order name', ordersCount);
+
                     if (ordersCount === 1 && prevTotal < threshold) {
                         return {success: true, amount_refund: 0, freeShipping: false}
+                    } else if (ordersCount === 0 && currentOrder.rows[0].order_amount >= threshold) {
+                        return {success: true, amount_refund: 0, freeShipping: true}
                     } else if (ordersCount === 1 && prevTotal >= threshold) {
                         return {success: true, amount_refund: 0, freeShipping: true}
                     } else if (ordersCount > 1) {
@@ -1971,9 +1980,9 @@ console.log('WE ARE NOT IN PERIOD');
                 // console.log(payedOrdersQuery);
                 let amountPayed = 0;
                 if (payedOrdersQueryRes.rows[0].totalPayed) {
-                    amountPayed = parseFloat(payedOrdersQueryRes.rows[0].totalPayed);
+                    amountPayed = parseFloat(currOrder.rows[0].totalPayed);
                 }
-                // console.log('AMOUNT PAYED', amountPayed);
+
 
                 const compareDate = moment(currOrder.rows[0].updated_at, "DD/MM/YYYY");
                 const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
@@ -1981,16 +1990,21 @@ console.log('WE ARE NOT IN PERIOD');
                 const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
                 const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
                 const inPeriod = compareDate.isBetween(startDate, endDate);
+console.log(1, amountPayed);
+console.log(2, currOrder.rows[0].order_amount);
 
 
                 sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currOrder.rows[0].live_sessions_id}`);
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
                 let isFree = false;let refundAmountNew = 0;
+console.log('in period', inPeriod)
                 if (inPeriod) {
+                    console.log('TYT', parseFloat(currOrder.rows[0].order_amount)+amountPayed)
                     // order already more therehold
                     if (parseFloat(currOrder.rows[0].order_amount)+amountPayed > parseFloat(settingsThreshold.rows[0].threshold)) {
                         isFree = true;
+                        return {success: true, amount_refund: 0, freeShipping: true}
                     }
                     // calculate refund
                     // const prevQuries =  await client.query(`SELECT * FROM  data.orders WHERE user_id=${userId} AND status='payed'`)

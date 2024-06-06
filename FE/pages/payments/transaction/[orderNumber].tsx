@@ -13,7 +13,7 @@ import {
 } from '../../../components/payments';
 import { fetchItemAction } from '../../../redux/payments';
 import { itemSelector } from '../../../redux/payments/selectors';
-import { singleDownloadAction } from '../../../redux/orders/actions';
+import { clearBase64Action } from '../../../redux/orders/actions';
 import { singleDowloadFileSelector } from '../../../redux/orders/selectors';
 
 export default function Payments({ session, locale }: { session: any; locale: string }) {
@@ -80,7 +80,10 @@ export default function Payments({ session, locale }: { session: any; locale: st
                         {/*    <span className="   pt-px">{t('Download Invoice')}</span>*/}
                         {/*</a>*/}
                         <Link href={`/orders/${orderNumber}?locale=${locale}&backroute=payment`}>
-                            <span className="gradient-btn pt-px cursor-pointer">
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                className="gradient-btn pt-px cursor-pointer"
+                                onClick={() => dispatch(clearBase64Action(null))}>
                                 {t('Download Invoice')}
                             </span>
                         </Link>

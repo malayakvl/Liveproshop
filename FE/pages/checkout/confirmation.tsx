@@ -7,6 +7,7 @@ import { checkPaymentStatusAction } from '../../redux/checkout';
 import { updateOrderStatusAction } from '../../redux/orders';
 import { paymentStatusSelector } from '../../redux/checkout/selectors';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
@@ -50,13 +51,17 @@ export default function Index({ session }: { session: any }) {
                 <link rel="icon" href="/images/logo-1.svg" />
             </Head>
 
-            <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10">
+            <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10 min-h-[400px]">
                 <div className="flex flex-wrap items-center">
                     <div className="text-3xl font-bold text-gray-350 p-4 lg:p-8 mr-4 lg:mr-8">
                         {t('Checkout confirmation')}
                     </div>
                 </div>
-                <div className="connect-page-status" />
+                <div className="relative">
+                    <div className="absolute left-[33%] md:left-[43%] top-[100px]">
+                        <Image width="200" height="200" src={`/images/main/clock-3d.svg`} />
+                    </div>
+                </div>
             </div>
         </>
     );
