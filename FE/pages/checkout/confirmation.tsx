@@ -58,7 +58,7 @@ export default function Index({ session }: { session: any }) {
                     </div>
                 </div>
                 <div className="relative">
-                    <div className="absolute left-[33%] md:left-[43%] top-[100px]">
+                    <div className="clock-confirmation">
                         <Image width="200" height="200" src={`/images/main/clock-3d.svg`} />
                     </div>
                 </div>

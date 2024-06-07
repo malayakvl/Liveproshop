@@ -80,15 +80,33 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
-console.log('Ebat', invoice.paymentType);
+console.log('Ebat', invoice);
+console.log('Transaction Id', invoice.transaction_id);
+console.log('Payment Type', invoice.paymentType);
 
     let transactionId = '';
     if (invoice.paymentType === 'MASTERCARD' || invoice.paymentType === 'VISA') {
        transactionId = invoice.paymentDetails.paymentData.costs[0].transaction_id;
+    } else if (invoice.paymentType === 'TRUSTLY') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'CBC') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'MBWAY') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'MULTIBANCO') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'AMEX') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'BANKTRANS') {
+        transactionId = invoice.transaction_id;
     } else if (invoice.paymentType === 'PAYPAL') {
         transactionId = invoice.transaction_id;
-    } else if (paymentData.payment_details.type === 'IDEAL') {
-        transactionId = paymentData.costs[0].transaction_id;
+    } else if (invoice.paymentType.includes('IDEAL')) {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('ALIPAY')) {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('MAESTRO')) {
+        transactionId = invoice.transaction_id;
     } else if (paymentData.payment_details.type === 'BANKTRANS') {
         transactionId = paymentData.payment_details.external_transaction_id;
     } else if (paymentData.payment_details.type === 'ALIPAY') {
@@ -96,20 +114,6 @@ console.log('Ebat', invoice.paymentType);
         // transactionId = '';
     } else if (paymentData.payment_details.type === 'MAESTRO') {
         transactionId = paymentData.transaction_id;
-        transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else if (paymentData.payment_details.type === 'WECHAT') {
-        transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else if (paymentData.payment_details.type === 'TRUSTLY') {
-        transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else if (paymentData.payment_details.type === 'CBC') {
-        transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else {
-        // transactionId = "";
-        transactionId = invoice.paymentDetails.paymentData.costs[0].transaction_id;
     }
 console.log('Transaction ID', transactionId);    
     doc
@@ -1001,7 +1005,7 @@ console.log(ordersQuery);
                     }).catch(error => {
                         return {error: error.message}
                     });
-console.log('MS', multiOrderPaymentData);
+// console.log('MS', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
