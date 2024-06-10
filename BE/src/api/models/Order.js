@@ -1396,7 +1396,6 @@ console.log(ordersQuery);
             orderNumber = res.rows[0].order_number;
             storeName = res.rows[0].store_name;
             sessionId = res.rows[0].live_sessions_id;
-console.log('Session ID', sessionId);
             const tmpUserId = res.rows[0].tmp_user_id;
             if (!orderNumber) {
                 const SQLWait = `SELECT *
@@ -1404,23 +1403,20 @@ console.log('Session ID', sessionId);
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
-console.log(resWait.rows[0].order_id);
-
+console.log('Wait order ID', resWait.rows[0].order_id);
+console.log('Order ID', resWait.rows[0].order_id);
                 if (!resWait.rows[0].order_id) {
 console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     if (existNonPayed.rows.length > 0) {
-console.log('here we are 1');
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
                     } else {
-console.log('here we are 2');
                         const existNonPayedEmpty = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' ORDER BY created_at DESC`);
                         if (existNonPayedEmpty.rows.length > 0) {
                             orderId = existNonPayedEmpty.rows[0].id;
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
-console.log('didnt find order for user')
                             const emptyWaitRes = await client.query(`SELECT id, order_number, live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
@@ -1431,7 +1427,6 @@ console.log('didnt find order for user')
                                 order_number='${orderNumber}',
                                 sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
-console.log(updtQuery);
                             await client.query(updtQuery);
 
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
@@ -1450,6 +1445,8 @@ console.log(updtQuery);
                 return {success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName };
 
             } else {
+console.log('AAAAA');
+exit;
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
                 const prefixWait = Math.floor(Date.now()/1000);
 

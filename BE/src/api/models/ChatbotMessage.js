@@ -235,6 +235,7 @@ class ChatbotMessage {
                     WHERE lsm.parcer_status = TRUE AND lsm.order_status IS NOT NULL AND lsm.reply_sended IS NULL
                     AND ls.id='${sessionId}'
                     ORDER BY lsm.created_at DESC LIMIT 50`;
+            console.log(productQueryNew);
             const res = await client.query(productQueryNew);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
