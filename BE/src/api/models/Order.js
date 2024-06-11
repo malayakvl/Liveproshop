@@ -1005,7 +1005,7 @@ console.log(ordersQuery);
                     }).catch(error => {
                         return {error: error.message}
                     });
-// console.log('MS', multiOrderPaymentData);
+console.log('MS', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
@@ -1446,7 +1446,6 @@ console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}
 
             } else {
 console.log('AAAAA');
-exit;
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
                 const prefixWait = Math.floor(Date.now()/1000);
 
@@ -1477,6 +1476,7 @@ exit;
                                         WHERE data.orders.user_id='${userId}'
                                         AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
                                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                 if (existNonPayedOrder.rows[0]?.id) {
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     orderId = existNonPayedOrder.rows[0].id;
