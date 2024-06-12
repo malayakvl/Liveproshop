@@ -91,6 +91,8 @@ console.log('Payment Type', invoice.paymentType);
         transactionId = invoice.transaction_id;
     } else if (invoice.paymentType === 'CBC') {
         transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'WECHAT') {
+        transactionId = invoice.transaction_id;
     } else if (invoice.paymentType === 'MBWAY') {
         transactionId = invoice.transaction_id;
     } else if (invoice.paymentType === 'MULTIBANCO') {
