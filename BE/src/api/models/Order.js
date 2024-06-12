@@ -491,6 +491,10 @@ class Order {
     async updateWaitingItemQty(itemId, qty, configId, orderId) {
         const client = await pool.connect();
         try {
+console.log('itemId', itemId);
+console.log('qty', qty);
+console.log('configId', configId);
+console.log('orderId', orderId);
             const dataOrderNumArr = (new Date().toISOString().slice(0,11).replace('T',' ')).split('-');
             const _tmpNumber = dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0];
             const queryNumber = `SELECT order_number FROM
@@ -506,7 +510,7 @@ class Order {
                 const _tNum = orderNumData.rows[0].order_number.split('-')
                 _newOrderNumber = `${moment().format('YYYYMMDD')}-${parseInt(_tNum[1]) + 1}`;
             }
-            console.log("Order Number", _newOrderNumber);
+console.log("Order Number", _newOrderNumber);
             // const laterstOrder = await client.query(`SELECT order_number FROM
             //     data.orders WHERE order_number LIKE '${dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0]}-%'
             //     LIMIT 1 ORDER BY created_at DESC`);
@@ -517,17 +521,22 @@ class Order {
             waitItems.rows.forEach(_item => {
                 totalAmount += parseFloat(_item.price)*parseInt(_item.quantity);
             })
-            const updtQueryOrder = `UPDATE data.orders SET 
+console.log('ZZZZ', 1);
+            //update product config qty
+            const updtConfigQuery = `UPDATE data.product_configurations SET quantity=quantity - ${qty} WHERE id=${configId};`;
+            await client.query(updtConfigQuery);
+
+
+            if (orderId) {
+                const updtQueryOrder = `UPDATE data.orders SET 
                         status='new', status_waiting=null, order_number='${_newOrderNumber}',
                         order_amount='${totalAmount}', total_amoint='${totalAmount}' 
                         WHERE id=${orderId};`;
-            await client.query(updtQueryOrder);
+                console.log('ZZZZ', updtQueryOrder);
+                await client.query(updtQueryOrder);
+            }
 
             return { orderNuber: _newOrderNumber }
-            // const orderData = await client.query(`SELECT`)
-            // const updtQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
-            // await client.query(updtQuery);
-            // getting all wait with this configuration
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

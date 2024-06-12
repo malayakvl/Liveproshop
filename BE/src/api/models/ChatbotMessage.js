@@ -237,7 +237,7 @@ class ChatbotMessage {
                     (lsm.parcer_status = FALSE AND lsm.reply_sended IS NULL AND (lsm.message LIKE '%vendu%' OR lsm.message LIKE '%sold%'))) 
                     AND ls.id='${sessionId}'
                     ORDER BY lsm.created_at DESC LIMIT 50`;
-            console.log(productQueryNew);
+            // console.log(productQueryNew);
             const res = await client.query(productQueryNew);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
