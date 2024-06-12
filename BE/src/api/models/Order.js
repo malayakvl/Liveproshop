@@ -461,7 +461,7 @@ class Order {
                     WHERE product_configuration_id=${configId} AND data.order_items.status='waiting'
                     ORDER BY data.order_items.created_at LIMIT 50`;
 
-            console.log(waitingQuery);
+// console.log(waitingQuery);
             const waitingData = await client.query(waitingQuery);
 
             return { items: waitingData.rows.length > 0 ? waitingData.rows : [] }
@@ -510,7 +510,6 @@ console.log('orderId', orderId);
                 const _tNum = orderNumData.rows[0].order_number.split('-')
                 _newOrderNumber = `${moment().format('YYYYMMDD')}-${parseInt(_tNum[1]) + 1}`;
             }
-console.log("Order Number", _newOrderNumber);
             // const laterstOrder = await client.query(`SELECT order_number FROM
             //     data.orders WHERE order_number LIKE '${dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0]}-%'
             //     LIMIT 1 ORDER BY created_at DESC`);

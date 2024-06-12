@@ -72,9 +72,11 @@ class OrderController {
     async updateWaitingItemQty(req, res) {
         const { itemId, qty, configId, orderId } = req.query;
         const data = await orderModel.updateWaitingItemQty(itemId, qty, configId, orderId);
-        console.log("WAIT DATA", data);
-
-        return res.status(200).json({ success: true, orderNumber: data.orderNuber });
+        if (data.qty === 0) {
+            return res.status(200).json({ success: true, orderNumber: data.orderNuber });
+        } else {
+            return res.status(200).json({ success: true, orderNumber: data.orderNuber });
+        }
     }
 
     async waitingJobOrders(req, res) {
