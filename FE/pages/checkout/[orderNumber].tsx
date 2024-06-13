@@ -23,8 +23,6 @@ import {
     redirectOrderNumberAction,
     setupReturnedUrlAction
 } from '../../redux/orders';
-// import Countdown from 'react-countdown';
-// import CountdownTimer from '../../hooks/useCountDown';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -33,8 +31,6 @@ import Link from 'next/link';
 import { userSelector } from '../../redux/user/selectors';
 import { showEmailNotificationAction } from '../../redux/layouts';
 import { expireOrderAction } from '../../redux/orders/actions';
-// import shippingMethod from "../../components/checkout/ShippingMethod";
-// import CardValidator from 'card-validator';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
@@ -58,9 +54,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const [timerValueMunites, setTimerValueMinutes] = useState(0);
     const [timerValueSeconds, setTimerValueSeconds] = useState(0);
     const [timerExpire, setTimerExpire] = useState(false);
-    // const [countDownDate, setCountDownDate] = useState(null);
-
-    // const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
 
     const x = setInterval(function () {
         // Get today's date and time
@@ -80,7 +73,13 @@ export default function Index({ session, locale }: { session: any; locale: any }
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             // time for payment expire
-            if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+            if (
+                (days === 0 && hours === 0 && minutes === 0 && seconds === 0) ||
+                days < 0 ||
+                hours < 0 ||
+                minutes < 0 ||
+                seconds < 0
+            ) {
                 dispatch(expireOrderAction(order.id));
             }
             setTimerValueDays(days);
@@ -151,6 +150,10 @@ export default function Index({ session, locale }: { session: any; locale: any }
         }
     }, [redirectMerchantUrl]);
 
+    useEffect(() => {
+        console.log('Check timer if leave page');
+    });
+
     const validationSchema = Yup.object({
         first_name: Yup.string()
             .strict(true)
@@ -165,11 +168,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field')),
-        // state: Yup.string()
-        //     .strict(true)
-        //     .trim(t('Cannot include leading and trailing spaces'))
-        //     .required(t('Required field'))
-        //     .min(3, t('State must be at least 3 characters')),
         city: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
@@ -180,9 +178,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
             .trim(t('Cannot include leading and trailing spaces'))
             .required(t('Required field'))
             .min(5, t('Address must be at least 5 characters')),
-        // address_line_2: Yup.string()
-        //     .strict(true)
-        //     .trim(t('Cannot include leading and trailing spaces')),
         phone: Yup.string()
             .strict(true)
             .trim(t('Cannot include leading and trailing spaces'))
