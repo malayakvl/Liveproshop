@@ -62,8 +62,25 @@ class OrderController {
         return res.status(200).json({ success: true, qty: data.qty });
     }
 
+
+    async removeWaitItemStatus(req, res) {
+        const { itemId } = req.query;
+        const data = await orderModel.removeItemWaitStatus(itemId);
+
+        return res.status(200).json({ success: true });
+    }
+
+    async updateConfigQtyAfterWait(req, res) {
+        const { configId, qty } = req.query;
+
+        const data = await orderModel.updateConfigQty(configId, qty);
+
+        return res.status(200).json({ success: true, qty: data.qty });
+    }
+
     async updateWaitingOrder(req, res) {
         const { orderId } = req.query;
+        console.log('Remove wait from order_items');
         const data = await orderModel.updateWaitWithOrderId(orderId);
 
         return res.status(200).json({ success: true });

@@ -80,6 +80,8 @@ apiRoutes.route('/create-orders').get(OrderController.createOrders);
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);
 apiRoutes.route('/orders/minus-item-order').get(OrderController.minusOrderItem);
 apiRoutes.route('/order/get-config-qty').get(OrderController.getProductConfigQty);
+apiRoutes.route('/order/update-qty-after-wait').get(OrderController.updateConfigQtyAfterWait);
+apiRoutes.route('/order/remove-wait-from-item').get(OrderController.removeWaitItemStatus);
 
 apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
 apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);

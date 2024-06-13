@@ -379,6 +379,83 @@ class Order {
         }
     }
 
+    async removeItemWaitStatus(itemId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.order_items SET status=null WHERE id='${itemId}'`);
+            return { success: true }
+            // const orderData = await client.query(`SELECT quantity FROM 
+            //         data.product_configurations WHERE id='${configId}'`);
+            //
+            // if (orderData.rows.length > 0) {
+            //     const newQty = parseInt(orderData.rows[0].quantity) - parseInt(qty);
+            //     await client.query(`UPDATE data.product_configurations SET quantity='${newQty}'
+            //         WHERE id='${configId}'`);
+            //     return { success: true }
+            // } else {
+            //     return { success: true }
+            // }
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async updateConfigQty(configId, qty) {
+        const client = await pool.connect();
+        try {
+            const orderData = await client.query(`SELECT quantity FROM 
+                    data.product_configurations WHERE id='${configId}'`);
+
+            if (orderData.rows.length > 0) {
+                const newQty = parseInt(orderData.rows[0].quantity) - parseInt(qty);
+                await client.query(`UPDATE data.product_configurations SET quantity='${newQty}'
+                    WHERE id='${configId}'`);
+                return { success: true }
+            } else {
+                return { success: true }
+            }
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
     async getConfigQty(configId) {
         const client = await pool.connect();
         try {
@@ -417,6 +494,8 @@ class Order {
     async updateWaitWithOrderId(orderId) {
         const client = await pool.connect();
         try {
+            console.log(`UPDATE data.orders SET 
+                    status='new', statusWaiting=null WHERE id='${orderId}' `);
             const orderData = await client.query(`UPDATE data.orders SET 
                     status='new', statusWaiting=null WHERE id='${orderId}' `);
 
@@ -459,7 +538,7 @@ class Order {
                     LEFT JOIN data.seller_settings ON data.seller_settings.user_id = data.live_sessions.user_id
                     LEFT JOIN data.free_order_threshold foth ON foth.user_id = data.live_sessions.user_id
                     WHERE product_configuration_id=${configId} AND data.order_items.status='waiting'
-                    ORDER BY data.order_items.created_at LIMIT 50`;
+                    ORDER BY data.order_items.created_at LIMIT 1`;
 
 // console.log(waitingQuery);
             const waitingData = await client.query(waitingQuery);
