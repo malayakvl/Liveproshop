@@ -13,7 +13,7 @@ async function updateWaitingJob() {
     // start parsing messages
     await axios(`${apiUrl}/api/run-waiting-job?configId=${configData[1]}`)
         .then((response) => {
-            console.log('Length wait', response.data.data.items.length);
+            // console.log('Length wait', response.data.data.items.length);
             if (response.data.data.items.length > 0) {
                 response.data.data.items.forEach(async item => {
                     let msgText;
@@ -32,8 +32,9 @@ async function updateWaitingJob() {
                     // check item qty
                     await axios(`${apiUrl}/api/order/get-config-qty?configId=${configData[1]}`)
                         .then(async (responseQty) => {
-console.log('GETTING QTY', parseInt(responseQty.data.qty))
+console.log('GETTING ITEM', item)
                             if (parseInt(responseQty.data.qty) > 0) {
+console.log('ORDER ID', item.order_id)
                                 if (item.order_id) {
                                     let typeTimer = item.order_timer.days ? 'd' : item.order_timer.hours ? 'h' : 'm';
                                     let orderTimer = item.order_timer.hours ?? item.order_timer.days ?? item.order_timer.minutes;
@@ -60,7 +61,7 @@ console.log('GETTING QTY', parseInt(responseQty.data.qty))
                                         .then(async function (responseSending) {
                                             // console.log(responseSending);
                                             // minusing qty from configuration
-console.log('SHOULD REMOVE QTY FROM CONFIGURATION 1', item)
+console.log('ELSE BLOCK', item)
 
                                             return responseSending;
                                         }).catch(e => {
