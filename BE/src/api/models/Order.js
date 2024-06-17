@@ -1223,20 +1223,28 @@ console.log('MS', multiOrderPaymentData);
             // send email about shipping
             const emailSql = `
                 SELECT data.users.*, data.user_stores.name AS store_name, 
-                    data.orders.order_number, data.users.selected_locale 
+                    data.orders.order_number, data.users.selected_locale,
+                    data.users.email, data.users.email_real
                 FROM data.orders 
                     LEFT JOIN data.users ON data.users.id=data.orders.user_id 
                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id                   
                     WHERE data.orders.id IN (${orderIds.join(',')})`;
-            console.log(emailSql);
             const emailRes = await client.query(emailSql);
             let mail = '';
+            let mailSendAddress = '';
 
             await emailRes.rows.forEach(async _order => {
                 mail = await confirmShippedEmail(_order.email, _order.selected_locale ? _order.selected_locale : 'fr', _order);
+                mailSendAddress = _order.email
+                if (!_order.email.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                )) {
+                    mailSendAddress = _order.email_real;
+                };
+
                 sendMail(
-                    _order.email,
+                    mailSendAddress,
                     mail.subject,
                     mail.body
                 );
