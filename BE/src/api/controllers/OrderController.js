@@ -86,6 +86,13 @@ class OrderController {
         return res.status(200).json({ success: true });
     }
 
+    async returnWrongParsedConfigured(req, res) {
+        const { qty, configId } = req.query;
+        const data = await orderModel.returnNotParsedConfigQty(qty, configId);
+        return res.status(200).json({ success: true });
+
+    }
+
     async updateWaitingItemQty(req, res) {
         const { itemId, qty, configId, orderId } = req.query;
         const data = await orderModel.updateWaitingItemQty(itemId, qty, configId, orderId);

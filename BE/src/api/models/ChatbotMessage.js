@@ -226,7 +226,7 @@ class ChatbotMessage {
             //         ORDER BY lsm.created_at DESC LIMIT 50`;
             const productQueryNew = `SELECT lsm.* , p.name AS product_name, ls.user_id, dss.order_timer, 
                     dss.free_shipping_timer, foth.threshold, us.name as store_name, p.publish AS activeProduct,
-                    p.publish AS active_product
+                    p.publish AS active_product, p.configured
                     FROM data.live_sessions_messages lsm
                     LEFT JOIN data.products p ON (p.id = (lsm.parcer_data->>'item')::integer)
                     LEFT JOIN data.live_sessions ls ON lsm.live_sessions_id = ls.id

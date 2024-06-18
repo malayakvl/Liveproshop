@@ -567,13 +567,40 @@ class Order {
         }
     }
 
+    async returnNotParsedConfigQty(qty, configId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${qty} WEHRE id='${configId}'`);
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Return Not Parser Configured:',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
     async updateWaitingItemQty(itemId, qty, configId, orderId) {
         const client = await pool.connect();
         try {
-console.log('itemId', itemId);
-console.log('qty', qty);
-console.log('configId', configId);
-console.log('orderId', orderId);
+// console.log('itemId', itemId);
+// console.log('qty', qty);
+// console.log('configId', configId);
+// console.log('orderId', orderId);
             const dataOrderNumArr = (new Date().toISOString().slice(0,11).replace('T',' ')).split('-');
             const _tmpNumber = dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0];
             const queryNumber = `SELECT order_number FROM

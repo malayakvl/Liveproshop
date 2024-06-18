@@ -43,7 +43,6 @@ async function sessionLaunche() {
                             trim: true         // trim leading and trailing replacement chars, defaults to `true`
                         })
 
-
                         // before send message check order status about wait
                         const statusWaitItem = await axios(`${apiUrl}/api/check-wait-status?comment_id=${message.message_id}`)
                             .then( (response) => {
@@ -110,6 +109,19 @@ async function sessionLaunche() {
                                 });
 
                         } else {
+                            console.log('Product configured', message.configured);
+                            if (message.configured && (!message.parcer_data.color && !message.parcer_data.size)) {
+                                msgText = `Sorry, we could not find the keyword (reference / size / color / etc.) you were asking for.\n\nHere are some examples of correct comments:\n\nSOLD 14 green\n\nSOLD 169 M\n\nSOLD 35 beige M\n\nPlease check that you have typed the keyword correctly.`;
+                                msgTextFr = `Désolés, nous n'avons pas pu trouver le mot clé (référence / taille / couleur / etc.) que vous demandiez.\n\nVoici quelques exemples de commentaires corrects:\n\nVENDU 14 vert\n\nVENDU 169 M\n\nVENDU 35 beige M\n\nMerci de vérifier que vous avez correctement tapé le mot-clé.`;
+
+                                // should return qty back
+                                await axios(`${apiUrl}/api/retunr-configured-wrong-parsed?configId=${message.product_configuration_id}&qty=1`)
+                                    .then( (response) => {
+                                        return response.data.result;
+                                    }).catch(e => {
+                                        console.log(e);
+                                    });
+                            }
                             responceResultMessage =  await axios.post(
                                 `https://graph.facebook.com/v18.0/me/messages`,
                                 '',
