@@ -25,7 +25,7 @@ async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        let historyRes;
+console.log('generate header done');
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
@@ -80,13 +80,35 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
-    // const shippingRefund = t["Shipping refund:"];
-    // console.log("TYPE", paymentData.payment_details.type);
+console.log('Ebat', invoice);
+console.log('Transaction Id', invoice.transaction_id);
+console.log('Payment Type', invoice.paymentType);
+
     let transactionId = '';
-    if (invoice.paymentType === 'PAYPAL') {
+    if (invoice.paymentType === 'MASTERCARD' || invoice.paymentType === 'VISA') {
+       transactionId = invoice.paymentDetails.paymentData.costs[0].transaction_id;
+    } else if (invoice.paymentType === 'TRUSTLY') {
         transactionId = invoice.transaction_id;
-    } else if (paymentData.payment_details.type === 'IDEAL') {
-        transactionId = paymentData.costs[0].transaction_id;
+    } else if (invoice.paymentType === 'CBC') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'WECHAT') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'MBWAY') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'MULTIBANCO') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'AMEX') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'BANKTRANS') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'PAYPAL') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('IDEAL')) {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('ALIPAY')) {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('MAESTRO')) {
+        transactionId = invoice.transaction_id;
     } else if (paymentData.payment_details.type === 'BANKTRANS') {
         transactionId = paymentData.payment_details.external_transaction_id;
     } else if (paymentData.payment_details.type === 'ALIPAY') {
@@ -94,19 +116,8 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         // transactionId = '';
     } else if (paymentData.payment_details.type === 'MAESTRO') {
         transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else if (paymentData.payment_details.type === 'WECHAT') {
-        transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else if (paymentData.payment_details.type === 'TRUSTLY') {
-        transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else if (paymentData.payment_details.type === 'CBC') {
-        transactionId = paymentData.transaction_id;
-        // transactionId = '';
-    } else {
-        transactionId = paymentData.costs[0].transaction_id;
     }
+console.log('Transaction ID', transactionId);    
     doc
         .fontSize(10)
         .text(captionNumber, 50, customerInformationTop)
@@ -368,6 +379,83 @@ class Order {
         }
     }
 
+    async removeItemWaitStatus(itemId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.order_items SET status=null WHERE id='${itemId}'`);
+            return { success: true }
+            // const orderData = await client.query(`SELECT quantity FROM 
+            //         data.product_configurations WHERE id='${configId}'`);
+            //
+            // if (orderData.rows.length > 0) {
+            //     const newQty = parseInt(orderData.rows[0].quantity) - parseInt(qty);
+            //     await client.query(`UPDATE data.product_configurations SET quantity='${newQty}'
+            //         WHERE id='${configId}'`);
+            //     return { success: true }
+            // } else {
+            //     return { success: true }
+            // }
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async updateConfigQty(configId, qty) {
+        const client = await pool.connect();
+        try {
+            const orderData = await client.query(`SELECT quantity FROM 
+                    data.product_configurations WHERE id='${configId}'`);
+
+            if (orderData.rows.length > 0) {
+                const newQty = parseInt(orderData.rows[0].quantity) - parseInt(qty);
+                await client.query(`UPDATE data.product_configurations SET quantity='${newQty}'
+                    WHERE id='${configId}'`);
+                return { success: true }
+            } else {
+                return { success: true }
+            }
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
     async getConfigQty(configId) {
         const client = await pool.connect();
         try {
@@ -406,6 +494,8 @@ class Order {
     async updateWaitWithOrderId(orderId) {
         const client = await pool.connect();
         try {
+            console.log(`UPDATE data.orders SET 
+                    status='new', statusWaiting=null WHERE id='${orderId}' `);
             const orderData = await client.query(`UPDATE data.orders SET 
                     status='new', statusWaiting=null WHERE id='${orderId}' `);
 
@@ -448,9 +538,9 @@ class Order {
                     LEFT JOIN data.seller_settings ON data.seller_settings.user_id = data.live_sessions.user_id
                     LEFT JOIN data.free_order_threshold foth ON foth.user_id = data.live_sessions.user_id
                     WHERE product_configuration_id=${configId} AND data.order_items.status='waiting'
-                    ORDER BY data.order_items.created_at LIMIT 50`;
+                    ORDER BY data.order_items.created_at LIMIT 1`;
 
-            console.log(waitingQuery);
+// console.log(waitingQuery);
             const waitingData = await client.query(waitingQuery);
 
             return { items: waitingData.rows.length > 0 ? waitingData.rows : [] }
@@ -477,9 +567,40 @@ class Order {
         }
     }
 
+    async returnNotParsedConfigQty(qty, configId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${qty} WEHRE id='${configId}'`);
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Return Not Parser Configured:',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
     async updateWaitingItemQty(itemId, qty, configId, orderId) {
         const client = await pool.connect();
         try {
+// console.log('itemId', itemId);
+// console.log('qty', qty);
+// console.log('configId', configId);
+// console.log('orderId', orderId);
             const dataOrderNumArr = (new Date().toISOString().slice(0,11).replace('T',' ')).split('-');
             const _tmpNumber = dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0];
             const queryNumber = `SELECT order_number FROM
@@ -495,7 +616,6 @@ class Order {
                 const _tNum = orderNumData.rows[0].order_number.split('-')
                 _newOrderNumber = `${moment().format('YYYYMMDD')}-${parseInt(_tNum[1]) + 1}`;
             }
-            console.log("Order Number", _newOrderNumber);
             // const laterstOrder = await client.query(`SELECT order_number FROM
             //     data.orders WHERE order_number LIKE '${dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0]}-%'
             //     LIMIT 1 ORDER BY created_at DESC`);
@@ -506,17 +626,22 @@ class Order {
             waitItems.rows.forEach(_item => {
                 totalAmount += parseFloat(_item.price)*parseInt(_item.quantity);
             })
-            const updtQueryOrder = `UPDATE data.orders SET 
+console.log('ZZZZ', 1);
+            //update product config qty
+            const updtConfigQuery = `UPDATE data.product_configurations SET quantity=quantity - ${qty} WHERE id=${configId};`;
+            await client.query(updtConfigQuery);
+
+
+            if (orderId) {
+                const updtQueryOrder = `UPDATE data.orders SET 
                         status='new', status_waiting=null, order_number='${_newOrderNumber}',
                         order_amount='${totalAmount}', total_amoint='${totalAmount}' 
                         WHERE id=${orderId};`;
-            await client.query(updtQueryOrder);
+                console.log('ZZZZ', updtQueryOrder);
+                await client.query(updtQueryOrder);
+            }
 
             return { orderNuber: _newOrderNumber }
-            // const orderData = await client.query(`SELECT`)
-            // const updtQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
-            // await client.query(updtQuery);
-            // getting all wait with this configuration
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -903,7 +1028,7 @@ class Order {
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
-        console.log('LOCALE', locale)
+console.log('LOCALE', locale)
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -924,7 +1049,7 @@ class Order {
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-// console.log(ordersQuery);
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const orderId = res.rows[0].id;
             let historyRes;
@@ -933,8 +1058,10 @@ class Order {
             } else {
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-            // console.log(historyRes.rows[0]);
-
+            if (!historyRes.rows[0]) {
+                await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
+                historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
+            }
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
@@ -948,6 +1075,7 @@ class Order {
                     fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 }
             }
+
             // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
@@ -993,7 +1121,7 @@ class Order {
                     }).catch(error => {
                         return {error: error.message}
                     });
-
+console.log('MS', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
@@ -1059,7 +1187,7 @@ class Order {
             }
             error = {
                 code: 500,
-                message: 'Error get list of users'
+                message: 'Model error (Generate PDF):'
             };
             return  {
                 fileName: '',
@@ -1122,20 +1250,28 @@ class Order {
             // send email about shipping
             const emailSql = `
                 SELECT data.users.*, data.user_stores.name AS store_name, 
-                    data.orders.order_number, data.users.selected_locale 
+                    data.orders.order_number, data.users.selected_locale,
+                    data.users.email, data.users.email_real
                 FROM data.orders 
                     LEFT JOIN data.users ON data.users.id=data.orders.user_id 
                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id                   
                     WHERE data.orders.id IN (${orderIds.join(',')})`;
-            console.log(emailSql);
             const emailRes = await client.query(emailSql);
             let mail = '';
+            let mailSendAddress = '';
 
             await emailRes.rows.forEach(async _order => {
                 mail = await confirmShippedEmail(_order.email, _order.selected_locale ? _order.selected_locale : 'fr', _order);
+                mailSendAddress = _order.email
+                if (!_order.email.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                )) {
+                    mailSendAddress = _order.email_real;
+                };
+
                 sendMail(
-                    _order.email,
+                    mailSendAddress,
                     mail.subject,
                     mail.body
                 );
@@ -1384,7 +1520,6 @@ class Order {
             orderNumber = res.rows[0].order_number;
             storeName = res.rows[0].store_name;
             sessionId = res.rows[0].live_sessions_id;
-console.log('Session ID', sessionId);
             const tmpUserId = res.rows[0].tmp_user_id;
             if (!orderNumber) {
                 const SQLWait = `SELECT *
@@ -1392,23 +1527,20 @@ console.log('Session ID', sessionId);
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
-console.log(resWait.rows[0].order_id);
-
+console.log('Wait order ID', resWait.rows[0].order_id);
+console.log('Order ID', resWait.rows[0].order_id);
                 if (!resWait.rows[0].order_id) {
 console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     if (existNonPayed.rows.length > 0) {
-console.log('here we are 1');
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
                     } else {
-console.log('here we are 2');
                         const existNonPayedEmpty = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' ORDER BY created_at DESC`);
                         if (existNonPayedEmpty.rows.length > 0) {
                             orderId = existNonPayedEmpty.rows[0].id;
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
-console.log('didnt find order for user')
                             const emptyWaitRes = await client.query(`SELECT id, order_number, live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
@@ -1419,7 +1551,6 @@ console.log('didnt find order for user')
                                 order_number='${orderNumber}',
                                 sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
-console.log(updtQuery);
                             await client.query(updtQuery);
 
                             await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
@@ -1438,6 +1569,7 @@ console.log(updtQuery);
                 return {success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName };
 
             } else {
+console.log('AAAAA');
                 const _tmpOrderNumber = res.rows[0].order_number.split('-');
                 const prefixWait = Math.floor(Date.now()/1000);
 
@@ -1468,6 +1600,7 @@ console.log(updtQuery);
                                         WHERE data.orders.user_id='${userId}'
                                         AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
                                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                 if (existNonPayedOrder.rows[0]?.id) {
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     orderId = existNonPayedOrder.rows[0].id;
@@ -1617,7 +1750,7 @@ console.log('first order without any splitting');
     }
 
 
-    async insertOrderStatus (orderId, status) {
+    async insertOrderStatus (orderId, status, locale) {
         const client = await pool.connect();
         try {
 console.log('here')
@@ -1838,8 +1971,12 @@ console.log('here')
                     // scenario 1:
                     // Free shipping is active. User makes the first order and it does not reach the threshold
                     // Buyer pays for shipping regardless the price and shipping method
+console.log('order name', ordersCount);
+
                     if (ordersCount === 1 && prevTotal < threshold) {
                         return {success: true, amount_refund: 0, freeShipping: false}
+                    } else if (ordersCount === 0 && currentOrder.rows[0].order_amount >= threshold) {
+                        return {success: true, amount_refund: 0, freeShipping: true}
                     } else if (ordersCount === 1 && prevTotal >= threshold) {
                         return {success: true, amount_refund: 0, freeShipping: true}
                     } else if (ordersCount > 1) {
@@ -1968,9 +2105,9 @@ console.log('WE ARE NOT IN PERIOD');
                 // console.log(payedOrdersQuery);
                 let amountPayed = 0;
                 if (payedOrdersQueryRes.rows[0].totalPayed) {
-                    amountPayed = parseFloat(payedOrdersQueryRes.rows[0].totalPayed);
+                    amountPayed = parseFloat(currOrder.rows[0].totalPayed);
                 }
-                // console.log('AMOUNT PAYED', amountPayed);
+
 
                 const compareDate = moment(currOrder.rows[0].updated_at, "DD/MM/YYYY");
                 const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
@@ -1978,16 +2115,21 @@ console.log('WE ARE NOT IN PERIOD');
                 const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
                 const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
                 const inPeriod = compareDate.isBetween(startDate, endDate);
+console.log(1, amountPayed);
+console.log(2, currOrder.rows[0].order_amount);
 
 
                 sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currOrder.rows[0].live_sessions_id}`);
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
                 let isFree = false;let refundAmountNew = 0;
+console.log('in period', inPeriod)
                 if (inPeriod) {
+                    console.log('TYT', parseFloat(currOrder.rows[0].order_amount)+amountPayed)
                     // order already more therehold
                     if (parseFloat(currOrder.rows[0].order_amount)+amountPayed > parseFloat(settingsThreshold.rows[0].threshold)) {
                         isFree = true;
+                        return {success: true, amount_refund: 0, freeShipping: true}
                     }
                     // calculate refund
                     // const prevQuries =  await client.query(`SELECT * FROM  data.orders WHERE user_id=${userId} AND status='payed'`)
@@ -2036,7 +2178,7 @@ console.log('WE ARE NOT IN PERIOD');
             }
             const orderData = {
                 "currency": "EUR",
-                "amount": order.total_amount*100,
+                "amount": (order.total_amount + order.shipping_amount)*100,
                 "description": "Refund by seller"
             }
             const multiSafePayClientRes = await axios
@@ -2049,7 +2191,8 @@ console.log('WE ARE NOT IN PERIOD');
                     await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${order.id}', 'canceled')`);
                     return {success: true, error: null}
                 }).catch(error => {
-                    console.log(error.message);
+                    console.log(error);
+                    console.log('Multisafe error', error.message);
                     return {success: false, error: error.message}
                 });
 

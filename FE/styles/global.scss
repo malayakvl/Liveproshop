@@ -153,6 +153,10 @@
   font-weight: normal !important;
 }
 
+.clock-confirmation {
+  @apply absolute left-[33%] md:left-[43%] top-[25px];
+}
+
 @import "components/sidebar-header";
 @import "components/header";
 @import "components/main";

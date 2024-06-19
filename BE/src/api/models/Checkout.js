@@ -5,6 +5,8 @@ import crypto from "crypto";
 import moment from 'moment';
 import shippingModel from "./Shipping.js";
 import orderModel from "./Order.js";
+import { confirmOrderPaymentEmail } from "../sender/templates.js";
+import {sendMail} from "../lib/sendMail.js";
 
 class Checkout {
 
@@ -251,34 +253,57 @@ class Checkout {
         }
     }
     
-    async updateOrderStatus(data, user) {
+    async updateOrderStatus(data, user, locale) {
         const client = await pool.connect();
         let error;
+        console.log('locale', locale);
         try {
-            const orderRes = await client.query(`SELECT id FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
+            const orderRes = await client.query(`SELECT * FROM data.orders WHERE hash='${data.hash}' AND user_id='${user.id}'`);
+            const sellerData = await client.query(`SELECT data.user_stores.name AS store_name 
+                FROM data.live_sessions 
+                LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id`);
+            const storeName = sellerData.rows[0].store_name
             if (orderRes.rows.length) {
                 if (data.type === 'redirect') {
-                    // setup payment details
-                    // await axios
-                    //     .get(`${process.env.MULTISAFEPAY_URL}/orders/LP-ID-${orderRes.rows[0].id}?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, dataOrder, {
-                    //         headers: { 'Content-Type': 'application/json' }
-                    //     })
-                    //     .then(async (res) => {
-                    //         // console.log("Res Data", res.data);
-                    //         console.log("MULTISAFE DATA", res.data);
-                    //         // return {redirectUrl: 'https://testpayv2.multisafepay.com/connect/82EHClmcDytee3MubyiXfdojEFcxiWYJ2Vs/?lang=en_UA', error: null}
-                    //     }).catch(error => {
-                    //
-                    //     });
                     await client.query(`UPDATE data.orders SET status='payed' WHERE id=${orderRes.rows[0].id}`);
-                    console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
-                    // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
-                    // const orderData = await client.query(`SELECT user_id FROM daata.orders WHERE id=${orderRes.rows[0].id}`)
 
                     // send email about success payment and generate pdf
-                    // const userData = await client.query(`SELECT email FROM data.users WHERE id='${orderData.rows[0].user_id}'`);
+                    const userData = await client.query(`SELECT email, email_real, last_name, first_name FROM data.users WHERE id='${orderRes.rows[0].user_id}'`);
+                    const orderData = orderRes.rows[0];
+    console.log('GENERATE INVOICE PDF', locale);
+                    // check if file exist, then return true
+                    const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${orderRes.rows[0].country_id}'`);
+                    const deliveryAddress = coutryRes.rows[0].nicename+', '+orderRes.rows[0].post_code+', '+orderRes.rows[0].city+', '+orderRes.rows[0].shipping_address
+                    const multiOrderPaymentData = await axios
+                        .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
+                            headers: { 'Content-Type': 'application/json' }
+                        })
+                        .then(async (res) => {
+                            // console.log('PAYMENT METHODS', res.data.data);
+                            return {'success': true, paymentData: res.data.data}
+                        }).catch(error => {
+                            return {error: error.message}
+                        });
+                    // generate pad
+console.log('Multisafe data', multiOrderPaymentData)  ;
+                    const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
+console.log('Order Data', order);
+                    const filePathArr = order.filename.split('/');
+                    // console.log(filePathArr);
+                    const fileAttachment = {
+                        name: filePathArr[4],
+                        path: `${process.env.FULL_DOWNLOAD_FOLDER}${order.filename}`
+                    }
+                    console.log('File attachment', fileAttachment);
 
-
+                    const paymentMethod = multiOrderPaymentData.paymentData.payment_details.type;
+                    const mailConfirmPayment = await confirmOrderPaymentEmail(locale, storeName, orderRes.rows[0], deliveryAddress, paymentMethod);
+                    sendMail(
+                        userData.rows[0].email_real,
+                        mailConfirmPayment.subject,
+                        mailConfirmPayment.body,
+                        fileAttachment
+                    );
                     return { paymentStatus: 'success', error: null };
                 } else if (data.type === 'cancel') {
                     return { paymentStatus: 'cancel', error: 'Client cancel payment' };

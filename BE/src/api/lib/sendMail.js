@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export const sendMail = async (to, subject, html) => {
+export const sendMail = async (to, subject, html, attachment = '') => {
     const transporterDB = nodemailer.createTransport({
         pool: true,
         host: process.env.EMAIL_SMTP_HOST,
@@ -10,15 +10,35 @@ export const sendMail = async (to, subject, html) => {
             pass: process.env.EMAIL_SMTP_PASS
         }
     });
-
-    const mailOptions = {
-        from: 'noreply@liveproshop.com',
-        to: to,
-        subject: subject,
-        html: html
-    };
-    transporterDB.sendMail(mailOptions, function (error, info) {
-        if (error) { console.log(error); }
-        return info;
-    });
+    if (attachment) {
+        transporterDB.sendMail({
+            from: 'noreply@liveproshop.com',
+            to: to,
+            subject: subject,
+            html: html,
+            attachments: [{
+                filename: attachment.name,
+                path: attachment.path,
+                contentType: 'application/pdf'
+            }],
+            function(err, info) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    console.log(info);
+                }
+            }
+        });
+    } else {
+        const mailOptions = {
+            from: 'noreply@liveproshop.com',
+            to: to,
+            subject: subject,
+            html: html
+        };
+        transporterDB.sendMail(mailOptions, function (error, info) {
+            if (error) { console.log(error); }
+            return info;
+        });
+    }
 };

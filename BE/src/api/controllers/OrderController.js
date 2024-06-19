@@ -62,19 +62,45 @@ class OrderController {
         return res.status(200).json({ success: true, qty: data.qty });
     }
 
+
+    async removeWaitItemStatus(req, res) {
+        const { itemId } = req.query;
+        const data = await orderModel.removeItemWaitStatus(itemId);
+
+        return res.status(200).json({ success: true });
+    }
+
+    async updateConfigQtyAfterWait(req, res) {
+        const { configId, qty } = req.query;
+
+        const data = await orderModel.updateConfigQty(configId, qty);
+
+        return res.status(200).json({ success: true, qty: data.qty });
+    }
+
     async updateWaitingOrder(req, res) {
         const { orderId } = req.query;
+        console.log('Remove wait from order_items');
         const data = await orderModel.updateWaitWithOrderId(orderId);
 
         return res.status(200).json({ success: true });
     }
 
+    async returnWrongParsedConfigured(req, res) {
+        const { qty, configId } = req.query;
+        const data = await orderModel.returnNotParsedConfigQty(qty, configId);
+        return res.status(200).json({ success: true });
+
+    }
+
     async updateWaitingItemQty(req, res) {
         const { itemId, qty, configId, orderId } = req.query;
         const data = await orderModel.updateWaitingItemQty(itemId, qty, configId, orderId);
-        console.log("WAIT DATA", data);
-
-        return res.status(200).json({ success: true, orderNumber: data.orderNuber });
+        if (data.qty === 0) {
+            return res.status(200).json({ success: true, orderNumber: data.orderNuber });
+        } else {
+            return res.status(200).json({ success: true, orderNumber: data.orderNuber });
+        }
     }
 
     async waitingJobOrders(req, res) {
@@ -249,7 +275,7 @@ class OrderController {
         if (req.user) {
             // await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderRes.rows[0].id}', 'payed')`);
 
-            const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status);
+            const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status, req.query.locale);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }
         return res.status(200).json({ success: true, orderNumber: null });

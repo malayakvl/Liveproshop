@@ -1,17 +1,19 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-// import { useTranslations } from 'next-intl';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkPaymentStatusAction } from '../../redux/checkout';
-// import { updateOrderStatusAction } from '../../redux/orders';
+import { updateOrderStatusAction } from '../../redux/orders';
 import { paymentStatusSelector } from '../../redux/checkout/selectors';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
+    const t = useTranslations();
     const paymentStatus = useSelector(paymentStatusSelector);
-
+    const { locale }: any = useRouter();
     const {
         query: { orderId, lang, hash, type }
     } = useRouter();
@@ -20,14 +22,15 @@ export default function Index({ session }: { session: any }) {
 
     useEffect(() => {
         window.localStorage.removeItem('orderCommentId');
-        dispatch(checkPaymentStatusAction(hash, type, orderId));
+        dispatch(checkPaymentStatusAction(hash, type, orderId, locale));
     }, []);
 
     useEffect(() => {
         if (paymentStatus) {
             if (paymentStatus === 'success') {
                 // insert history statuses here
-                // dispatch(updateOrderStatusAction(orderId, 'payed'));
+                // alert(locale);
+                dispatch(updateOrderStatusAction(orderId, 'payed', locale));
                 location.href = `${window.location.origin}/${
                     lang == 'en' ? 'en/' : ''
                 }checkout/complete?orderId=${orderId}`;
@@ -48,16 +51,22 @@ export default function Index({ session }: { session: any }) {
                 <link rel="icon" href="/images/logo-1.svg" />
             </Head>
 
-            <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10">
+            <div className="lg:white-shadow-medium bg-white rounded-lg pr-4 pb-4 lg:pr-8 lg:pb-8 lg:mr-4 mt-10 min-h-[400px]">
                 <div className="flex flex-wrap items-center">
                     <div className="text-3xl font-bold text-gray-350 p-4 lg:p-8 mr-4 lg:mr-8">
-                        Checkout confirmation
+                        {t('Checkout confirmation')}
+                    </div>
+                </div>
+                <div className="relative">
+                    <div className="clock-confirmation">
+                        <Image width="200" height="200" src={`/images/main/clock-3d.svg`} />
                     </div>
                 </div>
             </div>
         </>
     );
 }
+
 export async function getServerSideProps(context: any) {
     const { locale } = context;
     const session = await getSession(context);

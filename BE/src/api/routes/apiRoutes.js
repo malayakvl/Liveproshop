@@ -58,6 +58,7 @@ apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQt
 apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
 apiRoutes.route('/get-order-clear').get(OrderController.removeUnpayedOrder);
 apiRoutes.route('/remove-sessions-order').get(OrderController.removeSessionsOrders);
+apiRoutes.route('/retunr-configured-wrong-parsed').get(OrderController.returnWrongParsedConfigured);
 
 
 apiRoutes.route('/check-subscription-for-update').get(UserController.fetchSubscriptionsForUpdate);
@@ -80,6 +81,8 @@ apiRoutes.route('/create-orders').get(OrderController.createOrders);
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);
 apiRoutes.route('/orders/minus-item-order').get(OrderController.minusOrderItem);
 apiRoutes.route('/order/get-config-qty').get(OrderController.getProductConfigQty);
+apiRoutes.route('/order/update-qty-after-wait').get(OrderController.updateConfigQtyAfterWait);
+apiRoutes.route('/order/remove-wait-from-item').get(OrderController.removeWaitItemStatus);
 
 apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
 apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);

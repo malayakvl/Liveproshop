@@ -37,6 +37,7 @@ declare namespace Orders {
         order_amount: number;
         discount_amount: number;
         total_amount: number;
+        shipping_amount: number;
         order_number: number;
         status: OrderStatus;
         status_waiting: string;

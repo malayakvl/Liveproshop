@@ -103,7 +103,12 @@ export default {
   "schtext_2": "Si votre compte n'est pas synchronisé, les fonctionnalités de Live Pro Shop ne seront pas disponibles pendant votre live.",
   "schtext_3": "Vous pouvez suivre ce ",
   "schtext_4": "guide",
-  "schtext_5": "pour synchroniser votre compte. "
+  "schtext_5": "pour synchroniser votre compte. ",
 
-
+  "Order Confirmation": "Confirmation de commande",
+  "Thank you for shopping at": "Merci d'avoir effectué vos achats sur",
+  "Order :": "Commande :",
+  "Payment :": "Paiement :",
+  "Delivery :": "Livraison :",
+  "Please find the summary of your order and your invoice attached.": "Veuillez trouver le récapitulatif de votre commande et votre facture en pièce jointe."
 };

@@ -49,7 +49,7 @@ async function syncFB() {
                 return response;
             },
             {
-                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content'
+                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
             }
         )
     );
@@ -129,7 +129,8 @@ async function getAccountData(authResponse) {
     //     scope: 'pages_show_list,pages_messaging,pages_manage_metadata,pages_read_user_content'
     // };
     const loginOptions = {
-        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
+        // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
+        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
     };
     axios
         .get(
@@ -177,3 +178,5 @@ function stopAuthenticateTimer() {
     // cancel timer for re-authenticating with the api
     clearTimeout(authenticateTimeout);
 }
+
+// curl -i -X GET "https://graph.facebook.com/2763630843946760/accounts?access_token=EAArS9KI0vagBO46CIW5SZCe2ZCHRAyxmvNEcwZC4GMJCEmYuoZCGxmCcv7hNA5QP9zDQ6EbYPjKTaGSdP5e1J7fkXwM3w1sjzHXnTBDJpkEdeQ06qf42svmCgubo6ZBgKWiXAZA5i32ZAIUpcKfZCWGaZC2sNGCS92RgtHqi2ZCoOtuQyNx3tigaN60aPp8Rm8jwXvFxvLCeixZBlbs8Ka2dsM2Uopg6ecZD"

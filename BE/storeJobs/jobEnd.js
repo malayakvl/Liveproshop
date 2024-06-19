@@ -18,6 +18,7 @@ async function startProcess() {
     await axios(`${apiUrl}/api/fetch-store-session-for-end`)
         .then( (response) => {
             response.data.result.forEach(async session => {
+                console.log('Live session data', session.id);
 
                 shell.exec(`pm2 delete "jobStoreEvent ${session.id}"`, function(code, output) {
                 });

@@ -338,9 +338,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 {/*</td>*/}
                                 <td>
                                     {formatCurrency(
-                                        item.total_amount
-                                            ? item.total_amount - item.refund_amount
-                                            : item.order_amount
+                                        parseFloat(item.total_amount) -
+                                            parseFloat(item.refund_amount) +
+                                            parseFloat(item.shipping_amount)
                                     )}
                                 </td>
 
