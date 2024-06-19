@@ -10,6 +10,11 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
 }) => {
     const t = useTranslations();
     const user = useSelector(userSelector);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const totalSpent =
+        parseFloat(String(totals.total_amount ?? 0)) +
+        parseFloat(String(totals.total_shipping ?? 0));
     return (
         <>
             <div className="w-full border-b md:border-b-0 mb-4 md:mb-0 flex flex-col w-full md:w-full  lg:w-1/4 xl:w-1/5 justify-center align-middle">
@@ -21,7 +26,7 @@ const Totals: React.FC<{ totals: Dashboard.Totals; roleId: number }> = ({
                         <div className="">
                             <Image src="/images/dashboard-card.svg" width={20} height={18} />
                             <span className="ml-3 font-bold text-gray-350 text-2xl">
-                                {formatCurrency(totals.total_amount ?? 0)}
+                                {formatCurrency(totalSpent)}
                             </span>
                         </div>
                     </div>
