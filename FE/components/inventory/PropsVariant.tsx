@@ -19,6 +19,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                     props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
                 }
             });
+            dispatch(setIdentAction(false));
         }
     };
 
