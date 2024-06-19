@@ -99,11 +99,9 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                 <td>
                                     <div className="text-right">
                                         {formatCurrency(
-                                            item.total_amount
-                                                ? parseFloat(String(item.total_amount)) +
-                                                      parseFloat(String(item.shipping_amount))
-                                                : parseFloat(String(item.order_amount)) +
-                                                      parseFloat(String(item.shipping_amount))
+                                            parseFloat(String(item.total_amount)) -
+                                                parseFloat(item.refund_amount) +
+                                                parseFloat(String(item.shipping_amount))
                                         )}
                                     </div>
                                 </td>
