@@ -2178,7 +2178,7 @@ console.log('in period', inPeriod)
             }
             const orderData = {
                 "currency": "EUR",
-                "amount": order.total_amount*100,
+                "amount": (order.total_amount + order.shipping_amount)*100,
                 "description": "Refund by seller"
             }
             const multiSafePayClientRes = await axios
@@ -2191,7 +2191,8 @@ console.log('in period', inPeriod)
                     await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${order.id}', 'canceled')`);
                     return {success: true, error: null}
                 }).catch(error => {
-                    console.log(error.message);
+                    console.log(error);
+                    console.log('Multisafe error', error.message);
                     return {success: false, error: error.message}
                 });
 
