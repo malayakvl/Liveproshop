@@ -669,6 +669,10 @@
   "Free Shipping Period": "Période de livraison gratuite",
   "Please setup period": "S'il vous plaît, période d'installation",
   "Shipping refund": "Remboursement des frais de port ",
-  "Checkout confirmation": "Confirmation de paiement"
+  "Checkout confirmation": "Confirmation de paiement",
+  "Days": "Jours",
+  "Hours": "Heures",
+  "Minutes": "Minutes",
+  "Seconds": "Secondes"
 
 }

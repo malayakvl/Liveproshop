@@ -669,5 +669,9 @@
   "Free Shipping Period": "Free Shipping Period",
   "Please setup period": "Please, setup period",
   "Shipping refund": "Shipping refund",
-  "Checkout confirmation": "Checkout confirmation"
+  "Checkout confirmation": "Checkout confirmation",
+  "Days": "Days",
+  "Hours": "Hours",
+  "Minutes": "Minutes",
+  "Seconds": "Seconds"
 }

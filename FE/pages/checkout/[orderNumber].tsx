@@ -198,27 +198,35 @@ export default function Index({ session, locale }: { session: any; locale: any }
                         <div className="text-3xl text-center w-full">
                             <div className="countdown-value">
                                 <span className="red-yellow-gradient-text counter-caption-time">
-                                    {timerValueDays}
+                                    {timerValueDays >= 0 ? timerValueDays : 0}
                                 </span>
-                                <span className="block color-black counter-caption">Days</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Days')}
+                                </span>
                             </div>
                             <div className="countdown-value">
                                 <span className="red-yellow-gradient-text counter-caption-time">
-                                    {timerValueHours}
+                                    {timerValueHours >= 0 ? timerValueHours : 0}
                                 </span>
-                                <span className="block color-black counter-caption">Hours</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Hours')}
+                                </span>
                             </div>
                             <div className="countdown-value">
                                 <span className="red-yellow-gradient-text counter-caption-time">
-                                    {timerValueMunites}
+                                    {timerValueMunites >= 0 ? timerValueMunites : 0}
                                 </span>
-                                <span className="block color-black counter-caption">Minutes</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Minutes')}
+                                </span>
                             </div>
                             <div className="countdown-value">
                                 <span className="red-yellow-gradient-text counter-caption-time">
-                                    {timerValueSeconds}
+                                    {timerValueSeconds >= 0 ? timerValueSeconds : 0}
                                 </span>
-                                <span className="block color-black counter-caption">Seconds</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Seconds')}
+                                </span>
                             </div>
                         </div>
                     )}
