@@ -1375,12 +1375,23 @@ console.log('MS', multiOrderPaymentData);
         }
     }
 
-    async connectThrowStore(messageId, fromId) {
+    async connectThrowStore(messageId, fromId, storeId) {
         const client = await pool.connect();
         try {
-            console.log(messageId, fromId);
+            // console.log(messageId, fromId);
             // find order by message and attach to current user
-            const connetedQuery = `SELECT * FROM data.user2pages WHERE from_id='${fromId}'`
+            const connetedQuery = `SELECT * FROM data.user2pages WHERE from_id='${fromId}' AND store_id=${storeId}`
+            const connetedQueryRes = await client.query(connetedQuery);
+            if (connetedQueryRes.rows.length > 0) {
+                const userId = connetedQueryRes.rows[0].user_id;
+                // find order by message
+                const queryOrder = `SELECT data.orders.id FROM data.order_items LEFT JOIN 
+                data.orders ON data.orders.id = data.order_items.order_id 
+                WHERE message_id='${messageId}'`;
+                const findedOrderRes = await client.query(queryOrder);
+                await client.query(`UPDATE data.orders SET user_id='${userId}'`)
+            }
+            return { success: true };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

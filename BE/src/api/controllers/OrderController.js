@@ -253,7 +253,7 @@ class OrderController {
 
     async compareFromOrder (req, res) {
         console.log('fing user by comment and by from_id');
-        const data = await orderModel.connectThrowStore(req.query.messageId, req.query.fromId);
+        const data = await orderModel.connectThrowStore(req.query.messageId, req.query.fromId, req.query.storeId);
         // if (req.user) {
         //     console.log('fing user by comment and by from_id');
         //     const data = await orderModel.findWaitByCommentId(req.query.messageId, fromId);
