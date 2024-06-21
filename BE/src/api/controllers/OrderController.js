@@ -251,6 +251,18 @@ class OrderController {
         return res.status(200).json({ success: true, orderNumber: null });
     }
 
+    async compareFromOrder (req, res) {
+        console.log('fing user by comment and by from_id');
+        const data = await orderModel.connectThrowStore(req.query.messageId, req.query.fromId);
+        // if (req.user) {
+        //     console.log('fing user by comment and by from_id');
+        //     const data = await orderModel.findWaitByCommentId(req.query.messageId, fromId);
+        //     console.log('here wa are', data);
+        //     return res.status(200).json({ success: true, orderNumber: data.orderNumber });
+        // }
+        // return res.status(200).json({ success: true, orderNumber: null });
+    }
+
     async findWaitOrderById (req, res) {
         if (req.user) {
             console.log('getting wait order by id', req.query.orderId);
