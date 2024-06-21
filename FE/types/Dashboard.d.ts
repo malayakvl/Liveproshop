@@ -16,5 +16,6 @@ declare namespace Dashboard {
         total_buyers: number;
         total_pending: number;
         total_refund: number;
+        total_shipping: number;
     }
 }

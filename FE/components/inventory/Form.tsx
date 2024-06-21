@@ -221,21 +221,27 @@ function ProductForm({
                 const tmpError: any[] = [];
                 setErrorConfigured([]);
                 // let tmpError: string[] = [];
-                selectedColors.forEach((_color: any) => {
-                    selectedSizes.forEach((_size: any) => {
-                        if (
-                            !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
-                            !values[`configureQty_${_color['label']}_${_size['label']}`]
-                        ) {
-                            errorConfig = true;
-                            tmpError.push(`error_${_color['label']}_${_size['label']}`);
-                        }
+                if (values['configured']) {
+                    selectedColors.forEach((_color: any) => {
+                        selectedSizes.forEach((_size: any) => {
+                            if (
+                                !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
+                                !values[`configureQty_${_color['label']}_${_size['label']}`]
+                            ) {
+                                errorConfig = true;
+                                tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                            }
+                        });
                     });
-                });
+                }
                 if (tmpError.length > 0) {
                     setErrorConfigured(tmpError);
                 }
+                console.log('Error Config', errorConfig);
+                console.log('isIdent', isIdent);
+
                 if (!isIdent && !errorConfig) {
+                    console.log('WTF');
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
                         if (!['material_id', 'tags', 'description'].includes(key)) {
