@@ -1679,7 +1679,8 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     await client.query(orderSQL);
 
                     const fromQuery = `SELECT data.order_items.message_id, 
-                        data.live_sessions_messages.from_id, data.live_sessions.store_id  
+                        data.live_sessions_messages.from_id, data.live_sessions.store_id,
+                        data.live_sessions_messages.real_from_id  
                         FROM data.order_items
                         LEFT JOIN data.live_sessions_messages ON 
                             data.live_sessions_messages.message_id = data.order_items.message_id
@@ -1687,18 +1688,19 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                         WHERE order_id='${res.rows[0].order_id}'
                         LIMIT 1`;
                     const fromQueryRes = await client.query(fromQuery);
-
                     const connQeryUserStoreQuery = `SELECT * FROM data.user2pages WHERE 
                         from_id='${fromQueryRes.rows[0].from_id}' AND user_id='${userId}' AND 
                         store_id='${fromQueryRes.rows[0].store_id}'`;
                     const connQeryUserStoreQueryRes = await client.query(connQeryUserStoreQuery);
                     if (connQeryUserStoreQueryRes.rows.length === 0) {
-                        const insertQueryConnect =
-                            `INSERT INTO data.user2pages (from_id, user_id, store_id) VALUES 
+                        if (fromQueryRes.rows[0].real_from_id) {
+                            const insertQueryConnect =
+                                `INSERT INTO data.user2pages (from_id, user_id, store_id) VALUES 
                             ('${fromQueryRes.rows[0].from_id}', '${userId}', '${fromQueryRes.rows[0].store_id}')
                             `;
 
-                        await client.query(insertQueryConnect)
+                            await client.query(insertQueryConnect)
+                        }
                     }
                     const oData = await client.query(`SELECT order_number FROM data.orders WHERE id='${res.rows[0].order_id}'`);
                     const combineOrderNumber = sessionId+'-'+oData.rows[0].order_number.replace(sessionId+'-', '');
