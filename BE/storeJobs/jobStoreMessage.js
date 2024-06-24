@@ -23,12 +23,14 @@ async function sessionLaunche() {
 
                     console.log(`Reply/Message comment ${message.message_id}: ${message.from_id}`);
                     if (message.from_id && orderFrom && message.parcer_status === true) {
-                        await axios(`${apiUrl}/api/check-user-to-stores?messageId=${message.message_id}&fromId=${message.from_id}&storeId=${message.store_id}`)
-                            .then((response) => {
+                        if (message.real_from_id) {
+                            await axios(`${apiUrl}/api/check-user-to-stores?messageId=${message.message_id}&fromId=${message.real_from_id}&storeId=${message.store_id}`)
+                                .then((response) => {
 
-                            }).catch((e) => {
-                                // console.log('error sending reply message', e,error.error.message);
-                            });
+                                }).catch((e) => {
+                                    // console.log('error sending reply message', e,error.error.message);
+                                });
+                        }
                         if (message.parcer_data.hasOwnProperty("sold")) {
                             lng = 'en';
                         }
