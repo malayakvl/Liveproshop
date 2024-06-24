@@ -29,7 +29,6 @@ async function sessionLaunche() {
                             }).catch((e) => {
                                 // console.log('error sending reply message', e,error.error.message);
                             });
-console.log('Kakogo hera tak medlenno')
                         if (message.parcer_data.hasOwnProperty("sold")) {
                             lng = 'en';
                         }
@@ -150,7 +149,7 @@ console.log('Kakogo hera tak medlenno')
                         console.log("Respionce send result", responceResultMessage.data);
 
 
-                        if (responceResultMessage.data.recipient_id) {
+                        if (responceResultMessage.data?.recipient_id) {
                             await axios.get(
                                 `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}&recipient_id=${responceResultMessage.data.recipient_id}`
                             )
