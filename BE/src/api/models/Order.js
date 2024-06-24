@@ -1378,7 +1378,6 @@ console.log('MS', multiOrderPaymentData);
     async connectThrowStore(messageId, fromId, storeId) {
         const client = await pool.connect();
         try {
-            // console.log(messageId, fromId);
             // find order by message and attach to current user
             const connetedQuery = `SELECT * FROM data.user2pages WHERE from_id='${fromId}' AND store_id=${storeId}`
             const connetedQueryRes = await client.query(connetedQuery);
@@ -1386,10 +1385,14 @@ console.log('MS', multiOrderPaymentData);
                 const userId = connetedQueryRes.rows[0].user_id;
                 // find order by message
                 const queryOrder = `SELECT data.orders.id FROM data.order_items LEFT JOIN 
-                data.orders ON data.orders.id = data.order_items.order_id 
-                WHERE message_id='${messageId}'`;
+                    data.orders ON data.orders.id = data.order_items.order_id 
+                    WHERE message_id='${messageId}'`;
                 const findedOrderRes = await client.query(queryOrder);
-                await client.query(`UPDATE data.orders SET user_id='${userId}'`)
+                console.log('Finded Order Info', findedOrderRes.rows[0]);
+                console.log('Update Orders');
+                console.log(`UPDATE data.orders SET user_id='${userId}' WHERE id='${findedOrderRes.rows[0].id}'`)
+
+                await client.query(`UPDATE data.orders SET user_id='${userId}' WHERE id='${findedOrderRes.rows[0].id}'`)
             }
             return { success: true };
         } catch (e) {

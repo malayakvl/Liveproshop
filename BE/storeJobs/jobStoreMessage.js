@@ -29,9 +29,7 @@ async function sessionLaunche() {
                             }).catch((e) => {
                                 // console.log('error sending reply message', e,error.error.message);
                             });
-
-
-
+console.log('Kakogo hera tak medlenno')
                         if (message.parcer_data.hasOwnProperty("sold")) {
                             lng = 'en';
                         }
@@ -163,7 +161,9 @@ async function sessionLaunche() {
                                     console.log(e);
                                 });
                         }
-                        console.log("AAAA", responceResultMessage.data.recipient_id);
+                        if (responceResultMessage.data.recipient_id) {
+                            console.log("AAAA", responceResultMessage.data.recipient_id);
+                        }
                     } else {
                         console.log('not parsed here ')
                         let string = message.message;
