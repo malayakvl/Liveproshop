@@ -23,6 +23,14 @@ async function sessionLaunche() {
 
                     console.log(`Reply/Message comment ${message.message_id}: ${message.from_id}`);
                     if (message.from_id && orderFrom && message.parcer_status === true) {
+                        if (message.real_from_id) {
+                            await axios(`${apiUrl}/api/check-user-to-stores?messageId=${message.message_id}&fromId=${message.real_from_id}&storeId=${message.store_id}`)
+                                .then((response) => {
+
+                                }).catch((e) => {
+                                    // console.log('error sending reply message', e,error.error.message);
+                                });
+                        }
                         if (message.parcer_data.hasOwnProperty("sold")) {
                             lng = 'en';
                         }
@@ -109,7 +117,6 @@ async function sessionLaunche() {
                                 });
 
                         } else {
-                            console.log('Product configured', message.configured);
                             if (message.configured && (!message.parcer_data.color && !message.parcer_data.size)) {
                                 msgText = `Sorry, we could not find the keyword (reference / size / color / etc.) you were asking for.\n\nHere are some examples of correct comments:\n\nSOLD 14 green\n\nSOLD 169 M\n\nSOLD 35 beige M\n\nPlease check that you have typed the keyword correctly.`;
                                 msgTextFr = `Désolés, nous n'avons pas pu trouver le mot clé (référence / taille / couleur / etc.) que vous demandiez.\n\nVoici quelques exemples de commentaires corrects:\n\nVENDU 14 vert\n\nVENDU 169 M\n\nVENDU 35 beige M\n\nMerci de vérifier que vous avez correctement tapé le mot-clé.`;
@@ -144,7 +151,7 @@ async function sessionLaunche() {
                         console.log("Respionce send result", responceResultMessage.data);
 
 
-                        if (responceResultMessage.data.recipient_id) {
+                        if (responceResultMessage.data?.recipient_id) {
                             await axios.get(
                                 `${apiUrl}/api/update-live-messages?comment_id=${orderFrom}&recipient_id=${responceResultMessage.data.recipient_id}`
                             )
@@ -155,7 +162,9 @@ async function sessionLaunche() {
                                     console.log(e);
                                 });
                         }
-                        console.log("AAAA", responceResultMessage.data.recipient_id);
+                        if (responceResultMessage.data.recipient_id) {
+                            console.log("AAAA", responceResultMessage.data.recipient_id);
+                        }
                     } else {
                         console.log('not parsed here ')
                         let string = message.message;
