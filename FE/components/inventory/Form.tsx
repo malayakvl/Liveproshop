@@ -237,11 +237,11 @@ function ProductForm({
                 if (tmpError.length > 0) {
                     setErrorConfigured(tmpError);
                 }
-                console.log('Error Config', errorConfig);
-                console.log('isIdent', isIdent);
+                // console.log('Error Config', errorConfig);
+                // console.log('isIdent', isIdent);
 
                 if (!isIdent && !errorConfig) {
-                    console.log('WTF');
+                    // console.log('WTF');
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
                         if (!['material_id', 'tags', 'description'].includes(key)) {
@@ -473,46 +473,39 @@ function ProductForm({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3, 4, 5].map(
-                                                                    (num: number) => (
-                                                                        <Fragment
-                                                                            key={`${size.id}_${num}`}>
-                                                                            {size[
-                                                                                `name_${num}`
-                                                                            ] && (
-                                                                                <td
-                                                                                    role="presentation"
-                                                                                    className="border p-2 cursor-pointer"
-                                                                                    onClick={() =>
-                                                                                        handleChangeSize(
-                                                                                            {
-                                                                                                value: size[
-                                                                                                    `id_${num}`
-                                                                                                ],
-                                                                                                label: size[
-                                                                                                    `name_${num}`
-                                                                                                ]
-                                                                                            },
-                                                                                            props
-                                                                                                .values
-                                                                                                .configured
-                                                                                        )
-                                                                                    }>
-                                                                                    {
-                                                                                        size[
-                                                                                            `name_${num}`
-                                                                                        ]
-                                                                                    }
-                                                                                </td>
-                                                                            )}
-                                                                            {!size[
-                                                                                `name_${num}`
-                                                                            ] && (
-                                                                                <td className="border p-2" />
-                                                                            )}
-                                                                        </Fragment>
-                                                                    )
-                                                                )}
+                                                                {[1, 4, 5].map((num: number) => (
+                                                                    <Fragment
+                                                                        key={`${size.id}_${num}`}>
+                                                                        {size[`name_${num}`] && (
+                                                                            <td
+                                                                                role="presentation"
+                                                                                className="border p-2 cursor-pointer"
+                                                                                onClick={() =>
+                                                                                    handleChangeSize(
+                                                                                        {
+                                                                                            value: size[
+                                                                                                `id_${num}`
+                                                                                            ],
+                                                                                            label: size[
+                                                                                                `name_${num}`
+                                                                                            ]
+                                                                                        },
+                                                                                        props.values
+                                                                                            .configured
+                                                                                    )
+                                                                                }>
+                                                                                {
+                                                                                    size[
+                                                                                        `name_${num}`
+                                                                                    ]
+                                                                                }
+                                                                            </td>
+                                                                        )}
+                                                                        {!size[`name_${num}`] && (
+                                                                            <td className="border p-2" />
+                                                                        )}
+                                                                    </Fragment>
+                                                                ))}
                                                             </tr>
                                                         )
                                                     )}
