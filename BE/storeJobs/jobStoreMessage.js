@@ -20,17 +20,17 @@ async function sessionLaunche() {
                     const orderFrom = message.message_id;
                     const x = message.parcer_data;
                     let lng = 'fr';
-
                     console.log(`Reply/Message comment ${message.message_id}: ${message.from_id}`);
+                    console.log(`In period: ${message.in_period === null ? 'no free period': 'free period'}`);
                     if (message.from_id && orderFrom && message.parcer_status === true) {
-                        if (message.real_from_id) {
-                            await axios(`${apiUrl}/api/check-user-to-stores?messageId=${message.message_id}&fromId=${message.real_from_id}&storeId=${message.store_id}`)
-                                .then((response) => {
-
-                                }).catch((e) => {
-                                    // console.log('error sending reply message', e,error.error.message);
-                                });
-                        }
+                        // if (message.real_from_id) {
+                        //     await axios(`${apiUrl}/api/check-user-to-stores?messageId=${message.message_id}&fromId=${message.real_from_id}&storeId=${message.store_id}`)
+                        //         .then((response) => {
+                        //
+                        //         }).catch((e) => {
+                        //             // console.log('error sending reply message', e,error.error.message);
+                        //         });
+                        // }
                         if (message.parcer_data.hasOwnProperty("sold")) {
                             lng = 'en';
                         }
@@ -63,8 +63,13 @@ async function sessionLaunche() {
                                 msgText = `We are sorry, but the product ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} is no longer available.\n\nIn order to be added to the waiting list and be notified, click on the following button CONFIRM`;
                                 msgTextFr = `Nous sommes désolés, mais le produit ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} n'est plus disponible.\n\nPour être rajouté(e) sur la liste d’attente et être averti(e) dès qu’il sera à nouveau disponible, CLIQUEZ sur le bouton suivant. CONFIRMER `;
                             } else {
-                                msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
-                                msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
+                                if (message.in_period === null) {
+                                    msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale`;
+                                    msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente`;
+                                } else {
+                                    msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
+                                    msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
+                                }
                             }
                             // we can parce message and find product
                             // msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/auth/signup?storeName=ahead_fashion&comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
