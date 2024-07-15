@@ -1389,7 +1389,10 @@ console.log('MS', multiOrderPaymentData);
                     WHERE message_id='${messageId}'`;
                 const findedOrderRes = await client.query(queryOrder);
 
-                await client.query(`UPDATE data.orders SET user_id='${userId}' WHERE id='${findedOrderRes.rows[0].id}'`)
+                await client.query(`UPDATE data.orders 
+                    SET user_id='${userId}', 
+                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
             }
             return { success: true };
         } catch (e) {
