@@ -74,6 +74,7 @@ class ProductController {
             }
             const dataProduct = req.body;
             const photos = [];
+            console.log(dataProduct);
             if (req.files.length > 0) {
                 req.files.forEach(file => {
                     photos.push(file.filename);

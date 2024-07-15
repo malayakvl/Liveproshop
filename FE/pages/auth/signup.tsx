@@ -241,9 +241,16 @@ export default function Signup({ locale }: { locale: string }) {
                                                 Il semble que vous utilisiez le navigateur intégré
                                                 de Facebook. Pour une meilleure expérience, veuillez
                                                 ouvrir ce lien dans votre navigateur par défaut:
-                                                Appuyez longuement sur le lien et choosiness
-                                                «Ocurrir dans Safari», ou ouvrez-le dans le
-                                                navigateur Chrome en copiant&nbsp;
+                                                <br />
+                                                1) Appuyez longuement sur le lien et choisir&nbsp;
+                                                <a
+                                                    className="underline text-yellow-500"
+                                                    href={`${incomingOrderLink}`}>
+                                                    «Ocurrir dans Safari»
+                                                </a>{' '}
+                                                <br />
+                                                2) Ou ouvrez-le dans le navigateur Chrome en
+                                                cliquant{' '}
                                                 <span
                                                     className="underline text-yellow-500"
                                                     dangerouslySetInnerHTML={{

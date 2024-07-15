@@ -45,18 +45,20 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                 <td>
                                     <div className="float-left">
                                         <div className="flex flex-row">
-                                            <div className="user-photo" style={{ marginLeft: '0' }}>
-                                                <Image
-                                                    src={
-                                                        item.buyer_photo
-                                                            ? baseApiUrl + item.buyer_photo
-                                                            : userProfileImg
-                                                    }
-                                                    width={24}
-                                                    height={24}
-                                                    className="rounded-full cursor-pointer"
-                                                    alt=""
-                                                />
+                                            <div
+                                                className="user-photo-1"
+                                                style={{ marginLeft: '0' }}>
+                                                {/*<Image*/}
+                                                {/*    src={*/}
+                                                {/*        item.buyer_photo*/}
+                                                {/*            ? baseApiUrl + item.buyer_photo*/}
+                                                {/*            : userProfileImg*/}
+                                                {/*    }*/}
+                                                {/*    width={24}*/}
+                                                {/*    height={24}*/}
+                                                {/*    className="rounded-full cursor-pointer"*/}
+                                                {/*    alt=""*/}
+                                                {/*/>*/}
                                             </div>
                                             <div className="pl-3">{item.buyer_first_name}</div>
                                         </div>
