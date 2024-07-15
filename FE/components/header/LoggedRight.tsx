@@ -36,6 +36,7 @@ const LoggedRight: React.FC = () => {
 
     useEffect(
         function () {
+            console.log(user?.photo);
             if (user?.photo) {
                 setUserPhoto(baseApiUrl + user?.photo);
             }
@@ -76,6 +77,7 @@ const LoggedRight: React.FC = () => {
         setShowProfileMenu(false);
     };
 
+    console.log('Profile Image', userProfileImg);
     return (
         <>
             <div className={`relative float-left`}>
@@ -86,17 +88,19 @@ const LoggedRight: React.FC = () => {
                         setShowProfileMenu(!showProfileMenu);
                     }}>
                     <span className="mt-1 inline-block">
-                        {/*{userPhoto}*/}
-                        <div
-                            className="profile-small-image"
-                            style={{ backgroundImage: `url(${userPhoto})` }}></div>
-                        {/*<Image*/}
-                        {/*    src={userPhoto}*/}
-                        {/*    width={24}*/}
-                        {/*    height={24}*/}
-                        {/*    className="rounded-full cursor-pointer"*/}
-                        {/*    alt=""*/}
-                        {/*/>*/}
+                        {/*{userPhoto && (*/}
+                        {/*    <div*/}
+                        {/*        className="profile-small-image"*/}
+                        {/*        style={{ backgroundImage: `url(${userPhoto})` }}></div>*/}
+                        {/*)}*/}
+
+                        <Image
+                            src={userPhoto}
+                            width={40}
+                            height={40}
+                            className="rounded-full cursor-pointer"
+                            alt=""
+                        />
                     </span>
                     <span className="profile-name">
                         {user.first_name || user.last_name ? user.first_name : user.email}

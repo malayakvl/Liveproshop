@@ -283,7 +283,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 <td className="">
                                     <div className="float-left">
                                         <div className="flex flex-row">
-                                            <div className="user-photo" style={{ marginLeft: '0' }}>
+                                            <div
+                                                className="user-photo-1"
+                                                style={{ marginLeft: '0' }}>
                                                 <Image
                                                     src={
                                                         item.buyer_photo
