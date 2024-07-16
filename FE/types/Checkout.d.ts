@@ -8,5 +8,7 @@ declare namespace Checkout {
         redirectUrl: string | null;
         paymentStatus: string | null;
         itemsWait: any[];
+        prevOrderAmount: number;
+        reloadOrderAfterCombine: boolean;
     }
 }

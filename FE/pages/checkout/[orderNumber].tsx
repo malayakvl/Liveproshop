@@ -329,7 +329,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                             {({ errors, touched }) => (
                                 <Form>
                                     <div className="flex flex-wrap justify-between">
-                                        {console.log(errors)}
+                                        {/*{console.log(errors)}*/}
                                         <div
                                             className="flex-auto lg:flex-1 relative"
                                             id="checkoutAddress">
@@ -387,13 +387,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                                     />
                                                 </>
                                             )}
-
-                                            {/*<div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">*/}
-                                            {/*    <div className="text-2xl font-bold text-gray-350 mb-6">*/}
-                                            {/*        {t('Payment  Method')}*/}
-                                            {/*    </div>*/}
-                                            {/*    <PaymentGuide />*/}
-                                            {/*</div>*/}
                                         </div>
 
                                         <div className="flex-auto lg:flex-1 white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 shadow-inner">

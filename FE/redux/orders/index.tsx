@@ -28,7 +28,9 @@ import {
     clearWaitOrderByCommentAction,
     setupConnectedStoreNameAction,
     openBrowserAction,
-    setGoogleDeepLinkAction
+    setGoogleDeepLinkAction,
+    setupOrderAmountAction,
+    reloadAfterCombineAction
 } from './actions';
 
 const initialState: {
@@ -56,6 +58,8 @@ const initialState: {
     redirectOrderNumber: any;
     storeName: any;
     googleBrowserLink: any;
+    prevOrderAmount: number;
+    reloadOrderAfterCombine: boolean;
 } = {
     isFetched: false,
     loading: false,
@@ -85,7 +89,9 @@ const initialState: {
     redirectCheckout: false,
     redirectOrderNumber: null,
     storeName: null,
-    googleBrowserLink: null
+    googleBrowserLink: null,
+    prevOrderAmount: 0,
+    reloadOrderAfterCombine: false
 };
 
 const ACTION_HANDLERS: any = {
@@ -290,8 +296,19 @@ const ACTION_HANDLERS: any = {
             ...state,
             googleBrowserLink: action.payload
         })
+    },
+    [setupOrderAmountAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            prevOrderAmount: action.payload
+        })
+    },
+    [reloadAfterCombineAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            reloadOrderAfterCombine: action.payload
+        })
     }
-
 };
 
 export {
@@ -322,7 +339,9 @@ export {
     clearWaitOrderByCommentAction,
     setupConnectedStoreNameAction,
     openBrowserAction,
-    setGoogleDeepLinkAction
+    setGoogleDeepLinkAction,
+    setupOrderAmountAction,
+    reloadAfterCombineAction
 };
 
 // ------------------------------------

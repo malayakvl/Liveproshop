@@ -597,3 +597,5 @@ export const redirectOrderNumberAction: any = createAction('orders/REDIRECT_ORDE
 export const setupConnectedOrderIdAction: any = createAction('orders/SETUP_CONNECTED_ORDER_ID');
 export const setupConnectedStoreNameAction: any = createAction('orders/SETUP_CONNECTED_STORE');
 export const setGoogleDeepLinkAction: any = createAction('orders/SET_GOOGLE_DEEP_LINK');
+export const setupOrderAmountAction: any = createAction('orders/SET_ORDER_AMOUNT');
+export const reloadAfterCombineAction: any = createAction('orders/RELOAD_AFTER_COMBINE');
