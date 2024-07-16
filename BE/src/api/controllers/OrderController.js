@@ -163,8 +163,6 @@ class OrderController {
     }
 
     async fetchOrderByComment (req, res) {
-        console.log("INCOMING QUERY COMMENT", req.query.commentId);
-        console.log("INCOMING USER FB ID", req.query.userFbEmail);
         const data = await orderModel.checkOrderStatus(req.query.commentId, req.query.userFbEmail);
         // console.log("FETCHED DATA", data);
         // console.log("INCOMING USER", req.query.commentId);

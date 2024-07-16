@@ -1384,15 +1384,99 @@ console.log('MS', multiOrderPaymentData);
             if (connetedQueryRes.rows.length > 0) {
                 const userId = connetedQueryRes.rows[0].user_id;
                 // find order by message
-                const queryOrder = `SELECT data.orders.id FROM data.order_items LEFT JOIN 
+                const queryOrder = `SELECT data.orders.id, 
+                    data.orders.live_sessions_id, data.orders.order_amount, 
+                    data.orders.total_amount
+                    FROM data.order_items LEFT JOIN 
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
                 const findedOrderRes = await client.query(queryOrder);
+                await client.query(`UPDATE data.orders
+                    SET user_id='${userId}',
+                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
+console.log('HERE WE ARE connectThrowStore');
 
+
+                // check if we have non payed order
+                const existNonPayedOrder = await client.query(
+                    `SELECT data.orders.id, data.orders.order_number, 
+                                        data.orders.order_amount, data.orders.total_amount,
+                                        data.orders.live_sessions_id FROM data.orders 
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                                        LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id   
+                                        WHERE data.orders.user_id='${userId}'
+                                        AND data.orders.status='new' AND data.orders.id != '${findedOrderRes.rows[0].id}'
+                                        AND live_sessions_id='${findedOrderRes.rows[0].live_sessions_id}' 
+                                        AND status_waiting IS NULL`);
+                let orderId, orderNumber;
+                if (existNonPayedOrder.rows[0]?.id) {
+                    orderNumber = existNonPayedOrder.rows[0].order_number;
+                    orderId = existNonPayedOrder.rows[0].id;
+                    // before add new items check if this item already aexist in order, if yes only change quantity
+                    const updateExistItemsSQL = `UPDATE data.order_items SET 
+                        order_id='${existNonPayedOrder.rows[0].id}' 
+                        WHERE order_id='${findedOrderRes.rows[0].id}' AND status IS NULL `;
+
+                    await client.query(updateExistItemsSQL);
+                    // update amounts for order splited order
+                    const updateAmountSQL = `UPDATE data.orders 
+                        SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
+                        total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
+                        sync_at=now()
+                        WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                    await client.query(updateAmountSQL);
+
+                    // delete unused order
+                    await client.query(`DELETE FROM data.orders 
+                        WHERE id='${findedOrderRes.rows[0].id}'`);
+
+                    // combined same rows in order_items
+                    const combinedSQL = await client.query(`
+                        SELECT product_configuration_id, SUM(quantity) AS resultsQty
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id`);
+                    const realOrderItems = await client.query(`SELECT id 
+                    FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
+                    // need to combine two rows into one
+                    if (combinedSQL.rows.length < realOrderItems.rows.length) {
+                        const combinedData = [];
+                        combinedSQL.rows.forEach(_item => {
+                            combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
+                        })
+                        const _dataResCombine = await client.query(`SELECT product_configuration_id, 
+                        SUM(quantity) AS resultsQty, array_agg(id) as products
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id;`)
+                        _dataResCombine.rows.forEach(_row => {
+                            if (_row.products.length > 1) {
+                                _row.products.forEach(async (_itemId, _key) => {
+                                    console.log(_key)
+                                    if (_key > 0) {
+                                        await client.query(`DELETE FROM data.order_items WHERE id='${_itemId}'`);
+                                    }
+                                })
+                            }
+                        });
+                        // update quantity for order items row
+                        combinedData.forEach(async (_item) => {
+                            await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
+                        WHERE product_configuration_id='${_item.config_id}'`)
+                        });
+                    }
+                }
                 await client.query(`UPDATE data.orders 
                     SET user_id='${userId}', 
                         sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
-                    WHERE id='${findedOrderRes.rows[0].id}'`)
+                    WHERE id='${existNonPayedOrder.rows[0].id}'`)
+
+
+                // await client.query(`UPDATE data.orders
+                //     SET user_id='${userId}',
+                //         sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                //     WHERE id='${findedOrderRes.rows[0].id}'`)
             }
             return { success: true };
         } catch (e) {
