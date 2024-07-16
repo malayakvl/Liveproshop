@@ -30,7 +30,9 @@ import {
     openBrowserAction,
     setGoogleDeepLinkAction,
     setupOrderAmountAction,
-    reloadAfterCombineAction
+    fetchOrderTotalAmountAction,
+    fetchOrderTotalAmountActionUpdated,
+    reloadAfterCombineAction, setupOrderAmountUpdatedAction
 } from './actions';
 
 const initialState: {
@@ -59,6 +61,7 @@ const initialState: {
     storeName: any;
     googleBrowserLink: any;
     prevOrderAmount: number;
+    currOrderAmount: number;
     reloadOrderAfterCombine: boolean;
 } = {
     isFetched: false,
@@ -91,6 +94,7 @@ const initialState: {
     storeName: null,
     googleBrowserLink: null,
     prevOrderAmount: 0,
+    currOrderAmount: 0,
     reloadOrderAfterCombine: false
 };
 
@@ -303,6 +307,12 @@ const ACTION_HANDLERS: any = {
             prevOrderAmount: action.payload
         })
     },
+    [setupOrderAmountUpdatedAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            currOrderAmount: action.payload
+        })
+    },
     [reloadAfterCombineAction]: {
         next: (state: State.Orders, action: Action<any>): State.Orders => ({
             ...state,
@@ -341,7 +351,9 @@ export {
     openBrowserAction,
     setGoogleDeepLinkAction,
     setupOrderAmountAction,
-    reloadAfterCombineAction
+    fetchOrderTotalAmountAction,
+    reloadAfterCombineAction,
+    fetchOrderTotalAmountActionUpdated
 };
 
 // ------------------------------------

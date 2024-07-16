@@ -30,7 +30,7 @@ class CheckoutController {
         // console.log("wait products", orderItemsWait);
         // get latest order amount
         const freeSheppingData = await orderModel.isFreeShipping(req.user.id, orderNumber);
-        console.log('SHIPPING PARAMS', freeSheppingData);
+// console.log('SHIPPING PARAMS', freeSheppingData);
 
         // const orderItems = await checkoutModel.fetchOrderItems(orderData.or);
         const address = await userModel.findUserAddress(req.user.id);

@@ -531,29 +531,68 @@ export const openBrowserAction: any = createAction(
                 )
                 .then(async (data: any) => {
                     console.log('Returned data try shell', data);
-                    // data.data.shellObject.exec(
-                    //     `open -a Safari https://liveproshop.com/en/`,
-                    //     function (code: any, output: any) {
-                    //         console.log('Exit code:', code);
-                    //         console.log('Program output:', output);
-                    //     }
-                    // );
-                    // dispatch(
-                    //     setSuccessToastAction(`Record has been ${isNew ? 'updated' : 'created'}`)
-                    // );
-                    // dispatch(setEmptyFormAction());
-                    // dispatch(fetchItemsAction());
-                    // dispatch(showPopupAction(false));
                     dispatch(showLoaderAction(false));
-                    // toggleModalPopup('.modal-schedule');
-
-
-                    // sold 120 white m 2
-                    // sold 119 black m 1
-                    // sold 116 red xl 1
                 });
         }
 );
+export const fetchOrderTotalAmountAction: any = createAction(
+    'orders/FETCH_ORDER_TOTAL_AMOUNT',
+    async (orderNumber: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/fetch-total-amount?orderNumber=${orderNumber}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    dispatch(setupOrderAmountAction(res.data.total_amount));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const fetchOrderTotalAmountActionUpdated: any = createAction(
+    'orders/FETCH_ORDER_TOTAL_AMOUNT_TIMER',
+    async (orderNumber: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/fetch-total-amount?orderNumber=${orderNumber}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    dispatch(setupOrderAmountUpdatedAction(res.data.total_amount));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+// export const fetchOrderTotalAmountAction: any = createAction(
+//     'orders/FETCH_ORDER_TOTAL_AMOUNT',
+//     async (orderId: number) =>
+//         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+//             const state = getState();
+//             dispatch(showLoaderAction(true));
+//             return axios
+//                 .get(
+//                     `${baseUrl}/orders/fetch-total-amount?orderId=${orderId}`,
+//                     {},
+//                     {
+//                         headers: {
+//                             ...authHeader(state.user.user.email)
+//                         }
+//                     }
+//                 )
+//                 .then(async (data: any) => {
+//                     console.log('Order Amount Total', data.total_amount);
+//                     dispatch(setupOrderAmountAction(data.total_amount));
+//                     dispatch(showLoaderAction(false));
+//                 });
+//         }
+// );
+
 
 // export const demoveItemOrderAction: any = createAction(
 //     'order/REMOVE_ITEM_ACTION',
@@ -598,4 +637,6 @@ export const setupConnectedOrderIdAction: any = createAction('orders/SETUP_CONNE
 export const setupConnectedStoreNameAction: any = createAction('orders/SETUP_CONNECTED_STORE');
 export const setGoogleDeepLinkAction: any = createAction('orders/SET_GOOGLE_DEEP_LINK');
 export const setupOrderAmountAction: any = createAction('orders/SET_ORDER_AMOUNT');
+export const setupOrderAmountUpdatedAction: any = createAction('orders/SET_ORDER_AMOUNT_TIMER');
 export const reloadAfterCombineAction: any = createAction('orders/RELOAD_AFTER_COMBINE');
+// export const fetchOrderTotalAmountAction: any = createAction('orders/FETCH_ORDER_TOTAL');

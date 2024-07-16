@@ -26,6 +26,7 @@ declare namespace Orders {
         storeName: any;
         googleBrowserLink: any;
         prevOrderAmount: number;
+        currOrderAmount: number;
         reloadOrderAfterCombine: boolean;
     }
 

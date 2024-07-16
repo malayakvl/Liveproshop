@@ -260,6 +260,16 @@ class OrderController {
         // return res.status(200).json({ success: true, orderNumber: null });
     }
 
+    async fetchTotalAmount(req, res) {
+        console.log('Order Number', req.query.orderNumber);
+        if (req.user) {
+           const orderNumber = req.query.orderNumber;
+           const resQuery = await orderModel.fetchTotal(orderNumber);
+           return res.status(200).json({ success: true, total_amount: resQuery.data.order_amount });
+        }
+        return res.status(200).json({ success: true, total_amount: 0 });
+    }
+
     async findWaitOrderById (req, res) {
         if (req.user) {
             console.log('getting wait order by id', req.query.orderId);

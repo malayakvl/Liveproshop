@@ -36,7 +36,6 @@ const LoggedRight: React.FC = () => {
 
     useEffect(
         function () {
-            console.log(user?.photo);
             if (user?.photo) {
                 setUserPhoto(baseApiUrl + user?.photo);
             }
@@ -77,7 +76,6 @@ const LoggedRight: React.FC = () => {
         setShowProfileMenu(false);
     };
 
-    console.log('Profile Image', userProfileImg);
     return (
         <>
             <div className={`relative float-left`}>
