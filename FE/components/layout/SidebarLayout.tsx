@@ -121,7 +121,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             {user.role_id === 2 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
             <div
-                className={`relative ml-0 h-full mt-2 pb-2 md:mt-0 md:mb-10 md:pl-4 md:mr-8 ${
+                className={`relative ml-0 mt-2 pb-2 md:mt-0 md:mb-10 md:pl-4 md:mr-8 ${
                     !isSidebarOpen ? 'side-margin' : 'side-with-sidebar'
                 }`}>
                 <div className="absolute md:hidden flex items-center">
