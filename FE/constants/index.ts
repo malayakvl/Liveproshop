@@ -95,20 +95,17 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     [PaginationType.ORDERS]: [
         { iconClass: 'icon-tbl-triangle' },
         { sortKey: 'orders.order_number', iconClass: 'icon-tbl-order' },
+        { titleKey: '' },
         { sortKey: 'orders.status', iconClass: 'icon-tbl-status' },
         { sortKey: '', iconClass: 'icon-tbl-historystatus', titleKey: '' },
         { sortKey: '', iconClass: 'icon-tbl-pdf', titleKey: '' },
         { sortKey: 'orders.created_at', iconClass: 'icon-tbl-date' },
         { sortKey: 'users__buyer.first_name', titleKey: 'Shoppers', iconClass: 'icon-tbl-users' },
         { sortKey: 'countries.iso', iconClass: 'icon-tbl-country' },
-        // { sortKey: 'orders.shipping_id', iconClass: 'icon-tbl-sh-cart' },
         { sortKey: 'shipping.name', iconClass: 'icon-tbl-sh-cart' },
         { sortKey: 'payments.name', iconClass: 'icon-tbl-card' },
         { titleKey: 'Products' },
-        // { titleKey: 'Store Name' },
-        // { iconClass: 'icon-tbl-total', titleKey: 'Shipping/Refund' },
-        { iconClass: 'icon-tbl-total', sortKey: 'orders.order_amount', titleKey: 'Total' },
-        { titleKey: '' }
+        { iconClass: 'icon-tbl-total', sortKey: 'orders.order_amount', titleKey: 'Total' }
     ],
     [PaginationType.SELLERS]: [
         // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
