@@ -65,6 +65,7 @@
     "react-select": "^5.2.1",
     "react-spring": "^8.0.27",
     "react-tag-autocomplete": "^6.3.0",
+    "react-zoom-pan-pinch": "^3.6.1",
     "redux": "^4.1.2",
     "redux-actions": "^2.6.5",
     "redux-logger": "^3.0.6",
