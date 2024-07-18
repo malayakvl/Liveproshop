@@ -18,6 +18,7 @@ export const fetchCheckoutAction: any = createAction(
             order: Orders.DataItem;
             address: Profile.Address;
             shippingMethods: ShippingMethod[];
+            prevOrderAmount: number;
         }> => {
             const state = getState();
             dispatch(showLoaderAction(true));
@@ -34,12 +35,12 @@ export const fetchCheckoutAction: any = createAction(
                 )
                 .then((res: any) => {
                     dispatch(showLoaderAction(false));
-                    console.log(res.data);
                     return {
                         order: res.data.order,
                         address: res.data.address,
                         shippingMethods: res.data.shippingMethods,
-                        itemsWait: res.data.orderItemsWait.productsWaiting
+                        itemsWait: res.data.orderItemsWait.productsWaiting,
+                        prevOrderAmount: res.data.order.total_amount
                     };
                 });
         }

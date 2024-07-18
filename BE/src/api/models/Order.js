@@ -1223,6 +1223,26 @@ console.log('MS', multiOrderPaymentData);
         }
     }
 
+    async fetchTotal (orderNumber) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.orders WHERE order_number = '${orderNumber}';`;
+            const res = await client.query(SQL);
+            return {success: true, error: null, data: res.rows[0]};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
 
     async checkOrderStatus (messageId) {
         const client = await pool.connect();
@@ -2240,15 +2260,15 @@ console.log('WE ARE NOT IN PERIOD');
                 const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
                 const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
                 const inPeriod = compareDate.isBetween(startDate, endDate);
-console.log(1, amountPayed);
-console.log(2, currOrder.rows[0].order_amount);
+// console.log(1, amountPayed);
+// console.log(2, currOrder.rows[0].order_amount);
 
 
                 sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currOrder.rows[0].live_sessions_id}`);
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
                 let isFree = false;let refundAmountNew = 0;
-console.log('in period', inPeriod)
+// console.log('in period', inPeriod)
                 if (inPeriod) {
                     console.log('TYT', parseFloat(currOrder.rows[0].order_amount)+amountPayed)
                     // order already more therehold

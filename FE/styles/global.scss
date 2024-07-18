@@ -5,6 +5,10 @@
 @import "tailwindcss/utilities";
 @import "tailwindcss/screens";
 
+html {
+  scroll-behaviour: smooth;
+}
+
 @layer utilities {
   .rainbow-gradient-text {
     background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);

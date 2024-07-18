@@ -21,7 +21,10 @@ import {
     clearWaitOrderByCommentAction,
     redirectCheckoutAction,
     redirectOrderNumberAction,
-    setupReturnedUrlAction
+    setupReturnedUrlAction,
+    setupOrderAmountAction,
+    fetchOrderTotalAmountAction,
+    fetchOrderTotalAmountActionUpdated
 } from '../../redux/orders';
 
 import { Formik, Form } from 'formik';
@@ -31,6 +34,7 @@ import Link from 'next/link';
 import { userSelector } from '../../redux/user/selectors';
 import { showEmailNotificationAction } from '../../redux/layouts';
 import { expireOrderAction } from '../../redux/orders/actions';
+import { prevOrderAmountSelector, timerOrderAmountSelector } from '../../redux/orders/selectors';
 
 export default function Index({ session, locale }: { session: any; locale: any }) {
     if (!session) return null;
@@ -46,6 +50,8 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const redirectMerchantUrl = useSelector(redirectMerchantUrlSelector);
     const address = useSelector(addressCheckoutSelector);
     const shippingMethods = useSelector(shippingMethodsCheckoutSelector);
+    const prevOrderAmount = useSelector(prevOrderAmountSelector);
+    const timerOrderAmount = useSelector(timerOrderAmountSelector);
 
     const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
     const NOW_IN_MS = new Date().getTime();
@@ -89,6 +95,12 @@ export default function Index({ session, locale }: { session: any; locale: any }
         }
     }, 1000);
 
+    const y = setInterval(function () {
+        if (order?.order_number) {
+            dispatch(fetchOrderTotalAmountActionUpdated(order.order_number));
+        }
+    }, 2000);
+
     const DateTimeDisplay = ({
         value,
         type,
@@ -117,8 +129,20 @@ export default function Index({ session, locale }: { session: any; locale: any }
     };
 
     useEffect(() => {
+        if (timerOrderAmount > 0 && prevOrderAmount && timerOrderAmount != prevOrderAmount) {
+            if (parseFloat(prevOrderAmount) != parseFloat(timerOrderAmount)) {
+                dispatch(setupOrderAmountAction(timerOrderAmount));
+                window.location.reload();
+            }
+        }
+    }, [prevOrderAmount, timerOrderAmount]);
+
+    useEffect(() => {
         if (order.status == 'expired') {
             setTimerExpire(true);
+        }
+        if (order?.order_number) {
+            dispatch(fetchOrderTotalAmountAction(order.order_number));
         }
     }, [order]);
 
@@ -150,9 +174,9 @@ export default function Index({ session, locale }: { session: any; locale: any }
         }
     }, [redirectMerchantUrl]);
 
-    useEffect(() => {
-        console.log('Check timer if leave page');
-    });
+    // useEffect(() => {
+    //     console.log('Check timer if leave page');
+    // });
 
     const validationSchema = Yup.object({
         first_name: Yup.string()
@@ -329,7 +353,7 @@ export default function Index({ session, locale }: { session: any; locale: any }
                             {({ errors, touched }) => (
                                 <Form>
                                     <div className="flex flex-wrap justify-between">
-                                        {console.log(errors)}
+                                        {/*{console.log(errors)}*/}
                                         <div
                                             className="flex-auto lg:flex-1 relative"
                                             id="checkoutAddress">
@@ -387,13 +411,6 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                                     />
                                                 </>
                                             )}
-
-                                            {/*<div className="white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10">*/}
-                                            {/*    <div className="text-2xl font-bold text-gray-350 mb-6">*/}
-                                            {/*        {t('Payment  Method')}*/}
-                                            {/*    </div>*/}
-                                            {/*    <PaymentGuide />*/}
-                                            {/*</div>*/}
                                         </div>
 
                                         <div className="flex-auto lg:flex-1 white-shadow-medium bg-white rounded-lg p-3 lg:p-6 ml-4 lg:ml-8 mt-10 shadow-inner">

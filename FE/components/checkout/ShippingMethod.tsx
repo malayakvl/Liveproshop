@@ -31,7 +31,6 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
     const showEmailNotice = useSelector(showEmailNoticeSelector);
     // const showEmailNotice = true;
     if (shippingMethods.length === 0 && address.country_id) {
-        console.log('NEED TO GET METHODS');
         dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
     }
 
@@ -40,8 +39,6 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
             setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false);
         }
     }, [shippingMethods]);
-
-    console.log(shippingMethods);
 
     return !shippingMethods.length ? null : (
         <div className={className}>

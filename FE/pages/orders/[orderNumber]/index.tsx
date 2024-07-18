@@ -10,7 +10,9 @@ import Head from 'next/head';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const base64toBlob = (data: string) => {
     // Cut the prefix `data:application/pdf;base64` from the raw base 64
@@ -38,6 +40,7 @@ export default function Index({ locale }: { locale: string }) {
 
     const [url, setUrl] = useState('');
     const [blobData, setBlobData] = useState<any>(null);
+    // const { instance, zoomIn, zoomOut, ...rest } = useControls();
 
     const {
         query: { orderNumber, type, backroute }
@@ -128,14 +131,81 @@ export default function Index({ locale }: { locale: string }) {
                             </Link>
                         </>
                     )}
-                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
-                        <div style={{ height: '750px' }}>
-                            <Viewer
-                                fileUrl={url}
-                                // plugins={[defaultLayoutPluginInstance]}
-                            />
-                        </div>
-                    </Worker>
+                    <TransformWrapper initialScale={1} initialPositionX={0} initialPositionY={0}>
+                        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                            <React.Fragment>
+                                <div className="tools block text-center mt-3">
+                                    <div>
+                                        <button
+                                            onClick={() => zoomIn()}
+                                            className="btn gradient-btn mr-2">
+                                            <Image
+                                                src="/images/pdf-icons/zoomIn.svg"
+                                                width="20"
+                                                height="20"
+                                            />
+                                        </button>
+                                        <button
+                                            onClick={() => zoomOut()}
+                                            className="btn gradient-btn mr-2">
+                                            <Image
+                                                src="/images/pdf-icons/zoomOut.svg"
+                                                width="20"
+                                                height="20"
+                                            />
+                                        </button>
+                                        <button
+                                            onClick={() => resetTransform()}
+                                            className="btn gradient-btn">
+                                            <Image
+                                                src="/images/pdf-icons/reset.svg"
+                                                width="20"
+                                                height="20"
+                                            />
+                                        </button>
+                                    </div>
+                                </div>
+                                <TransformComponent>
+                                    <div
+                                        style={{
+                                            width: 'calc(100vw)',
+                                            marginTop: '50px'
+                                        }}>
+                                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
+                                            <div style={{ height: '750px' }}>
+                                                <Viewer
+                                                    fileUrl={url}
+                                                    // plugins={[defaultLayoutPluginInstance]}
+                                                />
+                                            </div>
+                                        </Worker>
+                                    </div>
+                                </TransformComponent>
+                            </React.Fragment>
+                        )}
+                    </TransformWrapper>
+                    {/*<TransformWrapper>*/}
+                    {/*    <TransformComponent>*/}
+                    {/*        <div style={{ border: 'solid 1px', width: '370px', marginTop: '50px' }}>*/}
+                    {/*            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">*/}
+                    {/*                <div style={{ height: '750px' }}>*/}
+                    {/*                    <Viewer*/}
+                    {/*                        fileUrl={url}*/}
+                    {/*                        // plugins={[defaultLayoutPluginInstance]}*/}
+                    {/*                    />*/}
+                    {/*                </div>*/}
+                    {/*            </Worker>*/}
+                    {/*        </div>*/}
+                    {/*    </TransformComponent>*/}
+                    {/*</TransformWrapper>*/}
+                    {/*<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">*/}
+                    {/*    <div style={{ height: '750px' }}>*/}
+                    {/*        <Viewer*/}
+                    {/*            fileUrl={url}*/}
+                    {/*            // plugins={[defaultLayoutPluginInstance]}*/}
+                    {/*        />*/}
+                    {/*    </div>*/}
+                    {/*</Worker>*/}
                     {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                     {/*<span className="cursor-pointer scroll-button " onClick={() => scrollToTop()}>Click to top</span>*/}
                 </div>

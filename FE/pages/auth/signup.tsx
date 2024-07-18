@@ -238,19 +238,20 @@ export default function Signup({ locale }: { locale: string }) {
                                         )}
                                         {locale == 'fr' && (
                                             <>
-                                                Il semble que vous utilisiez le navigateur intégré
-                                                de Facebook. Pour une meilleure expérience, veuillez
+                                                l semble que vous utilisiez le navigateur intégré de
+                                                Facebook. Pour une meilleure expérience, veuillez
                                                 ouvrir ce lien dans votre navigateur par défaut:
                                                 <br />
-                                                1) Appuyez longuement sur le lien et choisir&nbsp;
+                                                1) Appuyez longuement sur le lien et choisir «Ouvrir
+                                                dans Safari»
                                                 <a
                                                     className="underline text-yellow-500"
                                                     href={`${incomingOrderLink}`}>
-                                                    «Ocurrir dans Safari»
+                                                    LE LIEN
                                                 </a>{' '}
                                                 <br />
                                                 2) Ou ouvrez-le dans le navigateur Chrome en
-                                                cliquant{' '}
+                                                cliquant
                                                 <span
                                                     className="underline text-yellow-500"
                                                     dangerouslySetInnerHTML={{

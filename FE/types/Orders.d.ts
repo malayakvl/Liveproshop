@@ -25,9 +25,13 @@ declare namespace Orders {
         redirectOrderNumber: any;
         storeName: any;
         googleBrowserLink: any;
+        prevOrderAmount: number;
+        currOrderAmount: number;
+        reloadOrderAfterCombine: boolean;
     }
 
     interface DataItem {
+        name: any;
         order_items_count: number;
         id: number;
         live_sessions_id: number;

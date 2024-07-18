@@ -673,6 +673,7 @@
   "Days": "Jours",
   "Hours": "Heures",
   "Minutes": "Minutes",
-  "Seconds": "Secondes"
+  "Seconds": "Secondes",
+  "text_download_order": "Pour télécharger la facture, cliquez sur le numéro de commande."
 
 }

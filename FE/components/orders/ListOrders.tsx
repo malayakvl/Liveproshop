@@ -196,11 +196,11 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 </td>
                                 <td
                                     className={`${
-                                        user.role_id === 1 && item.status_waiting
+                                        user.role_id === 2 && item.status_waiting
                                             ? ''
                                             : 'order-number'
                                     }`}>
-                                    {user.role_id === 1 && !item.status_waiting && (
+                                    {user.role_id === 2 && !item.status_waiting && (
                                         <>
                                             <Link
                                                 href={`/orders/${item.order_number}?locale=${locale}`}>
@@ -208,26 +208,48 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             </Link>
                                         </>
                                     )}
-                                    {user.role_id === 1 && item.status_waiting && (
+                                    {user.role_id === 2 && item.status_waiting && (
                                         <span
                                             className="f-12 number-waiting"
                                             style={{ color: 'black !important' }}>
                                             {item.order_number}
                                         </span>
                                     )}
-                                    {user.role_id === 2 && item.status === 'new' && (
+                                    {user.role_id === 1 && item.status === 'new' && (
                                         <>
                                             <Link href={`/checkout/${item.order_number}`}>
                                                 <a>{item.order_number}</a>
                                             </Link>
                                         </>
                                     )}
-                                    {user.role_id === 2 && item.status !== 'new' && (
+                                    {user.role_id === 1 && item.status !== 'new' && (
                                         <Link href={`/orders/${item.order_number}`}>
                                             <a>{item.order_number}</a>
                                         </Link>
                                     )}
                                 </td>
+                                {user.role_id === 1 &&
+                                    item.status === 'new' &&
+                                    item.total_amount != 0 && (
+                                        <td style={{ paddingTop: 0, paddingBottom: 0 }}>
+                                            {!item.status_waiting && (
+                                                <Link
+                                                    href={`/checkout/${item.order_number}?storeName=${item.name}`}>
+                                                    <div
+                                                        className="gradient-btn-small cursor-pointer"
+                                                        style={{
+                                                            paddingTop: '3px',
+                                                            paddingBottom: '3px',
+                                                            minWidth: '60px'
+                                                        }}>
+                                                        <span className="text-white bg-none font-bold">
+                                                            {t('Pay')}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            )}
+                                        </td>
+                                    )}
                                 <td className="order-status">
                                     <div className="flex flex-row items-center justify-center">
                                         {!item.status_waiting ? (
@@ -331,13 +353,6 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     {item.order_items?.length ? item.order_items?.length : 0}x{' '}
                                     <span className="red-yellow-gradient-text">product (s)</span>
                                 </td>
-                                {/*<td>{item.name}</td>*/}
-                                {/*<td>*/}
-                                {/*    {formatCurrency(*/}
-                                {/*        item.shipping_amount ? item.shipping_amount : 0*/}
-                                {/*    )}{' '}*/}
-                                {/*    / {formatCurrency(item.refund_amount ? item.refund_amount : 0)}*/}
-                                {/*</td>*/}
                                 <td>
                                     {formatCurrency(
                                         parseFloat(item.total_amount) -
@@ -349,29 +364,6 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             )
                                     )}
                                 </td>
-
-                                {user.role_id === 1 &&
-                                    item.status === 'new' &&
-                                    item.total_amount != 0 && (
-                                        <td style={{ paddingTop: 0, paddingBottom: 0 }}>
-                                            {!item.status_waiting && (
-                                                <Link
-                                                    href={`/checkout/${item.order_number}?storeName=${item.name}`}>
-                                                    <div
-                                                        className="gradient-btn-small cursor-pointer"
-                                                        style={{
-                                                            paddingTop: '3px',
-                                                            paddingBottom: '3px',
-                                                            minWidth: '60px'
-                                                        }}>
-                                                        <span className="text-white bg-none font-bold">
-                                                            {t('Pay')}
-                                                        </span>
-                                                    </div>
-                                                </Link>
-                                            )}
-                                        </td>
-                                    )}
                             </tr>
                             <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
                                 <td />
