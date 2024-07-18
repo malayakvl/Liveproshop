@@ -33,7 +33,7 @@ export default function MainLayout({ children }: { children: any }) {
                     );
                 }
                 if (window.localStorage.getItem('orderWaitCommentId')) {
-                    console.log('EEEEEE', window.localStorage.getItem('orderWaitCommentId'));
+                    // console.log('EEEEEE', window.localStorage.getItem('orderWaitCommentId'));
                     dispatch(
                         fetchUserOrderWaitAction(
                             session?.user.email,
@@ -42,7 +42,7 @@ export default function MainLayout({ children }: { children: any }) {
                     );
                 }
             } else {
-                console.log('BBBBBB', commentId);
+                // console.log('BBBBBB', commentId);
                 const localUser = JSON.parse(window.localStorage.getItem('user') || '{}');
                 // console.log('SESSION EMAIL', session?.user?.email);
                 // console.log('LOCAL EMAIL', localUser.email);
@@ -102,32 +102,36 @@ export default function MainLayout({ children }: { children: any }) {
     );
 
     return (
-        <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased text-black">
-            {children}
-            <CookieConsent
-                location="top"
-                buttonText={t('Accept Cookies')}
-                declineButtonText={t('Decline Cookes')}
-                cookieName="myAwesomeCookieName2"
-                style={{ background: '#FFF' }}
-                buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
-                buttonWrapperClasses={'cookies-btn-block'}
-                enableDeclineButton
-                expires={150}>
-                <div className="cookie-text">
-                    <span>
-                        {t('cookie_text')}
-                        <em>
-                            <Link href={'/privacy'}>
-                                <a className="red-yellow-gradient-text" target="_blank">
-                                    {t('cookie_policy_link')}
-                                </a>
-                            </Link>
-                        </em>
-                    </span>
-                </div>
-                {/*<span style={{ fontSize: '10px' }}>This bit of text is smaller :O</span>*/}
-            </CookieConsent>
+        <div className="overflow-hidden">
+            <div
+                className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased text-black pb-[300px]"
+                id="contentLayoutMain">
+                {children}
+                <CookieConsent
+                    location="top"
+                    buttonText={t('Accept Cookies')}
+                    declineButtonText={t('Decline Cookes')}
+                    cookieName="myAwesomeCookieName2"
+                    style={{ background: '#FFF' }}
+                    buttonStyle={{ color: '#4e503b', fontSize: '13px' }}
+                    buttonWrapperClasses={'cookies-btn-block'}
+                    enableDeclineButton
+                    expires={150}>
+                    <div className="cookie-text">
+                        <span>
+                            {t('cookie_text')}
+                            <em>
+                                <Link href={'/privacy'}>
+                                    <a className="red-yellow-gradient-text" target="_blank">
+                                        {t('cookie_policy_link')}
+                                    </a>
+                                </Link>
+                            </em>
+                        </span>
+                    </div>
+                    {/*<span style={{ fontSize: '10px' }}>This bit of text is smaller :O</span>*/}
+                </CookieConsent>
+            </div>
         </div>
     );
 }
