@@ -23,6 +23,22 @@ class OrderController {
         }
     }
 
+    /**
+     *
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
+    async fetchLiveItems(req, res) {
+        const { limit, offset, queryFilter, column, sort } = req.query;
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        } else {
+            const data = await orderModel.fetchLiveItems(1, limit, req.user, false, offset, queryFilter, column, sort);
+            return res.status(200).json({ count: data.size, items: data.items ? data.items : [], itemsStatuses: data.grouppedStatuses});
+        }
+    }
+
 
     async fetchFilters (req, res) {
         if (!req.user) {
@@ -272,18 +288,18 @@ class OrderController {
 
     async findWaitOrderById (req, res) {
         if (req.user) {
-            console.log('getting wait order by id', req.query.orderId);
+            // console.log('getting wait order by id', req.query.orderId);
             const tmpWait = req.query.orderId?.split('_');
             let data;
             if (req.query.orderId?.hasOwnProperty('_')) {
                 data = await orderModel.findWaitByCommentId(req.query.orderId, req.user.id);
             } else {
-                console.log("here we are search by order id");
+                // console.log("here we are search by order id");
                 data = await orderModel.findWaitById(req.query.orderId, req.user.id);
             }
 
             // const data = await orderModel.findWaitById(req.query.orderId, req.user.id);
-            console.log('here wa are', data);
+            // console.log('here wa are', data);
             return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         }
         return res.status(200).json({ success: true, orderNumber: null });

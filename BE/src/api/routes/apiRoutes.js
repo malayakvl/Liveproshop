@@ -168,6 +168,7 @@ apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllAct
 
 apiRoutes.route('/orders/connect-bycomment').get(OrderController.fetchOrderByComment);
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
+apiRoutes.route('/orders/fetch-live-items').get(OrderController.fetchLiveItems);
 apiRoutes.route('/orders/fetch-waiting-items').get(OrderController.fetchWaitingList);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
 apiRoutes.route('/create-order/:id/:locale/:type').get(OrderController.generateInvoice);

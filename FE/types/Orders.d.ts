@@ -2,6 +2,7 @@ declare namespace Orders {
     interface Root {
         count: number;
         items: DataItem[];
+        liveItems: DataItem[];
         itemsStatuses: any[];
         item: DataItem;
         isFetched: boolean;
