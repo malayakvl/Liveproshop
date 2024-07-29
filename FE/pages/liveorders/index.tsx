@@ -59,7 +59,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                 <div className="flex border border-l-0 border-r-0 border-t-0 pb-5 mb-10 mt-10">
                     <h2 className="dark-blue-header w-full">{t('Live orders')}</h2>
                 </div>
-                <List />
+                {/*<List />*/}
             </div>
             <SchedulePopup />
         </>
