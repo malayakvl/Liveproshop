@@ -11,7 +11,6 @@ const tokenData = args[4].split('=');
 
 async function sessionLaunche() {
     // start parsing messages
-    console.log('here');
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
             response.data.data.forEach(async message => {

@@ -261,11 +261,11 @@ class OrderController {
     }
 
     async fetchTotalAmount(req, res) {
-        console.log('Order Number', req.query.orderNumber);
+        // console.log('Order Number', req.query.orderNumber);
         if (req.user) {
            const orderNumber = req.query.orderNumber;
            const resQuery = await orderModel.fetchTotal(orderNumber);
-           return res.status(200).json({ success: true, total_amount: resQuery.data.order_amount });
+            return res.status(200).json({ success: true, total_amount: resQuery.data ?  resQuery.data.order_amount : 0});
         }
         return res.status(200).json({ success: true, total_amount: 0 });
     }

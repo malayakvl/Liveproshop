@@ -1411,11 +1411,30 @@ console.log('MS', multiOrderPaymentData);
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
                 const findedOrderRes = await client.query(queryOrder);
+                const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
+
+                const settingsSettingsQuery = (
+                    `SELECT data.seller_settings.order_timer FROM data.seller_settings 
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
+                const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                let expireAt;
+
+                if (settingsSettingsRes.rows[0].order_timer.hours) {
+                   expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                }
+                if (settingsSettingsRes.rows[0].order_timer.days) {
+                   expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                }
+                if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                    expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                }
+
                 await client.query(`UPDATE data.orders
                     SET user_id='${userId}',
-                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
-console.log('HERE WE ARE connectThrowStore');
 
 
                 // check if we have non payed order
@@ -1659,7 +1678,7 @@ console.log('HERE WE ARE connectThrowStore');
             storeName = res.rows[0].store_name;
             sessionId = res.rows[0].live_sessions_id;
             const tmpUserId = res.rows[0].tmp_user_id;
-console.log('Order Number', orderNumber);
+// console.log('Order Number1', orderNumber);
             if (!orderNumber) {
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
@@ -1683,12 +1702,34 @@ console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}
                             const emptyWaitRes = await client.query(`SELECT id, order_number, live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
+                            const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
+                            const settingsSettingsQuery =
+                                `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${sessionId}'`;
+                            const settingsSettingsRes = await client.query(settingsSettingsQuery);
+
+                            let expireAt;
+                            if (settingsSettingsRes.rows[0].order_timer.hours) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            if (settingsSettingsRes.rows[0].order_timer.days) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            console.log('Expire At', expireAt)
+
+
+
                             const updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
                                 order_number='${orderNumber}',
-                                sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
+                                sync_at='${syncAt}',
+                                expire_order_at='${expireAt}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
                             await client.query(updtQuery);
 
@@ -1777,8 +1818,26 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     }
                 } else {
                     let nOrderNumber = sessionId+'-'+res.rows[0].order_number;
+                    const settingsSettingsQuery = (
+                        `SELECT data.seller_settings.order_timer FROM data.seller_settings 
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${sessionId}'`);
+                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                    let expireAt;
+
+                    if (settingsSettingsRes.rows[0].order_timer.hours) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.days) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                    }
+
                     orderId = res.rows[0].order_id;
-                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', sync_at=now(),
+                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
+                        sync_at=now(), expire_order_at='${expireAt}',
                         total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                     await client.query(orderSQL);
 
@@ -1811,7 +1870,7 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
                     orderNumber = combineOrderNumber;
                 }
-                console.log('ORDER NUMBER', orderNumber);
+                // console.log('ORDER NUMBER', orderNumber);
 
                 // find waiting products in order
                 const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE
