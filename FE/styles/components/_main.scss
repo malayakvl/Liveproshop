@@ -474,6 +474,16 @@
 
 
 }
+.countdown-small {
+  background: #F5F5F5;
+  display: inline-block;
+  margin: 5px;
+  border-radius: 6px;
+
+  @apply w-[24px] h-[24px] md:w-[24px] md:h-[24px];
+
+
+}
 .counter-caption-time {
   //font-size: 32px;
   font-weight: 600;
@@ -484,6 +494,23 @@
   @apply text-[20px] md:text-[32px];
 }
 .counter-caption {
+  //font-size: 12px !important;
+  //margin-top: -15px;
+
+  @apply text-[9px] mt-[-8px] md:text-[12px] md:mt-[-5px];
+}
+.counter-caption-time-small {
+  //font-size: 32px;
+  font-weight: 600;
+  line-height: inherit;
+  text-align: center;
+  display: block;
+  margin-top: -20px;
+  //margin-left: 10px;
+
+  @apply text-[14px] md:text-[14px];
+}
+.counter-caption-small {
   //font-size: 12px !important;
   //margin-top: -15px;
 

@@ -16,8 +16,29 @@ const ListLiveItems: React.FC<any> = ({ items, orderId }) => {
                             style={{ borderBottom: 'solid 1px #EEF1F7' }}
                             className="pb-4">
                             <div className="text-[18px] text-bold text-gray-350">
-                                {t('Products in order')}{' '}
-                                <span className="red-yellow-gradient-text">{orderId}</span>
+                                <div className="float-left">{t('Products in order')} </div>
+                                <div className="float-left mt-[-9px] ml-[10px]">
+                                    <div className="countdown-value countdown-value countdown-small">
+                                        <span className="red-yellow-gradient-text counter-caption-time-small">
+                                            0
+                                        </span>
+                                    </div>
+                                    <div className="countdown-value countdown-value countdown-small">
+                                        <span className="red-yellow-gradient-text counter-caption-time-small">
+                                            0
+                                        </span>
+                                    </div>
+                                    <div className="countdown-value countdown-value countdown-small">
+                                        <span className="red-yellow-gradient-text counter-caption-time-small">
+                                            0
+                                        </span>
+                                    </div>
+                                    <div className="countdown-value countdown-value countdown-small">
+                                        <span className="red-yellow-gradient-text counter-caption-time-small">
+                                            0
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </th>
                     </tr>
