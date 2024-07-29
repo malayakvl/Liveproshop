@@ -12,6 +12,7 @@ export enum PaginationType {
     PAYMENTS = 'payments',
     BUYERS = 'buyers',
     ORDERS = 'orders',
+    LIVEORDERS = 'liveorders',
     WAITING = 'waiting',
     SELLERS = 'sellers',
     DASHBOARD = 'dashboard',
@@ -106,6 +107,13 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
         { sortKey: 'payments.name', iconClass: 'icon-tbl-card' },
         { titleKey: 'Products' },
         { iconClass: 'icon-tbl-total', sortKey: 'orders.order_amount', titleKey: 'Total' }
+    ],
+    [PaginationType.LIVEORDERS]: [
+        { iconClass: 'icon-tbl-order' },
+        { iconClass: 'icon-tbl-date' },
+        { titleKey: 'Shoppers', iconClass: 'icon-tbl-users' },
+        { titleKey: 'Products' },
+        { iconClass: 'icon-tbl-total', titleKey: 'Total' }
     ],
     [PaginationType.SELLERS]: [
         // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },
