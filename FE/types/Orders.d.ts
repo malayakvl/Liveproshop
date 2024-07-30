@@ -29,6 +29,7 @@ declare namespace Orders {
         prevOrderAmount: number;
         currOrderAmount: number;
         reloadOrderAfterCombine: boolean;
+        latestLiveOrder: number;
     }
 
     interface DataItem {

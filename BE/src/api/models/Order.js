@@ -812,7 +812,7 @@ console.log('ZZZZ', 1);
     }
 
 
-    async fetchLiveItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
+    async fetchLiveItems (page, perPage = 20000, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
@@ -852,7 +852,7 @@ console.log('ZZZZ', 1);
 
             }
             const ordersQuery = `SELECT *
-                                FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+                                FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'created_at DESC');`;
 console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];

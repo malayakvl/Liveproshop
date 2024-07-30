@@ -24,7 +24,7 @@ import { Filters, FilterValues, ListLiveItems } from './index';
 import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { formatCurrency } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
-import { bulkDownloadAction } from '../../redux/orders/actions';
+import { bulkDownloadAction, expireOrderAction } from '../../redux/orders/actions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -38,6 +38,7 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
     const dispatch = useDispatch();
     const items = useSelector(liveItemsSelector);
     const itemsStatuses = useSelector(itemsStatusesSelector);
+    const [time, setTime] = useState(new Date());
     const count = useSelector(itemsCountSelector);
     const { filters }: Layouts.Pagination = useSelector(
         paginationSelectorFactory(PaginationType.ORDERS)
@@ -52,6 +53,16 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
     const sendRequest = useCallback(() => {
         return dispatch(fetchLiveItemsAction());
     }, [dispatch]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            // dispatch(fetchLiveItemsAction());
+            window.location.reload();
+            setTime(new Date());
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         const setupChecked: any = [];

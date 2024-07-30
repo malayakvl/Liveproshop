@@ -93,10 +93,10 @@ export const fetchLiveItemsAction: any = createAction(
             )(state);
             const queryFilter = JSON.stringify(filters);
             dispatch(showLoaderAction(true));
-            let orderCommentId;
-            if (window.localStorage.getItem('order_comment_id')) {
-                orderCommentId = window.localStorage.getItem('order_comment_id');
-            }
+            // let orderCommentId;
+            // if (window.localStorage.getItem('order_comment_id')) {
+            //     orderCommentId = window.localStorage.getItem('order_comment_id');
+            // }
             return axios
                 .get(
                     `${baseUrl}/orders/fetch-live-items?${queryString.stringify({
@@ -105,8 +105,7 @@ export const fetchLiveItemsAction: any = createAction(
                         sort,
                         column,
                         query,
-                        queryFilter,
-                        orderCommentId
+                        queryFilter
                     })}`,
                     {
                         headers: {

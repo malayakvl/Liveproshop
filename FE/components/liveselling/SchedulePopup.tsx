@@ -37,7 +37,7 @@ const SchedulePopup: React.FC<any> = () => {
     const storeItems = useSelector(paginatedStoresSelector);
     const [showAlert, setShowAlert] = useState(true);
 
-    console.log('user settings', settingsValues);
+    // console.log('user settings', settingsValues);
 
     // const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
 

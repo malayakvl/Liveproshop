@@ -508,7 +508,7 @@
   margin-top: -20px;
   //margin-left: 10px;
 
-  @apply text-[14px] md:text-[14px];
+  @apply mt-[4px] text-[14px] md:text-[14px] md:mt-[-20px];
 }
 .counter-caption-small {
   //font-size: 12px !important;

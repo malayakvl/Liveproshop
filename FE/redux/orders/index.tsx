@@ -66,6 +66,7 @@ const initialState: {
     prevOrderAmount: number;
     currOrderAmount: number;
     reloadOrderAfterCombine: boolean;
+    latestLiveOrder: number;
 } = {
     isFetched: false,
     loading: false,
@@ -99,7 +100,8 @@ const initialState: {
     googleBrowserLink: null,
     prevOrderAmount: 0,
     currOrderAmount: 0,
-    reloadOrderAfterCombine: false
+    reloadOrderAfterCombine: false,
+    latestLiveOrder: 0
 };
 
 const ACTION_HANDLERS: any = {
