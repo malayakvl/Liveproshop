@@ -3,8 +3,10 @@ import { baseApiUrl } from '../../constants';
 import { BanIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';
 import { formatCurrency } from '../../lib/functions';
+import moment from 'moment/moment';
+import { OrderCounter } from './index';
 
-const ListLiveItems: React.FC<any> = ({ items, orderId }) => {
+const ListLiveItems: React.FC<any> = ({ items, expireAt }) => {
     const t = useTranslations();
     return (
         <>
@@ -16,29 +18,30 @@ const ListLiveItems: React.FC<any> = ({ items, orderId }) => {
                             style={{ borderBottom: 'solid 1px #EEF1F7' }}
                             className="pb-4">
                             <div className="text-[18px] text-bold text-gray-350">
-                                <div className="float-left">{t('Products in order')} </div>
-                                <div className="float-left mt-[-9px] ml-[10px]">
-                                    <div className="countdown-value countdown-value countdown-small">
-                                        <span className="red-yellow-gradient-text counter-caption-time-small">
-                                            0
-                                        </span>
-                                    </div>
-                                    <div className="countdown-value countdown-value countdown-small">
-                                        <span className="red-yellow-gradient-text counter-caption-time-small">
-                                            0
-                                        </span>
-                                    </div>
-                                    <div className="countdown-value countdown-value countdown-small">
-                                        <span className="red-yellow-gradient-text counter-caption-time-small">
-                                            0
-                                        </span>
-                                    </div>
-                                    <div className="countdown-value countdown-value countdown-small">
-                                        <span className="red-yellow-gradient-text counter-caption-time-small">
-                                            0
-                                        </span>
-                                    </div>
-                                </div>
+                                <div className="float-left">{t('Products in order')}</div>
+                                <OrderCounter endDate={expireAt} />
+                                {/*<div className="float-left mt-[-9px] ml-[10px]">*/}
+                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
+                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
+                                {/*            0*/}
+                                {/*        </span>*/}
+                                {/*    </div>*/}
+                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
+                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
+                                {/*            0*/}
+                                {/*        </span>*/}
+                                {/*    </div>*/}
+                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
+                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
+                                {/*            0*/}
+                                {/*        </span>*/}
+                                {/*    </div>*/}
+                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
+                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
+                                {/*            0*/}
+                                {/*        </span>*/}
+                                {/*    </div>*/}
+                                {/*</div>*/}
                             </div>
                         </th>
                     </tr>

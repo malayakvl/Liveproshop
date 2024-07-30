@@ -183,7 +183,7 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
                                 <td colSpan={10} style={{ borderLeft: 'solid 1px red' }}>
                                     <ListLiveItems
                                         items={item.order_items}
-                                        orderId={item.order_number}
+                                        expireAt={item.expire_order_at}
                                     />
                                 </td>
                             </tr>

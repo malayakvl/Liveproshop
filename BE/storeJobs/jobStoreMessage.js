@@ -13,6 +13,7 @@ async function sessionLaunche() {
     // start parsing messages
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
+            console.log(response.data.data)
             response.data.data.forEach(async message => {
                 if (message.message_id) {
                     const orderMessageId = message.message_id;

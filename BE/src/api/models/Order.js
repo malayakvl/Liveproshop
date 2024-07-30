@@ -1527,10 +1527,11 @@ console.log('MS', multiOrderPaymentData);
                 const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
 
                 const settingsSettingsQuery = (
-                    `SELECT data.seller_settings.order_timer FROM data.seller_settings 
+                    `SELECT data.seller_settings.order_timer FROM data.seller_settings
                                         LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
                                         WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
                 const settingsSettingsRes = await client.query(settingsSettingsQuery);
+// console.log(settingsSettingsRes);
                 let expireAt;
 
                 if (settingsSettingsRes.rows[0].order_timer.hours) {
@@ -1571,10 +1572,37 @@ console.log('MS', multiOrderPaymentData);
                         WHERE order_id='${findedOrderRes.rows[0].id}' AND status IS NULL `;
 
                     await client.query(updateExistItemsSQL);
+console.log('HEEEEEEEEEEEEEE COMBINE');
+
+                    const settingsSettingsQuery = (
+                        `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                            LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                            WHERE data.live_sessions.id = '${existNonPayedOrder.rows[0].live_sessions_id}'`);
+console.log(settingsSettingsQuery);
+                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                    let expireAt;
+
+                    if (settingsSettingsRes.rows[0].order_timer.hours) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.days) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                    }
+
+                    // const updateAmountSQL1 = `UPDATE data.orders
+                    //     SET
+                    //     expire_order_at='${expireAt}'
+                    //     WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                    // console.log(updateAmountSQL1);
+
                     // update amounts for order splited order
                     const updateAmountSQL = `UPDATE data.orders 
                         SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
                         total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
+                        expire_order_at='${expireAt}',
                         sync_at=now()
                         WHERE id='${existNonPayedOrder.rows[0].id}'`;
                     await client.query(updateAmountSQL);
