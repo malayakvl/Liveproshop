@@ -812,6 +812,130 @@ console.log('ZZZZ', 1);
     }
 
 
+    async fetchLiveItems (page, perPage = 20000, user, isRead = false, reqOffset = null, filters, column, sort) {
+        const client = await pool.connect();
+        try {
+            const _filters = JSON.parse(filters);
+            switch (user.role_id) {
+                case UserRole.ADMIN:
+                    break;
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = [user.id];
+                    if (_filters.shopper_id) {
+                        _filters.buyer_id = _filters.shopper_id;
+                        delete _filters.userIds;
+                    }
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = [user.id];
+            }
+            if (_filters.status?.length === 0) {
+                if (user.role_id === UserRole.BUYER) {
+                    _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW, OrderStatus.WAITING];
+                } else {
+                    _filters.status = [OrderStatus.NEW];
+                }
+            }
+
+            // _filters.buyer_id = _filters.shopper_id;
+            const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
+            const size = _total.rows[0].count;
+            let offset;
+            if (reqOffset) {
+                offset = reqOffset;
+            } else {
+                offset = (Number(page) - 1) * Number(perPage);
+            }
+            if (!column && !sort) {
+
+            } else {
+
+            }
+            const ordersQuery = `SELECT *
+                                FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'created_at DESC');`;
+console.log(ordersQuery);
+            const res = await client.query(ordersQuery);
+            const items = res.rows.length > 0 ? res.rows : [];
+            const _items = res.rows.length > 0 ? res.rows : [];
+            const _orderIds = [];
+            if (_items.length > 0) {
+                // console.log(_items)
+                const orderIds = [];
+                _items.map(_order => {
+                    _orderIds.push(_order.id);
+                })
+            }
+            let orderStatuses;
+            let orderStatusesRes = [];
+            if (_orderIds.length) {
+                orderStatuses = `
+                    SELECT
+                        json_agg(
+                            json_build_object(
+                            'status', order_statuses.status,
+                            'created_at', order_statuses.created_at,
+                            'order_id', order_statuses.order_id
+                            )
+                        ) AS order_statuses
+                    FROM data.order_statuses
+                    WHERE TRUE
+                        AND (order_statuses.order_id IN (${_orderIds.join(',')}))
+                `;
+                orderStatusesRes = await client.query(orderStatuses);
+            }
+//             console.log(orderStatuses);
+//             const orderStatusesRes = await client.query(orderStatuses);
+            const _itemStatuses = orderStatusesRes.rows[0].order_statuses;
+            const _itemStatusesIds = [];
+            const grouppedStatuses = [];
+            if (orderStatusesRes.rows[0].order_statuses !== null) {
+                orderStatusesRes.rows[0].order_statuses.map(status => {
+                    _itemStatusesIds.push(status.order_id);
+                });
+                let unique = _itemStatusesIds.reduce(function (a, b)  {
+                    if (a.indexOf(b) < 0) a.push(b);
+                    return a;
+                }, []);
+                unique.forEach(_id => {
+                    // console.log(_itemStatuses.find(_item => _item.order_id === _id));
+                    grouppedStatuses.push({id:_id, statuses:(_itemStatuses.filter(obj => {
+                            return obj.order_id === _id
+                        }))});
+                });
+            }
+            const error = null;
+
+            return {
+                items,
+                grouppedStatuses,
+                size,
+                error
+            };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
+
     async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
@@ -854,7 +978,7 @@ console.log('ZZZZ', 1);
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            // console.log(ordersQuery);
+// console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -866,14 +990,6 @@ console.log('ZZZZ', 1);
                     _orderIds.push(_order.id);
                 })
             }
-            // const orderStatuses = `SELECT
-            //         json_agg(
-            //             (jsonb_build_object('status', order_statuses.status) || jsonb_build_object('created_at', order_statuses.created_at) || jsonb_build_object('order_id', order_statuses.order_id))::json
-            //         ) AS order_statuses
-            //     FROM data.order_statuses
-            //     WHERE TRUE
-            //         AND (order_statuses.order_id IN (${_orderIds.join(',')}))`;
-            //
             let orderStatuses;
             let orderStatusesRes = [];
             if (_orderIds.length) {
@@ -905,9 +1021,6 @@ console.log('ZZZZ', 1);
                     if (a.indexOf(b) < 0) a.push(b);
                     return a;
                 }, []);
-                // console.log(_itemStatuses)
-                // console.log('++++++++++++');
-                // itemStatuses.
                 unique.forEach(_id => {
                     // console.log(_itemStatuses.find(_item => _item.order_id === _id));
                     grouppedStatuses.push({id:_id, statuses:(_itemStatuses.filter(obj => {
@@ -1411,11 +1524,31 @@ console.log('MS', multiOrderPaymentData);
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
                 const findedOrderRes = await client.query(queryOrder);
+                const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
+
+                const settingsSettingsQuery = (
+                    `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
+                const settingsSettingsRes = await client.query(settingsSettingsQuery);
+// console.log(settingsSettingsRes);
+                let expireAt;
+
+                if (settingsSettingsRes.rows[0].order_timer.hours) {
+                   expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                }
+                if (settingsSettingsRes.rows[0].order_timer.days) {
+                   expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                }
+                if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                    expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                }
+
                 await client.query(`UPDATE data.orders
                     SET user_id='${userId}',
-                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
-console.log('HERE WE ARE connectThrowStore');
 
 
                 // check if we have non payed order
@@ -1439,10 +1572,37 @@ console.log('HERE WE ARE connectThrowStore');
                         WHERE order_id='${findedOrderRes.rows[0].id}' AND status IS NULL `;
 
                     await client.query(updateExistItemsSQL);
+console.log('HEEEEEEEEEEEEEE COMBINE');
+
+                    const settingsSettingsQuery = (
+                        `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                            LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                            WHERE data.live_sessions.id = '${existNonPayedOrder.rows[0].live_sessions_id}'`);
+console.log(settingsSettingsQuery);
+                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                    let expireAt;
+
+                    if (settingsSettingsRes.rows[0].order_timer.hours) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.days) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                    }
+
+                    // const updateAmountSQL1 = `UPDATE data.orders
+                    //     SET
+                    //     expire_order_at='${expireAt}'
+                    //     WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                    // console.log(updateAmountSQL1);
+
                     // update amounts for order splited order
                     const updateAmountSQL = `UPDATE data.orders 
                         SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
                         total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
+                        expire_order_at='${expireAt}',
                         sync_at=now()
                         WHERE id='${existNonPayedOrder.rows[0].id}'`;
                     await client.query(updateAmountSQL);
@@ -1659,7 +1819,7 @@ console.log('HERE WE ARE connectThrowStore');
             storeName = res.rows[0].store_name;
             sessionId = res.rows[0].live_sessions_id;
             const tmpUserId = res.rows[0].tmp_user_id;
-console.log('Order Number', orderNumber);
+// console.log('Order Number1', orderNumber);
             if (!orderNumber) {
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
@@ -1683,12 +1843,34 @@ console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}
                             const emptyWaitRes = await client.query(`SELECT id, order_number, live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
                             orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
+                            const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
+                            const settingsSettingsQuery =
+                                `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${sessionId}'`;
+                            const settingsSettingsRes = await client.query(settingsSettingsQuery);
+
+                            let expireAt;
+                            if (settingsSettingsRes.rows[0].order_timer.hours) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            if (settingsSettingsRes.rows[0].order_timer.days) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            console.log('Expire At', expireAt)
+
+
+
                             const updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
                                 order_number='${orderNumber}',
-                                sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
+                                sync_at='${syncAt}',
+                                expire_order_at='${expireAt}' 
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
                             await client.query(updtQuery);
 
@@ -1777,8 +1959,26 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     }
                 } else {
                     let nOrderNumber = sessionId+'-'+res.rows[0].order_number;
+                    const settingsSettingsQuery = (
+                        `SELECT data.seller_settings.order_timer FROM data.seller_settings 
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${sessionId}'`);
+                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                    let expireAt;
+
+                    if (settingsSettingsRes.rows[0].order_timer.hours) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.days) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                    }
+
                     orderId = res.rows[0].order_id;
-                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', sync_at=now(),
+                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
+                        sync_at=now(), expire_order_at='${expireAt}',
                         total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
                     await client.query(orderSQL);
 
@@ -1811,7 +2011,7 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
                     orderNumber = combineOrderNumber;
                 }
-                console.log('ORDER NUMBER', orderNumber);
+                // console.log('ORDER NUMBER', orderNumber);
 
                 // find waiting products in order
                 const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE

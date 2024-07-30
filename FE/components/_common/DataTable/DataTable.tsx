@@ -47,7 +47,7 @@ const DataTable: React.FC<Props> = ({
     switcherOnClick,
     hideBulk
 }) => {
-    const { PRODUCTS, CHATBOT, SHIPPING, ORDERS, PAYMENTS } = PaginationType;
+    const { PRODUCTS, CHATBOT, SHIPPING, ORDERS, LIVEORDERS, PAYMENTS } = PaginationType;
     const t = useTranslations();
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);

@@ -260,25 +260,33 @@ export default function Index({ session, locale }: { session: any; locale: any }
                                 <span className="red-yellow-gradient-text counter-caption-time">
                                     0
                                 </span>
-                                <span className="block color-black counter-caption">Days</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Days')}
+                                </span>
                             </div>
                             <div className="countdown-value">
                                 <span className="red-yellow-gradient-text counter-caption-time">
                                     0
                                 </span>
-                                <span className="block color-black counter-caption">Hours</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Hours')}
+                                </span>
                             </div>
                             <div className="countdown-value">
                                 <span className="red-yellow-gradient-text counter-caption-time">
                                     0
                                 </span>
-                                <span className="block color-black counter-caption">Minutes</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Minutes')}
+                                </span>
                             </div>
                             <div className="countdown-value">
                                 <span className="red-yellow-gradient-text counter-caption-time">
                                     0
                                 </span>
-                                <span className="block color-black counter-caption">Seconds</span>
+                                <span className="block color-black counter-caption">
+                                    {t('Seconds')}
+                                </span>
                             </div>
                         </div>
                     )}

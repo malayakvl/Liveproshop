@@ -1,6 +1,7 @@
 import { Action, handleActions } from 'redux-actions';
 import {
     fetchItemsAction,
+    fetchLiveItemsAction,
     fetchItemAction,
     setEmptyFormAction,
     showPopupAction,
@@ -32,7 +33,8 @@ import {
     setupOrderAmountAction,
     fetchOrderTotalAmountAction,
     fetchOrderTotalAmountActionUpdated,
-    reloadAfterCombineAction, setupOrderAmountUpdatedAction
+    reloadAfterCombineAction,
+    setupOrderAmountUpdatedAction
 } from './actions';
 
 const initialState: {
@@ -40,6 +42,7 @@ const initialState: {
     loading: boolean;
     count: number;
     items: Orders.DataItem[];
+    liveItems: Orders.DataItem[];
     itemsStatuses: any;
     item: any;
     showPopup: boolean;
@@ -63,11 +66,13 @@ const initialState: {
     prevOrderAmount: number;
     currOrderAmount: number;
     reloadOrderAfterCombine: boolean;
+    latestLiveOrder: number;
 } = {
     isFetched: false,
     loading: false,
     count: 0,
     items: [],
+    liveItems: [],
     itemsStatuses: [],
     item: {},
     showPopup: false,
@@ -95,7 +100,8 @@ const initialState: {
     googleBrowserLink: null,
     prevOrderAmount: 0,
     currOrderAmount: 0,
-    reloadOrderAfterCombine: false
+    reloadOrderAfterCombine: false,
+    latestLiveOrder: 0
 };
 
 const ACTION_HANDLERS: any = {
@@ -103,6 +109,22 @@ const ACTION_HANDLERS: any = {
         next: (
             state: State.Orders,
             action: Type.ReduxAction<Pick<State.Orders, 'count' | 'items'>>
+        ): State.Orders => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Orders): State.Orders => ({
+            ...state,
+            loading: false,
+            isFetched: false
+        })
+    },
+    [fetchLiveItemsAction]: {
+        next: (
+            state: State.Orders,
+            action: Type.ReduxAction<Pick<State.Orders, 'count' | 'liveItems'>>
         ): State.Orders => ({
             ...state,
             ...action.payload,
@@ -323,6 +345,7 @@ const ACTION_HANDLERS: any = {
 
 export {
     fetchItemsAction,
+    fetchLiveItemsAction,
     fetchItemAction,
     showPopupAction,
     setEmptyFormAction,

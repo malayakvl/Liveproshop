@@ -80,6 +80,49 @@ export const fetchItemsAction: any = createAction(
                 });
         }
 );
+export const fetchLiveItemsAction: any = createAction(
+    'orders/FETCH_LIVE_ITEMS',
+    async () =>
+        (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ count: any; liveItems: any }> => {
+            const state = getState();
+            const { limit, offset, sort, column, query, filters } = paginationSelectorFactory(
+                PaginationType.ORDERS
+            )(state);
+            const queryFilter = JSON.stringify(filters);
+            dispatch(showLoaderAction(true));
+            // let orderCommentId;
+            // if (window.localStorage.getItem('order_comment_id')) {
+            //     orderCommentId = window.localStorage.getItem('order_comment_id');
+            // }
+            return axios
+                .get(
+                    `${baseUrl}/orders/fetch-live-items?${queryString.stringify({
+                        limit,
+                        offset,
+                        sort,
+                        column,
+                        query,
+                        queryFilter
+                    })}`,
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then((res: any) => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        count: res.data.count,
+                        liveItems: res.data.items,
+                        itemsStatuses: res.data.itemsStatuses
+                    };
+                });
+        }
+);
 export const fetchFilerItems: any = createAction(
     'orders/FETCH_FILTER_ITEMS',
     async () =>

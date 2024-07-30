@@ -12,6 +12,10 @@ export const paginatedItemsSelector = createSelector(
     rootSelector,
     (orders: State.Orders): any => orders.items
 );
+export const liveItemsSelector = createSelector(
+    rootSelector,
+    (orders: State.Orders): any => orders.liveItems
+);
 export const itemsCountSelector = createSelector(
     rootSelector,
     (orders: State.Orders): number => orders.count
