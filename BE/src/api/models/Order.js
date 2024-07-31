@@ -16,7 +16,6 @@ import {
     confirmShippedEmail, confirmSubscriptionEmail
 } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
-import * as nodeFetch from "node-fetch";
 
 
 
@@ -383,6 +382,7 @@ class Order {
         const client = await pool.connect();
         try {
             await client.query(`UPDATE data.order_items SET status=null WHERE id='${itemId}'`);
+            // check orderId parameters for waiting item
             return { success: true }
             // const orderData = await client.query(`SELECT quantity FROM 
             //         data.product_configurations WHERE id='${configId}'`);
@@ -539,6 +539,7 @@ class Order {
                     LEFT JOIN data.free_order_threshold foth ON foth.user_id = data.live_sessions.user_id
                     WHERE product_configuration_id=${configId} AND data.order_items.status='waiting'
                     ORDER BY data.order_items.created_at LIMIT 1`;
+console.log(waitingQuery)
 
 // console.log(waitingQuery);
             const waitingData = await client.query(waitingQuery);
@@ -1508,22 +1509,32 @@ console.log('MS', multiOrderPaymentData);
         }
     }
 
-    async connectThrowStore(messageId, fromId, storeId) {
+    async connectThrowStore(messageId, fromId, storeId, inPeriod, freePeriodEnd) {
         const client = await pool.connect();
         try {
             // find order by message and attach to current user
-            const connetedQuery = `SELECT * FROM data.user2pages WHERE from_id='${fromId}' AND store_id=${storeId}`
+            const connetedQuery = `SELECT * FROM data.user2pages 
+                WHERE from_id='${fromId}' AND store_id=${storeId}`
             const connetedQueryRes = await client.query(connetedQuery);
-            if (connetedQueryRes.rows.length > 0) {
-                const userId = connetedQueryRes.rows[0].user_id;
-                // find order by message
-                const queryOrder = `SELECT data.orders.id, 
+            const queryOrder = `SELECT data.orders.id, 
                     data.orders.live_sessions_id, data.orders.order_amount, 
                     data.orders.total_amount
                     FROM data.order_items LEFT JOIN 
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
-                const findedOrderRes = await client.query(queryOrder);
+            const findedOrderRes = await client.query(queryOrder);
+            await client.query(`UPDATE data.orders
+                    SET 
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
+
+
+            if (connetedQueryRes.rows.length > 0) {
+
+                const userId = connetedQueryRes.rows[0].user_id;
+                // find order by message
+
                 const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
 
                 const settingsSettingsQuery = (
@@ -1531,7 +1542,6 @@ console.log('MS', multiOrderPaymentData);
                                         LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
                                         WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
                 const settingsSettingsRes = await client.query(settingsSettingsQuery);
-// console.log(settingsSettingsRes);
                 let expireAt;
 
                 if (settingsSettingsRes.rows[0].order_timer.hours) {
@@ -1543,11 +1553,20 @@ console.log('MS', multiOrderPaymentData);
                 if (settingsSettingsRes.rows[0].order_timer.minutes) {
                     expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                 }
+console.log(`UPDATE data.orders
+                    SET user_id='${userId}',
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}',
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`);
 
                 await client.query(`UPDATE data.orders
                     SET user_id='${userId}',
                         sync_at='${syncAt}',
-                        expire_order_at='${expireAt}'
+                        expire_order_at='${expireAt}',
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
 
 
@@ -1603,7 +1622,9 @@ console.log(settingsSettingsQuery);
                         SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
                         total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
                         expire_order_at='${expireAt}',
-                        sync_at=now()
+                        sync_at=now(),
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
                         WHERE id='${existNonPayedOrder.rows[0].id}'`;
                     await client.query(updateAmountSQL);
 
@@ -1649,7 +1670,9 @@ console.log(settingsSettingsQuery);
                 }
                 await client.query(`UPDATE data.orders 
                     SET user_id='${userId}', 
-                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
+                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}',
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
                     WHERE id='${existNonPayedOrder.rows[0].id}'`)
 
 
@@ -1819,37 +1842,38 @@ console.log(settingsSettingsQuery);
             storeName = res.rows[0].store_name;
             sessionId = res.rows[0].live_sessions_id;
             const tmpUserId = res.rows[0].tmp_user_id;
-// console.log('Order Number1', orderNumber);
             if (!orderNumber) {
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
-console.log('Wait order ID', resWait.rows[0].order_id);
-console.log('Order ID', resWait.rows[0].order_id);
                 if (!resWait.rows[0].order_id) {
-console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+// console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
                     } else {
-                        const existNonPayedEmpty = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' ORDER BY created_at DESC`);
+                        const existNonPayedEmpty = await client.query(
+                            `SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' 
+                            ORDER BY created_at DESC`);
                         if (existNonPayedEmpty.rows.length > 0) {
                             orderId = existNonPayedEmpty.rows[0].id;
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
-                            const emptyWaitRes = await client.query(`SELECT id, order_number, live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
+                            const emptyWaitRes = await client.query(
+                                `SELECT id, order_number, user_id,
+                                    live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
+
                             orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
                             const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
                             const settingsSettingsQuery =
                                 `SELECT data.seller_settings.order_timer FROM data.seller_settings
                                         LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
-                                        WHERE data.live_sessions.id = '${sessionId}'`;
+                                        WHERE data.live_sessions.id = '${emptyWaitRes.rows[0].live_sessions_id}'`;
                             const settingsSettingsRes = await client.query(settingsSettingsQuery);
-
                             let expireAt;
                             if (settingsSettingsRes.rows[0].order_timer.hours) {
                                 expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
@@ -1860,9 +1884,6 @@ console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}
                             if (settingsSettingsRes.rows[0].order_timer.minutes) {
                                 expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                             }
-                            console.log('Expire At', expireAt)
-
-
 
                             const updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 

@@ -217,7 +217,8 @@ class ChatbotMessage {
                     dss.free_shipping_timer, foth.threshold, us.name as store_name, p.publish AS activeProduct,
                     p.publish AS active_product, p.configured, us.id AS store_id,
                     lsm.real_from_id, lsm.message_id, dss.free_shipping_from, dss.free_shipping_to,
-                    (lsm.created_at BETWEEN dss.free_shipping_from AND dss.free_shipping_to) AS in_period
+                    (lsm.created_at BETWEEN dss.free_shipping_from AND dss.free_shipping_to) AS in_period,
+                    dss.free_shipping_to
                     FROM data.live_sessions_messages lsm
                     LEFT JOIN data.products p ON (p.id = (lsm.parcer_data->>'item')::integer)
                     LEFT JOIN data.live_sessions ls ON lsm.live_sessions_id = ls.id
@@ -230,9 +231,13 @@ class ChatbotMessage {
                     ORDER BY lsm.created_at DESC LIMIT 50`;
             // console.log(productQueryNew);
             const res = await client.query(productQueryNew);
+
+
+
+            // before send check free period if yes set 'free_period_end' params in orders
             if (res.rows.length > 0) {
                 res.rows.forEach(async data => {
-                    await orderModel.connectThrowStore(data.message_id, data.real_from_id, data.store_id);
+                    await orderModel.connectThrowStore(data.message_id, data.real_from_id, data.store_id, !!data.in_period, data.free_shipping_to);
                 })
             }
 
