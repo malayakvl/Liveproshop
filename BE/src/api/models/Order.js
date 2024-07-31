@@ -16,7 +16,6 @@ import {
     confirmShippedEmail, confirmSubscriptionEmail
 } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
-import * as nodeFetch from "node-fetch";
 
 
 
@@ -1508,22 +1507,32 @@ console.log('MS', multiOrderPaymentData);
         }
     }
 
-    async connectThrowStore(messageId, fromId, storeId) {
+    async connectThrowStore(messageId, fromId, storeId, inPeriod, freePeriodEnd) {
         const client = await pool.connect();
         try {
             // find order by message and attach to current user
-            const connetedQuery = `SELECT * FROM data.user2pages WHERE from_id='${fromId}' AND store_id=${storeId}`
+            const connetedQuery = `SELECT * FROM data.user2pages 
+                WHERE from_id='${fromId}' AND store_id=${storeId}`
             const connetedQueryRes = await client.query(connetedQuery);
-            if (connetedQueryRes.rows.length > 0) {
-                const userId = connetedQueryRes.rows[0].user_id;
-                // find order by message
-                const queryOrder = `SELECT data.orders.id, 
+            const queryOrder = `SELECT data.orders.id, 
                     data.orders.live_sessions_id, data.orders.order_amount, 
                     data.orders.total_amount
                     FROM data.order_items LEFT JOIN 
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
-                const findedOrderRes = await client.query(queryOrder);
+            const findedOrderRes = await client.query(queryOrder);
+            await client.query(`UPDATE data.orders
+                    SET 
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
+
+
+            if (connetedQueryRes.rows.length > 0) {
+
+                const userId = connetedQueryRes.rows[0].user_id;
+                // find order by message
+
                 const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
 
                 const settingsSettingsQuery = (
@@ -1531,7 +1540,6 @@ console.log('MS', multiOrderPaymentData);
                                         LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
                                         WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
                 const settingsSettingsRes = await client.query(settingsSettingsQuery);
-// console.log(settingsSettingsRes);
                 let expireAt;
 
                 if (settingsSettingsRes.rows[0].order_timer.hours) {
@@ -1543,11 +1551,20 @@ console.log('MS', multiOrderPaymentData);
                 if (settingsSettingsRes.rows[0].order_timer.minutes) {
                     expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                 }
+console.log(`UPDATE data.orders
+                    SET user_id='${userId}',
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}',
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`);
 
                 await client.query(`UPDATE data.orders
                     SET user_id='${userId}',
                         sync_at='${syncAt}',
-                        expire_order_at='${expireAt}'
+                        expire_order_at='${expireAt}',
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
 
 
@@ -1603,7 +1620,9 @@ console.log(settingsSettingsQuery);
                         SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
                         total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
                         expire_order_at='${expireAt}',
-                        sync_at=now()
+                        sync_at=now(),
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
                         WHERE id='${existNonPayedOrder.rows[0].id}'`;
                     await client.query(updateAmountSQL);
 
@@ -1649,7 +1668,9 @@ console.log(settingsSettingsQuery);
                 }
                 await client.query(`UPDATE data.orders 
                     SET user_id='${userId}', 
-                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}' 
+                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}',
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
                     WHERE id='${existNonPayedOrder.rows[0].id}'`)
 
 
