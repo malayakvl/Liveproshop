@@ -1850,7 +1850,8 @@ console.log(settingsSettingsQuery);
                 let updateTotal = 0;
                 if (!resWait.rows[0].order_id) {
 // console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
-                    const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+                    const existNonPayed = await client.query(`SELECT * FROM data.orders 
+                        WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
@@ -1867,7 +1868,9 @@ console.log(settingsSettingsQuery);
                                     live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
 
-                            orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
+                            // down't remember why i attach prefix
+                            // orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
+                            orderNumber = emptyWaitRes.rows[0].order_number;
                             const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
                             const settingsSettingsQuery =
                                 `SELECT data.seller_settings.order_timer,  data.seller_settings.free_shipping_to,
