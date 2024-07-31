@@ -13,6 +13,7 @@ import { toggleModalPeriodSetupConfirmation } from '../../../lib/functions';
 import { useTranslations } from 'next-intl';
 import moment from 'moment/moment';
 import ModalPeriodSetup from '../ModalPeriodSetup';
+import { setThresholdAction } from '../../../redux/shipping/actions';
 
 const ConfirmationPeriodSetupModal: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,13 +24,19 @@ const ConfirmationPeriodSetupModal: React.FC = () => {
     const periodSetup = useSelector(setupPeriodSelector);
     const t = useTranslations();
 
+    console.log(periodSetup);
+
     const {
         title = `${
             t('Do you want to set the period from ') +
             '' +
             moment(periodSetup?.startDate).format('DD/MM/YYYY') +
+            ' ' +
+            periodSetup?.startTime +
             ' - ' +
             moment(periodSetup?.endDate).format('DD/MM/YYYY') +
+            ' ' +
+            periodSetup?.endTime +
             ' ' +
             t(' for free shipping?')
         }`,
@@ -57,13 +64,14 @@ const ConfirmationPeriodSetupModal: React.FC = () => {
     const handleSubmitBtnClick = useCallback(
         (event: React.SyntheticEvent) => {
             event.preventDefault();
+            console.log('here', periodSetup);
+            dispatch(setThresholdAction(periodSetup));
             if (!onConfirm) return;
             setIsLoading(true);
             onConfirm()
                 .then(handleCancelBtnClick)
                 .finally(() => {
                     setIsLoading(false);
-                    console.log('on confirm');
                     toggleModalPeriodSetupConfirmation();
                 });
         },

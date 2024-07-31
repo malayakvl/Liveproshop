@@ -20,10 +20,11 @@ import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Image from 'next/image';
-// import { showDateSelectorAction } from '../../redux/dashboard';
 import { showDatePopupSelector } from '../../redux/dashboard/selectors';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import TimePicker from 'rc-time-picker';
+import 'rc-time-picker/assets/index.css';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -42,6 +43,8 @@ export default function ShippingThreshold() {
     const showDatePopup = useSelector(showDatePopupSelector);
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
+    const [timeFrom, setTimeFrom] = useState(moment());
+    const [timeTo, setTimeTo] = useState(moment());
     const [calendarPeriod, setCalendarPeriod] = useState<any>(null);
 
     const SP = (dateRange: any) => {
@@ -54,16 +57,24 @@ export default function ShippingThreshold() {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         setCalendarPeriod(pd);
+        console.log('modal confirmation');
         dispatch(setupPeriodAction(pd));
-        dispatch(
-            setModalConfirmationSetupPeriodMetaAction({
-                onConfirm: async () => {
-                    toggleModalPeriodSetupConfirmation();
-                    // dispatch(showShippedConfirmationModalAction)
-                    // dispatch(setShippingPeriodAction(pd));
-                }
-            })
-        );
+        // dispatch(
+        //     setModalConfirmationSetupPeriodMetaAction({
+        //         onConfirm: async () => {
+        //             toggleModalPeriodSetupConfirmation();
+        //         }
+        //     })
+        // );
+    };
+
+    const handleValueChangeFrom = (value: any) => {
+        setTimeFrom(value);
+        console.log(value && value.format('HH:mm:ss'));
+    };
+
+    const handleValueChangeTo = (value: any) => {
+        setTimeTo(value);
     };
 
     useEffect(() => {
@@ -101,6 +112,24 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
+                                const dateFromNew = `${calendarPeriod.startDate} ${timeFrom}`;
+                                const dateToNew = `${calendarPeriod.endDate} ${timeTo}`;
+                                // setCalendarPeriod({ startDate: dateFromNew, endDate: dateToNew });
+                                dispatch(
+                                    setupPeriodAction({
+                                        startDate: calendarPeriod.startDate,
+                                        endDate: calendarPeriod.endDate,
+                                        startTime: moment(timeFrom).format('HH:mm'),
+                                        endTime: moment(timeTo).format('HH:mm')
+                                    })
+                                );
+                                dispatch(
+                                    setModalConfirmationSetupPeriodMetaAction({
+                                        onConfirm: async () => {
+                                            toggleModalPeriodSetupConfirmation();
+                                        }
+                                    })
+                                );
                                 if (
                                     !calendarPeriod &&
                                     !period.free_shipping_from &&
@@ -110,10 +139,10 @@ export default function ShippingThreshold() {
                                 } else {
                                     const formData = {
                                         threshold: values.threshold,
-                                        dateFrom: moment(dateRange[0]).format('YYYY-MM-DD'),
-                                        dateTo: moment(dateRange[1]).format('YYYY-MM-DD')
+                                        timeFromNew: moment(timeFrom).format('HH:mm:ss'),
+                                        timeToNew: moment(timeFrom).format('HH:mm:ss')
                                     };
-                                    dispatch(setThresholdAction(formData));
+                                    // dispatch(setThresholdAction(formData));
                                 }
                             }}
                             enableReinitialize
@@ -123,7 +152,7 @@ export default function ShippingThreshold() {
                             })}
                             render={(props) => (
                                 <Form onSubmit={props.handleSubmit}>
-                                    <div className="w-full md:w-1/2 p-4 float-left">
+                                    <div className="w-full md:w-1/3 p-4 float-left">
                                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                             {t('Free shipping threshold')}
                                         </div>
@@ -141,7 +170,7 @@ export default function ShippingThreshold() {
                                             <ErrorMessage name="threshold" />
                                         </div>
                                     </div>
-                                    <div className="w-full md:w-1/2 p-4 float-left">
+                                    <div className="w-full md:w-2/3 p-4 float-left">
                                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                             {t('Free Shipping Period')}
                                         </div>
@@ -169,6 +198,22 @@ export default function ShippingThreshold() {
                                                         setDateRange(update);
                                                     }}
                                                     isClearable={true}
+                                                />
+                                            </div>
+                                            <div className="inline-block ml-6">
+                                                <TimePicker
+                                                    className={`form-control-picker`}
+                                                    format={'HH:mm:ss'}
+                                                    name="time_from"
+                                                    value={timeFrom}
+                                                    onChange={handleValueChangeFrom}
+                                                />
+                                                <TimePicker
+                                                    format={'HH:mm:ss'}
+                                                    className={`form-control-picker ml-4`}
+                                                    name="time_to"
+                                                    value={timeTo}
+                                                    onChange={handleValueChangeTo}
                                                 />
                                             </div>
                                         </div>
