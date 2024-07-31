@@ -382,6 +382,7 @@ class Order {
         const client = await pool.connect();
         try {
             await client.query(`UPDATE data.order_items SET status=null WHERE id='${itemId}'`);
+            // check orderId parameters for waiting item
             return { success: true }
             // const orderData = await client.query(`SELECT quantity FROM 
             //         data.product_configurations WHERE id='${configId}'`);
@@ -538,6 +539,7 @@ class Order {
                     LEFT JOIN data.free_order_threshold foth ON foth.user_id = data.live_sessions.user_id
                     WHERE product_configuration_id=${configId} AND data.order_items.status='waiting'
                     ORDER BY data.order_items.created_at LIMIT 1`;
+console.log(waitingQuery)
 
 // console.log(waitingQuery);
             const waitingData = await client.query(waitingQuery);

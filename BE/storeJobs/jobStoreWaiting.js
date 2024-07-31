@@ -32,7 +32,6 @@ async function updateWaitingJob() {
                     // check item qty
                     await axios(`${apiUrl}/api/order/get-config-qty?configId=${configData[1]}`)
                         .then(async (responseQty) => {
-console.log('GETTING QTY', parseInt(responseQty.data.qty))
                             if (parseInt(responseQty.data.qty) > 0) {
                                 if (item.order_id) {
                                     let typeTimer = item.order_timer.days ? 'd' : item.order_timer.hours ? 'h' : 'm';
@@ -85,7 +84,6 @@ console.log('SHOULD REMOVE QTY FROM CONFIGURATION 1', item)
                                     )
                                         .then(async function (responseSending) {
                                             // console.log(responseSending);
-console.log('ID', item.wait_item_id)
                                             await axios(`${apiUrl}/api/order/remove-wait-from-item?itemId=${item.wait_item_id}`)
                                                 .then(async (responseQty) => {
 
