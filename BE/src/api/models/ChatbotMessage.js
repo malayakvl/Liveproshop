@@ -229,10 +229,8 @@ class ChatbotMessage {
                     (lsm.parcer_status = FALSE AND lsm.reply_sended IS NULL AND (lsm.message LIKE '%vendu%' OR lsm.message LIKE '%sold%'))) 
                     AND ls.id='${sessionId}'
                     ORDER BY lsm.created_at DESC LIMIT 50`;
-console.log(productQueryNew);
             const res = await client.query(productQueryNew);
 
-console.log('END FREE PERIOD', data.free_shipping_to)
 
             // before send check free period if yes set 'free_period_end' params in orders
             if (res.rows.length > 0) {

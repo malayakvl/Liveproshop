@@ -169,20 +169,24 @@ class OrderController {
     }
 
     async removeUnpayedOrder (req, res) {
-        const data = await orderModel.removeUnpayedSessionOrder(req.query.sessionId);
+        console.log(req.query)
+        if (req.query.fromJob === 1) {
+            const data = await orderModel.removeUnpayedSessionOrder(req.query.sessionId);
+        }
         return res.status(200).json({success: true});
     }
 
-    async expirePeriod() {
-        const data = await orderModel.removeExpirePeriodOrder();
-        return res.status(200).json({success: true});
-    }
+    // async expirePeriod() {
+    //     const data = await orderModel.removeExpirePeriodOrder();
+    //     return res.status(200).json({success: true});
+    // }
 
 
-    async getOrderFreePeriod(req, res){
-        console.log('here');
-        const data = await orderModel.removeExpirePeriodOrder();
-        return res.status(200).json({ success: true, data: data });
+    async getOrderFreePeriodClear(req, res){
+        if (req.query.fromJob === 'yes') {
+            const data = await orderModel.removeExpirePeriodOrder();
+        }
+        return res.status(200).json({ success: true });
     }
 
     async checkOrderStatus (req, res) {
