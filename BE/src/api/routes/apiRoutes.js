@@ -57,6 +57,8 @@ apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder)
 apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
 apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
 apiRoutes.route('/get-order-clear').get(OrderController.removeUnpayedOrder);
+apiRoutes.route('/get-order-clear-period').get(OrderController.getOrderFreePeriod);
+
 apiRoutes.route('/remove-sessions-order').get(OrderController.removeSessionsOrders);
 apiRoutes.route('/retunr-configured-wrong-parsed').get(OrderController.returnWrongParsedConfigured);
 

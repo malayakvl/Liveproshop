@@ -173,6 +173,18 @@ class OrderController {
         return res.status(200).json({success: true});
     }
 
+    async expirePeriod() {
+        const data = await orderModel.removeExpirePeriodOrder();
+        return res.status(200).json({success: true});
+    }
+
+
+    async getOrderFreePeriod(req, res){
+        console.log('here');
+        const data = await orderModel.removeExpirePeriodOrder();
+        return res.status(200).json({ success: true, data: data });
+    }
+
     async checkOrderStatus (req, res) {
         const data = await orderModel.checkOrderStatus(req.query.comment_id);
         return res.status(200).json({success: true, data: data});
@@ -240,12 +252,12 @@ class OrderController {
 
     async expireOrder (req, res) {
         if (req.user) {
-            console.log('ORDER EXPIRE', req.query.orderId);
             const data = await orderModel.expireOrder(req.query.orderId, req.user.id);
             return res.status(200).json({ success: true });
         }
         return res.status(200).json({ success: true, orderNumber: null });
     }
+
 
     async findOrderByCommentId (req, res) {
         if (req.user) {
