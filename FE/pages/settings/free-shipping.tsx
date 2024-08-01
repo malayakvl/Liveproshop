@@ -57,7 +57,6 @@ export default function ShippingThreshold() {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         setCalendarPeriod(pd);
-        console.log('modal confirmation');
         dispatch(setupPeriodAction(pd));
         // dispatch(
         //     setModalConfirmationSetupPeriodMetaAction({
@@ -70,7 +69,6 @@ export default function ShippingThreshold() {
 
     const handleValueChangeFrom = (value: any) => {
         setTimeFrom(value);
-        console.log(value && value.format('HH:mm:ss'));
     };
 
     const handleValueChangeTo = (value: any) => {
@@ -87,6 +85,7 @@ export default function ShippingThreshold() {
                 }
             })
             .then((result) => {
+                console.log(result.data);
                 setThreshold(result.data.threshold);
                 dispatch(setPeriodDeleteValuesActions(result.data.period));
                 setPeriod(result.data.period);
@@ -94,6 +93,8 @@ export default function ShippingThreshold() {
     }, [user.email]);
 
     if (!user.email) return null;
+
+    console.log('DB period', period);
 
     return (
         <>
@@ -222,13 +223,13 @@ export default function ShippingThreshold() {
                                                 <ul className="inline-block">
                                                     <li className="float-left">
                                                         <span className="inline-block mt-[2px] text-gray-350">
-                                                            {moment(
-                                                                period.free_shipping_from
-                                                            ).format('DD/MM/YYYY HH:mm')}
+                                                            {moment(period.free_shipping_from)
+                                                                .add('-3', 'hours')
+                                                                .format('DD/MM/YYYY HH:mm')}
                                                             {' - '}
-                                                            {moment(period.free_shipping_to).format(
-                                                                'DD/MM/YYYY HH:mm'
-                                                            )}
+                                                            {moment(period.free_shipping_to)
+                                                                .add('-3', 'hours')
+                                                                .format('DD/MM/YYYY HH:mm')}
                                                         </span>
                                                     </li>
                                                     <li className="float-left">
