@@ -85,7 +85,6 @@ export default function ShippingThreshold() {
                 }
             })
             .then((result) => {
-                console.log(result.data);
                 setThreshold(result.data.threshold);
                 dispatch(setPeriodDeleteValuesActions(result.data.period));
                 setPeriod(result.data.period);
