@@ -2218,7 +2218,7 @@ console.log('here')
         const client = await pool.connect();
         try {
             const _tmpRes = await client.query(`SELECT * FROM data.orders 
-                WHERE free_period_end < now() LIMIT 20`);
+                WHERE free_period_end < (NOW() + interval '${process.env.SERVER_TIME_DIFF} hour') LIMIT 20`);
             if (_tmpRes.rows.length > 0) {
                 _tmpRes.rows.forEach(async _order => {
                     const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
