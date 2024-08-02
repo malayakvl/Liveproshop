@@ -816,7 +816,6 @@ console.log('ZZZZ', 1);
     async fetchLiveItems (page, perPage = 20000, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
-console.log('here model', filters);
             const _filters = JSON.parse(filters);
 
             switch (user.role_id) {
@@ -2219,8 +2218,10 @@ console.log('here')
     async removeExpirePeriodOrder() {
         const client = await pool.connect();
         try {
+            // console.log(`SELECT * FROM data.orders
+            //     WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             const _tmpRes = await client.query(`SELECT * FROM data.orders 
-                WHERE free_period_end < (NOW() + interval '${process.env.SERVER_TIME_DIFF} hour') LIMIT 20`);
+                WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             if (_tmpRes.rows.length > 0) {
                 _tmpRes.rows.forEach(async _order => {
                     const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
