@@ -47,6 +47,7 @@
     "postcss-nested": "^5.0.6",
     "query-string": "^7.0.1",
     "rc-slider": "^9.7.5",
+    "rc-time-picker": "^3.7.3",
     "react": "17.0.2",
     "react-bootstrap": "^2.0.3",
     "react-calendly": "^4.1.1",

@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { ListLiveOrders } from '../../components/orders';
+import { ListLiveOrders } from '../../components/liveorders';
 
 // import { showFormSelector } from '../../redux/chatbot/selectors';
 // import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';
@@ -21,7 +21,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
 
             <div className="block-white-8 mr-10 white-shadow-big">
                 <div className="page-title ">
-                    <h1>{t('Live Orders')}</h1>
+                    <h1>{t('Live Carts')}</h1>
                 </div>
             </div>
             <div className="block-white-8 mr-10 white-shadow-medium mt-10">

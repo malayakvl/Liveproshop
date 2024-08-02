@@ -20,10 +20,11 @@ import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
 import Head from 'next/head';
 import Image from 'next/image';
-// import { showDateSelectorAction } from '../../redux/dashboard';
 import { showDatePopupSelector } from '../../redux/dashboard/selectors';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import TimePicker from 'rc-time-picker';
+import 'rc-time-picker/assets/index.css';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -42,6 +43,8 @@ export default function ShippingThreshold() {
     const showDatePopup = useSelector(showDatePopupSelector);
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
+    const [timeFrom, setTimeFrom] = useState(moment());
+    const [timeTo, setTimeTo] = useState(moment());
     const [calendarPeriod, setCalendarPeriod] = useState<any>(null);
 
     const SP = (dateRange: any) => {
@@ -55,15 +58,21 @@ export default function ShippingThreshold() {
         // @ts-ignore
         setCalendarPeriod(pd);
         dispatch(setupPeriodAction(pd));
-        dispatch(
-            setModalConfirmationSetupPeriodMetaAction({
-                onConfirm: async () => {
-                    toggleModalPeriodSetupConfirmation();
-                    // dispatch(showShippedConfirmationModalAction)
-                    // dispatch(setShippingPeriodAction(pd));
-                }
-            })
-        );
+        // dispatch(
+        //     setModalConfirmationSetupPeriodMetaAction({
+        //         onConfirm: async () => {
+        //             toggleModalPeriodSetupConfirmation();
+        //         }
+        //     })
+        // );
+    };
+
+    const handleValueChangeFrom = (value: any) => {
+        setTimeFrom(value);
+    };
+
+    const handleValueChangeTo = (value: any) => {
+        setTimeTo(value);
     };
 
     useEffect(() => {
@@ -76,6 +85,7 @@ export default function ShippingThreshold() {
                 }
             })
             .then((result) => {
+                console.log(result.data);
                 setThreshold(result.data.threshold);
                 dispatch(setPeriodDeleteValuesActions(result.data.period));
                 setPeriod(result.data.period);
@@ -83,6 +93,9 @@ export default function ShippingThreshold() {
     }, [user.email]);
 
     if (!user.email) return null;
+
+    console.log('DB period', period);
+    console.log('DB threhold', threshold);
 
     return (
         <>
@@ -101,6 +114,25 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
+                                const dateFromNew = `${calendarPeriod.startDate} ${timeFrom}`;
+                                const dateToNew = `${calendarPeriod.endDate} ${timeTo}`;
+                                // setCalendarPeriod({ startDate: dateFromNew, endDate: dateToNew });
+                                dispatch(
+                                    setupPeriodAction({
+                                        startDate: calendarPeriod.startDate,
+                                        endDate: calendarPeriod.endDate,
+                                        startTime: moment(timeFrom).format('HH:mm'),
+                                        endTime: moment(timeTo).format('HH:mm'),
+                                        threshold: values.threshold
+                                    })
+                                );
+                                dispatch(
+                                    setModalConfirmationSetupPeriodMetaAction({
+                                        onConfirm: async () => {
+                                            toggleModalPeriodSetupConfirmation();
+                                        }
+                                    })
+                                );
                                 if (
                                     !calendarPeriod &&
                                     !period.free_shipping_from &&
@@ -110,10 +142,10 @@ export default function ShippingThreshold() {
                                 } else {
                                     const formData = {
                                         threshold: values.threshold,
-                                        dateFrom: moment(dateRange[0]).format('YYYY-MM-DD'),
-                                        dateTo: moment(dateRange[1]).format('YYYY-MM-DD')
+                                        timeFromNew: moment(timeFrom).format('HH:mm:ss'),
+                                        timeToNew: moment(timeFrom).format('HH:mm:ss')
                                     };
-                                    dispatch(setThresholdAction(formData));
+                                    // dispatch(setThresholdAction(formData));
                                 }
                             }}
                             enableReinitialize
@@ -123,7 +155,7 @@ export default function ShippingThreshold() {
                             })}
                             render={(props) => (
                                 <Form onSubmit={props.handleSubmit}>
-                                    <div className="w-full md:w-1/2 p-4 float-left">
+                                    <div className="w-full md:w-1/3 p-4 float-left">
                                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                             {t('Free shipping threshold')}
                                         </div>
@@ -141,7 +173,7 @@ export default function ShippingThreshold() {
                                             <ErrorMessage name="threshold" />
                                         </div>
                                     </div>
-                                    <div className="w-full md:w-1/2 p-4 float-left">
+                                    <div className="w-full md:w-2/3 p-4 float-left">
                                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                             {t('Free Shipping Period')}
                                         </div>
@@ -171,19 +203,35 @@ export default function ShippingThreshold() {
                                                     isClearable={true}
                                                 />
                                             </div>
+                                            <div className="inline-block ml-6">
+                                                <TimePicker
+                                                    className={`form-control-picker`}
+                                                    format={'HH:mm:ss'}
+                                                    name="time_from"
+                                                    value={timeFrom}
+                                                    onChange={handleValueChangeFrom}
+                                                />
+                                                <TimePicker
+                                                    format={'HH:mm:ss'}
+                                                    className={`form-control-picker ml-4`}
+                                                    name="time_to"
+                                                    value={timeTo}
+                                                    onChange={handleValueChangeTo}
+                                                />
+                                            </div>
                                         </div>
                                         {period.free_shipping_from && period.free_shipping_to && (
                                             <div className="block text-[14px] font-bold mt-[20px]">
                                                 <ul className="inline-block">
                                                     <li className="float-left">
                                                         <span className="inline-block mt-[2px] text-gray-350">
-                                                            {moment(
-                                                                period.free_shipping_from
-                                                            ).format('DD/MM/YYYY HH:mm')}
+                                                            {moment(period.free_shipping_from)
+                                                                .add('-3', 'hours')
+                                                                .format('DD/MM/YYYY HH:mm')}
                                                             {' - '}
-                                                            {moment(period.free_shipping_to).format(
-                                                                'DD/MM/YYYY HH:mm'
-                                                            )}
+                                                            {moment(period.free_shipping_to)
+                                                                .add('-3', 'hours')
+                                                                .format('DD/MM/YYYY HH:mm')}
                                                         </span>
                                                     </li>
                                                     <li className="float-left">

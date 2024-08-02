@@ -817,6 +817,7 @@ console.log('ZZZZ', 1);
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
+
             switch (user.role_id) {
                 case UserRole.ADMIN:
                     break;
@@ -1509,6 +1510,7 @@ console.log('MS', multiOrderPaymentData);
         }
     }
 
+
     async connectThrowStore(messageId, fromId, storeId, inPeriod, freePeriodEnd) {
         const client = await pool.connect();
         try {
@@ -1523,11 +1525,15 @@ console.log('MS', multiOrderPaymentData);
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
             const findedOrderRes = await client.query(queryOrder);
+
+            const _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
+
             await client.query(`UPDATE data.orders
                     SET 
                         in_period = ${inPeriod},
-                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                        free_period_end='${_endPeriod}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
+
 
 
             if (connetedQueryRes.rows.length > 0) {
@@ -1553,20 +1559,20 @@ console.log('MS', multiOrderPaymentData);
                 if (settingsSettingsRes.rows[0].order_timer.minutes) {
                     expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                 }
-console.log(`UPDATE data.orders
-                    SET user_id='${userId}',
-                        sync_at='${syncAt}',
-                        expire_order_at='${expireAt}',
-                        in_period = ${inPeriod},
-                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
-                    WHERE id='${findedOrderRes.rows[0].id}'`);
+// console.log(`UPDATE data.orders
+//                     SET user_id='${userId}',
+//                         sync_at='${syncAt}',
+//                         expire_order_at='${expireAt}',
+//                         in_period = ${inPeriod},
+//                         free_period_end='${_endPeriod}'
+//                     WHERE id='${findedOrderRes.rows[0].id}'`);
 
                 await client.query(`UPDATE data.orders
                     SET user_id='${userId}',
                         sync_at='${syncAt}',
                         expire_order_at='${expireAt}',
                         in_period = ${inPeriod},
-                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                        free_period_end='${_endPeriod}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
 
 
@@ -1850,7 +1856,8 @@ console.log(settingsSettingsQuery);
                 let updateTotal = 0;
                 if (!resWait.rows[0].order_id) {
 // console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
-                    const existNonPayed = await client.query(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+                    const existNonPayed = await client.query(`SELECT * FROM data.orders 
+                        WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
@@ -1863,14 +1870,18 @@ console.log(settingsSettingsQuery);
                             orderNumber = existNonPayedEmpty.rows[0].order_number;
                         } else {
                             const emptyWaitRes = await client.query(
-                                `SELECT id, order_number, user_id,
+                                `SELECT id, order_number, user_id, updated_at,
                                     live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
                             orderId = emptyWaitRes.rows[0].id;
 
-                            orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
+                            // down't remember why i attach prefix
+                            // orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
+                            orderNumber = emptyWaitRes.rows[0].order_number;
                             const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
                             const settingsSettingsQuery =
-                                `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                                `SELECT data.seller_settings.order_timer,  data.seller_settings.free_shipping_to,
+                                        data.seller_settings.free_shipping_from
+                                        FROM data.seller_settings
                                         LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
                                         WHERE data.live_sessions.id = '${emptyWaitRes.rows[0].live_sessions_id}'`;
                             const settingsSettingsRes = await client.query(settingsSettingsQuery);
@@ -1884,25 +1895,34 @@ console.log(settingsSettingsQuery);
                             if (settingsSettingsRes.rows[0].order_timer.minutes) {
                                 expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                             }
+                            const forattedDate = moment(emptyWaitRes.rows[0].updated_at).format('YYYY-MM-DD hh:mm:ss');
+                            const dateFrom = moment(settingsSettingsRes.rows[0].free_shipping_from).format('YYYY-MM-DD hh:mm:ss');
+                            const dateTo = moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss');
 
+                            const inPeriod = forattedDate >= dateFrom && forattedDate <= dateTo;
                             const updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
                                 order_number='${orderNumber}',
                                 sync_at='${syncAt}',
-                                expire_order_at='${expireAt}' 
+                                expire_order_at='${expireAt}',
+                                in_period=${inPeriod},
+                                free_period_end='${moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss')}'
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
                             await client.query(updtQuery);
 
-                            await client.query(`UPDATE data.order_items SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`)
+                            await client.query(`UPDATE data.order_items 
+                                SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`
+                            );
                         }
                     }
                     if (resWait.rows.length > 0) {
                         for (const _item of resWait.rows) {
                             if (!_item.order_id) {
                                 updateTotal += _item.price*_item.quantity;
-                                await client.query(`UPDATE data.order_items SET order_id = ${orderId} WHERE message_id='${commentId}'`);
+                                await client.query(`UPDATE data.order_items 
+                                    SET order_id = ${orderId} WHERE message_id='${commentId}'`);
                             }
                         }
                     }
@@ -2193,6 +2213,45 @@ console.log('here')
         } finally {
             client.release();
         }
+    }
+
+    async removeExpirePeriodOrder() {
+        const client = await pool.connect();
+        try {
+            // console.log(`SELECT * FROM data.orders
+            //     WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            const _tmpRes = await client.query(`SELECT * FROM data.orders 
+                WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            if (_tmpRes.rows.length > 0) {
+                _tmpRes.rows.forEach(async _order => {
+                    const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
+                    if (tmpResItems.rows.length > 0) {
+                        tmpResItems.rows.forEach(async _item => {
+                            // return quntity for configuration
+                            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
+                            console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                        })
+                    }
+                    // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`)
+                })
+            }
+
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+
     }
 
     async removeUnpayedSessionOrder (sessionId) {

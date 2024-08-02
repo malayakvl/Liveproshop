@@ -1,51 +1,26 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { getSession } from 'next-auth/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { List } from '../../components/liveselling';
 import { accountService } from '../../_services';
 import SchedulePopup from '../../components/liveselling/SchedulePopup';
 import { showPopupAction } from '../../redux/livesessions';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { fetchScenariosAction } from '../../redux/livesessions';
-import { userSelector } from '../../redux/user/selectors';
-import { fetchFormAction } from '../../redux/settings';
-import { itemSelector } from '../../redux/settings/selectors';
-import moment from 'moment';
 
-export default function Index({ session, locale }: { session: any; locale: string }) {
+export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
-    const user = useSelector(userSelector);
-    const settingsValues = useSelector(itemSelector);
-    // const dataShowAlert = useState(true);
-    const [showAlert, setShowAlert] = useState(true);
 
     const fbSync = () => {
         accountService.syncFB();
     };
     useEffect(() => {
         dispatch(fetchScenariosAction());
-        dispatch(fetchFormAction());
     }, []);
-
-    useEffect(() => {
-        if (
-            (settingsValues.delivery_doc ||
-                settingsValues.delivery_link ||
-                settingsValues.privacy_link ||
-                settingsValues.privacy_doc ||
-                settingsValues.terms_doc ||
-                settingsValues.terms_link ||
-                settingsValues.return_doc ||
-                settingsValues.return_link) &&
-            settingsValues.multisafe_api_key
-        ) {
-            setShowAlert(false);
-        }
-    }, [settingsValues]);
 
     return (
         <>
@@ -63,78 +38,21 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             <span>{t('Sync account')}</span>
                         </button>
                     </div>
-                    {user.auth_provider_expiration_time && (
-                        <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
-                            {t('Expire in')}{' '}
-                            {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
-                        </div>
-                    )}
                     <div className="clear-both" />
                 </div>
-                <div className={`block alert-danger mb-6 ${!showAlert ? 'hidden' : ''}`}>
-                    {t('text_settings_params')}
-                    <ul className="mt-3">
-                        {!settingsValues.delivery_doc &&
-                            !settingsValues.privacy_doc &&
-                            !settingsValues.terms_doc &&
-                            !settingsValues.return_doc &&
-                            !settingsValues.terms_link &&
-                            !settingsValues.privacy_link &&
-                            !settingsValues.return_link &&
-                            !settingsValues.delivery_link && (
-                                <li>
-                                    {locale == 'en' ? (
-                                        <p>
-                                            Documents - <Link href={'/documents'}> here</Link>
-                                        </p>
-                                    ) : (
-                                        <p>
-                                            Vos documents
-                                            <Link href={'/documents'}> ici</Link>
-                                        </p>
-                                    )}
-                                </li>
-                            )}
-                        {!settingsValues.multisafe_api_key && (
-                            <li>
-                                {locale == 'en' ? (
-                                    <p>
-                                        Multisafe - <Link href={'/payment-setting'}> here</Link>
-                                    </p>
-                                ) : (
-                                    <p>
-                                        Multisafe
-                                        <Link href={'/payment-setting'}> ici</Link>
-                                    </p>
-                                )}
-                            </li>
-                        )}
-                        {!settingsValues.multisafe_api_key && (
-                            <li>
-                                {locale == 'en' ? (
-                                    <p>
-                                        Live session params - <Link href={'/settings'}> here</Link>
-                                    </p>
-                                ) : (
-                                    <p>
-                                        Programmer un Live paramètres
-                                        <Link href={'/settings'}> ici</Link>
-                                    </p>
-                                )}
-                            </li>
-                        )}
-                    </ul>
-                    {user.subscription_id?.includes('skip_') && (
-                        <div className="alert-danger mb-6">
-                            {t('text_plan_schedule')}{' '}
-                            <Link href={'/pricing'}>
-                                <span className="font-bold cursor-pointer">
-                                    {t('text_plan_schedule1')}
-                                </span>
-                            </Link>{' '}
-                            {t('text_plan_schedule2')}
+                <div className="block">
+                    <div className="w-full bg-white">
+                        <div className="flex flex-wrap justify-between">
+                            <p className="text-blue-400 underline text-base mb-4">
+                                <Link href={'/guides/liveselling'}>{t('liveselling_descr')}</Link>
+                            </p>
+                            <button
+                                className="btn-big xl:ml-4 mt-4 md:mt-0"
+                                onClick={() => dispatch(showPopupAction(true))}>
+                                {t('Schedule new session')}
+                            </button>
                         </div>
-                    )}
+                    </div>
                     <div className="clear-both" />
                 </div>
             </div>

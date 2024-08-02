@@ -453,7 +453,10 @@ class Shipping {
     async fetchShippingPeriod(userId) {
         const client = await pool.connect();
         try {
-            const res = await client.query(`SELECT free_shipping_from, free_shipping_to FROM data.seller_settings WHERE user_id=${userId}`);
+            console.log(`SELECT free_shipping_from, free_shipping_to 
+                FROM data.seller_settings WHERE user_id=${userId}`);
+            const res = await client.query(`SELECT free_shipping_from, free_shipping_to 
+                FROM data.seller_settings WHERE user_id=${userId}`);
 
             return res.rows[0];
         } catch (e) {

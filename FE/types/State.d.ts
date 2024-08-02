@@ -12,6 +12,7 @@ declare namespace State {
         shippings: Shippings;
         livesessions: Livesessions;
         orders: Orders;
+        liveorders: Liveorders;
         payments: Payments;
         waitingList: WaitingList;
         buyers: Buyers;
@@ -39,6 +40,7 @@ declare namespace State {
     type Shippings = Array<Shipping>;
     type Livesessions = Livesessions.Root;
     type Orders = Orders.Root;
+    type Liveorders = Liveorders.Root;
     type Payments = Payments.Root;
     type WaitingList = WaitingList.Root;
     type PaymentPlans = PaymentPlans.Root;

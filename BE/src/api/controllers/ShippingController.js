@@ -153,11 +153,12 @@ export default new class ShippingController {
     }
 
     setThreshold(req, res) {
-        const currentTime = moment(Date.now()).format('HH:mm:ss');
+        console.log(req.body)
+        // const currentTime = moment(Date.now()).format('HH:mm:ss');
         // console.log(req.body.dateFrom)
-        req.body.dateFrom = `${req.body.dateFrom} ${currentTime}`;
-        req.body.dateTo = `${req.body.dateTo} ${currentTime}`;
-        // console.log(req.body);
+        req.body.dateFrom = `${req.body.startDate} ${req.body.startTime}`;
+        req.body.dateTo = `${req.body.endDate} ${req.body.endTime}`;
+        console.log(req.body);
         shippingModel.setThreshold(req.user.id, req.body)
         // shippingModel.setShippingPeriod(req.user.id, req.body.startDate, req.body.endDate)
         res.status(200).json({})

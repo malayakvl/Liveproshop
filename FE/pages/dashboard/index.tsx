@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Router from 'next/router';
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { paginatedItemsSelector, showDatePopupSelector } from '../../redux/dashboard/selectors';
 import { paginationSelectorFactory } from '../../redux/layouts/selectors';
@@ -50,6 +50,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     );
 
     useEffect(() => {
+        // console.log('CURRENT USER USE EFFECT', user);
         if (user.id) {
             dispatch(
                 setPaginationAction({
@@ -98,15 +99,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     </button>
                 )}
             </div>
-            {user.subscription_id?.includes('skip_') && (
-                <div className="alert-danger mb-6">
-                    {t('text_plan_schedule')}{' '}
-                    <Link href={'/pricing'}>
-                        <span className="font-bold cursor-pointer">{t('text_plan_schedule1')}</span>
-                    </Link>{' '}
-                    {t('text_plan_schedule2')}
-                </div>
-            )}
 
             <div className="block-white-4 mr-10" onClick={reverseDatePopup}>    {/* eslint-disable-line */}
                 <div className="flex flex-row flex-wrap w-full">
