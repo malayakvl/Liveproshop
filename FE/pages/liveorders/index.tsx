@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/client';
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { ListLiveOrders } from '../../components/orders';
+import { ListLiveOrders } from '../../components/liveorders';
 
 // import { showFormSelector } from '../../redux/chatbot/selectors';
 // import { setEmptyFormAction, showFormAction } from '../../redux/chatbot';

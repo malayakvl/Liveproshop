@@ -816,7 +816,9 @@ console.log('ZZZZ', 1);
     async fetchLiveItems (page, perPage = 20000, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
+console.log('here model', filters);
             const _filters = JSON.parse(filters);
+
             switch (user.role_id) {
                 case UserRole.ADMIN:
                     break;

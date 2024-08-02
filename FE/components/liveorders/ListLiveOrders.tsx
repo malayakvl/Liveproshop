@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     achiveNameSelector,
     itemsCountSelector,
-    itemsStatusesSelector,
     liveItemsSelector
 } from '../../redux/liveorders/selectors';
 import { PaginationType } from '../../constants';
@@ -128,13 +127,13 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
                             className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
                             <Image width={16} height={16} src={'/images/filter.svg'} />
                             <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
-                            <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
-                                {filters.country_id.length +
-                                    filters.payment_id.length +
-                                    !!filters.total_amount.length +
-                                    !!filters.created_at.length +
-                                    filters.country_id.length}
-                            </div>
+                            {/*<div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">*/}
+                            {/*    {filters.country_id.length +*/}
+                            {/*        filters.payment_id.length +*/}
+                            {/*        !!filters.total_amount.length +*/}
+                            {/*        !!filters.created_at.length +*/}
+                            {/*        filters.country_id.length}*/}
+                            {/*</div>*/}
                         </button>
                     </div>
                 </div>
