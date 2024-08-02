@@ -19,10 +19,10 @@ const ListLiveItems: React.FC<any> = ({ items, expireAt }) => {
                             className="pb-4">
                             <div className="text-[18px] text-bold text-gray-350">
                                 <div className="float-left">
-                                    {t('Products in order')} Expire at{' '}
-                                    {moment(expireAt).format('HH:ss')}
+                                    {t('Products in order')}
+                                    {/*{moment(expireAt).add(-3, 'hours').format('HH:mm:ss')}*/}
                                 </div>
-                                <OrderCounter endDate={expireAt} />
+                                <OrderCounter endDate={moment(expireAt).add(-3, 'hours')} />
                             </div>
                         </th>
                     </tr>
