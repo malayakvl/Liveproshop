@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import pool from './api/models/connect.js';
+import shell from "shelljs";
 
 const appRoute = Router();
 appRoute.get(/.*$/, function (req, res, next) {
@@ -10,6 +11,24 @@ appRoute.get(/.*$/, function (req, res, next) {
             next();
         }
     });
+});
+
+// here automatically start jobs for project
+shell.exec(`pm2 start ./storeJobs/jobClearOrders.js --name "jobClearOrders"`, function(code, output) {
+    console.log('Exit code:', code);
+    console.log('Program output:', output);
+});
+shell.exec(`pm2 start ./storeJobs/jobClearOrdersFreePeriod.js --name "jobClearOrdersFreePeriod"`, function(code, output) {
+    console.log('Exit code:', code);
+    console.log('Program output:', output);
+});
+shell.exec(`pm2 start ./storeJobs/jobStart.js --name "jobStart"`, function(code, output) {
+    console.log('Exit code:', code);
+    console.log('Program output:', output);
+});
+shell.exec(`pm2 start ./storeJobs/jobEnd.js --name "jobEnd"`, function(code, output) {
+    console.log('Exit code:', code);
+    console.log('Program output:', output);
 });
 
 appRoute.get('/', (req, res) => {
