@@ -20,28 +20,6 @@ const ListLiveItems: React.FC<any> = ({ items, expireAt }) => {
                             <div className="text-[18px] text-bold text-gray-350">
                                 <div className="float-left">{t('Products in order')}</div>
                                 <OrderCounter endDate={expireAt} />
-                                {/*<div className="float-left mt-[-9px] ml-[10px]">*/}
-                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
-                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
-                                {/*            0*/}
-                                {/*        </span>*/}
-                                {/*    </div>*/}
-                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
-                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
-                                {/*            0*/}
-                                {/*        </span>*/}
-                                {/*    </div>*/}
-                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
-                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
-                                {/*            0*/}
-                                {/*        </span>*/}
-                                {/*    </div>*/}
-                                {/*    <div className="countdown-value countdown-value countdown-small">*/}
-                                {/*        <span className="red-yellow-gradient-text counter-caption-time-small">*/}
-                                {/*            0*/}
-                                {/*        </span>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
                             </div>
                         </th>
                     </tr>

@@ -184,6 +184,7 @@ class OrderController {
 
     async getOrderFreePeriodClear(req, res){
         if (req.query.fromJob === 'yes') {
+            console.log('here we are - clear period');
             const data = await orderModel.removeExpirePeriodOrder();
         }
         return res.status(200).json({ success: true });

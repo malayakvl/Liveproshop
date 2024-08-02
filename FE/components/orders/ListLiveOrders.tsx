@@ -5,7 +5,7 @@ import {
     itemsCountSelector,
     itemsStatusesSelector,
     liveItemsSelector
-} from '../../redux/orders/selectors';
+} from '../../redux/liveorders/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import {
@@ -14,17 +14,17 @@ import {
     showCancelConfirmationModalAction,
     showShippedConfirmationModalAction,
     showDateSelectorAction
-} from '../../redux/orders';
+} from '../../redux/liveorders';
 import moment from 'moment';
 import Image from 'next/image';
 import { baseApiUrl } from '../../constants';
 import { initIdsAction } from '../../redux/layouts';
 import { useTranslations } from 'next-intl';
 import { Filters, FilterValues, ListLiveItems } from './index';
-import { checkedIdsSelector, paginationSelectorFactory } from '../../redux/layouts/selectors';
+import { paginationSelectorFactory } from '../../redux/layouts/selectors';
 import { formatCurrency } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
-import { bulkDownloadAction, expireOrderAction } from '../../redux/orders/actions';
+import { bulkDownloadAction } from '../../redux/liveorders/actions';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -37,11 +37,10 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
     const t = useTranslations();
     const dispatch = useDispatch();
     const items = useSelector(liveItemsSelector);
-    const itemsStatuses = useSelector(itemsStatusesSelector);
-    const [time, setTime] = useState(new Date());
+    const [_, setTime] = useState(new Date());
     const count = useSelector(itemsCountSelector);
     const { filters }: Layouts.Pagination = useSelector(
-        paginationSelectorFactory(PaginationType.ORDERS)
+        paginationSelectorFactory(PaginationType.LIVEORDERS)
     );
     const user = useSelector(userSelector);
     const achiveName = useSelector(achiveNameSelector);
@@ -118,7 +117,28 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
                         locale={locale}
                         filterOpen={filterOpen}
                     />
+                    <div className="">
+                        <button
+                            onClick={() => {
+                                if (filterOpen) {
+                                    dispatch(showDateSelectorAction(false));
+                                }
+                                setFilterOpen(!filterOpen);
+                            }}
+                            className="absolute top-[-40px] md:top-0 right-0 flex items-center text-sm border rounded-lg px-4 py-1.5">
+                            <Image width={16} height={16} src={'/images/filter.svg'} />
+                            <div className="font-medium text-gray-400 ml-2">{t('Filters')}</div>
+                            <div className="ml-2 font-bold rounded-full p-[2px] text-center bg-gray-400 text-xs h-5 w-5 text-white">
+                                {filters.country_id.length +
+                                    filters.payment_id.length +
+                                    !!filters.total_amount.length +
+                                    !!filters.created_at.length +
+                                    filters.country_id.length}
+                            </div>
+                        </button>
+                    </div>
                 </div>
+
                 <div className="mb-5">
                     <FilterValues />
                 </div>
@@ -170,6 +190,9 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
                                             <div className="pl-3">
                                                 {item.buyer_first_name} {item.buyer_last_name}
                                             </div>
+                                            {/*<span className="absolute pt-[17px] font-[9px] store-style">*/}
+                                            {/*    {item.name}*/}
+                                            {/*</span>*/}
                                         </div>
                                     </div>
                                 </td>
@@ -198,6 +221,76 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
                                     />
                                 </td>
                             </tr>
+                            {/*<tr>*/}
+                            {/*    <td style={{ width: '50px' }}>*/}
+                            {/*        <i*/}
+                            {/*            role="presentation"*/}
+                            {/*            className="icon-tbl-triangle cursor-pointer"*/}
+                            {/*            style={{ marginTop: '5px' }}*/}
+                            {/*            onClick={() => handleShowMore(item.id)}*/}
+                            {/*        />*/}
+                            {/*    </td>*/}
+                            {/*    <td*/}
+                            {/*        className={`${*/}
+                            {/*            user.role_id === 2 && item.status_waiting*/}
+                            {/*                ? ''*/}
+                            {/*                : 'order-number'*/}
+                            {/*        }`}>*/}
+                            {/*        {item.order_number}*/}
+                            {/*    </td>*/}
+                            {/*    <td className="order-date">*/}
+                            {/*        {moment(item.created_at).format('DD/MM/YYYY')}*/}
+                            {/*    </td>*/}
+                            {/*    <td></td>*/}
+                            {/*    <td className="">*/}
+                            {/*        <div className="float-left">*/}
+                            {/*            <div className="flex flex-row">*/}
+                            {/*                <div*/}
+                            {/*                    className="user-photo-1"*/}
+                            {/*                    style={{ marginLeft: '0' }}>*/}
+                            {/*                    <Image*/}
+                            {/*                        src={*/}
+                            {/*                            item.buyer_photo*/}
+                            {/*                                ? baseApiUrl + item.buyer_photo*/}
+                            {/*                                : userProfileImg*/}
+                            {/*                        }*/}
+                            {/*                        width={24}*/}
+                            {/*                        height={24}*/}
+                            {/*                        className="rounded-full cursor-pointer"*/}
+                            {/*                        alt=""*/}
+                            {/*                    />*/}
+                            {/*                </div>*/}
+                            {/*                <div className="pl-3">*/}
+                            {/*                    {item.buyer_first_name} {item.buyer_last_name}*/}
+                            {/*                </div>*/}
+                            {/*            </div>*/}
+                            {/*        </div>*/}
+                            {/*    </td>*/}
+                            {/*    <td style={{ minWidth: '150px' }}>*/}
+                            {/*        {item.order_items?.length ? item.order_items?.length : 0}x{' '}*/}
+                            {/*        <span className="red-yellow-gradient-text">product (s)</span>*/}
+                            {/*    </td>*/}
+                            {/*    <td>*/}
+                            {/*        {formatCurrency(*/}
+                            {/*            parseFloat(item.total_amount) -*/}
+                            {/*                parseFloat(*/}
+                            {/*                    item.refund_amount ? item.refund_amount : 0*/}
+                            {/*                ) +*/}
+                            {/*                parseFloat(*/}
+                            {/*                    item.shipping_amount ? item.shipping_amount : 0*/}
+                            {/*                )*/}
+                            {/*        )}*/}
+                            {/*    </td>*/}
+                            {/*</tr>*/}
+                            {/*<tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>*/}
+                            {/*    <td />*/}
+                            {/*    <td colSpan={10} style={{ borderLeft: 'solid 1px red' }}>*/}
+                            {/*        <ListLiveItems*/}
+                            {/*            items={item.order_items}*/}
+                            {/*            expireAt={item.expire_order_at}*/}
+                            {/*        />*/}
+                            {/*    </td>*/}
+                            {/*</tr>*/}
                         </Fragment>
                     ))}
                 </DataTable>

@@ -2227,11 +2227,11 @@ console.log('here')
                             // return quntity for configuration
                             await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
                             console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
-                            // await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
                         })
                     }
                     // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
-                    // await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`)
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`)
                 })
             }
 

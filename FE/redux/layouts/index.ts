@@ -80,7 +80,19 @@ const initialState: State.Layouts = {
                 seller_id: []
             }
         },
-        [PaginationType.LIVEORDERS]: { ...initPagination },
+        [PaginationType.LIVEORDERS]: {
+            ...initPagination,
+            filters: {
+                order_number: '',
+                shipping_id: [],
+                country_id: [],
+                payment_id: [],
+                status: [],
+                total_amount: [],
+                created_at: [],
+                seller_id: []
+            }
+        },
         [PaginationType.ORDERS]: {
             ...initPagination,
             filters: {

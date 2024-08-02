@@ -16,6 +16,7 @@ import livesessionsReducer from '../redux/livesessions/index';
 import countriesReducer from '../redux/countries/index';
 import shippingReducer from '../redux/shipping/index';
 import ordersReducer from '../redux/orders/index';
+import liveordersReducer from '../redux/liveorders/index';
 import paymentsReducer from '../redux/payments';
 import waitingListReducer from '../redux/waitingList/index';
 import sellersReducer from '../redux/sellers/index';
@@ -38,6 +39,7 @@ const reducers = combineReducers({
     countries: countriesReducer,
     shippings: shippingReducer,
     orders: ordersReducer,
+    liveorders: liveordersReducer,
     payments: paymentsReducer,
     waitingList: waitingListReducer,
     buyers: buyersReducer,

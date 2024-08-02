@@ -2,14 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    FilterPayment,
-    FilterStatus,
     FilterAmount,
-    FilterCountry,
-    FilterDelivery,
     FilterNumber,
     FilterDate,
-    FilterSeller,
     FilterDateRange,
     FilterDropdownShoppers
 } from './index';
@@ -99,19 +94,9 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
 
                 <FilterDateRange />
 
-                {user.role_id === 3 && <FilterSeller />}
-
                 <FilterAmount />
 
-                <FilterStatus />
-
-                <FilterPayment />
-
                 <FilterDropdownShoppers locale={locale} />
-
-                <FilterCountry locale={locale} />
-
-                <FilterDelivery />
             </div>
         </div>
     );

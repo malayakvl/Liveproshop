@@ -110,10 +110,11 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     ],
     [PaginationType.LIVEORDERS]: [
         { iconClass: 'icon-tbl-order' },
+        { titleKey: '' },
         { iconClass: 'icon-tbl-date' },
         { titleKey: 'Shoppers', iconClass: 'icon-tbl-users' },
         { titleKey: 'Products' },
-        { iconClass: 'icon-tbl-total', titleKey: 'Total' }
+        { iconClass: 'icon-tbl-total', sortKey: 'orders.order_amount', titleKey: 'Total' }
     ],
     [PaginationType.SELLERS]: [
         // { className: 'flex justify-center', iconClass: 'icon-tbl-index' },

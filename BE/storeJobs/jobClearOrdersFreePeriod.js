@@ -12,7 +12,7 @@ const apiUrl = process.env.API_URL;
 
 async function clearOrdersFreePeriod() {
     // start parsing messages
-    console.log('here', `${apiUrl}/api/get-order-clear-period`);
+    console.log('here', `${apiUrl}/api/get-order-clear-free-period`);
     await axios(`${apiUrl}/api/get-order-clear-free-period?fromJob=yes`)
     .then(async (responseQty) => {
 

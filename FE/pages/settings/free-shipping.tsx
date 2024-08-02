@@ -95,6 +95,7 @@ export default function ShippingThreshold() {
     if (!user.email) return null;
 
     console.log('DB period', period);
+    console.log('DB threhold', threshold);
 
     return (
         <>
@@ -121,7 +122,8 @@ export default function ShippingThreshold() {
                                         startDate: calendarPeriod.startDate,
                                         endDate: calendarPeriod.endDate,
                                         startTime: moment(timeFrom).format('HH:mm'),
-                                        endTime: moment(timeTo).format('HH:mm')
+                                        endTime: moment(timeTo).format('HH:mm'),
+                                        threshold: values.threshold
                                     })
                                 );
                                 dispatch(
