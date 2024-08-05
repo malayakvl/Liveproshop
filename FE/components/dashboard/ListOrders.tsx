@@ -98,6 +98,17 @@ const ListOrders: React.FC<{ orders: Orders.DataItem[]; locale: string }> = ({
                                             )}
                                         </td>
                                     )}
+                                {user.role_id === 1 &&
+                                    item.status !== 'new' &&
+                                    item.total_amount != 0 && (
+                                        <td
+                                            style={{
+                                                paddingTop: 0,
+                                                paddingBottom: 0,
+                                                maxWidth: '70px'
+                                            }}
+                                        />
+                                    )}
                                 <td>
                                     <span className={item.status}>{t(item.status)}</span>
                                 </td>
