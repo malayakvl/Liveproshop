@@ -1846,6 +1846,7 @@ console.log(settingsSettingsQuery);
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
             storeName = res.rows[0].store_name;
+console.log('Store Name', storeName)
             sessionId = res.rows[0].live_sessions_id;
             const tmpUserId = res.rows[0].tmp_user_id;
             if (!orderNumber) {
@@ -1872,6 +1873,7 @@ console.log(settingsSettingsQuery);
                             const emptyWaitRes = await client.query(
                                 `SELECT id, order_number, user_id, updated_at,
                                     live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
+console.log('Here', emptyWaitRes.rows[0].id);
                             orderId = emptyWaitRes.rows[0].id;
 
                             // down't remember why i attach prefix
@@ -1900,7 +1902,11 @@ console.log(settingsSettingsQuery);
                             const dateTo = moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss');
 
                             const inPeriod = forattedDate >= dateFrom && forattedDate <= dateTo;
-                            const updtQuery = `UPDATE data.orders 
+                            const freePeriodEnd = settingsSettingsRes.rows[0].free_shipping_to ?
+                                moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss') : null;
+                            let updtQuery;
+                            if (settingsSettingsRes.rows[0].free_shipping_to) {
+                                updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
@@ -1910,6 +1916,18 @@ console.log(settingsSettingsQuery);
                                 in_period=${inPeriod},
                                 free_period_end='${moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss')}'
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
+                            } else {
+                                updtQuery = `UPDATE data.orders 
+                                SET user_id=${userId}, 
+                                total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                order_number='${orderNumber}',
+                                sync_at='${syncAt}',
+                                expire_order_at='${expireAt}',
+                                in_period=${inPeriod}
+                                WHERE id=${emptyWaitRes.rows[0].id}`;
+                            }
+console.log(updtQuery);
                             await client.query(updtQuery);
 
                             await client.query(`UPDATE data.order_items 
