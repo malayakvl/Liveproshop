@@ -1846,6 +1846,7 @@ console.log(settingsSettingsQuery);
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
             storeName = res.rows[0].store_name;
+console.log('Store Name', storeName)
             sessionId = res.rows[0].live_sessions_id;
             const tmpUserId = res.rows[0].tmp_user_id;
             if (!orderNumber) {
@@ -1872,6 +1873,7 @@ console.log(settingsSettingsQuery);
                             const emptyWaitRes = await client.query(
                                 `SELECT id, order_number, user_id, updated_at,
                                     live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
+console.log('Here', emptyWaitRes.rows[0].id);
                             orderId = emptyWaitRes.rows[0].id;
 
                             // down't remember why i attach prefix
@@ -1900,7 +1902,11 @@ console.log(settingsSettingsQuery);
                             const dateTo = moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss');
 
                             const inPeriod = forattedDate >= dateFrom && forattedDate <= dateTo;
-                            const updtQuery = `UPDATE data.orders 
+                            // const freePeriodEnd = settingsSettingsRes.rows[0].free_shipping_to ?
+                            //     moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss') : null;
+                            let updtQuery;
+                            if (settingsSettingsRes.rows[0].free_shipping_to) {
+                                updtQuery = `UPDATE data.orders 
                                 SET user_id=${userId}, 
                                 total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
@@ -1910,11 +1916,32 @@ console.log(settingsSettingsQuery);
                                 in_period=${inPeriod},
                                 free_period_end='${moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss')}'
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
+                            } else {
+                                updtQuery = `UPDATE data.orders 
+                                SET user_id=${userId}, 
+                                total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                order_number='${orderNumber}',
+                                sync_at='${syncAt}',
+                                expire_order_at='${expireAt}'
+                                WHERE id=${emptyWaitRes.rows[0].id}`;
+                            }
+
+console.log(updtQuery);
                             await client.query(updtQuery);
 
                             await client.query(`UPDATE data.order_items 
                                 SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`
                             );
+                            // const totalAmountSQL = (
+                            //     `SELECT SUM(total_amount) AS sum_total_amount,
+                            //         SUM(order_amount) AS sum_order_amount
+                            //         FROM data.order_items
+                            //     WHERE order_id=${emptyWaitRes.rows[0].id} AND user_id=${tmpUserId}
+                            //     GROUP BY order_id`);
+                            //
+                            // console.log(totalAmountSQL);
+
                         }
                     }
                     if (resWait.rows.length > 0) {
@@ -2231,10 +2258,17 @@ console.log('here')
                             await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
                             console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
                             await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+
                         })
                     }
                     // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
-                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`)
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`);
+
                 })
             }
 

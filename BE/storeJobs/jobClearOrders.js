@@ -13,7 +13,7 @@ const storeData = args[3].split('=');
 async function clearOrderJob() {
     // start parsing messages
     console.log('here', `${apiUrl}/api/get-order-clear`);
-    await axios(`${apiUrl}/api/get-order-remove`)
+    await axios(`${apiUrl}/api/get-order-clear`)
     .then(async (responseQty) => {
         // if (parseInt(responseQty.data.qty) > 0) {
         //     await axios(`${apiUrl}/api/run-waiting-job?configId=${configData[1]}`)
