@@ -1902,8 +1902,8 @@ console.log('Here', emptyWaitRes.rows[0].id);
                             const dateTo = moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss');
 
                             const inPeriod = forattedDate >= dateFrom && forattedDate <= dateTo;
-                            const freePeriodEnd = settingsSettingsRes.rows[0].free_shipping_to ?
-                                moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss') : null;
+                            // const freePeriodEnd = settingsSettingsRes.rows[0].free_shipping_to ?
+                            //     moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss') : null;
                             let updtQuery;
                             if (settingsSettingsRes.rows[0].free_shipping_to) {
                                 updtQuery = `UPDATE data.orders 
@@ -1923,16 +1923,25 @@ console.log('Here', emptyWaitRes.rows[0].id);
                                 order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
                                 order_number='${orderNumber}',
                                 sync_at='${syncAt}',
-                                expire_order_at='${expireAt}',
-                                in_period=${inPeriod}
+                                expire_order_at='${expireAt}'
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
                             }
+
 console.log(updtQuery);
                             await client.query(updtQuery);
 
                             await client.query(`UPDATE data.order_items 
                                 SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`
                             );
+                            // const totalAmountSQL = (
+                            //     `SELECT SUM(total_amount) AS sum_total_amount,
+                            //         SUM(order_amount) AS sum_order_amount
+                            //         FROM data.order_items
+                            //     WHERE order_id=${emptyWaitRes.rows[0].id} AND user_id=${tmpUserId}
+                            //     GROUP BY order_id`);
+                            //
+                            // console.log(totalAmountSQL);
+
                         }
                     }
                     if (resWait.rows.length > 0) {
