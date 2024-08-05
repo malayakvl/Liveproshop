@@ -306,8 +306,8 @@ class OrderController {
     async checkOrderByNumber(req, res) {
         const orderNumber = req.query.orderNumber;
         const resQuery = await orderModel.fetchExistByNumber(orderNumber);
-
-        return res.status(200).json({ success: true, exist_order: resQuery.data });
+console.log('Order Exisit', resQuery?.data ? 1 : -1);
+        return res.status(200).json({ success: true, exist_order: resQuery?.data ? 1 : -1 });
     }
 
     async findWaitOrderById (req, res) {

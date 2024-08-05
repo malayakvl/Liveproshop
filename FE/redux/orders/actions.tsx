@@ -624,7 +624,9 @@ export const checkOrderExistAction: any = createAction(
                     }
                 })
                 .then((res: any) => {
-                    console.log(res.data);
+                    if (parseFloat(res.data.exist_order) < 0) {
+                        window.location.reload();
+                    }
                     // if (!res.data.exist_order) {
                     //     alert('redirect');
                     // }

@@ -1343,7 +1343,7 @@ console.log('MS', multiOrderPaymentData);
         try {
             const SQL = `SELECT * FROM data.orders WHERE order_number = '${orderNumber}';`;
             const res = await client.query(SQL);
-            if (res.rows[0].length > 0) {
+            if (res.rows.length > 0) {
                 return {success: true, error: null, data: res.rows[0]};
             } else {
                 return {success: true, error: null, data: null};
