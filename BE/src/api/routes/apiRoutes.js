@@ -155,6 +155,7 @@ apiRoutes.route('/orders/find-order-by-comment').get(OrderController.findOrderBy
 apiRoutes.route('/orders/find-wait-order-by-comment').get(OrderController.findWaitOrderByCommentId);
 apiRoutes.route('/orders/find-order-by-db-id').get(OrderController.findWaitOrderById);
 apiRoutes.route('/orders/fetch-total-amount').get(OrderController.fetchTotalAmount);
+apiRoutes.route('/orders/check-order-by-number').get(OrderController.checkOrderByNumber);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 

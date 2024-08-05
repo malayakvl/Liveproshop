@@ -612,6 +612,27 @@ export const fetchOrderTotalAmountActionUpdated: any = createAction(
                 });
         }
 );
+export const checkOrderExistAction: any = createAction(
+    'orders/CHECK_ORDER_EXIST',
+    async (orderNumber: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/check-order-by-number?orderNumber=${orderNumber}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    console.log(res.data);
+                    // if (!res.data.exist_order) {
+                    //     alert('redirect');
+                    // }
+                    // dispatch(setupOrderAmountUpdatedAction(res.data.total_amount));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 // export const fetchOrderTotalAmountAction: any = createAction(
 //     'orders/FETCH_ORDER_TOTAL_AMOUNT',
 //     async (orderId: number) =>
@@ -635,7 +656,6 @@ export const fetchOrderTotalAmountActionUpdated: any = createAction(
 //                 });
 //         }
 // );
-
 
 // export const demoveItemOrderAction: any = createAction(
 //     'order/REMOVE_ITEM_ACTION',

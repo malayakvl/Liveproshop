@@ -34,7 +34,8 @@ import {
     fetchOrderTotalAmountAction,
     fetchOrderTotalAmountActionUpdated,
     reloadAfterCombineAction,
-    setupOrderAmountUpdatedAction
+    setupOrderAmountUpdatedAction,
+    checkOrderExistAction
 } from './actions';
 
 const initialState: {
@@ -376,7 +377,8 @@ export {
     setupOrderAmountAction,
     fetchOrderTotalAmountAction,
     reloadAfterCombineAction,
-    fetchOrderTotalAmountActionUpdated
+    fetchOrderTotalAmountActionUpdated,
+    checkOrderExistAction
 };
 
 // ------------------------------------

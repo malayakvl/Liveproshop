@@ -303,6 +303,13 @@ class OrderController {
         return res.status(200).json({ success: true, total_amount: 0 });
     }
 
+    async checkOrderByNumber(req, res) {
+        const orderNumber = req.query.orderNumber;
+        const resQuery = await orderModel.fetchExistByNumber(orderNumber);
+
+        return res.status(200).json({ success: true, exist_order: resQuery.data });
+    }
+
     async findWaitOrderById (req, res) {
         if (req.user) {
             // console.log('getting wait order by id', req.query.orderId);

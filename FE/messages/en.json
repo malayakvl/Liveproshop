@@ -677,5 +677,6 @@
   "text_download_order": "In order to download the invoice click on the order number",
   "Live Orders": "Live Orders",
   "Products in order": "Products in order",
-  "Products in cart": "Products in cart"
+  "Products in cart": "Products in cart",
+  "Live Carts": "Live Carts"
 }
