@@ -2249,10 +2249,17 @@ console.log('here')
                             await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
                             console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
                             await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+
                         })
                     }
                     // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
-                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`)
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`);
+
                 })
             }
 
