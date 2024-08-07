@@ -548,7 +548,7 @@
   "simple": "simple",
   "configured": "configured",
   "Simple product": "Simple product",
-  "A simple product may have only one colour and size.": "A simple product may have only one colour and size.",
+  "A simple product may have only one colour and size": "A simple product may have only one colour and size.",
   "inorder_text": "In order to have a simple product you need to leave the toggle in the default\n  position, see the screenshot below:",
   "Configured product": "Configured product",
   "configured_text_1": "Configured product has an unlimited number of size-colour combinations.",

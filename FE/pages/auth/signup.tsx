@@ -234,6 +234,14 @@ export default function Signup({ locale }: { locale: string }) {
                                                         __html: `${chromeLink}`
                                                     }}></span>
                                                 &nbsp;and open it in Chrome browser
+                                                <br />
+                                                <a
+                                                    target="_blank"
+                                                    className="underline text-yellow-500"
+                                                    href="googlechrome://navigate?url=example.com"
+                                                    rel="noreferrer">
+                                                    Chrome LINK
+                                                </a>
                                             </>
                                         )}
                                         {locale == 'fr' && (

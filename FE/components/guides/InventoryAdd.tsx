@@ -36,7 +36,7 @@ const InventoryAdd: React.FC = () => {
             </h3>
             <div className="text-[16px] leading-[24px] md:text-[20px] text-gray-350 max-w-[800px] font-medium">
                 <p className="block mb-[15px]">
-                    {t('A simple product may have only one colour and size.')}
+                    {t('A simple product may have only one colour and size')}
                 </p>
                 <p>{t('inorder_text')}</p>
             </div>
