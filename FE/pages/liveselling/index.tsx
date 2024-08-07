@@ -7,19 +7,28 @@ import { List } from '../../components/liveselling';
 import { accountService } from '../../_services';
 import SchedulePopup from '../../components/liveselling/SchedulePopup';
 import { showPopupAction } from '../../redux/livesessions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchScenariosAction } from '../../redux/livesessions';
+import { userSelector } from '../../redux/user/selectors';
+import { fetchFormAction } from '../../redux/settings';
+import { itemSelector } from '../../redux/settings/selectors';
+import moment from 'moment';
 
-export default function Index({ session }: { session: any }) {
+export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
     const t = useTranslations();
     const dispatch = useDispatch();
+    const user = useSelector(userSelector);
+    const settingsValues = useSelector(itemSelector);
+
+    console.log(locale);
 
     const fbSync = () => {
         accountService.syncFB();
     };
     useEffect(() => {
         dispatch(fetchScenariosAction());
+        dispatch(fetchFormAction());
     }, []);
 
     return (
@@ -38,19 +47,97 @@ export default function Index({ session }: { session: any }) {
                             <span>{t('Sync account')}</span>
                         </button>
                     </div>
+                    <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
+                        {t('Expire in')}{' '}
+                        {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
+                    </div>
                     <div className="clear-both" />
                 </div>
                 <div className="block">
+                    {!settingsValues.delivery_doc &&
+                        !settingsValues.privacy_doc &&
+                        !settingsValues.terms_doc &&
+                        !settingsValues.return_doc &&
+                        !settingsValues.terms_link &&
+                        !settingsValues.privacy_link &&
+                        !settingsValues.return_link &&
+                        !settingsValues.delivery_link && (
+                            <div className="alert-danger mb-6">
+                                {locale == 'en' ? (
+                                    <p>
+                                        Note! You must add your documents before going live -
+                                        <Link href={'/documents'}> here</Link>
+                                    </p>
+                                ) : (
+                                    <p>
+                                        Remarque : Il est impératif d`abater vos documents avant de
+                                        commencer vos diffusions en direct.
+                                        <Link href={'/documents'}> ici</Link>
+                                    </p>
+                                )}
+                            </div>
+                        )}
+                    {!settingsValues.multisafe_api_key && (
+                        <div className="alert-danger mb-6">
+                            {locale == 'en' ? (
+                                <p>
+                                    Note! You must add your payment info before going live -
+                                    <Link href={'/payment-setting'}> here</Link>
+                                </p>
+                            ) : (
+                                <p>
+                                    Remarque : Vous devez ajouter vos informations de paiement avant
+                                    de passer en ligne
+                                    <Link href={'/payment-setting'}> ici</Link>
+                                </p>
+                            )}
+                        </div>
+                    )}
+                    {!settingsValues.order_timer && (
+                        <div className="alert-danger mb-6">
+                            {locale == 'en' ? (
+                                <p>
+                                    Note! You must add your cart settings info before going live -
+                                    <Link href={'/settings'}> here</Link>
+                                </p>
+                            ) : (
+                                <p>
+                                    Remarque : Vous devez ajouter les informations sur les
+                                    paramètres de votre panier avant de passer en ligne
+                                    <Link href={'/settings'}> ici</Link>
+                                </p>
+                            )}
+                        </div>
+                    )}
                     <div className="w-full bg-white">
                         <div className="flex flex-wrap justify-between">
                             <p className="text-blue-400 underline text-base mb-4">
                                 <Link href={'/guides/liveselling'}>{t('liveselling_descr')}</Link>
                             </p>
-                            <button
-                                className="btn-big xl:ml-4 mt-4 md:mt-0"
-                                onClick={() => dispatch(showPopupAction(true))}>
-                                {t('Schedule new session')}
-                            </button>
+                            {(!settingsValues.delivery_doc &&
+                                !settingsValues.privacy_doc &&
+                                !settingsValues.terms_doc &&
+                                !settingsValues.return_doc &&
+                                !settingsValues.terms_link &&
+                                !settingsValues.privacy_link &&
+                                !settingsValues.return_link &&
+                                !settingsValues.delivery_link) ||
+                            !settingsValues.order_timer ||
+                            !settingsValues.multisafe_api_key ? (
+                                <div />
+                            ) : (
+                                <div>
+                                    <button
+                                        className="btn-big xl:ml-4 mt-4 md:mt-0"
+                                        onClick={() => dispatch(showPopupAction(true))}>
+                                        {t('Schedule new session')}
+                                    </button>
+                                </div>
+                            )}
+                            {/*    className="btn-big xl:ml-4 mt-4 md:mt-0"*/}
+                            {/*    onClick={() => dispatch(showPopupAction(true))}>*/}
+                            {/*    {t('Schedule new session')}*/}
+                            {/*</button>*/}
                         </div>
                     </div>
                     <div className="clear-both" />
