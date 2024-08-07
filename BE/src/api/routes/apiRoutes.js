@@ -57,6 +57,7 @@ apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder)
 apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
 apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
 apiRoutes.route('/get-order-clear').get(OrderController.removeUnpayedOrder);
+apiRoutes.route('/get-order-expired').get(OrderController.getOrderExpiredClear);
 apiRoutes.route('/get-order-clear-free-period').get(OrderController.getOrderFreePeriodClear);
 
 apiRoutes.route('/remove-sessions-order').get(OrderController.removeSessionsOrders);
@@ -155,6 +156,7 @@ apiRoutes.route('/orders/find-order-by-comment').get(OrderController.findOrderBy
 apiRoutes.route('/orders/find-wait-order-by-comment').get(OrderController.findWaitOrderByCommentId);
 apiRoutes.route('/orders/find-order-by-db-id').get(OrderController.findWaitOrderById);
 apiRoutes.route('/orders/fetch-total-amount').get(OrderController.fetchTotalAmount);
+apiRoutes.route('/orders/check-order-by-number').get(OrderController.checkOrderByNumber);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 

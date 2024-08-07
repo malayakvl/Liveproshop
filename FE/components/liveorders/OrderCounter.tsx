@@ -9,15 +9,28 @@ const OrderCounter: React.FC<any> = ({ endDate }) => {
     const [timerValueMunites, setTimerValueMinutes] = useState(0);
     const [timerValueSeconds, setTimerValueSeconds] = useState(0);
 
+    // console.log('Order period from db', endDate);
+    // const userTimezoneOffset = new Date(endDate);
+    const _now = new Date().getTime();
+    const _tmpDateToLocale = new Date(endDate).toLocaleString();
+    const _tmpDateToIco = new Date(new Date(endDate).toISOString());
+    // console.log('To Locale String', _tmpDateToLocale);
+    // console.log('To Locale String', new Date(_tmpDateToIco));
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // console.log('Diff', _tmpDateToIco - _now);
+
     const x = setInterval(function () {
         // Get today's date and time
         const now = new Date().getTime();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const countDownDate = new Date(endDate);
+        const countDownDate = new Date(endDate).toLocaleString();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        const distance = countDownDate - now;
+        // const distance = new Date(countDownDate) - now;
+        // const distance = countDownDate - now;
+        const distance = _tmpDateToIco - now;
 
         // Time calculations for days, hours, minutes and seconds
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));

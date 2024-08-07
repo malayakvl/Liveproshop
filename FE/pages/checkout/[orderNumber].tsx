@@ -24,7 +24,8 @@ import {
     setupReturnedUrlAction,
     setupOrderAmountAction,
     fetchOrderTotalAmountAction,
-    fetchOrderTotalAmountActionUpdated
+    fetchOrderTotalAmountActionUpdated,
+    checkOrderExistAction
 } from '../../redux/orders';
 
 import { Formik, Form } from 'formik';
@@ -98,6 +99,9 @@ export default function Index({ session, locale }: { session: any; locale: any }
     const y = setInterval(function () {
         if (order?.order_number) {
             dispatch(fetchOrderTotalAmountActionUpdated(order.order_number));
+        }
+        if (order?.order_number) {
+            dispatch(checkOrderExistAction(order.order_number));
         }
     }, 2000);
 

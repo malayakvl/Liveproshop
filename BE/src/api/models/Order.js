@@ -838,6 +838,7 @@ console.log('ZZZZ', 1);
                     _filters.status = [OrderStatus.NEW];
                 }
             }
+            // _filters.sync_at = NULL;
 
             // _filters.buyer_id = _filters.shopper_id;
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
@@ -1338,6 +1339,30 @@ console.log('MS', multiOrderPaymentData);
         }
     }
 
+    async fetchExistByNumber (orderNumber) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.orders WHERE order_number = '${orderNumber}';`;
+            const res = await client.query(SQL);
+            if (res.rows.length > 0) {
+                return {success: true, error: null, data: res.rows[0]};
+            } else {
+                return {success: true, error: null, data: null};
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async fetchTotal (orderNumber) {
         const client = await pool.connect();
         try {
@@ -1514,6 +1539,7 @@ console.log('MS', multiOrderPaymentData);
     async connectThrowStore(messageId, fromId, storeId, inPeriod, freePeriodEnd) {
         const client = await pool.connect();
         try {
+console.log('Connect throw store');
             // find order by message and attach to current user
             const connetedQuery = `SELECT * FROM data.user2pages 
                 WHERE from_id='${fromId}' AND store_id=${storeId}`
@@ -1525,18 +1551,23 @@ console.log('MS', multiOrderPaymentData);
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
             const findedOrderRes = await client.query(queryOrder);
+            let _endPeriod;
+console.log(1);
+            if (freePeriodEnd) {
+                _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
+console.log(_endPeriod);
 
-            const _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
-
-            await client.query(`UPDATE data.orders
+                await client.query(`UPDATE data.orders
                     SET 
                         in_period = ${inPeriod},
                         free_period_end='${_endPeriod}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
-
+            } else {
+            }
 
 
             if (connetedQueryRes.rows.length > 0) {
+console.log('TUTUTUTUTUTUTUUT')
 
                 const userId = connetedQueryRes.rows[0].user_id;
                 // find order by message
@@ -1564,16 +1595,24 @@ console.log('MS', multiOrderPaymentData);
 //                         sync_at='${syncAt}',
 //                         expire_order_at='${expireAt}',
 //                         in_period = ${inPeriod},
-//                         free_period_end='${_endPeriod}'
+//                         free_period_end='${_endPeriod ? _endPeriod : null}'
 //                     WHERE id='${findedOrderRes.rows[0].id}'`);
 
-                await client.query(`UPDATE data.orders
+                if (inPeriod) {
+                    await client.query(`UPDATE data.orders
                     SET user_id='${userId}',
                         sync_at='${syncAt}',
                         expire_order_at='${expireAt}',
                         in_period = ${inPeriod},
                         free_period_end='${_endPeriod}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
+                } else {
+                    await client.query(`UPDATE data.orders
+                    SET user_id='${userId}',
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
+                }
 
 
                 // check if we have non payed order
@@ -2242,13 +2281,64 @@ console.log('here')
         }
     }
 
+    async removeExpireOrder() {
+        const client = await pool.connect();
+        try {
+            // console.log(`SELECT * FROM data.orders
+            //     WHERE status='new' AND expire_order_at < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            // const _tmpRes = await client.query(`SELECT * FROM data.orders
+            //     WHERE status='new' AND (expire_order_at + interval '${process.env.PERIOD_ORDER_DIFF} hour') < (NOW())
+            //      AND expire_order_at IS NOT NULL LIMIT 20`);
+            const _tmpRes = await client.query(`SELECT * FROM data.orders 
+                WHERE status='new' AND (expire_order_at ) < (NOW())
+                 AND expire_order_at IS NOT NULL LIMIT 20`);
+            if (_tmpRes.rows.length > 0) {
+                _tmpRes.rows.forEach(async _order => {
+                    const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
+                    if (tmpResItems.rows.length > 0) {
+                        tmpResItems.rows.forEach(async _item => {
+                            // return quntity for configuration
+                            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
+                            console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+
+                        })
+                    }
+                    // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`);
+
+                })
+            }
+
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+
+
+    }
+
     async removeExpirePeriodOrder() {
         const client = await pool.connect();
         try {
             // console.log(`SELECT * FROM data.orders
             //     WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             const _tmpRes = await client.query(`SELECT * FROM data.orders 
-                WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+                WHERE status='new' AND free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             if (_tmpRes.rows.length > 0) {
                 _tmpRes.rows.forEach(async _order => {
                     const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);

@@ -19,7 +19,7 @@ export default function MainLayout({ children }: { children: any }) {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const commentId = urlParams.getAll('comment_id')[0];
-            console.log('COMMENT ID', window.localStorage.getItem('orderCommentId'));
+            // console.log('COMMENT ID', window.localStorage.getItem('orderCommentId'));
             if (session?.user?.email && !window.localStorage.getItem('user')) {
                 dispatch(fetchUserAction(session.user.email));
                 console.log('USER MAIL', session.user.email);

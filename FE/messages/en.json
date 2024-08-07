@@ -548,7 +548,7 @@
   "simple": "simple",
   "configured": "configured",
   "Simple product": "Simple product",
-  "A simple product may have only one colour and size.": "A simple product may have only one colour and size.",
+  "A simple product may have only one colour and size": "A simple product may have only one colour and size.",
   "inorder_text": "In order to have a simple product you need to leave the toggle in the default\n  position, see the screenshot below:",
   "Configured product": "Configured product",
   "configured_text_1": "Configured product has an unlimited number of size-colour combinations.",
@@ -677,5 +677,6 @@
   "text_download_order": "In order to download the invoice click on the order number",
   "Live Orders": "Live Orders",
   "Products in order": "Products in order",
-  "Products in cart": "Products in cart"
+  "Products in cart": "Products in cart",
+  "Live Carts": "Live Carts"
 }

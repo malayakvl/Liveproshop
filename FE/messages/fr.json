@@ -549,7 +549,7 @@
   "simple": "simple",
   "configured": "configuré / avec options",
   "Simple product": "Produit Simple",
-  "A simple product may have only one colour and size.": "Un produit simple peut n'avoir qu'une seule couleur et qu'une seule taille.",
+  "A simple product may have only one colour and size": "Un produit simple peut n'avoir qu'une seule couleur et qu`une seule taille.",
   "inorder_text": "Afin d'avoir un produit simple, vous devez laisser le bouton dans la position par défaut, voir la capture d'écran ci-dessous :",
   "configured_text_1":"Le produit configuré a un nombre illimité de combinaisons de taille-couleur.",
   "Configured product": "Produit configuré / avec options",
@@ -677,6 +677,7 @@
   "text_download_order": "Pour télécharger la facture, cliquez sur le numéro de commande.",
   "Live Orders": "Live Orders",
   "Products in order": "Produits en commande",
-  "Products in cart": "Produits dans le panier"
+  "Products in cart": "Produits dans le panier",
+  "Live Carts": "Chariots vivants"
 
 }
