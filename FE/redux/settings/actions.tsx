@@ -47,11 +47,15 @@ export const submitFormLinkAction: any = createAction(
                 })
                 .then(async (response) => {
                     if (response.data.success) {
-                        window.location.reload();
+                        dispatch(setSuccessToastAction('Record has been updated'));
+                        // eslint-disable-next-line @typescript-eslint/no-empty-function
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 3000);
+                        // window.location.reload();
                         // dispatch(removeUploadedTermsAndCondFile());
                         // dispatch(removeUploadedPolicyFile());
                         dispatch(fetchFormAction());
-                        dispatch(setSuccessToastAction('Record has been updated'));
                     } else dispatch(setErrorToastAction('Something went wrong'));
 
                     dispatch(showLoaderAction(false));
