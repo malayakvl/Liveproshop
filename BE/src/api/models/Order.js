@@ -2287,7 +2287,8 @@ console.log('here')
             // console.log(`SELECT * FROM data.orders
             //     WHERE status='new' AND expire_order_at < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             const _tmpRes = await client.query(`SELECT * FROM data.orders 
-                WHERE status='new' AND expire_order_at < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+                WHERE status='new' AND (expire_order_at + interval '${process.env.PERIOD_ORDER_DIFF} hour') < (NOW())
+                 AND expire_order_at IS NOT NULL LIMIT 20`);
             if (_tmpRes.rows.length > 0) {
                 _tmpRes.rows.forEach(async _order => {
                     const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
