@@ -838,6 +838,7 @@ console.log('ZZZZ', 1);
                     _filters.status = [OrderStatus.NEW];
                 }
             }
+            // _filters.sync_at = NULL;
 
             // _filters.buyer_id = _filters.shopper_id;
             const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
