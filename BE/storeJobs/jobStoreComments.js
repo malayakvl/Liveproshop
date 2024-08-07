@@ -11,7 +11,14 @@ async function startProcess() {
         await axios.get(`https://graph.facebook.com/v17.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment&limit=100&access_token=${tokenData[1]}`)
             .then(async function (response) {
                 const results = response.data.data;
-                console.log(response.data.data);
+                console.log('Incoming Comments', response.data.data[0]);
+                // if (response.data.data[0].from) {
+                //     console.log('User ID', response.data.data[0].id)
+                //     await axios(`${apiUrl}/api/check-user-to-stores?messageId=${response.data.data[0].id}&fromId=${response.data.data[0].from}&storeId=70`)
+                //         .then((response) => {
+                //
+                //         })
+                // }
                 await axios
                     .post(`${apiUrl}/api/add-live-messages?sessionId=${sessionsData[1]}`, results)
                     .then(() => {

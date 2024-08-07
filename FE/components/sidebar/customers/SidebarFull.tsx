@@ -45,6 +45,17 @@ const SidebarFull: React.FC = () => {
                     </a>
                 </Link>
             </li>
+            <li
+                role="presentation"
+                className={currRoute === 'liveorders' ? 'active' : ''}
+                onClick={() => closeMenu()}>
+                <Link href={'/liveorders'}>
+                    <a>
+                        <i className="liveorders" />
+                        <span className="s-caption">{t('Live Carts')}</span>
+                    </a>
+                </Link>
+            </li>
             <li role="presentation" onClick={() => closeMenu()}>
                 <Link href={'/inventory'}>
                     <a>

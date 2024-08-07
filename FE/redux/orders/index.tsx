@@ -1,6 +1,7 @@
 import { Action, handleActions } from 'redux-actions';
 import {
     fetchItemsAction,
+    fetchLiveItemsAction,
     fetchItemAction,
     setEmptyFormAction,
     showPopupAction,
@@ -25,7 +26,16 @@ import {
     redirectOrderNumberAction,
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
-    clearWaitOrderByCommentAction
+    clearWaitOrderByCommentAction,
+    setupConnectedStoreNameAction,
+    openBrowserAction,
+    setGoogleDeepLinkAction,
+    setupOrderAmountAction,
+    fetchOrderTotalAmountAction,
+    fetchOrderTotalAmountActionUpdated,
+    reloadAfterCombineAction,
+    setupOrderAmountUpdatedAction,
+    checkOrderExistAction
 } from './actions';
 
 const initialState: {
@@ -33,6 +43,7 @@ const initialState: {
     loading: boolean;
     count: number;
     items: Orders.DataItem[];
+    liveItems: Orders.DataItem[];
     itemsStatuses: any;
     item: any;
     showPopup: boolean;
@@ -51,11 +62,18 @@ const initialState: {
     orderReturnedUrl: string | null;
     redirectCheckout: boolean;
     redirectOrderNumber: any;
+    storeName: any;
+    googleBrowserLink: any;
+    prevOrderAmount: number;
+    currOrderAmount: number;
+    reloadOrderAfterCombine: boolean;
+    latestLiveOrder: number;
 } = {
     isFetched: false,
     loading: false,
     count: 0,
     items: [],
+    liveItems: [],
     itemsStatuses: [],
     item: {},
     showPopup: false,
@@ -78,7 +96,13 @@ const initialState: {
     connectedOrderNumber: null,
     orderReturnedUrl: null,
     redirectCheckout: false,
-    redirectOrderNumber: null
+    redirectOrderNumber: null,
+    storeName: null,
+    googleBrowserLink: null,
+    prevOrderAmount: 0,
+    currOrderAmount: 0,
+    reloadOrderAfterCombine: false,
+    latestLiveOrder: 0
 };
 
 const ACTION_HANDLERS: any = {
@@ -86,6 +110,22 @@ const ACTION_HANDLERS: any = {
         next: (
             state: State.Orders,
             action: Type.ReduxAction<Pick<State.Orders, 'count' | 'items'>>
+        ): State.Orders => ({
+            ...state,
+            ...action.payload,
+            loading: false,
+            isFetched: true
+        }),
+        throw: (state: State.Orders): State.Orders => ({
+            ...state,
+            loading: false,
+            isFetched: false
+        })
+    },
+    [fetchLiveItemsAction]: {
+        next: (
+            state: State.Orders,
+            action: Type.ReduxAction<Pick<State.Orders, 'count' | 'liveItems'>>
         ): State.Orders => ({
             ...state,
             ...action.payload,
@@ -271,11 +311,42 @@ const ACTION_HANDLERS: any = {
             ...state,
             redirectOrderNumber: action.payload
         })
+    },
+    [setupConnectedStoreNameAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            storeName: action.payload
+        })
+    },
+    [setGoogleDeepLinkAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            googleBrowserLink: action.payload
+        })
+    },
+    [setupOrderAmountAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            prevOrderAmount: action.payload
+        })
+    },
+    [setupOrderAmountUpdatedAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            currOrderAmount: action.payload
+        })
+    },
+    [reloadAfterCombineAction]: {
+        next: (state: State.Orders, action: Action<any>): State.Orders => ({
+            ...state,
+            reloadOrderAfterCombine: action.payload
+        })
     }
 };
 
 export {
     fetchItemsAction,
+    fetchLiveItemsAction,
     fetchItemAction,
     showPopupAction,
     setEmptyFormAction,
@@ -299,7 +370,15 @@ export {
     redirectOrderNumberAction,
     setupConnectedOrderIdAction,
     setupWaitOrderByCommentAction,
-    clearWaitOrderByCommentAction
+    clearWaitOrderByCommentAction,
+    setupConnectedStoreNameAction,
+    openBrowserAction,
+    setGoogleDeepLinkAction,
+    setupOrderAmountAction,
+    fetchOrderTotalAmountAction,
+    reloadAfterCombineAction,
+    fetchOrderTotalAmountActionUpdated,
+    checkOrderExistAction
 };
 
 // ------------------------------------

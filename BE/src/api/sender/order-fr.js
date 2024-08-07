@@ -25,5 +25,7 @@ export default {
     "Payment Method": "Mode de paiement: ",
     "Refund": "Remboursement",
     "color": "couleur",
-    "size": "taille"
+    "size": "taille",
+    "Shipping refund": "Remboursement",
+    "Shipping refund1": "des frais de port:"
 }

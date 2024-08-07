@@ -14,23 +14,24 @@ import {
 } from '../../redux/user/actions';
 import { accountService } from '../../_services';
 import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/selectors';
-import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
+import { googleDeepLinkSelector, orderTmpCommentIdSelector } from '../../redux/orders/selectors';
+import { nativeBrowserSelector, openRealBrowserSelector } from '../../redux/layouts/selectors';
+import { openBrowserAction } from '../../redux/orders';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const tmpCommentOrderId = useSelector(orderTmpCommentIdSelector);
-    // const {
-    //     values: { roleId }
-    // } = useFormikContext();
-    // const { setFieldValue } = useFormikContext();
     const hideFormSelector = useSelector(hideRegisterFormSelector);
     const forFree = useSelector(userForFreeSelector);
+    const nativeBrowser = useSelector(nativeBrowserSelector);
+    const openRealBrowser = useSelector(openRealBrowserSelector);
     type FormData = {
         email: string;
         acceptTerms: boolean;
         role_id: '1' | '2';
         forFree: any;
     };
+    const googleDeepLink = useSelector(googleDeepLinkSelector);
 
     const t = useTranslations();
     const [roleId, setRoleId] = useState(1);
@@ -39,10 +40,8 @@ export default function Signup({ locale }: { locale: string }) {
     const [commentId, setCommentId] = useState('');
     const [_, setCommentTmpId] = useState('');
     const [showSellerRadio, setShowSellerRadio] = useState(true);
-    // const { values, submitForm } = useFormikContext();
-    // const { setFieldValue } = useFormikContext();
-    // const params = new URLSearchParams(window.location.pathname);
-    // console.log(window.location.pathname);
+    const [chromeLink, setChromeLink] = useState('');
+    const incomingOrderLink = useSelector(googleDeepLinkSelector);
 
     const validationSchema = Yup.object().shape({
         email: !isFbClicked
@@ -59,7 +58,30 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        // const commentId = commentStr[1];
+        console.log('messenger link', incomingOrderLink);
+        if (googleDeepLink) {
+            setChromeLink(googleDeepLink.replace('https://', ''));
+        }
+
+        if (
+            window.localStorage.getItem('orderCommentId') ||
+            window.localStorage.getItem('orderWaitCommentId')
+        ) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            if (window.localStorage.getItem('orderCommentId')) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setCommentId(window.localStorage.getItem('orderCommentId'));
+            } else {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                setCommentId(window.localStorage.getItem('orderWaitCommentId'));
+            }
+
+            setShowSellerRadio(false);
+            setRoleId(1);
+        }
         if (commentStr[1]) {
             setCommentId(commentStr[1]);
             setShowSellerRadio(false);
@@ -74,6 +96,26 @@ export default function Signup({ locale }: { locale: string }) {
         }
     }, [tmpCommentOrderId]);
 
+    useEffect(() => {
+        console.log('Order Link', incomingOrderLink);
+        if (nativeBrowser) {
+            // console.log('GOOGLE DEEP LINK', googleDeepLink.replace('https://', ''));
+            let linkGenerate;
+            if (locale === 'en') {
+                linkGenerate = `<a href=${`googlechrome://${googleDeepLink.replace(
+                    'https://',
+                    ''
+                )}`}>LINK</a>`;
+            } else {
+                linkGenerate = `<a href=${`googlechrome://${googleDeepLink.replace(
+                    'https://',
+                    ''
+                )}`}>LE LIEN</a>`;
+            }
+            setChromeLink(linkGenerate);
+        }
+    }, [nativeBrowser]);
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (typeof window !== 'undefined') {
@@ -81,15 +123,30 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        // const parseCommentId = commentStr[1];
         if (commentStr[0] == 'comment_id' && commentStr[1]) {
-            // console.log(commentStr[1]);
             dispatch(setOrderCommentAction(commentStr[1]));
             window.localStorage.setItem('order_comment_id', commentStr[1]);
         }
+
         if (commentStr[0] == 'order_id' && commentStr[1]) {
             dispatch(setWaitOrderIdAction(commentStr[1]));
             window.localStorage.setItem('order_wait_id', commentStr[1]);
+        }
+        if (window.localStorage.getItem('orderCommentId')) {
+            // console.log(commentStr[1]);
+            const orderIdStorage = window.localStorage.getItem('orderCommentId');
+            dispatch(setOrderCommentAction(orderIdStorage));
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            window.localStorage.setItem('order_comment_id', orderIdStorage);
+        }
+        if (window.localStorage.getItem('orderWaitCommentId')) {
+            // console.log(commentStr[1]);
+            const orderIdStorage = window.localStorage.getItem('orderWaitCommentId');
+            dispatch(setOrderCommentAction(orderIdStorage));
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            window.localStorage.setItem('order_comment_id', orderIdStorage);
         }
     }
 
@@ -102,14 +159,6 @@ export default function Signup({ locale }: { locale: string }) {
                 const dataParams = urlParams.split('&');
                 const commentStr = dataParams[0].split('=');
                 parseCommentId = commentStr[1];
-                // if (commentStr[0] == 'comment_id' && commentStr[1]) {
-                //     // setRoleId(1);
-                //     if (!commentId) {
-                //         setCommentId(commentStr[1]);
-                //     }
-                //     // setCommentId(commentStr[1]);
-                //     // setFieldValue('roleId', '1');
-                // }
             }
             accountService.registerFB(`${roleId}_${locale}_${forFree ? 1 : 0}_${parseCommentId}`);
         } else {
@@ -120,7 +169,9 @@ export default function Signup({ locale }: { locale: string }) {
         }
     };
 
-    // console.log('Comment ID', commentId)
+    // const openSafaryBrowser = () => {
+    //     dispatch(openBrowserAction());
+    // };
 
     return (
         <>
@@ -143,32 +194,105 @@ export default function Signup({ locale }: { locale: string }) {
                         <form
                             onSubmit={props.handleSubmit}
                             className={`sign-up-form colored-shadow ${
-                                showSellerRadio ? '' : 'max-h-[350px] sign-up-fb'
+                                showSellerRadio ? '' : 'sign-up-fb'
                             }`}>
                             <div className="mt-0 w-full font-bold md:mt-0 md:pr-8 md:w-2/4 md:flex md:flex-col md:justify-center">
                                 <div className="text-3xl md:text-4xl mb-9 text-gray-600">
                                     {t('Sign up today!')}
                                 </div>
-
-                                <div className="mb-6 text-xl line-height-105percent text-gray-600">
-                                    {t('registr_descr')}
-                                </div>
-                                <div className="mb-6 text-sm line-height-105percent text-gray-600 italic">
-                                    {t('You can cancel at any time before to avoid the charge')}
-                                </div>
-
-                                <div className="font-normal mb-6 text-blue-350 hidden">
-                                    {t('registr_descr_small')}
-                                </div>
-
-                                <Link href={'/auth/signin'}>
-                                    <a className="font-bold red-yellow-gradient-text mb-8 block">
-                                        {t('have_account_descr')}
+                                <span className="mt-2 mb-4 hidden">
+                                    <a href="googlechrome://liveproshop.com">Chrome Liveproshop</a>
+                                </span>
+                                <span className="mt-2 mb-4 hidden">
+                                    <a href="com.apple.safari://open_url?url=[https://liveproshop]">
+                                        Safari Liveproshop
                                     </a>
-                                </Link>
+                                </span>
+                                {/*<div className="alert-warning mb-6 block">*/}
+                                {/*    It looks like you are using the Facebook in-app browser. For*/}
+                                {/*    better experience, please open this link in your default browser*/}
+                                {/*</div>*/}
+                                {nativeBrowser && (
+                                    <div className="alert-warning mb-6 block">
+                                        {locale == 'en' && (
+                                            <>
+                                                It looks like you are using the Facebook in-app
+                                                better experience, please open this link in your
+                                                default browser.
+                                                <br />
+                                                1) Press and hold the{' '}
+                                                <a
+                                                    className="underline text-yellow-500"
+                                                    href={`${incomingOrderLink}`}>
+                                                    LINK
+                                                </a>{' '}
+                                                <br />
+                                                2) Or you can use this{' '}
+                                                <span
+                                                    className="underline text-yellow-500"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: `${chromeLink}`
+                                                    }}></span>
+                                                &nbsp;and open it in Chrome browser
+                                                <br />
+                                                <a
+                                                    target="_blank"
+                                                    className="underline text-yellow-500"
+                                                    href="googlechrome://navigate?url=example.com"
+                                                    rel="noreferrer">
+                                                    Chrome LINK
+                                                </a>
+                                            </>
+                                        )}
+                                        {locale == 'fr' && (
+                                            <>
+                                                l semble que vous utilisiez le navigateur intégré de
+                                                Facebook. Pour une meilleure expérience, veuillez
+                                                ouvrir ce lien dans votre navigateur par défaut:
+                                                <br />
+                                                1) Appuyez longuement sur le lien et choisir «Ouvrir
+                                                dans Safari»
+                                                <a
+                                                    className="underline text-yellow-500"
+                                                    href={`${incomingOrderLink}`}>
+                                                    LE LIEN
+                                                </a>{' '}
+                                                <br />
+                                                2) Ou ouvrez-le dans le navigateur Chrome en
+                                                cliquant
+                                                <span
+                                                    className="underline text-yellow-500"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: `${chromeLink}`
+                                                    }}></span>
+                                            </>
+                                        )}
+                                    </div>
+                                )}
+                                <div className={`${nativeBrowser ? 'sign-up-form-disable' : ''}`}>
+                                    <div className="mb-6 text-xl line-height-105percent text-gray-600">
+                                        {t('registr_descr')}
+                                    </div>
+                                    <div className="mb-6 text-sm line-height-105percent text-gray-600 italic">
+                                        {t('You can cancel at any time before to avoid the charge')}
+                                    </div>
+
+                                    <div className="font-normal mb-6 text-blue-350 hidden">
+                                        {t('registr_descr_small')}
+                                    </div>
+
+                                    <Link href={'/auth/signin'}>
+                                        <a className="font-bold red-yellow-gradient-text mb-8 block">
+                                            {t('have_account_descr')}
+                                        </a>
+                                    </Link>
+                                </div>
                             </div>
 
-                            <div className="w-full md:pl-12 md:border-l md:w-2/4">
+                            <div
+                                className={`w-full md:pl-12 md:border-l md:w-2/4 ${
+                                    nativeBrowser ? 'sign-up-form-disable' : ''
+                                }`}>
                                 {!hideForm && (
                                     <>
                                         <div className="flex mb-10">

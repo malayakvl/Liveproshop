@@ -13,7 +13,7 @@ import {
 } from '../../../components/payments';
 import { fetchItemAction } from '../../../redux/payments';
 import { itemSelector } from '../../../redux/payments/selectors';
-import { singleDownloadAction } from '../../../redux/orders/actions';
+import { clearBase64Action } from '../../../redux/orders/actions';
 import { singleDowloadFileSelector } from '../../../redux/orders/selectors';
 
 export default function Payments({ session, locale }: { session: any; locale: string }) {
@@ -71,14 +71,22 @@ export default function Payments({ session, locale }: { session: any; locale: st
                         {/*    <span className="pl-4 pt-px">{t('Download Invoice')}</span>*/}
                         {/*</a>*/}
                         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        <a
-                            onClick={() => dispatch(singleDownloadAction(orderNumber, locale))}
-                            href="javascript:;"
-                            className="gradient-btn"
-                            rel="noreferrer">
-                            {/*<Image width="20" height="18" src={'/images/download.svg'} />*/}
-                            <span className="   pt-px">{t('Download Invoice')}</span>
-                        </a>
+                        {/*<a*/}
+                        {/*    onClick={() => dispatch(singleDownloadAction(orderNumber, locale))}*/}
+                        {/*    href="javascript:;"*/}
+                        {/*    className="gradient-btn"*/}
+                        {/*    rel="noreferrer">*/}
+                        {/*    /!*<Image width="20" height="18" src={'/images/download.svg'} />*!/*/}
+                        {/*    <span className="   pt-px">{t('Download Invoice')}</span>*/}
+                        {/*</a>*/}
+                        <Link href={`/orders/${orderNumber}?locale=${locale}&backroute=payment`}>
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                className="gradient-btn pt-px cursor-pointer"
+                                onClick={() => dispatch(clearBase64Action(null))}>
+                                {t('Download Invoice')}
+                            </span>
+                        </Link>
                     </div>
 
                     <div className="overflow-x-scroll flex w-full">

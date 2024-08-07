@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslations } from 'next-intl';
 import { DataTable } from '../../components/_common';
 import { PaginationType } from '../../constants';
-import { fetchStoresAction } from '../../redux/mystores/actions';
+import { fetchStoresAction } from '../../redux/mystores';
 // import { baseApiUrl } from '../../constants';
 import { BanIcon } from '@heroicons/react/solid';
 // import Image from 'next/image';

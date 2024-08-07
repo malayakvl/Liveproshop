@@ -42,30 +42,12 @@ const SidebarShipping = function () {
                     </a>
                 </Link>
             </li>
-
-            <li
-                className={`submenu ${
-                    currRoute === 'settings/free-shipping-threshold' ? 'active' : ''
-                }`}>
-                <Link href={'/settings/free-shipping-threshold'}>
+            <li className={`submenu ${currRoute === 'settings/free-shipping' ? 'active' : ''}`}>
+                <Link href={'/settings/free-shipping'}>
                     <a>
                         <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
                         <span className="s-caption" style={{ whiteSpace: 'normal' }}>
-                            {t('Free shipping threshold')}
-                        </span>
-                    </a>
-                </Link>
-            </li>
-
-            <li
-                className={`submenu ${
-                    currRoute === 'settings/free-shipping-window' ? 'active' : ''
-                }`}>
-                <Link href={'/settings/free-shipping-window'}>
-                    <a>
-                        <i className="text-blue-350 text-base font-bold tracking-wide truncate cursor-pointer" />
-                        <span className="s-caption" style={{ whiteSpace: 'normal' }}>
-                            {t('Free Shipping Window')}
+                            {t('Free shipping')}
                         </span>
                     </a>
                 </Link>

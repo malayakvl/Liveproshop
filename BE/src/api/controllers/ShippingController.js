@@ -1,5 +1,6 @@
 import multer from 'multer';
 import shippingModel from '../models/Shipping.js'
+import moment from "moment";
 
 export default new class ShippingController {
     create(req, res) {
@@ -152,20 +153,45 @@ export default new class ShippingController {
     }
 
     setThreshold(req, res) {
-        shippingModel.setThreshold(req.user.id, req.body.threshold)
+        console.log(req.body)
+        // const currentTime = moment(Date.now()).format('HH:mm:ss');
+        // console.log(req.body.dateFrom)
+        req.body.dateFrom = `${req.body.startDate} ${req.body.startTime}`;
+        req.body.dateTo = `${req.body.endDate} ${req.body.endTime}`;
+        console.log(req.body);
+        shippingModel.setThreshold(req.user.id, req.body)
+        // shippingModel.setShippingPeriod(req.user.id, req.body.startDate, req.body.endDate)
         res.status(200).json({})
+    }
+
+    setShippingPeriod(req, res) {
+        console.log(req.body);
+        shippingModel.setShippingPeriod(req.user.id, req.body.startDate, req.body.endDate)
+        res.status(200).json({})
+    }
+
+    clearShippingPeriod(req, res) {
+        shippingModel.clearShippingPeriod(req.user.id)
+        res.status(200).json({})
+    }
+
+    fetchShippingPeriod(req, res) {
+        const data = shippingModel.fetchShippingPeriod(req.user.id);
+        console.log(data);
+        res.status(200).json({success: true, data: data})
     }
 
     async fetchThreshold(req, res) {
         if (!req.user) return res.status(401).json('Access deny');
 
-        const result = await shippingModel.fetchThreshold(req.user.id)
-
+        const result = await shippingModel.fetchThreshold(req.user.id);
+        const resultPeriod = await shippingModel.fetchShippingPeriod(req.user.id)
+console.log('Result', result);
         if (!result) {
             return res.status(200).json({ threshold: '' })
         }
 
-        return res.status(200).json({ threshold: result.threshold })
+        return res.status(200).json({ threshold: result.threshold, period: resultPeriod })
 
     }
 }

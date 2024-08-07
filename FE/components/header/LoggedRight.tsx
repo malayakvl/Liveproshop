@@ -86,17 +86,19 @@ const LoggedRight: React.FC = () => {
                         setShowProfileMenu(!showProfileMenu);
                     }}>
                     <span className="mt-1 inline-block">
-                        {/*{userPhoto}*/}
-                        <div
-                            className="profile-small-image"
-                            style={{ backgroundImage: `url(${userPhoto})` }}></div>
-                        {/*<Image*/}
-                        {/*    src={userPhoto}*/}
-                        {/*    width={24}*/}
-                        {/*    height={24}*/}
-                        {/*    className="rounded-full cursor-pointer"*/}
-                        {/*    alt=""*/}
-                        {/*/>*/}
+                        {/*{userPhoto && (*/}
+                        {/*    <div*/}
+                        {/*        className="profile-small-image"*/}
+                        {/*        style={{ backgroundImage: `url(${userPhoto})` }}></div>*/}
+                        {/*)}*/}
+
+                        <Image
+                            src={userPhoto}
+                            width={40}
+                            height={40}
+                            className="rounded-full cursor-pointer"
+                            alt=""
+                        />
                     </span>
                     <span className="profile-name">
                         {user.first_name || user.last_name ? user.first_name : user.email}

@@ -49,11 +49,13 @@ const OrderSummary = () => {
             // @ts-ignore
             totalOrder += parseInt(order.order_amount * 1.2);
         }
-        // totalOrder = totalOrder.toFixed();
         if (selectedShippingMethod?.price) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             totalOrder += parseInt(selectedShippingMethod.price);
+        }
+        if (dataOrder.refund_amount > 0) {
+            totalOrder = totalOrder - parseInt(dataOrder.refund_amount);
         }
         return formatCurrency(totalOrder);
     };
@@ -63,12 +65,6 @@ const OrderSummary = () => {
         if (order?.order_items) {
             order.order_items.sort((a: any, b: any) => (a.id > b.id ? 1 : -1));
         }
-        // console.log('CURRENT SETTINGS',
-        //     order.seller_settings?.privacy_doc.replace(regExpDelBrackets, '').replace()
-        // );
-        // if (order?.waiting_products) {
-        //     console.log('CURRENT WAITING', JSON.parse(order.waiting_products));
-        // }
     }, [order]);
 
     const removeItemOrder = (itemId: number) => {
@@ -87,7 +83,7 @@ const OrderSummary = () => {
         return formatCurrency(totalAmount - vatAmount);
     };
 
-    console.log('ORDER', order.seller_settings);
+    // console.log('ORDER', order.seller_settings);
 
     return (
         <>
@@ -213,6 +209,14 @@ const OrderSummary = () => {
                             {t('Shipping')}
                             <span className="inline-block ml-4 font-bold min-w-[3rem]">
                                 {formatCurrency(0)}
+                            </span>
+                        </div>
+                    )}
+                    {order.refund_amount > 0 && (
+                        <div className="flex justify-between my-2 text-gray-350 text-[18px] text-right">
+                            {t('Shipping refund')}
+                            <span className="inline-block ml-4 font-bold min-w-[3rem]">
+                                {formatCurrency(order.refund_amount)}
                             </span>
                         </div>
                     )}

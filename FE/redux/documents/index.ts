@@ -4,7 +4,7 @@ import { addUploadedFile, removeUploadedFile } from './actions';
 const initialState: {
     uploadedPolicyFiles: any[];
 } = {
-    uploadedPolicyFiles: [],
+    uploadedPolicyFiles: []
 };
 
 const ACTION_HANDLERS: any = {
@@ -27,7 +27,7 @@ const ACTION_HANDLERS: any = {
                 (file) => file.lastModified !== (action.payload as any).lastModified
             )
         };
-    },
+    }
 };
 
 export { addUploadedFile, removeUploadedFile };

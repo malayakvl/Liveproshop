@@ -56,6 +56,12 @@ apiRoutes.route('/run-waiting-job').get(OrderController.waitingJobOrders);
 apiRoutes.route('/update-waiting-order').get(OrderController.updateWaitingOrder);
 apiRoutes.route('/update-wait-item_qty').get(OrderController.updateWaitingItemQty);
 apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
+apiRoutes.route('/get-order-clear').get(OrderController.removeUnpayedOrder);
+apiRoutes.route('/get-order-expired').get(OrderController.getOrderExpiredClear);
+apiRoutes.route('/get-order-clear-free-period').get(OrderController.getOrderFreePeriodClear);
+
+apiRoutes.route('/remove-sessions-order').get(OrderController.removeSessionsOrders);
+apiRoutes.route('/retunr-configured-wrong-parsed').get(OrderController.returnWrongParsedConfigured);
 
 
 apiRoutes.route('/check-subscription-for-update').get(UserController.fetchSubscriptionsForUpdate);
@@ -78,6 +84,9 @@ apiRoutes.route('/create-orders').get(OrderController.createOrders);
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);
 apiRoutes.route('/orders/minus-item-order').get(OrderController.minusOrderItem);
 apiRoutes.route('/order/get-config-qty').get(OrderController.getProductConfigQty);
+apiRoutes.route('/order/update-qty-after-wait').get(OrderController.updateConfigQtyAfterWait);
+apiRoutes.route('/order/remove-wait-from-item').get(OrderController.removeWaitItemStatus);
+apiRoutes.route('/check-user-to-stores').get(OrderController.compareFromOrder);
 
 apiRoutes.route('/check-payment-status').post(UserController.checkPaymentStatus);
 apiRoutes.route('/subscription').post(UserController.createUserFromSubscription);
@@ -86,6 +95,7 @@ apiRoutes.route('/get-plan-info').get(PaymentPlanController.fetchPlanInfo);
 apiRoutes.route('/create-payment-intent').post(PaymentPlanController.stripeClientSecret);
 apiRoutes.route('/contact-us').post(ContactUsController.sendMessage);
 apiRoutes.route('/request-demo').post(ContactUsController.requestDemo);
+apiRoutes.route('/open-browser').post(OrderController.openBrowser);
 
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */
@@ -145,6 +155,8 @@ apiRoutes.route('/products/find').get(ProductController.find);
 apiRoutes.route('/orders/find-order-by-comment').get(OrderController.findOrderByCommentId);
 apiRoutes.route('/orders/find-wait-order-by-comment').get(OrderController.findWaitOrderByCommentId);
 apiRoutes.route('/orders/find-order-by-db-id').get(OrderController.findWaitOrderById);
+apiRoutes.route('/orders/fetch-total-amount').get(OrderController.fetchTotalAmount);
+apiRoutes.route('/orders/check-order-by-number').get(OrderController.checkOrderByNumber);
 
 apiRoutes.route('/tags/find').get(TagController.fetchTags);
 
@@ -160,6 +172,7 @@ apiRoutes.route('/chatbot/change-active-all').get(ChatbotController.changeAllAct
 
 apiRoutes.route('/orders/connect-bycomment').get(OrderController.fetchOrderByComment);
 apiRoutes.route('/orders/fetch-items').get(OrderController.fetchItems);
+apiRoutes.route('/orders/fetch-live-items').get(OrderController.fetchLiveItems);
 apiRoutes.route('/orders/fetch-waiting-items').get(OrderController.fetchWaitingList);
 apiRoutes.route('/orders/fetch-filters').get(OrderController.fetchFilters);
 apiRoutes.route('/create-order/:id/:locale/:type').get(OrderController.generateInvoice);
@@ -217,6 +230,7 @@ apiRoutes.route('/checkout/fetch-shipping-methods').get(CheckoutController.fetch
 apiRoutes.route('/checkout').post(CheckoutController.chechoutSubmit);
 apiRoutes.route('/checkout/confirm').post(CheckoutController.chechoutComfirmation);
 apiRoutes.route('/orders/insert-status').get(OrderController.insertStatus);
+apiRoutes.route('/orders/expire').get(OrderController.expireOrder);
 
 //FB routes
 apiRoutes.route('/fb-authenticate').post(UserController.syncFb);
@@ -236,6 +250,9 @@ apiRoutes.route('/shipping/change-statuses').put(ShippingController.changeStatus
 apiRoutes.route('/shipping/change-status/:id').put(ShippingController.changeStatus);
 apiRoutes.route('/shipping/threshold').post(ShippingController.setThreshold);
 apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold);
+// apiRoutes.route('/shipping/threshold').get(ShippingController.fetchThreshold);
+apiRoutes.route('/shipping/free-period').post(ShippingController.setShippingPeriod);
+apiRoutes.route('/shipping/clear-free-period').post(ShippingController.clearShippingPeriod);
 
 
 

@@ -80,7 +80,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
             } else if (status === 'cancel' || status === 'refund') {
                 return dispatch(showCancelConfirmationModalAction(true));
             } else {
-                return dispatch(bulkDownloadAction());
+                return dispatch(bulkDownloadAction(locale));
             }
         },
         [dispatch]
@@ -136,7 +136,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                         <button
                             // style={{ right: '0px', top: '20px' }}
                             className={`gradient-btn btn-download-orders`}
-                            onClick={() => dispatch(bulkDownloadAction())}>
+                            onClick={() => dispatch(bulkDownloadAction(locale))}>
                             <div className="font-medium text-white ml-2 mr-2 py-[3px]">
                                 {t('Download Orders')}
                             </div>
@@ -196,36 +196,82 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 </td>
                                 <td
                                     className={`${
-                                        user.role_id === 1 && item.status_waiting
+                                        user.role_id === 2 && item.status_waiting
                                             ? ''
                                             : 'order-number'
                                     }`}>
-                                    {user.role_id === 1 && !item.status_waiting && (
-                                        <Link
-                                            href={`/orders/${item.order_number}?locale=${locale}`}>
-                                            <a>{item.order_number}</a>
-                                        </Link>
+                                    {user.role_id === 2 && !item.status_waiting && (
+                                        <>
+                                            <Link
+                                                href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                <a>{item.order_number}</a>
+                                            </Link>
+                                        </>
                                     )}
-                                    {user.role_id === 1 && item.status_waiting && (
+                                    {user.role_id === 2 && item.status_waiting && (
                                         <span
                                             className="f-12 number-waiting"
                                             style={{ color: 'black !important' }}>
                                             {item.order_number}
                                         </span>
                                     )}
-                                    {user.role_id === 2 && item.status === 'new' && (
+                                    {user.role_id === 1 && item.status === 'new' && (
                                         <>
                                             <Link href={`/checkout/${item.order_number}`}>
                                                 <a>{item.order_number}</a>
                                             </Link>
                                         </>
                                     )}
-                                    {user.role_id === 2 && item.status !== 'new' && (
+                                    {user.role_id === 1 && item.status !== 'new' && (
                                         <Link href={`/orders/${item.order_number}`}>
                                             <a>{item.order_number}</a>
                                         </Link>
                                     )}
                                 </td>
+                                {user.role_id === 1 &&
+                                    item.status === 'new' &&
+                                    item.total_amount != 0 && (
+                                        <td style={{ paddingTop: 0, paddingBottom: 0 }}>
+                                            {!item.status_waiting && (
+                                                <Link
+                                                    href={`/checkout/${item.order_number}?storeName=${item.name}`}>
+                                                    <div
+                                                        className="gradient-btn-small cursor-pointer"
+                                                        style={{
+                                                            paddingTop: '3px',
+                                                            paddingBottom: '3px',
+                                                            minWidth: '60px'
+                                                        }}>
+                                                        <span className="text-white bg-none font-bold">
+                                                            {t('Pay')}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            )}
+                                        </td>
+                                    )}
+                                {user.role_id === 1 &&
+                                    item.status === 'payed' &&
+                                    item.total_amount != 0 && (
+                                        <td style={{ paddingTop: 0, paddingBottom: 0 }}>
+                                            {/*{!item.status_waiting && (*/}
+                                            {/*    <Link*/}
+                                            {/*        href={`/checkout/${item.order_number}?storeName=${item.name}`}>*/}
+                                            {/*        <div*/}
+                                            {/*            className="gradient-btn-small cursor-pointer"*/}
+                                            {/*            style={{*/}
+                                            {/*                paddingTop: '3px',*/}
+                                            {/*                paddingBottom: '3px',*/}
+                                            {/*                minWidth: '60px'*/}
+                                            {/*            }}>*/}
+                                            {/*            <span className="text-white bg-none font-bold">*/}
+                                            {/*                {t('Pay')}*/}
+                                            {/*            </span>*/}
+                                            {/*        </div>*/}
+                                            {/*    </Link>*/}
+                                            {/*)}*/}
+                                        </td>
+                                    )}
                                 <td className="order-status">
                                     <div className="flex flex-row items-center justify-center">
                                         {!item.status_waiting ? (
@@ -281,7 +327,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 <td className="">
                                     <div className="float-left">
                                         <div className="flex flex-row">
-                                            <div className="user-photo" style={{ marginLeft: '0' }}>
+                                            <div
+                                                className="user-photo-1"
+                                                style={{ marginLeft: '0' }}>
                                                 <Image
                                                     src={
                                                         item.buyer_photo
@@ -294,7 +342,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                     alt=""
                                                 />
                                             </div>
-                                            <div className="pl-3">{item.buyer_first_name}</div>
+                                            <div className="pl-3">
+                                                {item.buyer_first_name} {item.buyer_last_name}
+                                            </div>
+                                            {/*<span className="absolute pt-[17px] font-[9px] store-style">*/}
+                                            {/*    {item.name}*/}
+                                            {/*</span>*/}
                                         </div>
                                     </div>
                                 </td>
@@ -324,30 +377,15 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                 </td>
                                 <td>
                                     {formatCurrency(
-                                        item.total_amount ? item.total_amount : item.order_amount
+                                        parseFloat(item.total_amount) -
+                                            parseFloat(
+                                                item.refund_amount ? item.refund_amount : 0
+                                            ) +
+                                            parseFloat(
+                                                item.shipping_amount ? item.shipping_amount : 0
+                                            )
                                     )}
                                 </td>
-                                {user.role_id === 1 &&
-                                    item.status === 'new' &&
-                                    item.total_amount != 0 && (
-                                        <td style={{ paddingTop: 0, paddingBottom: 0 }}>
-                                            {!item.status_waiting && (
-                                                <Link href={`/checkout/${item.order_number}`}>
-                                                    <div
-                                                        className="gradient-btn-small cursor-pointer"
-                                                        style={{
-                                                            paddingTop: '3px',
-                                                            paddingBottom: '3px',
-                                                            minWidth: '60px'
-                                                        }}>
-                                                        <span className="text-white bg-none font-bold">
-                                                            {t('Pay')}
-                                                        </span>
-                                                    </div>
-                                                </Link>
-                                            )}
-                                        </td>
-                                    )}
                             </tr>
                             <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
                                 <td />

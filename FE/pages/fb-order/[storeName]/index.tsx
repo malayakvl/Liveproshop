@@ -1,22 +1,20 @@
 import Head from 'next/head';
 import FullLayout from '../../../components/layout/FullLayout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Router, { useRouter } from 'next/router';
-// import { setFbCommentAction, findOrderByCommentAction } from '../../../redux/orders';
 import { userSelector } from '../../../redux/user/selectors';
-// import {findOrderByCommentUnregAction} from "../../../redux/orders/actions";
-// import { useNavigate } from 'react-router-dom';
 import { orderCommentIdSelector } from '../../../redux/orders/selectors';
-import { setTmpFbCommentAction } from '../../../redux/orders';
+import { setGoogleDeepLinkAction, setTmpFbCommentAction } from '../../../redux/orders';
 import { setupOrderByCommentAction } from '../../../redux/orders';
+import { setNativeBrowserAction } from '../../../redux/layouts';
 
 export default function Index({ locale }: { locale: string }) {
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const orderId = useSelector(orderCommentIdSelector);
-    // const navigate = useNavigate();
-    // http://localhost:3000/en/fb-order/ahead-fashion?comment_id=372155932034821_1183669132590892
+    const lng = locale == 'en' ? 'en' : '';
+    const [detectedBrowswer, setDetectedBrowser] = useState('');
 
     const {
         query: { comment_id }
@@ -25,6 +23,22 @@ export default function Index({ locale }: { locale: string }) {
     useEffect(() => {
         if (typeof comment_id === 'string') {
             window.localStorage.setItem('orderCommentId', comment_id);
+            // const paramsUrl = window.location.href.split('/');
+            window.localStorage.setItem('googleDeepUrl', window.location.href);
+            window.localStorage.setItem('storeName', comment_id);
+            const ua = navigator.userAgent || navigator.vendor;
+            setDetectedBrowser(
+                `Navigator FB: ${ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1}`
+            );
+            dispatch(setNativeBrowserAction(ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1));
+            dispatch(
+                setGoogleDeepLinkAction(
+                    `https://liveproshop.com${
+                        lng == 'en' ? '/en' : ''
+                    }/fb-order/fashion-haven?comment_id=${comment_id}`
+                )
+            );
+
             dispatch(setTmpFbCommentAction(comment_id));
         }
         if (user?.email && user.role_id == 1) {
@@ -36,7 +50,6 @@ export default function Index({ locale }: { locale: string }) {
                     )
                 );
             }, 2000);
-            // window.location.href = `${locale == 'fr' ? '' : '/en'}/about-us`;
         } else {
             setTimeout(() => {
                 // window.location.href = `${locale == 'fr' ? '' : '/en'}/auth/signup`;
@@ -53,7 +66,11 @@ export default function Index({ locale }: { locale: string }) {
             </Head>
 
             <div className="main-layout">
-                <div className="connect-page-status"></div>
+                <div className="connect-page-status">
+                    <div className="font-bold absolute top-[100px] left-[30%] hidden">
+                        {detectedBrowswer}
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -2,6 +2,7 @@ declare namespace Orders {
     interface Root {
         count: number;
         items: DataItem[];
+        liveItems: DataItem[];
         itemsStatuses: any[];
         item: DataItem;
         isFetched: boolean;
@@ -23,9 +24,16 @@ declare namespace Orders {
         orderReturnedUrl: null | any;
         redirectCheckout: boolean;
         redirectOrderNumber: any;
+        storeName: any;
+        googleBrowserLink: any;
+        prevOrderAmount: number;
+        currOrderAmount: number;
+        reloadOrderAfterCombine: boolean;
+        latestLiveOrder: number;
     }
 
     interface DataItem {
+        name: any;
         order_items_count: number;
         id: number;
         live_sessions_id: number;
@@ -35,6 +43,7 @@ declare namespace Orders {
         order_amount: number;
         discount_amount: number;
         total_amount: number;
+        shipping_amount: number;
         order_number: number;
         status: OrderStatus;
         status_waiting: string;
@@ -57,6 +66,8 @@ declare namespace Orders {
         freeShipping: number;
         waiting_products: any;
         seller_settings: any;
+        countdownDate: any;
+        refund_amount: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

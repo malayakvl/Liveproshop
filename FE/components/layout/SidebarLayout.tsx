@@ -17,7 +17,7 @@ import {
     setupWaitOrderByCommentAction
 } from '../../redux/orders';
 import { setUserLocaleAction } from '../../redux/user/actions';
-import { orderNumberSelector } from '../../redux/orders/selectors';
+import { orderNumberSelector, storeNameSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
@@ -25,6 +25,7 @@ export default function SidebarLayout({ children }: { children: any }) {
     const dispatch = useDispatch();
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     const redirectOrderNumber = useSelector(orderNumberSelector);
+    const redirectStoreName = useSelector(storeNameSelector);
     const { locale }: any = useRouter();
     // const redirectOrderNumber = '';
 
@@ -35,7 +36,6 @@ export default function SidebarLayout({ children }: { children: any }) {
     // const isMobileDevice = useSelector(isMobileDeviceSelector);
     useEffect(() => {
         if (user?.email && user.role_id == 2) {
-            console.log('USER SUBSCRIPTION', user.status);
             if (user?.status === 'cancel') {
                 Router.push(`/pricing`);
             }
@@ -89,17 +89,18 @@ export default function SidebarLayout({ children }: { children: any }) {
 
     useEffect(() => {
         if (redirectOrderNumber && user?.email && user.role_id == 1) {
+            // dispatch(setupStoreNameByComment(redirectOrderNumber));
             dispatch(setupOrderByCommentAction(null));
             dispatch(setupWaitOrderByCommentAction(null));
             if (user.email || user.email_real) {
                 setTimeout(() => {
-                    window.location.href = `/en/checkout/${redirectOrderNumber}`;
-                    // Router.push(`/en/checkout/${redirectOrderNumber}`);
+                    if (locale == 'fr') {
+                        window.location.href = `/checkout/${redirectOrderNumber}?storeName=${redirectStoreName}`;
+                    } else {
+                        window.location.href = `/en/checkout/${redirectOrderNumber}?storeName=${redirectStoreName}`;
+                    }
                 }, 1000);
             }
-            // alert('55');
-            // window.location.href = `/en/checkout/${redirectOrderNumber}`;
-            // Router.push(`/en/checkout/${redirectOrderNumber}`);
         }
     }, [redirectOrderNumber, user.email]);
 
@@ -120,7 +121,7 @@ export default function SidebarLayout({ children }: { children: any }) {
             {user.role_id === 2 && <SidebarCustomer />}
             {user.role_id === 3 && <SidebarAdmin />}
             <div
-                className={`relative ml-0 h-full mt-2 pb-2 md:mt-0 md:mb-10 md:pl-4 md:mr-8 ${
+                className={`relative ml-0 mt-2 pb-2 md:mt-0 md:mb-10 md:pl-4 md:mr-8 ${
                     !isSidebarOpen ? 'side-margin' : 'side-with-sidebar'
                 }`}>
                 <div className="absolute md:hidden flex items-center">

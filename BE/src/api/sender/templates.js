@@ -379,3 +379,34 @@ export const requestDemoFromEmail = async (email = '', locale = localeDefault) =
     <p>${t['Request Demo from']} (${email})!</p>`)
   };
 };
+
+
+export const confirmOrderPaymentEmail = async (locale = localeDefault, sellerName, order, deliveryAddress, paymentMethod) => {
+  const { default: t } = await import(`../sender/${locale}.js`);
+
+  return {
+    subject: `${sellerName} ${t['Order Confirmation']}`,
+    body: emailHtml(t, `
+    <p>${t['Hello']},</p>
+    <p>
+      ${t['Thank you for shopping at']}&nbsp;${sellerName}
+    </p>
+    <p>
+      ${t['Order :']}&nbsp;${order.order_number}
+    </p>
+    <p>
+      ${t['Payment :']}&nbsp;${paymentMethod}
+    </p>
+    <p>
+      ${t['Delivery :']}&nbsp;${deliveryAddress}
+    </p>
+    <p>
+      ${t['Please find the summary of your order and your invoice attached.']}
+    </p>
+    <p>
+      ${t['See you soon']},
+      <br>
+      ${t['The Live Pro Shop Team']}
+    </p>`)
+  };
+};

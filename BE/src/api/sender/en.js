@@ -102,6 +102,13 @@ export default {
   "schtext_2": "If your account is not synchronized, Live Pro  Shop features will not be available during your live session.",
   "schtext_3": "You can follow this ",
   "schtext_4": "guide ",
-  "schtext_5": "to sync your account"
+  "schtext_5": "to sync your account",
+
+  "Order Confirmation": "Order Confirmation",
+  "Thank you for shopping at": "Thank you for shopping at",
+  "Order :": "Order :",
+  "Payment :": "Payment :",
+  "Delivery :": "Delivery :",
+  "Please find the summary of your order and your invoice attached.": "Please find the summary of your order and your invoice attached."
 
 };

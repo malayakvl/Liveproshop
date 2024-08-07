@@ -25,7 +25,8 @@ const initialState: {
         total_amount: 0,
         total_refund: 0,
         total_buyers: 0,
-        total_pending: 0
+        total_pending: 0,
+        total_shipping: 0
     },
     showPopup: false,
     fileterData: {

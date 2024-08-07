@@ -5,6 +5,10 @@
 @import "tailwindcss/utilities";
 @import "tailwindcss/screens";
 
+html {
+  scroll-behaviour: smooth;
+}
+
 @layer utilities {
   .rainbow-gradient-text {
     background: linear-gradient(45.86deg, #354D9E 4.03%, #AB44C1 21.02%, #E96597 37.63%, #FF9384 55.1%, #FFC16C 71.23%, #F9F871 90%, #F9F871 90.01%);
@@ -31,6 +35,10 @@
   }
   .block-white-8 {
     @apply ml-4 mr-4 flex-row md:w-full bg-white rounded-lg p-8 md:mr-10 md:ml-0;
+  }
+  .block-white-8-multi {
+    padding: 10px 0 !important;
+    @apply ml-4 mr-4 flex-row md:w-full bg-white rounded-lg md:mr-10 md:ml-0;
   }
   .white-shadow-big {
     box-shadow: 0 10px 20px rgba(170, 177, 180, 0.5);
@@ -143,6 +151,14 @@
 
 .block-worning {
   @apply bg-gradient-to-r from-red-400 to-red-50 left-[30%] top-[12px] text-blue-450;
+}
+.store-style {
+  font-size: 10px !important;
+  font-weight: normal !important;
+}
+
+.clock-confirmation {
+  @apply absolute left-[33%] md:left-[43%] top-[25px];
 }
 
 @import "components/sidebar-header";

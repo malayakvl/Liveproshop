@@ -1,6 +1,7 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import moment from 'moment';
+import orderModel from "./Order.js";
 
 class ChatbotMessage {
     async addMessages(sessionId, data) {
@@ -156,16 +157,24 @@ class ChatbotMessage {
     async checkWaitingItemStatus(messageId) {
         const client = await pool.connect();
         try {
+            // const query = await client.query(
+            //     `SELECT * FROM data.order_items WHERE message_id='${messageId}' AND status='waiting'`
+            // );
             const query = await client.query(
-                `SELECT * FROM data.order_items WHERE message_id='${messageId}' AND status='waiting'`
+                `SELECT * FROM data.order_items WHERE message_id='${messageId}'`
             );
             const itemInWait = query.rows[0].quantity;
             let result;
             const queryExist = await client.query(`SELECT * FROM data.order_items WHERE message_id='${messageId}' AND status IS NULL`);
             result = !(queryExist.rows.length > 0 && query.rows.length > 0);
-            if (!result) {
-                await client.query(`UPDATE data.orders SET status='waiting' WHERE id='${query.rows[0].order_id}'`);
-            }
+
+
+            // CHECK CODE CORRECTLY
+            // if (!result) {
+            //     await client.query(`UPDATE data.orders SET status='waiting' WHERE id='${query.rows[0].order_id}'`);
+            // }
+
+
             // if (queryExist.rows.length > 0 && query.rows.length > 0) {
             //     // removing wait item from order
             //     // await client.query(`DELETE FROM data.order_items WHERE message_id='${messageId}' AND status='waiting'`);
@@ -204,29 +213,32 @@ class ChatbotMessage {
     async getMessagesForReply(sessionId, data) {
         const client = await pool.connect();
         try {
-            // const productQueryNew = `SELECT lsm.* , p.name AS product_name, ls.user_id, dss.order_timer,
-            //         dss.free_shipping_timer, foth.threshold, us.name as store_name
-            //         FROM data.live_sessions_messages lsm
-            //         LEFT JOIN data.products p ON (p.id = (lsm.parcer_data->>'item')::integer)
-            //         LEFT JOIN data.live_sessions ls ON lsm.live_sessions_id = ls.id
-            //         LEFT JOIN data.user_stores us ON us.id=ls.store_id
-            //         LEFT JOIN data.seller_settings dss ON dss.user_id = ls.user_id
-            //         LEFT JOIN data.free_order_threshold foth ON foth.user_id = ls.user_id
-            //         WHERE lsm.parcer_status = TRUE AND lsm.order_status IS NOT NULL AND lsm.reply_sended IS NULL
-            //         AND ls.id='${sessionId}'
-            //         ORDER BY lsm.created_at DESC LIMIT 50`;
             const productQueryNew = `SELECT lsm.* , p.name AS product_name, ls.user_id, dss.order_timer, 
-                    dss.free_shipping_timer, foth.threshold, us.name as store_name, p.publish AS activeProduct
+                    dss.free_shipping_timer, foth.threshold, us.name as store_name, p.publish AS activeProduct,
+                    p.publish AS active_product, p.configured, us.id AS store_id,
+                    lsm.real_from_id, lsm.message_id, dss.free_shipping_from, dss.free_shipping_to,
+                    (lsm.created_at BETWEEN dss.free_shipping_from AND dss.free_shipping_to) AS in_period,
+                    dss.free_shipping_to
                     FROM data.live_sessions_messages lsm
                     LEFT JOIN data.products p ON (p.id = (lsm.parcer_data->>'item')::integer)
                     LEFT JOIN data.live_sessions ls ON lsm.live_sessions_id = ls.id
                     LEFT JOIN data.user_stores us ON us.id=ls.store_id
                     LEFT JOIN data.seller_settings dss ON dss.user_id = ls.user_id
                     LEFT JOIN data.free_order_threshold foth ON foth.user_id = ls.user_id
-                    WHERE lsm.parcer_status = TRUE AND lsm.order_status IS NOT NULL AND lsm.reply_sended IS NULL
+                    WHERE ((lsm.parcer_status = TRUE AND lsm.order_status IS NOT NULL AND lsm.reply_sended IS NULL) OR 
+                    (lsm.parcer_status = FALSE AND lsm.reply_sended IS NULL AND (lsm.message LIKE '%vendu%' OR lsm.message LIKE '%sold%'))) 
                     AND ls.id='${sessionId}'
                     ORDER BY lsm.created_at DESC LIMIT 50`;
             const res = await client.query(productQueryNew);
+
+
+            // before send check free period if yes set 'free_period_end' params in orders
+            if (res.rows.length > 0) {
+                res.rows.forEach(async data => {
+                    await orderModel.connectThrowStore(data.message_id, data.real_from_id, data.store_id, !!data.in_period, data.free_shipping_to);
+                })
+            }
+
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
 

@@ -6,6 +6,8 @@ export { default as DataTable } from './DataTable/DataTable';
 export { default as ButtonTableAction } from './ButtonTableAction/ButtonTableAction';
 export { default as Modal } from './Modal';
 export { default as ConfirmationModal } from './modal/ConfirmationModal';
+export { default as ModalPeriodSetup } from './ModalPeriodSetup';
+export { default as ModalPeriodDelete } from './ModalPeriodDelete';
 export { default as CalendlyModal } from './modal/CalendlyModal';
 export { default as Button } from './Button';
 export { default as Dropdown } from './Dropdown';

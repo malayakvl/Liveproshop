@@ -12,6 +12,9 @@ import {
     checkAllIdsAction,
     uncheckAllIdsAction,
     setModalConfirmationMetaAction,
+    setModalConfirmationDeletePeriodMetaAction,
+    setModalConfirmationSetupPeriodMetaAction,
+    setPeriodForDeleteAction,
     setModalCalendlyMetaAction,
     setSwitchHeaderAction,
     showLoaderAction,
@@ -21,7 +24,11 @@ import {
     toggleTextingMenuAction,
     setLngAction,
     toggleProfileMenuAction,
-    showEmailNotificationAction
+    showEmailNotificationAction,
+    hideshowPeriodPopupAction,
+    setupPeriodAction,
+    setPeriodDeleteValuesActions,
+    setNativeBrowserAction,
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 // import { showPopupAction } from '../dashboard';
@@ -68,6 +75,19 @@ const initialState: State.Layouts = {
                 country_id: [],
                 payment_id: [],
                 status: [OrderStatus.PAYED],
+                total_amount: [],
+                created_at: [],
+                seller_id: []
+            }
+        },
+        [PaginationType.LIVEORDERS]: {
+            ...initPagination,
+            filters: {
+                order_number: '',
+                shipping_id: [],
+                country_id: [],
+                payment_id: [],
+                status: [],
                 total_amount: [],
                 created_at: [],
                 seller_id: []
@@ -146,6 +166,11 @@ const initialState: State.Layouts = {
     switchHeader: false,
     switchToggled: false,
     modalConfirmationMeta: null,
+    modalConfirmationDeletePeriodMeta: null,
+    modalConfirmationSetupPeriodMeta: null,
+    deletePeriodHidePopup: false,
+    deletePeriod: null,
+    setupPeriod: null,
     modalCalendlyMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
@@ -153,7 +178,9 @@ const initialState: State.Layouts = {
     showTextingMenu: false,
     showProfileMenu: false,
     selectedLng: 'fr',
-    showEmailNotification: false
+    showEmailNotification: false,
+    nativeBrowser: false,
+    openRealBrowser: false
 };
 
 // ------------------------------------
@@ -231,6 +258,10 @@ const ACTION_HANDLERS: any = {
         ...state,
         isSidebarOpen: !state.isSidebarOpen
     }),
+    [hideshowPeriodPopupAction]: (state: State.Layouts): State.Layouts => ({
+        ...state,
+        deletePeriodHidePopup: !state.deletePeriodHidePopup
+    }),
     [sidebarCloseAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
         isSidebarOpen: false
@@ -294,6 +325,31 @@ const ACTION_HANDLERS: any = {
             ...action.payload
         }
     }),
+    [setModalConfirmationDeletePeriodMetaAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<Layouts.ModalDeletePeriodMeta>
+    ): State.Layouts => ({
+        ...state,
+        modalConfirmationDeletePeriodMeta: action.payload && {
+            ...action.payload
+        }
+    }),
+    [setModalConfirmationSetupPeriodMetaAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<Layouts.ModalConfirmPeriodMeta>
+    ): State.Layouts => ({
+        ...state,
+        modalConfirmationSetupPeriodMeta: action.payload && {
+            ...action.payload
+        }
+    }),
+    [setPeriodForDeleteAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<any>
+    ): State.Layouts => ({
+        ...state,
+        deletePeriod: action.payload
+    }),
     [setModalCalendlyMetaAction]: (
         state: State.Layouts,
         action: Type.ReduxAction<Layouts.ModalCalendlyMeta>
@@ -326,7 +382,25 @@ const ACTION_HANDLERS: any = {
             ...state,
             showEmailNotification: action.payload
         })
-    }
+    },
+    [setupPeriodAction]: {
+        next: (state: State.Layouts, action: Action<any>): State.Layouts => ({
+            ...state,
+            setupPeriod: action.payload
+        })
+    },
+    [setPeriodDeleteValuesActions]: {
+        next: (state: State.Layouts, action: Action<any>): State.Layouts => ({
+            ...state,
+            deletePeriod: action.payload
+        })
+    },
+    [setNativeBrowserAction]: {
+        next: (state: State.Layouts, action: Action<any>): State.Layouts => ({
+            ...state,
+            nativeBrowser: action.payload
+        })
+    },
 };
 
 export {
@@ -342,13 +416,20 @@ export {
     setInfoToastAction,
     deleteToastAction,
     setModalConfirmationMetaAction,
+    setModalConfirmationDeletePeriodMetaAction,
+    setModalConfirmationSetupPeriodMetaAction,
+    setPeriodForDeleteAction,
     setModalCalendlyMetaAction,
     setSwitchToggleAction,
     sidebarCloseAction,
     toggleTextingMenuAction,
     setLngAction,
     toggleProfileMenuAction,
-    showEmailNotificationAction
+    showEmailNotificationAction,
+    hideshowPeriodPopupAction,
+    setupPeriodAction,
+    setPeriodDeleteValuesActions,
+    setNativeBrowserAction,
 };
 
 // ------------------------------------

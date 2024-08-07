@@ -60,6 +60,28 @@ export const modalConfirmationMetaSelector = createSelector(
     (layouts: State.Layouts): Layouts.ModalConfirmationMeta | null => layouts.modalConfirmationMeta
 );
 
+export const modalConfirmationPeriodDeleteMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalDeletePeriodMeta | null =>
+        layouts.modalConfirmationDeletePeriodMeta
+);
+export const modalConfirmationPeriodSetupMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalConfirmPeriodMeta | null =>
+        layouts.modalConfirmationSetupPeriodMeta
+);
+export const deletePeriodSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): any => layouts.deletePeriod
+);
+export const setupPeriodSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): any => layouts.setupPeriod
+);
+export const deletePeriodPopupSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): any => layouts.deletePeriodHidePopup
+);
 export const modalCalendlyMetaSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): Layouts.ModalCalendlyMeta | null => layouts.modalCalendlyMeta
@@ -82,4 +104,12 @@ export const siteLanguageSelector = createSelector(
 export const showEmailNoticeSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): boolean => layouts.showEmailNotification
+);
+export const nativeBrowserSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.nativeBrowser
+);
+export const openRealBrowserSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): boolean => layouts.openRealBrowser
 );

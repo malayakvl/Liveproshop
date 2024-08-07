@@ -12,6 +12,7 @@ import Link from 'next/link';
 export default function Index({ session }: { session: any }) {
     if (!session) return null;
     const t = useTranslations();
+    const { locale }: any = useRouter();
     const user = useSelector(userSelector);
     const dispatch = useDispatch();
     const {
@@ -26,7 +27,7 @@ export default function Index({ session }: { session: any }) {
 
     useEffect(() => {
         if (orderId) {
-            dispatch(updateOrderStatusAction(orderId, 'payed'));
+            dispatch(updateOrderStatusAction(orderId, 'payed', locale));
         }
     }, [orderId]);
 

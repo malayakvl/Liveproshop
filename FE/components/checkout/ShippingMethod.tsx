@@ -31,7 +31,6 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
     const showEmailNotice = useSelector(showEmailNoticeSelector);
     // const showEmailNotice = true;
     if (shippingMethods.length === 0 && address.country_id) {
-        console.log('NEED TO GET METHODS');
         dispatch(fetchShippingMethodsByCountryCheckoutAction(order.id, address.country_id));
     }
 
@@ -52,9 +51,7 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
                             type="radio"
                             name="shippingMethodId"
                             value={String(shippingMethod.id)}
-                            title={formatCurrency(
-                                order.freeShipping != 1 ? shippingMethod.price : 0
-                            )}
+                            title={formatCurrency(shippingMethod.price)}
                             text={shippingMethod.name}
                             img={baseUrl + shippingMethod.image}
                             component={Radio}

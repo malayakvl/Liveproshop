@@ -1,0 +1,13 @@
+{
+  "Guide - Multisafepay - rules for sellers": "Guide - Multisafepay - Règles applicables aux vendeurs",
+  "mguide_1": "1. Pour recevoir les paiements de vos commandes, vous devez vous inscrire sur ",
+  "mguide_2": "1.1. Choisissez l’option LIVE /  Entrez le revenu mensuel moyen généré par vos diffusions en Live /  Insérez l`url de votre site internet",
+  "mtext_1": "Lors de votre inscription, tenez compte de ces informations essentielles. Si la documentation ne couvre pas certaines étapes, c'est parce qu'elles sont explicites et que vous devez simplement suivre le processus.",
+  "mtext_2": "2. Ensuite, vous devez remplir toutes les informations requises et choisir les méthodes de paiement qui seront disponibles pour vos clients.",
+  "mtext_3": "3. Ensuite, vous devez aller dans \"Sites\" - \"Ajouter un nouveau site\" et ajouter toutes les informations requises dans le formulaire.",
+  "mtext_4": "3.1. Choisissez la catégorie \"Commerce de détail/marchandises\".",
+  "mtext_5": "3.2. Choisissez la sous-catégorie qui convient à votre entreprise et au produit que vous vendez.",
+  "mtext_6": "3.3. Ajouter cette adresse dans le champ \"Base URL\" - ",
+  "mtext_7": "4. Après avoir ajouté le site web, vous devez sauvegarder les informations et revenir à la section \"Sites\". Vous verrez le site ajouté dans le tableau et vous devez cliquer sur le bouton de la clé. Cliquez dessus et votre clé sera copiée.",
+  "link_m1": "Multisafepay."
+}

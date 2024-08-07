@@ -78,13 +78,14 @@ class Livesession {
             // console.log(moment().format("YYYY-MM-DD"));
             const durationQuery = await client.query(`SELECT * FROM data.live_sessions WHERE id='${itemId}' AND user_id=${userId}`);
             let endPeriod;
-            if (durationQuery.rows[0].order_timer.minutes) {
-                endPeriod = moment().add(durationQuery.rows[0].order_timer.minutes, 'minutes');
-            } else if (durationQuery.rows[0].order_timer.hours) {
-                endPeriod = moment().add(durationQuery.rows[0].order_timer.hours, 'hours');
-            } else {
-                endPeriod = moment().add(durationQuery.rows[0].order_timer.days, 'days');
-            }
+            endPeriod = moment().add(0, 'minutes');
+            // if (durationQuery.rows[0].order_timer.minutes) {
+            //     endPeriod = moment().add(durationQuery.rows[0].order_timer.minutes, 'minutes');
+            // } else if (durationQuery.rows[0].order_timer.hours) {
+            //     endPeriod = moment().add(durationQuery.rows[0].order_timer.hours, 'hours');
+            // } else {
+            //     endPeriod = moment().add(durationQuery.rows[0].order_timer.days, 'days');
+            // }
             const query = await client.query(
                 `UPDATE data.live_sessions SET status='closed',
                     event_time_end = '${endPeriod.format("HH:mm:ss")}', event_date_end='${endPeriod.format("YYYY-MM-DD")}' WHERE id=${itemId} AND user_id=${userId}`
@@ -268,9 +269,25 @@ class Livesession {
 
     async getStoreSessionsForEnd() {
         const client = await pool.connect();
-        const queryStr = `SELECT
-                    *
-                FROM data.get_live_sessions_store_ended('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        // const queryStr = `SELECT
+        //             *
+        //         FROM data.get_live_sessions_store_ended_new('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+        // console.log(queryStr);
+        // const queryStr = `SELECT ls.* FROM data.live_sessions ls INNER JOIN data.user_stores us ON (ls.store_id = us.id)
+        //                 WHERE TRUE
+        //                     AND (ls.status = 'closed')
+        //                     AND (ls.video_id IS NOT NULL)
+        //                     AND (ls.job_closed IS NULL)
+        //                     AND event_date_end = '${moment().format('YYYY-MM-DD')}'
+        //                     AND event_time_end <= '${moment().add(3, 'hours').format('HH:mm:ss')}'`;
+        const queryStr = `SELECT ls.* FROM data.live_sessions ls INNER JOIN data.user_stores us ON (ls.store_id = us.id)
+                        WHERE TRUE
+                            AND (ls.status = 'closed')
+                            AND (ls.video_id IS NOT NULL)
+                            AND (ls.job_closed IS NULL)
+                            AND event_date_end = '${moment().format('YYYY-MM-DD')}'
+                            AND event_time_end <= '${moment().add(3, 'hours').format('HH:mm:ss')}'`;
+        console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
@@ -526,6 +543,7 @@ class Livesession {
     }
 
     async getAll (page, perPage = 20, userId, reqOffset = null) {
+        console.log('here');
         const client = await pool.connect();
         try {
             const _total = await client.query(
@@ -539,7 +557,13 @@ class Livesession {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             
-            const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
+            // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
+            const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name 
+FROM data.live_sessions 
+LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+WHERE data.live_sessions.user_id='${userId}'
+                ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
+            // console.log(productQuery);
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;

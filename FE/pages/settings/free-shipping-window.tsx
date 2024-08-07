@@ -11,6 +11,14 @@ import { showLoaderAction } from '../../redux/layouts/actions';
 import { submitFormAction } from '../../redux/settings/actions';
 import ConfirmDialog from '../../components/_common/ConfirmDialog';
 import Head from 'next/head';
+import Image from 'next/image';
+import moment from 'moment/moment';
+import { DateRangePicker } from 'react-date-range';
+import { showDateSelectorAction } from '../../redux/dashboard';
+import { showDatePopupSelector } from '../../redux/dashboard/selectors';
+
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 export default function Index() {
     const t = useTranslations();
@@ -19,13 +27,31 @@ export default function Index() {
 
     const [showForm, setShowForm] = useState(false);
     const [selectedItem, setSelectedItem] = useState<any | null>();
-
+    const [state, setState] = useState<any>([
+        {
+            startDate: moment().subtract(1, 'month').toDate(),
+            endDate: moment().toDate(),
+            key: 'selection'
+        }
+    ]);
+    const showDatePopup = useSelector(showDatePopupSelector);
     const validationSchema = Yup.object({
         free_shipping_timer: Yup.number().when('free_shipping_status', {
             is: true,
             then: Yup.number().required(t('Required field'))
         })
     });
+
+    const reverseDatePopup = useCallback(
+        (event) => {
+            if (event.target?.name === 'inputDate') {
+                dispatch(showDateSelectorAction(!showDatePopup));
+            } else if (showDatePopup) {
+                dispatch(showDateSelectorAction(false));
+            }
+        },
+        [showDatePopup]
+    );
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
@@ -71,54 +97,81 @@ export default function Index() {
                         {(props) => {
                             return (
                                 <form className="w-full md:w-1/2" onSubmit={props.handleSubmit}>
-                                    {/* <div className="font-bold text-gray-350 text-lg mb-8 border-gray-200">
-                                        {t('Live session Settings')}
-                                    </div>
-                                    <div className="flex">
-                                        <div className="max-w-[100px]">
-                                            <InputText
-                                                icon={null}
-                                                label={'Duration Cart'}
-                                                name={'order_timer'}
-                                                placeholder={'num_day_hour'}
-                                                style={null}
-                                                props={props}
-                                                tips={null}
-                                            />
-                                        </div>
-                                        <div className="ml-2">
-                                            <InputSelect
-                                                options={[
-                                                    { id: 'h', name: 'Hour(s)' },
-                                                    { id: 'd', name: 'Day(s)' }
-                                                ]}
-                                                label={'Type Interval'}
-                                                name={'type'}
-                                                style={null}
-                                                props={props}
-                                            />
-                                        </div>
-                                    </div> */}
                                     <div className="mt-8 font-bold text-gray-350 text-lg mb-8 border-gray-200">
                                         {t('Free Shipping Window')}
                                     </div>
-                                    <InputSwitcher
-                                        label={'Free Shipping'}
-                                        name={'free_shipping_status'}
-                                        style={null}
-                                        props={props}
-                                    />
-                                    <div className="max-w-[300px]">
-                                        <InputText
-                                            icon={null}
-                                            label={'Free Shipping Hour(s)'}
-                                            name={'free_shipping_timer'}
-                                            placeholder={'Free Shipping Hour(s)'}
-                                            style={null}
-                                            props={props}
-                                            tips={null}
-                                        />
+                                    <div className="p-3 flex">
+                                        <Image src="/images/calendar.svg" width={20} height={18} />
+                                        <span className="font-bold text-sm text-blue-350 ml-2">
+                                            <input
+                                                name="inputDate"
+                                                className="w-full form-control"
+                                                type="text"
+                                                placeholder={t('Date')}
+                                                readOnly={true}
+                                                onClick={reverseDatePopup}
+                                                value={``}
+                                            />
+                                        </span>
                                     </div>
+
+                                    <div className="flex mt-1">
+                                        <div className="w-1/2 mr-2">
+                                            <div className="mb-3 text-xs font-bold text-blue-350">
+                                                {t('From')}
+                                            </div>
+                                            <input
+                                                className="w-full form-control"
+                                                type="text"
+                                                placeholder={''}
+                                                value={''}
+                                            />
+                                        </div>
+                                        <div className="w-1/2">
+                                            <div className="mb-3 text-xs font-bold text-blue-350">
+                                                {t('To')}
+                                            </div>
+                                            <input
+                                                className="w-full form-control"
+                                                type="text"
+                                                placeholder={''}
+                                                value={''}
+                                            />
+                                        </div>
+                                    </div>
+                                    {showDatePopup && (
+                                        <div
+                                            id="divDate"
+                                            className="dashbord-filter absolute shadow-xl rounded-3xl"
+                                            style={{ zIndex: 10 }}>
+                                            <DateRangePicker
+                                                // editableDateInputs={true}
+                                                onChange={(item) => setState([item.selection])}
+                                                moveRangeOnFirstSelection={false}
+                                                months={1}
+                                                ranges={state}
+                                                direction="horizontal"
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/*<InputSwitcher*/}
+                                    {/*    label={'Free Shipping'}*/}
+                                    {/*    name={'free_shipping_status'}*/}
+                                    {/*    style={null}*/}
+                                    {/*    props={props}*/}
+                                    {/*/>*/}
+                                    {/*<div className="max-w-[300px]">*/}
+                                    {/*    <InputText*/}
+                                    {/*        icon={null}*/}
+                                    {/*        label={'Free Shipping Hour(s)'}*/}
+                                    {/*        name={'free_shipping_timer'}*/}
+                                    {/*        placeholder={'Free Shipping Hour(s)'}*/}
+                                    {/*        style={null}*/}
+                                    {/*        props={props}*/}
+                                    {/*        tips={null}*/}
+                                    {/*    />*/}
+                                    {/*</div>*/}
                                     {/* <InputText
                                         style={'w-1/2'}
                                         icon={null}

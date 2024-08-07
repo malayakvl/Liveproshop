@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { itemsCountSelector, paginatedItemsSelector } from '../../redux/livesessions/selectors';
 import { PaginationType } from '../../constants';
@@ -7,15 +7,19 @@ import { fetchItemsAction } from '../../redux/livesessions';
 import { stopSessionAction } from '../../redux/livesessions/actions';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
+import { itemSelector } from '../../redux/settings/selectors';
+import Link from 'next/link';
 
 const ListMessages: React.FC = () => {
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
     const count = useSelector(itemsCountSelector);
+    const settingsValues = useSelector(itemSelector);
+
     const t = useTranslations();
 
     const [closedSessions, setClosedSession] = useState<number[]>([]);
-
+    const [showAlert, setShowAlert] = useState(true);
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);
@@ -45,6 +49,11 @@ const ListMessages: React.FC = () => {
                         </td>
                         <td>
                             {item.status != 'closed' && !closedSessions.includes(item.id) && (
+                                <span title="Close" role="presentation" className={item.status}>
+                                    {t(item.status)}
+                                </span>
+                            )}
+                            {item.status == 'live' && !closedSessions.includes(item.id) && (
                                 <span
                                     title="Close"
                                     onClick={() => {
@@ -52,15 +61,16 @@ const ListMessages: React.FC = () => {
                                         setClosedSession([...closedSessions, item.id]);
                                     }}
                                     role="presentation"
-                                    className={item.status}>
-                                    {t(item.status)}
+                                    className="live-close">
+                                    {t('Close')}
                                 </span>
                             )}
+
                             {(item.status === 'closed' || closedSessions.includes(item.id)) && (
                                 <span className="closed">{t('Closed')}</span>
                             )}
                         </td>
-                        <td>Store name</td>
+                        <td>{item.store_name}</td>
                         {/*<td>{item.user_cnt ? item.user_cnt : '-'}</td>*/}
                     </tr>
                 ))}

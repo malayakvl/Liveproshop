@@ -15,6 +15,8 @@ const initialState: {
     redirectUrl: any;
     paymentStatus: string | null;
     itemsWait: any[];
+    prevOrderAmount: number;
+    reloadOrderAfterCombine: boolean;
 } = {
     isFetched: false,
     loading: false,
@@ -23,7 +25,9 @@ const initialState: {
     shippingMethods: [],
     redirectUrl: null,
     paymentStatus: null,
-    itemsWait: []
+    itemsWait: [],
+    prevOrderAmount: 0,
+    reloadOrderAfterCombine: false
 };
 
 const ACTION_HANDLERS: any = {

@@ -395,8 +395,12 @@ input:focus, input:active {
 }
 
 .sign-up-form {
-  @apply w-80 mb-5 p-8 flex-col rounded-lg
-      mt-10 flex md:flex-row md:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0;
+  @apply w-80 mb-5 p-8 flex-col rounded-lg mt-0
+      md:mt-10 flex md:flex-row md:w-[750px] lg:w-[1000px] bg-white md:px-10 md:py-10 md:mr-0 md:ml-0;
+}
+.sign-up-form-disable {
+  pointer-events: none;
+  opacity: 0.3;
 }
 
 .sign-up-fb {
@@ -462,4 +466,31 @@ input:focus, input:active {
 }
 .rigt-upload {
   @apply ml-0 md:ml-4
+}
+
+.react-datepicker__input-container input {
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+  border-color: #CFD8DC !important;
+  color: #4F5B84 !important;
+  //@apply bg-white w-full rounded-lg p-2.5 text-xs text-gray-350
+  //font-medium border-gray-180 border placeholder-gray-180;
+}
+.react-datepicker__day {
+  font-family: Montserrat, serif !important;
+  font-size: 12px !important;
+}
+.react-datepicker-ignore-onclickoutside input, .react-datepicker__input-container input {
+  font-size: 13px !important;
+}
+.rc-time-picker-input {
+  height: 44px !important;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem !important;
+  max-width: 120px;
+  padding-left: 10px !important;
+  font-size: 14px;
+}
+.rc-time-picker-clear {
+  top: 11px !important;
 }

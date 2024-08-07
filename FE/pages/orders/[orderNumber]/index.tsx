@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getSession } from 'next-auth/client';
 import { useDispatch, useSelector } from 'react-redux';
 import { Viewer, Worker } from '@react-pdf-viewer/core';
@@ -10,7 +10,9 @@ import Head from 'next/head';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 
 const base64toBlob = (data: string) => {
     // Cut the prefix `data:application/pdf;base64` from the raw base 64
@@ -34,17 +36,19 @@ export default function Index({ locale }: { locale: string }) {
     // const fileName: string = useSelector(orderFileNameFetchedSelector);
     const base64Data: string | null = useSelector(orderBase64DataSelector);
     const t = useTranslations();
+    const scrollDivRef = useRef(null);
 
     const [url, setUrl] = useState('');
     const [blobData, setBlobData] = useState<any>(null);
+    // const { instance, zoomIn, zoomOut, ...rest } = useControls();
 
     const {
-        query: { orderNumber, type }
+        query: { orderNumber, type, backroute }
     } = useRouter();
 
     useEffect(() => {
         dispatch(showLoaderAction(true));
-        dispatch(fetchOrderPdfAction(orderNumber, locale, type));
+        dispatch(fetchOrderPdfAction(orderNumber, locale, type ? type : ''));
     }, []);
 
     useEffect(() => {
@@ -58,10 +62,46 @@ export default function Index({ locale }: { locale: string }) {
         }
     }, [orderFetched, base64Data]);
 
+    const scrollToTop = function () {
+        const currentPosition = window.scrollY;
+        console.log('here we are', currentPosition);
+        if (currentPosition != 0) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // safafi 적용을 위한 코드 예시 (미적용)
+            // setTimeout(function () {
+            //   window.scrollTo(0, currentPosition - 50);
+            //   scrollToTop();
+            // }, 10);
+            // scrollToTop();
+        }
+    };
+
     useEffect(() => {
         if (blobData) {
             setUrl(URL.createObjectURL(blobData));
             dispatch(showLoaderAction(false));
+
+            const button = document.getElementsByClassName('scroll-button');
+
+            const showScrollBtn = function () {
+                window.scrollY > window.innerHeight ? console.log(1) : console.log(2);
+            };
+            window.addEventListener('scroll', showScrollBtn);
+
+            // button.addEventListener('click', scrollToTop);
+
+            if (scrollDivRef) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // scrollDivRef?.current.scrollTo(0, 0);
+                window.scrollTo({ top: 100, left: 100, behavior: 'smooth' });
+                setTimeout(() => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    scrollDivRef?.current.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+                console.log('scroll up will be here');
+            }
         }
     }, [blobData]);
 
@@ -72,20 +112,102 @@ export default function Index({ locale }: { locale: string }) {
             <Head>
                 <title>LiveProshop - Order {orderNumber}</title>
             </Head>
-
+            <div ref={scrollDivRef}></div>
             {base64Data && (
                 <div>
-                    <Link href={'/orders'}>
-                        <a className="view-back">{t('Go Back')}</a>
-                    </Link>
-                    <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
-                        <div style={{ height: '750px' }}>
-                            <Viewer
-                                fileUrl={url}
-                                // plugins={[defaultLayoutPluginInstance]}
-                            />
-                        </div>
-                    </Worker>
+                    {backroute === 'payment' ? (
+                        <>
+                            <Link
+                                href={`${
+                                    locale == 'en' ? '/en' : ''
+                                }/payments/transaction/${orderNumber}`}>
+                                <a className="view-back">{t('Go Back')}</a>
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link href={'/orders'}>
+                                <a className="view-back">{t('Go Back')}</a>
+                            </Link>
+                        </>
+                    )}
+                    <TransformWrapper initialScale={1} initialPositionX={0} initialPositionY={0}>
+                        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                            <React.Fragment>
+                                <div className="tools block text-center mt-3">
+                                    <div>
+                                        <button
+                                            onClick={() => zoomIn()}
+                                            className="btn gradient-btn mr-2">
+                                            <Image
+                                                src="/images/pdf-icons/zoomIn.svg"
+                                                width="20"
+                                                height="20"
+                                            />
+                                        </button>
+                                        <button
+                                            onClick={() => zoomOut()}
+                                            className="btn gradient-btn mr-2">
+                                            <Image
+                                                src="/images/pdf-icons/zoomOut.svg"
+                                                width="20"
+                                                height="20"
+                                            />
+                                        </button>
+                                        <button
+                                            onClick={() => resetTransform()}
+                                            className="btn gradient-btn">
+                                            <Image
+                                                src="/images/pdf-icons/reset.svg"
+                                                width="20"
+                                                height="20"
+                                            />
+                                        </button>
+                                    </div>
+                                </div>
+                                <TransformComponent>
+                                    <div
+                                        style={{
+                                            width: 'calc(100vw)',
+                                            marginTop: '50px'
+                                        }}>
+                                        <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">
+                                            <div style={{ height: '750px' }}>
+                                                <Viewer
+                                                    fileUrl={url}
+                                                    // plugins={[defaultLayoutPluginInstance]}
+                                                />
+                                            </div>
+                                        </Worker>
+                                    </div>
+                                </TransformComponent>
+                            </React.Fragment>
+                        )}
+                    </TransformWrapper>
+                    {/*<TransformWrapper>*/}
+                    {/*    <TransformComponent>*/}
+                    {/*        <div style={{ border: 'solid 1px', width: '370px', marginTop: '50px' }}>*/}
+                    {/*            <Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">*/}
+                    {/*                <div style={{ height: '750px' }}>*/}
+                    {/*                    <Viewer*/}
+                    {/*                        fileUrl={url}*/}
+                    {/*                        // plugins={[defaultLayoutPluginInstance]}*/}
+                    {/*                    />*/}
+                    {/*                </div>*/}
+                    {/*            </Worker>*/}
+                    {/*        </div>*/}
+                    {/*    </TransformComponent>*/}
+                    {/*</TransformWrapper>*/}
+                    {/*<Worker workerUrl="https://unpkg.com/pdfjs-dist@2.12.313/build/pdf.worker.js">*/}
+                    {/*    <div style={{ height: '750px' }}>*/}
+                    {/*        <Viewer*/}
+                    {/*            fileUrl={url}*/}
+                    {/*            // plugins={[defaultLayoutPluginInstance]}*/}
+                    {/*        />*/}
+                    {/*    </div>*/}
+                    {/*</Worker>*/}
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                    {/*<span className="cursor-pointer scroll-button " onClick={() => scrollToTop()}>Click to top</span>*/}
                 </div>
             )}
         </>

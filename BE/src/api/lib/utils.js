@@ -24,6 +24,25 @@ export const setCookie = (cookieName, cookieValue, lifeTime, req, res) => {
     }
 };
 
+export const addHoursToDate = (date, n) => {
+    const d = new Date(date);
+    d.setTime(d.getTime() + n * 3_600_000);
+    return d;
+};
+
+export const addDaysToDate = (date, n) => {
+    const d = new Date(date);
+    d.setDate(d.getDate() + n);
+    return d;
+};
+
+export const addMinutesToDate = (date, n) => {
+    const d = new Date(date);
+    d.setTime(d.getTime() + n * 60_000);
+    return d;
+};
+
+
 export const getDomain = () => {
     return `.${process.env.APPLICATION_URL}`;
 };

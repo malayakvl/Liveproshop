@@ -17,6 +17,7 @@ import Link from 'next/link';
 import Select from 'react-select';
 import { fetchStoresAction } from '../../redux/mystores';
 import { paginatedStoresSelector } from '../../redux/mystores/selectors';
+import { itemSelector } from '../../redux/settings/selectors';
 // import { fetchStoresAction } from '../../redux/mystores';
 // import { paginatedStoresSelector } from '../../redux/mystores/selectors';
 
@@ -28,11 +29,15 @@ const SchedulePopup: React.FC<any> = () => {
     const [selectedStore, setSelectedStore] = useState(null);
     const feature_fb_schedule = useSelector(userSelector)?.plan_options?.feature_fb_schedule;
     const user = useSelector(userSelector);
+    const settingsValues = useSelector(itemSelector);
 
     const [startDate, setStartDate] = useState(new Date());
     const [startTime, setStartTime] = useState(moment().format('HH:mm'));
     const [listStores, setListStores] = useState([]);
     const storeItems = useSelector(paginatedStoresSelector);
+    const [showAlert, setShowAlert] = useState(true);
+
+    // console.log('user settings', settingsValues);
 
     // const [selectedScenarios, setSelectedScenarios] = useState<number[]>([]);
 
@@ -63,6 +68,22 @@ const SchedulePopup: React.FC<any> = () => {
         dispatch(setLiveSessionStoreAction(selectedOption.value));
     };
 
+    useEffect(() => {
+        if (
+            (settingsValues.delivery_doc ||
+                settingsValues.delivery_link ||
+                settingsValues.privacy_link ||
+                settingsValues.privacy_doc ||
+                settingsValues.terms_doc ||
+                settingsValues.terms_link ||
+                settingsValues.return_doc ||
+                settingsValues.return_link) &&
+            settingsValues.multisafe_api_key
+        ) {
+            setShowAlert(false);
+        }
+    }, [settingsValues]);
+    console.log('SHOW ALERT', showAlert);
     // useEffect(() => {
     //     if (selectedStoreId) {
     //         setSelectedStore(storeItems.find((_store: any) => _store.value === selectedStoreId));
@@ -131,7 +152,7 @@ const SchedulePopup: React.FC<any> = () => {
                     </div>
                     {/*Body*/}
                     <div>
-                        <div className="flex">
+                        <div className={`flex ${!showAlert ? 'hidden' : ''}`}>
                             <span className="block mb-3 text-sm">
                                 {t('Before scheduling a new session')},
                                 <br /> {t('please, fill in all settings')}&nbsp;

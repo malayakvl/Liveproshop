@@ -54,7 +54,9 @@
 .danger {
   @apply bg-red-400 font-bold text-sm text-white rounded-lg px-4 py-2.5;
 }
-
+.agree {
+  @apply bg-green-400 font-bold text-sm text-white rounded-lg px-4 py-2.5;
+}
 .action {
   @apply border rounded-lg border-gray-180 p-2.5 font-bold uppercase relative text-[10px];
 
@@ -252,4 +254,18 @@
 
 .burger-btn {
   @apply top-[-45px] md:top-[-25px] left-0;
+}
+.delete-period {
+  background-image: url(../../public/images/delete-period.svg);
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  background-size: contain;
+  margin-left: 20px;
+  display: inline-block;
+}
+.modal-close-period {
+  position: absolute;
+  right: -9px;
+  top: -4px;
 }

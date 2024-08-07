@@ -8,6 +8,7 @@ declare namespace Layouts {
             sellers: Pagination;
             livesessions: Pagination;
             orders: Pagination;
+            liveorders: Pagination;
             waiting: Pagination;
             payments: Pagination;
             buyers: Pagination;
@@ -21,6 +22,11 @@ declare namespace Layouts {
         toasts: Toast[];
         checkedIds: checkedIds[];
         modalConfirmationMeta: ModalConfirmationMeta | null;
+        modalConfirmationDeletePeriodMeta: ModalDeletePeriodMeta | null;
+        modalConfirmationSetupPeriodMeta: ModalConfirmPeriodMeta | null;
+        deletePeriod: null;
+        setupPeriod: null;
+        deletePeriodHidePopup: boolean;
         modalCalendlyMeta: ModalCalendlyMeta | null;
         switchHeader: boolean;
         switchToggled: boolean;
@@ -31,6 +37,8 @@ declare namespace Layouts {
         showProfileMenu: boolean;
         selectedLng: string;
         showEmailNotification: boolean;
+        nativeBrowser: boolean;
+        openRealBrowser: boolean;
     }
 
     interface TabTypes {
@@ -79,6 +87,16 @@ declare namespace Layouts {
         onCancel?: () => void;
     }
     interface ModalCalendlyMeta {
+        titleKey?: string;
+        onConfirm: () => void;
+        onCancel?: () => void;
+    }
+    interface ModalConfirmPeriodMeta {
+        titleKey?: string;
+        onConfirm: () => void;
+        onCancel?: () => void;
+    }
+    interface ModalDeletePeriodMeta {
         titleKey?: string;
         onConfirm: () => void;
         onCancel?: () => void;

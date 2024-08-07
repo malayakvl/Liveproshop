@@ -80,6 +80,49 @@ export const fetchItemsAction: any = createAction(
                 });
         }
 );
+export const fetchLiveItemsAction: any = createAction(
+    'orders/FETCH_LIVE_ITEMS',
+    async () =>
+        (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ count: any; liveItems: any }> => {
+            const state = getState();
+            const { limit, offset, sort, column, query, filters } = paginationSelectorFactory(
+                PaginationType.ORDERS
+            )(state);
+            const queryFilter = JSON.stringify(filters);
+            dispatch(showLoaderAction(true));
+            // let orderCommentId;
+            // if (window.localStorage.getItem('order_comment_id')) {
+            //     orderCommentId = window.localStorage.getItem('order_comment_id');
+            // }
+            return axios
+                .get(
+                    `${baseUrl}/orders/fetch-live-items?${queryString.stringify({
+                        limit,
+                        offset,
+                        sort,
+                        column,
+                        query,
+                        queryFilter
+                    })}`,
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then((res: any) => {
+                    dispatch(showLoaderAction(false));
+                    return {
+                        count: res.data.count,
+                        liveItems: res.data.items,
+                        itemsStatuses: res.data.itemsStatuses
+                    };
+                });
+        }
+);
 export const fetchFilerItems: any = createAction(
     'orders/FETCH_FILTER_ITEMS',
     async () =>
@@ -133,7 +176,7 @@ export const bulkShippingAction: any = createAction(
 );
 export const bulkDownloadAction: any = createAction(
     'products/BULK_DOWNLOAD',
-    async () =>
+    async (locale: string) =>
         async (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
             dispatch(showLoaderAction(true));
@@ -146,16 +189,18 @@ export const bulkDownloadAction: any = createAction(
                     countChecked++;
                 }
             });
+            const lng = locale;
+            console.log('Current locale', locale);
             if (countChecked == 0) {
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
                 dispatch(showLoaderAction(false));
             } else {
                 return axios
                     .post(
-                        `${baseUrl}/orders/bulk-download`,
+                        `${baseUrl}/orders/bulk-download?locale=${locale}`,
                         {
                             data: JSON.stringify(state.layouts.checkedIds),
-                            locale: state.layouts.selectedLng
+                            locale: locale
                         },
                         {
                             headers: {
@@ -284,6 +329,29 @@ export const fetchOrderPdfAction: any = createAction(
             };
         }
 );
+export const expireOrderAction: any = createAction(
+    'orders/EXPIRE_ORDER',
+    async (orderId: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ fileterData: any }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/orders/expire?orderId=${orderId}`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            window.location.reload();
+            if (res.status) {
+                dispatch(showLoaderAction(false));
+            }
+            return {
+                fileterData: res.data.items
+            };
+        }
+);
 export const findSellersAction: any = createAction(
     'orders/FIND_SELLER_AUTOSUGGEST',
     async (query: string) =>
@@ -300,13 +368,16 @@ export const findSellersAction: any = createAction(
 );
 export const updateOrderStatusAction: any = createAction(
     'orders/INSERT_ORDER_STATUS',
-    async (orderId: number, status: string) =>
+    async (orderId: number, status: string, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            console.log('LOCALE', locale);
             return axios
-                .get(`${baseUrl}/orders/insert-status?orderId=${orderId}&status=${status}`, {
-                    headers: {
-                        ...authHeader(state.user.user.email)
+                .get(
+                    `${baseUrl}/orders/insert-status?orderId=${orderId}&status=${status}&locale=${locale}`,
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
                     }
                 })
                 .then((res: any) => res.data.result);
@@ -329,11 +400,36 @@ export const connectOrderAction: any = createAction(
 export const fetchUserOrderAction: any = createAction(
     'order/FETCH_USER_ORDER',
     async (email: string) => {
+        console.log('USER EMAIL FOR CONNECT', email);
         return axios
             .get(
                 `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
                     'user'
-                )}commentId=${window.localStorage.getItem('order_comment_id')}`,
+                )}&commentId=${window.localStorage.getItem(
+                    'order_comment_id'
+                )}&userFbEmail=${email}`,
+                {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                }
+            )
+            .then((res) => {
+                // console.log('RETURNED DATA', res.data);
+                // window.localStorage.removeItem('orderCommentId');
+                res.data.user;
+            })
+            .catch((e) => console.log(e.message));
+    }
+);
+export const fetchUserOrderWaitAction: any = createAction(
+    'order/FETCH_USER_WAIT_ORDER',
+    async (email: string) => {
+        return axios
+            .get(
+                `${baseUrl}/orders/connect-bycomment?user=${window.localStorage.getItem(
+                    'user'
+                )}commentId=${window.localStorage.getItem('orderWaitCommentId')}`,
                 {
                     headers: {
                         ...authHeader(email)
@@ -358,10 +454,12 @@ export const setupOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    if (res.data.storeName) {
+                        dispatch(setupConnectedStoreNameAction(res.data.storeName));
+                    }
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    // dispatch(setupConnectedStoreNameAction(res.data.storeName));
                     res.data.orderNumber;
-                    // window.location.href = `/checkout/${}`;
                 })
                 .catch((e) => console.log(e.message));
         }
@@ -396,7 +494,27 @@ export const setupWaitOrderByCommentAction: any = createAction(
                     }
                 })
                 .then((res) => {
-                    console.log('ORDER NUMBER', res.data.orderNumber);
+                    console.log('ORDER NUMBER WAIT', res.data.orderNumber);
+                    dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
+                    res.data.orderNumber;
+                    // window.location.href = `/checkout/${}`;
+                })
+                .catch((e) => console.log(e.message));
+        }
+);
+export const setupStoreNameByComment: any = createAction(
+    'order/FETCH_EXIST_WAIT_USER_ORDER',
+    async (commentId: string, email: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            console.log(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`);
+            return axios
+                .get(`${baseUrl}/orders/find-wait-order-by-comment?commentId=${commentId}`, {
+                    headers: {
+                        ...authHeader(email)
+                    }
+                })
+                .then((res) => {
+                    console.log('ORDER NUMBER WAIT', res.data.orderNumber);
                     dispatch(setupConnectedOrderIdAction(res.data.orderNumber));
                     res.data.orderNumber;
                     // window.location.href = `/checkout/${}`;
@@ -425,6 +543,7 @@ export const minusItemOrderAction: any = createAction(
     async (itemId: number, orderNumber: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
+            dispatch(showLoaderAction(true));
             return axios
                 .get(`${baseUrl}/orders/minus-item-order?orderItemId=${itemId}`, {
                     headers: {
@@ -432,10 +551,113 @@ export const minusItemOrderAction: any = createAction(
                     }
                 })
                 .then((res: any) => {
-                    dispatch(fetchCheckoutAction(orderNumber));
+                    window.location.reload();
+                    // dispatch(fetchCheckoutAction(orderNumber));
                 });
         }
 );
+export const openBrowserAction: any = createAction(
+    'orders/OPEN_BROWSER_PROG',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            return axios
+                .post(
+                    `${baseUrl}/open-browser`,
+                    {},
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then(async (data: any) => {
+                    console.log('Returned data try shell', data);
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const fetchOrderTotalAmountAction: any = createAction(
+    'orders/FETCH_ORDER_TOTAL_AMOUNT',
+    async (orderNumber: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/fetch-total-amount?orderNumber=${orderNumber}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    dispatch(setupOrderAmountAction(res.data.total_amount));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const fetchOrderTotalAmountActionUpdated: any = createAction(
+    'orders/FETCH_ORDER_TOTAL_AMOUNT_TIMER',
+    async (orderNumber: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/fetch-total-amount?orderNumber=${orderNumber}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    dispatch(setupOrderAmountUpdatedAction(res.data.total_amount));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+export const checkOrderExistAction: any = createAction(
+    'orders/CHECK_ORDER_EXIST',
+    async (orderNumber: number) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            return axios
+                .get(`${baseUrl}/orders/check-order-by-number?orderNumber=${orderNumber}`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then((res: any) => {
+                    if (parseFloat(res.data.exist_order) < 0) {
+                        window.location.reload();
+                    }
+                    // if (!res.data.exist_order) {
+                    //     alert('redirect');
+                    // }
+                    // dispatch(setupOrderAmountUpdatedAction(res.data.total_amount));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
+// export const fetchOrderTotalAmountAction: any = createAction(
+//     'orders/FETCH_ORDER_TOTAL_AMOUNT',
+//     async (orderId: number) =>
+//         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+//             const state = getState();
+//             dispatch(showLoaderAction(true));
+//             return axios
+//                 .get(
+//                     `${baseUrl}/orders/fetch-total-amount?orderId=${orderId}`,
+//                     {},
+//                     {
+//                         headers: {
+//                             ...authHeader(state.user.user.email)
+//                         }
+//                     }
+//                 )
+//                 .then(async (data: any) => {
+//                     console.log('Order Amount Total', data.total_amount);
+//                     dispatch(setupOrderAmountAction(data.total_amount));
+//                     dispatch(showLoaderAction(false));
+//                 });
+//         }
+// );
 
 // export const demoveItemOrderAction: any = createAction(
 //     'order/REMOVE_ITEM_ACTION',
@@ -477,3 +699,9 @@ export const setupReturnedUrlAction: any = createAction('orders/SETUP_RETURNED_U
 export const redirectCheckoutAction: any = createAction('orders/REDIRECT_CHECKOUT_ACTION');
 export const redirectOrderNumberAction: any = createAction('orders/REDIRECT_ORDER_NUMBER');
 export const setupConnectedOrderIdAction: any = createAction('orders/SETUP_CONNECTED_ORDER_ID');
+export const setupConnectedStoreNameAction: any = createAction('orders/SETUP_CONNECTED_STORE');
+export const setGoogleDeepLinkAction: any = createAction('orders/SET_GOOGLE_DEEP_LINK');
+export const setupOrderAmountAction: any = createAction('orders/SET_ORDER_AMOUNT');
+export const setupOrderAmountUpdatedAction: any = createAction('orders/SET_ORDER_AMOUNT_TIMER');
+export const reloadAfterCombineAction: any = createAction('orders/RELOAD_AFTER_COMBINE');
+// export const fetchOrderTotalAmountAction: any = createAction('orders/FETCH_ORDER_TOTAL');

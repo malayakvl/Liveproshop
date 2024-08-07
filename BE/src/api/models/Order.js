@@ -18,11 +18,13 @@ import {
 import { sendMail } from "../lib/sendMail.js";
 
 
+
+
 async function createInvoice (invoice, path, locale, ivoiceType) {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-        let historyRes;
+console.log('generate header done');
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
@@ -48,7 +50,7 @@ async function generateHeader(doc, seller, locale) {
         .text(`${seller.phone}`, 300, 75, { align: "right" })
         // .text(`${seller.address_line_1}`, 300, 65, { align: "right" })
         .text(seller.company_name, 300, 90, { align: "right" })
-        .text("VAT: "+seller.vat, 300, 105, { align: "right" })
+        .text("VAT: 20%", 300, 105, { align: "right" })
         // .text(seller.phone, 300, 95, { align: "right" })
         .moveDown();
 }
@@ -58,7 +60,6 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         .fillColor("#444444")
         .fontSize(20)
         .text(ivoiceType !== 'refund' ? t["Invoice"] : t["Refund"], 50, 160);
-
 
     generateHr(doc, 185);
     const customerInformationTop = 200;
@@ -78,6 +79,44 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
+console.log('Ebat', invoice);
+console.log('Transaction Id', invoice.transaction_id);
+console.log('Payment Type', invoice.paymentType);
+
+    let transactionId = '';
+    if (invoice.paymentType === 'MASTERCARD' || invoice.paymentType === 'VISA') {
+       transactionId = invoice.paymentDetails.paymentData.costs[0].transaction_id;
+    } else if (invoice.paymentType === 'TRUSTLY') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'CBC') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'WECHAT') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'MBWAY') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'MULTIBANCO') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'AMEX') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'BANKTRANS') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType === 'PAYPAL') {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('IDEAL')) {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('ALIPAY')) {
+        transactionId = invoice.transaction_id;
+    } else if (invoice.paymentType.includes('MAESTRO')) {
+        transactionId = invoice.transaction_id;
+    } else if (paymentData.payment_details.type === 'BANKTRANS') {
+        transactionId = paymentData.payment_details.external_transaction_id;
+    } else if (paymentData.payment_details.type === 'ALIPAY') {
+        transactionId = paymentData.transaction_id;
+        // transactionId = '';
+    } else if (paymentData.payment_details.type === 'MAESTRO') {
+        transactionId = paymentData.transaction_id;
+    }
+console.log('Transaction ID', transactionId);    
     doc
         .fontSize(10)
         .text(captionNumber, 50, customerInformationTop)
@@ -88,27 +127,26 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
         .text(invoice.invoice_date, 150, customerInformationTop + 15)
         .text(captionTotal, 50, customerInformationTop + 30)
         .text(
-            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal)),
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal) - parseFloat(invoice.refund_amount)),
             150,
             customerInformationTop + 30
         )
-        .font("Helvetica-Bold")
-        .text(invoice.shipping.name, 300, customerInformationTop)
+        .font("Helvetica-Bold");
+
+    // if (parseFloat(invoice.refund_amount) > 0) {
+    //     console.log('REFUND SHIPPING', invoice.refund_amount)
+    //     // doc.text(t["Shipping refund"], 50, customerInformationTop + 45)
+    //     doc.text(formatCurrency(parseFloat(invoice.refund_amount)), 150, customerInformationTop + 45)
+    //     doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
+    //
+    // }
+    console.log('HERE WE ARE');
+    console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
+    doc.text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
-        .text(t["Transaction ID"]+paymentData.costs[0].transaction_id, 300, customerInformationTop + 40)
-        // .text(t["Holder Name"]+paymentData.payment_details.account_holder_name, 300, customerInformationTop + 45)
-        .text(t["Payment Method"]+paymentData.payment_details.type, 300, customerInformationTop + 55)
-        // .text(paymentData.payment_details.amount, 300, customerInformationTop + 75)
-        // .text(
-        //     invoice.shipping.city +
-        //     ", " +
-        //     invoice.shipping.state +
-        //     ", " +
-        //     invoice.shipping.country,
-        //     300,
-        //     customerInformationTop + 30
-        // )
+        .text(t["Transaction ID"]+transactionId, 300, customerInformationTop + 40)
+        .text(t["Payment Method"]+invoice.paymentType, 300, customerInformationTop + 55)
         .moveDown();
 
     generateHr(doc, 282);
@@ -170,6 +208,19 @@ async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
             "",
             formatCurrency(invoice.shipping_amount)
         );
+        let refundToDatePosition = paidToDatePosition + 20;
+        if (invoice.refund_amount) {
+
+            generateTableRow(
+                doc,
+                refundToDatePosition,
+                "",
+                "",
+                t["Shipping refund"],
+                "",
+                formatCurrency(invoice.refund_amount)
+            );
+        }
         // reacalculate vat
         let vatAmount = 0;
         let totalAmount = 0;
@@ -177,9 +228,7 @@ async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
         totalAmount = parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount);
         vatAmount = (parseFloat(invoice.subtotal) + parseFloat(invoice.shipping_amount)) / 1.2;
 
-        // console.log(formatCurrency(totalAmount - vatAmount));
-
-        const vatToDatePosition = paidToDatePosition + 20;
+        const vatToDatePosition = invoice.refund_amount ? refundToDatePosition + 20 : paidToDatePosition + 30;
         generateTableRow(
             doc,
             vatToDatePosition,
@@ -200,7 +249,7 @@ async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
             "",
             t[ivoiceType !== 'refund' ? "Total Payment" : "Refund Payment"],
             "",
-            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal))
+            formatCurrency(parseFloat((0)) + parseFloat(invoice.shipping_amount) + parseFloat(invoice.subtotal) - parseFloat(invoice.refund_amount))
         );
         doc.font("Helvetica");
     }
@@ -329,6 +378,84 @@ class Order {
         }
     }
 
+    async removeItemWaitStatus(itemId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.order_items SET status=null WHERE id='${itemId}'`);
+            // check orderId parameters for waiting item
+            return { success: true }
+            // const orderData = await client.query(`SELECT quantity FROM 
+            //         data.product_configurations WHERE id='${configId}'`);
+            //
+            // if (orderData.rows.length > 0) {
+            //     const newQty = parseInt(orderData.rows[0].quantity) - parseInt(qty);
+            //     await client.query(`UPDATE data.product_configurations SET quantity='${newQty}'
+            //         WHERE id='${configId}'`);
+            //     return { success: true }
+            // } else {
+            //     return { success: true }
+            // }
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async updateConfigQty(configId, qty) {
+        const client = await pool.connect();
+        try {
+            const orderData = await client.query(`SELECT quantity FROM 
+                    data.product_configurations WHERE id='${configId}'`);
+
+            if (orderData.rows.length > 0) {
+                const newQty = parseInt(orderData.rows[0].quantity) - parseInt(qty);
+                await client.query(`UPDATE data.product_configurations SET quantity='${newQty}'
+                    WHERE id='${configId}'`);
+                return { success: true }
+            } else {
+                return { success: true }
+            }
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Create orders):',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
     async getConfigQty(configId) {
         const client = await pool.connect();
         try {
@@ -367,6 +494,8 @@ class Order {
     async updateWaitWithOrderId(orderId) {
         const client = await pool.connect();
         try {
+            console.log(`UPDATE data.orders SET 
+                    status='new', statusWaiting=null WHERE id='${orderId}' `);
             const orderData = await client.query(`UPDATE data.orders SET 
                     status='new', statusWaiting=null WHERE id='${orderId}' `);
 
@@ -401,7 +530,7 @@ class Order {
                         data.live_sessions.store_id, data.live_sessions_messages.recipient_id, 
                         data.order_items.id AS wait_item_id, access_token, data.live_sessions_messages.message,
                         data.seller_settings.order_timer, data.seller_settings.free_shipping_timer, threshold,
-                        data.user_stores.name as store_name
+                        data.user_stores.name as store_name, data.order_items.product_id
                     FROM data.order_items 
                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.order_items.live_sessions_id
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
@@ -409,9 +538,10 @@ class Order {
                     LEFT JOIN data.seller_settings ON data.seller_settings.user_id = data.live_sessions.user_id
                     LEFT JOIN data.free_order_threshold foth ON foth.user_id = data.live_sessions.user_id
                     WHERE product_configuration_id=${configId} AND data.order_items.status='waiting'
-                    ORDER BY data.order_items.created_at LIMIT 50`;
+                    ORDER BY data.order_items.created_at LIMIT 1`;
+console.log(waitingQuery)
 
-            console.log(waitingQuery);
+// console.log(waitingQuery);
             const waitingData = await client.query(waitingQuery);
 
             return { items: waitingData.rows.length > 0 ? waitingData.rows : [] }
@@ -438,9 +568,40 @@ class Order {
         }
     }
 
+    async returnNotParsedConfigQty(qty, configId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${qty} WEHRE id='${configId}'`);
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Return Not Parser Configured:',
+                    { message: e.message }
+                );
+            }
+            // const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of product qty'
+            };
+            return {
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
     async updateWaitingItemQty(itemId, qty, configId, orderId) {
         const client = await pool.connect();
         try {
+// console.log('itemId', itemId);
+// console.log('qty', qty);
+// console.log('configId', configId);
+// console.log('orderId', orderId);
             const dataOrderNumArr = (new Date().toISOString().slice(0,11).replace('T',' ')).split('-');
             const _tmpNumber = dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0];
             const queryNumber = `SELECT order_number FROM
@@ -456,25 +617,32 @@ class Order {
                 const _tNum = orderNumData.rows[0].order_number.split('-')
                 _newOrderNumber = `${moment().format('YYYYMMDD')}-${parseInt(_tNum[1]) + 1}`;
             }
-            console.log("Order Number", _newOrderNumber);
             // const laterstOrder = await client.query(`SELECT order_number FROM
             //     data.orders WHERE order_number LIKE '${dataOrderNumArr[2]+dataOrderNumArr[1]+dataOrderNumArr[0]}-%'
             //     LIMIT 1 ORDER BY created_at DESC`);
             const updtQueryItem = `UPDATE data.order_items SET status=null WHERE id=${itemId};`;
-            const updtQueryOrder = `UPDATE data.orders SET 
-                        status='new', status_waiting=null, order_number='${_newOrderNumber}' 
-                        WHERE id=${orderId};`;
-
-            console.log(updtQueryItem);
-            console.log(updtQueryOrder);
             await client.query(updtQueryItem);
-            await client.query(updtQueryOrder);
+            const waitItems = await client.query(`SELECT * FROM data.order_items WHERE id=${itemId}`);
+            let totalAmount = 0;
+            waitItems.rows.forEach(_item => {
+                totalAmount += parseFloat(_item.price)*parseInt(_item.quantity);
+            })
+console.log('ZZZZ', 1);
+            //update product config qty
+            const updtConfigQuery = `UPDATE data.product_configurations SET quantity=quantity - ${qty} WHERE id=${configId};`;
+            await client.query(updtConfigQuery);
+
+
+            if (orderId) {
+                const updtQueryOrder = `UPDATE data.orders SET 
+                        status='new', status_waiting=null, order_number='${_newOrderNumber}',
+                        order_amount='${totalAmount}', total_amoint='${totalAmount}' 
+                        WHERE id=${orderId};`;
+                console.log('ZZZZ', updtQueryOrder);
+                await client.query(updtQueryOrder);
+            }
 
             return { orderNuber: _newOrderNumber }
-            // const orderData = await client.query(`SELECT`)
-            // const updtQuery = `UPDATE data.product_configurations SET quantity=${qty} WHERE id=${configId};`;
-            // await client.query(updtQuery);
-            // getting all wait with this configuration
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -645,6 +813,132 @@ class Order {
     }
 
 
+    async fetchLiveItems (page, perPage = 20000, user, isRead = false, reqOffset = null, filters, column, sort) {
+        const client = await pool.connect();
+        try {
+            const _filters = JSON.parse(filters);
+
+            switch (user.role_id) {
+                case UserRole.ADMIN:
+                    break;
+                case UserRole.CUSTOMER:
+                    _filters.seller_id = [user.id];
+                    if (_filters.shopper_id) {
+                        _filters.buyer_id = _filters.shopper_id;
+                        delete _filters.userIds;
+                    }
+                    break;
+                case UserRole.BUYER:
+                    _filters.buyer_id = [user.id];
+            }
+            if (_filters.status?.length === 0) {
+                if (user.role_id === UserRole.BUYER) {
+                    _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW, OrderStatus.WAITING];
+                } else {
+                    _filters.status = [OrderStatus.NEW];
+                }
+            }
+            // _filters.sync_at = NULL;
+
+            // _filters.buyer_id = _filters.shopper_id;
+            const _total = await client.query(`SELECT count FROM data.get_orders_count('${JSON.stringify(_filters)}');`);
+            const size = _total.rows[0].count;
+            let offset;
+            if (reqOffset) {
+                offset = reqOffset;
+            } else {
+                offset = (Number(page) - 1) * Number(perPage);
+            }
+            if (!column && !sort) {
+
+            } else {
+
+            }
+            const ordersQuery = `SELECT *
+                                FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'created_at DESC');`;
+console.log(ordersQuery);
+            const res = await client.query(ordersQuery);
+            const items = res.rows.length > 0 ? res.rows : [];
+            const _items = res.rows.length > 0 ? res.rows : [];
+            const _orderIds = [];
+            if (_items.length > 0) {
+                // console.log(_items)
+                const orderIds = [];
+                _items.map(_order => {
+                    _orderIds.push(_order.id);
+                })
+            }
+            let orderStatuses;
+            let orderStatusesRes = [];
+            if (_orderIds.length) {
+                orderStatuses = `
+                    SELECT
+                        json_agg(
+                            json_build_object(
+                            'status', order_statuses.status,
+                            'created_at', order_statuses.created_at,
+                            'order_id', order_statuses.order_id
+                            )
+                        ) AS order_statuses
+                    FROM data.order_statuses
+                    WHERE TRUE
+                        AND (order_statuses.order_id IN (${_orderIds.join(',')}))
+                `;
+                orderStatusesRes = await client.query(orderStatuses);
+            }
+//             console.log(orderStatuses);
+//             const orderStatusesRes = await client.query(orderStatuses);
+            const _itemStatuses = orderStatusesRes.rows[0].order_statuses;
+            const _itemStatusesIds = [];
+            const grouppedStatuses = [];
+            if (orderStatusesRes.rows[0].order_statuses !== null) {
+                orderStatusesRes.rows[0].order_statuses.map(status => {
+                    _itemStatusesIds.push(status.order_id);
+                });
+                let unique = _itemStatusesIds.reduce(function (a, b)  {
+                    if (a.indexOf(b) < 0) a.push(b);
+                    return a;
+                }, []);
+                unique.forEach(_id => {
+                    // console.log(_itemStatuses.find(_item => _item.order_id === _id));
+                    grouppedStatuses.push({id:_id, statuses:(_itemStatuses.filter(obj => {
+                            return obj.order_id === _id
+                        }))});
+                });
+            }
+            const error = null;
+
+            return {
+                items,
+                grouppedStatuses,
+                size,
+                error
+            };
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Products getAll):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                items,
+                error
+            };
+
+        } finally {
+            client.release();
+        }
+    }
+
+
     async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
         const client = await pool.connect();
         try {
@@ -687,7 +981,7 @@ class Order {
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-            console.log(ordersQuery);
+// console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -699,14 +993,6 @@ class Order {
                     _orderIds.push(_order.id);
                 })
             }
-            // const orderStatuses = `SELECT
-            //         json_agg(
-            //             (jsonb_build_object('status', order_statuses.status) || jsonb_build_object('created_at', order_statuses.created_at) || jsonb_build_object('order_id', order_statuses.order_id))::json
-            //         ) AS order_statuses
-            //     FROM data.order_statuses
-            //     WHERE TRUE
-            //         AND (order_statuses.order_id IN (${_orderIds.join(',')}))`;
-            //
             let orderStatuses;
             let orderStatusesRes = [];
             if (_orderIds.length) {
@@ -738,9 +1024,6 @@ class Order {
                     if (a.indexOf(b) < 0) a.push(b);
                     return a;
                 }, []);
-                // console.log(_itemStatuses)
-                // console.log('++++++++++++');
-                // itemStatuses.
                 unique.forEach(_id => {
                     // console.log(_itemStatuses.find(_item => _item.order_id === _id));
                     grouppedStatuses.push({id:_id, statuses:(_itemStatuses.filter(obj => {
@@ -861,6 +1144,7 @@ class Order {
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
+console.log('LOCALE', locale)
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -881,7 +1165,7 @@ class Order {
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-            console.log(ordersQuery);
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const orderId = res.rows[0].id;
             let historyRes;
@@ -890,24 +1174,23 @@ class Order {
             } else {
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-            console.log(historyRes.rows[0]);
-
+            if (!historyRes.rows[0]) {
+                await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
+                historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
+            }
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
-            // if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
-            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
-            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
-            //     }
-            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`)) {
-            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
-            //     }
-            //     if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
-            //         fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
-            //     }
-            //     // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
-            //     // fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
-            //     // fs.mkdirSync(dirArchiveFolder);
-            // }
+            if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`);
+                }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders`);
+                }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
+                }
+            }
 
             // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
@@ -938,18 +1221,24 @@ class Order {
                                                        FROM data.addresses LEFT JOIN data.users ON data.users.id=data.addresses.user_id
                                                        WHERE user_id=${res.rows[0].buyer_id}`);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
+
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
+
                 // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
-                const multiSafePayClientRes = await axios
-                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {
+                const orderNuberForMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}`;
+                const multiOrderPaymentData = await axios
+                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
                         headers: { 'Content-Type': 'application/json' }
                     })
-                    .then(async (resM) => {
-                        return resM.data.data;
+                    .then(async (res) => {
+                        // console.log('PAYMENT METHODS', res.data.data);
+                        return {'success': true, paymentData: res.data.data}
                     }).catch(error => {
-                        console.log("Merchant error", error);
+                        return {error: error.message}
                     });
+console.log('MS', multiOrderPaymentData);
+                const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
                 const invoice = {
@@ -968,20 +1257,22 @@ class Order {
                     status: res.rows[0].status,
                     items: res.rows[0].order_items,
                     subtotal: res.rows[0].order_amount,
+                    refund_amount: refundAmount,
                     shipping_amount: res.rows[0].shipping_amount,
                     paid: res.rows[0].total_amount,
                     invoice_nr: res.rows[0].order_number+(typeInvoice !== 'refund' ? '' : `-${res.rows[0].refund_prefix}`),
                     invoice_date: moment(historyRes.rows[0].created_at).format('DD/MM/YYYY'),
-                    paymentDetails: multiSafePayClientRes,
+                    paymentDetails: multiOrderPaymentData,
+                    transaction_id: multiOrderPaymentData.paymentData.payment_methods[0].external_transaction_id,
+                    paymentType: multiOrderPaymentData.paymentData.payment_methods[0].type,
                     orderId: orderId
                     // paymentDetails: {}
                 };
-                console.log(invoice);
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
-                await setTimeout(8000);
+                // await setTimeout(3000);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
-                    await setTimeout(4000);
+                    await setTimeout(2000);
                 }
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -1012,7 +1303,7 @@ class Order {
             }
             error = {
                 code: 500,
-                message: 'Error get list of users'
+                message: 'Model error (Generate PDF):'
             };
             return  {
                 fileName: '',
@@ -1033,6 +1324,50 @@ class Order {
                 const orderId = res.rows[0].order_id;
                 await client.query(`UPDATE data.orders SET user_id=${userId} WHERE id=${orderId}`);
             }
+            return {success: true, error: null, data: res.rows[0]};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async fetchExistByNumber (orderNumber) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.orders WHERE order_number = '${orderNumber}';`;
+            const res = await client.query(SQL);
+            if (res.rows.length > 0) {
+                return {success: true, error: null, data: res.rows[0]};
+            } else {
+                return {success: true, error: null, data: null};
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async fetchTotal (orderNumber) {
+        const client = await pool.connect();
+        try {
+            const SQL = `SELECT * FROM data.orders WHERE order_number = '${orderNumber}';`;
+            const res = await client.query(SQL);
             return {success: true, error: null, data: res.rows[0]};
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -1075,20 +1410,28 @@ class Order {
             // send email about shipping
             const emailSql = `
                 SELECT data.users.*, data.user_stores.name AS store_name, 
-                    data.orders.order_number, data.users.selected_locale 
+                    data.orders.order_number, data.users.selected_locale,
+                    data.users.email, data.users.email_real
                 FROM data.orders 
                     LEFT JOIN data.users ON data.users.id=data.orders.user_id 
                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id                   
                     WHERE data.orders.id IN (${orderIds.join(',')})`;
-console.log(emailSql);
             const emailRes = await client.query(emailSql);
             let mail = '';
+            let mailSendAddress = '';
 
             await emailRes.rows.forEach(async _order => {
                 mail = await confirmShippedEmail(_order.email, _order.selected_locale ? _order.selected_locale : 'fr', _order);
+                mailSendAddress = _order.email
+                if (!_order.email.match(
+                    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                )) {
+                    mailSendAddress = _order.email_real;
+                };
+
                 sendMail(
-                    _order.email,
+                    mailSendAddress,
                     mail.subject,
                     mail.body
                 );
@@ -1115,6 +1458,14 @@ console.log(emailSql);
         const client = await pool.connect();
         try {
             const itemRow = await client.query(`SELECT * FROM data.order_items WHERE id='${orderItemId}'`);
+            const itemConfigurationId = itemRow.rows[0].product_configuration_id;
+
+            // start waiting when remove item from cart
+            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${itemConfigurationId}" -- configId=${itemConfigurationId}`, function(code, output) {
+                console.log('Exit code:', code);
+                console.log('Program output:', output);
+            });
+
             // console.log(`UPDATE data.orders SET
             //     order_amount=order_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity},
             //     total_amount=total_amount - ${itemRow.rows[0].price*itemRow.rows[0].quantity}
@@ -1163,7 +1514,219 @@ console.log(emailSql);
             //     WHERE id='${itemRow.rows[0].product_configuration_id}'`);
             await client.query(`UPDATE data.product_configurations SET quantity = quantity + 1
                 WHERE id='${itemRow.rows[0].product_configuration_id}'`);
+
+            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${itemRow.rows[0].product_configuration_id}" -- configId=${itemRow.rows[0].product_configuration_id}`, function(code, output) {
+                console.log('Exit code:', code);
+                console.log('Program output:', output);
+            });
+
             return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async connectThrowStore(messageId, fromId, storeId, inPeriod, freePeriodEnd) {
+        const client = await pool.connect();
+        try {
+console.log('Connect throw store');
+            // find order by message and attach to current user
+            const connetedQuery = `SELECT * FROM data.user2pages 
+                WHERE from_id='${fromId}' AND store_id=${storeId}`
+            const connetedQueryRes = await client.query(connetedQuery);
+            const queryOrder = `SELECT data.orders.id, 
+                    data.orders.live_sessions_id, data.orders.order_amount, 
+                    data.orders.total_amount
+                    FROM data.order_items LEFT JOIN 
+                    data.orders ON data.orders.id = data.order_items.order_id 
+                    WHERE message_id='${messageId}'`;
+            const findedOrderRes = await client.query(queryOrder);
+            let _endPeriod;
+console.log(1);
+            if (freePeriodEnd) {
+                _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
+console.log(_endPeriod);
+
+                await client.query(`UPDATE data.orders
+                    SET 
+                        in_period = ${inPeriod},
+                        free_period_end='${_endPeriod}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
+            } else {
+            }
+
+
+            if (connetedQueryRes.rows.length > 0) {
+console.log('TUTUTUTUTUTUTUUT')
+
+                const userId = connetedQueryRes.rows[0].user_id;
+                // find order by message
+
+                const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
+
+                const settingsSettingsQuery = (
+                    `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
+                const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                let expireAt;
+
+                if (settingsSettingsRes.rows[0].order_timer.hours) {
+                   expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                }
+                if (settingsSettingsRes.rows[0].order_timer.days) {
+                   expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                }
+                if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                    expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                }
+// console.log(`UPDATE data.orders
+//                     SET user_id='${userId}',
+//                         sync_at='${syncAt}',
+//                         expire_order_at='${expireAt}',
+//                         in_period = ${inPeriod},
+//                         free_period_end='${_endPeriod ? _endPeriod : null}'
+//                     WHERE id='${findedOrderRes.rows[0].id}'`);
+
+                if (inPeriod) {
+                    await client.query(`UPDATE data.orders
+                    SET user_id='${userId}',
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}',
+                        in_period = ${inPeriod},
+                        free_period_end='${_endPeriod}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
+                } else {
+                    await client.query(`UPDATE data.orders
+                    SET user_id='${userId}',
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
+                }
+
+
+                // check if we have non payed order
+                const existNonPayedOrder = await client.query(
+                    `SELECT data.orders.id, data.orders.order_number, 
+                                        data.orders.order_amount, data.orders.total_amount,
+                                        data.orders.live_sessions_id FROM data.orders 
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                                        LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id   
+                                        WHERE data.orders.user_id='${userId}'
+                                        AND data.orders.status='new' AND data.orders.id != '${findedOrderRes.rows[0].id}'
+                                        AND live_sessions_id='${findedOrderRes.rows[0].live_sessions_id}' 
+                                        AND status_waiting IS NULL`);
+                let orderId, orderNumber;
+                if (existNonPayedOrder.rows[0]?.id) {
+                    orderNumber = existNonPayedOrder.rows[0].order_number;
+                    orderId = existNonPayedOrder.rows[0].id;
+                    // before add new items check if this item already aexist in order, if yes only change quantity
+                    const updateExistItemsSQL = `UPDATE data.order_items SET 
+                        order_id='${existNonPayedOrder.rows[0].id}' 
+                        WHERE order_id='${findedOrderRes.rows[0].id}' AND status IS NULL `;
+
+                    await client.query(updateExistItemsSQL);
+console.log('HEEEEEEEEEEEEEE COMBINE');
+
+                    const settingsSettingsQuery = (
+                        `SELECT data.seller_settings.order_timer FROM data.seller_settings
+                            LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                            WHERE data.live_sessions.id = '${existNonPayedOrder.rows[0].live_sessions_id}'`);
+console.log(settingsSettingsQuery);
+                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                    let expireAt;
+
+                    if (settingsSettingsRes.rows[0].order_timer.hours) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.days) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                    }
+
+                    // const updateAmountSQL1 = `UPDATE data.orders
+                    //     SET
+                    //     expire_order_at='${expireAt}'
+                    //     WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                    // console.log(updateAmountSQL1);
+
+                    // update amounts for order splited order
+                    const updateAmountSQL = `UPDATE data.orders 
+                        SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
+                        total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
+                        expire_order_at='${expireAt}',
+                        sync_at=now(),
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                        WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                    await client.query(updateAmountSQL);
+
+                    // delete unused order
+                    await client.query(`DELETE FROM data.orders 
+                        WHERE id='${findedOrderRes.rows[0].id}'`);
+
+                    // combined same rows in order_items
+                    const combinedSQL = await client.query(`
+                        SELECT product_configuration_id, SUM(quantity) AS resultsQty
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id`);
+                    const realOrderItems = await client.query(`SELECT id 
+                    FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
+                    // need to combine two rows into one
+                    if (combinedSQL.rows.length < realOrderItems.rows.length) {
+                        const combinedData = [];
+                        combinedSQL.rows.forEach(_item => {
+                            combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
+                        })
+                        const _dataResCombine = await client.query(`SELECT product_configuration_id, 
+                        SUM(quantity) AS resultsQty, array_agg(id) as products
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id;`)
+                        _dataResCombine.rows.forEach(_row => {
+                            if (_row.products.length > 1) {
+                                _row.products.forEach(async (_itemId, _key) => {
+                                    console.log(_key)
+                                    if (_key > 0) {
+                                        await client.query(`DELETE FROM data.order_items WHERE id='${_itemId}'`);
+                                    }
+                                })
+                            }
+                        });
+                        // update quantity for order items row
+                        combinedData.forEach(async (_item) => {
+                            await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
+                        WHERE product_configuration_id='${_item.config_id}'`)
+                        });
+                    }
+                }
+                await client.query(`UPDATE data.orders 
+                    SET user_id='${userId}', 
+                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}',
+                        in_period = ${inPeriod},
+                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
+                    WHERE id='${existNonPayedOrder.rows[0].id}'`)
+
+
+                // await client.query(`UPDATE data.orders
+                //     SET user_id='${userId}',
+                //         sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
+                //     WHERE id='${findedOrderRes.rows[0].id}'`)
+            }
+            return { success: true };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -1266,113 +1829,310 @@ console.log(emailSql);
         }
     }
 
+    async expireOrder(orderId, userId) {
+        const client = await pool.connect();
+        try {
+            console.log('EXPIRE ORDER');
+
+            const order = await client.query(`SELECT * FROM data.orders WHERE id='${orderId}' AND user_id='${userId}' AND status !='expired'`);
+            if (order.rows.length > 0) {
+                await client.query(`UPDATE data.orders SET total_amount = 0, order_amount=0, expire_order_at=now(), status='expired' WHERE id=${order.rows[0].id}`)
+                const sessionId = order.rows[0].live_sessions_id;
+                const orderItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${order.rows[0].id}'`);
+                if (orderItems.rows.length > 0) {
+                    orderItems.rows.forEach(async _item => {
+                        // put qty back to product
+                        console.log(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`);
+                        // await client.query(`UPDATE data.product_configurations SET quantity=1 WHERE id=${_item.product_configuration_id}`);
+                        await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`);
+                        // remove item
+                        await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+
+                        // start wait job
+                        shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                            console.log('Exit code:', code);
+                            console.log('Program output:', output);
+                        });
+                    });
+                }
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async findByCommentId (commentId, userId) {
         const client = await pool.connect();
-        console.log('findByCommentId');
         try {
-            let orderNumber;let orderId;let copyOrderData;
-            const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId,
-                        data.orders.live_sessions_id, order_amount, total_amount, quantity
+            let orderNumber;let orderId;let copyOrderData;let storeName;let sessionId;
+            const SQL = `SELECT order_id, order_number, data.order_items.status, data.orders.id AS orderId, data.order_items.user_id AS tmp_user_id,
+                        data.orders.live_sessions_id, order_amount, total_amount, 
+                        quantity, data.order_items.user_id AS tmp_user, data.user_stores.name AS store_name
                                 FROM data.order_items 
                                 LEFT JOIN data.orders ON data.orders.id = data.order_items.order_id
+                                LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                                LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
-            console.log('orderNumber', orderNumber);
-            // console.log(orderNumber);
-            const _tmpOrderNumber = res.rows[0].order_number.split('-');
-            const prefixWait = Math.floor(Date.now()/1000);
-            console.log('prefixWait', prefixWait);
-            // exit;
+            storeName = res.rows[0].store_name;
+console.log('Store Name', storeName)
+            sessionId = res.rows[0].live_sessions_id;
+            const tmpUserId = res.rows[0].tmp_user_id;
+            if (!orderNumber) {
+                const SQLWait = `SELECT *
+                                FROM data.order_items 
+                                WHERE message_id='${commentId}' ORDER BY order_id`;
+                const resWait = await client.query(SQLWait);
+                let updateTotal = 0;
+                if (!resWait.rows[0].order_id) {
+// console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+                    const existNonPayed = await client.query(`SELECT * FROM data.orders 
+                        WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+                    if (existNonPayed.rows.length > 0) {
+                        orderId = existNonPayed.rows[0].id;
+                        orderNumber = existNonPayed.rows[0].order_number;
+                    } else {
+                        const existNonPayedEmpty = await client.query(
+                            `SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' 
+                            ORDER BY created_at DESC`);
+                        if (existNonPayedEmpty.rows.length > 0) {
+                            orderId = existNonPayedEmpty.rows[0].id;
+                            orderNumber = existNonPayedEmpty.rows[0].order_number;
+                        } else {
+                            const emptyWaitRes = await client.query(
+                                `SELECT id, order_number, user_id, updated_at,
+                                    live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
+console.log('Here', emptyWaitRes.rows[0].id);
+                            orderId = emptyWaitRes.rows[0].id;
 
-            copyOrderData = res.rows[0];
-            // copyOrderData.order_number = `${_tmpOrderNumber[0]}-WO-${_tmpOrderNumber[1]}`;
-            copyOrderData.order_number = `${res.rows[0].order_number}-WO-${prefixWait}`;
-            orderId = res.rows[0].orderId;
-            // console.log(`SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
-            //     AND status='new' AND id != '${res.rows[0].order_id}'
-            //     AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
-            // exit;
-            const existNonPayedOrder = await client.query(
-                `SELECT id, order_number FROM data.orders WHERE user_id='${userId}'
-                AND status='new' AND id != '${res.rows[0].order_id}'
-                AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
-            if (existNonPayedOrder.rows[0]?.id) {
-                orderNumber = existNonPayedOrder.rows[0].order_number;
-                // copyOrderData.user_id = userId;
-                // copyOrderData.order_number = `${res.rows[0].order_number}-WO-$prefixWait}`;
-                orderId = existNonPayedOrder.rows[0].id;
-                // before add new items check if this item already aexist in order, if yes only change quantity
-                const updateExistItemsSQL = `UPDATE data.order_items SET 
+                            // down't remember why i attach prefix
+                            // orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
+                            orderNumber = emptyWaitRes.rows[0].order_number;
+                            const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
+                            const settingsSettingsQuery =
+                                `SELECT data.seller_settings.order_timer,  data.seller_settings.free_shipping_to,
+                                        data.seller_settings.free_shipping_from
+                                        FROM data.seller_settings
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${emptyWaitRes.rows[0].live_sessions_id}'`;
+                            const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                            let expireAt;
+                            if (settingsSettingsRes.rows[0].order_timer.hours) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            if (settingsSettingsRes.rows[0].order_timer.days) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                                expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                            }
+                            const forattedDate = moment(emptyWaitRes.rows[0].updated_at).format('YYYY-MM-DD hh:mm:ss');
+                            const dateFrom = moment(settingsSettingsRes.rows[0].free_shipping_from).format('YYYY-MM-DD hh:mm:ss');
+                            const dateTo = moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss');
+
+                            const inPeriod = forattedDate >= dateFrom && forattedDate <= dateTo;
+                            // const freePeriodEnd = settingsSettingsRes.rows[0].free_shipping_to ?
+                            //     moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss') : null;
+                            let updtQuery;
+                            if (settingsSettingsRes.rows[0].free_shipping_to) {
+                                updtQuery = `UPDATE data.orders 
+                                SET user_id=${userId}, 
+                                total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                order_number='${orderNumber}',
+                                sync_at='${syncAt}',
+                                expire_order_at='${expireAt}',
+                                in_period=${inPeriod},
+                                free_period_end='${moment(settingsSettingsRes.rows[0].free_shipping_to).format('YYYY-MM-DD hh:mm:ss')}'
+                                WHERE id=${emptyWaitRes.rows[0].id}`;
+                            } else {
+                                updtQuery = `UPDATE data.orders 
+                                SET user_id=${userId}, 
+                                total_amount=${resWait.rows[0].quantity*resWait.rows[0].price}, 
+                                order_amount=${resWait.rows[0].quantity*resWait.rows[0].price},
+                                order_number='${orderNumber}',
+                                sync_at='${syncAt}',
+                                expire_order_at='${expireAt}'
+                                WHERE id=${emptyWaitRes.rows[0].id}`;
+                            }
+
+console.log(updtQuery);
+                            await client.query(updtQuery);
+
+                            await client.query(`UPDATE data.order_items 
+                                SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`
+                            );
+                            // const totalAmountSQL = (
+                            //     `SELECT SUM(total_amount) AS sum_total_amount,
+                            //         SUM(order_amount) AS sum_order_amount
+                            //         FROM data.order_items
+                            //     WHERE order_id=${emptyWaitRes.rows[0].id} AND user_id=${tmpUserId}
+                            //     GROUP BY order_id`);
+                            //
+                            // console.log(totalAmountSQL);
+
+                        }
+                    }
+                    if (resWait.rows.length > 0) {
+                        for (const _item of resWait.rows) {
+                            if (!_item.order_id) {
+                                updateTotal += _item.price*_item.quantity;
+                                await client.query(`UPDATE data.order_items 
+                                    SET order_id = ${orderId} WHERE message_id='${commentId}'`);
+                            }
+                        }
+                    }
+                }
+                // return {success: true, orderId: orderId, orderNumber: orderNumber };
+                return {success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName };
+
+            } else {
+                const _tmpOrderNumber = res.rows[0].order_number.split('-');
+                const prefixWait = Math.floor(Date.now()/1000);
+                copyOrderData = res.rows[0];
+                // copyOrderData.order_number = `${_tmpOrderNumber[0]}-WO-${_tmpOrderNumber[1]}`;
+                copyOrderData.order_number = `${res.rows[0].order_number}-WO-${prefixWait}`;
+                orderId = res.rows[0].orderId;
+                const existNonPayedOrder = await client.query(
+                    `SELECT data.orders.id, data.orders.order_number, data.orders.live_sessions_id FROM data.orders 
+                                     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                                        LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id   
+                                        WHERE data.orders.user_id='${userId}'
+                                        AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
+                                        AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
+                if (existNonPayedOrder.rows[0]?.id) {
+console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
+                    orderNumber = existNonPayedOrder.rows[0].order_number;
+                    orderId = existNonPayedOrder.rows[0].id;
+                    // before add new items check if this item already aexist in order, if yes only change quantity
+                    const updateExistItemsSQL = `UPDATE data.order_items SET 
                         order_id='${existNonPayedOrder.rows[0].id}' WHERE message_id='${commentId}' AND status IS NULL `;
-                await client.query(updateExistItemsSQL);
-                // update amounts for order splited order
-                const updateAmountSQL = `UPDATE data.orders 
-                    SET order_amount = order_amount + ${res.rows[0].order_amount},
-                    total_amount = total_amount +  ${res.rows[0].total_amount}
-                    WHERE id='${existNonPayedOrder.rows[0].id}'`;
-                await client.query(updateAmountSQL);
+                    await client.query(updateExistItemsSQL);
+                    // update amounts for order splited order
+                    const updateAmountSQL = `UPDATE data.orders 
+                        SET order_amount = order_amount + ${res.rows[0].order_amount},
+                        total_amount = total_amount +  ${res.rows[0].total_amount},
+                        sync_at=now()
+                        WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                    await client.query(updateAmountSQL);
 
-                // delete unused order
-                await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
+                    // delete unused order
+                    await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
 
-                // combined same rows in order_items
-                const combinedSQL = await client.query(`
-                    SELECT product_configuration_id, SUM(quantity) AS resultsQty
-                    FROM data.order_items
-                    WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                    GROUP BY product_configuration_id`);
-                const realOrderItems = await client.query(`SELECT id 
+                    // combined same rows in order_items
+                    const combinedSQL = await client.query(`
+                        SELECT product_configuration_id, SUM(quantity) AS resultsQty
+                        FROM data.order_items
+                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
+                        GROUP BY product_configuration_id`);
+                    const realOrderItems = await client.query(`SELECT id 
                     FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
-                // need to combine two rows into one
-                console.log(combinedSQL.rows.length, realOrderItems.rows.length);
-                if (combinedSQL.rows.length < realOrderItems.rows.length) {
-                    const combinedData = [];
-                    combinedSQL.rows.forEach(_item => {
-                        combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
-                    })
-                    const _dataResCombine = await client.query(`SELECT product_configuration_id, 
+                    // need to combine two rows into one
+                    if (combinedSQL.rows.length < realOrderItems.rows.length) {
+                        const combinedData = [];
+                        combinedSQL.rows.forEach(_item => {
+                            combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
+                        })
+                        const _dataResCombine = await client.query(`SELECT product_configuration_id, 
                         SUM(quantity) AS resultsQty, array_agg(id) as products
                         FROM data.order_items
                         WHERE order_id=${existNonPayedOrder.rows[0]?.id}
                         GROUP BY product_configuration_id;`)
-                    _dataResCombine.rows.forEach(_row => {
-                        if (_row.products.length > 1) {
-                            _row.products.forEach(async (_itemId, _key) => {
-                                console.log(_key)
-                                if (_key > 0) {
-                                    await client.query(`DELETE FROM data.order_items WHERE id='${_itemId}'`);
-                                }
-                            })
-                        }
-                    });
-                    // update quantity for order items row
-                    combinedData.forEach(async (_item) => {
-                        await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
+                        _dataResCombine.rows.forEach(_row => {
+                            if (_row.products.length > 1) {
+                                _row.products.forEach(async (_itemId, _key) => {
+                                    console.log(_key)
+                                    if (_key > 0) {
+                                        await client.query(`DELETE FROM data.order_items WHERE id='${_itemId}'`);
+                                    }
+                                })
+                            }
+                        });
+                        // update quantity for order items row
+                        combinedData.forEach(async (_item) => {
+                            await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
                         WHERE product_configuration_id='${_item.config_id}'`)
-                    });
-                }
-            } else {
-                orderId = res.rows[0].order_id;
-                const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
-                    total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
-                await client.query(orderSQL);
-            }
-            console.log('ORDERID', orderId);
+                        });
+                    }
+                } else {
+                    let nOrderNumber = sessionId+'-'+res.rows[0].order_number;
+                    const settingsSettingsQuery = (
+                        `SELECT data.seller_settings.order_timer FROM data.seller_settings 
+                                        LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
+                                        WHERE data.live_sessions.id = '${sessionId}'`);
+                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
+                    let expireAt;
 
-            // find waiting products in order
-            const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE
+                    if (settingsSettingsRes.rows[0].order_timer.hours) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.days) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
+                    }
+                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
+                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+                    }
+
+                    orderId = res.rows[0].order_id;
+                    const orderSQL = `UPDATE data.orders SET user_id='${userId}', 
+                        sync_at=now(), expire_order_at='${expireAt}',
+                        total_amount=order_amount WHERE id='${res.rows[0].order_id}'`;
+                    await client.query(orderSQL);
+
+                    const fromQuery = `SELECT data.order_items.message_id, 
+                        data.live_sessions_messages.from_id, data.live_sessions.store_id,
+                        data.live_sessions_messages.real_from_id  
+                        FROM data.order_items
+                        LEFT JOIN data.live_sessions_messages ON 
+                            data.live_sessions_messages.message_id = data.order_items.message_id
+                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.live_sessions_messages.live_sessions_id
+                        WHERE order_id='${res.rows[0].order_id}'
+                        LIMIT 1`;
+                    const fromQueryRes = await client.query(fromQuery);
+                    const connQeryUserStoreQuery = `SELECT * FROM data.user2pages WHERE 
+                        from_id='${fromQueryRes.rows[0].from_id}' AND user_id='${userId}' AND 
+                        store_id='${fromQueryRes.rows[0].store_id}'`;
+                    const connQeryUserStoreQueryRes = await client.query(connQeryUserStoreQuery);
+                    if (connQeryUserStoreQueryRes.rows.length === 0) {
+                        if (fromQueryRes.rows[0].real_from_id) {
+                            const insertQueryConnect =
+                                `INSERT INTO data.user2pages (from_id, user_id, store_id) VALUES 
+                            ('${fromQueryRes.rows[0].from_id}', '${userId}', '${fromQueryRes.rows[0].store_id}')
+                            `;
+
+                            await client.query(insertQueryConnect)
+                        }
+                    }
+                    const oData = await client.query(`SELECT order_number FROM data.orders WHERE id='${res.rows[0].order_id}'`);
+                    const combineOrderNumber = sessionId+'-'+oData.rows[0].order_number.replace(sessionId+'-', '');
+                    await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
+                    orderNumber = combineOrderNumber;
+                }
+                // console.log('ORDER NUMBER', orderNumber);
+
+                // find waiting products in order
+                const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE
                 message_id='${commentId}' AND status='waiting'`);
 
-            // create separate order for each wait item
-            waitingItems.rows.forEach(async (_item, key) => {
-                const insertOrder = await client.query(`INSERT INTO data.orders
+                // create separate order for each wait item
+                waitingItems.rows.forEach(async (_item, key) => {
+                    const insertOrder = await client.query(`INSERT INTO data.orders
                     (user_id, live_sessions_id, order_amount, total_amount, order_number, status, status_waiting)
                     VALUES ('${userId}', '${copyOrderData.live_sessions_id}', ${_item.price},
                      ${_item.price}, '${copyOrderData.order_number}', 'waiting', true) RETURNING id;`);
 
-                // console.log("ITEM CONFIG", _item.configuration);
-                await client.query(`INSERT INTO data.order_items (order_id, message_id, product_id,
+                    // console.log("ITEM CONFIG", _item.configuration);
+                    await client.query(`INSERT INTO data.order_items (order_id, message_id, product_id,
                                     product_configuration_id, color_id, size_id, price, quantity, status,
                                     configuration, user_id, live_sessions_id) VALUES (
                                     ${insertOrder.rows[0].id}, '${_item.message_id}',
@@ -1382,28 +2142,18 @@ console.log(emailSql);
                                     '${JSON.stringify(_item.configuration)}', ${userId}, ${_item.live_sessions_id}
 
                 )`);
-                console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
-                await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
-                // await client.query(`INSERT INTO data.order_items (order_id, message_id, product_id,
-                //                     product_configuration_id, color_id, size_id, price, quantity, status,
-                //                     configuration, user_id, live_sessions_id) VALUES (
-                //                     {insertOrder.rows[0].id}, '${_item.message_id}',
-                //                     '${_item.product_id}', '${_item.product_configuration_id}',
-                //                     '${_item.color_id}', '${_item.size_id}',
-                //                     '{${_item.price}}', ${_item.quantity}, 'waiting',
-                //                     '${_item.configuration}', {userId}, {_item.live_sessions_id}
-                //
-                // )`);
-                // console.log("BBBBB", insertOrder.rows[0].id);
-            })
+                    await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                })
 
-            await client.query(`UPDATE data.orders SET waiting_products='${JSON.stringify(waitingItems.rows)}' WHERE id=${orderId}`)
+                await client.query(`UPDATE data.orders SET waiting_products='${JSON.stringify(waitingItems.rows)}' WHERE id=${orderId}`)
 
-            console.log("=============");
-            console.log("RETURNED DATA");
-            console.log({success: true, orderId: orderId, orderNumber: orderNumber })
-            console.log("=============");
-            return {success: true, orderId: orderId, orderNumber: orderNumber };
+                console.log("=============");
+                console.log("RETURNED DATA");
+                console.log({success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName })
+                console.log("=============");
+                return {success: true, orderId: orderId, orderNumber: orderNumber, storeName: storeName };
+            }
+            // console.log(orderNumber);
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -1452,9 +2202,10 @@ console.log(emailSql);
     }
 
 
-    async insertOrderStatus (orderId, status) {
+    async insertOrderStatus (orderId, status, locale) {
         const client = await pool.connect();
         try {
+console.log('here')
             // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             const _tmpRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='${status}'`);
             if (_tmpRes.rows.length === 0) {
@@ -1475,12 +2226,201 @@ console.log(emailSql);
         }
     }
 
+    async removeUnpayedSessionsOrders () {
+        const client = await pool.connect();
+        try {
+            const expireDateNotSync = moment().add(-process.env.ORDER_REMOVE_DAYS, 'days').add(3, 'hours').format('YYYY-MM-DD HH:mm:ss');
+            const ordersNotSyncQuery = `SELECT * FROM data.orders WHERE status='new'
+                AND created_at <= '${expireDateNotSync}' AND sync_at IS NULL`;
+            const ordersSyncQuery = `SELECT * FROM data.orders WHERE status='new'
+                AND sync_at <= '${expireDateNotSync}'`;
+            const notSyncRes = await client.query(ordersNotSyncQuery);
+            const syncRes = await client.query(ordersSyncQuery);
+            if (notSyncRes.rows.length > 0) {
+                // store products back and set status expired
+                notSyncRes.rows.forEach(async _order => {
+                    const notSyncItems = await client.query(`SELECT * FROM data.order_items WHERE order_id=${_order.id}`);
+                    if (notSyncItems.rows.length > 0) {
+                        notSyncItems.rows.forEach(async _item => {
+                            // console.log(_item.product_configuration_id, _item.quantity);
+                            await client.query(`UPDATE data.product_configurations 
+                                SET quantity = quantity + ${parseInt(_item.quantity)} WHERE id='${_item.product_configuration_id}'`);
+                            await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+                        });
+                    }
+                    await client.query(`UPDATE data.orders SET status='expired' WHERE id=${_order.id}`)
+                })
+            }
+            if (syncRes.rows.length > 0) {
+                // store products back and set status expired
+                syncRes.rows.forEach(async _order => {
+                    const notSyncItems = await client.query(`SELECT * FROM data.order_items WHERE order_id=${_order.id}`);
+                    if (notSyncItems.rows.length > 0) {
+                        notSyncItems.rows.forEach(async _item => {
+                            // console.log(_item.product_configuration_id, _item.quantity);
+                            await client.query(`UPDATE data.product_configurations 
+                                SET quantity = quantity + ${parseInt(_item.quantity)} WHERE id='${_item.product_configuration_id}'`);
+                            await client.query(`DELETE FROM data.order_items WHERE id='${_item.id}'`);
+                        });
+                    }
+                    await client.query(`UPDATE data.orders SET status='expired' WHERE id=${_order.id}`)
+                })
+            }
+            return {success: true};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
+    async removeExpireOrder() {
+        const client = await pool.connect();
+        try {
+            // console.log(`SELECT * FROM data.orders
+            //     WHERE status='new' AND expire_order_at < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            // const _tmpRes = await client.query(`SELECT * FROM data.orders
+            //     WHERE status='new' AND (expire_order_at + interval '${process.env.PERIOD_ORDER_DIFF} hour') < (NOW())
+            //      AND expire_order_at IS NOT NULL LIMIT 20`);
+            const _tmpRes = await client.query(`SELECT * FROM data.orders 
+                WHERE status='new' AND (expire_order_at ) < (NOW())
+                 AND expire_order_at IS NOT NULL LIMIT 20`);
+            if (_tmpRes.rows.length > 0) {
+                _tmpRes.rows.forEach(async _order => {
+                    const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
+                    if (tmpResItems.rows.length > 0) {
+                        tmpResItems.rows.forEach(async _item => {
+                            // return quntity for configuration
+                            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
+                            console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+
+                        })
+                    }
+                    // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`);
+
+                })
+            }
+
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+
+
+    }
+
+    async removeExpirePeriodOrder() {
+        const client = await pool.connect();
+        try {
+            // console.log(`SELECT * FROM data.orders
+            //     WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            const _tmpRes = await client.query(`SELECT * FROM data.orders 
+                WHERE status='new' AND free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            if (_tmpRes.rows.length > 0) {
+                _tmpRes.rows.forEach(async _order => {
+                    const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
+                    if (tmpResItems.rows.length > 0) {
+                        tmpResItems.rows.forEach(async _item => {
+                            // return quntity for configuration
+                            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
+                            console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+
+                        })
+                    }
+                    // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`);
+
+                })
+            }
+
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+
+    }
+
+    async removeUnpayedSessionOrder (sessionId) {
+        const client = await pool.connect();
+        try {
+            const _tmpRes = await client.query(`SELECT * FROM data.orders WHERE live_sessions_id='${sessionId}' AND status='new' AND total_amount > 0 LIMIT 20`);
+            if (_tmpRes.rows.length > 0) {
+                _tmpRes.rows.forEach(async _order => {
+                    const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
+                    if (tmpResItems.rows.length > 0) {
+                        tmpResItems.rows.forEach(async _item => {
+                            // return quntity for configuration
+                            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+                        })
+                    }
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`)
+                })
+            }
+
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+    }
+
     async bulkDownload(ids, user, locale) {
         console.log('LOCALE', locale);
         const client = await pool.connect();
         try {
             const promisesQueries = [];
-            console.log(ids);
             ids.forEach(async (id) => {
                 const order = await client.query(`SELECT * FROM data.orders WHERE id=${id};`);
                 promisesQueries.push(this.generatePdf(order.rows[0].order_number, user.id, user, locale, 'download'));
@@ -1519,55 +2459,248 @@ console.log(emailSql);
     async isFreeShipping(userId, orderNumber) {
         const client = await pool.connect();
         try {
-            const SQL = `SELECT * FROM data.orders WHERE 
-                user_id=${userId} AND status='payed' ORDER BY updated_at DESC LIMIT 1`;
-            const res = await client.query(SQL);
-
             let sellerData;
             let settingsThreshold;
             let settings;
+            const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
+            sellerData = await client.query(`SELECT user_id 
+                                FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
+            const currOrderId = currentOrder.rows[0].id;
+            let compareAmountTherehold = 0;
+            // get seller settings
+            // console.log(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
+            settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
 
-            if (res.rows.length) {
-                const timeStart = (new Date(res.rows[0].updated_at));
-                const timeEnd = (new Date());
-                const hourDiff  = (timeEnd - timeStart) / 1000 / 60 / 60;
+            settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
+            let threshold = 0;
+            if (settingsThreshold.rows.length > 0) {
+                threshold = parseInt(settingsThreshold.rows[0].threshold) > 0 ? settingsThreshold.rows[0].threshold : 0;
+            }
 
-                sellerData = await client.query(`SELECT user_id 
-                                FROM data.live_sessions WHERE id=${res.rows[0].live_sessions_id}`);
-                settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
-                settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
-                const freeShipping = settings.rows[0];
-                // const freeAmountOver = settingsThreshold.rows[0].threshold;
-                if (freeShipping) {
-                    if (freeShipping.free_shipping_status) {
-                        if (settingsThreshold.rows.length) {
-                            console.log(settings.rows[0].free_shipping_timer.hours)
-                            if (res.rows[0].order_amount > settingsThreshold.rows[0].threshold && settings.rows[0].free_shipping_timer.hours > hourDiff) {
-                                console.log('Discount delivery');
-                                return {success: true, freeShipping: 1}
+            const SQL = `SELECT * FROM data.orders WHERE 
+                user_id=${userId} AND status='payed' 
+                AND (return_shipping IS NULL AND refund_amount = 0) 
+                ORDER BY updated_at DESC LIMIT 1`;
+            const res = await client.query(SQL);
+            let inPeriod = false;
+            let freeShipping = false;
+            let amountRefund = 0;
+
+            if (res.rows.length > 0) {
+                const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD HH:mm:ss");
+                const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD HH:mm:ss");
+                const orderCreatedAtDb= moment(currentOrder.rows[0].created_at).format("YYYY-MM-DD HH:mm:ss");
+
+                // defined is period setup and yes, check whether the order arrived within the specified period
+                if (settings.rows[0].free_shipping_from) {
+                    const checkPeriodQuery = `SELECT 1 WHERE '${orderCreatedAtDb}' 
+                        BETWEEN '${startDateDb}' 
+                        AND '${endDateDb}'`;
+                    const checkPeriodRes = await client.query(checkPeriodQuery);
+                    inPeriod =  checkPeriodRes.rows.length > 0;
+                }
+                if (inPeriod) {
+                    let prevTotal = 0;
+                    let refundShipping = 0;
+                    let ordersCount = 0;
+                    const prevOrdersQuery = `SELECT * FROM data.orders 
+                            LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                            WHERE  (data.orders.status = 'payed' OR data.orders.status = 'new') 
+                            AND data.orders.user_id='${userId}' AND 
+                            data.orders.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'
+                            `;
+// console.log(prevOrdersQuery);
+                    const prevOrderRes = await client.query(prevOrdersQuery);
+                    prevOrderRes.rows.forEach(_order => {
+                        prevTotal += parseFloat(_order.order_amount);
+                        amountRefund += parseFloat(_order.shipping_amount);
+                        ordersCount++;
+                    });
+// console.log(ordersCount);
+                    // scenario 1:
+                    // Free shipping is active. User makes the first order and it does not reach the threshold
+                    // Buyer pays for shipping regardless the price and shipping method
+console.log('order name', ordersCount);
+
+                    if (ordersCount === 1 && prevTotal < threshold) {
+                        return {success: true, amount_refund: 0, freeShipping: false}
+                    } else if (ordersCount === 0 && currentOrder.rows[0].order_amount >= threshold) {
+                        return {success: true, amount_refund: 0, freeShipping: true}
+                    } else if (ordersCount === 1 && prevTotal >= threshold) {
+                        return {success: true, amount_refund: 0, freeShipping: true}
+                    } else if (ordersCount > 1) {
+                        if (prevTotal < threshold) {
+                            return {success: true, amount_refund: 0, freeShipping: true}
+                        } else {
+                            // check if user peayed for shipping
+                            const checkRefundQuery =  `SELECT SUM(shipping_amount) AS total_shipping 
+                                FROM data.orders
+                                WHERE 
+                                user_id='${userId}' AND
+                                status='payed' AND
+                                created_at 
+                                BETWEEN 
+                                '${startDateDb}' 
+                                AND 
+                                '${endDateDb}'`;
+                            const resRefundQuery = await client.query(checkRefundQuery);
+                            // check do we refund before
+                            let refundAmount = resRefundQuery.rows[0].total_shipping ? resRefundQuery.rows[0].total_shipping : 0;
+// console.log('Refund Shipping', refundAmount);
+                            const existRefundQuery =  `SELECT SUM(refund_amount) AS total_refund
+                                FROM data.orders
+                                WHERE 
+                                user_id='${userId}' AND
+                                status='payed' AND
+                                refund_amount > 0 AND
+                                created_at 
+                                BETWEEN 
+                                '${startDateDb}' 
+                                AND 
+                                '${endDateDb}'`;
+                            const existRefundQueryRes = await client.query(existRefundQuery);
+// console.log('EXIST refund', )
+                            if (existRefundQueryRes.rows[0].total_refund > 0) {
+                                refundAmount = 0;
                             }
+// console.log(existRefundQuery);
+
+                            return {success: true, amount_refund: refundAmount, freeShipping: true}
                         }
                     }
                 }
-                return {success: true, freeShipping: 0}
-                // console.log(settingsThreshold.rows[0]);
-                // console.log(sellerData.rows[0].user_id);
-                // console.log(hourDiff)
+
+console.log('IN PERIOD', inPeriod) ;
+console.log('THRESHOLD', threshold) ;
+                if (threshold > 0 && inPeriod) {
+                    const prevOrdersQuery = `SELECT * FROM data.orders 
+                        LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
+                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                        WHERE 
+                            data.order_statuses.status = 'payed' AND
+                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} 
+                            AND data.orders.user_id='${userId}' 
+                            AND
+                            data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+                    const prevOrderRes = await client.query(prevOrdersQuery);
+                    let prevTotal = 0;
+                    let refundShipping = 0;
+                    let ordersCount = 0;
+                    prevOrderRes.rows.forEach(_order => {
+                        prevTotal += parseFloat(_order.order_amount);
+                        ordersCount++;
+                        refundShipping += !_order.return_shipping ? 0 : parseFloat(_order.shipping_amount);
+                    });
+                    ordersCount = ordersCount + 1;
+
+                    let makeRefund = false;
+                    if (prevTotal + parseFloat(currentOrder.rows[0].order_amount) >= threshold) {
+                        makeRefund = true;
+                        // calculate refund amount
+                        console.log(`SELECT shipping_amount, id 
+                                FROM data.orders WHERE shipping_amount > 0 AND user_id=${userId} AND return_shipping IS NOT TRUE ORDER BY created_at DESC LIMIT 1`)
+                        const refundData = await client.query(`SELECT shipping_amount, id 
+                                FROM data.orders WHERE shipping_amount > 0 AND user_id=${userId} AND return_shipping IS NOT TRUE ORDER BY created_at DESC LIMIT 1`);
+                        amountRefund = parseFloat(refundData.rows[0].shipping_amount);
+
+
+                        console.log('AMOUNT REFUND', amountRefund)
+                        // check if we refund before
+                        const refundedOrderRes =  await client.query(`SELECT id FROM data.orders WHERE refund_amount > 0 AND user_id=${userId} AND status='payed'`);
+                        if (refundedOrderRes.rows.length !== 0) {
+                            amountRefund = 0;
+                        }
+                        if (amountRefund) {
+                            await client.query(`UPDATE data.orders SET refund_amount='${amountRefund}' WHERE id='${currentOrder.rows[0].id}' `)
+                            return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}
+                        }
+                        // await client.query(`UPDATE data.orders SET return_shipping = true WHERE id='${refundData.rows[0].id}'`)
+                        console.log('Make refund', amountRefund)
+
+                        return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}
+                    } else {
+                        return {success: true, amount_refund: 0, freeShipping: freeShipping}
+                    }
+                } else {
+console.log('WE ARE NOT IN PERIOD');
+                    return {success: true, amount_refund: 0, freeShipping: freeShipping}
+                }
+
+                if (parseFloat(amountRefund) > 0) {
+                    await client.query(`UPDATE data.orders SET refund_amount='${amountRefund}' WHERE id='${currOrderId}'`)
+                }
+                let prevOrderRes1 = null;
+                if (!inPeriod) {
+                    console.log('AAAAAA');
+                } else {
+                    const prevOrdersQuery1 = `SELECT * FROM data.orders 
+                        LEFT JOIN data.order_statuses ON data.order_statuses.order_id = data.orders.id 
+                        LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                        WHERE 
+                            data.order_statuses.status = 'payed' AND 
+                            data.live_sessions.user_id = ${sellerData.rows[0].user_id} AND data.orders.user_id='${userId}' AND
+                            data.order_statuses.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'`;
+                    prevOrderRes1 = await client.query(prevOrdersQuery1);
+                }
+
+                return {success: true, amount_refund: amountRefund, freeShipping: freeShipping}
             } else {
-                // console.log(`SELECT order_amount, live_sessions_id FROM
-                //     data.orders WHERE order_number='${orderNumber}'`);
-                const currOrder = await client.query(`SELECT order_amount, live_sessions_id FROM 
+                const currOrder = await client.query(`SELECT order_amount, user_id, live_sessions_id, created_at, updated_at FROM 
                     data.orders WHERE order_number='${orderNumber}'`);
+
+                // const userOrdersQuery = await client.query()
+                const payedOrdersQuery = (`SELECT SUM(order_amount) as totalPayed FROM data.orders WHERE user_id='${currOrder.rows[0].user_id}'AND status='payed'`)
+                const payedOrdersQueryRes = await client.query(payedOrdersQuery)
+                // console.log(payedOrdersQuery);
+                let amountPayed = 0;
+                if (payedOrdersQueryRes.rows[0].totalPayed) {
+                    amountPayed = parseFloat(currOrder.rows[0].totalPayed);
+                }
+
+
+                const compareDate = moment(currOrder.rows[0].updated_at, "DD/MM/YYYY");
+                const startDate   = moment(settings.rows[0].free_shipping_from, "DD/MM/YYYY");
+                const endDate     = moment(settings.rows[0].free_shipping_to, "DD/MM/YYYY");
+                const startDateDb   = moment(settings.rows[0].free_shipping_from).format("YYYY-MM-DD");
+                const endDateDb     = moment(settings.rows[0].free_shipping_to).format("YYYY-MM-DD");
+                const inPeriod = compareDate.isBetween(startDate, endDate);
+// console.log(1, amountPayed);
+// console.log(2, currOrder.rows[0].order_amount);
+
+
                 sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currOrder.rows[0].live_sessions_id}`);
-                // settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
-
                 settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
-
-                if (currOrder.rows[0].order_amount > settingsThreshold.rows[0].threshold) {
-                    return {success: true, freeShipping: 1}
+                let isFree = false;let refundAmountNew = 0;
+// console.log('in period', inPeriod)
+                if (inPeriod) {
+                    console.log('TYT', parseFloat(currOrder.rows[0].order_amount)+amountPayed)
+                    // order already more therehold
+                    if (parseFloat(currOrder.rows[0].order_amount)+amountPayed > parseFloat(settingsThreshold.rows[0].threshold)) {
+                        isFree = true;
+                        return {success: true, amount_refund: 0, freeShipping: true}
+                    }
+                    // calculate refund
+                    // const prevQuries =  await client.query(`SELECT * FROM  data.orders WHERE user_id=${userId} AND status='payed'`)
+                    // const prevQuries =  await client.query('SELECT * FROM  data.orders WHERE user_id=${}')
+                    // if (parseFloat(currOrder.rows[0].order_amount)+amountPayed > parseFloat(settingsThreshold.rows[0].threshold)) {
+                    //     // console.log('Amount OrderD', parseFloat(currOrder.rows[0].order_amount)
+                    //     return {success: true, amount_refund: 0, freeShipping: false}
+                    // } else {
+                    //     console.log('ORDER AMOUNT', parseFloat(currOrder.rows[0].order_amount));
+                    //     console.log('THEREHOLD', parseFloat(settingsThreshold.rows[0].threshold));
+                    //     if (parseFloat(currOrder.rows[0].order_amount) < parseFloat(settingsThreshold.rows[0].threshold) )
+                    //     {
+                    //         return {success: true, amount_refund: 0, freeShipping: false}
+                    //     } else {
+                    //         return {success: true, amount_refund: 0, freeShipping: true}
+                    //     }
+                    // }
+                } else {
+                    return {success: true, amount_refund: 0, freeShipping: false}
                 }
-                return {success: true, freeShipping: 0}
+
+                return {success: true, amount_refund: 0, freeShipping: false}
             }
         } catch (e) {
             console.log(e.message)
@@ -1594,9 +2727,11 @@ console.log(emailSql);
             }
             const orderData = {
                 "currency": "EUR",
-                "amount": order.total_amount*100,
+                "amount": (parseFloat(order.total_amount) + parseFloat(order.shipping_amount > 0 ? order.shipping_amount : 0))*100,
                 "description": "Refund by seller"
             }
+            console.log(orderData);
+            console.log(`${process.env.MULTISAFE_ORDER_PREFIX}-${order.id}`);
             const multiSafePayClientRes = await axios
                 .post(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${order.id}/refunds?api_key=${sellerSettingsRes.rows[0].multisafe_api_key}`, orderData,{
                     headers: { 'Content-Type': 'application/json' }
@@ -1607,7 +2742,8 @@ console.log(emailSql);
                     await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${order.id}', 'canceled')`);
                     return {success: true, error: null}
                 }).catch(error => {
-                    console.log(error.message);
+                    console.log(error);
+                    console.log('Multisafe error', error.message);
                     return {success: false, error: error.message}
                 });
 

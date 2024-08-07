@@ -49,7 +49,7 @@ async function syncFB() {
                 return response;
             },
             {
-                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content'
+                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
             }
         )
     );
@@ -129,7 +129,8 @@ async function getAccountData(authResponse) {
     //     scope: 'pages_show_list,pages_messaging,pages_manage_metadata,pages_read_user_content'
     // };
     const loginOptions = {
-        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
+        // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
+        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
     };
     axios
         .get(
