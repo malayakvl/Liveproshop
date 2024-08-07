@@ -2280,13 +2280,60 @@ console.log('here')
         }
     }
 
+    async removeExpireOrder() {
+        const client = await pool.connect();
+        try {
+            // console.log(`SELECT * FROM data.orders
+            //     WHERE status='new' AND expire_order_at < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            const _tmpRes = await client.query(`SELECT * FROM data.orders 
+                WHERE status='new' AND expire_order_at < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            if (_tmpRes.rows.length > 0) {
+                _tmpRes.rows.forEach(async _order => {
+                    const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
+                    if (tmpResItems.rows.length > 0) {
+                        tmpResItems.rows.forEach(async _item => {
+                            // return quntity for configuration
+                            await client.query(`UPDATE data.product_configurations SET quantity=quantity+${parseInt(_item.quantity)} WHERE id=${_item.product_configuration_id}`)
+                            console.log(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+                            await client.query(`DELETE FROM data.order_items WHERE id=${_item.id}`);
+
+                            shell.exec(`pm2 start ../BE/storeJobs/jobStoreWaiting.js --name "jobStoreWaiting ${_item.product_configuration_id}" -- configId=${_item.product_configuration_id}`, function(code, output) {
+                                console.log('Exit code:', code);
+                                console.log('Program output:', output);
+                            });
+
+                        })
+                    }
+                    // console.log(`DELETE FROM data.orders WHERE id=${_order.id}`);
+                    await client.query(`DELETE FROM data.orders WHERE id=${_order.id}`);
+
+                })
+            }
+
+            return {success: true, error: null};
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return {success: false, error: e.message };
+        } finally {
+            client.release();
+        }
+
+
+    }
+
     async removeExpirePeriodOrder() {
         const client = await pool.connect();
         try {
             // console.log(`SELECT * FROM data.orders
             //     WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             const _tmpRes = await client.query(`SELECT * FROM data.orders 
-                WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+                WHERE status='new' AND free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             if (_tmpRes.rows.length > 0) {
                 _tmpRes.rows.forEach(async _order => {
                     const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);

@@ -180,6 +180,13 @@ class OrderController {
     //     const data = await orderModel.removeExpirePeriodOrder();
     //     return res.status(200).json({success: true});
     // }
+    async getOrderExpiredClear(req, res) {
+        if (req.query.fromJob === 'yes') {
+            console.log('here we are - remove expired');
+            const data = await orderModel.removeExpireOrder();
+        }
+        return res.status(200).json({ success: true });
+    }
 
 
     async getOrderFreePeriodClear(req, res){
