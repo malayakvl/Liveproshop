@@ -411,7 +411,7 @@ class Shipping {
         const client = await pool.connect();
         try {
             await client.query(`UPDATE data.seller_settings SET free_shipping_from=null, free_shipping_to=null WHERE user_id=${userId}`);
-            await client.query(`UPDATE data.free_order_threshold SET threshold=null WHERE user_id=${userId}`);
+            // await client.query(`UPDATE data.free_order_threshold SET threshold=null WHERE user_id=${userId}`);
             // await client.query('UPDATE data.free_order_threshold WHERE user_id = $1', [userId]);
 
             return true;

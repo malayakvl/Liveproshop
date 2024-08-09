@@ -494,3 +494,11 @@ input:focus, input:active {
 .rc-time-picker-clear {
   top: 11px !important;
 }
+.threshold-block .form-control-icon {
+  //max-width: 150px;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+  border-color: #CFD8DC !important;
+  color: #4F5B84 !important;
+  //box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1) !important;
+}
