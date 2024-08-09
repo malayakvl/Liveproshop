@@ -6,7 +6,11 @@
 }
 .f-threshold {
   background-image: url("../../public/images/euro-icon.svg");
-  background-size: contain;
+  background-size: 15px, auto, contain;
+  background-position-y: 11px;
+  background-position-x: 9px;
+  background-repeat: no-repeat;
+  padding-left: 30px;
 }
 
 .f-fname {

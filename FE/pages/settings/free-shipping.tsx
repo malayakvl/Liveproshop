@@ -111,7 +111,7 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
-                                console.log(calendarPeriod);
+                                console.log(values);
                                 dispatch(
                                     setupPeriodAction({
                                         startDate: calendarPeriod.startDate,
@@ -135,11 +135,14 @@ export default function ShippingThreshold() {
                                 ) {
                                     dispatch(setErrorToastAction('Please setup period'));
                                 } else {
-                                    const formData = {
-                                        threshold: values.threshold,
-                                        timeFromNew: moment(timeFrom).format('HH:mm:ss'),
-                                        timeToNew: moment(timeFrom).format('HH:mm:ss')
-                                    };
+                                    if (!values.threshold) {
+                                        console.log(11);
+                                    }
+                                    // const formData = {
+                                    //     threshold: values.threshold,
+                                    //     timeFromNew: moment(timeFrom).format('HH:mm:ss'),
+                                    //     timeToNew: moment(timeFrom).format('HH:mm:ss')
+                                    // };
                                     // dispatch(setThresholdAction(formData));
                                 }
                             }}
@@ -157,21 +160,21 @@ export default function ShippingThreshold() {
                                         <div className="text-sm text-gray-500 mt-6 mb-3">
                                             {t('settings_theshold')}
                                         </div>
-                                        <div style={{ maxWidth: '150px' }}>
-                                            <InputText
-                                                icon={'f-threshold'}
-                                                style={'field-threshold'}
-                                                label={null}
-                                                name={'threshold'}
-                                                placeholder={t('threshold')}
-                                                props={props}
-                                                tips={null}
-                                            />
-                                        </div>
-                                        {/*<Field*/}
-                                        {/*    name="threshold"*/}
-                                        {/*    className="form-control max-w-[150px] float-left mt-4"*/}
-                                        {/*/>*/}
+                                        {/*<div style={{ maxWidth: '150px' }}>*/}
+                                        {/*    <InputText*/}
+                                        {/*        icon={'f-threshold'}*/}
+                                        {/*        style={'field-threshold'}*/}
+                                        {/*        label={null}*/}
+                                        {/*        name={'threshold'}*/}
+                                        {/*        placeholder={null}*/}
+                                        {/*        props={props}*/}
+                                        {/*        tips={null}*/}
+                                        {/*    />*/}
+                                        {/*</div>*/}
+                                        <Field
+                                            name="threshold"
+                                            className="f-threshold form-control font-control-icon max-w-[150px] float-left mt-4"
+                                        />
                                         {/*<span className="float-left mt-[23px] ml-[15px] font-bold rainbow-gradient-text">*/}
                                         {/*    &euro;*/}
                                         {/*</span>*/}
