@@ -390,6 +390,7 @@ class Shipping {
     async setShippingPeriod(userId, dateFrom, dateTo) {
         const client = await pool.connect();
         try {
+            console.log(`UPDATE data.seller_settings SET free_shipping_from='${dateFrom}', free_shipping_to='${dateTo}' WHERE user_id=${userId}`);
             await client.query(`UPDATE data.seller_settings SET free_shipping_from='${dateFrom}', free_shipping_to='${dateTo}' WHERE user_id=${userId}`);
 
             return true;
