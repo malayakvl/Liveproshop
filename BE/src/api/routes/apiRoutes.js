@@ -59,6 +59,8 @@ apiRoutes.route('/session-reminder').get(UserController.sessionReminder);
 apiRoutes.route('/get-order-clear').get(OrderController.removeUnpayedOrder);
 apiRoutes.route('/get-order-expired').get(OrderController.getOrderExpiredClear);
 apiRoutes.route('/get-order-clear-free-period').get(OrderController.getOrderFreePeriodClear);
+apiRoutes.route('/clear-free-period-job').get(ShippingController.clearShippingPeriodJob);
+
 
 apiRoutes.route('/remove-sessions-order').get(OrderController.removeSessionsOrders);
 apiRoutes.route('/retunr-configured-wrong-parsed').get(OrderController.returnWrongParsedConfigured);
@@ -96,6 +98,7 @@ apiRoutes.route('/create-payment-intent').post(PaymentPlanController.stripeClien
 apiRoutes.route('/contact-us').post(ContactUsController.sendMessage);
 apiRoutes.route('/request-demo').post(ContactUsController.requestDemo);
 apiRoutes.route('/open-browser').post(OrderController.openBrowser);
+
 
 /** ===================================================================== */
 /** ================== AUTHENTIFICATED ROUTES =========================== */

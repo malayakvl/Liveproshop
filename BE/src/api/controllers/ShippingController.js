@@ -175,6 +175,11 @@ export default new class ShippingController {
         res.status(200).json({})
     }
 
+    async clearShippingPeriodJob(req, res) {
+        await shippingModel.clearShippingPeriodJob()
+        res.status(200).json({})
+    }
+
     fetchShippingPeriod(req, res) {
         const data = shippingModel.fetchShippingPeriod(req.user.id);
         console.log(data);
