@@ -28,7 +28,7 @@ import {
     hideshowPeriodPopupAction,
     setupPeriodAction,
     setPeriodDeleteValuesActions,
-    setNativeBrowserAction,
+    setNativeBrowserAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 // import { showPopupAction } from '../dashboard';
@@ -85,12 +85,7 @@ const initialState: State.Layouts = {
             filters: {
                 order_number: '',
                 shipping_id: [],
-                country_id: [],
-                payment_id: [],
-                status: [],
-                total_amount: [],
-                created_at: [],
-                seller_id: []
+                country_id: []
             }
         },
         [PaginationType.ORDERS]: {
@@ -400,7 +395,7 @@ const ACTION_HANDLERS: any = {
             ...state,
             nativeBrowser: action.payload
         })
-    },
+    }
 };
 
 export {
@@ -429,7 +424,7 @@ export {
     hideshowPeriodPopupAction,
     setupPeriodAction,
     setPeriodDeleteValuesActions,
-    setNativeBrowserAction,
+    setNativeBrowserAction
 };
 
 // ------------------------------------
