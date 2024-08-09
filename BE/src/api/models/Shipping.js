@@ -390,6 +390,7 @@ class Shipping {
     async setShippingPeriod(userId, dateFrom, dateTo) {
         const client = await pool.connect();
         try {
+            console.log(`UPDATE data.seller_settings SET free_shipping_from='${dateFrom}', free_shipping_to='${dateTo}' WHERE user_id=${userId}`);
             await client.query(`UPDATE data.seller_settings SET free_shipping_from='${dateFrom}', free_shipping_to='${dateTo}' WHERE user_id=${userId}`);
 
             return true;
@@ -459,6 +460,39 @@ class Shipping {
                 FROM data.seller_settings WHERE user_id=${userId}`);
 
             return res.rows[0];
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model Shipping error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Tags Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async clearShippingPeriodJob() {
+        const client = await pool.connect();
+        try {
+            const querySQL = `SELECT * FROM data.seller_settings WHERE free_shipping_to < (now() + interval '${process.env.PERIOD_ORDER_DIFF} hour')`;
+
+            const queryRes = await client.query(querySQL);
+            const ids = [];
+            if (queryRes.rows.length > 0) {
+                queryRes.rows.forEach(_res => {
+                    ids.push(_res.user_id);
+                });
+
+                const updQuery = `UPDATE data.seller_settings SET 
+                    free_shipping_from=null, free_shipping_to=null WHERE user_id IN (${ids.toString()})`;
+                // console.log(updQuery);
+                await client.query(updQuery);
+            }
+            return { success: true, error: null };
+
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(

@@ -30,6 +30,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
+import { InputText } from '../../components/_form';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -93,9 +94,6 @@ export default function ShippingThreshold() {
 
     if (!user.email) return null;
 
-    console.log('DB period', period);
-    console.log('DB threhold', threshold);
-
     return (
         <>
             <Head>
@@ -113,9 +111,7 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
-                                const dateFromNew = `${calendarPeriod.startDate} ${timeFrom}`;
-                                const dateToNew = `${calendarPeriod.endDate} ${timeTo}`;
-                                // setCalendarPeriod({ startDate: dateFromNew, endDate: dateToNew });
+                                console.log(values);
                                 dispatch(
                                     setupPeriodAction({
                                         startDate: calendarPeriod.startDate,
@@ -139,11 +135,14 @@ export default function ShippingThreshold() {
                                 ) {
                                     dispatch(setErrorToastAction('Please setup period'));
                                 } else {
-                                    const formData = {
-                                        threshold: values.threshold,
-                                        timeFromNew: moment(timeFrom).format('HH:mm:ss'),
-                                        timeToNew: moment(timeFrom).format('HH:mm:ss')
-                                    };
+                                    if (!values.threshold) {
+                                        console.log(11);
+                                    }
+                                    // const formData = {
+                                    //     threshold: values.threshold,
+                                    //     timeFromNew: moment(timeFrom).format('HH:mm:ss'),
+                                    //     timeToNew: moment(timeFrom).format('HH:mm:ss')
+                                    // };
                                     // dispatch(setThresholdAction(formData));
                                 }
                             }}
@@ -154,25 +153,36 @@ export default function ShippingThreshold() {
                             })}
                             render={(props) => (
                                 <Form onSubmit={props.handleSubmit}>
-                                    <div className="w-full md:w-1/3 p-4 float-left">
+                                    <div className="w-full md:w-2/5 p-4 float-left threshold-block">
                                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                             {t('Free shipping threshold')}
                                         </div>
-                                        <div className="text-sm text-gray-500 mt-6">
+                                        <div className="text-sm text-gray-500 mt-6 mb-3">
                                             {t('settings_theshold')}
                                         </div>
+                                        {/*<div style={{ maxWidth: '150px' }}>*/}
+                                        {/*    <InputText*/}
+                                        {/*        icon={'f-threshold'}*/}
+                                        {/*        style={'field-threshold'}*/}
+                                        {/*        label={null}*/}
+                                        {/*        name={'threshold'}*/}
+                                        {/*        placeholder={null}*/}
+                                        {/*        props={props}*/}
+                                        {/*        tips={null}*/}
+                                        {/*    />*/}
+                                        {/*</div>*/}
                                         <Field
                                             name="threshold"
-                                            className="form-control max-w-[150px] float-left mt-4"
+                                            className="f-threshold form-control font-control-icon max-w-[150px] float-left mt-4"
                                         />
-                                        <span className="float-left mt-[23px] ml-[15px] font-bold rainbow-gradient-text">
-                                            &euro;
-                                        </span>
+                                        {/*<span className="float-left mt-[23px] ml-[15px] font-bold rainbow-gradient-text">*/}
+                                        {/*    &euro;*/}
+                                        {/*</span>*/}
                                         <div className="error-el">
                                             <ErrorMessage name="threshold" />
                                         </div>
                                     </div>
-                                    <div className="w-full md:w-2/3 p-4 float-left">
+                                    <div className="w-full md:w-3/5 p-4 float-left">
                                         <div className="font-bold text-gray-350 text-lg pb-4 border-b border-gray-200">
                                             {t('Free Shipping Period')}
                                         </div>
