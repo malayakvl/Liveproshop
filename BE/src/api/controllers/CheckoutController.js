@@ -21,16 +21,9 @@ class CheckoutController {
         const orderData = await checkoutModel.fetchOrder(orderNumber, req.user.id);
         const sellerSettingsData = await userModel.fetchUserSettings(orderData.order.seller_id);
 
-        // getting waiting products from current order
-        // (e.g. seller have 1 buyer want 3, and we create order for 1 qnt and need to show how not available)
-        // orderData.order.order_items.forEach(_item => {
-        //     console.log(_item.message_id);
-        // })
         const orderItemsWait = await checkoutModel.fetchWaitInOrder(orderData.order.order_items, orderData.order.id);
-        // console.log("wait products", orderItemsWait);
-        // get latest order amount
         const freeSheppingData = await orderModel.isFreeShipping(req.user.id, orderNumber);
-// console.log('SHIPPING PARAMS', freeSheppingData);
+console.log('SHIPPING PARAMS', freeSheppingData);
 
         // const orderItems = await checkoutModel.fetchOrderItems(orderData.or);
         const address = await userModel.findUserAddress(req.user.id);
