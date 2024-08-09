@@ -817,6 +817,26 @@ console.log('ZZZZ', 1);
         const client = await pool.connect();
         try {
             const _filters = JSON.parse(filters);
+            // fetch cart duration
+            const sellerSettingsSQL = `SELECT * FROM data.seller_settings WHERE user_id=${user.id}`;
+            const settingsRes = await client.query(sellerSettingsSQL);
+            let expireAtInterval;
+            let expireAtIntervalPeriod;
+
+            if (settingsRes.rows[0].order_timer.hours) {
+                expireAtIntervalPeriod = settingsRes.rows[0].order_timer.hours;
+                expireAtInterval = 'hour';
+            }
+            if (settingsRes.rows[0].order_timer.days) {
+                expireAtIntervalPeriod = settingsRes.rows[0].order_timer.days;
+                expireAtInterval = 'day';
+            }
+            if (settingsRes.rows[0].order_timer.minutes) {
+                expireAtIntervalPeriod = settingsRes.rows[0].order_timer.minutes;
+                expireAtInterval = 'minute';
+            }
+
+            console.log(settingsRes.rows[0]);
 
             switch (user.role_id) {
                 case UserRole.ADMIN:
@@ -831,13 +851,14 @@ console.log('ZZZZ', 1);
                 case UserRole.BUYER:
                     _filters.buyer_id = [user.id];
             }
-            if (_filters.status?.length === 0) {
-                if (user.role_id === UserRole.BUYER) {
-                    _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW, OrderStatus.WAITING];
-                } else {
-                    _filters.status = [OrderStatus.NEW];
-                }
-            }
+            // if (_filters.status?.length === 0) {
+            //     if (user.role_id === UserRole.BUYER) {
+            //         _filters.status = [OrderStatus.PAYED, OrderStatus.SHIPPED, OrderStatus.CANCELED, OrderStatus.NEW, OrderStatus.WAITING];
+            //     } else {
+            //         _filters.status = [OrderStatus.NEW];
+            //     }
+            // }
+            _filters.status = [OrderStatus.NEW, OrderStatus.WAITING];
             // _filters.sync_at = NULL;
 
             // _filters.buyer_id = _filters.shopper_id;
@@ -854,11 +875,12 @@ console.log('ZZZZ', 1);
             } else {
 
             }
+
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'created_at DESC');`;
 console.log(ordersQuery);
             const res = await client.query(ordersQuery);
-            const items = res.rows.length > 0 ? res.rows : [];
+            // const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
             const _orderIds = [];
             if (_items.length > 0) {
@@ -868,49 +890,19 @@ console.log(ordersQuery);
                     _orderIds.push(_order.id);
                 })
             }
-            let orderStatuses;
-            let orderStatusesRes = [];
-            if (_orderIds.length) {
-                orderStatuses = `
-                    SELECT
-                        json_agg(
-                            json_build_object(
-                            'status', order_statuses.status,
-                            'created_at', order_statuses.created_at,
-                            'order_id', order_statuses.order_id
-                            )
-                        ) AS order_statuses
-                    FROM data.order_statuses
-                    WHERE TRUE
-                        AND (order_statuses.order_id IN (${_orderIds.join(',')}))
-                `;
-                orderStatusesRes = await client.query(orderStatuses);
-            }
-//             console.log(orderStatuses);
-//             const orderStatusesRes = await client.query(orderStatuses);
-            const _itemStatuses = orderStatusesRes.rows[0].order_statuses;
-            const _itemStatusesIds = [];
-            const grouppedStatuses = [];
-            if (orderStatusesRes.rows[0].order_statuses !== null) {
-                orderStatusesRes.rows[0].order_statuses.map(status => {
-                    _itemStatusesIds.push(status.order_id);
-                });
-                let unique = _itemStatusesIds.reduce(function (a, b)  {
-                    if (a.indexOf(b) < 0) a.push(b);
-                    return a;
-                }, []);
-                unique.forEach(_id => {
-                    // console.log(_itemStatuses.find(_item => _item.order_id === _id));
-                    grouppedStatuses.push({id:_id, statuses:(_itemStatuses.filter(obj => {
-                            return obj.order_id === _id
-                        }))});
-                });
-            }
-            const error = null;
+            const updateExpireQuery = `UPDATE data.orders SET expire_order_at = 
+                sync_at  + (INTERVAL '${expireAtIntervalPeriod} ${expireAtInterval}') 
+                WHERE id IN (${_orderIds.join(',')})`;
+            await client.query(updateExpireQuery);
 
+            const ordersQueryUpdt = `SELECT *
+                                FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', 'created_at DESC');`;
+            const resUpdt = await client.query(ordersQueryUpdt);
+            const items = resUpdt.rows.length > 0 ? resUpdt.rows : [];
+
+            const error = null;
             return {
                 items,
-                grouppedStatuses,
                 size,
                 error
             };

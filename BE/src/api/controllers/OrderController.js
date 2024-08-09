@@ -35,7 +35,7 @@ class OrderController {
             return res.status(401).json('Access deny');
         } else {
             const data = await orderModel.fetchLiveItems(1, 20000, req.user, false, offset, queryFilter, column, sort);
-            return res.status(200).json({ count: data.size, items: data.items ? data.items : [], itemsStatuses: data.grouppedStatuses});
+            return res.status(200).json({ count: data.size, items: data.items ? data.items : []});
         }
     }
 
