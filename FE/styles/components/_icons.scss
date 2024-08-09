@@ -4,6 +4,14 @@
 .f-facebook {
   background-image: url("../../public/images/facebook-gray.svg");
 }
+.f-threshold {
+  background-image: url("../../public/images/euro-icon.svg");
+  background-size: 15px, auto, contain;
+  background-position-y: 11px;
+  background-position-x: 9px;
+  background-repeat: no-repeat;
+  padding-left: 30px !important;
+}
 
 .f-fname {
   background-image: url("../../public/images/input-name.svg");
