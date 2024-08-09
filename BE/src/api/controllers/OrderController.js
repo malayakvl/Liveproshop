@@ -182,7 +182,7 @@ class OrderController {
     // }
     async getOrderExpiredClear(req, res) {
         if (req.query.fromJob === 'yes') {
-            console.log('here we are - remove expired');
+            // console.log('here we are - remove expired');
             const data = await orderModel.removeExpireOrder();
         }
         return res.status(200).json({ success: true });
@@ -191,7 +191,7 @@ class OrderController {
 
     async getOrderFreePeriodClear(req, res){
         if (req.query.fromJob === 'yes') {
-            console.log('here we are - clear period');
+            // console.log('here we are - clear period');
             const data = await orderModel.removeExpirePeriodOrder();
         }
         return res.status(200).json({ success: true });
@@ -313,7 +313,6 @@ class OrderController {
     async checkOrderByNumber(req, res) {
         const orderNumber = req.query.orderNumber;
         const resQuery = await orderModel.fetchExistByNumber(orderNumber);
-console.log('Order Exisit', resQuery?.data ? 1 : -1);
         return res.status(200).json({ success: true, exist_order: resQuery?.data ? 1 : -1 });
     }
 

@@ -104,7 +104,7 @@ export default function MainLayout({ children }: { children: any }) {
     return (
         <div className="overflow-hidden">
             <div
-                className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased text-black pb-[300px]"
+                className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased text-black"
                 id="contentLayoutMain">
                 {children}
                 <CookieConsent
