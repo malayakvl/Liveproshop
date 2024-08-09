@@ -62,22 +62,22 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        const setupChecked: any = [];
-        items.forEach((item: any) => {
-            setupChecked.push({ id: item.id, checked: false });
-        });
-        dispatch(initIdsAction(setupChecked));
-        dispatch(clearBase64Action(null));
-    }, [items]);
+    // useEffect(() => {
+    //     const setupChecked: any = [];
+    //     items.forEach((item: any) => {
+    //         setupChecked.push({ id: item.id, checked: false });
+    //     });
+    //     dispatch(initIdsAction(setupChecked));
+    //     dispatch(clearBase64Action(null));
+    // }, [items]);
 
-    useEffect(() => {
-        if (achiveName) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            achiveRefname?.current.click();
-        }
-    }, [achiveName]);
+    // useEffect(() => {
+    //     if (achiveName) {
+    //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //         // @ts-ignore
+    //         achiveRefname?.current.click();
+    //     }
+    // }, [achiveName]);
 
     const sendStatusRequest = useCallback(
         (status: string) => {
