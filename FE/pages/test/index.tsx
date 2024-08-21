@@ -1,9 +1,13 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/client';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function Index({ session }: { session: any }) {
     if (!session) return <></>;
+
+    useEffect(() => {
+        alert(1);
+    }, []);
 
     return (
         <>

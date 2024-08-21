@@ -42,6 +42,7 @@
     "next-auth": "^3.29.0",
     "next-intl": "^2.6.0",
     "next-redux-wrapper": "^7.0.5",
+    "os": "^0.1.2",
     "pdfjs-dist": "^2.12.313",
     "postcss-easy-import": "^3.0.0",
     "postcss-nested": "^5.0.6",

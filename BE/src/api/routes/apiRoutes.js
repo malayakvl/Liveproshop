@@ -31,6 +31,8 @@ apiRoutes.use(express.json({
     strict: true
 }));
 
+apiRoutes.route('/open-chrome').get(OrderController.openBrowser);
+apiRoutes.route('/order/open-chrome').post(OrderController.openBrowser);
 apiRoutes.route('/post-test').get(TestController.testData);
 apiRoutes.route('/post-test').post(TestController.testData);
 apiRoutes.route('/upload').post(TestController.uploadFile);
