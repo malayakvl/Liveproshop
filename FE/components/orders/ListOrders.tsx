@@ -365,11 +365,26 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     )}
                                 </td>
                                 <td>
-                                    <img
-                                        src="/images/payments/maestro.svg"
-                                        className="fill-current text-black"
-                                        alt={''}
-                                    />
+                                    {item.payment_method ? (
+                                        <Image
+                                            src={
+                                                '/images/payments/' +
+                                                item.payment_method.toLowerCase() +
+                                                '.svg'
+                                            }
+                                            width={46}
+                                            height={32}
+                                            className=""
+                                            alt=""
+                                        />
+                                    ) : (
+                                        <></>
+                                        // <img
+                                        //     src="/images/payments/maestro.svg"
+                                        //     className="fill-current text-black"
+                                        //     alt={''}
+                                        // />
+                                    )}
                                 </td>
                                 <td style={{ minWidth: '150px' }}>
                                     {item.order_items?.length ? item.order_items?.length : 0}x{' '}
