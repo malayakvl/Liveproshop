@@ -1260,6 +1260,12 @@ console.log('MS', multiOrderPaymentData);
                     orderId: orderId
                     // paymentDetails: {}
                 };
+
+                // save payment method to db
+console.log(`UPDATE data.orders SET payment_method='${multiOrderPaymentData.paymentData.payment_methods[0].type}' WHERE id=${orderId}`);
+                await client.query(`UPDATE data.orders SET payment_method='${multiOrderPaymentData.paymentData.payment_methods[0].type}' WHERE id=${orderId}`);
+
+
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 // await setTimeout(3000);
