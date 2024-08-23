@@ -1262,7 +1262,6 @@ console.log('MS', multiOrderPaymentData);
                 };
 
                 // save payment method to db
-console.log(`UPDATE data.orders SET payment_method='${multiOrderPaymentData.paymentData.payment_methods[0].type}' WHERE id=${orderId}`);
                 await client.query(`UPDATE data.orders SET payment_method='${multiOrderPaymentData.paymentData.payment_methods[0].type}' WHERE id=${orderId}`);
 
 
