@@ -1536,7 +1536,6 @@ console.log('MS', multiOrderPaymentData);
     async connectThrowStore(messageId, fromId, storeId, inPeriod, freePeriodEnd) {
         const client = await pool.connect();
         try {
-console.log('Connect throw store');
             // find order by message and attach to current user
             const connetedQuery = `SELECT * FROM data.user2pages 
                 WHERE from_id='${fromId}' AND store_id=${storeId}`
@@ -1549,11 +1548,8 @@ console.log('Connect throw store');
                     WHERE message_id='${messageId}'`;
             const findedOrderRes = await client.query(queryOrder);
             let _endPeriod;
-console.log(1);
             if (freePeriodEnd) {
                 _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
-console.log(_endPeriod);
-
                 await client.query(`UPDATE data.orders
                     SET 
                         in_period = ${inPeriod},
@@ -1564,20 +1560,15 @@ console.log(_endPeriod);
 
 
             if (connetedQueryRes.rows.length > 0) {
-console.log('TUTUTUTUTUTUTUUT')
-
                 const userId = connetedQueryRes.rows[0].user_id;
                 // find order by message
-
                 const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
-
                 const settingsSettingsQuery = (
                     `SELECT data.seller_settings.order_timer FROM data.seller_settings
                                         LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
                                         WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
                 const settingsSettingsRes = await client.query(settingsSettingsQuery);
                 let expireAt;
-
                 if (settingsSettingsRes.rows[0].order_timer.hours) {
                    expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
                 }
@@ -1587,32 +1578,33 @@ console.log('TUTUTUTUTUTUTUUT')
                 if (settingsSettingsRes.rows[0].order_timer.minutes) {
                     expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                 }
-// console.log(`UPDATE data.orders
-//                     SET user_id='${userId}',
-//                         sync_at='${syncAt}',
-//                         expire_order_at='${expireAt}',
-//                         in_period = ${inPeriod},
-//                         free_period_end='${_endPeriod ? _endPeriod : null}'
-//                     WHERE id='${findedOrderRes.rows[0].id}'`);
-
-                if (inPeriod) {
-                    await client.query(`UPDATE data.orders
-                    SET user_id='${userId}',
-                        sync_at='${syncAt}',
-                        expire_order_at='${expireAt}',
-                        in_period = ${inPeriod},
-                        free_period_end='${_endPeriod}'
-                    WHERE id='${findedOrderRes.rows[0].id}'`)
-                } else {
-                    await client.query(`UPDATE data.orders
-                    SET user_id='${userId}',
-                        sync_at='${syncAt}',
-                        expire_order_at='${expireAt}'
-                    WHERE id='${findedOrderRes.rows[0].id}'`)
-                }
+                // if (inPeriod) {
+                //     await client.query(`UPDATE data.orders
+                //     SET user_id='${userId}',
+                //         sync_at='${syncAt}',
+                //         expire_order_at='${expireAt}',
+                //         in_period = ${inPeriod},
+                //         free_period_end='${_endPeriod}'
+                //     WHERE id='${findedOrderRes.rows[0].id}'`)
+                // } else {
+                //     await client.query(`UPDATE data.orders
+                //     SET user_id='${userId}',
+                //         sync_at='${syncAt}',
+                //         expire_order_at='${expireAt}'
+                //     WHERE id='${findedOrderRes.rows[0].id}'`)
+                // }
 
 
                 // check if we have non payed order
+// console.log(`SELECT data.orders.id, data.orders.order_number,
+//         data.orders.order_amount, data.orders.total_amount,
+//         data.orders.live_sessions_id FROM data.orders
+//         LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+//         LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+//         WHERE data.orders.user_id='${userId}'
+//         AND data.orders.status='new' AND data.orders.id != '${findedOrderRes.rows[0].id}'
+//         AND live_sessions_id='${findedOrderRes.rows[0].live_sessions_id}'
+//     AND status_waiting IS NULL`);
                 const existNonPayedOrder = await client.query(
                     `SELECT data.orders.id, data.orders.order_number, 
                                         data.orders.order_amount, data.orders.total_amount,
@@ -1625,103 +1617,51 @@ console.log('TUTUTUTUTUTUTUUT')
                                         AND status_waiting IS NULL`);
                 let orderId, orderNumber;
                 if (existNonPayedOrder.rows[0]?.id) {
+console.log('START COMBINE MECHANIZM');
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     orderId = existNonPayedOrder.rows[0].id;
+
                     // before add new items check if this item already aexist in order, if yes only change quantity
                     const updateExistItemsSQL = `UPDATE data.order_items SET 
-                        order_id='${existNonPayedOrder.rows[0].id}' 
+                        order_id='${orderId}' 
                         WHERE order_id='${findedOrderRes.rows[0].id}' AND status IS NULL `;
-
+console.log('CHANGE ORDER ID FOR NEW ITEM') ;
+console.log(updateExistItemsSQL);
                     await client.query(updateExistItemsSQL);
-console.log('HEEEEEEEEEEEEEE COMBINE');
 
-                    const settingsSettingsQuery = (
-                        `SELECT data.seller_settings.order_timer FROM data.seller_settings
-                            LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
-                            WHERE data.live_sessions.id = '${existNonPayedOrder.rows[0].live_sessions_id}'`);
-console.log(settingsSettingsQuery);
-                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
-                    let expireAt;
+// console.log('MINUS QTY FROM PRODUCT CONFIGURATION') ;
 
-                    if (settingsSettingsRes.rows[0].order_timer.hours) {
-                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
-                    }
-                    if (settingsSettingsRes.rows[0].order_timer.days) {
-                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
-                    }
-                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
-                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
-                    }
 
-                    // const updateAmountSQL1 = `UPDATE data.orders
-                    //     SET
-                    //     expire_order_at='${expireAt}'
-                    //     WHERE id='${existNonPayedOrder.rows[0].id}'`;
-                    // console.log(updateAmountSQL1);
+                    //remove row from data.orders cuz we change owner for order_items
+console.log('REMOVE UNUSED ROW IN DATA.ORDERS') ;
+                    const removeUnusedOrder = `DELETE FROM data.orders 
+                        WHERE id='${findedOrderRes.rows[0].id}'`;
+                    await client.query(removeUnusedOrder);
 
-                    // update amounts for order splited order
+console.log('START RECALCULATE TOTAL ORDER AMOUNTS');
+                    const orderItemsSQL = `SELECT * FROM data.order_items WHERE order_id='${orderId}'`;
+                    const orderItemsRes = await client.query(`SELECT price, quantity FROM data.order_items WHERE order_id='${orderId}'`);
+                    let totalItemsAm = 0;
+                    orderItemsRes.rows.forEach(_item => {
+                        totalItemsAm += _item.price*_item.quantity;
+                    })
+console.log('SETUP NEW ORDER AMOUNT AND SYNC', totalItemsAm);
+
                     const updateAmountSQL = `UPDATE data.orders 
-                        SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
-                        total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
+                        SET order_amount = ${totalItemsAm},
+                        total_amount = ${totalItemsAm},
                         expire_order_at='${expireAt}',
                         sync_at=now(),
-                        in_period = ${inPeriod},
-                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
-                        WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                        in_period = ${inPeriod}
+                        WHERE id='${orderId}'`;
+console.log(updateAmountSQL)
                     await client.query(updateAmountSQL);
-
-                    // delete unused order
-                    await client.query(`DELETE FROM data.orders 
-                        WHERE id='${findedOrderRes.rows[0].id}'`);
-
-                    // combined same rows in order_items
-                    const combinedSQL = await client.query(`
-                        SELECT product_configuration_id, SUM(quantity) AS resultsQty
-                        FROM data.order_items
-                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                        GROUP BY product_configuration_id`);
-                    const realOrderItems = await client.query(`SELECT id 
-                    FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
-                    // need to combine two rows into one
-                    if (combinedSQL.rows.length < realOrderItems.rows.length) {
-                        const combinedData = [];
-                        combinedSQL.rows.forEach(_item => {
-                            combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
-                        })
-                        const _dataResCombine = await client.query(`SELECT product_configuration_id, 
-                        SUM(quantity) AS resultsQty, array_agg(id) as products
-                        FROM data.order_items
-                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                        GROUP BY product_configuration_id;`)
-                        _dataResCombine.rows.forEach(_row => {
-                            if (_row.products.length > 1) {
-                                _row.products.forEach(async (_itemId, _key) => {
-                                    console.log(_key)
-                                    if (_key > 0) {
-                                        await client.query(`DELETE FROM data.order_items WHERE id='${_itemId}'`);
-                                    }
-                                })
-                            }
-                        });
-                        // update quantity for order items row
-                        combinedData.forEach(async (_item) => {
-                            await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
-                        WHERE product_configuration_id='${_item.config_id}'`)
-                        });
+                    if (inPeriod) {
+                        await client.query(`UPDATE data.orders SET
+                            free_period_end=${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}
+                            WHERE id='${orderId}'`)
                     }
                 }
-                await client.query(`UPDATE data.orders 
-                    SET user_id='${userId}', 
-                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}',
-                        in_period = ${inPeriod},
-                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
-                    WHERE id='${existNonPayedOrder.rows[0].id}'`)
-
-
-                // await client.query(`UPDATE data.orders
-                //     SET user_id='${userId}',
-                //         sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
-                //     WHERE id='${findedOrderRes.rows[0].id}'`)
             }
             return { success: true };
         } catch (e) {
@@ -1892,9 +1832,15 @@ console.log('Store Name', storeName)
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
                 if (!resWait.rows[0].order_id) {
-// console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
-                    const existNonPayed = await client.query(`SELECT * FROM data.orders 
-                        WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+console.log(`SELECT * FROM data.orders 
+                WHERE status='new' AND user_id='${userId}' 
+                AND total_amount > 0 ORDER BY created_at DESC
+`);
+                    const existNonPayed = await client.query(
+                        `SELECT * FROM data.orders 
+                        WHERE status='new' AND user_id='${userId}' 
+                        AND total_amount > 0 ORDER BY created_at DESC`);
+console.log('Exist non payed', existNonPayed.rows.length);
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
