@@ -62,7 +62,7 @@ const SidebarHeader: React.FC = () => {
                     <div className="relative">
                         {/*<i className="icon-warning" style={{ marginTop: '12px' }} />*/}
                         <span className="inline-block mx-[10px]">
-                            <span className="text-[20px] font-bold ">
+                            <span className="text-[16px] md:text-[20px] font-bold ">
                                 {t('Please add an email in your')}
                             </span>
                             <Link href={'/account'}>
