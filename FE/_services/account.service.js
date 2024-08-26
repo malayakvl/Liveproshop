@@ -64,28 +64,10 @@ async function registerFB(paramData, commentId) {
     // const commentId = infoParam[0] ? infoParam[0] : 2;
     const locale = infoParam[1];
     const forFree = infoParam[2];
-    console.log('Register FB SDK');
     // login with facebook then authenticate with the API to get a JWT auth token
     // const { authResponse } = await new Promise(window.FB.login);
     const { authResponse } = await new Promise(window.FB.login);
 
-    // login and add stores
-    // const loginOptions = {
-    //     scope: 'publish_video,manage_pages,pages_show_list,pages_messaging'
-    // };
-    // const { authResponse } = await new Promise((resolve, reject) => {
-    //     window.FB.login(
-    //         (response) => {
-    //             // handle the response
-    //             if (response.authResponse) {
-    //                 resolve(response);
-    //             } else {
-    //                 reject(response);
-    //             }
-    //         },
-    //         { scope: 'email,pages_show_list,pages_messaging,publish_video' }
-    //     );
-    // });
     authResponse.roleId = roleId;
     authResponse.locale = locale;
     authResponse.forFree = forFree;

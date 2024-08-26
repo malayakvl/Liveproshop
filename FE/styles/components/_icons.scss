@@ -11,6 +11,10 @@
   background-position-x: 9px;
   background-repeat: no-repeat;
   padding-left: 30px !important;
+
+  &:focus {
+    padding-left: 30px !important;
+  }
 }
 
 .f-fname {

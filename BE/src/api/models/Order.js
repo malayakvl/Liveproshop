@@ -1578,33 +1578,13 @@ console.log('MS', multiOrderPaymentData);
                 if (settingsSettingsRes.rows[0].order_timer.minutes) {
                     expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                 }
-                // if (inPeriod) {
-                //     await client.query(`UPDATE data.orders
-                //     SET user_id='${userId}',
-                //         sync_at='${syncAt}',
-                //         expire_order_at='${expireAt}',
-                //         in_period = ${inPeriod},
-                //         free_period_end='${_endPeriod}'
-                //     WHERE id='${findedOrderRes.rows[0].id}'`)
-                // } else {
-                //     await client.query(`UPDATE data.orders
-                //     SET user_id='${userId}',
-                //         sync_at='${syncAt}',
-                //         expire_order_at='${expireAt}'
-                //     WHERE id='${findedOrderRes.rows[0].id}'`)
-                // }
-
+                await client.query(`UPDATE data.orders
+                    SET user_id='${userId}',
+                        sync_at='${syncAt}',
+                        expire_order_at='${expireAt}'
+                    WHERE id='${findedOrderRes.rows[0].id}'`)
 
                 // check if we have non payed order
-// console.log(`SELECT data.orders.id, data.orders.order_number,
-//         data.orders.order_amount, data.orders.total_amount,
-//         data.orders.live_sessions_id FROM data.orders
-//         LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-//         LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
-//         WHERE data.orders.user_id='${userId}'
-//         AND data.orders.status='new' AND data.orders.id != '${findedOrderRes.rows[0].id}'
-//         AND live_sessions_id='${findedOrderRes.rows[0].live_sessions_id}'
-//     AND status_waiting IS NULL`);
                 const existNonPayedOrder = await client.query(
                     `SELECT data.orders.id, data.orders.order_number, 
                                         data.orders.order_amount, data.orders.total_amount,

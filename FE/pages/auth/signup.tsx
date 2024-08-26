@@ -60,7 +60,7 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        console.log('messenger link', incomingOrderLink);
+        // console.log('messenger link', incomingOrderLink);
         if (googleDeepLink) {
             setChromeLink(googleDeepLink.replace('https://', ''));
         }

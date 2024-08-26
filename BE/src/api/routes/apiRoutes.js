@@ -22,7 +22,6 @@ import CheckoutController from "../controllers/CheckoutController.js";
 import ContactUsController from "../controllers/ContactUsController.js";
 import StoreController from "../controllers/StoreController.js";
 
-
 const apiRoutes = express.Router();
 
 apiRoutes.use(express.json({
