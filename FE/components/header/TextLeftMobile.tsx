@@ -102,7 +102,12 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                     <LangSwitcherInline />
                     <Link href={'/auth/signup'}>
                         <button className="mt-[40px] sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] mr-[12px]">
-                            <span className="inline-block">{t('Try for free')}!</span>
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                className="inline-block"
+                                onClick={() => dispatch(toggleTextingMenuAction(false))}>
+                                {t('Try for free')}!
+                            </span>
                         </button>
                     </Link>
                 </div>
