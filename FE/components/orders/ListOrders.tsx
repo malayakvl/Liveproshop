@@ -365,25 +365,9 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     )}
                                 </td>
                                 <td>
-                                    {item.payment_method ? (
-                                        <Image
-                                            src={
-                                                '/images/payments/' +
-                                                item.payment_method.toLowerCase() +
-                                                '.svg'
-                                            }
-                                            width={46}
-                                            height={32}
-                                            className=""
-                                            alt=""
-                                        />
-                                    ) : (
-                                        <></>
-                                        // <img
-                                        //     src="/images/payments/maestro.svg"
-                                        //     className="fill-current text-black"
-                                        //     alt={''}
-                                        // />
+                                    {item.payment_method && (
+                                        <div
+                                            className={`pyment-method-icon ${item.payment_method.toLowerCase()}`}></div>
                                     )}
                                 </td>
                                 <td style={{ minWidth: '150px' }}>

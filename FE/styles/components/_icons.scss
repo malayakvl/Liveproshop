@@ -220,3 +220,54 @@
   background-repeat: no-repeat;
   @apply inline-block float-left w-[36px] h-[24px];
 }
+
+.pyment-method-icon {
+  display: block;
+  width: 35px;
+  height: 27px;
+  //border: solid 1px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.amex {
+  background-image: url("../../public/images/payments/amex.svg");
+}
+.ideal {
+  background-image: url("../../public/images/payments/ideal.svg");
+}
+.mastercard {
+  background-image: url("../../public/images/payments/mastercard.svg");
+}
+.mastercard {
+  background-image: url("../../public/images/payments/mastercard.svg");
+}
+.alipay {
+  background-image: url("../../public/images/payments/alipay.svg");
+}
+.maestro {
+  background-image: url("../../public/images/payments/maestro.svg");
+}
+.trustly {
+  background-image: url("../../public/images/payments/trustly.svg");
+}
+.wechat {
+  background-image: url("../../public/images/payments/wechat.svg");
+}
+.paypal {
+  background-image: url("../../public/images/payments/paypal.svg");
+}
+.visa {
+  background-image: url("../../public/images/payments/visa.svg");
+}
+.cbc {
+  background-image: url("../../public/images/payments/cbc_new.svg");
+}
+.mbway {
+  background-image: url("../../public/images/payments/mbway.svg");
+}
+.multibanco {
+  background-image: url("../../public/images/payments/multibanco.svg");
+}
+.banktrans {
+  background-image: url("../../public/images/payments/banktrans.svg");
+}
