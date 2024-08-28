@@ -939,7 +939,7 @@ console.log(ordersQuery);
                 case UserRole.ADMIN:
                     break;
                 case UserRole.CUSTOMER:
-                    _filters.seller_id = [user.id];
+                    // _filters.seller_id = [user.id];
                     if (_filters.shopper_id) {
                         _filters.buyer_id = _filters.shopper_id;
                         delete _filters.userIds;
@@ -973,7 +973,7 @@ console.log(ordersQuery);
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-// console.log(ordersQuery);
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
