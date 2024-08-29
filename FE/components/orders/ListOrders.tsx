@@ -250,27 +250,11 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             )}
                                         </td>
                                     )}
+                                {user.role_id === 2 && <td></td>}
                                 {user.role_id === 1 &&
                                     item.status === 'payed' &&
                                     item.total_amount != 0 && (
-                                        <td style={{ paddingTop: 0, paddingBottom: 0 }}>
-                                            {/*{!item.status_waiting && (*/}
-                                            {/*    <Link*/}
-                                            {/*        href={`/checkout/${item.order_number}?storeName=${item.name}`}>*/}
-                                            {/*        <div*/}
-                                            {/*            className="gradient-btn-small cursor-pointer"*/}
-                                            {/*            style={{*/}
-                                            {/*                paddingTop: '3px',*/}
-                                            {/*                paddingBottom: '3px',*/}
-                                            {/*                minWidth: '60px'*/}
-                                            {/*            }}>*/}
-                                            {/*            <span className="text-white bg-none font-bold">*/}
-                                            {/*                {t('Pay')}*/}
-                                            {/*            </span>*/}
-                                            {/*        </div>*/}
-                                            {/*    </Link>*/}
-                                            {/*)}*/}
-                                        </td>
+                                        <td style={{ paddingTop: 0, paddingBottom: 0 }}></td>
                                     )}
                                 <td className="order-status">
                                     <div className="flex flex-row items-center justify-center">
