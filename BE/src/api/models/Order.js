@@ -939,7 +939,7 @@ console.log(ordersQuery);
                 case UserRole.ADMIN:
                     break;
                 case UserRole.CUSTOMER:
-                    // _filters.seller_id = [user.id];
+                    _filters.seller_id = [user.id];
                     if (_filters.shopper_id) {
                         _filters.buyer_id = _filters.shopper_id;
                         delete _filters.userIds;
@@ -1540,13 +1540,14 @@ console.log('MS', multiOrderPaymentData);
             const connetedQuery = `SELECT * FROM data.user2pages 
                 WHERE from_id='${fromId}' AND store_id=${storeId}`
             const connetedQueryRes = await client.query(connetedQuery);
-            const queryOrder = `SELECT data.orders.id, 
+            const queryOrder = `SELECT data.orders.id, data.orders.user_id AS fake_user_id,
                     data.orders.live_sessions_id, data.orders.order_amount, 
                     data.orders.total_amount
                     FROM data.order_items LEFT JOIN 
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
             const findedOrderRes = await client.query(queryOrder);
+            const fakeUserId = findedOrderRes.rows[0].fake_user_id;
             let _endPeriod;
             if (freePeriodEnd) {
                 _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
@@ -1555,12 +1556,11 @@ console.log('MS', multiOrderPaymentData);
                         in_period = ${inPeriod},
                         free_period_end='${_endPeriod}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
-            } else {
             }
-
 
             if (connetedQueryRes.rows.length > 0) {
                 const userId = connetedQueryRes.rows[0].user_id;
+
                 // find order by message
                 const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
                 const settingsSettingsQuery = (
@@ -1582,7 +1582,11 @@ console.log('MS', multiOrderPaymentData);
                     SET user_id='${userId}',
                         sync_at='${syncAt}',
                         expire_order_at='${expireAt}'
-                    WHERE id='${findedOrderRes.rows[0].id}'`)
+                    WHERE id='${findedOrderRes.rows[0].id}'`);
+
+                // remove fake user
+                await client.query(`DELETE FROM data.users WHERE id='${fakeUserId}'`);
+
 
                 // check if we have non payed order
                 const existNonPayedOrder = await client.query(
@@ -1802,9 +1806,10 @@ console.log(updateAmountSQL)
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
             storeName = res.rows[0].store_name;
-console.log('Store Name', storeName)
             sessionId = res.rows[0].live_sessions_id;
-            const tmpUserId = res.rows[0].tmp_user_id;
+            const tmpUserId = res.rows[0].tmp_user;
+console.log('Fake user', tmpUserId)
+
             if (!orderNumber) {
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
@@ -1812,10 +1817,6 @@ console.log('Store Name', storeName)
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
                 if (!resWait.rows[0].order_id) {
-console.log(`SELECT * FROM data.orders 
-                WHERE status='new' AND user_id='${userId}' 
-                AND total_amount > 0 ORDER BY created_at DESC
-`);
                     const existNonPayed = await client.query(
                         `SELECT * FROM data.orders 
                         WHERE status='new' AND user_id='${userId}' 
@@ -1895,15 +1896,6 @@ console.log(updtQuery);
                             await client.query(`UPDATE data.order_items 
                                 SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`
                             );
-                            // const totalAmountSQL = (
-                            //     `SELECT SUM(total_amount) AS sum_total_amount,
-                            //         SUM(order_amount) AS sum_order_amount
-                            //         FROM data.order_items
-                            //     WHERE order_id=${emptyWaitRes.rows[0].id} AND user_id=${tmpUserId}
-                            //     GROUP BY order_id`);
-                            //
-                            // console.log(totalAmountSQL);
-
                         }
                     }
                     if (resWait.rows.length > 0) {
@@ -1934,7 +1926,6 @@ console.log(updtQuery);
                                         AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
                                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 if (existNonPayedOrder.rows[0]?.id) {
-console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     orderId = existNonPayedOrder.rows[0].id;
                     // before add new items check if this item already aexist in order, if yes only change quantity
@@ -1951,6 +1942,9 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
 
                     // delete unused order
                     await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
+                    // remove fake user
+console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
+                    await client.query(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
 
                     // combined same rows in order_items
                     const combinedSQL = await client.query(`
@@ -2041,7 +2035,6 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
                     orderNumber = combineOrderNumber;
                 }
-                // console.log('ORDER NUMBER', orderNumber);
 
                 // find waiting products in order
                 const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE
@@ -2069,6 +2062,9 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                 })
 
                 await client.query(`UPDATE data.orders SET waiting_products='${JSON.stringify(waitingItems.rows)}' WHERE id=${orderId}`)
+                // remove fake user
+console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
+                await client.query(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
 
                 console.log("=============");
                 console.log("RETURNED DATA");

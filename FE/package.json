@@ -64,6 +64,7 @@
     "react-paginate": "^8.1.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.11.2",
+    "react-scroll": "^1.9.0",
     "react-select": "^5.2.1",
     "react-spring": "^8.0.27",
     "react-tag-autocomplete": "^6.3.0",

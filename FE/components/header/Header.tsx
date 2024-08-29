@@ -258,7 +258,14 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                 </Link>
                             </div>
                             {!isMobile && <LangSwitcher type={null} />}
-                            <span className="logout-btn login-btn-layout">
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                className="logout-btn login-btn-layout"
+                                onClick={() => {
+                                    if (showTextingMenu) {
+                                        dispatch(toggleTextingMenuAction(!showTextingMenu));
+                                    }
+                                }}>
                                 <Link href={'/auth/signin'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
@@ -337,7 +344,13 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             </a>
                         </span>
                     ) : (
-                        <span className="logout-btn login-btn-layout">
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                        <span
+                            className="logout-btn login-btn-layout"
+                            onClick={() => {
+                                console.log(1111);
+                                dispatch(toggleTextingMenuAction(!showTextingMenu));
+                            }}>
                             <Link href={'/auth/signin'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a href="javascript:;" title={t('Login')}>
