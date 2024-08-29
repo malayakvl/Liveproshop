@@ -337,3 +337,12 @@ span.canceled {
   position: relative;
   z-index: 999;
 }
+
+.table_container {
+  display: grid;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border-radius: 15px;
+  //box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.2);
+}
