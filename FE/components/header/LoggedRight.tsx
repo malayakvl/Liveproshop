@@ -13,8 +13,7 @@ import { fetchLatestAction } from '../../redux/notifications';
 // import BrandMobile from "../sidebar/BrandMobile";
 // import { toggleSidebarAction } from '../../redux/layouts';
 
-const userProfileImg =
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+const userProfileImg = '/images/pic_profile.png';
 
 // interface Props {
 //     isNonPage?: boolean | null;
@@ -36,6 +35,7 @@ const LoggedRight: React.FC = () => {
 
     useEffect(
         function () {
+            console.log(user?.photo);
             if (user?.photo) {
                 setUserPhoto(baseApiUrl + user?.photo);
             }

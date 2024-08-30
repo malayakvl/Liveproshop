@@ -79,9 +79,6 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
-console.log('Ebat', invoice);
-console.log('Transaction Id', invoice.transaction_id);
-console.log('Payment Type', invoice.paymentType);
 
     let transactionId = '';
     if (invoice.paymentType === 'MASTERCARD' || invoice.paymentType === 'VISA') {
@@ -116,7 +113,6 @@ console.log('Payment Type', invoice.paymentType);
     } else if (paymentData.payment_details.type === 'MAESTRO') {
         transactionId = paymentData.transaction_id;
     }
-console.log('Transaction ID', transactionId);    
     doc
         .fontSize(10)
         .text(captionNumber, 50, customerInformationTop)
@@ -140,7 +136,6 @@ console.log('Transaction ID', transactionId);
     //     doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
     //
     // }
-    console.log('HERE WE ARE');
     console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
     doc.text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
@@ -1157,7 +1152,6 @@ console.log('LOCALE', locale)
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const orderId = res.rows[0].id;
             let historyRes;
@@ -1229,7 +1223,6 @@ console.log(ordersQuery);
                     }).catch(error => {
                         return {error: error.message}
                     });
-console.log('MS', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
@@ -2124,7 +2117,6 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
     async insertOrderStatus (orderId, status, locale) {
         const client = await pool.connect();
         try {
-console.log('here')
             // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             const _tmpRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='${status}'`);
             if (_tmpRes.rows.length === 0) {
