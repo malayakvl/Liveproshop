@@ -1796,14 +1796,17 @@ console.log(updateAmountSQL)
                                 LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                                 LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
+// console.log(SQL);
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
             storeName = res.rows[0].store_name;
             sessionId = res.rows[0].live_sessions_id;
             const tmpUserId = res.rows[0].tmp_user;
-console.log('Fake user', tmpUserId)
+            const fakeUserId = res.rows[0].tmp_user;
+console.log('Fake user', fakeUserId)
 
             if (!orderNumber) {
+console.log('This block !orderNumber')
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
@@ -1832,8 +1835,6 @@ console.log('Exist non payed', existNonPayed.rows.length);
 console.log('Here', emptyWaitRes.rows[0].id);
                             orderId = emptyWaitRes.rows[0].id;
 
-                            // down't remember why i attach prefix
-                            // orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
                             orderNumber = emptyWaitRes.rows[0].order_number;
                             const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
                             const settingsSettingsQuery =
@@ -1882,9 +1883,13 @@ console.log('Here', emptyWaitRes.rows[0].id);
                                 expire_order_at='${expireAt}'
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
                             }
-
-console.log(updtQuery);
+// console.log(updtQuery);
                             await client.query(updtQuery);
+
+                            // remove fake user
+                            if (userId !== fakeUserId) {
+                                await client.query(`DELETE FROM data.users WHERE id='${fakeUserId}'`)
+                            }
 
                             await client.query(`UPDATE data.order_items 
                                 SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`

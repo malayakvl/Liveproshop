@@ -18,6 +18,7 @@ import {
 } from '../../redux/orders';
 import { setUserLocaleAction } from '../../redux/user/actions';
 import { orderNumberSelector, storeNameSelector } from '../../redux/orders/selectors';
+import { orderTmpCommentIdSelector } from '../../redux/orders/selectors';
 
 export default function SidebarLayout({ children }: { children: any }) {
     const user = useSelector(userSelector);
@@ -26,6 +27,7 @@ export default function SidebarLayout({ children }: { children: any }) {
     const isSidebarOpen = useSelector(isSidebarOpenSelector);
     const redirectOrderNumber = useSelector(orderNumberSelector);
     const redirectStoreName = useSelector(storeNameSelector);
+    const tmpCommentOrderId = useSelector(orderTmpCommentIdSelector);
     const { locale }: any = useRouter();
     // const redirectOrderNumber = '';
 
@@ -50,6 +52,15 @@ export default function SidebarLayout({ children }: { children: any }) {
                     user?.email
                 )
             );
+        }
+        if (user.email && user.role_id == 1 && window.localStorage.getItem('tmpCommentOrderId')) {
+            console.log(window.localStorage.getItem('tmpCommentOrderId'));
+            // dispatch(
+            //     setupOrderByCommentAction(
+            //         window.localStorage.getItem('orderCommentId'),
+            //         user?.email
+            //     )
+            // );
         }
         if (user.email && user.role_id == 1 && window.localStorage.getItem('orderWaitCommentId')) {
             const waitData = window.localStorage.getItem('orderWaitCommentId');
@@ -86,6 +97,16 @@ export default function SidebarLayout({ children }: { children: any }) {
             dispatch(setUserLocaleAction(locale));
         }
     }, [user?.email]);
+
+    useEffect(() => {
+        if (tmpCommentOrderId && user?.email) {
+            console.log('TRY TO FIND ORDER BY COMMENT ID');
+            dispatch(setupOrderByCommentAction(tmpCommentOrderId, user?.email));
+        }
+        // if (tmpCommentOrderId) {
+        //     console.log('GETTING COMMENT ID FROM SELECTOR');
+        // }
+    }, [tmpCommentOrderId, user?.email]);
 
     useEffect(() => {
         if (redirectOrderNumber && user?.email && user.role_id == 1) {
