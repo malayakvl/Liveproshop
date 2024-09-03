@@ -1164,7 +1164,10 @@ console.log('LOCALE', locale)
                 await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-            const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
+            let dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}`;
+            let dirUploadForCreate = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
+console.log('dirUpload', dirUploadForCreate);
+console.log('type', type);
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
@@ -1179,7 +1182,7 @@ console.log('LOCALE', locale)
             }
 
             // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
-            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
+            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
@@ -1197,8 +1200,14 @@ console.log('LOCALE', locale)
                     error: null
                 }
             } else {
-                if (!fs.existsSync(dirUpload)) {
-                    fs.mkdirSync(dirUpload);
+console.log('PEREDELAT TUT');
+                if (!fs.existsSync(`${dirUploadForCreate}/${locale}`)) {
+console.log('Create dir')
+                    if (!fs.existsSync(`${dirUploadForCreate}`)) {
+                        fs.mkdirSync(dirUploadForCreate);
+                    }
+                    fs.mkdirSync(`${dirUploadForCreate}/${locale}`);
+                    // dirUpload = dirUpload + '/' + locale
                 }
             }
             if (res.rows.length > 0) {
@@ -1261,10 +1270,10 @@ console.log('LOCALE', locale)
                 await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
 
                 // await setTimeout(3000);
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
                     await setTimeout(2000);
                 }
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
