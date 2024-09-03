@@ -282,7 +282,7 @@ export default function Signup({
                                                     <div className="flex flex-wrap justify-between">
                                                         <div className="flex-auto lg:flex-1">
                                                             <div className="text-2xl font-bold text-gray-350 mb-6">
-                                                                {t('Add Payment Method')}123
+                                                                {t('Add Payment Method')}
                                                             </div>
                                                             <PaymentMethodPlan />
                                                         </div>
