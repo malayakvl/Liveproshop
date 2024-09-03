@@ -285,9 +285,9 @@ class Checkout {
                             return {error: error.message}
                         });
                     // generate pad
-console.log('Multisafe data', multiOrderPaymentData)  ;
+// console.log('Multisafe data', multiOrderPaymentData)  ;
                     const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
-console.log('Order Data', order);
+// console.log('Order Data', order);
                     const filePathArr = order.filename.split('/');
                     // console.log(filePathArr);
                     const fileAttachment = {

@@ -22,7 +22,6 @@ import CheckoutController from "../controllers/CheckoutController.js";
 import ContactUsController from "../controllers/ContactUsController.js";
 import StoreController from "../controllers/StoreController.js";
 
-
 const apiRoutes = express.Router();
 
 apiRoutes.use(express.json({
@@ -31,6 +30,8 @@ apiRoutes.use(express.json({
     strict: true
 }));
 
+apiRoutes.route('/open-chrome').get(OrderController.openBrowser);
+apiRoutes.route('/order/open-chrome').post(OrderController.openBrowser);
 apiRoutes.route('/post-test').get(TestController.testData);
 apiRoutes.route('/post-test').post(TestController.testData);
 apiRoutes.route('/upload').post(TestController.uploadFile);

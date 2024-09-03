@@ -678,5 +678,6 @@
   "Live Orders": "Live Orders",
   "Products in order": "Products in order",
   "Products in cart": "Products in cart",
-  "Live Carts": "Live Carts"
+  "Live Carts": "Live Carts",
+  "_products": "product (s)"
 }

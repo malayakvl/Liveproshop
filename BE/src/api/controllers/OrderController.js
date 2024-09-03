@@ -1,6 +1,7 @@
 import orderModel from '../models/Order.js';
 // import * as nodeFetch from "node-fetch";
 import shell from "shelljs";
+import cp from 'child_process';
 
 
 class OrderController {
@@ -347,6 +348,15 @@ class OrderController {
     }
 
     async openBrowser (req, res) {
+        let command;
+        console.log('here2222');
+        // window.location = 'intent:https://liveproshop.com#Intent;end';
+        // // eslint-disable-next-line prefer-const
+        command = `open -a "Google Chrome" https://liveproshop.com`;
+        // command = `google-chrome --no-sandbox https://liveproshop.com`;
+        console.log(`executing command: ${command}`);
+        cp.exec(command);
+
         // shell.exec(`open -a Safari https://liveproshop.com/en/`, function(code, output) {
         //     console.log('Exit code:', code);
         //     console.log('Program output:', output);
@@ -357,7 +367,7 @@ class OrderController {
         //     const data = await orderModel.insertOrderStatus(req.query.orderId, req.query.status);
         //     return res.status(200).json({ success: true, orderNumber: data.orderNumber });
         // }
-        return res.status(200).json({ success: true, shellObject: shell });
+        return res.status(200).json({ success: true });
     }
 }
 

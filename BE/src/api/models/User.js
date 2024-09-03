@@ -193,6 +193,14 @@ class User {
             // user = await this.findUserByEmail(userData.email);
             user = await this.findUserByProviderId(userData.id);
             const fullFbName = userData.name.split(' ');
+            const toFileData = JSON.stringify(userData, null, '\t');
+            const fileLog = `${process.env.FB_LOG_PATH}/fb.log`;
+            fs.readFile(fileLog, 'utf8', function (err, data) {
+                fs.appendFile(fileLog, toFileData, function(err, result) {
+                    if(err) console.log('error', err);
+                });
+            });
+            console.log(userData);
             const firstName = fullFbName[0];
             let lastName = '';
             if (fullFbName.length > 1) {
@@ -335,6 +343,15 @@ class User {
         const client = await pool.connect();
         try {
             let user;
+
+            // logged incoming data
+            const toFileData = JSON.stringify(userData, null, '\t');
+            const fileLog = `${process.env.FB_LOG_PATH}/fb.log`;
+            fs.readFile(fileLog, 'utf8', function (err, data) {
+                fs.appendFile(fileLog, toFileData, function(err, result) {
+                    if(err) console.log('error', err);
+                });
+            });
             user = await this.findUserByProviderId(userData.userID);
             if (parseInt(userData.roleId) === 2) {
                 // get user stores
@@ -345,6 +362,7 @@ class User {
                                 `https://graph.facebook.com/v17.0/me?fields=accounts&access_token=${userData.accessToken}`
                             )
                             .then(async (responsePages) => {
+
                                 if (responsePages.data.error) {
                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
                                 } else {

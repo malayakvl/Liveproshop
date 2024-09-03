@@ -24,8 +24,6 @@ const ConfirmationPeriodSetupModal: React.FC = () => {
     const periodSetup = useSelector(setupPeriodSelector);
     const t = useTranslations();
 
-    console.log('Confirmation period', periodSetup);
-
     const {
         title = `${
             t('Do you want to set the period from ') +

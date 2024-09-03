@@ -14,8 +14,7 @@ import { isSTextingMenuOpenSelector } from '../../redux/layouts/selectors';
 // import LangSwitcher from '../lang/Switcher';
 // import LoggedRight from "./LoggedRight";
 
-const userProfileImg =
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+const userProfileImg = '/images/pic_profile.png';
 
 interface Props {
     type: string | null;
@@ -102,7 +101,12 @@ const TextLeftMobile: React.FC<Props> = (type) => {
                     <LangSwitcherInline />
                     <Link href={'/auth/signup'}>
                         <button className="mt-[40px] sm:pl-0.5 sm:pr-0.5 md:w-auto gradient-btn max-h-[40px] pt-[7px] mr-[12px]">
-                            <span className="inline-block">{t('Try for free')}!</span>
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                className="inline-block"
+                                onClick={() => dispatch(toggleTextingMenuAction(false))}>
+                                {t('Try for free')}!
+                            </span>
                         </button>
                     </Link>
                 </div>

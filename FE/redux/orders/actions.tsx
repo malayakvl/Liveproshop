@@ -371,7 +371,6 @@ export const updateOrderStatusAction: any = createAction(
     async (orderId: number, status: string, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            console.log('LOCALE', locale);
             return axios
                 .get(
                     `${baseUrl}/orders/insert-status?orderId=${orderId}&status=${status}&locale=${locale}`,
@@ -444,7 +443,7 @@ export const fetchUserOrderWaitAction: any = createAction(
     }
 );
 export const setupOrderByCommentAction: any = createAction(
-    'order/FETCH_USER_ORDER',
+    'order/FETCH_USER_ORDER_BY_COMMENTID',
     async (commentId: string, email: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             return axios
