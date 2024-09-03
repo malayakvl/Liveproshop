@@ -100,7 +100,6 @@ export default function SidebarLayout({ children }: { children: any }) {
 
     useEffect(() => {
         if (tmpCommentOrderId && user?.email) {
-            console.log('TRY TO FIND ORDER BY COMMENT ID');
             dispatch(setupOrderByCommentAction(tmpCommentOrderId, user?.email));
         }
         // if (tmpCommentOrderId) {
