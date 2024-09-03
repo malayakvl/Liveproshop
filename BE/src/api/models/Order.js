@@ -1166,7 +1166,6 @@ console.log('LOCALE', locale)
             }
             let dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}`;
             let dirUploadForCreate = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
-console.log('dirUpload', dirUploadForCreate);
 console.log('type', type);
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
@@ -2356,7 +2355,7 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
             await setTimeout(4000);
             const tmpTime = Date.now();
             try {
-                await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
+                await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
             } catch (e) {
                 console.log(e.message)
             }
