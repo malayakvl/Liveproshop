@@ -316,9 +316,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     <td className="">
                                         <div className="float-left">
                                             <div className="flex flex-row">
-                                                <div
-                                                    className="user-photo-1"
-                                                    style={{ marginLeft: '0' }}>
+                                                <div className="buyer-data">
                                                     <Image
                                                         src={
                                                             item.buyer_photo
@@ -331,12 +329,35 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                         alt=""
                                                     />
                                                 </div>
-                                                <div className="pl-3">
+                                                <div>
                                                     {item.buyer_first_name} {item.buyer_last_name}
                                                 </div>
-                                                {/*<span className="absolute pt-[17px] font-[9px] store-style">*/}
-                                                {/*    {item.name}*/}
-                                                {/*</span>*/}
+                                                {/*<table>*/}
+                                                {/*    <tr>*/}
+                                                {/*        <td*/}
+                                                {/*            style={{*/}
+                                                {/*                width: '24px',*/}
+                                                {/*                height: '24px'*/}
+                                                {/*            }}>*/}
+                                                {/*            <Image*/}
+                                                {/*                src={*/}
+                                                {/*                    item.buyer_photo*/}
+                                                {/*                        ? baseApiUrl +*/}
+                                                {/*                          item.buyer_photo*/}
+                                                {/*                        : userProfileImg*/}
+                                                {/*                }*/}
+                                                {/*                width={24}*/}
+                                                {/*                height={24}*/}
+                                                {/*                className="rounded-full cursor-pointer"*/}
+                                                {/*                alt=""*/}
+                                                {/*            />*/}
+                                                {/*        </td>*/}
+                                                {/*        <td>*/}
+                                                {/*            {item.buyer_first_name}{' '}*/}
+                                                {/*            {item.buyer_last_name}*/}
+                                                {/*        </td>*/}
+                                                {/*    </tr>*/}
+                                                {/*</table>*/}
                                             </div>
                                         </div>
                                     </td>
