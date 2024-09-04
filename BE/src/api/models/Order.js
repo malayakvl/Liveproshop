@@ -1167,6 +1167,8 @@ console.log('LOCALE GENERATE PDF', locale)
             let dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}`;
             let dirUploadForCreate = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
 console.log('type', type);
+console.log('dirUpload', dirUpload);
+console.log('dirUploadForCreate', dirUploadForCreate);
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
@@ -2341,7 +2343,7 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
     }
 
     async bulkDownload(ids, user, locale) {
-        console.log('LOCALE', locale);
+        console.log('LOCALE BULK DOWNLOAD', locale);
         const client = await pool.connect();
         try {
             const promisesQueries = [];

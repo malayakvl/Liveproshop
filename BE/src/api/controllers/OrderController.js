@@ -2,6 +2,7 @@ import orderModel from '../models/Order.js';
 // import * as nodeFetch from "node-fetch";
 import shell from "shelljs";
 import cp from 'child_process';
+import fs from "fs";
 
 
 class OrderController {
@@ -257,6 +258,14 @@ class OrderController {
         } else {
             const ids = [];
             JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
+            let dirUpload = `${process.env.FULL_DOWNLOAD_FOLDER}/uploads/orders/${req.user.id}`;
+            if (!fs.existsSync(dirUpload)) {
+                fs.mkdirSync(dirUpload);
+                if (!fs.existsSync(`${dirUpload}/${req.query.locale}`)) {
+                    fs.mkdirSync(`${dirUpload}/${req.query.locale}`);
+                }
+            }
+
             const data = await orderModel.bulkDownload(ids, req.user, req.query.locale ? req.query.locale : 'fr');
             return res.status(200).json({ data: data.success, achive: data.achive });
         }
