@@ -2343,10 +2343,10 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
     }
 
     async bulkDownload(ids, user, locale) {
-        console.log('LOCALE BULK DOWNLOAD', locale);
         const client = await pool.connect();
         try {
             const promisesQueries = [];
+console.log('INCOMING IDS', ids);
             ids.forEach(async (id) => {
                 const order = await client.query(`SELECT * FROM data.orders WHERE id=${id};`);
                 promisesQueries.push(this.generatePdf(order.rows[0].order_number, user.id, user, locale, 'download'));

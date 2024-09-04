@@ -189,8 +189,12 @@ export const bulkDownloadAction: any = createAction(
                     countChecked++;
                 }
             });
+            state.layouts.checkedIds.forEach((id) => {
+                if (!id.checked) {
+                    countChecked--;
+                }
+            });
             const lng = locale;
-            console.log('Current locale', locale);
             if (countChecked == 0) {
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
                 dispatch(showLoaderAction(false));
@@ -377,8 +381,9 @@ export const updateOrderStatusAction: any = createAction(
                     {
                         headers: {
                             ...authHeader(state.user.user.email)
+                        }
                     }
-                })
+                )
                 .then((res: any) => res.data.result);
         }
 );

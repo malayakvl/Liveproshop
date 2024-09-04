@@ -10,7 +10,7 @@ import authRoutes from './src/api/routes/authRoute.js';
 import apiRoutes from './src/api/routes/apiRoutes.js';
 import appRoute from './src/appRoute.js';
 import bodyParser from 'body-parser';
-import sgMail from '@sendgrid/mail';
+// import sgMail from '@sendgrid/mail';
 
 
 /**
