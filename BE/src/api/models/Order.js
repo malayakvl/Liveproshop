@@ -1131,7 +1131,7 @@ console.log(ordersQuery);
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
-console.log('LOCALE', locale)
+console.log('LOCALE GENERATE PDF', locale)
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;

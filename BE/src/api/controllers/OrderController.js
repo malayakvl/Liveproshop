@@ -252,7 +252,6 @@ class OrderController {
     }
 
     async bulkDownload (req, res) {
-        console.log('Current locale', req.query.locale);
         if (!req.user) {
             return res.status(401).json('Access deny');
         } else {
