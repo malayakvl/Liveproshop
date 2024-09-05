@@ -1,7 +1,6 @@
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
 import { Formik } from 'formik';
 import { InputSwitcher, InputText } from '../_form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -179,6 +178,54 @@ function ProductForm({
     const showSizeHandler = () => {
         setShowSizeTable(!showSizeTable);
     };
+
+    // useEffect(() => {
+    //     if (additionalProps.sizesTable.length > 0) {
+    //         console.log('additionalProps.sizesTable', (additionalProps.sizesTable));
+    //         additionalProps.sizesTable.map((size: any, index: number) => {
+    //             const found = additionalProps.sizesTable.find(
+    //                 (element: any) => element === 'name_1'
+    //             );
+    //             console.log(found);
+    //             // if (size[`name_${num}`]) {
+    //             //     console.log(size[`name_${num}`]);
+    //             // }
+    //             console.log('tr');
+    //             console.log(`td 1`, size[`name_1`] ? size[`name_1`] : '');
+    //             console.log(`td 2`, size[`name_4`] ? size[`name_4`] : '');
+    //             console.log(`td 2`, size[`name_5`] ? size[`name_5`] : '');
+    //             // [1, 4].map((num: number) => {
+    //             //     // console.log(num);
+    //             //     if (size[`name_${num}`]) {
+    //             //         console.log(`td ${num}`, size[`name_${num}`]);
+    //             //     }
+    //             // });
+    //             console.log('/tr');
+    //         });
+    //         // [1, 4, 5].map((num: number) => {
+    //         //     // console.log(num);
+    //         //     additionalProps.sizesTable.map((size: any, index: number) => {
+    //         //         // console.log(additionalProps.sizesTable.find((element:any) => element > 10););
+    //         //         if (size[`name_${num}`]) {
+    //         //             console.log(size[`name_${num}`]);
+    //         //         }
+    //         //         // [1].map((num: number) => {
+    //         //         //     // console.log(num);
+    //         //         //     console.log(`Size name ${num}`, size[`name_${num}`]);
+    //         //         // });
+    //         //     });
+    //         // });
+    //         // additionalProps.sizesTable.map((size: any, index: number) => {
+    //         //     // if (size['name_4']) {
+    //         //     //     console.log(size['name_4']);
+    //         //     // }
+    //         //     [1].map((num: number) => {
+    //         //         // console.log(num);
+    //         //         console.log(`Size name ${num}`, size[`name_${num}`]);
+    //         //     });
+    //         // });
+    //     }
+    // }, [additionalProps]);
 
     const SubmitSchema = Yup.object().shape({
         name: Yup.string()
@@ -473,7 +520,7 @@ function ProductForm({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 4, 5].map((num: number) => (
+                                                                {[1, 2, 3].map((num: number) => (
                                                                     <Fragment
                                                                         key={`${size.id}_${num}`}>
                                                                         {size[`name_${num}`] && (
