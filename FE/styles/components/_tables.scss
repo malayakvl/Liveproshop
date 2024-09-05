@@ -341,12 +341,9 @@ span.canceled {
 }
 
 .table_container {
-  display: grid;
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  border-radius: 15px;
-  //box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.2);
+  overflow-x: scroll;
+  border: solid 1px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .buyer-data {
@@ -356,4 +353,41 @@ span.canceled {
   height: 24px !important;
   //border: solid 1px;
   margin-right: 5px;
+}
+
+.scroller {
+  width: 300px;
+  height: 100px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.container-for-scroll {
+  position: relative; /*important for the .position() method */
+  height: 100px;
+  width: 770px;
+}
+.container-for-scroll div {
+  height: 90px;
+  width: 60px;
+  float: left;
+  margin: 5px;
+  background: #39f;
+}
+
+.table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  width: 100% !important;
+  border: 1px solid #ddd !important;
+}
+
+.table.th, .table.td {
+  text-align: left !important;
+  padding: 8px !important;
+}
+
+.table.tr:nth-child(even){background-color: #f2f2f2}
+.sdiv {
+  overflow-x:auto !important;
+  margin-bottom: 20px !important;
 }

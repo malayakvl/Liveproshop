@@ -257,7 +257,6 @@ class OrderController {
             return res.status(401).json('Access deny');
         } else {
             const ids = [];
-console.log(JSON.parse(req.body.data));
             JSON.parse(req.body.data).filter(id => id.checked).forEach(data => ids.push(data.id));
             let dirUpload = `${process.env.FULL_DOWNLOAD_FOLDER}/uploads/orders/${req.user.id}`;
             if (!fs.existsSync(dirUpload)) {

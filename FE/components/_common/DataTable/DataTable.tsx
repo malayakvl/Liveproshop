@@ -331,43 +331,59 @@ const DataTable: React.FC<Props> = ({
     };
 
     return (
-        <div className="overflow-x-scroll">
+        <div className="scrollable-div relative mx-auto">
             <table className="w-full float-table">
                 <thead>{renderTableHeader()}</thead>
-                <tbody>{renderTableBody()}</tbody>
+                <tbody>
+                    {renderTableBody()}
+                    <tr>
+                        <td colSpan={12}>Footer</td>
+                    </tr>
+                </tbody>
+                {/*<tfoot>*/}
+                {/*    <tr>*/}
+                {/*        <td colSpan={12}>*/}
+                {/*            {!loading && !hidePaginationBar && (*/}
+                {/*                <div className="flex justify-between min-w-max w-full mt-5 mb-10">*/}
+                {/*                    <div className="w-16 mr-1">*/}
+                {/*                        <select*/}
+                {/*                            value={limit}*/}
+                {/*                            onChange={setLimit}*/}
+                {/*                            className="form-control">*/}
+                {/*                            <option value={10}>10</option>*/}
+                {/*                            <option value={25}>25</option>*/}
+                {/*                            <option value={50}>50</option>*/}
+                {/*                            <option value={100}>100</option>*/}
+                {/*                        </select>*/}
+                {/*                    </div>*/}
+                {/*                    {Math.ceil(totalAmount / limit) > 1 && (*/}
+                {/*                        <RawPagination*/}
+                {/*                            forcePage={*/}
+                {/*                                offset > totalAmount*/}
+                {/*                                    ? Math.ceil(totalAmount / limit)*/}
+                {/*                                    : offset / limit*/}
+                {/*                            }*/}
+                {/*                            pageCount={Math.ceil(totalAmount / limit)}*/}
+                {/*                            onPageChange={setPage}*/}
+                {/*                        />*/}
+                {/*                    )}*/}
+                {/*                    <div className="pagination-total">*/}
+                {/*                        {Boolean(totalAmount) && (*/}
+                {/*                            <div className="dataTables_info" role="status">*/}
+                {/*                                {t('Showing')} {offset + 1} {t('to')}{' '}*/}
+                {/*                                {offset + limit > totalAmount*/}
+                {/*                                    ? totalAmount*/}
+                {/*                                    : offset + limit}*/}
+                {/*                                {t('of')} {totalAmount} {t('entries')}*/}
+                {/*                            </div>*/}
+                {/*                        )}*/}
+                {/*                    </div>*/}
+                {/*                </div>*/}
+                {/*            )}*/}
+                {/*        </td>*/}
+                {/*    </tr>*/}
+                {/*</tfoot>*/}
             </table>
-            {!loading && !hidePaginationBar && (
-                <div className="flex justify-between min-w-max w-full mt-5 mb-10">
-                    <div className="w-16 mr-1">
-                        <select value={limit} onChange={setLimit} className="form-control">
-                            <option value={10}>10</option>
-                            <option value={25}>25</option>
-                            <option value={50}>50</option>
-                            <option value={100}>100</option>
-                        </select>
-                    </div>
-                    {Math.ceil(totalAmount / limit) > 1 && (
-                        <RawPagination
-                            forcePage={
-                                offset > totalAmount
-                                    ? Math.ceil(totalAmount / limit)
-                                    : offset / limit
-                            }
-                            pageCount={Math.ceil(totalAmount / limit)}
-                            onPageChange={setPage}
-                        />
-                    )}
-                    <div className="pagination-total">
-                        {Boolean(totalAmount) && (
-                            <div className="dataTables_info" role="status">
-                                {t('Showing')} {offset + 1} {t('to')}{' '}
-                                {offset + limit > totalAmount ? totalAmount : offset + limit} of{' '}
-                                {totalAmount} {t('entries')}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
