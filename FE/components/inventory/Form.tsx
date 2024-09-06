@@ -333,7 +333,9 @@ function ProductForm({
                 };
                 return (
                     <form onSubmit={props.handleSubmit} className="mt-5">
-                        <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
+                        <div
+                            className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2"
+                            style={{ paddingBottom: '100px' }}>
                             <div className="flex-col mb-4">
                                 <InventoryPhotos
                                     uploadedFiles={uploadedFiles}
@@ -451,50 +453,6 @@ function ProductForm({
                                         />
                                     </>
                                 )}
-
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Material')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory'}
-                                            options={prepareAdditionalDropdown(
-                                                additionalProps.materials,
-                                                locale
-                                            )}
-                                            value={selectedMaterials}
-                                            onChange={handleChangeMaterials}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Color')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isMulti={props.values.configured}
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory-color'}
-                                            options={prepareAdditionalColorDropdown(
-                                                additionalProps.colors,
-                                                locale
-                                            )}
-                                            value={selectedColors}
-                                            styles={colourStyles}
-                                            onChange={handleChangeColor}
-                                        />
-                                        {props.errors['color'] &&
-                                            selectedColors.length === 0 &&
-                                            selectedSizes.length === 0 && (
-                                                <div className="error-el">
-                                                    {props.errors['color']}
-                                                </div>
-                                            )}
-                                    </div>
-                                </div>
                                 <div className="mb-4">
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
@@ -564,6 +522,49 @@ function ProductForm({
                                             selectedSizes.length === 0 && (
                                                 <div className="error-el">
                                                     {props.errors['size']}
+                                                </div>
+                                            )}
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Material')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory'}
+                                            options={prepareAdditionalDropdown(
+                                                additionalProps.materials,
+                                                locale
+                                            )}
+                                            value={selectedMaterials}
+                                            onChange={handleChangeMaterials}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Color')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isMulti={props.values.configured}
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory-color'}
+                                            options={prepareAdditionalColorDropdown(
+                                                additionalProps.colors,
+                                                locale
+                                            )}
+                                            value={selectedColors}
+                                            styles={colourStyles}
+                                            onChange={handleChangeColor}
+                                        />
+                                        {props.errors['color'] &&
+                                            selectedColors.length === 0 &&
+                                            selectedSizes.length === 0 && (
+                                                <div className="error-el">
+                                                    {props.errors['color']}
                                                 </div>
                                             )}
                                     </div>
