@@ -223,7 +223,7 @@ class User {
                     )
                     ;
                 `;
-                console.log(query);
+                // console.log(query);
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
@@ -244,6 +244,10 @@ class User {
                                         storesList.forEach(async (store) => {
                                             const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
                                             if (queryStore.rows.length === 0) {
+                                                // const extQueryStoreRes = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
+                                                // if (extQueryStoreRes.rows.length > 0) {
+                                                //     await client.query(`DELETE FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`)
+                                                // }
                                                 await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
                                                     VALUES
@@ -263,17 +267,17 @@ class User {
                                                     WHERE user_id = '${user.id}';`
                                                 );
                                             }
-                                            await  client.query(`
-                                                INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
-                                                VALUES
-                                                (
-                                                    '${userData.id}',
-                                                    '${store.id}',
-                                                    '${store.access_token}',
-                                                    '${store.name}',
-                                                    '${user.id}'
-                                                );`
-                                            );
+                                            // await  client.query(`
+                                            //     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
+                                            //     VALUES
+                                            //     (
+                                            //         '${userData.id}',
+                                            //         '${store.id}',
+                                            //         '${store.access_token}',
+                                            //         '${store.name}',
+                                            //         '${user.id}'
+                                            //     );`
+                                            // );
                                         })
                                     }
                                     const { data } = responsePages;
@@ -367,6 +371,7 @@ class User {
                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
                                 } else {
                                     const storesList = responsePages.data.accounts.data;
+                console.log('STORES LIST', storesList);
                                     storesList.forEach(async (store) => {
                                         const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
                                         if (queryStore.rows.length === 0) {

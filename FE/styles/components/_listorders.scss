@@ -1,0 +1,52 @@
+.order-item {
+  box-shadow: -4px 2px 2px 1px rgba(209, 213, 224, 0.5);
+  //box-shadow: 0 4px 16px 0 #D1D5E080;
+  margin-bottom: 16px;
+  border: solid 1px #eff1f5;
+  border-radius: 4px;
+  padding: 16px;
+  @apply w-full;
+  font-size: 14px;
+
+  .float-checkbox {
+    appearance: none;
+    margin: 0;
+    font: inherit;
+    color: #00c868;
+    width: 1.5em;
+    height: 1.5em;
+    border: 0.15em solid #00c868;
+    border-radius: 4px;
+    transform: translateY(-0.075em);
+    margin-left: 4px;
+  }
+
+  .order-number {
+    font-size: 14px;
+    margin-left: 10px;
+    @apply font-normal red-yellow-gradient-text;
+  }
+  .order-row {
+    border-bottom: solid 1px #EEF1F7;
+    padding-bottom: 4px;
+  }
+  .caption {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: left;
+    color: #4F5B84;
+  }
+
+  .order-data {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .order-amount {
+    color:#4F5B84;
+    font-weight: bold;
+
+  }
+
+}

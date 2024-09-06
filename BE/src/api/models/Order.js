@@ -16,15 +16,15 @@ import {
     confirmShippedEmail, confirmSubscriptionEmail
 } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
+import path from "node:path";
 
 
 
 
-async function createInvoice (invoice, path, locale, ivoiceType) {
+async function createInvoice (invoice, path, locale, ivoiceType, downloadType = '') {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-console.log('generate header done');
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
@@ -136,7 +136,7 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     //     doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
     //
     // }
-    console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
+    // console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
     doc.text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
@@ -1131,7 +1131,6 @@ console.log(ordersQuery);
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
-console.log('LOCALE GENERATE PDF', locale)
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -1166,7 +1165,9 @@ console.log('LOCALE GENERATE PDF', locale)
             }
             let dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}`;
             let dirUploadForCreate = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
-console.log('type', type);
+// console.log('type', type);
+// console.log('dirUpload', dirUpload);
+// console.log('dirUploadForCreate', dirUploadForCreate);
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
@@ -1178,10 +1179,14 @@ console.log('type', type);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
                     fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/download`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/download`);
+                }
             }
 
-console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+// console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
+// console.log('File exist need to copy')
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
@@ -1199,16 +1204,19 @@ console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type ==
                     error: null
                 }
             } else {
-console.log('PEREDELAT TUT');
                 if (!fs.existsSync(`${dirUploadForCreate}/${locale}`)) {
-console.log('Create dir')
                     if (!fs.existsSync(`${dirUploadForCreate}`)) {
                         fs.mkdirSync(dirUploadForCreate);
                     }
                     fs.mkdirSync(`${dirUploadForCreate}/${locale}`);
+                    fs.mkdirSync(`${dirUploadForCreate}/${locale}/download`);
                     // dirUpload = dirUpload + '/' + locale
                 }
+                if (!fs.existsSync(`${dirUploadForCreate}/${locale}/download`)) {
+                    fs.mkdirSync(`${dirUploadForCreate}/${locale}/download`);
+                }
             }
+// console.log('HERE CHECK ROWS', res.rows.length);
             if (res.rows.length > 0) {
                 // get buyer information
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
@@ -1265,12 +1273,32 @@ console.log('Create dir')
                 // save payment method to db
                 await client.query(`UPDATE data.orders SET payment_method='${multiOrderPaymentData.paymentData.payment_methods[0].type}' WHERE id=${orderId}`);
 
-
-                await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
+// console.log('GENERATE INVOICE?', type)
+                await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund', type);
 
                 // await setTimeout(3000);
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
                     await setTimeout(2000);
+                } else {
+                    // fs.copyFile(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/download/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, (err) => {
+                    //     if (err) {
+                    //         console.log("Error Found:", err);
+                    //     }
+                    //     else {
+                    //         console.log('file copied')
+                    //     }
+                    // });
+                }
+// console.log('For download copy file');
+                if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`) && type ==='download') {
+                    fs.copyFile(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/download/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, (err) => {
+                        if (err) {
+                            console.log("Error Found:", err);
+                        }
+                        else {
+                            console.log('file copied')
+                        }
+                    });
                 }
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
@@ -2341,7 +2369,6 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
     }
 
     async bulkDownload(ids, user, locale) {
-        console.log('LOCALE', locale);
         const client = await pool.connect();
         try {
             const promisesQueries = [];
@@ -2355,7 +2382,19 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
             await setTimeout(4000);
             const tmpTime = Date.now();
             try {
-                await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
+                await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}/download`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
+
+                // clear download folder
+                fs.readdir(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}/download`, (err, files) => {
+                    if (err) throw err;
+
+                    for (const file of files) {
+                        fs.unlink(path.join(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}/download`, file), (err) => {
+                            if (err) throw err;
+                        });
+                    }
+                });
+
             } catch (e) {
                 console.log(e.message)
             }
