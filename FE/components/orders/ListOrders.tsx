@@ -363,26 +363,37 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                 {t('_products')}
                                             </span>
                                         </span>
-                                        <span className="order-data order-amount">
-                                            {formatCurrency(
-                                                parseFloat(item.total_amount) -
-                                                    parseFloat(
-                                                        item.refund_amount ? item.refund_amount : 0
-                                                    ) +
-                                                    parseFloat(
-                                                        item.shipping_amount
-                                                            ? item.shipping_amount
-                                                            : 0
-                                                    )
-                                            )}
+                                        <span className="order-data order-amount relative">
+                                            <span className="pr-[40px]">
+                                                {formatCurrency(
+                                                    parseFloat(item.total_amount) -
+                                                        parseFloat(
+                                                            item.refund_amount
+                                                                ? item.refund_amount
+                                                                : 0
+                                                        ) +
+                                                        parseFloat(
+                                                            item.shipping_amount
+                                                                ? item.shipping_amount
+                                                                : 0
+                                                        )
+                                                )}
+                                            </span>
+                                            <span className="arrow-order-down" />
                                         </span>
+                                    </div>
+                                    <div>
+                                        <ListItems
+                                            items={item.order_items}
+                                            orderId={item.order_number}
+                                        />
                                     </div>
                                 </div>
                             </Fragment>
                         ))}
                     </DataList>
                 </div>
-                <div className="hidden md:inline-block">
+                <div className="hidden md:inline-block w-full">
                     <DataTable
                         paginationType={PaginationType.ORDERS}
                         sendStatusRequest={sendStatusRequest}
@@ -572,6 +583,20 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                     item.shipping_amount ? item.shipping_amount : 0
                                                 )
                                         )}
+                                    </td>
+                                </tr>
+                                <tr className={!showMoreConfigs[item.id] ? 'hidden' : ''}>
+                                    <td className="" />
+                                    <td
+                                        colSpan={10}
+                                        style={{
+                                            borderLeft: 'solid 1px red',
+                                            paddingLeft: '20px'
+                                        }}>
+                                        <ListItems
+                                            items={item.order_items}
+                                            orderId={item.order_number}
+                                        />
                                     </td>
                                 </tr>
                             </Fragment>

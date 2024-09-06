@@ -41,6 +41,9 @@
   .order-data {
     text-align: right;
     margin-left: auto;
+    color:#4F5B84;
+    font-weight: 500;
+
   }
 
   .order-amount {
@@ -49,4 +52,41 @@
 
   }
 
+  .arrow-order-down {
+    background-image: url(../../public/images/orders/arrow.svg);
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    position: absolute;
+    right: 5px;
+  }
+
+}
+
+.line-item {
+  padding: 0.15rem 1.25rem !important;
+}
+
+.order-item-tbl {
+  td {
+    //border: solid 1px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    color:#4F5B84;
+
+  }
+  th {
+    //border: solid 1px;
+    padding-bottom: 3px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #99ABCE;
+    text-align: center;
+  }
+}
+.tbl-product-photo {
+  height: 100px;
+  width: 95px;
 }
