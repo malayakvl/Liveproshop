@@ -27,6 +27,7 @@ import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
 import { bulkDownloadAction } from '../../redux/orders/actions';
 import Router from 'next/router';
+import {OrderCounter} from "../liveorders";
 
 type Props = {
     locale: string;
@@ -238,8 +239,8 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                     )}
                                                 </div>
                                             )}
-                                            {user.role_id == 2 && item.status === 'payed' && (
-                                                <div className="flex flex-row items-center justify-center">
+                                            {user.role_id == 1 && item.status !== 'payed' && (
+                                                <div className="flex flex-row items-center justify-center order-status">
                                                     {!item.status_waiting ? (
                                                         <span
                                                             className={`order-status ${item.status}`}>
@@ -258,6 +259,43 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                     {/*    <span className="caption">Paid</span>*/}
                                     {/*    <span className="order-data">05.09/2024</span>*/}
                                     {/*</div>*/}
+                                    <div className="mt-[15px]">
+                                        {user.role_id === 1 &&
+                                            item.status === 'new' &&
+                                            item.total_amount != 0 && (
+                                                <>
+                                                    {!item.status_waiting && (
+                                                        <Link
+                                                            href={`/checkout/${item.order_number}?storeName=${item.name}`}>
+                                                            <div
+                                                                className="gradient-btn-small cursor-pointer"
+                                                                style={{
+                                                                    paddingTop: '3px',
+                                                                    paddingBottom: '3px',
+                                                                    minWidth: '60px'
+                                                                }}>
+                                                                <span className="text-white bg-none font-bold">
+                                                                    {t('Pay')}
+                                                                </span>
+                                                            </div>
+                                                        </Link>
+                                                    )}
+                                                    {item.status == 'new' && (
+                                                        <div className="mt-[10px] ml-[-10px]">
+                                                            <OrderCounter
+                                                                endDate={
+                                                                    item.expire_order_at
+                                                                        ? moment(
+                                                                              item.expire_order_at
+                                                                          ).add(0, 'hours')
+                                                                        : moment()
+                                                                }
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                    </div>
                                     <div
                                         className={`${
                                             !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
@@ -519,45 +557,84 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                 )}
                                             </div>
                                         )}
-                                    </td>
-                                    <td>
-                                        <span className="inline-block w-[20px] h-[20px]">
-                                            {item.status != 'new' && item.status != 'waiting' && (
-                                                <div className="status-dropdown">
-                                                    <DropdownStatusAction
-                                                        onChange={(v: any) => {
-                                                            console.log('222');
-                                                        }}
-                                                        options={displayOrderStatuses(item.id)}
-                                                    />
-                                                </div>
-                                            )}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {item.status == 'payed' && (
-                                            <Link
-                                                href={`/orders/${item.order_number}?locale=${locale}`}>
-                                                <span className="f-pdf inline-block mt-[3px]" />
-                                            </Link>
-                                        )}
-                                        {item.status == 'canceled' && (
-                                            <div className="invoice-dropdown">
-                                                <DropdownPdfAction
-                                                    onChange={(v: any) => {
-                                                        const type =
-                                                            v === 'invoice pdf'
-                                                                ? 'invoice'
-                                                                : 'refund';
-                                                        Router.push(
-                                                            `/orders/${item.order_number}?locale=${locale}&type=${type}`
-                                                        );
-                                                    }}
-                                                    options={['invoice pdf', 'refund pdf']}
-                                                />
+                                        {user.role_id == 1 && item.status === 'new' && (
+                                            <div className="flex flex-row items-center justify-center">
+                                                <span className={`order-status ${item.status}`}>
+                                                    {t(item.status)}
+                                                </span>
                                             </div>
                                         )}
                                     </td>
+                                    {user.role_id == 1 && item.status === 'new' ? (
+                                        <td colSpan={2}>
+                                            {user.role_id === 1 &&
+                                                item.status === 'new' &&
+                                                item.total_amount != 0 && (
+                                                    <>
+                                                        {!item.status_waiting && (
+                                                            <Link
+                                                                href={`/checkout/${item.order_number}?storeName=${item.name}`}>
+                                                                <div
+                                                                    className="gradient-btn-small cursor-pointer"
+                                                                    style={{
+                                                                        paddingTop: '3px',
+                                                                        paddingBottom: '3px',
+                                                                        minWidth: '60px'
+                                                                    }}>
+                                                                    <span className="text-white bg-none font-bold">
+                                                                        {t('Pay')}
+                                                                    </span>
+                                                                </div>
+                                                            </Link>
+                                                        )}
+                                                    </>
+                                                )}
+                                        </td>
+                                    ) : (
+                                        <>
+                                            <td>
+                                                <span className="inline-block w-[20px] h-[20px]">
+                                                    {item.status != 'new' &&
+                                                        item.status != 'waiting' && (
+                                                            <div className="status-dropdown">
+                                                                <DropdownStatusAction
+                                                                    onChange={(v: any) => {
+                                                                        console.log('222');
+                                                                    }}
+                                                                    options={displayOrderStatuses(
+                                                                        item.id
+                                                                    )}
+                                                                />
+                                                            </div>
+                                                        )}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                {item.status == 'payed' && (
+                                                    <Link
+                                                        href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                        <span className="f-pdf inline-block mt-[3px]" />
+                                                    </Link>
+                                                )}
+                                                {item.status == 'canceled' && (
+                                                    <div className="invoice-dropdown">
+                                                        <DropdownPdfAction
+                                                            onChange={(v: any) => {
+                                                                const type =
+                                                                    v === 'invoice pdf'
+                                                                        ? 'invoice'
+                                                                        : 'refund';
+                                                                Router.push(
+                                                                    `/orders/${item.order_number}?locale=${locale}&type=${type}`
+                                                                );
+                                                            }}
+                                                            options={['invoice pdf', 'refund pdf']}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </td>
+                                        </>
+                                    )}
                                     <td className="order-date">
                                         {moment(item.created_at).format('DD/MM/YYYY')}
                                     </td>
@@ -631,6 +708,8 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                         <ListItems
                                             items={item.order_items}
                                             orderId={item.order_number}
+                                            status={item.status}
+                                            expireAt={item.expire_order_at}
                                         />
                                     </td>
                                 </tr>

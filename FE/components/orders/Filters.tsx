@@ -6,7 +6,8 @@ import {
     FilterNumber,
     FilterDate,
     FilterDateRange,
-    FilterDropdownShoppers
+    FilterDropdownShoppers,
+    FilterStatus
 } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
@@ -93,6 +94,8 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
                 <FilterDate />
 
                 <FilterDateRange />
+
+                <FilterStatus />
 
                 <FilterAmount />
 

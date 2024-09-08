@@ -3,9 +3,13 @@ import { baseApiUrl } from '../../constants';
 import { BanIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';
 import { formatCurrency } from '../../lib/functions';
+import moment from 'moment';
+import { OrderCounter } from '../liveorders';
 
-const ListItems: React.FC<any> = ({ items, orderId }) => {
+const ListItems: React.FC<any> = ({ items, orderId, status, expireAt }) => {
     const t = useTranslations();
+
+    console.log(expireAt);
     return (
         <>
             <div className="md:hidden mt-[20px] flex">
@@ -91,8 +95,20 @@ const ListItems: React.FC<any> = ({ items, orderId }) => {
                                 style={{ borderBottom: 'solid 1px #EEF1F7' }}
                                 className="pb-4">
                                 <div className="text-[18px] text-bold text-gray-350">
-                                    {t('Products in order')}{' '}
-                                    <span className="red-yellow-gradient-text">{orderId}</span>
+                                    <div className="float-left">
+                                        {t('Products in order')}&nbsp;
+                                        <span className="red-yellow-gradient-text">{orderId}</span>
+                                        {/*{moment(expireAt).add(-3, 'hours').format('HH:mm:ss')}*/}
+                                    </div>
+                                    {status == 'new' && (
+                                        <OrderCounter
+                                            endDate={
+                                                expireAt
+                                                    ? moment(expireAt).add(0, 'hours')
+                                                    : moment()
+                                            }
+                                        />
+                                    )}
                                 </div>
                             </th>
                         </tr>
