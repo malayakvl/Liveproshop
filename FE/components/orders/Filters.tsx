@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    FilterPayment,
     FilterAmount,
     FilterNumber,
     FilterDate,
@@ -96,6 +97,8 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
                 <FilterDateRange />
 
                 <FilterStatus />
+
+                <FilterPayment />
 
                 <FilterAmount />
 

@@ -30,6 +30,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
         </>
     );
 }
+
 export async function getServerSideProps(context: any) {
     const { locale } = context;
     const session = await getSession(context);

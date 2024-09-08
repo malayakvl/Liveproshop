@@ -25,8 +25,6 @@ import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
 import { bulkDownloadAction } from '../../redux/liveorders/actions';
 import Link from 'next/link';
-import Router from 'next/router';
-import { ListItems } from '../orders';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
@@ -65,23 +63,6 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
 
         return () => clearInterval(interval);
     }, []);
-
-    // useEffect(() => {
-    //     const setupChecked: any = [];
-    //     items.forEach((item: any) => {
-    //         setupChecked.push({ id: item.id, checked: false });
-    //     });
-    //     dispatch(initIdsAction(setupChecked));
-    //     dispatch(clearBase64Action(null));
-    // }, [items]);
-
-    // useEffect(() => {
-    //     if (achiveName) {
-    //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //         // @ts-ignore
-    //         achiveRefname?.current.click();
-    //     }
-    // }, [achiveName]);
 
     const sendStatusRequest = useCallback(
         (status: string) => {

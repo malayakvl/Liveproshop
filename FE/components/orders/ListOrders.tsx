@@ -296,56 +296,63 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                 </>
                                             )}
                                     </div>
-                                    <div
-                                        className={`${
-                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
-                                        } w-full flex-row order-row pt-4`}>
-                                        <span className="caption">PDF</span>
-                                        <span className="order-data">
-                                            {item.status == 'payed' && (
-                                                <Link
-                                                    href={`/orders/${item.order_number}?locale=${locale}`}>
-                                                    <span className="f-pdf inline-block mt-[3px]" />
-                                                </Link>
-                                            )}
-                                            {item.status == 'canceled' && (
-                                                <div className="invoice-dropdown">
-                                                    <DropdownPdfAction
-                                                        onChange={(v: any) => {
-                                                            const type =
-                                                                v === 'invoice pdf'
-                                                                    ? 'invoice'
-                                                                    : 'refund';
-                                                            Router.push(
-                                                                `/orders/${item.order_number}?locale=${locale}&type=${type}`
-                                                            );
-                                                        }}
-                                                        options={['invoice pdf', 'refund pdf']}
-                                                    />
-                                                </div>
-                                            )}
-                                        </span>
-                                    </div>
-                                    <div
-                                        className={`${
-                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
-                                        } w-full flex-row order-row pt-4`}>
-                                        <span className="caption">History</span>
-                                        <span className="order-data">
-                                            <span className="inline-block w-[20px] h-[20px]">
-                                                {item.status != 'new' && item.status != 'waiting' && (
-                                                    <div className="status-dropdown">
-                                                        <DropdownStatusAction
+                                    {item.status != 'new' && (
+                                        <div
+                                            className={`${
+                                                !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                            } w-full flex-row order-row pt-4`}>
+                                            <span className="caption">PDF</span>
+                                            <span className="order-data">
+                                                {item.status == 'payed' && (
+                                                    <Link
+                                                        href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                        <span className="f-pdf inline-block mt-[3px]" />
+                                                    </Link>
+                                                )}
+                                                {item.status == 'canceled' && (
+                                                    <div className="invoice-dropdown">
+                                                        <DropdownPdfAction
                                                             onChange={(v: any) => {
-                                                                console.log('222');
+                                                                const type =
+                                                                    v === 'invoice pdf'
+                                                                        ? 'invoice'
+                                                                        : 'refund';
+                                                                Router.push(
+                                                                    `/orders/${item.order_number}?locale=${locale}&type=${type}`
+                                                                );
                                                             }}
-                                                            options={displayOrderStatuses(item.id)}
+                                                            options={['invoice pdf', 'refund pdf']}
                                                         />
                                                     </div>
                                                 )}
                                             </span>
-                                        </span>
-                                    </div>
+                                        </div>
+                                    )}
+                                    {item.status != 'new' && (
+                                        <div
+                                            className={`${
+                                                !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                            } w-full flex-row order-row pt-4`}>
+                                            <span className="caption">{t('History')}</span>
+                                            <span className="order-data">
+                                                <span className="inline-block w-[20px] h-[20px]">
+                                                    {item.status != 'new' &&
+                                                        item.status != 'waiting' && (
+                                                            <div className="status-dropdown">
+                                                                <DropdownStatusAction
+                                                                    onChange={(v: any) => {
+                                                                        console.log('222');
+                                                                    }}
+                                                                    options={displayOrderStatuses(
+                                                                        item.id
+                                                                    )}
+                                                                />
+                                                            </div>
+                                                        )}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    )}
                                     <div
                                         className={`${
                                             !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
@@ -381,44 +388,54 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             </div>
                                         </span>
                                     </div>
-                                    <div
-                                        className={`${
-                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
-                                        } w-full flex-row order-row pt-4`}>
-                                        <span className="caption">Country</span>
-                                        <span className="order-data">
-                                            {parseTranslation(item.country_json, 'name', locale)}
-                                        </span>
-                                    </div>
-                                    <div
-                                        className={`${
-                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
-                                        } w-full flex-row order-row pt-4`}>
-                                        <span className="caption">Shipping</span>
-                                        <span className="order-data">
-                                            {item.shipping_image && (
-                                                <Image
-                                                    src={baseApiUrl + item.shipping_image}
-                                                    width={24}
-                                                    height={24}
-                                                    className=""
-                                                    alt=""
-                                                />
-                                            )}
-                                        </span>
-                                    </div>
-                                    <div
-                                        className={`${
-                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
-                                        } w-full flex-row order-row pt-4`}>
-                                        <span className="caption">Payment</span>
-                                        <span className="order-data">
-                                            {item.payment_method && (
-                                                <div
-                                                    className={`pyment-method-icon ${item.payment_method.toLowerCase()}`}></div>
-                                            )}
-                                        </span>
-                                    </div>
+                                    {item.status != 'new' && (
+                                        <div
+                                            className={`${
+                                                !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                            } w-full flex-row order-row pt-4`}>
+                                            <span className="caption">Country</span>
+                                            <span className="order-data">
+                                                {parseTranslation(
+                                                    item.country_json,
+                                                    'name',
+                                                    locale
+                                                )}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {item.status != 'new' && (
+                                        <div
+                                            className={`${
+                                                !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                            } w-full flex-row order-row pt-4`}>
+                                            <span className="caption">Shipping</span>
+                                            <span className="order-data">
+                                                {item.shipping_image && (
+                                                    <Image
+                                                        src={baseApiUrl + item.shipping_image}
+                                                        width={24}
+                                                        height={24}
+                                                        className=""
+                                                        alt=""
+                                                    />
+                                                )}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {item.status != 'new' && (
+                                        <div
+                                            className={`${
+                                                !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                            } w-full flex-row order-row pt-4`}>
+                                            <span className="caption">Payment</span>
+                                            <span className="order-data">
+                                                {item.payment_method && (
+                                                    <div
+                                                        className={`pyment-method-icon ${item.payment_method.toLowerCase()}`}></div>
+                                                )}
+                                            </span>
+                                        </div>
+                                    )}
                                     <div className="flex w-full flex-row order-row pt-4">
                                         <span className="caption">
                                             {item.order_items?.length
