@@ -48,6 +48,7 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
     const achiveRefname = useRef(null);
 
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
+    const [showMoreMobileConfigs, setShowMoreMobileConfigs] = useState<any>({});
     const [filterOpen, setFilterOpen] = useState(false);
 
     const sendRequest = useCallback(() => {
@@ -88,6 +89,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
         const nextCheckedItems = { ...showMoreConfigs };
         nextCheckedItems[orderId] = !nextCheckedItems[orderId];
         setShowMoreConfigs(nextCheckedItems);
+    };
+
+    const handleShowMoreMobile = (orderId: number) => {
+        const nextCheckedItems = { ...showMoreMobileConfigs };
+        nextCheckedItems[orderId] = !nextCheckedItems[orderId];
+        setShowMoreMobileConfigs(nextCheckedItems);
     };
 
     const handleHideFilter = useCallback(() => {
@@ -247,11 +254,14 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             )}
                                         </div>
                                     </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
-                                        <span className="caption">Paid</span>
-                                        <span className="order-data">05.09/2024</span>
-                                    </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
+                                    {/*<div className="flex w-full flex-row order-row pt-4">*/}
+                                    {/*    <span className="caption">Paid</span>*/}
+                                    {/*    <span className="order-data">05.09/2024</span>*/}
+                                    {/*</div>*/}
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                        } w-full flex-row order-row pt-4`}>
                                         <span className="caption">PDF</span>
                                         <span className="order-data">
                                             {item.status == 'payed' && (
@@ -278,7 +288,10 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             )}
                                         </span>
                                     </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                        } w-full flex-row order-row pt-4`}>
                                         <span className="caption">History</span>
                                         <span className="order-data">
                                             <span className="inline-block w-[20px] h-[20px]">
@@ -295,13 +308,19 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             </span>
                                         </span>
                                     </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                        } w-full flex-row order-row pt-4`}>
                                         <span className="caption">Date</span>
                                         <span className="order-data">
                                             {moment(item.created_at).format('DD/MM/YYYY')}
                                         </span>
                                     </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                        } w-full flex-row order-row pt-4`}>
                                         <span className="caption">Shopper</span>
                                         <span className="order-data">
                                             <div className="flex flex-row">
@@ -324,13 +343,19 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             </div>
                                         </span>
                                     </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                        } w-full flex-row order-row pt-4`}>
                                         <span className="caption">Country</span>
                                         <span className="order-data">
                                             {parseTranslation(item.country_json, 'name', locale)}
                                         </span>
                                     </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                        } w-full flex-row order-row pt-4`}>
                                         <span className="caption">Shipping</span>
                                         <span className="order-data">
                                             {item.shipping_image && (
@@ -344,7 +369,10 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                             )}
                                         </span>
                                     </div>
-                                    <div className="flex w-full flex-row order-row pt-4">
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : 'flex'
+                                        } w-full flex-row order-row pt-4`}>
                                         <span className="caption">Payment</span>
                                         <span className="order-data">
                                             {item.payment_method && (
@@ -379,10 +407,17 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                         )
                                                 )}
                                             </span>
-                                            <span className="arrow-order-down" />
+                                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                            <span
+                                                className="arrow-order-down cursor-pointer"
+                                                onClick={() => handleShowMoreMobile(item.id)}
+                                            />
                                         </span>
                                     </div>
-                                    <div>
+                                    <div
+                                        className={`${
+                                            !showMoreMobileConfigs[item.id] ? 'hidden' : ''
+                                        }`}>
                                         <ListItems
                                             items={item.order_items}
                                             orderId={item.order_number}
