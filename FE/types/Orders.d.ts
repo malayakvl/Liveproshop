@@ -68,6 +68,7 @@ declare namespace Orders {
         seller_settings: any;
         countdownDate: any;
         refund_amount: any;
+        expire_order_at: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

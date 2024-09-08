@@ -27,7 +27,7 @@ import { formatCurrency, parseTranslation } from '../../lib/functions';
 import { userSelector } from '../../redux/user/selectors';
 import { bulkDownloadAction } from '../../redux/orders/actions';
 import Router from 'next/router';
-import {OrderCounter} from "../liveorders";
+import { OrderCounter } from '../liveorders';
 
 type Props = {
     locale: string;

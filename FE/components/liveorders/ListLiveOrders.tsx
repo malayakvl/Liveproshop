@@ -299,7 +299,7 @@ const ListLiveOrders: React.FC<Props> = ({ locale }) => {
                                         }`}>
                                         <ListLiveItems
                                             items={item.order_items}
-                                            orderId={item.order_number}
+                                            expireAt={item.expire_order_at}
                                         />
                                     </div>
                                 </div>
