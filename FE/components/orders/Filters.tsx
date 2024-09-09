@@ -2,11 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    FilterPayment,
     FilterAmount,
     FilterNumber,
     FilterDate,
     FilterDateRange,
-    FilterDropdownShoppers
+    FilterDropdownShoppers,
+    FilterStatus
 } from './index';
 import { fetchFilerItems } from '../../redux/orders';
 import { userSelector } from '../../redux/user/selectors';
@@ -93,6 +95,10 @@ const Filters: React.FC<Props> = ({ handleHideFilter, locale, filterOpen }) => {
                 <FilterDate />
 
                 <FilterDateRange />
+
+                <FilterStatus />
+
+                <FilterPayment />
 
                 <FilterAmount />
 

@@ -273,11 +273,11 @@ span.trial-subscription {
 }
 span.new {
   line-height: 14px !important;
-  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-green-250 bg-green-100 border-green-250;
 }
 span.waiting {
   line-height: 14px !important;
-  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-gray-350 bg-gray-100 border-gray-550;
 }
 span.payed, span.paid {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;
@@ -390,4 +390,8 @@ span.canceled {
 .sdiv {
   overflow-x:auto !important;
   margin-bottom: 20px !important;
+}
+
+.status-dropdown-order-mobile .dropdown-action {
+  margin-left: -175px;
 }

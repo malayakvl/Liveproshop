@@ -70,7 +70,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                                     </p>
                                 ) : (
                                     <p>
-                                        Remarque : Il est impératif d`abater vos documents avant de
+                                        Remarque : Il est impératif d`ajouter vos documents avant de
                                         commencer vos diffusions en direct.
                                         <Link href={'/documents'}> ici</Link>
                                     </p>
