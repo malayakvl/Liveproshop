@@ -13,6 +13,7 @@ BE/error.log
 /BE/public/uploads/users/
 /BE/error.log
 /BE/combined.log.log
+/BE/public/video
 .idea
 /_DB/
 /BE/public/uploads/archives/
