@@ -200,7 +200,7 @@ class User {
                     if(err) console.log('error', err);
                 });
             });
-            console.log(userData);
+// console.log('PROVIDER USER DATA', userData);
             const firstName = fullFbName[0];
             let lastName = '';
             if (fullFbName.length > 1) {
@@ -233,7 +233,7 @@ class User {
                         if (userData.accessToken) {
                             await axios
                                 .get(
-                                    `https://graph.facebook.com/v17.0/me?fields=accounts&access_token=${userData.accessToken}`
+                                    `https://graph.facebook.com/v20.0/me?fields=accounts,businesses&access_token=${userData.accessToken}`
                                 )
                                 .then(async (responsePages) => {
                                     // console.log("RESPONCE", responsePages.data.accounts.data);
@@ -241,13 +241,15 @@ class User {
                                         store.dispatch(setErrorToastAction('Could no getting stores list'));
                                     } else {
                                         const storesList = responsePages.data.accounts.data;
+                                        const businessesList = responsePages.data.businesses.data;
+                                        const userFbId = userData.id;
+
+                                        console.log('STORE LIST', storesList);
+// console.log('BUSINESS LIST', businessesList);
+
                                         storesList.forEach(async (store) => {
                                             const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
                                             if (queryStore.rows.length === 0) {
-                                                // const extQueryStoreRes = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
-                                                // if (extQueryStoreRes.rows.length > 0) {
-                                                //     await client.query(`DELETE FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`)
-                                                // }
                                                 await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
                                                     VALUES
@@ -267,17 +269,77 @@ class User {
                                                     WHERE user_id = '${user.id}';`
                                                 );
                                             }
-                                            // await  client.query(`
-                                            //     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id)
-                                            //     VALUES
-                                            //     (
-                                            //         '${userData.id}',
-                                            //         '${store.id}',
-                                            //         '${store.access_token}',
-                                            //         '${store.name}',
-                                            //         '${user.id}'
-                                            //     );`
-                                            // );
+                                        });
+
+                                        // businessesList.map(async (business) => {
+                                        //     console.log('BUSINESS', business);
+                                        // });
+
+                                        businessesList.map(async (business) => {
+                                            const queryBusiness = await client.query(
+                                                `SELECT * FROM data.user_businesses WHERE account_id='${userData.id}'
+                                                AND business_id='${business.id}'`);
+                                            if (queryBusiness.rows.length === 0) {
+                                                await  client.query(`
+                                                    INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
+                                                    VALUES
+                                                    (
+                                                        '${userData.id}',
+                                                        '${business.id}',
+                                                        '${business.name}',
+                                                        '${user.id}'
+                                                    );`
+                                                );
+                                            }
+                                            // get pages
+                                            await axios
+                                                .get(
+                                                    `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${userData.accessToken}`
+                                                )
+                                                .then(async (responseBusinessesPages) => {
+                                                    if (responseBusinessesPages.data.error) {
+                                                        store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                                    } else {
+                                                        if (responseBusinessesPages.data.error) {
+                                                            store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                                        } else {
+                                                            const storesList = responseBusinessesPages.data;
+                                                            // getting picture for store
+                                                            let storePicture = '';
+                                                            storesList.data.forEach(async (store) => {
+                                                                const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
+                                                                if (queryStore.rows.length === 0) {
+                                                                    await  client.query(`
+                                                            INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
+                                                            VALUES
+                                                            (
+                                                                '${userData.id}',
+                                                                '${store.id}',
+                                                                '${store.access_token}',
+                                                                '${store.name}',
+                                                                '${user.id}',
+                                                                '${store.fan_count}',
+                                                                true,
+                                                                '${store.picture.data.url}',
+                                                                true
+                                                            );`
+                                                                    );
+                                                                } else {
+                                                                    await  client.query(`
+                                                            UPDATE data.user_stores SET
+                                                                access_token='${store.access_token}',
+                                                                name='${store.name}',
+                                                                picture='${store.picture.data.url}',
+                                                                fan_count='${store.fan_count}',
+                                                                synchronized=true,
+                                                                is_business=true
+                                                            WHERE account_id='${userData.id}' AND store_id='${store.id}';`
+                                                                    );
+                                                                }
+                                                            })
+                                                        }
+                                                    }
+                                                });
                                         })
                                     }
                                     const { data } = responsePages;
@@ -347,6 +409,7 @@ class User {
         const client = await pool.connect();
         try {
             let user;
+// console.log('PROVIDER LOGIN');
 
             // logged incoming data
             const toFileData = JSON.stringify(userData, null, '\t');
@@ -363,7 +426,7 @@ class User {
                     if (userData.accessToken) {
                         await axios
                             .get(
-                                `https://graph.facebook.com/v17.0/me?fields=accounts&access_token=${userData.accessToken}`
+                                `https://graph.facebook.com/v20.0/me?fields=email,accounts,businesses&access_token=${userData.accessToken}`
                             )
                             .then(async (responsePages) => {
 
@@ -371,7 +434,8 @@ class User {
                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
                                 } else {
                                     const storesList = responsePages.data.accounts.data;
-                console.log('STORES LIST', storesList);
+                                    const businessesList = responsePages.data.businesses.data;
+// console.log('BUSINESSES LIST', businessesList);
                                     storesList.forEach(async (store) => {
                                         const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
                                         if (queryStore.rows.length === 0) {
@@ -394,6 +458,73 @@ class User {
                                                     WHERE user_id = '${user.id}';`
                                             );
                                         }
+                                    })
+
+                                    businessesList.map(async (business) => {
+                                        const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userData.id}' 
+                                            AND business_id='${business.id}'`);
+                                        if (queryBusiness.rows.length === 0) {
+                                            await  client.query(`
+                                                    INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
+                                                    VALUES
+                                                    (
+                                                        '${userData.id}',
+                                                        '${business.id}',
+                                                        '${business.name}',
+                                                        '${user.id}'
+                                                    );`
+                                            );
+                                        }
+                                        // get pages
+                                        await axios
+                                            .get(
+                                                `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${userData.accessToken}`
+                                            )
+                                            .then(async (responseBusinessesPages) => {
+                                                if (responseBusinessesPages.data.error) {
+                                                    store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                                } else {
+                                                    if (responseBusinessesPages.data.error) {
+                                                        store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                                    } else {
+                                                        const storesList = responseBusinessesPages.data;
+                                                        const userFbId = userData.id;
+                                                        // getting picture for store
+                                                        let storePicture = '';
+                                                        storesList.data.forEach(async (store) => {
+                                                            const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
+                                                            if (queryStore.rows.length === 0) {
+                                                                await  client.query(`
+                                                            INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
+                                                            VALUES
+                                                            (
+                                                                '${userData.id}',
+                                                                '${store.id}',
+                                                                '${store.access_token}',
+                                                                '${store.name}',
+                                                                '${user.id}',
+                                                                '${store.fan_count}',
+                                                                true,
+                                                                '${store.picture.data.url}',
+                                                                true
+                                                            );`
+                                                                );
+                                                            } else {
+                                                                await  client.query(`
+                                                            UPDATE data.user_stores SET
+                                                                access_token='${store.access_token}',
+                                                                name='${store.name}',
+                                                                picture='${store.picture.data.url}',
+                                                                fan_count='${store.fan_count}',
+                                                                synchronized=true,
+                                                                is_business=true
+                                                            WHERE account_id='${userData.id}' AND store_id='${store.id}';`
+                                                                );
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                            });
                                     })
                                 }
                                 const { data } = responsePages;
@@ -1802,7 +1933,7 @@ class User {
             if (data.accessToken) {
                 await axios
                     .get(
-                        `https://graph.facebook.com/v18.0/me/accounts?fields=picture{url},name,fan_count,access_token&access_token=${longToken}`
+                        `https://graph.facebook.com/v20.0/me/accounts?fields=picture{url},name,fan_count,access_token&access_token=${longToken}`
                     )
                     .then(async (responsePages) => {
                         if (responsePages.data.error) {
@@ -1844,6 +1975,92 @@ class User {
                         }
 
                         const { data } = responsePages;
+                        // console.log("Users account connected pages", dataPages);
+                        if (data.error) {
+                            store.dispatch(setErrorToastAction('Could no getting stores list'));
+                        }
+                    });
+                await axios
+                    .get(
+                        `https://graph.facebook.com/v20.0/me?fields=businesses&access_token=${longToken}`
+                    )
+                    .then(async (responseBusinesses) => {
+                        if (responseBusinesses.data.error) {
+                            store.dispatch(setErrorToastAction('Could no getting stores list'));
+                        } else {
+                            const businessesList = responseBusinesses.data;
+console.log((businessesList.businesses.data));
+                            businessesList.businesses.data.map(async (business) => {
+                                console.log(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}' 
+                                    AND business_id='${business.id}'`);
+                                const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}' 
+                                    AND business_id='${business.id}'`);
+                                if (queryBusiness.rows.length === 0) {
+                                    await  client.query(`
+                                                    INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
+                                                    VALUES
+                                                    (
+                                                        '${userFbId}',
+                                                        '${business.id}',
+                                                        '${business.name}',
+                                                        '${userData.id}'
+                                                    );`
+                                    );
+                                }
+                                // get pages
+                                await axios
+                                    .get(
+                                        `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`
+                                    )
+                                    .then(async (responseBusinessesPages) => {
+                                        if (responseBusinessesPages.data.error) {
+                                            store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                        } else {
+// console.log('Owned pages', JSON.stringify(responseBusinessesPages.data));
+                                            if (responseBusinessesPages.data.error) {
+                                                store.dispatch(setErrorToastAction('Could no getting stores list'));
+                                            } else {
+                                                const storesList = responseBusinessesPages.data;
+                                                // getting picture for store
+                                                let storePicture = '';
+                                                storesList.data.forEach(async (store) => {
+                                                    const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                                    if (queryStore.rows.length === 0) {
+                                                        await  client.query(`
+                                                            INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
+                                                            VALUES
+                                                            (
+                                                                '${userFbId}',
+                                                                '${store.id}',
+                                                                '${store.access_token}',
+                                                                '${store.name}',
+                                                                '${userData.id}',
+                                                                '${store.fan_count}',
+                                                                true,
+                                                                '${store.picture.data.url}',
+                                                                true
+                                                            );`
+                                                        );
+                                                    } else {
+                                                        await  client.query(`
+                                                            UPDATE data.user_stores SET
+                                                                access_token='${store.access_token}',
+                                                                name='${store.name}',
+                                                                picture='${store.picture.data.url}',
+                                                                fan_count='${store.fan_count}',
+                                                                synchronized=true,
+                                                                is_business=true
+                                                            WHERE account_id='${userFbId}' AND store_id='${store.id}';`
+                                                        );
+                                                    }
+                                                })
+                                            }
+                                        }
+                                    });
+                            })
+                        }
+
+                        const { data } = responseBusinesses;
                         // console.log("Users account connected pages", dataPages);
                         if (data.error) {
                             store.dispatch(setErrorToastAction('Could no getting stores list'));
@@ -2401,7 +2618,7 @@ console.log('BROKEN 2')
                 };
                 try {
                     const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
-                    console.log("NEW SUBSCRIPTION", subscriptionNew);
+// console.log("NEW SUBSCRIPTION", subscriptionNew);
 
                     // update subscription DB
                     const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);

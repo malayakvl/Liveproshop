@@ -52,7 +52,7 @@ function Profile() {
         (values: Profile.Profile, photo: any) => {
             const formData = new FormData();
             // let count = 0;
-
+            // console.log('here');
             Object.keys(values).forEach((key: string) => {
                 if ((values as any)[key] !== (profileData as any)[key]) {
                     formData.append(key, (values as any)[key]);
@@ -87,13 +87,14 @@ function Profile() {
 
     let SubmitSchema;
     if (user.role_id == 2) {
+        console.log('TUT');
         SubmitSchema = Yup.object().shape({
-            email: Yup.string()
-                .trim(t('Cannot include leading and trailing spaces'))
-                .min(3, t('Must be at least 3 characters'))
-                .email(t('Must be a valid email'))
-                .strict(true)
-                .required(t('You must enter your email')),
+            // email: Yup.string()
+            //     .trim(t('Cannot include leading and trailing spaces'))
+            //     .min(3, t('Must be at least 3 characters'))
+            //     .email(t('Must be a valid email'))
+            //     .strict(true)
+            //     .required(t('You must enter your email')),
             email_real: Yup.string()
                 .trim(t('Cannot include leading and trailing spaces'))
                 .min(3, t('Must be at least 3 characters'))
