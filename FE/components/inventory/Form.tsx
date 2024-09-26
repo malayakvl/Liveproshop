@@ -179,54 +179,6 @@ function ProductForm({
         setShowSizeTable(!showSizeTable);
     };
 
-    // useEffect(() => {
-    //     if (additionalProps.sizesTable.length > 0) {
-    //         console.log('additionalProps.sizesTable', (additionalProps.sizesTable));
-    //         additionalProps.sizesTable.map((size: any, index: number) => {
-    //             const found = additionalProps.sizesTable.find(
-    //                 (element: any) => element === 'name_1'
-    //             );
-    //             console.log(found);
-    //             // if (size[`name_${num}`]) {
-    //             //     console.log(size[`name_${num}`]);
-    //             // }
-    //             console.log('tr');
-    //             console.log(`td 1`, size[`name_1`] ? size[`name_1`] : '');
-    //             console.log(`td 2`, size[`name_4`] ? size[`name_4`] : '');
-    //             console.log(`td 2`, size[`name_5`] ? size[`name_5`] : '');
-    //             // [1, 4].map((num: number) => {
-    //             //     // console.log(num);
-    //             //     if (size[`name_${num}`]) {
-    //             //         console.log(`td ${num}`, size[`name_${num}`]);
-    //             //     }
-    //             // });
-    //             console.log('/tr');
-    //         });
-    //         // [1, 4, 5].map((num: number) => {
-    //         //     // console.log(num);
-    //         //     additionalProps.sizesTable.map((size: any, index: number) => {
-    //         //         // console.log(additionalProps.sizesTable.find((element:any) => element > 10););
-    //         //         if (size[`name_${num}`]) {
-    //         //             console.log(size[`name_${num}`]);
-    //         //         }
-    //         //         // [1].map((num: number) => {
-    //         //         //     // console.log(num);
-    //         //         //     console.log(`Size name ${num}`, size[`name_${num}`]);
-    //         //         // });
-    //         //     });
-    //         // });
-    //         // additionalProps.sizesTable.map((size: any, index: number) => {
-    //         //     // if (size['name_4']) {
-    //         //     //     console.log(size['name_4']);
-    //         //     // }
-    //         //     [1].map((num: number) => {
-    //         //         // console.log(num);
-    //         //         console.log(`Size name ${num}`, size[`name_${num}`]);
-    //         //     });
-    //         // });
-    //     }
-    // }, [additionalProps]);
-
     const SubmitSchema = Yup.object().shape({
         name: Yup.string()
             .max(140, t('Must be less characters', { charNumber: 140 }))
@@ -285,10 +237,8 @@ function ProductForm({
                     setErrorConfigured(tmpError);
                 }
                 // console.log('Error Config', errorConfig);
-                // console.log('isIdent', isIdent);
 
                 if (!isIdent && !errorConfig) {
-                    // console.log('WTF');
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
                         if (!['material_id', 'tags', 'description'].includes(key)) {
@@ -296,7 +246,7 @@ function ProductForm({
                         }
                     });
                     formData.append('description', editorContent);
-                    formData.append('publish', values['isPublish']);
+                    formData.append('publish', values['publish']);
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append(
