@@ -50,8 +50,9 @@ class UserController {
             user.company_name = '';
         }
         if (!user.email_real) {
-            // user.email_real = user.email;
-            user.email_real = '';
+            var re = /\S+@\S+\.\S+/;
+            re.test(user.email);
+            user.email_real = re.test(user.email) ? user.email : '';
         }
 
         delete user.salt;
