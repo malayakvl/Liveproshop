@@ -2,7 +2,6 @@ import { Router } from 'express';
 import pool from './api/models/connect.js';
 import shell from "shelljs";
 
-console.log(process.env.START_ON_SERVER)
 
 const appRoute = Router();
 appRoute.get(/.*$/, function (req, res, next) {

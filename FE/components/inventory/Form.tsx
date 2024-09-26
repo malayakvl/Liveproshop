@@ -1,7 +1,6 @@
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
 import { Formik } from 'formik';
 import { InputSwitcher, InputText } from '../_form';
 import { useDispatch, useSelector } from 'react-redux';
@@ -180,6 +179,54 @@ function ProductForm({
         setShowSizeTable(!showSizeTable);
     };
 
+    // useEffect(() => {
+    //     if (additionalProps.sizesTable.length > 0) {
+    //         console.log('additionalProps.sizesTable', (additionalProps.sizesTable));
+    //         additionalProps.sizesTable.map((size: any, index: number) => {
+    //             const found = additionalProps.sizesTable.find(
+    //                 (element: any) => element === 'name_1'
+    //             );
+    //             console.log(found);
+    //             // if (size[`name_${num}`]) {
+    //             //     console.log(size[`name_${num}`]);
+    //             // }
+    //             console.log('tr');
+    //             console.log(`td 1`, size[`name_1`] ? size[`name_1`] : '');
+    //             console.log(`td 2`, size[`name_4`] ? size[`name_4`] : '');
+    //             console.log(`td 2`, size[`name_5`] ? size[`name_5`] : '');
+    //             // [1, 4].map((num: number) => {
+    //             //     // console.log(num);
+    //             //     if (size[`name_${num}`]) {
+    //             //         console.log(`td ${num}`, size[`name_${num}`]);
+    //             //     }
+    //             // });
+    //             console.log('/tr');
+    //         });
+    //         // [1, 4, 5].map((num: number) => {
+    //         //     // console.log(num);
+    //         //     additionalProps.sizesTable.map((size: any, index: number) => {
+    //         //         // console.log(additionalProps.sizesTable.find((element:any) => element > 10););
+    //         //         if (size[`name_${num}`]) {
+    //         //             console.log(size[`name_${num}`]);
+    //         //         }
+    //         //         // [1].map((num: number) => {
+    //         //         //     // console.log(num);
+    //         //         //     console.log(`Size name ${num}`, size[`name_${num}`]);
+    //         //         // });
+    //         //     });
+    //         // });
+    //         // additionalProps.sizesTable.map((size: any, index: number) => {
+    //         //     // if (size['name_4']) {
+    //         //     //     console.log(size['name_4']);
+    //         //     // }
+    //         //     [1].map((num: number) => {
+    //         //         // console.log(num);
+    //         //         console.log(`Size name ${num}`, size[`name_${num}`]);
+    //         //     });
+    //         // });
+    //     }
+    // }, [additionalProps]);
+
     const SubmitSchema = Yup.object().shape({
         name: Yup.string()
             .max(140, t('Must be less characters', { charNumber: 140 }))
@@ -286,7 +333,9 @@ function ProductForm({
                 };
                 return (
                     <form onSubmit={props.handleSubmit} className="mt-5">
-                        <div className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2">
+                        <div
+                            className="max-w-screen-md xl:max-w-screen-2xl xl:grid xl:grid-cols-2"
+                            style={{ paddingBottom: '100px' }}>
                             <div className="flex-col mb-4">
                                 <InventoryPhotos
                                     uploadedFiles={uploadedFiles}
@@ -404,50 +453,6 @@ function ProductForm({
                                         />
                                     </>
                                 )}
-
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Material')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory'}
-                                            options={prepareAdditionalDropdown(
-                                                additionalProps.materials,
-                                                locale
-                                            )}
-                                            value={selectedMaterials}
-                                            onChange={handleChangeMaterials}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Color')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isMulti={props.values.configured}
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory-color'}
-                                            options={prepareAdditionalColorDropdown(
-                                                additionalProps.colors,
-                                                locale
-                                            )}
-                                            value={selectedColors}
-                                            styles={colourStyles}
-                                            onChange={handleChangeColor}
-                                        />
-                                        {props.errors['color'] &&
-                                            selectedColors.length === 0 &&
-                                            selectedSizes.length === 0 && (
-                                                <div className="error-el">
-                                                    {props.errors['color']}
-                                                </div>
-                                            )}
-                                    </div>
-                                </div>
                                 <div className="mb-4">
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
@@ -473,7 +478,7 @@ function ProductForm({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 4, 5].map((num: number) => (
+                                                                {[1, 2, 3].map((num: number) => (
                                                                     <Fragment
                                                                         key={`${size.id}_${num}`}>
                                                                         {size[`name_${num}`] && (
@@ -517,6 +522,49 @@ function ProductForm({
                                             selectedSizes.length === 0 && (
                                                 <div className="error-el">
                                                     {props.errors['size']}
+                                                </div>
+                                            )}
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Material')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory'}
+                                            options={prepareAdditionalDropdown(
+                                                additionalProps.materials,
+                                                locale
+                                            )}
+                                            value={selectedMaterials}
+                                            onChange={handleChangeMaterials}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Color')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isMulti={props.values.configured}
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory-color'}
+                                            options={prepareAdditionalColorDropdown(
+                                                additionalProps.colors,
+                                                locale
+                                            )}
+                                            value={selectedColors}
+                                            styles={colourStyles}
+                                            onChange={handleChangeColor}
+                                        />
+                                        {props.errors['color'] &&
+                                            selectedColors.length === 0 &&
+                                            selectedSizes.length === 0 && (
+                                                <div className="error-el">
+                                                    {props.errors['color']}
                                                 </div>
                                             )}
                                     </div>

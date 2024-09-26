@@ -331,7 +331,7 @@ const DataTable: React.FC<Props> = ({
     };
 
     return (
-        <div className="overflow-x-scroll">
+        <div className="scrollable-div relative mx-auto">
             <table className="w-full float-table">
                 <thead>{renderTableHeader()}</thead>
                 <tbody>{renderTableBody()}</tbody>
@@ -361,8 +361,8 @@ const DataTable: React.FC<Props> = ({
                         {Boolean(totalAmount) && (
                             <div className="dataTables_info" role="status">
                                 {t('Showing')} {offset + 1} {t('to')}{' '}
-                                {offset + limit > totalAmount ? totalAmount : offset + limit} of{' '}
-                                {totalAmount} {t('entries')}
+                                {offset + limit > totalAmount ? totalAmount : offset + limit}
+                                {t('of')} {totalAmount} {t('entries')}
                             </div>
                         )}
                     </div>

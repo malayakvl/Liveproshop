@@ -52,7 +52,9 @@
     }
   }
   td {
-    @apply md:min-w-0 px-2 py-1 text-sm font-bold text-left text-gray-350 align-top;
+    @apply md:min-w-0 text-sm font-bold text-left text-gray-350 align-top;
+    padding: .15rem .25rem;
+    font-size: 13px !important;
 
     .toggle-bg {
       width: 20px;
@@ -271,11 +273,11 @@ span.trial-subscription {
 }
 span.new {
   line-height: 14px !important;
-  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-green-250 bg-green-100 border-green-250;
 }
 span.waiting {
   line-height: 14px !important;
-  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border;
+  @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-gray-350 bg-gray-100 border-gray-550;
 }
 span.payed, span.paid {
   @apply px-2 py-1 capitalize text-xs font-semibold rounded-lg border text-yellow-600 bg-yellow-100 border-yellow-600;
@@ -336,4 +338,60 @@ span.canceled {
   transform: scale(2.0); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
   position: relative;
   z-index: 999;
+}
+
+.table_container {
+  overflow-x: scroll;
+  border: solid 1px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.buyer-data {
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px !important;
+  height: 24px !important;
+  //border: solid 1px;
+  margin-right: 5px;
+}
+
+.scroller {
+  width: 300px;
+  height: 100px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.container-for-scroll {
+  position: relative; /*important for the .position() method */
+  height: 100px;
+  width: 770px;
+}
+.container-for-scroll div {
+  height: 90px;
+  width: 60px;
+  float: left;
+  margin: 5px;
+  background: #39f;
+}
+
+.table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  width: 100% !important;
+  border: 1px solid #ddd !important;
+}
+
+.table.th, .table.td {
+  text-align: left !important;
+  padding: 8px !important;
+}
+
+.table.tr:nth-child(even){background-color: #f2f2f2}
+.sdiv {
+  overflow-x:auto !important;
+  margin-bottom: 20px !important;
+}
+
+.status-dropdown-order-mobile .dropdown-action {
+  margin-left: -175px;
 }

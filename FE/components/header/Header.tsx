@@ -16,8 +16,7 @@ import { toggleTextingMenuAction } from '../../redux/layouts';
 import { isSTextingMenuOpenSelector } from '../../redux/layouts/selectors';
 import { setupFreeSubscriptionAction } from '../../redux/user';
 
-const userProfileImg =
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+const userProfileImg = '/images/pic_profile.png';
 
 interface Props {
     isNonPage?: boolean | null;
@@ -258,7 +257,14 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                                 </Link>
                             </div>
                             {!isMobile && <LangSwitcher type={null} />}
-                            <span className="logout-btn login-btn-layout">
+                            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                            <span
+                                className="logout-btn login-btn-layout"
+                                onClick={() => {
+                                    if (showTextingMenu) {
+                                        dispatch(toggleTextingMenuAction(!showTextingMenu));
+                                    }
+                                }}>
                                 <Link href={'/auth/signin'}>
                                     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                     <a
@@ -337,7 +343,13 @@ const Header: React.FC<Props> = ({ isNonPage }) => {
                             </a>
                         </span>
                     ) : (
-                        <span className="logout-btn login-btn-layout">
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+                        <span
+                            className="logout-btn login-btn-layout"
+                            onClick={() => {
+                                console.log(1111);
+                                dispatch(toggleTextingMenuAction(!showTextingMenu));
+                            }}>
                             <Link href={'/auth/signin'}>
                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                 <a href="javascript:;" title={t('Login')}>

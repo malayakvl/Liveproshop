@@ -189,8 +189,12 @@ export const bulkDownloadAction: any = createAction(
                     countChecked++;
                 }
             });
+            state.layouts.checkedIds.forEach((id) => {
+                if (!id.checked) {
+                    countChecked--;
+                }
+            });
             const lng = locale;
-            console.log('Current locale', locale);
             if (countChecked == 0) {
                 dispatch(setErrorToastAction('Please select an order to be downloaded'));
                 dispatch(showLoaderAction(false));
@@ -371,15 +375,15 @@ export const updateOrderStatusAction: any = createAction(
     async (orderId: number, status: string, locale: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             const state = getState();
-            console.log('LOCALE', locale);
             return axios
                 .get(
                     `${baseUrl}/orders/insert-status?orderId=${orderId}&status=${status}&locale=${locale}`,
                     {
                         headers: {
                             ...authHeader(state.user.user.email)
+                        }
                     }
-                })
+                )
                 .then((res: any) => res.data.result);
         }
 );
@@ -444,7 +448,7 @@ export const fetchUserOrderWaitAction: any = createAction(
     }
 );
 export const setupOrderByCommentAction: any = createAction(
-    'order/FETCH_USER_ORDER',
+    'order/FETCH_USER_ORDER_BY_COMMENTID',
     async (commentId: string, email: string) =>
         (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
             return axios

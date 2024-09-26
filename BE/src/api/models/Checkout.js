@@ -270,7 +270,7 @@ class Checkout {
                     // send email about success payment and generate pdf
                     const userData = await client.query(`SELECT email, email_real, last_name, first_name FROM data.users WHERE id='${orderRes.rows[0].user_id}'`);
                     const orderData = orderRes.rows[0];
-    console.log('GENERATE INVOICE PDF', locale);
+console.log('GENERATE INVOICE PDF', locale);
                     // check if file exist, then return true
                     const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${orderRes.rows[0].country_id}'`);
                     const deliveryAddress = coutryRes.rows[0].nicename+', '+orderRes.rows[0].post_code+', '+orderRes.rows[0].city+', '+orderRes.rows[0].shipping_address
@@ -285,10 +285,12 @@ class Checkout {
                             return {error: error.message}
                         });
                     // generate pad
-console.log('Multisafe data', multiOrderPaymentData)  ;
+// console.log('Multisafe data', multiOrderPaymentData)  ;
                     const order = await orderModel.generatePdf(orderRes.rows[0].order_number, orderRes.rows[0].user_id, user, locale, "", 'download');
-console.log('Order Data', order);
+// console.log('Order Data', order);
                     const filePathArr = order.filename.split('/');
+console.log('filePathArr', filePathArr);
+console.log('path', `${process.env.FULL_DOWNLOAD_FOLDER}${order.filename}`);
                     // console.log(filePathArr);
                     const fileAttachment = {
                         name: filePathArr[4],

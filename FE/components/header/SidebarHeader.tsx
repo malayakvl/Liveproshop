@@ -9,8 +9,7 @@ import { showEmailNoticeSelector } from '../../redux/layouts/selectors';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
-const userProfileImg =
-    'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
+const userProfileImg = '/images/pic_profile.png';
 
 const SidebarHeader: React.FC = () => {
     const t = useTranslations();
@@ -53,14 +52,16 @@ const SidebarHeader: React.FC = () => {
     );
 
     return (
-        <div className="shadow-lg pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle" id="scTop">
+        <div
+            className="shadow-lg pr-4 pb-5 md:pb-0 md:pr-0 md:shadow-none md:flex items-center align-middle"
+            id="scTop">
             <div className="hidden md:flex w-full sm:w-1/2 md:w-3/5 lg:w-3/5 xl:w-3/5 items-center" />
             {showEmailNotice && (
-                <div className="p-[10px] items-center block-worning absolute rounded-lg text-center md:min-w-[480px]">
+                <div className="dashbord-header-notice p-[10px] items-center block-worning absolute rounded-lg text-center md:min-w-[480px]">
                     <div className="relative">
                         {/*<i className="icon-warning" style={{ marginTop: '12px' }} />*/}
                         <span className="inline-block mx-[10px]">
-                            <span className="text-[20px] font-bold ">
+                            <span className="text-[16px] md:text-[20px] font-bold ">
                                 {t('Please add an email in your')}
                             </span>
                             <Link href={'/account'}>

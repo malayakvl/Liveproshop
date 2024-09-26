@@ -16,15 +16,15 @@ import {
     confirmShippedEmail, confirmSubscriptionEmail
 } from "../sender/templates.js";
 import { sendMail } from "../lib/sendMail.js";
+import path from "node:path";
 
 
 
 
-async function createInvoice (invoice, path, locale, ivoiceType) {
+async function createInvoice (invoice, path, locale, ivoiceType, downloadType = '') {
     try {
         let doc = new PDFDocument({ size: "A4", margin: 50 });
         await generateHeader(doc, invoice.seller.data, locale);
-console.log('generate header done');
         await generateCustomerInformation(doc, invoice, invoice.paymentDetails, locale, ivoiceType);
         await generateInvoiceTable(doc, invoice, locale, ivoiceType);
         await generateFooter(doc, locale);
@@ -79,9 +79,6 @@ async function generateCustomerInformation(doc, invoice, paymentData, locale, iv
     const captionTotal = ivoiceType !== 'refund' ? t["Balance Due:"] : t["Refund Due:"];
     const captionNumber = ivoiceType !== 'refund' ? t["Invoice number:"] : t["Refund number:"];
     const captionDate = ivoiceType !== 'refund' ? t["Invoice Date:"] : t["Refund Date:"];
-console.log('Ebat', invoice);
-console.log('Transaction Id', invoice.transaction_id);
-console.log('Payment Type', invoice.paymentType);
 
     let transactionId = '';
     if (invoice.paymentType === 'MASTERCARD' || invoice.paymentType === 'VISA') {
@@ -116,7 +113,6 @@ console.log('Payment Type', invoice.paymentType);
     } else if (paymentData.payment_details.type === 'MAESTRO') {
         transactionId = paymentData.transaction_id;
     }
-console.log('Transaction ID', transactionId);    
     doc
         .fontSize(10)
         .text(captionNumber, 50, customerInformationTop)
@@ -140,8 +136,7 @@ console.log('Transaction ID', transactionId);
     //     doc.text(t["Shipping refund1"], 50, customerInformationTop + 55)
     //
     // }
-    console.log('HERE WE ARE');
-    console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
+    // console.log('PAYMENT TYPE FROM ORDER', invoice.paymentType);
     doc.text(invoice.shipping.name, 300, customerInformationTop)
         .font("Helvetica")
         .text(t["Delivery Address"]+deliveryAddress.join(','), 300, customerInformationTop + 15)
@@ -973,7 +968,7 @@ console.log(ordersQuery);
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-// console.log(ordersQuery);
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -1136,7 +1131,6 @@ console.log(ordersQuery);
 
     async generatePdf (orderNumber, userId, user, locale, type='download', typeInvoice='') {
         const client = await pool.connect();
-console.log('LOCALE', locale)
         // const selectedLocale = !locale ? locale = 'fr' : locale;
         const { default: t } = await import(`../sender/order-${locale}.js`);
         let error = null;
@@ -1157,7 +1151,6 @@ console.log('LOCALE', locale)
             const filter = JSON.stringify(_filters);
             const ordersQuery = `SELECT *
                                 FROM data.get_orders(1, 0, '${filter}');`;
-console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const orderId = res.rows[0].id;
             let historyRes;
@@ -1170,7 +1163,11 @@ console.log(ordersQuery);
                 await client.query(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', 'payed')`);
                 historyRes  = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='payed'`);
             }
-            const dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
+            let dirUpload = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}`;
+            let dirUploadForCreate = `${process.env.DOWNLOAD_FOLDER}/orders/${userId}`;
+// console.log('type', type);
+// console.log('dirUpload', dirUpload);
+// console.log('dirUploadForCreate', dirUploadForCreate);
             const dirArchiveFolder = `${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`;
             if (type === 'download' && !fs.existsSync(dirArchiveFolder)) {
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}`)) {
@@ -1182,11 +1179,15 @@ console.log(ordersQuery);
                 if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`)) {
                     fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/invoices`);
                 }
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/download`)) {
+                    fs.mkdirSync(`${process.env.DOWNLOAD_FOLDER}/users/${userId}/orders/download`);
+                }
             }
 
-            // console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
-            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
+// console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+            if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
+// console.log('File exist need to copy')
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -1198,15 +1199,24 @@ console.log(ordersQuery);
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     error: null
                 }
             } else {
-                if (!fs.existsSync(dirUpload)) {
-                    fs.mkdirSync(dirUpload);
+                if (!fs.existsSync(`${dirUploadForCreate}/${locale}`)) {
+                    if (!fs.existsSync(`${dirUploadForCreate}`)) {
+                        fs.mkdirSync(dirUploadForCreate);
+                    }
+                    fs.mkdirSync(`${dirUploadForCreate}/${locale}`);
+                    fs.mkdirSync(`${dirUploadForCreate}/${locale}/download`);
+                    // dirUpload = dirUpload + '/' + locale
+                }
+                if (!fs.existsSync(`${dirUploadForCreate}/${locale}/download`)) {
+                    fs.mkdirSync(`${dirUploadForCreate}/${locale}/download`);
                 }
             }
+// console.log('HERE CHECK ROWS', res.rows.length);
             if (res.rows.length > 0) {
                 // get buyer information
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
@@ -1229,7 +1239,6 @@ console.log(ordersQuery);
                     }).catch(error => {
                         return {error: error.message}
                     });
-console.log('MS', multiOrderPaymentData);
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
@@ -1260,13 +1269,38 @@ console.log('MS', multiOrderPaymentData);
                     orderId: orderId
                     // paymentDetails: {}
                 };
-                await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund');
+
+                // save payment method to db
+                await client.query(`UPDATE data.orders SET payment_method='${multiOrderPaymentData.paymentData.payment_methods[0].type}' WHERE id=${orderId}`);
+
+// console.log('GENERATE INVOICE?', type)
+                await createInvoice(invoice, `${dirUpload}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, locale, typeInvoice !== 'refund' ? 'invoice' : 'refund', type);
 
                 // await setTimeout(3000);
-                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}.pdf`)) {
+                if (!fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
                     await setTimeout(2000);
+                } else {
+                    // fs.copyFile(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/download/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, (err) => {
+                    //     if (err) {
+                    //         console.log("Error Found:", err);
+                    //     }
+                    //     else {
+                    //         console.log('file copied')
+                    //     }
+                    // });
                 }
-                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
+// console.log('For download copy file');
+                if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`) && type ==='download') {
+                    fs.copyFile(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, `${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/download/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`, (err) => {
+                        if (err) {
+                            console.log("Error Found:", err);
+                        }
+                        else {
+                            console.log('file copied')
+                        }
+                    });
+                }
+                const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
                     .then(
                         (response) => {
                             return response;
@@ -1278,7 +1312,7 @@ console.log('MS', multiOrderPaymentData);
                         }
                     );
                 return {
-                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
+                    filename: `${process.env.DB_DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`,
                     fileEncoded: base64,
                     isCreated: true,
                     error: null
@@ -1531,48 +1565,39 @@ console.log('MS', multiOrderPaymentData);
     async connectThrowStore(messageId, fromId, storeId, inPeriod, freePeriodEnd) {
         const client = await pool.connect();
         try {
-console.log('Connect throw store');
             // find order by message and attach to current user
             const connetedQuery = `SELECT * FROM data.user2pages 
                 WHERE from_id='${fromId}' AND store_id=${storeId}`
             const connetedQueryRes = await client.query(connetedQuery);
-            const queryOrder = `SELECT data.orders.id, 
+            const queryOrder = `SELECT data.orders.id, data.orders.user_id AS fake_user_id,
                     data.orders.live_sessions_id, data.orders.order_amount, 
                     data.orders.total_amount
                     FROM data.order_items LEFT JOIN 
                     data.orders ON data.orders.id = data.order_items.order_id 
                     WHERE message_id='${messageId}'`;
             const findedOrderRes = await client.query(queryOrder);
+            const fakeUserId = findedOrderRes.rows[0].fake_user_id;
             let _endPeriod;
-console.log(1);
             if (freePeriodEnd) {
                 _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
-console.log(_endPeriod);
-
                 await client.query(`UPDATE data.orders
                     SET 
                         in_period = ${inPeriod},
                         free_period_end='${_endPeriod}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
-            } else {
             }
 
-
             if (connetedQueryRes.rows.length > 0) {
-console.log('TUTUTUTUTUTUTUUT')
-
                 const userId = connetedQueryRes.rows[0].user_id;
+
                 // find order by message
-
                 const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
-
                 const settingsSettingsQuery = (
                     `SELECT data.seller_settings.order_timer FROM data.seller_settings
                                         LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
                                         WHERE data.live_sessions.id = '${findedOrderRes.rows[0].live_sessions_id}'`);
                 const settingsSettingsRes = await client.query(settingsSettingsQuery);
                 let expireAt;
-
                 if (settingsSettingsRes.rows[0].order_timer.hours) {
                    expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
                 }
@@ -1582,29 +1607,14 @@ console.log('TUTUTUTUTUTUTUUT')
                 if (settingsSettingsRes.rows[0].order_timer.minutes) {
                     expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
                 }
-// console.log(`UPDATE data.orders
-//                     SET user_id='${userId}',
-//                         sync_at='${syncAt}',
-//                         expire_order_at='${expireAt}',
-//                         in_period = ${inPeriod},
-//                         free_period_end='${_endPeriod ? _endPeriod : null}'
-//                     WHERE id='${findedOrderRes.rows[0].id}'`);
-
-                if (inPeriod) {
-                    await client.query(`UPDATE data.orders
-                    SET user_id='${userId}',
-                        sync_at='${syncAt}',
-                        expire_order_at='${expireAt}',
-                        in_period = ${inPeriod},
-                        free_period_end='${_endPeriod}'
-                    WHERE id='${findedOrderRes.rows[0].id}'`)
-                } else {
-                    await client.query(`UPDATE data.orders
+                await client.query(`UPDATE data.orders
                     SET user_id='${userId}',
                         sync_at='${syncAt}',
                         expire_order_at='${expireAt}'
-                    WHERE id='${findedOrderRes.rows[0].id}'`)
-                }
+                    WHERE id='${findedOrderRes.rows[0].id}'`);
+
+                // remove fake user
+                await client.query(`DELETE FROM data.users WHERE id='${fakeUserId}'`);
 
 
                 // check if we have non payed order
@@ -1620,103 +1630,51 @@ console.log('TUTUTUTUTUTUTUUT')
                                         AND status_waiting IS NULL`);
                 let orderId, orderNumber;
                 if (existNonPayedOrder.rows[0]?.id) {
+console.log('START COMBINE MECHANIZM');
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     orderId = existNonPayedOrder.rows[0].id;
+
                     // before add new items check if this item already aexist in order, if yes only change quantity
                     const updateExistItemsSQL = `UPDATE data.order_items SET 
-                        order_id='${existNonPayedOrder.rows[0].id}' 
+                        order_id='${orderId}' 
                         WHERE order_id='${findedOrderRes.rows[0].id}' AND status IS NULL `;
-
+console.log('CHANGE ORDER ID FOR NEW ITEM') ;
+console.log(updateExistItemsSQL);
                     await client.query(updateExistItemsSQL);
-console.log('HEEEEEEEEEEEEEE COMBINE');
 
-                    const settingsSettingsQuery = (
-                        `SELECT data.seller_settings.order_timer FROM data.seller_settings
-                            LEFT JOIN data.live_sessions ON data.live_sessions.user_id=data.seller_settings.user_id
-                            WHERE data.live_sessions.id = '${existNonPayedOrder.rows[0].live_sessions_id}'`);
-console.log(settingsSettingsQuery);
-                    const settingsSettingsRes = await client.query(settingsSettingsQuery);
-                    let expireAt;
+// console.log('MINUS QTY FROM PRODUCT CONFIGURATION') ;
 
-                    if (settingsSettingsRes.rows[0].order_timer.hours) {
-                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.hours, 'hours').format('YYYY-MM-DD HH:mm:ss');
-                    }
-                    if (settingsSettingsRes.rows[0].order_timer.days) {
-                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.days, 'days').format('YYYY-MM-DD HH:mm:ss');
-                    }
-                    if (settingsSettingsRes.rows[0].order_timer.minutes) {
-                        expireAt = moment().utcOffset(0, true).add(settingsSettingsRes.rows[0].order_timer.minutes, 'minutes').format('YYYY-MM-DD HH:mm:ss');
-                    }
 
-                    // const updateAmountSQL1 = `UPDATE data.orders
-                    //     SET
-                    //     expire_order_at='${expireAt}'
-                    //     WHERE id='${existNonPayedOrder.rows[0].id}'`;
-                    // console.log(updateAmountSQL1);
+                    //remove row from data.orders cuz we change owner for order_items
+console.log('REMOVE UNUSED ROW IN DATA.ORDERS') ;
+                    const removeUnusedOrder = `DELETE FROM data.orders 
+                        WHERE id='${findedOrderRes.rows[0].id}'`;
+                    await client.query(removeUnusedOrder);
 
-                    // update amounts for order splited order
+console.log('START RECALCULATE TOTAL ORDER AMOUNTS');
+                    const orderItemsSQL = `SELECT * FROM data.order_items WHERE order_id='${orderId}'`;
+                    const orderItemsRes = await client.query(`SELECT price, quantity FROM data.order_items WHERE order_id='${orderId}'`);
+                    let totalItemsAm = 0;
+                    orderItemsRes.rows.forEach(_item => {
+                        totalItemsAm += _item.price*_item.quantity;
+                    })
+console.log('SETUP NEW ORDER AMOUNT AND SYNC', totalItemsAm);
+
                     const updateAmountSQL = `UPDATE data.orders 
-                        SET order_amount = order_amount + ${findedOrderRes.rows[0].order_amount},
-                        total_amount = total_amount +  ${findedOrderRes.rows[0].total_amount},
+                        SET order_amount = ${totalItemsAm},
+                        total_amount = ${totalItemsAm},
                         expire_order_at='${expireAt}',
                         sync_at=now(),
-                        in_period = ${inPeriod},
-                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
-                        WHERE id='${existNonPayedOrder.rows[0].id}'`;
+                        in_period = ${inPeriod}
+                        WHERE id='${orderId}'`;
+console.log(updateAmountSQL)
                     await client.query(updateAmountSQL);
-
-                    // delete unused order
-                    await client.query(`DELETE FROM data.orders 
-                        WHERE id='${findedOrderRes.rows[0].id}'`);
-
-                    // combined same rows in order_items
-                    const combinedSQL = await client.query(`
-                        SELECT product_configuration_id, SUM(quantity) AS resultsQty
-                        FROM data.order_items
-                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                        GROUP BY product_configuration_id`);
-                    const realOrderItems = await client.query(`SELECT id 
-                    FROM data.order_items WHERE order_id=${existNonPayedOrder.rows[0]?.id}`);
-                    // need to combine two rows into one
-                    if (combinedSQL.rows.length < realOrderItems.rows.length) {
-                        const combinedData = [];
-                        combinedSQL.rows.forEach(_item => {
-                            combinedData.push({config_id: _item.product_configuration_id, qty: _item.resultsqty})
-                        })
-                        const _dataResCombine = await client.query(`SELECT product_configuration_id, 
-                        SUM(quantity) AS resultsQty, array_agg(id) as products
-                        FROM data.order_items
-                        WHERE order_id=${existNonPayedOrder.rows[0]?.id}
-                        GROUP BY product_configuration_id;`)
-                        _dataResCombine.rows.forEach(_row => {
-                            if (_row.products.length > 1) {
-                                _row.products.forEach(async (_itemId, _key) => {
-                                    console.log(_key)
-                                    if (_key > 0) {
-                                        await client.query(`DELETE FROM data.order_items WHERE id='${_itemId}'`);
-                                    }
-                                })
-                            }
-                        });
-                        // update quantity for order items row
-                        combinedData.forEach(async (_item) => {
-                            await client.query(`UPDATE data.order_items SET quantity='${_item.qty}' 
-                        WHERE product_configuration_id='${_item.config_id}'`)
-                        });
+                    if (inPeriod) {
+                        await client.query(`UPDATE data.orders SET
+                            free_period_end=${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}
+                            WHERE id='${orderId}'`)
                     }
                 }
-                await client.query(`UPDATE data.orders 
-                    SET user_id='${userId}', 
-                        sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}',
-                        in_period = ${inPeriod},
-                        free_period_end='${moment(freePeriodEnd).format('YYYY-MM-DD hh:mm:ss')}'
-                    WHERE id='${existNonPayedOrder.rows[0].id}'`)
-
-
-                // await client.query(`UPDATE data.orders
-                //     SET user_id='${userId}',
-                //         sync_at='${moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss')}'
-                //     WHERE id='${findedOrderRes.rows[0].id}'`)
             }
             return { success: true };
         } catch (e) {
@@ -1874,22 +1832,28 @@ console.log(settingsSettingsQuery);
                                 LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
                                 LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
+// console.log(SQL);
             const res = await client.query(SQL);
             orderNumber = res.rows[0].order_number;
             storeName = res.rows[0].store_name;
-console.log('Store Name', storeName)
             sessionId = res.rows[0].live_sessions_id;
-            const tmpUserId = res.rows[0].tmp_user_id;
+            const tmpUserId = res.rows[0].tmp_user;
+            const fakeUserId = res.rows[0].tmp_user;
+console.log('Fake user', fakeUserId)
+
             if (!orderNumber) {
+console.log('This block !orderNumber')
                 const SQLWait = `SELECT *
                                 FROM data.order_items 
                                 WHERE message_id='${commentId}' ORDER BY order_id`;
                 const resWait = await client.query(SQLWait);
                 let updateTotal = 0;
                 if (!resWait.rows[0].order_id) {
-// console.log(`SELECT * FROM data.orders WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
-                    const existNonPayed = await client.query(`SELECT * FROM data.orders 
-                        WHERE status='new' AND user_id='${userId}' AND total_amount > 0 ORDER BY created_at DESC`);
+                    const existNonPayed = await client.query(
+                        `SELECT * FROM data.orders 
+                        WHERE status='new' AND user_id='${userId}' 
+                        AND total_amount > 0 ORDER BY created_at DESC`);
+console.log('Exist non payed', existNonPayed.rows.length);
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
@@ -1907,8 +1871,6 @@ console.log('Store Name', storeName)
 console.log('Here', emptyWaitRes.rows[0].id);
                             orderId = emptyWaitRes.rows[0].id;
 
-                            // down't remember why i attach prefix
-                            // orderNumber = emptyWaitRes.rows[0].live_sessions_id+'-'+emptyWaitRes.rows[0].order_number;
                             orderNumber = emptyWaitRes.rows[0].order_number;
                             const syncAt = moment().utcOffset(0, true).format('YYYY-MM-DD HH:mm:ss');
                             const settingsSettingsQuery =
@@ -1957,22 +1919,17 @@ console.log('Here', emptyWaitRes.rows[0].id);
                                 expire_order_at='${expireAt}'
                                 WHERE id=${emptyWaitRes.rows[0].id}`;
                             }
-
-console.log(updtQuery);
+// console.log(updtQuery);
                             await client.query(updtQuery);
+
+                            // remove fake user
+                            if (userId !== fakeUserId) {
+                                await client.query(`DELETE FROM data.users WHERE id='${fakeUserId}'`)
+                            }
 
                             await client.query(`UPDATE data.order_items 
                                 SET order_id=${emptyWaitRes.rows[0].id} WHERE user_id=${tmpUserId}`
                             );
-                            // const totalAmountSQL = (
-                            //     `SELECT SUM(total_amount) AS sum_total_amount,
-                            //         SUM(order_amount) AS sum_order_amount
-                            //         FROM data.order_items
-                            //     WHERE order_id=${emptyWaitRes.rows[0].id} AND user_id=${tmpUserId}
-                            //     GROUP BY order_id`);
-                            //
-                            // console.log(totalAmountSQL);
-
                         }
                     }
                     if (resWait.rows.length > 0) {
@@ -2003,7 +1960,6 @@ console.log(updtQuery);
                                         AND data.orders.status='new' AND data.orders.id != '${res.rows[0].order_id}'
                                         AND live_sessions_id='${res.rows[0].live_sessions_id}' AND status_waiting IS NULL`);
                 if (existNonPayedOrder.rows[0]?.id) {
-console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     orderNumber = existNonPayedOrder.rows[0].order_number;
                     orderId = existNonPayedOrder.rows[0].id;
                     // before add new items check if this item already aexist in order, if yes only change quantity
@@ -2020,6 +1976,9 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
 
                     // delete unused order
                     await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
+                    // remove fake user
+console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
+                    await client.query(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
 
                     // combined same rows in order_items
                     const combinedSQL = await client.query(`
@@ -2110,7 +2069,6 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                     await client.query(`UPDATE data.orders SET order_number='${combineOrderNumber}' WHERE id='${res.rows[0].order_id}'`);
                     orderNumber = combineOrderNumber;
                 }
-                // console.log('ORDER NUMBER', orderNumber);
 
                 // find waiting products in order
                 const waitingItems = await client.query(`SELECT * FROM data.order_items WHERE
@@ -2138,6 +2096,9 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
                 })
 
                 await client.query(`UPDATE data.orders SET waiting_products='${JSON.stringify(waitingItems.rows)}' WHERE id=${orderId}`)
+                // remove fake user
+console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
+                await client.query(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
 
                 console.log("=============");
                 console.log("RETURNED DATA");
@@ -2197,7 +2158,6 @@ console.log('Non payed order', existNonPayedOrder.rows[0]?.id);
     async insertOrderStatus (orderId, status, locale) {
         const client = await pool.connect();
         try {
-console.log('here')
             // console.log(`INSERT INTO data.order_statuses (order_id, status) VALUES ('${orderId}', '${status}')`);
             const _tmpRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${orderId}' AND status='${status}'`);
             if (_tmpRes.rows.length === 0) {
@@ -2409,7 +2369,6 @@ console.log('here')
     }
 
     async bulkDownload(ids, user, locale) {
-        console.log('LOCALE', locale);
         const client = await pool.connect();
         try {
             const promisesQueries = [];
@@ -2423,7 +2382,19 @@ console.log('here')
             await setTimeout(4000);
             const tmpTime = Date.now();
             try {
-                await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
+                await zipLib.zip(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}/download`, `${process.env.DOWNLOAD_FOLDER}/achives/${user.id}_${tmpTime}.zip`);
+
+                // clear download folder
+                fs.readdir(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}/download`, (err, files) => {
+                    if (err) throw err;
+
+                    for (const file of files) {
+                        fs.unlink(path.join(`${process.env.DOWNLOAD_FOLDER}/orders/${user.id}/${locale}/download`, file), (err) => {
+                            if (err) throw err;
+                        });
+                    }
+                });
+
             } catch (e) {
                 console.log(e.message)
             }
