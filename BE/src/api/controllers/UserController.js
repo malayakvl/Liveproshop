@@ -26,6 +26,9 @@ class UserController {
         if (!user) {
             return res.status(401).json({});
         }
+        if (!user.email_real) {
+            user.email_real = user.email;
+        }
 
 
         if (!user.identification_number) {
