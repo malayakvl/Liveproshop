@@ -371,7 +371,7 @@
   "Skip for now": "Ignorer pour l'instant",
   "Unsubscribe": "Se désabonner",
   "active": "active",
-  "trialing": "procès",
+  "trialing": "Essai  gratuit",
   "Add Card": "Ajouter une carte",
   "Change Plan": "Changer de plan",
   "incomplete": "incomplète",
@@ -675,10 +675,10 @@
   "Minutes": "Minutes",
   "Seconds": "Secondes",
   "text_download_order": "Pour télécharger la facture, cliquez sur le numéro de commande.",
-  "Live Orders": "Paniers en course",
+  "Live Orders": "Paniers en cours",
   "Products in order": "Produits en commande",
   "Products in cart": "Produits dans le panier",
-  "Live Carts": "Paniers en course",
+  "Live Carts": "Paniers en cours",
   "_products": "produit(s)",
   "of": "of"
 }
