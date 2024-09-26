@@ -6,7 +6,11 @@ import { userSelector } from '../../redux/user/selectors';
 import CookieConsent from 'react-cookie-consent';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { fetchUserOrderAction, fetchUserOrderWaitAction } from '../../redux/orders/actions';
+import {
+    fetchUserOrderAction,
+    fetchUserOrderWaitAction,
+    setupOrderByCommentAction
+} from '../../redux/orders/actions';
 
 export default function MainLayout({ children }: { children: any }) {
     const [session] = useSession();
@@ -60,7 +64,13 @@ export default function MainLayout({ children }: { children: any }) {
                     // dispatch(fetchUserAction(localUser.email));
                     // dispatch(fetchUserAction(session?.user?.email));
                     if (window.localStorage.getItem('orderCommentId') || commentId) {
-                        console.log('dksadjaksdjaksldjkasl');
+                        console.log(user?.email, window.localStorage.getItem('orderCommentId'));
+                        // dispatch(
+                        //     setupOrderByCommentAction(
+                        //         window.localStorage.getItem('orderCommentId'),
+                        //         user?.email
+                        //     )
+                        // );
                         // dispatch(
                         //     fetchUserOrderAction(
                         //         session?.user?.email,

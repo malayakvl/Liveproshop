@@ -49,7 +49,7 @@ async function syncFB() {
                 return response;
             },
             {
-                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
+                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts,business_management'
             }
         )
     );
@@ -68,7 +68,6 @@ async function registerFB(paramData, commentId) {
     // login with facebook then authenticate with the API to get a JWT auth token
     // const { authResponse } = await new Promise(window.FB.login);
     const { authResponse } = await new Promise(window.FB.login);
-
     // login and add stores
     // const loginOptions = {
     //     scope: 'publish_video,manage_pages,pages_show_list,pages_messaging'
@@ -112,6 +111,7 @@ async function loginFB() {
     //         }
     //     }, loginOptions);
     // });
+    console.log('AUTH RESPONSE LOGIN', authResponse);
     if (authResponse) {
         store.dispatch(showLoaderAction(true));
         signIn('credentials_sdkfacebook_login', authResponse);
@@ -130,11 +130,11 @@ async function getAccountData(authResponse) {
     // };
     const loginOptions = {
         // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
-        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
+        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,business_management'
     };
     axios
         .get(
-            `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`,
+            `https://graph.facebook.com/v20.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
             loginOptions
         )
         .then((response) => {
@@ -145,6 +145,9 @@ async function getAccountData(authResponse) {
             // console.log('AUTH RESPONCE HERE', authResponse.roleId);
             data.accessToken = authResponse.accessToken;
             data.expirationTime = authResponse.data_access_expiration_time;
+            if (authResponse.email) {
+                data.email = authResponse.email;
+            }
             if (parseInt(authResponse.roleId) === 1) {
                 data.callbackUrl = `${window.location.origin}/${
                     authResponse.locale === 'fr' ? '' : 'en/'
@@ -157,6 +160,7 @@ async function getAccountData(authResponse) {
             data.roleId = authResponse.roleId ? authResponse.roleId : 2;
             data.forFree = authResponse.forFree;
             data.userAccounts = JSON.stringify(data.accounts);
+            data.userBusiness = JSON.stringify(data.businesses);
             store.dispatch(showLoaderAction(true));
             signIn('credentials_sdkfacebook', data);
         });

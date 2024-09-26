@@ -9,6 +9,7 @@ import { Field, Formik, ErrorMessage } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     inviteUserAction,
+    openBrowserActions,
     setOrderCommentAction,
     setWaitOrderIdAction
 } from '../../redux/user/actions';
@@ -17,6 +18,7 @@ import { hideRegisterFormSelector, userForFreeSelector } from '../../redux/user/
 import { googleDeepLinkSelector, orderTmpCommentIdSelector } from '../../redux/orders/selectors';
 import { nativeBrowserSelector, openRealBrowserSelector } from '../../redux/layouts/selectors';
 import { openBrowserAction } from '../../redux/orders';
+// import cp from 'child_process';
 
 export default function Signup({ locale }: { locale: string }) {
     const dispatch = useDispatch();
@@ -58,7 +60,7 @@ export default function Signup({ locale }: { locale: string }) {
         const urlParams = window.location.search.substring(1);
         const dataParams = urlParams.split('&');
         const commentStr = dataParams[0].split('=');
-        console.log('messenger link', incomingOrderLink);
+        // console.log('messenger link', incomingOrderLink);
         if (googleDeepLink) {
             setChromeLink(googleDeepLink.replace('https://', ''));
         }
@@ -97,7 +99,10 @@ export default function Signup({ locale }: { locale: string }) {
     }, [tmpCommentOrderId]);
 
     useEffect(() => {
-        console.log('Order Link', incomingOrderLink);
+        // console.log('Order Link', incomingOrderLink);
+        // console.log('Native browser Link', nativeBrowser);
+        // googleDeepLink =
+        //     'https://liveproshop.com/en/fb-order/fashion-haven?comment_id=500895462706236_857261645906585';
         if (nativeBrowser) {
             // console.log('GOOGLE DEEP LINK', googleDeepLink.replace('https://', ''));
             let linkGenerate;
@@ -112,6 +117,7 @@ export default function Signup({ locale }: { locale: string }) {
                     ''
                 )}`}>LE LIEN</a>`;
             }
+            console.log('Link generated', linkGenerate);
             setChromeLink(linkGenerate);
         }
     }, [nativeBrowser]);
@@ -168,6 +174,24 @@ export default function Signup({ locale }: { locale: string }) {
             actions.resetForm();
         }
     };
+
+    function openTab(url: string) {
+        alert(1);
+        navigator.clipboard.writeText('https://liveproshop.com');
+        // dispatch(openBrowserActions());
+        // let command;
+        // // eslint-disable-next-line prefer-const
+        // command = `open -a "Google Chrome" https://liveproshop.com`;
+        // console.log(`executing command: ${command}`);
+        // cp.exec(command);
+        // window.open('chrome://settings');
+        // location.href = 'googlechrome' + location.href.substring(4);
+        // const a = document.createElement('a');
+        // // a.href = 'https://google.com';
+        // a.href = url;
+        // a.target = '_blank';
+        // a.click();
+    }
 
     // const openSafaryBrowser = () => {
     //     dispatch(openBrowserAction());
@@ -226,14 +250,14 @@ export default function Signup({ locale }: { locale: string }) {
                                                     href={`${incomingOrderLink}`}>
                                                     LINK
                                                 </a>{' '}
-                                                <br />
-                                                2) Or you can use this{' '}
-                                                <span
-                                                    className="underline text-yellow-500"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: `${chromeLink}`
-                                                    }}></span>
-                                                &nbsp;and open it in Chrome browser
+                                                {/*<br />*/}
+                                                {/*2) Or you can use this{' '}*/}
+                                                {/*<span*/}
+                                                {/*    className="underline text-yellow-500"*/}
+                                                {/*    dangerouslySetInnerHTML={{*/}
+                                                {/*        __html: `${chromeLink}`*/}
+                                                {/*    }}></span>*/}
+                                                {/*&nbsp;and open it in Chrome browser*/}
                                                 {/*<br />*/}
                                                 {/*<a*/}
                                                 {/*    target="_blank"*/}
@@ -257,18 +281,27 @@ export default function Signup({ locale }: { locale: string }) {
                                                     href={`${incomingOrderLink}`}>
                                                     LE LIEN
                                                 </a>{' '}
-                                                <br />
-                                                2) Ou ouvrez-le dans le navigateur Chrome en
-                                                cliquant
-                                                <span
-                                                    className="underline text-yellow-500"
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: `${chromeLink}`
-                                                    }}></span>
+                                                {/*<br />*/}
+                                                {/*2) Ou ouvrez-le dans le navigateur Chrome en*/}
+                                                {/*cliquant*/}
+                                                {/*<span*/}
+                                                {/*    className="underline text-yellow-500"*/}
+                                                {/*    dangerouslySetInnerHTML={{*/}
+                                                {/*        __html: `${chromeLink}`*/}
+                                                {/*    }}></span>*/}
                                             </>
                                         )}
                                     </div>
                                 )}
+                                {/*<div>*/}
+                                {/*    /!* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions,jsx-a11y/anchor-is-valid *!/*/}
+                                {/*    <a*/}
+                                {/*        onClick={() => openTab('')}*/}
+                                {/*        className="block mt-4 underline"*/}
+                                {/*        href="navigator.clipboard.writeText('liveproshop.com');">*/}
+                                {/*        try it on Chrome!!*/}
+                                {/*    </a>*/}
+                                {/*</div>*/}
                                 <div className={`${nativeBrowser ? 'sign-up-form-disable' : ''}`}>
                                     <div className="mb-6 text-xl line-height-105percent text-gray-600">
                                         {t('registr_descr')}

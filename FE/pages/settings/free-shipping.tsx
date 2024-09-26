@@ -229,7 +229,7 @@ export default function ShippingThreshold() {
                                                 />
                                             </div>
                                         </div>
-                                        {period.free_shipping_from && period.free_shipping_to && (
+                                        {period?.free_shipping_from && period?.free_shipping_to && (
                                             <div className="block text-[14px] font-bold mt-[20px]">
                                                 <ul className="inline-block">
                                                     <li className="float-left">

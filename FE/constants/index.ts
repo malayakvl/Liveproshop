@@ -96,7 +96,6 @@ export const TableHeaders: { [key in PaginationType]: Type.DataTableHeader[] } =
     [PaginationType.ORDERS]: [
         { iconClass: 'icon-tbl-triangle' },
         { sortKey: 'orders.order_number', iconClass: 'icon-tbl-order' },
-        { titleKey: '' },
         { sortKey: 'orders.status', iconClass: 'icon-tbl-status' },
         { sortKey: '', iconClass: 'icon-tbl-historystatus', titleKey: '' },
         { sortKey: '', iconClass: 'icon-tbl-pdf', titleKey: '' },

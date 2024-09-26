@@ -562,6 +562,34 @@ export const setUserLocaleAction: any = createAction(
                 });
         }
 );
+export const openBrowserActions: any = createAction(
+    'user/OPEN_BROWSER_ACTION',
+    async (data: any, locale: string) =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            // const user = state.user.user;
+            console.log('TUT');
+            // const subscription = state.user.subscription;
+            // data.subscription = state.user.subscription;
+            return axios
+                .post(
+                    `${baseUrl}/open-chrome`,
+                    {},
+                    {
+                        headers: {
+                            ...authHeader(state.user.user.email)
+                        }
+                    }
+                )
+                .then((res) => {
+                    // dispatch()
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(e.response.data.error));
+                    dispatch(showLoaderAction(false));
+                });
+        }
+);
 
 export const setUserAction: any = createAction('user/SET_USER');
 export const hideRegisterFormAction: any = createAction('user/HIDE_REGISTER_FORM');
