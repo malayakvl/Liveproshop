@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { getSession } from 'next-auth/client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { List } from '../../components/liveselling';
 import { accountService } from '../../_services';
@@ -20,8 +20,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const dispatch = useDispatch();
     const user = useSelector(userSelector);
     const settingsValues = useSelector(itemSelector);
-
-    console.log(locale);
+    const [showErrorBlock, setShowErrorBlock] = useState(false);
 
     const fbSync = () => {
         accountService.syncFB();
@@ -30,6 +29,13 @@ export default function Index({ session, locale }: { session: any; locale: strin
         dispatch(fetchScenariosAction());
         dispatch(fetchFormAction());
     }, []);
+
+    useEffect(() => {
+        console.log('Settings Value', settingsValues);
+        if (settingsValues.user_id) {
+            setShowErrorBlock(true);
+        }
+    }, [settingsValues]);
 
     return (
         <>
@@ -53,7 +59,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     </div>
                     <div className="clear-both" />
                 </div>
-                <div className="block">
+                <div style={{ display: !showErrorBlock ? 'none' : 'block' }}>
                     {!settingsValues.delivery_doc &&
                         !settingsValues.privacy_doc &&
                         !settingsValues.terms_doc &&
