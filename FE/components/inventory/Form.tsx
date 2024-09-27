@@ -1,7 +1,7 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { Formik } from 'formik';
+import { Formik, FormikProps, useFormikContext } from 'formik';
 import { InputSwitcher, InputText } from '../_form';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTags from 'react-tag-autocomplete';
@@ -113,6 +113,11 @@ function ProductForm({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
+    const [formValues, setFormValues] = useState({});
+    // const { setFieldValue }: any = useFormikContext();
+
+    // const formRef = useRef<FormikProps>();
+    const formRef = React.useRef<FormikProps<any>>(null);
     // const [publishTmp, setPublishTmp] = useState<boolean>(false);
 
     const onDelete = useCallback(
@@ -155,8 +160,37 @@ function ProductForm({
         setSelectedMaterials(selectedOption);
     };
     const handleChangeColor = (selectedOption: any) => {
+        const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
+        selectedOption.forEach(function (_color: any) {
+            selectedSizes.forEach(function (_size: any) {
+                // console.log(`configurePrice_${_color.label}_${_size.label}`);
+                // console.log(
+                //     'Def values for price',
+                //     formValues[`configurePrice_${_color.label}_${_size.label}`]
+                // );
+                formRef.current?.setFieldValue(
+                    `configurePrice_${_color.label}_${_size.label}`,
+                    formValues[`configurePrice_${_color.label}_${_size.label}`]
+                        ? formValues[`configurePrice_${_color.label}_${_size.label}`]
+                        : ''
+                );
+                formRef.current?.setFieldValue(
+                    `configureQty_${_color.label}_${_size.label}`,
+                    formValues[`configureQty_${_color.label}_${_size.label}`]
+                        ? formValues[`configureQty_${_color.label}_${_size.label}`]
+                        : ''
+                );
+                formRef.current?.setFieldValue(
+                    `configureSKU_${_color.label}_${_size.label}`,
+                    formValues[`configureSKU_${_color.label}_${_size.label}`]
+                        ? formValues[`configureSKU_${_color.label}_${_size.label}`]
+                        : ''
+                );
+            });
+        });
     };
+
     const handleChangeSize = (selectedOption: any, configured: boolean) => {
         if (!configured) {
             setSelectedSizes(selectedOption);
@@ -166,6 +200,29 @@ function ProductForm({
             if (!_sizes.find((v: any) => v.value === selectedOption.value)) {
                 setSelectedSizes([...selectedSizes, selectedOption]);
             }
+            const formValues = formRef?.current?.values;
+            selectedColors.forEach(function (_color: any) {
+                selectedSizes.forEach(function (_size: any) {
+                    formRef.current?.setFieldValue(
+                        `configurePrice_${_color.label}_${_size.label}`,
+                        formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            ? formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                    formRef.current?.setFieldValue(
+                        `configureQty_${_color.label}_${_size.label}`,
+                        formValues[`configureQty_${_color.label}_${_size.label}`]
+                            ? formValues[`configureQty_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                    formRef.current?.setFieldValue(
+                        `configureSKU_${_color.label}_${_size.label}`,
+                        formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            ? formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                });
+            });
         }
         showSizeHandler();
     };
@@ -178,54 +235,6 @@ function ProductForm({
     const showSizeHandler = () => {
         setShowSizeTable(!showSizeTable);
     };
-
-    // useEffect(() => {
-    //     if (additionalProps.sizesTable.length > 0) {
-    //         console.log('additionalProps.sizesTable', (additionalProps.sizesTable));
-    //         additionalProps.sizesTable.map((size: any, index: number) => {
-    //             const found = additionalProps.sizesTable.find(
-    //                 (element: any) => element === 'name_1'
-    //             );
-    //             console.log(found);
-    //             // if (size[`name_${num}`]) {
-    //             //     console.log(size[`name_${num}`]);
-    //             // }
-    //             console.log('tr');
-    //             console.log(`td 1`, size[`name_1`] ? size[`name_1`] : '');
-    //             console.log(`td 2`, size[`name_4`] ? size[`name_4`] : '');
-    //             console.log(`td 2`, size[`name_5`] ? size[`name_5`] : '');
-    //             // [1, 4].map((num: number) => {
-    //             //     // console.log(num);
-    //             //     if (size[`name_${num}`]) {
-    //             //         console.log(`td ${num}`, size[`name_${num}`]);
-    //             //     }
-    //             // });
-    //             console.log('/tr');
-    //         });
-    //         // [1, 4, 5].map((num: number) => {
-    //         //     // console.log(num);
-    //         //     additionalProps.sizesTable.map((size: any, index: number) => {
-    //         //         // console.log(additionalProps.sizesTable.find((element:any) => element > 10););
-    //         //         if (size[`name_${num}`]) {
-    //         //             console.log(size[`name_${num}`]);
-    //         //         }
-    //         //         // [1].map((num: number) => {
-    //         //         //     // console.log(num);
-    //         //         //     console.log(`Size name ${num}`, size[`name_${num}`]);
-    //         //         // });
-    //         //     });
-    //         // });
-    //         // additionalProps.sizesTable.map((size: any, index: number) => {
-    //         //     // if (size['name_4']) {
-    //         //     //     console.log(size['name_4']);
-    //         //     // }
-    //         //     [1].map((num: number) => {
-    //         //         // console.log(num);
-    //         //         console.log(`Size name ${num}`, size[`name_${num}`]);
-    //         //     });
-    //         // });
-    //     }
-    // }, [additionalProps]);
 
     const SubmitSchema = Yup.object().shape({
         name: Yup.string()
@@ -257,11 +266,14 @@ function ProductForm({
                     : Yup.string()
         })
     });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return (
         <Formik
             enableReinitialize
             initialValues={productData.product}
             validationSchema={SubmitSchema}
+            innerRef={formRef}
             onSubmit={(values) => {
                 dispatch(setIdentAction(false));
                 let errorConfig = false;
@@ -285,10 +297,8 @@ function ProductForm({
                     setErrorConfigured(tmpError);
                 }
                 // console.log('Error Config', errorConfig);
-                // console.log('isIdent', isIdent);
 
                 if (!isIdent && !errorConfig) {
-                    // console.log('WTF');
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
                         if (!['material_id', 'tags', 'description'].includes(key)) {
@@ -296,7 +306,7 @@ function ProductForm({
                         }
                     });
                     formData.append('description', editorContent);
-                    formData.append('publish', values['isPublish']);
+                    formData.append('publish', values['publish']);
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append(
