@@ -22,7 +22,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
             dispatch(setIdentAction(false));
         }
     };
-
     const _colors: any[] = [];
     const _sizes: any[] = [];
     let tmpColors = [];
@@ -31,9 +30,37 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     } else {
         tmpColors = colors;
     }
+
+    // console.log('Selected sizes', props.values.selectedSizes);
+    // console.log('Props Values RED', props?.values['configurePrice_Red_m']);
+    // console.log('Props Values BLUE', props?.values['configurePrice_Blue_m']);
+    // console.log('TRY TO CHANGE PROPS');
+
+    // props?.values
+
+    // console.log('Price Red', props?.values['configurePrice_Red_m']);
+    // console.log(
+    //     'Props Values Finded',
+    //     props?.values?.selectedColors
+    //         ? props.values.selectedColors.find((_col: any) => _col.id == 1)?.name
+    //         : null
+    // );
+    // console.log(
+    //     'Filed name',
+    //     props?.values?.selectedColors
+    //         ? `configuredPrice_${
+    //               props.values.selectedColors.find((_col: any) => _col.id == 1)?.name
+    //           }_${props.values.selectedSizes.find((_sz: any) => _sz.id == 25)?.name}`
+    //         : null
+    // );
+    // if (formObj) {
+    //     formObj.setValue('configurePrice_Red_m', 100);
+    // }
+
     tmpColors.forEach((_color: any) => {
         _colors.push(_color.label);
     });
+    // console.log('COLORS', tmpColors);
     let tmpSizes = [];
     if (sizes.length === undefined) {
         tmpSizes.push(sizes);
@@ -94,9 +121,11 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                 <td style={{ paddingTop: 0 }}>
                                     <input
                                         type="checkbox"
-                                        onChange={() =>
-                                            setCheckedVariant(`${attr.color}_${attr.size}`)
-                                        }
+                                        onChange={(el) => {
+                                            if (checkedVariant == '')
+                                                setCheckedVariant(`${attr.color}_${attr.size}`);
+                                            else setCheckedVariant(``);
+                                        }}
                                         checked={checkedVariant == `${attr.color}_${attr.size}`}
                                     />
                                 </td>
