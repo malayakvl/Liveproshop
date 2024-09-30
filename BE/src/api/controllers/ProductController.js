@@ -74,18 +74,28 @@ class ProductController {
             }
             const dataProduct = req.body;
             const photos = [];
-            console.log(dataProduct);
+            // console.log(dataProduct);
             if (req.files.length > 0) {
                 req.files.forEach(file => {
                     photos.push(file.filename);
                 });
             }
             dataProduct.photos = photos;
-            dataProduct['publish'] = dataProduct['isPublish'];
+            dataProduct['publish'] = !dataProduct['publishCheckbox'];
+            console.log('Status checkbox', dataProduct['publish']);
+
             if (!dataProduct.id) {
                 await productModel.create(dataProduct, req.user.id);
             } else {
                 await productModel.update(dataProduct, req.user.id);
+            }
+            // update status
+            if (!dataProduct['publish']) {
+                console.log('TUT', dataProduct['publish'] )
+                // await productModel.updateStatus(dataProduct, req.user.id);
+            } else {
+                console.log('TUT', dataProduct['publish'] )
+                // await productModel.updateStatus(dataProduct, req.user.id);
             }
             return res.status(200).json({ success: true });
         });

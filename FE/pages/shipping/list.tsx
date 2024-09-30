@@ -272,7 +272,6 @@ export default function List({ locale }: { locale: string }) {
                                                     ?.checked
                                             }
                                             onChange={() => {
-                                                console.log('SELECTED ITEM', item);
                                                 item.status__customer_disabled_shipping =
                                                     !item.status__customer_disabled_shipping;
                                                 setSelectedItem(item);
@@ -362,8 +361,8 @@ export default function List({ locale }: { locale: string }) {
                 show={!!selectedItem}
                 text={t('Are you sure you want to {status} {name} method?', {
                     status: selectedItem?.status__customer_disabled_shipping
-                        ? t('disable')
-                        : t('enable'),
+                        ? t('enable')
+                        : t('disable'),
                     name: selectedItem?.name
                 })}
                 titleConfirm={t('Yes')}

@@ -2,7 +2,7 @@ import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
 import { Formik, FormikProps, useFormikContext } from 'formik';
-import { InputSwitcher, InputText } from '../_form';
+import { InputHidden, InputSwitcher, InputText } from '../_form';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTags from 'react-tag-autocomplete';
 import Select, { StylesConfig } from 'react-select';
@@ -113,12 +113,13 @@ function ProductForm({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
+    const [dataPublish, setDataPublish] = useState(false);
     const [formValues, setFormValues] = useState({});
     // const { setFieldValue }: any = useFormikContext();
 
     // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
-    // const [publishTmp, setPublishTmp] = useState<boolean>(false);
+    const [publishTmp, setPublishTmp] = useState<boolean>(false);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
@@ -162,33 +163,30 @@ function ProductForm({
     const handleChangeColor = (selectedOption: any) => {
         const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
-        selectedOption.forEach(function (_color: any) {
-            selectedSizes.forEach(function (_size: any) {
-                // console.log(`configurePrice_${_color.label}_${_size.label}`);
-                // console.log(
-                //     'Def values for price',
-                //     formValues[`configurePrice_${_color.label}_${_size.label}`]
-                // );
-                formRef.current?.setFieldValue(
-                    `configurePrice_${_color.label}_${_size.label}`,
-                    formValues[`configurePrice_${_color.label}_${_size.label}`]
-                        ? formValues[`configurePrice_${_color.label}_${_size.label}`]
-                        : ''
-                );
-                formRef.current?.setFieldValue(
-                    `configureQty_${_color.label}_${_size.label}`,
-                    formValues[`configureQty_${_color.label}_${_size.label}`]
-                        ? formValues[`configureQty_${_color.label}_${_size.label}`]
-                        : ''
-                );
-                formRef.current?.setFieldValue(
-                    `configureSKU_${_color.label}_${_size.label}`,
-                    formValues[`configureSKU_${_color.label}_${_size.label}`]
-                        ? formValues[`configureSKU_${_color.label}_${_size.label}`]
-                        : ''
-                );
+        if (selectedOption.length > 0) {
+            selectedOption.forEach(function (_color: any) {
+                selectedSizes.forEach(function (_size: any) {
+                    formRef.current?.setFieldValue(
+                        `configurePrice_${_color.label}_${_size.label}`,
+                        formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            ? formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                    formRef.current?.setFieldValue(
+                        `configureQty_${_color.label}_${_size.label}`,
+                        formValues[`configureQty_${_color.label}_${_size.label}`]
+                            ? formValues[`configureQty_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                    formRef.current?.setFieldValue(
+                        `configureSKU_${_color.label}_${_size.label}`,
+                        formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            ? formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                });
             });
-        });
+        }
     };
 
     const handleChangeSize = (selectedOption: any, configured: boolean) => {
@@ -306,7 +304,21 @@ function ProductForm({
                         }
                     });
                     formData.append('description', editorContent);
-                    formData.append('publish', values['publish']);
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    if (dataPublish === 'true') {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        formData.append('publishCheckbox', 1);
+                    } else {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        formData.append('publishCheckbox', 0);
+                    }
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    formData.append('publishCheckbox', dataPublish);
+
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append(
@@ -338,9 +350,12 @@ function ProductForm({
                     return handleChange(e);
                 };
                 const onChangeStatusPublish = (e: any) => {
-                    props.values['isPublish'] = true;
+                    props.values['isPublish'] = !props.values['isPublish'];
+                    setDataPublish(!props.values['isPublish']);
                     return handleChange(e);
                 };
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 return (
                     <form onSubmit={props.handleSubmit} className="mt-5">
                         <div
@@ -488,39 +503,46 @@ function ProductForm({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3, 4].map((num: number) => (
-                                                                    <Fragment
-                                                                        key={`${size.id}_${num}`}>
-                                                                        {size[`name_${num}`] && (
-                                                                            <td
-                                                                                role="presentation"
-                                                                                className="border p-2 cursor-pointer"
-                                                                                onClick={() =>
-                                                                                    handleChangeSize(
-                                                                                        {
-                                                                                            value: size[
-                                                                                                `id_${num}`
-                                                                                            ],
-                                                                                            label: size[
-                                                                                                `name_${num}`
-                                                                                            ]
-                                                                                        },
-                                                                                        props.values
-                                                                                            .configured
-                                                                                    )
-                                                                                }>
-                                                                                {
-                                                                                    size[
-                                                                                        `name_${num}`
-                                                                                    ]
-                                                                                }
-                                                                            </td>
-                                                                        )}
-                                                                        {!size[`name_${num}`] && (
-                                                                            <td className="border p-2" />
-                                                                        )}
-                                                                    </Fragment>
-                                                                ))}
+                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(
+                                                                    (num: number) => (
+                                                                        <Fragment
+                                                                            key={`${size.id}_${num}`}>
+                                                                            {size[
+                                                                                `name_${num}`
+                                                                            ] && (
+                                                                                <td
+                                                                                    role="presentation"
+                                                                                    className="border p-2 cursor-pointer"
+                                                                                    onClick={() =>
+                                                                                        handleChangeSize(
+                                                                                            {
+                                                                                                value: size[
+                                                                                                    `id_${num}`
+                                                                                                ],
+                                                                                                label: size[
+                                                                                                    `name_${num}`
+                                                                                                ]
+                                                                                            },
+                                                                                            props
+                                                                                                .values
+                                                                                                .configured
+                                                                                        )
+                                                                                    }>
+                                                                                    {
+                                                                                        size[
+                                                                                            `name_${num}`
+                                                                                        ]
+                                                                                    }
+                                                                                </td>
+                                                                            )}
+                                                                            {!size[
+                                                                                `name_${num}`
+                                                                            ] && (
+                                                                                <td className="border p-2" />
+                                                                            )}
+                                                                        </Fragment>
+                                                                    )
+                                                                )}
                                                             </tr>
                                                         )
                                                     )}
@@ -592,13 +614,17 @@ function ProductForm({
                                         />
                                     </>
                                 )}
-                                <InputSwitcher
-                                    label={'Active'}
-                                    name={'isPublish'}
-                                    style={null}
-                                    props={props}
-                                    onChange={onChangeStatusPublish}
-                                />
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Active')} </label>
+                                    <input
+                                        type="checkbox"
+                                        checked={!dataPublish}
+                                        onChange={(el) => {
+                                            console.log(el.target.checked);
+                                            setDataPublish(!el.target.checked);
+                                        }}
+                                    />
+                                </div>
 
                                 <button type="submit" className="gradient-btn">
                                     {props.values.id ? t('Update Product') : t('Add a Product')}

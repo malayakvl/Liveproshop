@@ -278,9 +278,9 @@ class Product {
                         tags = '{${productTags}}',
                         material_id = ${dataProduct.material_id},
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
-                        publish = ${dataProduct.publish ? dataProduct.publish : true}
+                        publish = ${dataProduct.publish === 1 ? false: true}
                      WHERE id=${_resProd.rows[0].id};`;
-                // console.log(queryUpdate);
+                console.log(queryUpdate);
                 await client.query(queryUpdate);
                 
                 // update configuration
@@ -718,6 +718,10 @@ class Product {
         } finally {
             client.release();
         }
+    }
+
+    async updateStatus (productId) {
+        console.log(productId)
     }
     
     
