@@ -81,8 +81,7 @@ class ProductController {
                 });
             }
             dataProduct.photos = photos;
-            dataProduct['publish'] = !dataProduct['publishCheckbox'];
-            console.log('Status checkbox', dataProduct['publish']);
+            // dataProduct['publish'] = !dataProduct['publishCheckbox'];
 
             if (!dataProduct.id) {
                 await productModel.create(dataProduct, req.user.id);
@@ -91,10 +90,10 @@ class ProductController {
             }
             // update status
             if (!dataProduct['publish']) {
-                console.log('TUT', dataProduct['publish'] )
+                console.log('TUT1', dataProduct['publish'] )
                 // await productModel.updateStatus(dataProduct, req.user.id);
             } else {
-                console.log('TUT', dataProduct['publish'] )
+                console.log('TUT2', dataProduct['publish'] )
                 // await productModel.updateStatus(dataProduct, req.user.id);
             }
             return res.status(200).json({ success: true });

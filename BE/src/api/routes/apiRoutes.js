@@ -215,6 +215,7 @@ apiRoutes.route('/livesession').post(LivesessionController.storeItem);
 apiRoutes.route('/livesession/stop/:id').get(LivesessionController.stopSession);
 apiRoutes.route('/livesession/fetch-items').get(LivesessionController.fetchItems);
 apiRoutes.route('/livesession/fetch-scenarios').get(LivesessionController.fetchScenarios);
+apiRoutes.route('/livesession/remove/:id').get(LivesessionController.removeItem);
 
 apiRoutes.route('/fetch-settings').get(UserController.fetchSettings);
 apiRoutes.route('/update-settings').post(UserController.updateSettings);

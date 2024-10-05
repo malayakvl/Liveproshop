@@ -34,6 +34,18 @@ class LivesessionController {
         return res.status(200).json({ result: data.result });
     }
 
+    async removeItem(req, res){
+        console.log(req.params.id);
+
+        const data = await livesessionModel.deleteRecord(req.params.id);
+        // if (!data.error) {
+        //     return res.status(200).json({ items: data.items, count: data.size });
+        // } else {
+        //     return res.status(401).json({ error: 'Something wend wrong' });
+        // }
+        return res.status(200).json({ status: true });
+    }
+
 
     async updateLiveMessage (req, res) {
         const data = await chatbotMessageModel.updateMessageStatus(req.query.comment_id, req.query.recipient_id);

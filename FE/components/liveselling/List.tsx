@@ -4,7 +4,7 @@ import { itemsCountSelector, paginatedItemsSelector } from '../../redux/livesess
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/livesessions';
-import { stopSessionAction } from '../../redux/livesessions/actions';
+import { removeItemAction, stopSessionAction } from '../../redux/livesessions/actions';
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { itemSelector } from '../../redux/settings/selectors';
@@ -71,6 +71,17 @@ const ListMessages: React.FC = () => {
                             )}
                         </td>
                         <td>{item.store_name}</td>
+                        <td>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <a
+                                href="javascript:;"
+                                onClick={() => {
+                                    dispatch(removeItemAction(item.id));
+                                }}
+                                className="button_table_action btn-delete">
+                                {t('Delete')}
+                            </a>
+                        </td>
                         {/*<td>{item.user_cnt ? item.user_cnt : '-'}</td>*/}
                     </tr>
                 ))}
