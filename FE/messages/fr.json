@@ -680,5 +680,6 @@
   "Products in cart": "Produits dans le panier",
   "Live Carts": "Paniers en cours",
   "_products": "produit(s)",
-  "of": "of"
+  "of": "of",
+  "You need to chose at least one colour": "Vous devez choisir au moins une couleur"
 }

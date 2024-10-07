@@ -105,8 +105,6 @@ function ProductFormAdd({
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
 
-    console.log('PUBLISH', publish);
-
     const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
