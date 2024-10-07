@@ -239,7 +239,7 @@ class Product {
         }
     }
 
-    async update (dataProduct, userId) {
+    async update (dataProduct, userId, publish) {
         const client = await pool.connect();
         try {
             const _resProd = await client.query(`SELECT * FROM data.products WHERE id=${dataProduct.id} AND user_id=${userId}`);
@@ -278,9 +278,9 @@ class Product {
                         tags = '{${productTags}}',
                         material_id = ${dataProduct.material_id},
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
-                        publish = ${dataProduct.publish === 1 ? false: true}
+                        publish = ${publish}
                      WHERE id=${_resProd.rows[0].id};`;
-                console.log(queryUpdate);
+console.log(queryUpdate);
                 await client.query(queryUpdate);
                 
                 // update configuration
@@ -312,8 +312,9 @@ class Product {
         }
     }
 
-    async create (dataProduct, userId) {
+    async create (dataProduct, userId, isPublish) {
         const client = await pool.connect();
+        console.log('IS PUBLISH', isPublish);
         try {
             // prepare tags
             const tags = await this.prepareTags(dataProduct.tags);
@@ -326,11 +327,12 @@ class Product {
                     $$${dataProduct.description}$$,
                     '{${tags}}',
                     '{${dataProduct.photos}}',
-                    ${dataProduct.publish ? dataProduct.publish : true},
+                    ${isPublish},
                     ${dataProduct.configured ? dataProduct.configured : false},
                     ${dataProduct.material_id},
                     ${userId}
                 ) RETURNING id;`;
+            console.log(queryInsert)
             const resProduct = await client.query(queryInsert);
             
             const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
@@ -720,8 +722,12 @@ class Product {
         }
     }
 
-    async updateStatus (productId) {
-        console.log(productId)
+    async updateStatus (dataProduct, userId) {
+        const client = await pool.connect();
+        console.log(`UPDATE data.products
+                    SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`)
+        const _resProd = await client.query(`UPDATE data.products
+                    SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`);
     }
     
     

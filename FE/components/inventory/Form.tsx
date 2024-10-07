@@ -89,20 +89,23 @@ const colourStyles: StylesConfig<ColourOption, true> = {
 function ProductForm({
     locale,
     productData,
-    photos
+    photos,
+    publish
 }: {
     locale: string;
     productData: Products.Product;
     photos: string[];
+    publish: boolean;
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-
     const additionalProps = useSelector(productAdditionalSelector);
     const additionalSelectedProps = useSelector(selectedAdditionalsSelector);
     const searchTagSuggestions = useSelector(tagSuggestionsSelector);
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
+
+    console.log('PUBLISH', publish);
 
     const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
@@ -113,9 +116,13 @@ function ProductForm({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
-    const [dataPublish, setDataPublish] = useState(false);
+    const [dataPublish, setDataPublish] = useState(publish);
     const [formValues, setFormValues] = useState({});
+    const [active, setActive] = useState(false);
+    const [x, setX] = useState(publish);
     // const { setFieldValue }: any = useFormikContext();
+
+    // console.log('FORM VALUES', formValues);
 
     // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
@@ -127,6 +134,10 @@ function ProductForm({
         },
         [tags]
     );
+
+    useEffect(() => {
+        setX(productData.product.publish);
+    }, [productData.product]);
 
     const onAddition = useCallback(
         (newTag) => {
@@ -230,6 +241,8 @@ function ProductForm({
     const clearSizeHandler = () => {
         setSelectedSizes([]);
     };
+
+    const [, set] = useState();
     const showSizeHandler = () => {
         setShowSizeTable(!showSizeTable);
     };
@@ -264,6 +277,9 @@ function ProductForm({
                     : Yup.string()
         })
     });
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return (
@@ -299,14 +315,17 @@ function ProductForm({
                 if (!isIdent && !errorConfig) {
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
-                        if (!['material_id', 'tags', 'description'].includes(key)) {
+                        if (!['material_id', 'tags', 'description', publish].includes(key)) {
                             formData.append(key, (values as any)[key]);
                         }
                     });
                     formData.append('description', editorContent);
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    if (dataPublish === 'true') {
+                    formData.append('isPublish', x);
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    if (active === 'true') {
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         formData.append('publishCheckbox', 1);
@@ -315,9 +334,9 @@ function ProductForm({
                         // @ts-ignore
                         formData.append('publishCheckbox', 0);
                     }
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    formData.append('publishCheckbox', dataPublish);
+                    // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // // @ts-ignore
+                    // formData.append('publishCheckbox', dataPublish);
 
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
@@ -339,6 +358,7 @@ function ProductForm({
                             formData.append('photos[]', file);
                         });
                     }
+                    console.log('FORM DATA', formData);
                     dispatch(updateProductAction(formData, values.id));
                 }
             }}>
@@ -349,11 +369,11 @@ function ProductForm({
                     setSelectedSizes([]);
                     return handleChange(e);
                 };
-                const onChangeStatusPublish = (e: any) => {
-                    props.values['isPublish'] = !props.values['isPublish'];
-                    setDataPublish(!props.values['isPublish']);
-                    return handleChange(e);
-                };
+                // const onChangeStatusPublish = (e: any) => {
+                //     props.values['isPublish'] = !props.values['isPublish'];
+                //     setDataPublish(!props.values['isPublish']);
+                //     return handleChange(e);
+                // };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 return (
@@ -503,7 +523,7 @@ function ProductForm({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(
+                                                                {[1, 2, 3, 4, 5, 6, 7].map(
                                                                     (num: number) => (
                                                                         <Fragment
                                                                             key={`${size.id}_${num}`}>
@@ -615,16 +635,36 @@ function ProductForm({
                                     </>
                                 )}
                                 <div className="mb-4">
-                                    <label className="control-label">{t('Active')} </label>
-                                    <input
-                                        type="checkbox"
-                                        checked={!dataPublish}
-                                        onChange={(el) => {
-                                            console.log(el.target.checked);
-                                            setDataPublish(!el.target.checked);
-                                        }}
-                                    />
+                                    <label className="control-label">{t('Active')}</label>
+                                    {/*<div className="radio">*/}
+                                    {/*    <label>*/}
+                                    {/*        <input*/}
+                                    {/*            type="radio"*/}
+                                    {/*            value="option1"*/}
+                                    {/*            onClick={() => {*/}
+                                    {/*                setActive(!productData.product.publish);*/}
+                                    {/*            }}*/}
+                                    {/*            checked={productData.product.publish}*/}
+                                    {/*        />*/}
+                                    {/*    </label>*/}
+                                    {/*</div>*/}
+                                    <input type="checkbox" checked={x} onChange={() => setX(!x)} />
+                                    {/*<input type="checkbox" checked={x} onChange={soldCheckbox}/>*/}
                                 </div>
+                                {/*<div className="mb-4">*/}
+                                {/*    <label className="control-label">*/}
+                                {/*    {t('Active')}*/}
+                                {/*    </label>*/}
+                                {/*    <input*/}
+                                {/*        type="checkbox"*/}
+                                {/*        checked={!dataPublish}*/}
+                                {/*        onChange={(el) => {*/}
+                                {/*            setDataPublish(!el.target.checked);*/}
+                                {/*            setActive(!el.target.checked);*/}
+                                {/*            console.log('handle change checkbox', active);*/}
+                                {/*        }}*/}
+                                {/*    />*/}
+                                {/*</div>*/}
 
                                 <button type="submit" className="gradient-btn">
                                     {props.values.id ? t('Update Product') : t('Add a Product')}
