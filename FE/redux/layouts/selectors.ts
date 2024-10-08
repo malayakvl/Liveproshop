@@ -74,6 +74,11 @@ export const modalConfirmationPeriodSetupMetaSelector = createSelector(
     (layouts: State.Layouts): Layouts.ModalConfirmPeriodMeta | null =>
         layouts.modalConfirmationSetupPeriodMeta
 );
+export const modalConfirmationPeriodSetupNewMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalConfirmNewPeriodMeta | null =>
+        layouts.modalConfirmationSetupNewPeriodMeta
+);
 export const deletePeriodSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): any => layouts.deletePeriod

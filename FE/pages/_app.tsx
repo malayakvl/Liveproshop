@@ -14,6 +14,7 @@ import { Toasts, ConfirmationModal, CalendlyModal } from '../components/_common'
 import React from 'react';
 import ConfirmationPeriodDeleteModal from '../components/_common/modal/ConfirmationPeriodDeleteModal';
 import ConfirmationPeriodSetupModal from '../components/_common/modal/ConfirmationPeriodSetupModal';
+import ConfirmationPeriodSetupNewModal from '../components/_common/modal/ConfirmationPeriodSetupModal';
 
 type NextPageWithLayout = NextPage & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -90,6 +91,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                     <ConfirmationModal />
                     <ConfirmationPeriodDeleteModal />
                     <ConfirmationPeriodSetupModal />
+                    <ConfirmationPeriodSetupNewModal />
                     <CalendlyModal />
                 </NextIntlProvider>
             </Provider>

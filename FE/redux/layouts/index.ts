@@ -14,6 +14,7 @@ import {
     setModalConfirmationMetaAction,
     setModalConfirmationDeletePeriodMetaAction,
     setModalConfirmationSetupPeriodMetaAction,
+    setModalConfirmationDiffPeriodMetaAction,
     setPeriodForDeleteAction,
     setModalCalendlyMetaAction,
     setSwitchHeaderAction,
@@ -164,6 +165,7 @@ const initialState: State.Layouts = {
     modalVariantMeta: null,
     modalConfirmationDeletePeriodMeta: null,
     modalConfirmationSetupPeriodMeta: null,
+    modalConfirmationSetupNewPeriodMeta: null,
     deletePeriodHidePopup: false,
     deletePeriod: null,
     setupPeriod: null,
@@ -339,6 +341,15 @@ const ACTION_HANDLERS: any = {
             ...action.payload
         }
     }),
+    [setModalConfirmationDiffPeriodMetaAction]: (
+        state: State.Layouts,
+        action: Type.ReduxAction<Layouts.ModalConfirmNewPeriodMeta>
+    ): State.Layouts => ({
+        ...state,
+        modalConfirmationSetupNewPeriodMeta: action.payload && {
+            ...action.payload
+        }
+    }),
     [setPeriodForDeleteAction]: (
         state: State.Layouts,
         action: Type.ReduxAction<any>
@@ -414,6 +425,7 @@ export {
     setModalConfirmationMetaAction,
     setModalConfirmationDeletePeriodMetaAction,
     setModalConfirmationSetupPeriodMetaAction,
+    setModalConfirmationDiffPeriodMetaAction,
     setPeriodForDeleteAction,
     setModalCalendlyMetaAction,
     setSwitchToggleAction,

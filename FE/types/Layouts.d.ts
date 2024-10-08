@@ -24,6 +24,7 @@ declare namespace Layouts {
         modalConfirmationMeta: ModalConfirmationMeta | null;
         modalConfirmationDeletePeriodMeta: ModalDeletePeriodMeta | null;
         modalConfirmationSetupPeriodMeta: ModalConfirmPeriodMeta | null;
+        modalConfirmationSetupNewPeriodMeta: ModalConfirmNewPeriodMeta | null;
         deletePeriod: null;
         setupPeriod: null;
         deletePeriodHidePopup: boolean;
@@ -98,6 +99,11 @@ declare namespace Layouts {
         onCancel?: () => void;
     }
     interface ModalConfirmPeriodMeta {
+        titleKey?: string;
+        onConfirm: () => void;
+        onCancel?: () => void;
+    }
+    interface ModalConfirmNewPeriodMeta {
         titleKey?: string;
         onConfirm: () => void;
         onCancel?: () => void;

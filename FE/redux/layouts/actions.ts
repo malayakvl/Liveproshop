@@ -51,6 +51,9 @@ export const setModalConfirmationDeletePeriodMetaAction: any = createAction(
 export const setModalConfirmationSetupPeriodMetaAction: any = createAction(
     'layouts/SET_MODAL_PERIOD_SETUP_CONFIRMATION'
 );
+export const setModalConfirmationDiffPeriodMetaAction: any = createAction(
+    'layouts/SET_MODAL_DIFF_PERIOD_SETUP_CONFIRMATION'
+);
 export const setPeriodForDeleteAction: any = createAction('layouts/SET_MODAL_PERIOD_VALUE');
 export const setModalCalendlyMetaAction: any = createAction('layouts/SET_MODAL_CALENDLY');
 export const toggleTextingMenuAction: any = createAction('layouts/TOGGLE_TEXTING_MENU');

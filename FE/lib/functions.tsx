@@ -72,6 +72,13 @@ export const toggleModalPeriodSetupConfirmation = () => {
     (modal as any).classList.toggle('pointer-events-none');
     (modal as any).classList.toggle('modal-active');
 };
+export const toggleModalPeriodNewSetupConfirmation = () => {
+    // const body = document.querySelector('body');
+    const modal = document.querySelector('.modal-period-setup-new');
+    (modal as any).classList.toggle('opacity-0');
+    (modal as any).classList.toggle('pointer-events-none');
+    (modal as any).classList.toggle('modal-active');
+};
 export const toggleModalPeriodDeleteConfirmation = () => {
     // const body = document.querySelector('body');
     const modal = document.querySelector('.modal-period-delete');

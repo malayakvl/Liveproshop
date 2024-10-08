@@ -14,7 +14,7 @@ import { ErrorMessage, Field, Formik } from 'formik';
 import { Form } from 'react-bootstrap';
 import { userSelector } from '../../redux/user/selectors';
 import axios from 'axios';
-import { authHeader, toggleModalPeriodSetupConfirmation } from '../../lib/functions';
+import { authHeader, toggleModalPeriodSetupConfirmation, toggleModalPeriodNewSetupConfirmation } from '../../lib/functions';
 import getConfig from 'next/config';
 import * as Yup from 'yup';
 import { getSession } from 'next-auth/client';
@@ -30,7 +30,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css';
-import { InputText } from '../../components/_form';
+import { setModalConfirmationDiffPeriodMetaAction } from '../../redux/layouts';
 
 const { publicRuntimeConfig } = getConfig();
 const url = `${publicRuntimeConfig.apiUrl}/api/shipping`;
@@ -41,6 +41,7 @@ export default function ShippingThreshold() {
     const user = useSelector(userSelector);
     const [threshold, setThreshold] = useState('');
     const [period, setPeriod] = useState({ free_shipping_from: null, free_shipping_to: null });
+    const [periodOld, setPeriodOld] = useState({ free_shipping_from: null, free_shipping_to: null });
     const showDatePopup = useSelector(showDatePopupSelector);
     const [dateRange, setDateRange] = useState([null, null]);
     const [startDate, endDate] = dateRange;
@@ -89,6 +90,7 @@ export default function ShippingThreshold() {
                 setThreshold(result.data.threshold);
                 dispatch(setPeriodDeleteValuesActions(result.data.period));
                 setPeriod(result.data.period);
+                setPeriodOld(result.data.period);
             });
     }, [user.email]);
 
@@ -111,7 +113,41 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
-                                console.log(values);
+                                let diffPeriod = false;
+                                if (
+                                    calendarPeriod.startDate !=
+                                    moment(period.free_shipping_from).format('YYYY-MM-DD')
+                                ) {
+                                    diffPeriod = true;
+                                }
+                                if (
+                                    calendarPeriod.endDate !=
+                                    moment(period.free_shipping_to).format('YYYY-MM-DD')
+                                ) {
+                                    diffPeriod = true;
+                                }
+                                if (
+                                    moment(period.free_shipping_from).format('YYYY-MM-DD') !=
+                                    moment(timeFrom).format('HH:mm')
+                                ) {
+                                    diffPeriod = true;
+                                }
+                                if (
+                                    moment(period.free_shipping_to).format('YYYY-MM-DD') !=
+                                    moment(timeTo).format('HH:mm')
+                                ) {
+                                    diffPeriod = true;
+                                }
+                                // if (diffPeriod) {
+                                //     console.log('111')
+                                //     dispatch(
+                                //         setModalConfirmationDiffPeriodMetaAction({
+                                //             onConfirm: async () => {
+                                //                 toggleModalPeriodNewSetupConfirmation();
+                                //             }
+                                //         })
+                                //     );
+                                // }
                                 dispatch(
                                     setupPeriodAction({
                                         startDate: calendarPeriod.startDate,
@@ -135,9 +171,6 @@ export default function ShippingThreshold() {
                                 ) {
                                     dispatch(setErrorToastAction('Please setup period'));
                                 } else {
-                                    if (!values.threshold) {
-                                        console.log(11);
-                                    }
                                     // const formData = {
                                     //     threshold: values.threshold,
                                     //     timeFromNew: moment(timeFrom).format('HH:mm:ss'),
