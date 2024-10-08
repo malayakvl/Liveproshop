@@ -46,12 +46,12 @@ const ModalPeriodSetup: React.FC<Props> = ({
             {...props}>
             <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50" />
 
-            <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+            <div className="modal-container bg-white  md:modal-period mx-auto rounded shadow-lg z-50 overflow-y-auto">
                 {/*Add margin if you want to see some of the overlay behind the modal*/}
                 <div className="modal-content py-4 text-left px-6">
                     {/*Title*/}
                     <div className="flex justify-between items-center pb-3 relative">
-                        <p className="text-2xl font-bold">{title}</p>
+                        <p className="md:text-2xl font-bold">{title}</p>
                         <div
                             role="presentation"
                             className="modal-close-period cursor-pointer z-50"

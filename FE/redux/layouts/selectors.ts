@@ -59,6 +59,10 @@ export const modalConfirmationMetaSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): Layouts.ModalConfirmationMeta | null => layouts.modalConfirmationMeta
 );
+export const modalVarianMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalVariantMeta | null => layouts.modalVariantMeta
+);
 
 export const modalConfirmationPeriodDeleteMetaSelector = createSelector(
     rootSelector,
@@ -85,6 +89,10 @@ export const deletePeriodPopupSelector = createSelector(
 export const modalCalendlyMetaSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): Layouts.ModalCalendlyMeta | null => layouts.modalCalendlyMeta
+);
+export const modalVariantMetaSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): Layouts.ModalVariantMeta | null => layouts.modalVariantMeta
 );
 
 export const activeTabSelectorFactory = (type: string) =>

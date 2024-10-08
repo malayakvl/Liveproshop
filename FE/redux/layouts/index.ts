@@ -161,6 +161,7 @@ const initialState: State.Layouts = {
     switchHeader: false,
     switchToggled: false,
     modalConfirmationMeta: null,
+    modalVariantMeta: null,
     modalConfirmationDeletePeriodMeta: null,
     modalConfirmationSetupPeriodMeta: null,
     deletePeriodHidePopup: false,

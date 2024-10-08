@@ -1,4 +1,4 @@
-import { ProductForm } from './index';
+import { ProductFormAdd } from './index';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEmptyProductAction } from '../../redux/products/actions';
@@ -18,7 +18,7 @@ const AddProduct: React.FC<PropsProduct> = ({ locale }) => {
 
     return (
         <>
-            <ProductForm locale={locale} productData={productData} photos={[]} />
+            <ProductFormAdd locale={locale} productData={productData} photos={[]} publish={true} />
         </>
     );
 };

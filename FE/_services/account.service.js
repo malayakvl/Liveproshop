@@ -130,7 +130,7 @@ async function getAccountData(authResponse) {
     // };
     const loginOptions = {
         // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
-        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts,business_management'
+        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,business_management'
     };
     axios
         .get(

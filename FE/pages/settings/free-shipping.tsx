@@ -160,17 +160,6 @@ export default function ShippingThreshold() {
                                         <div className="text-sm text-gray-500 mt-6 mb-3">
                                             {t('settings_theshold')}
                                         </div>
-                                        {/*<div style={{ maxWidth: '150px' }}>*/}
-                                        {/*    <InputText*/}
-                                        {/*        icon={'f-threshold'}*/}
-                                        {/*        style={'field-threshold'}*/}
-                                        {/*        label={null}*/}
-                                        {/*        name={'threshold'}*/}
-                                        {/*        placeholder={null}*/}
-                                        {/*        props={props}*/}
-                                        {/*        tips={null}*/}
-                                        {/*    />*/}
-                                        {/*</div>*/}
                                         <Field
                                             name="threshold"
                                             className="f-threshold form-control font-control-icon max-w-[150px] float-left mt-4"
@@ -195,7 +184,7 @@ export default function ShippingThreshold() {
                                                 width={20}
                                                 height={18}
                                             />
-                                            <div className="ml-2 inline-block">
+                                            <div className="md:ml-2 inline-block mb-4">
                                                 <DatePicker
                                                     selectsRange={true}
                                                     startDate={startDate}
@@ -212,7 +201,7 @@ export default function ShippingThreshold() {
                                                     isClearable={true}
                                                 />
                                             </div>
-                                            <div className="inline-block ml-6">
+                                            <div className="mb-4 inline-block md:ml-6 md:mb-0">
                                                 <TimePicker
                                                     className={`form-control-picker`}
                                                     format={'HH:mm:ss'}
@@ -222,7 +211,7 @@ export default function ShippingThreshold() {
                                                 />
                                                 <TimePicker
                                                     format={'HH:mm:ss'}
-                                                    className={`form-control-picker ml-4`}
+                                                    className={`mt-5 form-control-picker md:ml-4 md:mt-0`}
                                                     name="time_to"
                                                     value={timeTo}
                                                     onChange={handleValueChangeTo}

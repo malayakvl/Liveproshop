@@ -83,7 +83,7 @@ const SchedulePopup: React.FC<any> = () => {
             setShowAlert(false);
         }
     }, [settingsValues]);
-    console.log('SHOW ALERT', showAlert);
+
     // useEffect(() => {
     //     if (selectedStoreId) {
     //         setSelectedStore(storeItems.find((_store: any) => _store.value === selectedStoreId));

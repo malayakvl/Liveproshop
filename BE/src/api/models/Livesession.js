@@ -761,6 +761,13 @@ WHERE data.live_sessions.user_id='${userId}'
             client.release();
         }
     }
+
+    async deleteRecord(id) {
+        const client = await pool.connect();
+        // console.log(`DELETE from data.live_sessions WHERE id='${id}'`);
+        await client.query(`DELETE from data.live_sessions WHERE id='${id}'`);
+        return true;
+    }
     
     async changeActive(itemId, userId) {
         const client = await pool.connect();

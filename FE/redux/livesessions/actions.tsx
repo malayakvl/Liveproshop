@@ -119,6 +119,29 @@ export const fetchItemAction: any = createAction(
             };
         }
 );
+export const removeItemAction: any = createAction(
+    'livesession/REMOVE_ITEM',
+    async (id: number) =>
+        async (
+            dispatch: Type.Dispatch,
+            getState: () => State.Root
+        ): Promise<{ item: Livesessions.DataItem }> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            const res = await axios.get(`${baseUrl}/livesession/remove/${id}`, {
+                headers: {
+                    ...authHeader(state.user.user.email)
+                }
+            });
+            if (res.status) {
+                window.location.reload();
+                // dispatch(showItemAction(true));
+            }
+            return {
+                item: res.data.item
+            };
+        }
+);
 export const stopSessionAction: any = createAction(
     'livesession/STOP SESSION',
     async (id: number) =>

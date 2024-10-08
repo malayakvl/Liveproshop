@@ -241,7 +241,7 @@ function Profile() {
                                     />
                                 </div>
                                 <InputText
-                                    // disabled={validateEmail(props.values['email_real'])}
+                                    disabled={validateEmail(props.values['email_real'])}
                                     icon={'f-email'}
                                     label={null}
                                     name={'email_real'}
@@ -254,10 +254,10 @@ function Profile() {
                         ) : (
                             <>
                                 <InputText
-                                    disabled={validateEmail(props.values['email'])}
+                                    disabled={validateEmail(props.values['email_real'])}
                                     icon={'f-email'}
                                     label={null}
-                                    name={'email'}
+                                    name={'email_real'}
                                     placeholder={t('Email Address')}
                                     style={'lg:w-full'}
                                     props={props}
@@ -265,14 +265,24 @@ function Profile() {
                                 />
                                 <div className="hidden">
                                     <InputText
-                                        icon={null}
+                                        icon={'f-email'}
                                         label={null}
-                                        name={'email_real'}
+                                        name={'email'}
                                         placeholder={t('Email Address')}
                                         style={'lg:w-full'}
                                         props={props}
                                         tips={null}
                                     />
+
+                                    {/*<InputText*/}
+                                    {/*    icon={null}*/}
+                                    {/*    label={null}*/}
+                                    {/*    name={'email_real'}*/}
+                                    {/*    placeholder={t('Email Address')}*/}
+                                    {/*    style={'lg:w-full'}*/}
+                                    {/*    props={props}*/}
+                                    {/*    tips={null}*/}
+                                    {/*/>*/}
                                 </div>
                             </>
                         )}
