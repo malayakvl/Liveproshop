@@ -9,25 +9,59 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     const [checkedVariant, setCheckedVariant] = useState('');
     const [showError, setShowError] = useState(false);
     const dispatch = useDispatch();
+    const price = props.values[`configurePrice_${checkedVariant}`];
+    const qty = props.values[`configureQty_${checkedVariant}`];
+    const [newCheckedVariant, setNewCheckedVariat] = useState('');
+    // let tmpVariants: any[] = [];
+
     const setupIdent = (variants: any[]) => {
-        console.log('Checked valiant', checkedVariant)
-        if (checkedVariant) {
-            console.log('checked variant', checkedVariant);
-            const price = props.values[`configurePrice_${checkedVariant}`];
-            const qty = props.values[`configureQty_${checkedVariant}`];
-            if (colors.length === 0) {
-                setShowError(true);
+        console.log('New checked varian', newCheckedVariant);
+        // const price = 10;
+        // const qty = props.values[`configureQty_${newCheckedVariant}`];
+        // const qty = 10;
+        if (colors.length === 0) {
+            setShowError(true);
+        } else {
+            if (newCheckedVariant) {
+                // variants.forEach((attr: any) => {
+                //     console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
+                //     props.values[`configurePrice_${attr.color}_${attr.size}`] = 10;
+                //     props.values[`configureQty_${attr.color}_${attr.size}`] = 15;
+                // });
             }
-            console.log('VARIANT', variants);
-            variants.forEach((attr: any) => {
-                if (checkedVariant != `${attr.color}_${attr.size}`) {
-                    props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
-                    props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
-                }
-            });
-            dispatch(setIdentAction(false));
+            replacePrices(variants, price, qty);
+            // variants.forEach((attr: any) => {
+            //     console.log('field price name', `configurePrice_${attr.color}_${attr.size}`);
+            //     props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
+            //     props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
+            // });
+            // props.values[`configureQty_Yellow_42`] = 50;
         }
+        // props.values['configurePrice_Yellow_42'] = 55;
+        replacePrices(variants, price, qty);
+        dispatch(setIdentAction(false));
     };
+
+    const replacePrices = (variants: any[], price: number, qty: number) => {
+        variants.forEach((attr: any) => {
+            props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
+            props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            document.getElementById(`configurePrice_${attr.color}_${attr.size}`).value = price
+                ? price
+                : '';
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            document.getElementById(`configureQty_${attr.color}_${attr.size}`).value = qty
+                ? qty
+                : '';
+        });
+    };
+    // console.log('Variant', tmpVariants);
+
+    dispatch(setIdentAction(false));
+
     const _colors: any[] = [];
     const _sizes: any[] = [];
     let tmpColors = [];
@@ -60,7 +94,6 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     }
     attrs = attrs.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => ({ ...d, ...e }))));
 
-    console.log('SHOW EROR', showError);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return (
@@ -77,7 +110,12 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     2) Put the checkmark into the checkbox
     3) Click the "Replace all values with selected" button and these values will be applied to all product variations`}
                                         className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
-                                        onClick={() => setupIdent(attrs)}>
+                                        onClick={() => {
+                                            setTimeout(() => {
+                                                setupIdent(attrs);
+                                            }, 100);
+                                            // setupIdent(attrs);
+                                        }}>
                                         <span>{t('Replace all values with selected')}</span>
                                     </a>
                                 ) : (
@@ -87,7 +125,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     2) Cochez la case de référence
     3) Cliquez sur le bouton "Remplacer toutes les valeurs par celles sélectionnées" et ces valeurs seront appliquées à toutes les variations de produits`}
                                         className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
-                                        onClick={() => setupIdent(attrs)}>
+                                        onClick={() => {
+                                            setupIdent(attrs);
+                                        }}>
                                         <span>{t('Replace all values with selected')}</span>
                                     </a>
                                 )}
@@ -102,9 +142,10 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     <input
                                         type="checkbox"
                                         onChange={(el) => {
-                                            if (checkedVariant == '')
+                                            if (checkedVariant == '') {
+                                                setNewCheckedVariat(`${attr.color}_${attr.size}`);
                                                 setCheckedVariant(`${attr.color}_${attr.size}`);
-                                            else setCheckedVariant(``);
+                                            } else setCheckedVariant(``);
                                         }}
                                         checked={checkedVariant == `${attr.color}_${attr.size}`}
                                     />

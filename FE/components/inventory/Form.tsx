@@ -105,8 +105,6 @@ function ProductForm({
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
 
-    console.log('PUBLISH', publish);
-
     const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
     const [selectedSizes, setSelectedSizes] = useState<any[]>([]);
@@ -189,6 +187,7 @@ function ProductForm({
                             ? formValues[`configureQty_${_color.label}_${_size.label}`]
                             : ''
                     );
+
                     formRef.current?.setFieldValue(
                         `configureSKU_${_color.label}_${_size.label}`,
                         formValues[`configureSKU_${_color.label}_${_size.label}`]

@@ -171,6 +171,7 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1001;
 }
 .modal-content {
   border: 1px solid #fff;
