@@ -154,33 +154,6 @@ export default function Index() {
                                             />
                                         </div>
                                     )}
-
-                                    {/*<InputSwitcher*/}
-                                    {/*    label={'Free Shipping'}*/}
-                                    {/*    name={'free_shipping_status'}*/}
-                                    {/*    style={null}*/}
-                                    {/*    props={props}*/}
-                                    {/*/>*/}
-                                    {/*<div className="max-w-[300px]">*/}
-                                    {/*    <InputText*/}
-                                    {/*        icon={null}*/}
-                                    {/*        label={'Free Shipping Hour(s)'}*/}
-                                    {/*        name={'free_shipping_timer'}*/}
-                                    {/*        placeholder={'Free Shipping Hour(s)'}*/}
-                                    {/*        style={null}*/}
-                                    {/*        props={props}*/}
-                                    {/*        tips={null}*/}
-                                    {/*    />*/}
-                                    {/*</div>*/}
-                                    {/* <InputText
-                                        style={'w-1/2'}
-                                        icon={null}
-                                        label={t('Multisafepay API')}
-                                        name={'multisafe_api_key'}
-                                        placeholder={'Multisafepay API'}
-                                        props={props}
-                                        tips={null}
-                                    /> */}
                                     <button
                                         type="submit"
                                         className="w-32 mt-8 gradient-btn"

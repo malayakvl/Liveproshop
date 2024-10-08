@@ -207,6 +207,9 @@ html {
   padding: 10px;
   float:right;
 }
+.modal-period {
+  @apply md:max-w-[500px];
+}
 
 @import "components/sidebar-header";
 @import "components/header";
