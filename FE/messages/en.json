@@ -680,5 +680,7 @@
   "Products in cart": "Products in cart",
   "Live Carts": "Live Carts",
   "_products": "product (s)",
-  "of": "of"
+  "of": "of",
+  "You need to chose at least one colour": "You need to chose at least one colour",
+  "The new shipping windows will desactivate the current one, are you sure you want to set a new period?": "The new shipping windows will desactivate the current one, are you sure you want to set a new period?"
 }

@@ -1,6 +1,7 @@
 export { default as AddProduct } from './AddProduct';
 export { default as EditProduct } from './EditProduct';
 export { default as ProductForm } from './Form';
+export { default as ProductFormAdd } from './FormAdd';
 export { default as ListProducts } from './ListProducts';
 export { default as RenderVariant } from './PropsVariant';
 export { default as RenderSizes } from './PropsSizes';

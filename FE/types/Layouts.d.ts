@@ -25,9 +25,11 @@ declare namespace Layouts {
         modalConfirmationDeletePeriodMeta: ModalDeletePeriodMeta | null;
         modalConfirmationSetupPeriodMeta: ModalConfirmPeriodMeta | null;
         deletePeriod: null;
+        changeFreeShippingPeriod: boolean;
         setupPeriod: null;
         deletePeriodHidePopup: boolean;
         modalCalendlyMeta: ModalCalendlyMeta | null;
+        modalVariantMeta: ModalVariantMeta | null;
         switchHeader: boolean;
         switchToggled: boolean;
         activeTab: {
@@ -82,6 +84,11 @@ declare namespace Layouts {
     }
 
     interface ModalConfirmationMeta {
+        titleKey?: string;
+        onConfirm: () => void;
+        onCancel?: () => void;
+    }
+    interface ModalVariantMeta {
         titleKey?: string;
         onConfirm: () => void;
         onCancel?: () => void;

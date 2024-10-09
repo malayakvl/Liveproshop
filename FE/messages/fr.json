@@ -68,7 +68,7 @@
   "Submit": "Envoyer",
   "Edit": "Modifier",
   "Delete": "Supprimer",
-  "Cancel": "Remboursé",
+  "Cancel": "Annuler",
   "Yes": "Oui",
   "system": "Système message",
   "message": "Utilisateur message",
@@ -663,7 +663,7 @@
   "Do you want to delete period": "Voulez-vous désactiver la période du ",
   " for free shipping?": " pour la fenêtre de livraison gratuite?",
   "for free shipping?": " pour la fenêtre de livraison gratuite?",
-  "Do you want to set the period from ": "Voulez-vous désactiver la période du ",
+  "Do you want to set the period from ": "Voulez-vous activer la période du ",
   "Do you want to deactivate the period from ": "Voulez-vous désactiver la période du ",
   "Set the period": "Définir la période",
   "Free Shipping Period": "Période de livraison gratuite",
@@ -680,5 +680,7 @@
   "Products in cart": "Produits dans le panier",
   "Live Carts": "Paniers en cours",
   "_products": "produit(s)",
-  "of": "of"
+  "of": "of",
+  "You need to chose at least one colour": "Vous devez choisir au moins une couleur",
+  "The new shipping windows will desactivate the current one, are you sure you want to set a new period?": "La nouvelle fenêtre de livraison va desactiver celle en cours, êtes vous sûr de définir une nouvelle période?"
 }

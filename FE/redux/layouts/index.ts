@@ -28,7 +28,8 @@ import {
     hideshowPeriodPopupAction,
     setupPeriodAction,
     setPeriodDeleteValuesActions,
-    setNativeBrowserAction
+    setNativeBrowserAction,
+    setNewPeriodFreeShippingAction
 } from './actions';
 import { PaginationType, OrderStatus } from '../../constants';
 // import { showPopupAction } from '../dashboard';
@@ -161,11 +162,13 @@ const initialState: State.Layouts = {
     switchHeader: false,
     switchToggled: false,
     modalConfirmationMeta: null,
+    modalVariantMeta: null,
     modalConfirmationDeletePeriodMeta: null,
     modalConfirmationSetupPeriodMeta: null,
     deletePeriodHidePopup: false,
     deletePeriod: null,
     setupPeriod: null,
+    changeFreeShippingPeriod: false,
     modalCalendlyMeta: null,
     activeTab: {
         inventory: { tab: 'products' }
@@ -252,6 +255,10 @@ const ACTION_HANDLERS: any = {
     [toggleSidebarAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
         isSidebarOpen: !state.isSidebarOpen
+    }),
+    [setNewPeriodFreeShippingAction]: (state: State.Layouts): State.Layouts => ({
+        ...state,
+        changeFreeShippingPeriod: true
     }),
     [hideshowPeriodPopupAction]: (state: State.Layouts): State.Layouts => ({
         ...state,
@@ -424,7 +431,8 @@ export {
     hideshowPeriodPopupAction,
     setupPeriodAction,
     setPeriodDeleteValuesActions,
-    setNativeBrowserAction
+    setNativeBrowserAction,
+    setNewPeriodFreeShippingAction
 };
 
 // ------------------------------------

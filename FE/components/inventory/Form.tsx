@@ -1,8 +1,8 @@
-import React, { Fragment, useCallback, useEffect, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import * as Yup from 'yup';
 import { useTranslations } from 'next-intl';
-import { Formik } from 'formik';
-import { InputSwitcher, InputText } from '../_form';
+import { Formik, FormikProps, useFormikContext } from 'formik';
+import { InputHidden, InputSwitcher, InputText } from '../_form';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactTags from 'react-tag-autocomplete';
 import Select, { StylesConfig } from 'react-select';
@@ -89,15 +89,16 @@ const colourStyles: StylesConfig<ColourOption, true> = {
 function ProductForm({
     locale,
     productData,
-    photos
+    photos,
+    publish
 }: {
     locale: string;
     productData: Products.Product;
     photos: string[];
+    publish: boolean;
 }) {
     const t = useTranslations();
     const dispatch = useDispatch();
-
     const additionalProps = useSelector(productAdditionalSelector);
     const additionalSelectedProps = useSelector(selectedAdditionalsSelector);
     const searchTagSuggestions = useSelector(tagSuggestionsSelector);
@@ -113,7 +114,17 @@ function ProductForm({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
-    // const [publishTmp, setPublishTmp] = useState<boolean>(false);
+    const [dataPublish, setDataPublish] = useState(publish);
+    const [formValues, setFormValues] = useState({});
+    const [active, setActive] = useState(false);
+    const [x, setX] = useState(publish);
+    // const { setFieldValue }: any = useFormikContext();
+
+    // console.log('FORM VALUES', formValues);
+
+    // const formRef = useRef<FormikProps>();
+    const formRef = React.useRef<FormikProps<any>>(null);
+    const [publishTmp, setPublishTmp] = useState<boolean>(false);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
@@ -121,6 +132,10 @@ function ProductForm({
         },
         [tags]
     );
+
+    useEffect(() => {
+        setX(productData.product.publish);
+    }, [productData.product]);
 
     const onAddition = useCallback(
         (newTag) => {
@@ -155,8 +170,35 @@ function ProductForm({
         setSelectedMaterials(selectedOption);
     };
     const handleChangeColor = (selectedOption: any) => {
+        const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
+        if (selectedOption.length > 0) {
+            selectedOption.forEach(function (_color: any) {
+                selectedSizes.forEach(function (_size: any) {
+                    formRef.current?.setFieldValue(
+                        `configurePrice_${_color.label}_${_size.label}`,
+                        formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            ? formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                    formRef.current?.setFieldValue(
+                        `configureQty_${_color.label}_${_size.label}`,
+                        formValues[`configureQty_${_color.label}_${_size.label}`]
+                            ? formValues[`configureQty_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+
+                    formRef.current?.setFieldValue(
+                        `configureSKU_${_color.label}_${_size.label}`,
+                        formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            ? formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                });
+            });
+        }
     };
+
     const handleChangeSize = (selectedOption: any, configured: boolean) => {
         if (!configured) {
             setSelectedSizes(selectedOption);
@@ -166,6 +208,29 @@ function ProductForm({
             if (!_sizes.find((v: any) => v.value === selectedOption.value)) {
                 setSelectedSizes([...selectedSizes, selectedOption]);
             }
+            const formValues = formRef?.current?.values;
+            selectedColors.forEach(function (_color: any) {
+                selectedSizes.forEach(function (_size: any) {
+                    formRef.current?.setFieldValue(
+                        `configurePrice_${_color.label}_${_size.label}`,
+                        formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            ? formValues[`configurePrice_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                    formRef.current?.setFieldValue(
+                        `configureQty_${_color.label}_${_size.label}`,
+                        formValues[`configureQty_${_color.label}_${_size.label}`]
+                            ? formValues[`configureQty_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                    formRef.current?.setFieldValue(
+                        `configureSKU_${_color.label}_${_size.label}`,
+                        formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            ? formValues[`configureSKU_${_color.label}_${_size.label}`]
+                            : ''
+                    );
+                });
+            });
         }
         showSizeHandler();
     };
@@ -175,57 +240,11 @@ function ProductForm({
     const clearSizeHandler = () => {
         setSelectedSizes([]);
     };
+
+    const [, set] = useState();
     const showSizeHandler = () => {
         setShowSizeTable(!showSizeTable);
     };
-
-    // useEffect(() => {
-    //     if (additionalProps.sizesTable.length > 0) {
-    //         console.log('additionalProps.sizesTable', (additionalProps.sizesTable));
-    //         additionalProps.sizesTable.map((size: any, index: number) => {
-    //             const found = additionalProps.sizesTable.find(
-    //                 (element: any) => element === 'name_1'
-    //             );
-    //             console.log(found);
-    //             // if (size[`name_${num}`]) {
-    //             //     console.log(size[`name_${num}`]);
-    //             // }
-    //             console.log('tr');
-    //             console.log(`td 1`, size[`name_1`] ? size[`name_1`] : '');
-    //             console.log(`td 2`, size[`name_4`] ? size[`name_4`] : '');
-    //             console.log(`td 2`, size[`name_5`] ? size[`name_5`] : '');
-    //             // [1, 4].map((num: number) => {
-    //             //     // console.log(num);
-    //             //     if (size[`name_${num}`]) {
-    //             //         console.log(`td ${num}`, size[`name_${num}`]);
-    //             //     }
-    //             // });
-    //             console.log('/tr');
-    //         });
-    //         // [1, 4, 5].map((num: number) => {
-    //         //     // console.log(num);
-    //         //     additionalProps.sizesTable.map((size: any, index: number) => {
-    //         //         // console.log(additionalProps.sizesTable.find((element:any) => element > 10););
-    //         //         if (size[`name_${num}`]) {
-    //         //             console.log(size[`name_${num}`]);
-    //         //         }
-    //         //         // [1].map((num: number) => {
-    //         //         //     // console.log(num);
-    //         //         //     console.log(`Size name ${num}`, size[`name_${num}`]);
-    //         //         // });
-    //         //     });
-    //         // });
-    //         // additionalProps.sizesTable.map((size: any, index: number) => {
-    //         //     // if (size['name_4']) {
-    //         //     //     console.log(size['name_4']);
-    //         //     // }
-    //         //     [1].map((num: number) => {
-    //         //         // console.log(num);
-    //         //         console.log(`Size name ${num}`, size[`name_${num}`]);
-    //         //     });
-    //         // });
-    //     }
-    // }, [additionalProps]);
 
     const SubmitSchema = Yup.object().shape({
         name: Yup.string()
@@ -257,11 +276,17 @@ function ProductForm({
                     : Yup.string()
         })
     });
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     return (
         <Formik
             enableReinitialize
             initialValues={productData.product}
             validationSchema={SubmitSchema}
+            innerRef={formRef}
             onSubmit={(values) => {
                 dispatch(setIdentAction(false));
                 let errorConfig = false;
@@ -285,18 +310,33 @@ function ProductForm({
                     setErrorConfigured(tmpError);
                 }
                 // console.log('Error Config', errorConfig);
-                // console.log('isIdent', isIdent);
 
                 if (!isIdent && !errorConfig) {
-                    // console.log('WTF');
                     const formData = new FormData();
                     Object.keys(values).forEach((key: string) => {
-                        if (!['material_id', 'tags', 'description'].includes(key)) {
+                        if (!['material_id', 'tags', 'description', publish].includes(key)) {
                             formData.append(key, (values as any)[key]);
                         }
                     });
                     formData.append('description', editorContent);
-                    formData.append('publish', values['isPublish']);
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    formData.append('isPublish', x);
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    if (active === 'true') {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        formData.append('publishCheckbox', 1);
+                    } else {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        formData.append('publishCheckbox', 0);
+                    }
+                    // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // // @ts-ignore
+                    // formData.append('publishCheckbox', dataPublish);
+
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append(
@@ -317,6 +357,7 @@ function ProductForm({
                             formData.append('photos[]', file);
                         });
                     }
+                    console.log('FORM DATA', formData);
                     dispatch(updateProductAction(formData, values.id));
                 }
             }}>
@@ -327,10 +368,13 @@ function ProductForm({
                     setSelectedSizes([]);
                     return handleChange(e);
                 };
-                const onChangeStatusPublish = (e: any) => {
-                    props.values['isPublish'] = true;
-                    return handleChange(e);
-                };
+                // const onChangeStatusPublish = (e: any) => {
+                //     props.values['isPublish'] = !props.values['isPublish'];
+                //     setDataPublish(!props.values['isPublish']);
+                //     return handleChange(e);
+                // };
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 return (
                     <form onSubmit={props.handleSubmit} className="mt-5">
                         <div
@@ -478,39 +522,46 @@ function ProductForm({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3].map((num: number) => (
-                                                                    <Fragment
-                                                                        key={`${size.id}_${num}`}>
-                                                                        {size[`name_${num}`] && (
-                                                                            <td
-                                                                                role="presentation"
-                                                                                className="border p-2 cursor-pointer"
-                                                                                onClick={() =>
-                                                                                    handleChangeSize(
-                                                                                        {
-                                                                                            value: size[
-                                                                                                `id_${num}`
-                                                                                            ],
-                                                                                            label: size[
-                                                                                                `name_${num}`
-                                                                                            ]
-                                                                                        },
-                                                                                        props.values
-                                                                                            .configured
-                                                                                    )
-                                                                                }>
-                                                                                {
-                                                                                    size[
-                                                                                        `name_${num}`
-                                                                                    ]
-                                                                                }
-                                                                            </td>
-                                                                        )}
-                                                                        {!size[`name_${num}`] && (
-                                                                            <td className="border p-2" />
-                                                                        )}
-                                                                    </Fragment>
-                                                                ))}
+                                                                {[1, 2, 3, 4, 5, 6, 7].map(
+                                                                    (num: number) => (
+                                                                        <Fragment
+                                                                            key={`${size.id}_${num}`}>
+                                                                            {size[
+                                                                                `name_${num}`
+                                                                            ] && (
+                                                                                <td
+                                                                                    role="presentation"
+                                                                                    className="border p-2 cursor-pointer"
+                                                                                    onClick={() =>
+                                                                                        handleChangeSize(
+                                                                                            {
+                                                                                                value: size[
+                                                                                                    `id_${num}`
+                                                                                                ],
+                                                                                                label: size[
+                                                                                                    `name_${num}`
+                                                                                                ]
+                                                                                            },
+                                                                                            props
+                                                                                                .values
+                                                                                                .configured
+                                                                                        )
+                                                                                    }>
+                                                                                    {
+                                                                                        size[
+                                                                                            `name_${num}`
+                                                                                        ]
+                                                                                    }
+                                                                                </td>
+                                                                            )}
+                                                                            {!size[
+                                                                                `name_${num}`
+                                                                            ] && (
+                                                                                <td className="border p-2" />
+                                                                            )}
+                                                                        </Fragment>
+                                                                    )
+                                                                )}
                                                             </tr>
                                                         )
                                                     )}
@@ -582,13 +633,37 @@ function ProductForm({
                                         />
                                     </>
                                 )}
-                                <InputSwitcher
-                                    label={'Active'}
-                                    name={'isPublish'}
-                                    style={null}
-                                    props={props}
-                                    onChange={onChangeStatusPublish}
-                                />
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Active')}</label>
+                                    {/*<div className="radio">*/}
+                                    {/*    <label>*/}
+                                    {/*        <input*/}
+                                    {/*            type="radio"*/}
+                                    {/*            value="option1"*/}
+                                    {/*            onClick={() => {*/}
+                                    {/*                setActive(!productData.product.publish);*/}
+                                    {/*            }}*/}
+                                    {/*            checked={productData.product.publish}*/}
+                                    {/*        />*/}
+                                    {/*    </label>*/}
+                                    {/*</div>*/}
+                                    <input type="checkbox" checked={x} onChange={() => setX(!x)} />
+                                    {/*<input type="checkbox" checked={x} onChange={soldCheckbox}/>*/}
+                                </div>
+                                {/*<div className="mb-4">*/}
+                                {/*    <label className="control-label">*/}
+                                {/*    {t('Active')}*/}
+                                {/*    </label>*/}
+                                {/*    <input*/}
+                                {/*        type="checkbox"*/}
+                                {/*        checked={!dataPublish}*/}
+                                {/*        onChange={(el) => {*/}
+                                {/*            setDataPublish(!el.target.checked);*/}
+                                {/*            setActive(!el.target.checked);*/}
+                                {/*            console.log('handle change checkbox', active);*/}
+                                {/*        }}*/}
+                                {/*    />*/}
+                                {/*</div>*/}
 
                                 <button type="submit" className="gradient-btn">
                                     {props.values.id ? t('Update Product') : t('Add a Product')}
