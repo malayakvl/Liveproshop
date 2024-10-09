@@ -65,6 +65,7 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                 <ProductForm
                     locale={locale}
                     productData={productData}
+                    publish={productData.product.publish}
                     photos={productData.product.photos || []}
                 />
             )}

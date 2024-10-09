@@ -1,27 +1,67 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { InputText } from '../_form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIdentAction } from '../../redux/products';
 
 const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors, locale }) => {
     const t = useTranslations();
     const [checkedVariant, setCheckedVariant] = useState('');
+    const [showError, setShowError] = useState(false);
     const dispatch = useDispatch();
+    const price = props.values[`configurePrice_${checkedVariant}`];
+    const qty = props.values[`configureQty_${checkedVariant}`];
+    const [newCheckedVariant, setNewCheckedVariat] = useState('');
+    // let tmpVariants: any[] = [];
+
     const setupIdent = (variants: any[]) => {
-        dispatch(setIdentAction(true));
-        if (checkedVariant) {
-            const price = props.values[`configurePrice_${checkedVariant}`];
-            const qty = props.values[`configureQty_${checkedVariant}`];
-            variants.forEach((attr: any) => {
-                if (checkedVariant != `${attr.color}_${attr.size}`) {
-                    props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
-                    props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
-                }
-            });
-            dispatch(setIdentAction(false));
+        console.log('New checked varian', newCheckedVariant);
+        // const price = 10;
+        // const qty = props.values[`configureQty_${newCheckedVariant}`];
+        // const qty = 10;
+        if (colors.length === 0) {
+            setShowError(true);
+        } else {
+            if (newCheckedVariant) {
+                // variants.forEach((attr: any) => {
+                //     console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
+                //     props.values[`configurePrice_${attr.color}_${attr.size}`] = 10;
+                //     props.values[`configureQty_${attr.color}_${attr.size}`] = 15;
+                // });
+            }
+            replacePrices(variants, price, qty);
+            // variants.forEach((attr: any) => {
+            //     console.log('field price name', `configurePrice_${attr.color}_${attr.size}`);
+            //     props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
+            //     props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
+            // });
+            // props.values[`configureQty_Yellow_42`] = 50;
         }
+        // props.values['configurePrice_Yellow_42'] = 55;
+        replacePrices(variants, price, qty);
+        dispatch(setIdentAction(false));
     };
+
+    const replacePrices = (variants: any[], price: number, qty: number) => {
+        variants.forEach((attr: any) => {
+            props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
+            props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            document.getElementById(`configurePrice_${attr.color}_${attr.size}`).value = price
+                ? price
+                : '';
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            document.getElementById(`configureQty_${attr.color}_${attr.size}`).value = qty
+                ? qty
+                : '';
+        });
+    };
+    // console.log('Variant', tmpVariants);
+
+    dispatch(setIdentAction(false));
+
     const _colors: any[] = [];
     const _sizes: any[] = [];
     let tmpColors = [];
@@ -31,36 +71,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
         tmpColors = colors;
     }
 
-    // console.log('Selected sizes', props.values.selectedSizes);
-    // console.log('Props Values RED', props?.values['configurePrice_Red_m']);
-    // console.log('Props Values BLUE', props?.values['configurePrice_Blue_m']);
-    // console.log('TRY TO CHANGE PROPS');
-
-    // props?.values
-
-    // console.log('Price Red', props?.values['configurePrice_Red_m']);
-    // console.log(
-    //     'Props Values Finded',
-    //     props?.values?.selectedColors
-    //         ? props.values.selectedColors.find((_col: any) => _col.id == 1)?.name
-    //         : null
-    // );
-    // console.log(
-    //     'Filed name',
-    //     props?.values?.selectedColors
-    //         ? `configuredPrice_${
-    //               props.values.selectedColors.find((_col: any) => _col.id == 1)?.name
-    //           }_${props.values.selectedSizes.find((_sz: any) => _sz.id == 25)?.name}`
-    //         : null
-    // );
-    // if (formObj) {
-    //     formObj.setValue('configurePrice_Red_m', 100);
-    // }
-
     tmpColors.forEach((_color: any) => {
         _colors.push(_color.label);
     });
-    // console.log('COLORS', tmpColors);
     let tmpSizes = [];
     if (sizes.length === undefined) {
         tmpSizes.push(sizes);
@@ -94,20 +107,27 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     // eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
                                     <a
                                         title={`1) Put the price and quantity values in the row.
-2) Put the checkmark into the checkbox
-3) Click the "Replace all values with selected" button and these values will be applied to all product variations`}
+    2) Put the checkmark into the checkbox
+    3) Click the "Replace all values with selected" button and these values will be applied to all product variations`}
                                         className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
-                                        onClick={() => setupIdent(attrs)}>
+                                        onClick={() => {
+                                            setTimeout(() => {
+                                                setupIdent(attrs);
+                                            }, 100);
+                                            // setupIdent(attrs);
+                                        }}>
                                         <span>{t('Replace all values with selected')}</span>
                                     </a>
                                 ) : (
                                     // eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
                                     <a
                                         title={`1) Placez les valeurs de prix et de quantité
-2) Cochez la case de référence
-3) Cliquez sur le bouton "Remplacer toutes les valeurs par celles sélectionnées" et ces valeurs seront appliquées à toutes les variations de produits`}
+    2) Cochez la case de référence
+    3) Cliquez sur le bouton "Remplacer toutes les valeurs par celles sélectionnées" et ces valeurs seront appliquées à toutes les variations de produits`}
                                         className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
-                                        onClick={() => setupIdent(attrs)}>
+                                        onClick={() => {
+                                            setupIdent(attrs);
+                                        }}>
                                         <span>{t('Replace all values with selected')}</span>
                                     </a>
                                 )}
@@ -122,9 +142,10 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     <input
                                         type="checkbox"
                                         onChange={(el) => {
-                                            if (checkedVariant == '')
+                                            if (checkedVariant == '') {
+                                                setNewCheckedVariat(`${attr.color}_${attr.size}`);
                                                 setCheckedVariant(`${attr.color}_${attr.size}`);
-                                            else setCheckedVariant(``);
+                                            } else setCheckedVariant(``);
                                         }}
                                         checked={checkedVariant == `${attr.color}_${attr.size}`}
                                     />
@@ -201,6 +222,17 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                     </tbody>
                 </table>
             )}
+            <section className={showError ? `modal` : 'hidden'}>
+                <article className="modal-content p-lg-4">
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                    <div className="varianModalClose" onClick={() => setShowError(false)}>
+                        X
+                    </div>
+                    <main className="modal-mainContents">
+                        <p className="p-3 ">{t('You need to chose at least one colour')}</p>
+                    </main>
+                </article>
+            </section>
         </div>
     );
 };

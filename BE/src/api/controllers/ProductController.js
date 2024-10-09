@@ -73,20 +73,30 @@ class ProductController {
                 return res.status(500).json(err);
             }
             const dataProduct = req.body;
+console.log(dataProduct);
+            const publish = req.body.isPublish
             const photos = [];
-            console.log(dataProduct);
+            // console.log(dataProduct);
             if (req.files.length > 0) {
                 req.files.forEach(file => {
                     photos.push(file.filename);
                 });
             }
             dataProduct.photos = photos;
-            dataProduct['publish'] = dataProduct['isPublish'];
+            // dataProduct['publish'] = !dataProduct['publishCheckbox'];
             if (!dataProduct.id) {
-                await productModel.create(dataProduct, req.user.id);
+                await productModel.create(dataProduct, req.user.id, publish);
             } else {
-                await productModel.update(dataProduct, req.user.id);
+                await productModel.update(dataProduct, req.user.id, publish[1]);
             }
+            // console.log('FLAG ACTIVE', req.body.isPublish[0]);
+            // // update status
+            // if (req.body.activeCheckbox == 0) {
+            //     console.log('EBALA', req.body.publish);
+            //     await productModel.updateStatus(dataProduct, req.user.id);
+            // } else {
+            //     await productModel.updateStatus(dataProduct, req.user.id);
+            // }
             return res.status(200).json({ success: true });
         });
     }

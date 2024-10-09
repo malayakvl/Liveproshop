@@ -54,6 +54,7 @@ const InputText: React.FC<Props> = ({
                     onChange={onChange ? onChange : props.handleChange}
                     // value={inputValue || ''}
                     value={props.values[name]}
+                    id={name}
                     name={name}
                     disabled={disabled}
                 />
