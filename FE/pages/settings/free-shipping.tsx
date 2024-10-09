@@ -7,7 +7,8 @@ import {
     setModalConfirmationSetupPeriodMetaAction,
     setupPeriodAction,
     setPeriodDeleteValuesActions,
-    setErrorToastAction
+    setErrorToastAction,
+    setNewPeriodFreeShippingAction
 } from '../../redux/layouts';
 import { clearShippingPeriodAction } from '../../redux/shipping/actions';
 import { ErrorMessage, Field, Formik } from 'formik';
@@ -111,7 +112,33 @@ export default function ShippingThreshold() {
                     <div className="w-full">
                         <Formik
                             onSubmit={(values) => {
-                                console.log(values);
+                                let diffPeriod = false;
+                                if (calendarPeriod && period.free_shipping_from) {
+                                    if (
+                                        calendarPeriod.startDate !=
+                                        moment(period.free_shipping_from).format('YYYY-MM-DD')
+                                    ) {
+                                        diffPeriod = true;
+                                    }
+                                    if (
+                                        calendarPeriod.endDate !=
+                                        moment(period.free_shipping_to).format('YYYY-MM-DD')
+                                    ) {
+                                        diffPeriod = true;
+                                    }
+                                    if (
+                                        moment(period.free_shipping_from).format('YYYY-MM-DD') !=
+                                        moment(timeFrom).format('HH:mm')
+                                    ) {
+                                        diffPeriod = true;
+                                    }
+                                    if (
+                                        moment(period.free_shipping_to).format('YYYY-MM-DD') !=
+                                        moment(timeTo).format('HH:mm')
+                                    ) {
+                                        diffPeriod = true;
+                                    }
+                                }
                                 dispatch(
                                     setupPeriodAction({
                                         startDate: calendarPeriod.startDate,
@@ -121,13 +148,26 @@ export default function ShippingThreshold() {
                                         threshold: values.threshold
                                     })
                                 );
-                                dispatch(
-                                    setModalConfirmationSetupPeriodMetaAction({
-                                        onConfirm: async () => {
-                                            toggleModalPeriodSetupConfirmation();
-                                        }
-                                    })
-                                );
+
+                                if (diffPeriod) {
+                                    dispatch(setNewPeriodFreeShippingAction(true));
+                                    dispatch(
+                                        setModalConfirmationSetupPeriodMetaAction({
+                                            onConfirm: async () => {
+                                                toggleModalPeriodSetupConfirmation();
+                                            }
+                                        })
+                                    );
+                                } else {
+                                    dispatch(
+                                        setModalConfirmationSetupPeriodMetaAction({
+                                            onConfirm: async () => {
+                                                toggleModalPeriodSetupConfirmation();
+                                            }
+                                        })
+                                    );
+                                }
+
                                 if (
                                     !calendarPeriod &&
                                     !period.free_shipping_from &&
@@ -184,7 +224,7 @@ export default function ShippingThreshold() {
                                                 width={20}
                                                 height={18}
                                             />
-                                            <div className="md:ml-2 inline-block mb-4">
+                                            <div className="md:ml-2 inline-block mb-4 mr-4">
                                                 <DatePicker
                                                     selectsRange={true}
                                                     startDate={startDate}

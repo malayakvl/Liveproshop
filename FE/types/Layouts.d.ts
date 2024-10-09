@@ -25,6 +25,7 @@ declare namespace Layouts {
         modalConfirmationDeletePeriodMeta: ModalDeletePeriodMeta | null;
         modalConfirmationSetupPeriodMeta: ModalConfirmPeriodMeta | null;
         deletePeriod: null;
+        changeFreeShippingPeriod: boolean;
         setupPeriod: null;
         deletePeriodHidePopup: boolean;
         modalCalendlyMeta: ModalCalendlyMeta | null;

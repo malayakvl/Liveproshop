@@ -33,6 +33,9 @@ export const setSuccessToastAction: any = createAction('layouts/SET_SUCCESS_TOAS
 
 export const setInfoToastAction: any = createAction('layouts/SET_INFO_TOAST');
 export const setupPeriodAction: any = createAction('layouts/SET_FREE_PERIOD_SHIPPING');
+export const setNewPeriodFreeShippingAction: any = createAction(
+    'layouts/SET_NEW_FREE_PERIOD_SHIPPING'
+);
 
 export const deleteToastAction: any = createAction('layouts/DELETE_TOAST');
 
