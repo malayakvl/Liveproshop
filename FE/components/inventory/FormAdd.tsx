@@ -24,6 +24,8 @@ import { InventoryPhotos, RenderSizes, RenderVariant } from './index';
 const SunEditor = dynamic(() => import('suneditor-react'), {
     ssr: false
 });
+// import SunEditor from 'suneditor-react';
+import 'suneditor/dist/css/suneditor.min.css';
 
 export interface ColourOption {
     readonly value: string;
@@ -32,7 +34,7 @@ export interface ColourOption {
     readonly isFixed?: boolean;
     readonly isDisabled?: boolean;
 }
-
+console.log('Add Form');
 const colourStyles: StylesConfig<ColourOption, true> = {
     control: (styles) => ({ ...styles, backgroundColor: 'white' }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
@@ -118,14 +120,8 @@ function ProductFormAdd({
     const [formValues, setFormValues] = useState({});
     const [active, setActive] = useState(false);
     const [x, setX] = useState(true);
-    // const { setFieldValue }: any = useFormikContext();
-
-    // console.log('FORM VALUES', formValues);
-
-    // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
     const [publishTmp, setPublishTmp] = useState<boolean>(false);
-
     const onDelete = useCallback(
         (tagIndex: number) => {
             setTags(tags.filter((_, i) => i !== tagIndex));
@@ -352,7 +348,6 @@ function ProductFormAdd({
                             formData.append('photos[]', file);
                         });
                     }
-                    console.log('FORM DATA', formData);
                     dispatch(updateProductAction(formData, values.id));
                 }
             }}>
@@ -405,8 +400,8 @@ function ProductFormAdd({
                                         name={'description'}
                                         setDefaultStyle="font-family: Montserrat; font-size: 14px;"
                                         placeholder={t('Product Description')}
-                                        defaultValue={props.values.description || editorContent}
-                                        setContents={props.values.description}
+                                        defaultValue={editorContent}
+                                        setContents={''}
                                         setOptions={{ height: '250' }}
                                         onChange={handleChangeEditor}
                                     />
