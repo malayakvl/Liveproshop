@@ -356,7 +356,6 @@ function ProductForm({
                             formData.append('photos[]', file);
                         });
                     }
-                    console.log('FORM DATA', formData);
                     dispatch(updateProductAction(formData, values.id));
                 }
             }}>
@@ -405,27 +404,15 @@ function ProductForm({
                                     <label className="control-label" htmlFor={'description'}>
                                         {t('Product Description')}
                                     </label>
-                                    {productData.product.id ? (
-                                        <SunEditor
-                                            name={'description'}
-                                            setDefaultStyle="font-family: Montserrat; font-size: 14px;"
-                                            placeholder={t('Product Description')}
-                                            defaultValue={props.values.description || editorContent}
-                                            setContents={props.values.description}
-                                            setOptions={{ height: '250' }}
-                                            onChange={handleChangeEditor}
-                                        />
-                                    ) : (
-                                        <SunEditor
-                                            name={'description'}
-                                            setDefaultStyle="font-family: Montserrat; font-size: 14px;"
-                                            placeholder={t('Product Description')}
-                                            defaultValue={editorContent}
-                                            setContents={props.values.description}
-                                            setOptions={{ height: '250' }}
-                                            onChange={handleChangeEditor}
-                                        />
-                                    )}
+                                    <SunEditor
+                                        name={'description'}
+                                        setDefaultStyle="font-family: Montserrat; font-size: 14px;"
+                                        placeholder={t('Product Description')}
+                                        defaultValue={productData.product.description}
+                                        setContents={productData.product.description}
+                                        setOptions={{ height: '250' }}
+                                        onChange={handleChangeEditor}
+                                    />
                                     {editorContent.replace(/(&nbsp;|<([^>]+)>)/gi, '').length ===
                                         0 && (
                                         <div className="error-el">
