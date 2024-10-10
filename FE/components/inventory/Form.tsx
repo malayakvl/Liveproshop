@@ -32,7 +32,7 @@ export interface ColourOption {
     readonly isFixed?: boolean;
     readonly isDisabled?: boolean;
 }
-
+console.log('Edit Form');
 const colourStyles: StylesConfig<ColourOption, true> = {
     control: (styles) => ({ ...styles, backgroundColor: 'white' }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
@@ -125,7 +125,6 @@ function ProductForm({
     // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
     const [publishTmp, setPublishTmp] = useState<boolean>(false);
-
     const onDelete = useCallback(
         (tagIndex: number) => {
             setTags(tags.filter((_, i) => i !== tagIndex));
@@ -406,15 +405,27 @@ function ProductForm({
                                     <label className="control-label" htmlFor={'description'}>
                                         {t('Product Description')}
                                     </label>
-                                    <SunEditor
-                                        name={'description'}
-                                        setDefaultStyle="font-family: Montserrat; font-size: 14px;"
-                                        placeholder={t('Product Description')}
-                                        defaultValue={props.values.description || editorContent}
-                                        setContents={props.values.description}
-                                        setOptions={{ height: '250' }}
-                                        onChange={handleChangeEditor}
-                                    />
+                                    {productData.product.id ? (
+                                        <SunEditor
+                                            name={'description'}
+                                            setDefaultStyle="font-family: Montserrat; font-size: 14px;"
+                                            placeholder={t('Product Description')}
+                                            defaultValue={props.values.description || editorContent}
+                                            setContents={props.values.description}
+                                            setOptions={{ height: '250' }}
+                                            onChange={handleChangeEditor}
+                                        />
+                                    ) : (
+                                        <SunEditor
+                                            name={'description'}
+                                            setDefaultStyle="font-family: Montserrat; font-size: 14px;"
+                                            placeholder={t('Product Description')}
+                                            defaultValue={editorContent}
+                                            setContents={props.values.description}
+                                            setOptions={{ height: '250' }}
+                                            onChange={handleChangeEditor}
+                                        />
+                                    )}
                                     {editorContent.replace(/(&nbsp;|<([^>]+)>)/gi, '').length ===
                                         0 && (
                                         <div className="error-el">
