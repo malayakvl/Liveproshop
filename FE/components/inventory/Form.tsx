@@ -32,7 +32,7 @@ export interface ColourOption {
     readonly isFixed?: boolean;
     readonly isDisabled?: boolean;
 }
-console.log('Edit Form');
+
 const colourStyles: StylesConfig<ColourOption, true> = {
     control: (styles) => ({ ...styles, backgroundColor: 'white' }),
     option: (styles, { data, isDisabled, isFocused, isSelected }) => {
@@ -125,6 +125,7 @@ function ProductForm({
     // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
     const [publishTmp, setPublishTmp] = useState<boolean>(false);
+
     const onDelete = useCallback(
         (tagIndex: number) => {
             setTags(tags.filter((_, i) => i !== tagIndex));
@@ -405,27 +406,15 @@ function ProductForm({
                                     <label className="control-label" htmlFor={'description'}>
                                         {t('Product Description')}
                                     </label>
-                                    {productData.product.id ? (
-                                        <SunEditor
-                                            name={'description'}
-                                            setDefaultStyle="font-family: Montserrat; font-size: 14px;"
-                                            placeholder={t('Product Description')}
-                                            defaultValue={props.values.description || editorContent}
-                                            setContents={props.values.description}
-                                            setOptions={{ height: '250' }}
-                                            onChange={handleChangeEditor}
-                                        />
-                                    ) : (
-                                        <SunEditor
-                                            name={'description'}
-                                            setDefaultStyle="font-family: Montserrat; font-size: 14px;"
-                                            placeholder={t('Product Description')}
-                                            defaultValue={editorContent}
-                                            setContents={props.values.description}
-                                            setOptions={{ height: '250' }}
-                                            onChange={handleChangeEditor}
-                                        />
-                                    )}
+                                    <SunEditor
+                                        name={'description'}
+                                        setDefaultStyle="font-family: Montserrat; font-size: 14px;"
+                                        placeholder={t('Product Description')}
+                                        defaultValue={props.values.description || editorContent}
+                                        setContents={props.values.description}
+                                        setOptions={{ height: '250' }}
+                                        onChange={handleChangeEditor}
+                                    />
                                     {editorContent.replace(/(&nbsp;|<([^>]+)>)/gi, '').length ===
                                         0 && (
                                         <div className="error-el">
@@ -509,6 +498,49 @@ function ProductForm({
                                     </>
                                 )}
                                 <div className="mb-4">
+                                    <label className="control-label">{t('Material')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory'}
+                                            options={prepareAdditionalDropdown(
+                                                additionalProps.materials,
+                                                locale
+                                            )}
+                                            value={selectedMaterials}
+                                            onChange={handleChangeMaterials}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Color')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isMulti={props.values.configured}
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory-color'}
+                                            options={prepareAdditionalColorDropdown(
+                                                additionalProps.colors,
+                                                locale
+                                            )}
+                                            value={selectedColors}
+                                            styles={colourStyles}
+                                            onChange={handleChangeColor}
+                                        />
+                                        {props.errors['color'] &&
+                                            selectedColors.length === 0 &&
+                                            selectedSizes.length === 0 && (
+                                                <div className="error-el">
+                                                    {props.errors['color']}
+                                                </div>
+                                            )}
+                                    </div>
+                                </div>
+                                <div className="mb-4">
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
                                         <em
@@ -588,49 +620,6 @@ function ProductForm({
                                             )}
                                     </div>
                                 </div>
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Material')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory'}
-                                            options={prepareAdditionalDropdown(
-                                                additionalProps.materials,
-                                                locale
-                                            )}
-                                            value={selectedMaterials}
-                                            onChange={handleChangeMaterials}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Color')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isMulti={props.values.configured}
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory-color'}
-                                            options={prepareAdditionalColorDropdown(
-                                                additionalProps.colors,
-                                                locale
-                                            )}
-                                            value={selectedColors}
-                                            styles={colourStyles}
-                                            onChange={handleChangeColor}
-                                        />
-                                        {props.errors['color'] &&
-                                            selectedColors.length === 0 &&
-                                            selectedSizes.length === 0 && (
-                                                <div className="error-el">
-                                                    {props.errors['color']}
-                                                </div>
-                                            )}
-                                    </div>
-                                </div>
 
                                 {props.values.configured && (
                                     <>
@@ -646,35 +635,9 @@ function ProductForm({
                                 )}
                                 <div className="mb-4">
                                     <label className="control-label">{t('Active')}</label>
-                                    {/*<div className="radio">*/}
-                                    {/*    <label>*/}
-                                    {/*        <input*/}
-                                    {/*            type="radio"*/}
-                                    {/*            value="option1"*/}
-                                    {/*            onClick={() => {*/}
-                                    {/*                setActive(!productData.product.publish);*/}
-                                    {/*            }}*/}
-                                    {/*            checked={productData.product.publish}*/}
-                                    {/*        />*/}
-                                    {/*    </label>*/}
-                                    {/*</div>*/}
                                     <input type="checkbox" checked={x} onChange={() => setX(!x)} />
                                     {/*<input type="checkbox" checked={x} onChange={soldCheckbox}/>*/}
                                 </div>
-                                {/*<div className="mb-4">*/}
-                                {/*    <label className="control-label">*/}
-                                {/*    {t('Active')}*/}
-                                {/*    </label>*/}
-                                {/*    <input*/}
-                                {/*        type="checkbox"*/}
-                                {/*        checked={!dataPublish}*/}
-                                {/*        onChange={(el) => {*/}
-                                {/*            setDataPublish(!el.target.checked);*/}
-                                {/*            setActive(!el.target.checked);*/}
-                                {/*            console.log('handle change checkbox', active);*/}
-                                {/*        }}*/}
-                                {/*    />*/}
-                                {/*</div>*/}
 
                                 <button type="submit" className="gradient-btn">
                                     {props.values.id ? t('Update Product') : t('Add a Product')}
