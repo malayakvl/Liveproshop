@@ -43,7 +43,7 @@ export const updateProductAction: any = createAction(
                     dispatch(
                         setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
                     );
-                    window.location.reload();
+                    // window.location.reload();
                     dispatch(fetchAdditionalAction());
                     dispatch(fetchProductsAction());
                     dispatch(showLoaderAction(false));
