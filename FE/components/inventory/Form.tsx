@@ -277,6 +277,8 @@ function ProductForm({
         })
     });
 
+    console.log('PRODUCT DATA', productData.product);
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -296,9 +298,20 @@ function ProductForm({
                 if (values['configured']) {
                     selectedColors.forEach((_color: any) => {
                         selectedSizes.forEach((_size: any) => {
+                            const _tmpSizeLabel = _size['label'].replace('.', '_');
+                            console.log(
+                                'VALUES',
+                                values[`configurePrice_${_color['label']}_${_tmpSizeLabel}`]
+                            );
+                            console.log(
+                                'BY ID',
+                                document.getElementById(
+                                    `configurePrice_${_color['label']}_${_tmpSizeLabel}`
+                                )
+                            );
                             if (
-                                !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
-                                !values[`configureQty_${_color['label']}_${_size['label']}`]
+                                !values[`configurePrice_${_color['label']}_${_tmpSizeLabel}`] ||
+                                !values[`configureQty_${_color['label']}_${_tmpSizeLabel}`]
                             ) {
                                 errorConfig = true;
                                 tmpError.push(`error_${_color['label']}_${_size['label']}`);

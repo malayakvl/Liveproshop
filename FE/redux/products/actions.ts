@@ -133,6 +133,7 @@ export const fetchProductAction: any = createAction(
             if (res.status) {
                 dispatch(showLoaderAction(false));
             }
+            console.log('DATA SERVER', res.data.product);
             return {
                 product: res.data.product
             };

@@ -168,7 +168,10 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     <InputText
                                         icon={null}
                                         label={t('Price')}
-                                        name={`configurePrice_${attr.color}_${attr.size}`}
+                                        name={`configurePrice_${attr.color}_${attr.size.replace(
+                                            '.',
+                                            '_'
+                                        )}`}
                                         placeholder={'Price'}
                                         style={'w-[100px]'}
                                         props={props}
@@ -177,7 +180,10 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     <InputText
                                         icon={null}
                                         label={t('Quantity')}
-                                        name={`configureQty_${attr.color}_${attr.size}`}
+                                        name={`configureQty_${attr.color}_${attr.size.replace(
+                                            '.',
+                                            '_'
+                                        )}`}
                                         placeholder={'Quantity'}
                                         style={'w-[100px]'}
                                         props={props}
@@ -186,7 +192,10 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     <InputText
                                         icon={null}
                                         label={t('SKU')}
-                                        name={`configureSKU_${attr.color}_${attr.size}`}
+                                        name={`configureSKU_${attr.color}_${attr.size.replace(
+                                            '.',
+                                            '_'
+                                        )}`}
                                         placeholder={'SKU'}
                                         style={'w-full max-w-[170px]'}
                                         props={props}

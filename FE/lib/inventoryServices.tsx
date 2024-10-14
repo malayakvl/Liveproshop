@@ -21,11 +21,36 @@ export function prepareConfigValues(values: any, selectedColors: any, selectedSi
                     color_id: _confColors[i].value,
                     size_id: _confSizes[j].value
                 });
-                configData.push({
-                    price: values[`configurePrice_${_confColors[i].label}_${_confSizes[j].label}`],
-                    qty: values[`configureQty_${_confColors[i].label}_${_confSizes[j].label}`],
-                    sku: values[`configureSKU_${_confColors[i].label}_${_confSizes[j].label}`]
-                });
+                if (_confSizes[j].label.includes('.')) {
+                    configData.push({
+                        price: values[
+                            `configurePrice_${_confColors[i].label}_${_confSizes[j].label.replace(
+                                '.',
+                                '_'
+                            )}`
+                        ],
+                        qty: values[
+                            `configureQty_${_confColors[i].label}_${_confSizes[j].label.replace(
+                                '.',
+                                '_'
+                            )}`
+                        ],
+                        sku: values[
+                            `configureSKU_${_confColors[i].label}_${_confSizes[j].label.replace(
+                                '.',
+                                '_'
+                            )}`
+                        ]
+                    });
+                } else {
+                    configData.push({
+                        price: values[
+                            `configurePrice_${_confColors[i].label}_${_confSizes[j].label}`
+                        ],
+                        qty: values[`configureQty_${_confColors[i].label}_${_confSizes[j].label}`],
+                        sku: values[`configureSKU_${_confColors[i].label}_${_confSizes[j].label}`]
+                    });
+                }
             }
         }
     } else {

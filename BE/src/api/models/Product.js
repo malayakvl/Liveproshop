@@ -401,6 +401,7 @@ console.log(queryUpdate);
     async fetchProduct (id, userId) {
         const client = await pool.connect();
         try {
+            console.log('GET PRODUCT DATA');
             const res = await client.query(`SELECT * FROM data.products WHERE user_id=${userId} AND id=${id}`);
             if (res.rows.length) {
                 res.rows[0].selectedColors = [];
@@ -443,6 +444,7 @@ console.log(queryUpdate);
                         res.rows[0].price = resConfigs.rows[0].price;
                         res.rows[0].quantity = resConfigs.rows[0].quantity;
                     }
+
                     let selectedTagsData = [];
                     if (res.rows[0].tags) {
                         if (res.rows[0].tags.length > 0) {

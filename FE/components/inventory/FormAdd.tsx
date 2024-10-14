@@ -292,12 +292,21 @@ function ProductFormAdd({
                 if (values['configured']) {
                     selectedColors.forEach((_color: any) => {
                         selectedSizes.forEach((_size: any) => {
+                            const _tmpSize = _size['label'].replace('.', '_');
+                            const fieldName = `${_color['label']}_${_tmpSize}`;
+                            console.log('SIZE', _size['label'].replace('.', '_'));
+                            console.log('FIELD NAME', fieldName);
+                            console.log('VALUES', values[`configurePrice_${fieldName}`]);
+                            console.log(
+                                'BY ID',
+                                document.getElementById(`configurePrice_${fieldName}`)
+                            );
                             if (
-                                !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
-                                !values[`configureQty_${_color['label']}_${_size['label']}`]
+                                !values[`configurePrice_${fieldName}`] ||
+                                !values[`configureQty_${fieldName}`]
                             ) {
                                 errorConfig = true;
-                                tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                                tmpError.push(`error_${fieldName}`);
                             }
                         });
                     });
