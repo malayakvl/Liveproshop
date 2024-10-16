@@ -2840,6 +2840,10 @@ console.log('BROKEN 2')
             if (data.free_shipping_status) {
                 free_shipping_timer = `${data.free_shipping_timer || 0} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
+            const subscriptionPlan = await client.query(`SELECT plan_id FROM data.subscriptions WHERE user_id='${userId}'`);
+            let percent = 3;
+            if (subscriptionPlan.rows[0].plan_id === 1)
+                percent = 5;
 
             const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : data.type === 'd' ? 'day' : 'minute'}${data.order_timer > 1 ? 's' : ''}`;
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
@@ -2849,7 +2853,7 @@ console.log('BROKEN 2')
                     free_shipping_status = EXCLUDED.free_shipping_status,
                     multisafe_api_key = EXCLUDED.multisafe_api_key;`;
             await client.query(query, [userId, intervalDuration, free_shipping_timer, !!data.free_shipping_status, data.multisafe_api_key]);
-
+            await client.query(`UPDATE data.seller_settings SET transaction_percent='${percent}' WHERE user_id='${userId}'`);
             return { success: true };
 
         } catch (e) {
