@@ -114,8 +114,6 @@ function ProductFormAdd({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
-    const [dataPublish, setDataPublish] = useState(publish);
-    const [formValues, setFormValues] = useState({});
     const [active, setActive] = useState(false);
     const [x, setX] = useState(true);
     const dataVariants: {
@@ -125,13 +123,8 @@ function ProductFormAdd({
         color_id: number | null;
         size_id: number | null;
     }[] = [];
-    // const { setFieldValue }: any = useFormikContext();
 
-    // console.log('FORM VALUES', formValues);
-
-    // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
-    const [publishTmp, setPublishTmp] = useState<boolean>(false);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
