@@ -430,10 +430,11 @@ console.log(e.message)
                                 headers: { 'Content-Type': 'application/json' }
                             })
                             .then(async (resM) => {
-                                console.log('Merchant result', resM.data.data);
+                                // console.log('Merchant result', resM.data.data);
                                 return resM.data.data;
                             }).catch(error => {
-                                console.log("Merchant error", error);
+                                // console.log('Merchant error');
+                                console.log("Merchant error", error.message);
                             });
                         return {redirectUrl: res.data.data.payment_url, error: null}
                     }).catch(error => {

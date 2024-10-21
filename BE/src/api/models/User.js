@@ -481,6 +481,10 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                 });
             });
             user = await this.findUserByProviderId(userData.userID);
+            // const providerQuery = await client.query(`SELECT `)
+            const accountId = userData.userID;
+            console.log('PROVIDER LOGIN', accountId);
+
             if (parseInt(user.role_id) === 2) {
                 // get user stores
                 try {
@@ -495,11 +499,11 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
 
                                 return responseLongToken.data.access_token
                             });
-                        const accountId = userData.userID;
+                        const accountId = user.auth_provider_id;
 
                         await axios
                             .get(
-                                `https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
+                                `https://graph.facebook.com/v20.0/me?fields=id,email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
                             )
                             .then(async (responsePages) => {
 
@@ -508,15 +512,16 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                 } else {
                                     const storesList = responsePages.data.accounts.data;
                                     const businessesList = responsePages.data?.businesses?.data || [];
-                                    const userFbId = userData.id;
+                                    const userFbId = responsePages.data.id;
+                                    await client.query(`DELETE FROM data.user_stores WHERE account_id='${userFbId}'`);
                                     storesList.forEach(async (store) => {
-                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
+                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                         if (queryStore.rows.length === 0) {
                                             await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, picture, synchronized)
                                                     VALUES
                                                     (
-                                                        '${userData.userID}',
+                                                        '${userFbId}',
                                                         '${store.id}',
                                                         '${store.access_token}',
                                                         '${store.name}',
@@ -526,24 +531,24 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                                     );`
                                             );
                                         } else {
-                                            await  client.query(`
-                                                    UPDATE data.user_stores SET 
-                                                     access_token='${store.access_token}', 
+                                            const queryUpdStore =
+                                                `UPDATE data.user_stores SET
+                                                     access_token='${store.access_token}',
                                                      name='${store.name}'
-                                                    WHERE user_id = '${user.id}';`
-                                            );
+                                                    WHERE user_id = '${user.id}';`;
+                                            await client.query(queryUpdStore);
                                         }
                                     })
 
                                     businessesList.map(async (business) => {
-                                        const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userData.id}'
+                                        const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}'
                                             AND business_id='${business.id}'`);
                                         if (queryBusiness.rows.length === 0) {
                                             await  client.query(`
                                                     INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
                                                     VALUES
                                                     (
-                                                        '${userData.id}',
+                                                        '${userFbId}',
                                                         '${business.id}',
                                                         '${business.name}',
                                                         '${user.id}'
@@ -562,18 +567,18 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                                     if (responseBusinessesPages.data.error) {
                                                         store.dispatch(setErrorToastAction('Could no getting stores list'));
                                                     } else {
-                                                        const storesList = responseBusinessesPages.data;
-                                                        const userFbId = userData.id;
+                                                        const storeBusinessList = responseBusinessesPages.data;
+                                                        const userFbId = userData.userID;
                                                         // getting picture for store
                                                         let storePicture = '';
-                                                        storesList.data.forEach(async (store) => {
-                                                            const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${accountId}' AND store_id='${store.id}'`);
+                                                        storeBusinessList.data.forEach(async (store) => {
+                                                            const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                                             if (queryStore.rows.length === 0) {
                                                                 await  client.query(`
                                                             INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
                                                             VALUES
                                                             (
-                                                                '${accountId}',
+                                                                '${userFbId}',
                                                                 '${store.id}',
                                                                 '${store.access_token}',
                                                                 '${store.name}',
@@ -593,7 +598,7 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                                                 fan_count='${store.fan_count}',
                                                                 synchronized=true,
                                                                 is_business=true
-                                                            WHERE account_id='${accountId}' AND store_id='${store.id}';`
+                                                            WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                                                 );
                                                             }
                                                         })
@@ -2065,7 +2070,6 @@ console.log('CREATE SUBSCRIPTION');
                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                         } else {
                             const businessesList = responseBusinesses.data;
-console.log((businessesList.businesses.data));
                             businessesList.businesses.data.map(async (business) => {
                                 console.log(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}' 
                                     AND business_id='${business.id}'`);
@@ -2840,6 +2844,10 @@ console.log('BROKEN 2')
             if (data.free_shipping_status) {
                 free_shipping_timer = `${data.free_shipping_timer || 0} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
+            const subscriptionPlan = await client.query(`SELECT plan_id FROM data.subscriptions WHERE user_id='${userId}'`);
+            let percent = 3;
+            if (subscriptionPlan.rows[0].plan_id === 1)
+                percent = 5;
 
             const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : data.type === 'd' ? 'day' : 'minute'}${data.order_timer > 1 ? 's' : ''}`;
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
@@ -2849,7 +2857,7 @@ console.log('BROKEN 2')
                     free_shipping_status = EXCLUDED.free_shipping_status,
                     multisafe_api_key = EXCLUDED.multisafe_api_key;`;
             await client.query(query, [userId, intervalDuration, free_shipping_timer, !!data.free_shipping_status, data.multisafe_api_key]);
-
+            await client.query(`UPDATE data.seller_settings SET transaction_percent='${percent}' WHERE user_id='${userId}'`);
             return { success: true };
 
         } catch (e) {

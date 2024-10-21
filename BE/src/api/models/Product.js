@@ -280,19 +280,29 @@ class Product {
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
                         publish = ${publish}
                      WHERE id=${_resProd.rows[0].id};`;
-console.log(queryUpdate);
                 await client.query(queryUpdate);
-                
+                const configs = JSON.parse(dataProduct.configurations);
+// console.log('CONFIGS', configs);
+// exit;
                 // update configuration
                 await client.query(`DELETE FROM data.product_configurations WHERE product_id=${_resProd.rows[0].id}`);
-                const configs = JSON.parse(dataProduct.configurations);
-                if (configs.config) {
-                    const promisesQueries = [];
-                    configs.config.forEach((configuration, index) => {
-                        promisesQueries.push(this.addConfiguration(_resProd.rows[0].id, configuration, configs.configData[[index]]));
+// console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
+                // const configs = JSON.parse(dataProduct.configurations);
+                if (configs) {
+                    const promisesQueriesNew = [];
+                    configs.forEach((_config, index) => {
+                        promisesQueriesNew.push(this.addConfigurationNew(_resProd.rows[0].id, _config));
                     });
                     await Promise.all(promisesQueries);
                 }
+                    // const configs = JSON.parse(dataProduct.configurations);
+                // if (configs.config) {
+                //     const promisesQueries = [];
+                //     configs.config.forEach((configuration, index) => {
+                //         promisesQueries.push(this.addConfiguration(_resProd.rows[0].id, configuration, configuration));
+                //     });
+                //     await Promise.all(promisesQueries);
+                // }
     
                 return { success: true };
             } else {
@@ -314,7 +324,6 @@ console.log(queryUpdate);
 
     async create (dataProduct, userId, isPublish) {
         const client = await pool.connect();
-        console.log('IS PUBLISH', isPublish);
         try {
             // prepare tags
             const tags = await this.prepareTags(dataProduct.tags);
@@ -332,7 +341,7 @@ console.log(queryUpdate);
                     ${dataProduct.material_id},
                     ${userId}
                 ) RETURNING id;`;
-            console.log(queryInsert)
+// console.log(queryInsert)
             const resProduct = await client.query(queryInsert);
             
             const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
@@ -363,14 +372,38 @@ console.log(queryUpdate);
             }
     
             // update configuration
+console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
             const configs = JSON.parse(dataProduct.configurations);
-            if (configs.config) {
-                const promisesQueries = [];
-                configs.config.forEach((configuration, index) => {
-                    promisesQueries.push(this.addConfiguration(resProduct.rows[0].id, configuration, configs.configData[[index]]));
+            if (configs) {
+                const promisesQueriesNew = [];
+                configs.forEach((_config, index) => {
+                    promisesQueriesNew.push(this.addConfigurationNew(resProduct.rows[0].id, _config));
                 });
                 await Promise.all(promisesQueries);
+                // const promisesQueries = [];
+                // configs.forEach((configuration, index) => {
+                //     console.log('SINGLE CONFIG', configuration);
+                //     const SQL = `INSERT INTO data.product_configurations (resProduct.rows[0].id, price, quantity, sku, configuration)
+                //         VALUES (
+                //             ${productId},
+                //             ${configuration.price},
+                //             ${configuration.qty},
+                //             '${configuration.sku || '' }',
+                //             '${JSON.stringify({color_id: configuration.constructor, size_id: configuration.size_id})}'
+                //         )`;
+                //     console.log(SQL);
+                //     // promisesQueries.push(this.addConfiguration(resProduct.rows[0].id, configuration, configs.configData[[index]]));
+                //     // promisesQueries.push(this.addConfiguration(resProduct.rows[0].id, configuration, configs.configData[[index]]));
+                // });
+                // await Promise.all(promisesQueries);
             }
+            // if (configs.config) {
+            //     const promisesQueries = [];
+            //     configs.config.forEach((configuration, index) => {
+            //         promisesQueries.push(this.addConfiguration(resProduct.rows[0].id, configuration, configs.configData[[index]]));
+            //     });
+            //     await Promise.all(promisesQueries);
+            // }
 
             return { success: true };
         } catch (e) {
@@ -443,6 +476,7 @@ console.log(queryUpdate);
                         res.rows[0].price = resConfigs.rows[0].price;
                         res.rows[0].quantity = resConfigs.rows[0].quantity;
                     }
+
                     let selectedTagsData = [];
                     if (res.rows[0].tags) {
                         if (res.rows[0].tags.length > 0) {
@@ -534,15 +568,48 @@ console.log(queryUpdate);
         }
     }
 
+    async addConfigurationNew (productId, config) {
+// console.log('PRODUCT ID', productId);
+// console.log('CONFIG', config);
+        const SQL = `INSERT INTO data.product_configurations (product_id, price, quantity, sku, configuration)
+                        VALUES (
+                            ${productId},
+                            ${config.price},
+                            ${config.qty},
+                            '${config.sku || '' }',
+                            '${JSON.stringify({color_id: config.color_id, size_id: config.size_id})}'
+                        )`;
+// console.log('SQL CONFIGURATION', SQL);
+        const client = await pool.connect();
+        try {
+            await client.query(SQL);
+            return true;
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error Product Configuration:',
+                    { message: e.message }
+                );
+            }
+            return null;
+        } finally {
+            client.release();
+        }
+    }
+
     async addConfiguration (productId, config, configData) {
+console.log('PRODUCT ID', productId);
+console.log('CONFIG', config);
         const SQL = `INSERT INTO data.product_configurations (product_id, price, quantity, sku, configuration)
                         VALUES (
                             ${productId},
                             ${configData.price},
                             ${configData.qty},
                             '${configData.sku || '' }',
-                            '${JSON.stringify(config)}'
+                            '${JSON.stringify({color_id: configData.color_id, size_id: configData.size_id})}'
                         )`;
+console.log('SQL CONFIGURATION', SQL);
         const client = await pool.connect();
         try {
             await client.query(SQL);

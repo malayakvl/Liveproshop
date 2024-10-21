@@ -114,17 +114,17 @@ function ProductFormAdd({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
-    const [dataPublish, setDataPublish] = useState(publish);
-    const [formValues, setFormValues] = useState({});
     const [active, setActive] = useState(false);
     const [x, setX] = useState(true);
-    // const { setFieldValue }: any = useFormikContext();
+    const dataVariants: {
+        price: string | null;
+        qty: string | null;
+        sku: string;
+        color_id: number | null;
+        size_id: number | null;
+    }[] = [];
 
-    // console.log('FORM VALUES', formValues);
-
-    // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
-    const [publishTmp, setPublishTmp] = useState<boolean>(false);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
@@ -271,7 +271,6 @@ function ProductFormAdd({
                     : Yup.string()
         })
     });
-    console.log('TUT');
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -290,22 +289,79 @@ function ProductFormAdd({
                 setErrorConfigured([]);
                 // let tmpError: string[] = [];
                 if (values['configured']) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tmpVariant = document.getElementById('props_variants').textContent;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    let tmpValues: any[] = [];
+                    if (tmpVariant) {
+                        tmpValues = JSON.parse(tmpVariant);
+                    }
+                    // const tmpValues = JSON.parse(tmpVariant);
                     selectedColors.forEach((_color: any) => {
                         selectedSizes.forEach((_size: any) => {
-                            if (
-                                !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
-                                !values[`configureQty_${_color['label']}_${_size['label']}`]
-                            ) {
+                            const _tmpSizeLabel = _size['label'].replace('.', '_');
+                            let tPrice = '';
+                            let tQty = '';
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tPrice = document.getElementById(
+                                `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                            ).textContent;
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tQty = document.getElementById(
+                                `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                            ).textContent;
+                            if (tmpValues.length > 0) {
+                                tmpValues.forEach((_value: any) => {
+                                    if (
+                                        _value.color_id == _color['label'] &&
+                                        _value.size_id.replace('.', '_')
+                                    ) {
+                                        tPrice = _value.price;
+                                        tQty = _value.qty;
+                                    }
+                                });
+                            }
+                            dataVariants.push({
+                                price: tPrice,
+                                qty: tQty,
+                                sku: '',
+                                color_id: _color['value'],
+                                size_id: _size['value']
+                            });
+                            if (!tPrice || !tQty) {
+                                console.log('Set error');
                                 errorConfig = true;
                                 tmpError.push(`error_${_color['label']}_${_size['label']}`);
                             }
+                            // const _tmpSize = _size['label'].replace('.', '_');
+                            // const fieldName = `${_color['label']}_${_tmpSize}`;
+                            // console.log('SIZE', _size['label'].replace('.', '_'));
+                            // console.log('FIELD NAME', fieldName);
+                            // console.log('VALUES', values[`configurePrice_${fieldName}`]);
+                            // console.log(
+                            //     'BY ID',
+                            //     document.getElementById(`configurePrice_${fieldName}`)
+                            // );
+                            // if (
+                            //     !values[`configurePrice_${fieldName}`] ||
+                            //     !values[`configureQty_${fieldName}`]
+                            // ) {
+                            //     errorConfig = true;
+                            //     tmpError.push(`error_${fieldName}`);
+                            // }
                         });
                     });
                 }
-                if (tmpError.length > 0) {
-                    setErrorConfigured(tmpError);
-                }
-                // console.log('Error Config', errorConfig);
+                console.log('VARIANTS', dataVariants);
+                console.log('SUBMIT');
+                // if (tmpError.length > 0) {
+                //     setErrorConfigured(tmpError);
+                // }
+                // console.log(prepareConfigValues(values, selectedColors, selectedSizes));
 
                 if (!isIdent && !errorConfig) {
                     const formData = new FormData();
@@ -335,10 +391,7 @@ function ProductFormAdd({
 
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
-                    formData.append(
-                        'configurations',
-                        JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
-                    );
+                    formData.append('configurations', JSON.stringify(dataVariants));
                     formData.append('materials', JSON.stringify(selectedMaterials));
                     formData.append('colors', JSON.stringify(selectedColors));
                     formData.append('sizes', JSON.stringify(selectedSizes));
