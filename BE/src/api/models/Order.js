@@ -2429,6 +2429,7 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
             sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
+            console.log(sellerData);
             settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
 
             settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
@@ -2454,9 +2455,9 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
                 const checkPeriodRes = await client.query(checkPeriodQuery);
                 inPeriod =  checkPeriodRes.rows.length > 0;
             }
-console.log('IN PERIOD FIRST', inPeriod)
+            console.log('IN PERIOD FIRST', inPeriod)
             if (inPeriod) {
-console.log('NEW ALGO HERE');
+                console.log('NEW ALGO HERE');
                 const orderQuery = `SELECT SUM(total_amount) AS sum_total, 
                             SUM(shipping_amount) AS sum_shipping,
                             SUM(refund_amount) AS sum_refund 
@@ -2466,19 +2467,20 @@ console.log('NEW ALGO HERE');
                             AND data.orders.user_id='${userId}' AND 
                             data.orders.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'
                             GROUP BY data.orders.user_id`;
-console.log(orderQuery);
+                console.log(orderQuery);
                 const sumOrderRes = await client.query(orderQuery);
-                let payedShippingAmount; let freeShipping = false;let refundAmound = 0;
-                payedShippingAmount = parseFloat(sumOrderRes.rows[0].sum_shipping);
-                refundAmound = parseFloat(sumOrderRes.rows[0].sum_refund);
-                if (parseFloat(sumOrderRes.rows[0].sum_total) < parseFloat(threshold)) {
-console.log('Payed Shipping', payedShippingAmount)
+                let payedShippingAmount; let freeShipping = false;let refundAmound = 0; let sumTotal = 0;
+                payedShippingAmount = parseFloat(sumOrderRes.rows.length > 0 ? sumOrderRes.rows[0].sum_shipping : 0 );
+                refundAmound = parseFloat(sumOrderRes.rows.length > 0 ? sumOrderRes.rows[0].sum_refund : 0);
+                sumTotal = parseFloat(sumOrderRes.rows.length > 0 ? sumOrderRes.rows[0].sum_total : 0);
+                if (parseFloat(sumTotal) < parseFloat(threshold)) {
+                    console.log('Payed Shipping', payedShippingAmount)
                     if (payedShippingAmount > 0) {
                         freeShipping = true;
                     } else {
                         freeShipping = false;
                     }
-console.log('Free shipping ', freeShipping);
+                    console.log('Free shipping ', freeShipping);
                     return {success: true, amount_refund: 0, freeShipping: freeShipping}
                 } else {
                     if (refundAmound === 0 && payedShippingAmount > 0) {
@@ -2488,7 +2490,7 @@ console.log('Free shipping ', freeShipping);
                     }
                     return {success: true, amount_refund: refundAmound, freeShipping: true}
                 }
-                
+
                 return {success: true, amount_refund: 0, freeShipping: false}
             } else {
                 return {success: true, amount_refund: 0, freeShipping: false}

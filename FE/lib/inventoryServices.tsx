@@ -22,19 +22,37 @@ export function prepareConfigValues(values: any, selectedColors: any, selectedSi
                     size_id: _confSizes[j].value
                 });
                 if (_confSizes[j].label.includes('.')) {
+                    const _tmpSizeLabel = `${_confColors[i].label}_${_confSizes[j].label.replace(
+                        '.',
+                        '_'
+                    )}`;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tPrice = document.getElementById(
+                        `tconfigurePrice_${_confColors[i].label}_${_tmpSizeLabel}`
+                    ).textContent;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tQty = document.getElementById(
+                        `tconfigureQty_${_confColors[i].label}_${_tmpSizeLabel}`
+                    ).textContent;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
                     configData.push({
-                        price: values[
-                            `configurePrice_${_confColors[i].label}_${_confSizes[j].label.replace(
-                                '.',
-                                '_'
-                            )}`
-                        ],
-                        qty: values[
-                            `configureQty_${_confColors[i].label}_${_confSizes[j].label.replace(
-                                '.',
-                                '_'
-                            )}`
-                        ],
+                        // price: values[
+                        //     `configurePrice_${_confColors[i].label}_${_confSizes[j].label.replace(
+                        //         '.',
+                        //         '_'
+                        //     )}`
+                        // ],
+                        // qty: values[
+                        //     `configureQty_${_confColors[i].label}_${_confSizes[j].label.replace(
+                        //         '.',
+                        //         '_'
+                        //     )}`
+                        // ],
+                        price: 1,
+                        qty: 1,
                         sku: values[
                             `configureSKU_${_confColors[i].label}_${_confSizes[j].label.replace(
                                 '.',

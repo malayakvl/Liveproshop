@@ -118,7 +118,13 @@ function ProductForm({
     const [formValues, setFormValues] = useState({});
     const [active, setActive] = useState(false);
     const [x, setX] = useState(publish);
-    // const { setFieldValue }: any = useFormikContext();
+    const dataVariants: {
+        price: string | null;
+        qty: string | null;
+        sku: string;
+        color_id: number | null;
+        size_id: number | null;
+    }[] = [];
 
     // console.log('FORM VALUES', formValues);
 
@@ -277,8 +283,6 @@ function ProductForm({
         })
     });
 
-    console.log('PRODUCT DATA', productData.product);
-
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -296,28 +300,86 @@ function ProductForm({
                 setErrorConfigured([]);
                 // let tmpError: string[] = [];
                 if (values['configured']) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tmpVariant = document.getElementById('props_variants').textContent;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    let tmpValues: any[] = [];
+                    if (tmpVariant) {
+                        tmpValues = JSON.parse(tmpVariant);
+                    }
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    // const tmpValues = JSON.parse(tmpVariant);
                     selectedColors.forEach((_color: any) => {
                         selectedSizes.forEach((_size: any) => {
                             const _tmpSizeLabel = _size['label'].replace('.', '_');
-                            console.log(
-                                'VALUES',
-                                values[`configurePrice_${_color['label']}_${_tmpSizeLabel}`]
-                            );
-                            console.log(
-                                'BY ID',
-                                document.getElementById(
-                                    `configurePrice_${_color['label']}_${_tmpSizeLabel}`
-                                )
-                            );
-                            if (
-                                !values[`configurePrice_${_color['label']}_${_tmpSizeLabel}`] ||
-                                !values[`configureQty_${_color['label']}_${_tmpSizeLabel}`]
-                            ) {
+                            let tPrice = '';
+                            let tQty = '';
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tPrice = document.getElementById(
+                                `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                            ).textContent;
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tQty = document.getElementById(
+                                `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                            ).textContent;
+                            if (tmpValues.length > 0) {
+                                console.log('EBALA', tmpValues);
+                                tmpValues.forEach((_value: any) => {
+                                    if (
+                                        _value.color_id == _color['label'] &&
+                                        _value.size_id.replace('.', '_')
+                                    ) {
+                                        tPrice = _value.price;
+                                        tQty = _value.qty;
+                                    }
+                                });
+                            }
+                            dataVariants.push({
+                                price: tPrice,
+                                qty: tQty,
+                                sku: '',
+                                color_id: _color['value'],
+                                size_id: _size['value']
+                            });
+                            console.log('Data variants', dataVariants);
+                            if (!tPrice || !tQty) {
+                                console.log('Set error');
                                 errorConfig = true;
                                 tmpError.push(`error_${_color['label']}_${_size['label']}`);
                             }
                         });
                     });
+                    // selectedColors.forEach((_color: any) => {
+                    //     selectedSizes.forEach((_size: any) => {
+                    //         const _tmpSizeLabel = _size['label'].replace('.', '_');
+                    //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //         // @ts-ignore
+                    //         const tPrice = document.getElementById(
+                    //             `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                    //         ).textContent;
+                    //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    //         // @ts-ignore
+                    //         const tQty = document.getElementById(
+                    //             `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                    //         ).textContent;
+                    //         if (!tPrice || !tQty) {
+                    //             errorConfig = true;
+                    //             tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                    //         }
+                    //         // if (
+                    //         //     !values[`configurePrice_${_color['label']}_${_tmpSizeLabel}`] ||
+                    //         //     !values[`configureQty_${_color['label']}_${_tmpSizeLabel}`]
+                    //         // ) {
+                    //         //     errorConfig = true;
+                    //         //     tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                    //         // }
+                    //     });
+                    // });
                 }
                 if (tmpError.length > 0) {
                     setErrorConfigured(tmpError);
@@ -352,10 +414,11 @@ function ProductForm({
 
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
-                    formData.append(
-                        'configurations',
-                        JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
-                    );
+                    // formData.append(
+                    //     'configurations',
+                    //     JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
+                    // );
+                    formData.append('configurations', JSON.stringify(dataVariants));
                     formData.append('materials', JSON.stringify(selectedMaterials));
                     formData.append('colors', JSON.stringify(selectedColors));
                     formData.append('sizes', JSON.stringify(selectedSizes));
@@ -436,13 +499,6 @@ function ProductForm({
                                     )}
                                 </div>
 
-                                {/*<InputSwitcher*/}
-                                {/*    label={'Active'}*/}
-                                {/*    name={'active'}*/}
-                                {/*    style={null}*/}
-                                {/*    props={props}*/}
-                                {/*    onChange={props.handleChange}*/}
-                                {/*/>*/}
                                 <InputSwitcher
                                     label={'Configured'}
                                     name={'configured'}
