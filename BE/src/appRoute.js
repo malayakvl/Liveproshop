@@ -1,9 +1,6 @@
 import { Router } from 'express';
 import pool from './api/models/connect.js';
 import shell from "shelljs";
-import moment from "moment";
-
-console.log(moment().add(`${process.env.SERVER_TIME_DIFF}`, 'hours').format('YYYY-MM-DD HH:mm:ss'))
 
 const appRoute = Router();
 appRoute.get(/.*$/, function (req, res, next) {
