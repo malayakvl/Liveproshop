@@ -2021,6 +2021,8 @@ console.log('CREATE SUBSCRIPTION');
                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                         } else {
                             const storesList = responsePages.data;
+console.log('STORES LIST', storesList)
+
                             // getting picture for store
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
@@ -2042,13 +2044,19 @@ console.log('CREATE SUBSCRIPTION');
                                                     );`
                                     );
                                 } else {
+                                    // const periodStartNew =  new Date();
+                                    // const timestampStartNew = periodStartNew.getTime();
+                                    // const ts = moment().format('YYYY-MM-DD HH:mm:ss').unix();
+                                    // const m = moment.unix(ts);
+                                    //
                                     await  client.query(`
                                                     UPDATE data.user_stores SET
                                                         access_token='${store.access_token}',
                                                         name='${store.name}',
                                                         picture='${store.picture.data.url}',
                                                         fan_count='${store.fan_count}',
-                                                        synchronized=true
+                                                        synchronized=true,
+                                                        updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                     WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                     );
                                 }
@@ -2070,6 +2078,7 @@ console.log('CREATE SUBSCRIPTION');
                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                         } else {
                             const businessesList = responseBusinesses.data;
+console.log('BUSINESS LIST', businessesList.businesses.data)
                             businessesList.businesses.data.map(async (business) => {
                                 console.log(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}' 
                                     AND business_id='${business.id}'`);
@@ -2129,7 +2138,8 @@ console.log('CREATE SUBSCRIPTION');
                                                                 picture='${store.picture.data.url}',
                                                                 fan_count='${store.fan_count}',
                                                                 synchronized=true,
-                                                                is_business=true
+                                                                is_business=true,
+                                                                updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                             WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                                         );
                                                     }
