@@ -282,12 +282,8 @@ class Product {
                      WHERE id=${_resProd.rows[0].id};`;
                 await client.query(queryUpdate);
                 const configs = JSON.parse(dataProduct.configurations);
-// console.log('CONFIGS', configs);
-// exit;
-                // update configuration
+
                 await client.query(`DELETE FROM data.product_configurations WHERE product_id=${_resProd.rows[0].id}`);
-// console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
-                // const configs = JSON.parse(dataProduct.configurations);
                 if (configs) {
                     const promisesQueriesNew = [];
                     configs.forEach((_config, index) => {
@@ -536,6 +532,7 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
                 offset = (Number(page) - 1) * Number(perPage);
             }
             const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
+console.log(productQuery);
             // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];
@@ -569,8 +566,6 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
     }
 
     async addConfigurationNew (productId, config) {
-// console.log('PRODUCT ID', productId);
-// console.log('CONFIG', config);
         const SQL = `INSERT INTO data.product_configurations (product_id, price, quantity, sku, configuration)
                         VALUES (
                             ${productId},
@@ -579,7 +574,7 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
                             '${config.sku || '' }',
                             '${JSON.stringify({color_id: config.color_id, size_id: config.size_id})}'
                         )`;
-// console.log('SQL CONFIGURATION', SQL);
+console.log('SQL CONFIGURATION', SQL);
         const client = await pool.connect();
         try {
             await client.query(SQL);
