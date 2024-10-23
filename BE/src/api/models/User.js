@@ -1616,7 +1616,6 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
             const user = await this.findUserByEmailOnly(userData.email);
             await client.query(`UPDATE data.users SET selected_locale='${userData.locale}' WHERE id=${user.id}`)
             user.selected_locale = userData.locale;
-console.log('CREATE SUBSCRIPTION');
 
             if (user) {
                 user.subscription = null;
