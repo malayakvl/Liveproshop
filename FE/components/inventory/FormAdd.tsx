@@ -299,10 +299,7 @@ function ProductFormAdd({
                     if (tmpVariant) {
                         tmpValues = JSON.parse(tmpVariant);
                     }
-                    if (selectedSizes.length === 0 || selectedColors.length === 0) {
-                        setShowError(true);
-                        errorConfig = true;
-                    } else {
+                    if (selectedColors.length > 0 && selectedSizes.length > 0) {
                         selectedColors.forEach((_color: any) => {
                             selectedSizes.forEach((_size: any) => {
                                 const _tmpSizeLabel = _size['label'].replace('.', '_');
@@ -339,8 +336,54 @@ function ProductFormAdd({
                                 if (!tPrice || !tQty) {
                                     errorConfig = true;
                                     tmpError.push(`error_${_color['label']}_${_size['label']}`);
-                                    setShowError(true);
                                 }
+                            });
+                        });
+                    }
+                    if (selectedColors.length > 0 && selectedSizes.length == 0) {
+                        selectedColors.forEach((_color: any) => {
+                            let tPrice = '';
+                            let tQty = '';
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tPrice = document.getElementById(
+                                `tconfigurePrice_${_color['label']}_none`
+                            ).textContent;
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tQty = document.getElementById(
+                                `tconfigureQty_${_color['label']}_none`
+                            ).textContent;
+                            dataVariants.push({
+                                price: tPrice,
+                                qty: tQty,
+                                sku: '',
+                                color_id: _color['value'],
+                                size_id: null
+                            });
+                        });
+                    }
+                    if (selectedColors.length == 0 && selectedSizes.length > 0) {
+                        selectedSizes.forEach((_size: any) => {
+                            let tPrice = '';
+                            let tQty = '';
+                            const _tmpSizeLabel = _size['label'].replace('.', '_');
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tPrice = document.getElementById(
+                                `tconfigurePrice_none_${_tmpSizeLabel}`
+                            ).textContent;
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tQty = document.getElementById(
+                                `tconfigureQty_none_${_tmpSizeLabel}`
+                            ).textContent;
+                            dataVariants.push({
+                                price: tPrice,
+                                qty: tQty,
+                                sku: '',
+                                color_id: null,
+                                size_id: _size['value']
                             });
                         });
                     }

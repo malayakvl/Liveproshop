@@ -26,7 +26,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
         const tQty = document.getElementById(
             `tconfigureQty_${newCheckedVariant.replace('.', '_')}`
         ).textContent;
-        if (colors.length === 0 || sizes.length === 0) {
+        console.log('COLORS', colors);
+        console.log('SIZES', sizes);
+        if (colors.length === 0 && sizes.length === 0) {
             setShowError(true);
         } else {
             let textPrice: string | number;
@@ -44,7 +46,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                 // textPrice = parseFloat(document.getElementById(fieldName).textContent);
                 // const priceText = document.getElementById(`tconfigurePrice`);
                 variants.forEach((attr: any) => {
-                    console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
+                    // console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     document.getElementById(

@@ -176,7 +176,6 @@ function ProductForm({
     const handleChangeColor = (selectedOption: any) => {
         const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
-        console.log('SELECTED OPTION', selectedOption);
         if (selectedOption.length > 0) {
             selectedOption.forEach(function (_color: any) {
                 selectedSizes.forEach(function (_size: any) {
@@ -308,53 +307,103 @@ function ProductForm({
                     if (tmpVariant) {
                         tmpValues = JSON.parse(tmpVariant);
                     }
-                    if (selectedSizes.length === 0 || selectedColors.length === 0) {
+                    if (selectedSizes.length === 0 && selectedColors.length === 0) {
                         setShowError(true);
                         errorConfig = true;
                     } else {
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         // const tmpValues = JSON.parse(tmpVariant);
-                        selectedColors.forEach((_color: any) => {
-                            selectedSizes.forEach((_size: any) => {
-                                const _tmpSizeLabel = _size['label'].replace('.', '_');
+                        console.log('SELECTED COLORS', selectedColors);
+                        console.log('SELECTED SIZES', selectedSizes);
+                        if (selectedColors.length > 0 && selectedSizes.length > 0) {
+                            selectedColors.forEach((_color: any) => {
+                                selectedSizes.forEach((_size: any) => {
+                                    const _tmpSizeLabel = _size['label'].replace('.', '_');
+                                    let tPrice = '';
+                                    let tQty = '';
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    tPrice = document.getElementById(
+                                        `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                                    ).textContent;
+                                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                    // @ts-ignore
+                                    tQty = document.getElementById(
+                                        `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                                    ).textContent;
+                                    if (tmpValues.length > 0) {
+                                        tmpValues.forEach((_value: any) => {
+                                            if (
+                                                _value.color_id == _color['label'] &&
+                                                _value.size_id.replace('.', '_')
+                                            ) {
+                                                tPrice = _value.price;
+                                                tQty = _value.qty;
+                                            }
+                                        });
+                                    }
+                                    dataVariants.push({
+                                        price: tPrice,
+                                        qty: tQty,
+                                        sku: '',
+                                        color_id: _color['value'],
+                                        size_id: _size['value']
+                                    });
+                                    if (!tPrice || !tQty) {
+                                        errorConfig = true;
+                                        tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                                    }
+                                });
+                            });
+                        }
+                        if (selectedColors.length > 0 && selectedSizes.length == 0) {
+                            selectedColors.forEach((_color: any) => {
                                 let tPrice = '';
                                 let tQty = '';
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore
                                 tPrice = document.getElementById(
-                                    `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                                    `tconfigurePrice_${_color['label']}_none`
                                 ).textContent;
                                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                                 // @ts-ignore
                                 tQty = document.getElementById(
-                                    `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                                    `tconfigureQty_${_color['label']}_none`
                                 ).textContent;
-                                if (tmpValues.length > 0) {
-                                    tmpValues.forEach((_value: any) => {
-                                        if (
-                                            _value.color_id == _color['label'] &&
-                                            _value.size_id.replace('.', '_')
-                                        ) {
-                                            tPrice = _value.price;
-                                            tQty = _value.qty;
-                                        }
-                                    });
-                                }
                                 dataVariants.push({
                                     price: tPrice,
                                     qty: tQty,
                                     sku: '',
                                     color_id: _color['value'],
+                                    size_id: null
+                                });
+                            });
+                        }
+                        if (selectedColors.length == 0 && selectedSizes.length > 0) {
+                            selectedSizes.forEach((_size: any) => {
+                                let tPrice = '';
+                                let tQty = '';
+                                const _tmpSizeLabel = _size['label'].replace('.', '_');
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                tPrice = document.getElementById(
+                                    `tconfigurePrice_none_${_tmpSizeLabel}`
+                                ).textContent;
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                tQty = document.getElementById(
+                                    `tconfigureQty_none_${_tmpSizeLabel}`
+                                ).textContent;
+                                dataVariants.push({
+                                    price: tPrice,
+                                    qty: tQty,
+                                    sku: '',
+                                    color_id: null,
                                     size_id: _size['value']
                                 });
-                                console.log('Data variants', dataVariants);
-                                if (!tPrice || !tQty) {
-                                    errorConfig = true;
-                                    tmpError.push(`error_${_color['label']}_${_size['label']}`);
-                                }
                             });
-                        });
+                        }
                     }
                 } else {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -404,10 +453,6 @@ function ProductForm({
 
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
-                    // formData.append(
-                    //     'configurations',
-                    //     JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
-                    // );
                     formData.append('configurations', JSON.stringify(dataVariants));
                     formData.append('materials', JSON.stringify(selectedMaterials));
                     formData.append('colors', JSON.stringify(selectedColors));
