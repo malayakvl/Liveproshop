@@ -10,7 +10,15 @@ const storeData = args[3].split('=');
 
 async function startProcess() {
     try {
-        console.log(`https://graph.facebook.com/v18.0/${storeData[1]}/live_videos?broadcast_status=["LIVE"]&fields=broadcast_start_time,id,title&access_token=${tokenData[1]}`);
+        // await axios.get(`https://graph.facebook.com/v18.0/${storeData[1]}/live_videos?broadcast_status=["VOD"]&fields=broadcast_start_time,id,title&access_token=${tokenData[1]}`)
+        //     .then(async function (response) {
+        //         const results = response.data.data;
+        //         console.log("Getting vod videos", results);
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error", error.response.data.error.message);
+        //     });
+
         await axios.get(`https://graph.facebook.com/v18.0/${storeData[1]}/live_videos?broadcast_status=["LIVE"]&fields=broadcast_start_time,id,title&access_token=${tokenData[1]}`)
             .then(async function (response) {
                 const results = response.data.data;

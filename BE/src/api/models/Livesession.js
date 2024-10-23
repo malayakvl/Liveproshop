@@ -633,13 +633,14 @@ class Livesession {
             const resStores = await client.query(storesQuery);
             let longToken;
             let expiteLongTokenAt;
-            if (resStores.rows.length > 0) {
+            let expiteAccessLongTokenAt;
+            // if (resStores.rows.length > 0) {
 // console.log('STORES LENGTH', resStores.rows.length)
-// console.log('USER TOKEN', user.auth_provider_access_token)
+console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
 // console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.auth_provider_access_token}`);
                 longToken = await axios
                     .get(
-                        `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.auth_provider_access_token}`
+                        `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
                     )
                     .then(async (responseLongToken) => {
                         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
@@ -682,8 +683,41 @@ console.log('RESULT RESPONSE', longToken);
                         console.log('data_access_expires_at', longTokenExpire.result.data.data_access_expires_at);
                         expiteLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
                     }
+                }  else {
+                    // get date expired
+                    // user.auth_provider_access_token
+                    const appAccessToken = await axios
+                        .get(
+                            `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`
+                        )
+                        .then(async (responseLongToken) => {
+                            return {appToken: responseLongToken.data.access_token};
+                        }).catch(e => {
+                            return {error: e.response.data.error.message};
+                            // return  e.response.data.error.message
+                        });
+                    console.log('APP TOKEN DATA', appAccessToken);
+
+
+                    longTokenExpire = await axios
+                        .get(
+                            `https://graph.facebook.com/debug_token?input_token=${user.auth_provider_access_token}&access_token=${appAccessToken.appToken}`
+                        )
+                        .then(async (responseLongToken) => {
+                            console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                            return {result: responseLongToken.data};
+                        }).catch(e => {
+                            return  {error: e.response.data.error.message}
+                        })
+                    // console.log('LONG TOKEN EXPIRE', longTokenExpire)
+                    if (!longTokenExpire.error) {
+                        expiteLongTokenAt = moment.unix(longTokenExpire.result.data.expires_at).format("DD-MM-YYYY HH:mm:ss");
+                        expiteAccessLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
+                        console.log('EXPIRED', expiteLongTokenAt);
+                        console.log('EXPIRED', expiteAccessLongTokenAt);
+                    }
                 }
-            }
+            // }
 
 
             // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
