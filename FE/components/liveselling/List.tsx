@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsCountSelector, paginatedItemsSelector } from '../../redux/livesessions/selectors';
+import {
+    itemsCountSelector,
+    longTokenSelector,
+    paginatedItemsSelector
+} from '../../redux/livesessions/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/livesessions';
@@ -8,11 +12,11 @@ import { removeItemAction, stopSessionAction } from '../../redux/livesessions/ac
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { itemSelector } from '../../redux/settings/selectors';
-import Link from 'next/link';
 
 const ListMessages: React.FC = () => {
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
+    const longTokenMsg = useSelector(longTokenSelector);
     const count = useSelector(itemsCountSelector);
     const settingsValues = useSelector(itemSelector);
 
@@ -26,6 +30,13 @@ const ListMessages: React.FC = () => {
 
     return (
         <div className="mt-7">
+            {longTokenMsg && (
+                <div className="alert-danger">
+                    {t(
+                        'Your Facebook token is expired or invalid, please resynchronize with your Facebook account'
+                    )}
+                </div>
+            )}
             <DataTable
                 paginationType={PaginationType.LIVESESSIONS}
                 totalAmount={count}

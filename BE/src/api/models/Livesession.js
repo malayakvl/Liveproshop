@@ -642,9 +642,9 @@ console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_e
                     )
                     .then(async (responseLongToken) => {
                         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
-                        await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+                        // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
 
-                        return responseLongToken.data.access_token
+                        return null;
                     }).catch(e => {
                         console.log('ERROR', e.response.data.error.message)
                         return  e.response.data.error.message

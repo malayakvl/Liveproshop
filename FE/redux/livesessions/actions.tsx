@@ -91,7 +91,8 @@ export const fetchItemsAction: any = createAction(
                     dispatch(showLoaderAction(false));
                     return {
                         count: res.data.count,
-                        items: res.data.items
+                        items: res.data.items,
+                        longToken: res.data.longToken
                     };
                 });
         }

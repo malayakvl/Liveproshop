@@ -681,5 +681,6 @@
   "Live Carts": "Live Carts",
   "_products": "product (s)",
   "of": "of",
-  "You need to chose at least one colour and size": "You need to chose at least one colour and size"
+  "You need to chose at least one colour and size": "You need to chose at least one colour and size",
+  "Your Facebook token is expired or invalid, please resynchronize with your Facebook account": "Your Facebook token is expired or invalid, please resynchronize with your Facebook account"
 }

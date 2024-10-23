@@ -8,6 +8,7 @@ declare namespace Livesessions {
         showPopup: boolean;
         itemScenarios: DataScenario[];
         selectedStoreId: number | null;
+        longToken: any;
     }
 
     interface DataScenario {
