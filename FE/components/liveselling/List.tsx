@@ -19,7 +19,7 @@ const ListMessages: React.FC = () => {
     const t = useTranslations();
 
     const [closedSessions, setClosedSession] = useState<number[]>([]);
-    const [showAlert, setShowAlert] = useState(true);
+    // const [showAlert, setShowAlert] = useState(true);
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);

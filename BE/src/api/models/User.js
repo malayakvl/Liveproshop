@@ -3363,7 +3363,6 @@ console.log('BROKEN 2')
             }
             if (dataFiles.length > 0) {
                 const promisesDocs = [];
-                console.log('here');
                 dataFiles.forEach(doc => {
                     console.log("DOC", doc);
                     // promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));

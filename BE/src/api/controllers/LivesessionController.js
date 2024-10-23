@@ -10,7 +10,6 @@ class LivesessionController {
      */
     async fetchItems (req, res) {
         const { limit, offset, queryFilter } = req.query;
-
         if (!req.user) {
             return res.status(401).json('Access deny');
         }

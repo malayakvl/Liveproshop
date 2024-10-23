@@ -1,6 +1,7 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import moment from 'moment';
+import store from "./Store.js";
 
 class Livesession {
     async getUserScenarios (userId) {
@@ -543,7 +544,6 @@ class Livesession {
     }
 
     async getAll (page, perPage = 20, userId, reqOffset = null) {
-        console.log('here');
         const client = await pool.connect();
         try {
             const _total = await client.query(
@@ -556,12 +556,20 @@ class Livesession {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            
+            const storesQuery = `SELECT * FROM data.user_stores WHERE user_id='${userId}' ORDER BY fan_count DESC limit ${perPage} OFFSET ${offset}`;
+            const resStores = await client.query(storesQuery);
+            if (resStores.rows.length > 0) {
+                resStores.rows.forEach(_store => {
+                    console.log('STORE', _store);
+                })
+            }
+
+
             // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name 
-FROM data.live_sessions 
-LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
-WHERE data.live_sessions.user_id='${userId}'
+                    FROM data.live_sessions 
+                    LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+                    WHERE data.live_sessions.user_id='${userId}'
                 ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             // console.log(productQuery);
             const res = await client.query(productQuery);
