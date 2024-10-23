@@ -2,7 +2,6 @@ import { Router } from 'express';
 import pool from './api/models/connect.js';
 import shell from "shelljs";
 
-
 const appRoute = Router();
 appRoute.get(/.*$/, function (req, res, next) {
     pool.query('SELECT 1 + 1  AS solution', (error) => {

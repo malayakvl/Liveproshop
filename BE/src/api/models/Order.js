@@ -1840,6 +1840,7 @@ console.log(updateAmountSQL)
             const tmpUserId = res.rows[0].tmp_user;
             const fakeUserId = res.rows[0].tmp_user;
 console.log('Fake user', fakeUserId)
+console.log('Order number', orderNumber)
 
             if (!orderNumber) {
 console.log('This block !orderNumber')
@@ -1853,7 +1854,10 @@ console.log('This block !orderNumber')
                         `SELECT * FROM data.orders 
                         WHERE status='new' AND user_id='${userId}' 
                         AND total_amount > 0 ORDER BY created_at DESC`);
-console.log('Exist non payed', existNonPayed.rows.length);
+console.log(`SELECT * FROM data.orders 
+                        WHERE status='new' AND user_id='${userId}' 
+                        AND total_amount > 0 ORDER BY created_at DESC`)
+console.log('Exist non payed TUT', existNonPayed.rows.length);
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
@@ -1977,7 +1981,6 @@ console.log('Here', emptyWaitRes.rows[0].id);
                     // delete unused order
                     await client.query(`DELETE FROM data.orders  WHERE id='${res.rows[0].order_id}'`);
                     // remove fake user
-console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
                     await client.query(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
 
                     // combined same rows in order_items
@@ -2421,7 +2424,7 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
 
     async isFreeShipping(userId, orderNumber) {
         const client = await pool.connect();
-        console.log('Calculate period');
+        // console.log('Calculate period');
         try {
             let sellerData;
             let settingsThreshold;
@@ -2429,7 +2432,7 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
             const currentOrder = await client.query(`SELECT * FROM data.orders WHERE order_number='${orderNumber}' AND user_id=${userId}`);
             sellerData = await client.query(`SELECT user_id 
                                 FROM data.live_sessions WHERE id=${currentOrder.rows[0].live_sessions_id}`);
-            console.log(sellerData);
+            // console.log(sellerData);
             settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerData.rows[0].user_id}`);
 
             settingsThreshold = await client.query(`SELECT * FROM data.free_order_threshold WHERE user_id=${sellerData.rows[0].user_id}`);
@@ -2455,9 +2458,8 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
                 const checkPeriodRes = await client.query(checkPeriodQuery);
                 inPeriod =  checkPeriodRes.rows.length > 0;
             }
-            console.log('IN PERIOD FIRST', inPeriod)
+// console.log('IN PERIOD FIRST', inPeriod)
             if (inPeriod) {
-                console.log('NEW ALGO HERE');
                 const orderQuery = `SELECT SUM(total_amount) AS sum_total, 
                             SUM(shipping_amount) AS sum_shipping,
                             SUM(refund_amount) AS sum_refund 
@@ -2467,7 +2469,7 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
                             AND data.orders.user_id='${userId}' AND 
                             data.orders.created_at BETWEEN '${startDateDb}' AND '${endDateDb}'
                             GROUP BY data.orders.user_id`;
-                console.log(orderQuery);
+// console.log(orderQuery);
                 const sumOrderRes = await client.query(orderQuery);
                 let payedShippingAmount; let freeShipping = false;let refundAmound = 0; let sumTotal = 0;
                 payedShippingAmount = parseFloat(sumOrderRes.rows.length > 0 ? sumOrderRes.rows[0].sum_shipping : 0 );

@@ -287,7 +287,7 @@ class Livesession {
                             AND (ls.job_closed IS NULL)
                             AND event_date_end = '${moment().format('YYYY-MM-DD')}'
                             AND event_time_end <= '${moment().add(3, 'hours').format('HH:mm:ss')}'`;
-        console.log(queryStr);
+        // console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];

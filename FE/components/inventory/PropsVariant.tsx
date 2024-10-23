@@ -26,7 +26,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
         const tQty = document.getElementById(
             `tconfigureQty_${newCheckedVariant.replace('.', '_')}`
         ).textContent;
-        if (colors.length === 0) {
+        console.log('COLORS', colors);
+        console.log('SIZES', sizes);
+        if (colors.length === 0 && sizes.length === 0) {
             setShowError(true);
         } else {
             let textPrice: string | number;
@@ -44,7 +46,7 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                 // textPrice = parseFloat(document.getElementById(fieldName).textContent);
                 // const priceText = document.getElementById(`tconfigurePrice`);
                 variants.forEach((attr: any) => {
-                    console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
+                    // console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     document.getElementById(
@@ -72,39 +74,8 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                     JSON.stringify(dataVariantsTmp);
             }
         }
-        // props.values['configurePrice_Yellow_42'] = 55;
-        // replacePrices(variants, price, qty);
         dispatch(setIdentAction(false));
     };
-
-    // const replacePrices = (variants: any[], price: number, qty: number, textPrice: number, textQty) => {
-    //     console.log('VARIANTS', variants);
-    //     console.log('PRICE', variants);
-    //     console.log('QTY', qty);
-    //     variants.forEach((attr: any) => {
-    //         props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
-    //         props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
-    //         console.log('Element', `configurePrice_${attr.color}_${attr.size}`);
-    //         const priceName = `tconfigurePrice_${attr.color}_${attr.size.replace('.', '_')}`;
-    //         console.log(
-    //             'Element replace',
-    //             `configurePrice_${attr.color}_${attr.size.replace('.', '_')}`
-    //         );
-    //         // document.getElementById(`tconfigurePrice_Red_xxs`).text = 1
-    //         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //         // @ts-ignore
-    //         document.getElementById(priceName).textContent = textPrice;
-    //         // document.getElementById(`configurePrice_${attr.color}_${attr.size.replace('.', '_')}`).value = price
-    //         //     ? price
-    //         //     : '';
-    //         // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //         // // @ts-ignore
-    //         // document.getElementById(`configureQty_${attr.color}_${attr.size.replace('.', '_')}`).value = qty
-    //         //     ? qty
-    //         //     : '';
-    //     });
-    // };
-    // console.log('Variant', tmpVariants);
 
     dispatch(setIdentAction(false));
 
@@ -399,7 +370,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                         X
                     </div>
                     <main className="modal-mainContents">
-                        <p className="p-3 ">{t('You need to chose at least one colour')}</p>
+                        <p className="p-3 ">
+                            {t('You need to chose at least one colour and size')}
+                        </p>
                     </main>
                 </article>
             </section>

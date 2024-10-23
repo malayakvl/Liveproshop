@@ -116,6 +116,7 @@ function ProductFormAdd({
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
     const [active, setActive] = useState(false);
     const [x, setX] = useState(true);
+    const [showError, setShowError] = useState(false);
     const dataVariants: {
         price: string | null;
         qty: string | null;
@@ -168,7 +169,7 @@ function ProductFormAdd({
     const handleChangeColor = (selectedOption: any) => {
         const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
-        if (selectedOption.length > 0) {
+        if (selectedOption) {
             selectedOption.forEach(function (_color: any) {
                 selectedSizes.forEach(function (_size: any) {
                     formRef.current?.setFieldValue(
@@ -271,7 +272,7 @@ function ProductFormAdd({
                     : Yup.string()
         })
     });
-
+    console.log('Show error', showError);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -298,70 +299,109 @@ function ProductFormAdd({
                     if (tmpVariant) {
                         tmpValues = JSON.parse(tmpVariant);
                     }
-                    // const tmpValues = JSON.parse(tmpVariant);
-                    selectedColors.forEach((_color: any) => {
-                        selectedSizes.forEach((_size: any) => {
-                            const _tmpSizeLabel = _size['label'].replace('.', '_');
+                    if (selectedColors.length > 0 && selectedSizes.length > 0) {
+                        selectedColors.forEach((_color: any) => {
+                            selectedSizes.forEach((_size: any) => {
+                                const _tmpSizeLabel = _size['label'].replace('.', '_');
+                                let tPrice = '';
+                                let tQty = '';
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                tPrice = document.getElementById(
+                                    `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                                ).textContent;
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                tQty = document.getElementById(
+                                    `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                                ).textContent;
+                                if (tmpValues.length > 0) {
+                                    tmpValues.forEach((_value: any) => {
+                                        if (
+                                            _value.color_id == _color['label'] &&
+                                            _value.size_id.replace('.', '_')
+                                        ) {
+                                            tPrice = _value.price;
+                                            tQty = _value.qty;
+                                        }
+                                    });
+                                }
+                                dataVariants.push({
+                                    price: tPrice,
+                                    qty: tQty,
+                                    sku: '',
+                                    color_id: _color['value'],
+                                    size_id: _size['value']
+                                });
+                                if (!tPrice || !tQty) {
+                                    errorConfig = true;
+                                    tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                                }
+                            });
+                        });
+                    }
+                    if (selectedColors.length > 0 && selectedSizes.length == 0) {
+                        selectedColors.forEach((_color: any) => {
                             let tPrice = '';
                             let tQty = '';
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             tPrice = document.getElementById(
-                                `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                                `tconfigurePrice_${_color['label']}_none`
                             ).textContent;
                             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                             // @ts-ignore
                             tQty = document.getElementById(
-                                `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                                `tconfigureQty_${_color['label']}_none`
                             ).textContent;
-                            if (tmpValues.length > 0) {
-                                tmpValues.forEach((_value: any) => {
-                                    if (
-                                        _value.color_id == _color['label'] &&
-                                        _value.size_id.replace('.', '_')
-                                    ) {
-                                        tPrice = _value.price;
-                                        tQty = _value.qty;
-                                    }
-                                });
-                            }
                             dataVariants.push({
                                 price: tPrice,
                                 qty: tQty,
                                 sku: '',
                                 color_id: _color['value'],
+                                size_id: null
+                            });
+                        });
+                    }
+                    if (selectedColors.length == 0 && selectedSizes.length > 0) {
+                        selectedSizes.forEach((_size: any) => {
+                            let tPrice = '';
+                            let tQty = '';
+                            const _tmpSizeLabel = _size['label'].replace('.', '_');
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tPrice = document.getElementById(
+                                `tconfigurePrice_none_${_tmpSizeLabel}`
+                            ).textContent;
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tQty = document.getElementById(
+                                `tconfigureQty_none_${_tmpSizeLabel}`
+                            ).textContent;
+                            dataVariants.push({
+                                price: tPrice,
+                                qty: tQty,
+                                sku: '',
+                                color_id: null,
                                 size_id: _size['value']
                             });
-                            if (!tPrice || !tQty) {
-                                console.log('Set error');
-                                errorConfig = true;
-                                tmpError.push(`error_${_color['label']}_${_size['label']}`);
-                            }
-                            // const _tmpSize = _size['label'].replace('.', '_');
-                            // const fieldName = `${_color['label']}_${_tmpSize}`;
-                            // console.log('SIZE', _size['label'].replace('.', '_'));
-                            // console.log('FIELD NAME', fieldName);
-                            // console.log('VALUES', values[`configurePrice_${fieldName}`]);
-                            // console.log(
-                            //     'BY ID',
-                            //     document.getElementById(`configurePrice_${fieldName}`)
-                            // );
-                            // if (
-                            //     !values[`configurePrice_${fieldName}`] ||
-                            //     !values[`configureQty_${fieldName}`]
-                            // ) {
-                            //     errorConfig = true;
-                            //     tmpError.push(`error_${fieldName}`);
-                            // }
                         });
+                    }
+                } else {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tColor = selectedColors?.value || null;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tSize = selectedSizes?.value || null;
+                    dataVariants.push({
+                        price: values['price'],
+                        qty: values['quantity'],
+                        sku: values['sku'],
+                        color_id: tColor,
+                        size_id: tSize
                     });
                 }
-                console.log('VARIANTS', dataVariants);
-                console.log('SUBMIT');
-                // if (tmpError.length > 0) {
-                //     setErrorConfigured(tmpError);
-                // }
-                // console.log(prepareConfigValues(values, selectedColors, selectedSizes));
 
                 if (!isIdent && !errorConfig) {
                     const formData = new FormData();
@@ -406,7 +446,6 @@ function ProductFormAdd({
                             formData.append('photos[]', file);
                         });
                     }
-                    console.log('FORM DATA', formData);
                     dispatch(updateProductAction(formData, values.id));
                 }
             }}>
@@ -681,6 +720,21 @@ function ProductFormAdd({
                                 </button>
                             </div>
                         </div>
+                        <section className={showError ? `modal` : 'hidden'}>
+                            <article className="modal-content p-lg-4">
+                                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                <div
+                                    className="varianModalClose"
+                                    onClick={() => setShowError(false)}>
+                                    X
+                                </div>
+                                <main className="modal-mainContents">
+                                    <p className="p-3 ">
+                                        {t('You need to chose at least one colour and size')}
+                                    </p>
+                                </main>
+                            </article>
+                        </section>
                     </form>
                 );
             }}
