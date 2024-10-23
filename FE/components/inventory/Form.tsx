@@ -423,7 +423,6 @@ function ProductForm({
                 if (tmpError.length > 0) {
                     setErrorConfigured(tmpError);
                 }
-                // console.log('Error Config', errorConfig);
 
                 if (!isIdent && !errorConfig) {
                     const formData = new FormData();
@@ -447,10 +446,6 @@ function ProductForm({
                         // @ts-ignore
                         formData.append('publishCheckbox', 0);
                     }
-                    // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // // @ts-ignore
-                    // formData.append('publishCheckbox', dataPublish);
-
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append('configurations', JSON.stringify(dataVariants));
@@ -478,11 +473,6 @@ function ProductForm({
                     setSelectedSizes([]);
                     return handleChange(e);
                 };
-                // const onChangeStatusPublish = (e: any) => {
-                //     props.values['isPublish'] = !props.values['isPublish'];
-                //     setDataPublish(!props.values['isPublish']);
-                //     return handleChange(e);
-                // };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 return (

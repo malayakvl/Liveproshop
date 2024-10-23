@@ -425,10 +425,6 @@ function ProductFormAdd({
                         // @ts-ignore
                         formData.append('publishCheckbox', 0);
                     }
-                    // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // // @ts-ignore
-                    // formData.append('publishCheckbox', dataPublish);
-
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append('configurations', JSON.stringify(dataVariants));
