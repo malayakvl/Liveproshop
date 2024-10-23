@@ -92,7 +92,8 @@ export const fetchItemsAction: any = createAction(
                     return {
                         count: res.data.count,
                         items: res.data.items,
-                        longToken: res.data.longToken
+                        longTokenError: res.data.longTokenError,
+                        expireTokenAt: res.data.expireTokenAt
                     };
                 });
         }

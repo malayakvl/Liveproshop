@@ -13,7 +13,10 @@ import { userSelector } from '../../redux/user/selectors';
 import { fetchFormAction } from '../../redux/settings';
 import { itemSelector } from '../../redux/settings/selectors';
 import moment from 'moment';
-import { longTokenSelector } from '../../redux/livesessions/selectors';
+import {
+    longTokenErrorSelector,
+    longTokenExpireSelector
+} from '../../redux/livesessions/selectors';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -22,7 +25,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const user = useSelector(userSelector);
     const settingsValues = useSelector(itemSelector);
     const [showErrorBlock, setShowErrorBlock] = useState(false);
-    const longTokenMsg = useSelector(longTokenSelector);
+    const longTokenError = useSelector(longTokenErrorSelector);
+    const longTokenExpire = useSelector(longTokenExpireSelector);
 
     const fbSync = () => {
         accountService.syncFB();
@@ -38,6 +42,8 @@ export default function Index({ session, locale }: { session: any; locale: strin
             setShowErrorBlock(true);
         }
     }, [settingsValues]);
+
+    console.log('Expire token at', longTokenExpire);
 
     return (
         <>
@@ -55,10 +61,9 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             <span>{t('Sync account')}</span>
                         </button>
                     </div>
-                    {!longTokenMsg && (
+                    {!longTokenError && (
                         <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
-                            {t('Expire in')}{' '}
-                            {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
+                            {t('Expire in')} {longTokenExpire}
                         </div>
                     )}
 

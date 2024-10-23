@@ -16,7 +16,7 @@ class LivesessionController {
 
         const data = await livesessionModel.getAll(1, limit, req.user.id, offset, queryFilter, req.user);
         if (!data.error) {
-            return res.status(200).json({ items: data.items, count: data.size, longToken: data.longToken });
+            return res.status(200).json({ items: data.items, count: data.size, longTokenError: data.longToken?.error, expireTokenAt: data.expiteLongTokenAt });
         } else {
             return res.status(401).json({ error: 'Something wend wrong' });
         }

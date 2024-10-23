@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     itemsCountSelector,
-    longTokenSelector,
+    longTokenErrorSelector,
     paginatedItemsSelector
 } from '../../redux/livesessions/selectors';
 import { PaginationType } from '../../constants';
@@ -16,7 +16,7 @@ import { itemSelector } from '../../redux/settings/selectors';
 const ListMessages: React.FC = () => {
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
-    const longTokenMsg = useSelector(longTokenSelector);
+    const longTokenErrorMsg = useSelector(longTokenErrorSelector);
     const count = useSelector(itemsCountSelector);
     const settingsValues = useSelector(itemSelector);
 
@@ -30,7 +30,7 @@ const ListMessages: React.FC = () => {
 
     return (
         <div className="mt-7">
-            {longTokenMsg && (
+            {longTokenErrorMsg && (
                 <div className="alert-danger">
                     {t(
                         'Your Facebook token is expired or invalid, please resynchronize with your Facebook account'
