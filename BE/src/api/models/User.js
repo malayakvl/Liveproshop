@@ -1996,7 +1996,7 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                        WHERE id=${userData.id}
                         `;
         const userFbId = data.userID;
-
+console.log('USER TOKEN', data.accessToken);
         // getting long live token
         const longToken = await axios
             .get(
@@ -2007,8 +2007,10 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                 await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
 
                 return responseLongToken.data.access_token
+            }).catch(e => {
+                return  e.response.data.error.message
             });
-
+console.log('LONG TOKEN RESPONSE', longToken);
         try {
             if (data.accessToken) {
                 await axios
@@ -2652,7 +2654,6 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
             const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
             const customerId = dbSubscriptionInfo.rows[0].customer_id;
             const oldSubscriptionId = dbSubscriptionInfo.rows[0].customer_id;
-console.log('BROKEN 2')
             // REFUNDING METHANIZM
             // const periodStart =  new Date();
             // const timestampStart = periodStart.getTime();
@@ -2683,15 +2684,6 @@ console.log('BROKEN 2')
 
             // const amountRemaining = upcomingInvoice.amount_remaining;
             if (refundAmount > 0 && paymentIntent) {
-                // refund payement
-                // try {
-                //     await stripe.refunds.create({
-                //         payment_intent: paymentIntent,
-                //         amount: refundAmount,
-                //     });
-                // } catch (e) {
-                //     console.log(e.message);
-                // }
                 try {
                     const cancelSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
                 } catch (e) {
@@ -2707,7 +2699,6 @@ console.log('BROKEN 2')
                 };
                 try {
                     const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
-// console.log("NEW SUBSCRIPTION", subscriptionNew);
 
                     // update subscription DB
                     const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
@@ -2966,60 +2957,9 @@ console.log('BROKEN 2')
                                 await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
                             })
                         }
-                        // if (file.indexOf('policy111') > 0) {
-                        //     console.log('need update policy')
-                        //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                        //         if (err) throw err
-                        //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
-                        //         console.log(`${dirUpload}/${file}`)
-                        //         console.log('to')
-                        //         console.log(`${dirNewUpload}/${file}`)
-                        //     })
-                        // }
                     });
                 }
-                // files.forEach(async file => {
-                //     let indexOfFirstPolicy = file.indexOf('policy');
-                //     let indexOfFirstTerms = file.indexOf('terms');
-                //     let indexOfFirstDelivery = file.indexOf('delivery');
-                //     let indexOfFirstReturn = file.indexOf('return');
-                //     if (indexOfFirstPolicy === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     if (indexOfFirstTerms === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     if (indexOfFirstDelivery === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     if (indexOfFirstReturn === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     // if (file.indexOf('policy111') > 0) {
-                //     //     console.log('need update policy')
-                //     //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //     //         if (err) throw err
-                //     //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
-                //     //         console.log(`${dirUpload}/${file}`)
-                //     //         console.log('to')
-                //     //         console.log(`${dirNewUpload}/${file}`)
-                //     //     })
-                //     // }
-                // });
             });
-            // const fs = require('fs');
 
             const _settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
             if (_settings.rows[0].tmp_privacy_doc) {

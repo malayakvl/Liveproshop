@@ -14,13 +14,26 @@ class LivesessionController {
             return res.status(401).json('Access deny');
         }
 
-        const data = await livesessionModel.getAll(1, limit, req.user.id, offset, queryFilter);
+        const data = await livesessionModel.getAll(1, limit, req.user.id, offset, queryFilter, req.user);
         if (!data.error) {
-            return res.status(200).json({ items: data.items, count: data.size });
+            return res.status(200).json({ items: data.items, count: data.size, longToken: data.longToken });
         } else {
             return res.status(401).json({ error: 'Something wend wrong' });
         }
     }
+//     async fetchItems (req, res) {
+//         const { limit, offset, queryFilter } = req.query;
+//         if (!req.user) {
+//             return res.status(401).json('Access deny');
+//         }
+// console.log(req.user);
+//         const data = await livesessionModel.getAll(1, limit, req.user.id, offset, queryFilter);
+//         if (!data.error) {
+//             return res.status(200).json({ items: data.items, count: data.size });
+//         } else {
+//             return res.status(401).json({ error: 'Something wend wrong' });
+//         }
+//     }
 
     /**
      * After start event for session change status that session is add to pm2 process
