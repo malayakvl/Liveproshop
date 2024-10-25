@@ -6,9 +6,11 @@ import orderModel from "./Order.js";
 class ChatbotMessage {
     async addMessages(sessionId, data) {
         const client = await pool.connect();
-        const productQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
+        const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
+console.log('Comment query');
+console.log(commentQuery);
         try {
-            await client.query(productQuery);
+            await client.query(commentQuery);
             const items = [];
             const error = null;
             

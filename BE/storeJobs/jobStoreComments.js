@@ -8,7 +8,7 @@ const tokenData = args[4].split('=');
 const videoData = args[2].split('=');
 async function startProcess() {
     try {
-        await axios.get(`https://graph.facebook.com/v17.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment&limit=100&access_token=${tokenData[1]}`)
+        await axios.get(`https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment&limit=100&access_token=${tokenData[1]}`)
             .then(async function (response) {
                 const results = response.data.data;
                 console.log('Incoming Comments', response.data.data[0]);

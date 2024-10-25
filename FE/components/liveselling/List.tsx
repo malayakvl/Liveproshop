@@ -30,13 +30,6 @@ const ListMessages: React.FC = () => {
 
     return (
         <div className="mt-7">
-            {longTokenErrorMsg && (
-                <div className="alert-danger">
-                    {t(
-                        'Your Facebook token is expired or invalid, please resynchronize with your Facebook account'
-                    )}
-                </div>
-            )}
             <DataTable
                 paginationType={PaginationType.LIVESESSIONS}
                 totalAmount={count}

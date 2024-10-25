@@ -638,19 +638,32 @@ class Livesession {
 // console.log('STORES LENGTH', resStores.rows.length)
 console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
 // console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.auth_provider_access_token}`);
-                longToken = await axios
-                    .get(
-                        `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
-                    )
-                    .then(async (responseLongToken) => {
-                        console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
-                        // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+//                 longToken = await axios
+//                     .get(
+//                         `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
+//                     )
+//                     .then(async (responseLongToken) => {
+//                         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+//                         // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+//
+//                         return {result: responseLongToken.data};
+//                     }).catch(e => {
+//                         console.log('ERROR', e.response.data.error.message)
+//                         return  {error: e.response.data.error.message}
+//                     })
+            longToken = await axios
+                .get(
+                    `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
+                )
+                .then(async (responseLongToken) => {
+                    console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+                    // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
 
-                        return {result: responseLongToken.data};
-                    }).catch(e => {
-                        console.log('ERROR', e.response.data.error.message)
-                        return  {error: e.response.data.error.message}
-                    })
+                    return {result: responseLongToken.data};
+                }).catch(e => {
+                    console.log('ERROR', e.response.data.error.message)
+                    return  {error: e.response.data.error.message}
+                })
 console.log('RESULT RESPONSE', longToken);
                 let longTokenExpire;
                 if (!longToken.error) {
@@ -736,7 +749,7 @@ console.log('RESULT RESPONSE', longToken);
                 size,
                 error,
                 longToken,
-                expiteLongTokenAt
+                expiteLongTokenAt,
             };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {

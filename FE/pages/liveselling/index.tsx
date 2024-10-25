@@ -27,6 +27,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const [showErrorBlock, setShowErrorBlock] = useState(false);
     const longTokenError = useSelector(longTokenErrorSelector);
     const longTokenExpire = useSelector(longTokenExpireSelector);
+    const longTokenErrorMsg = useSelector(longTokenErrorSelector);
 
     const fbSync = () => {
         accountService.syncFB();
@@ -37,13 +38,10 @@ export default function Index({ session, locale }: { session: any; locale: strin
     }, []);
 
     useEffect(() => {
-        console.log('Settings Value', settingsValues);
         if (settingsValues.user_id) {
             setShowErrorBlock(true);
         }
     }, [settingsValues]);
-
-    console.log('Expire token at', longTokenExpire);
 
     return (
         <>
@@ -66,7 +64,19 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             {t('Expire in')} {longTokenExpire}
                         </div>
                     )}
-
+                    {longTokenError && (
+                        <div className="pl-3 font-bold text-[14px] text-orange-450 inline-block mt-4">
+                            {t('Token has expired')} {longTokenExpire}
+                        </div>
+                    )}
+                    <div className="clear-both"></div>
+                    {longTokenErrorMsg && (
+                        <div className="alert-danger clear-both mb-4 mt-4">
+                            {t(
+                                'Your Facebook token is expired or invalid, please resynchronize with your Facebook account'
+                            )}
+                        </div>
+                    )}
                     <div className="clear-both" />
                 </div>
                 <div style={{ display: !showErrorBlock ? 'none' : 'block' }}>
