@@ -8,10 +8,31 @@ class ChatbotMessageController {
      * @param res
      * @returns {Promise<*>}
      */
+    async getSinceDate(req, res) {
+        const data = await chatbotMessageModel.messagesSinceDate(req.query.sessionId);
+        console.log('SINCE DATA', data)
+        if (!data.error) {
+            return res.status(200).json({success: true, unixTimestamp: data.dateComment});
+        } else {
+            return res.status(401).json({success: false, error: data.error});
+        }
+    }
+
+
+    /**
+     *
+     * @param req
+     * @param res
+     * @returns {Promise<*>}
+     */
     async addMessages(req, res) {
         const data = await chatbotMessageModel.addMessages(req.query.sessionId, req.body);
         if (!data.error) {
-            return res.status(200).json({success: true});
+            const dateStr = data.dateComment;
+            // Convert to Unix timestamp (in seconds)
+            const unixTimestamp = Math.floor(new Date(dateStr).getTime() / 1000);
+
+            return res.status(200).json({unixTimestamp: unixTimestamp});
         } else {
             return res.status(401).json({success: false, error: data.error});
         }

@@ -4,6 +4,47 @@ import moment from 'moment';
 import orderModel from "./Order.js";
 
 class ChatbotMessage {
+    async messagesSinceDate(sessionId) {
+        const client = await pool.connect();
+        const commentQuery = `SELECT created_time FROM data.live_sessions_messages WHERE live_sessions_id = '${sessionId}' 
+            ORDER BY created_at DESC LIMIT 1;`;
+console.log('Comment Query', commentQuery);
+        try {
+            const resQuery = await client.query(commentQuery);
+            const dateComment = resQuery.rows.length > 0 ? resQuery.rows[0].created_time : null;
+            const error = null;
+
+            return {
+                dateComment,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: productQuery }
+                );
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: e.message }
+                );
+            }
+            const dateComment = null;
+            const error = {
+                code: 500,
+                message: 'error getting last comment datetime message'
+            };
+            return {
+                dateComment,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+    
     async addMessages(sessionId, data) {
         const client = await pool.connect();
         const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;

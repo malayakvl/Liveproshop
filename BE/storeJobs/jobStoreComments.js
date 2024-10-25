@@ -8,10 +8,28 @@ const tokenData = args[4].split('=');
 const videoData = args[2].split('=');
 async function startProcess() {
     try {
-        await axios.get(`https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment&limit=100&access_token=${tokenData[1]}`)
+        const sinceParams = await axios.get(`${apiUrl}/api/get-live-messages-since?sessionId=${sessionsData[1]}`)
+            .then(async function (response) {
+                const sinceDate = response.data.unixTimestamp;
+                console.log('Since', sinceDate);
+                return sinceDate;
+            })
+            .catch(function (error) {
+                console.log("error on get comment under video", error.message);
+            });
+        console.log('SINCE PARAMS FOR COMMENTS', sinceParams);
+        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100order=chronological&access_token=${tokenData[1]}`;
+        if (sinceParams) {
+            const dateStr = sinceParams;
+            // Convert to Unix timestamp (in seconds)
+            const unixTimestamp = Math.floor(new Date(dateStr).getTime() / 1000);
+
+            urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100order=chronological&since=${unixTimestamp}&access_token=${tokenData[1]}`;
+        }
+        await axios.get(urlComment)
             .then(async function (response) {
                 const results = response.data.data;
-                console.log('Incoming Comments', response.data.data[0]);
+                console.log('Incoming Comments', response.data.data);
                 // if (response.data.data[0].from) {
                 //     console.log('User ID', response.data.data[0].id)
                 //     await axios(`${apiUrl}/api/check-user-to-stores?messageId=${response.data.data[0].id}&fromId=${response.data.data[0].from}&storeId=70`)
