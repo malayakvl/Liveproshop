@@ -23,7 +23,7 @@ console.log('Comment Query', commentQuery);
                 logger.log(
                     'error',
                     'Model error (chatbot messages addMessages):',
-                    { message: productQuery }
+                    { message: commentQuery }
                 );
                 logger.log(
                     'error',
@@ -64,7 +64,7 @@ console.log(commentQuery);
                 logger.log(
                     'error',
                     'Model error (chatbot messages addMessages):',
-                    { message: productQuery }
+                    { message: commentQuery }
                 );
                 logger.log(
                     'error',

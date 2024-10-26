@@ -18,13 +18,13 @@ async function startProcess() {
                 console.log("error on get comment under video", error.message);
             });
         console.log('SINCE PARAMS FOR COMMENTS', sinceParams);
-        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=50order=chronological&access_token=${tokenData[1]}`;
+        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&access_token=${tokenData[1]}`;
         if (sinceParams) {
             const dateStr = sinceParams;
             // Convert to Unix timestamp (in seconds)
             const unixTimestamp = Math.floor(new Date(dateStr).getTime() / 1000);
 
-            urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=50order=chronological&since=${unixTimestamp}&access_token=${tokenData[1]}`;
+            urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&since=${unixTimestamp}&access_token=${tokenData[1]}`;
         }
         await axios.get(urlComment)
             .then(async function (response) {

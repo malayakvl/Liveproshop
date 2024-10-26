@@ -1579,12 +1579,25 @@ console.log(ordersQuery);
             const fakeUserId = findedOrderRes.rows[0].fake_user_id;
             let _endPeriod;
             if (freePeriodEnd) {
-                _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
-                await client.query(`UPDATE data.orders
+                const pEnd = moment(freePeriodEnd);
+                const pNow = moment();
+                if (pNow > pEnd) {
+                    console.log('DELETE FROM settings period');
+                } else {
+                    _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
+                    await client.query(`UPDATE data.orders
                     SET 
                         in_period = ${inPeriod},
                         free_period_end='${_endPeriod}'
                     WHERE id='${findedOrderRes.rows[0].id}'`)
+                }
+
+                // _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
+                // await client.query(`UPDATE data.orders
+                //     SET
+                //         in_period = ${inPeriod},
+                //         free_period_end='${_endPeriod}'
+                //     WHERE id='${findedOrderRes.rows[0].id}'`)
             }
 
             if (connetedQueryRes.rows.length > 0) {
@@ -2294,6 +2307,7 @@ console.log(`DELETE FROM data.users WHERE id='${tmpUserId}'`);
             //     WHERE free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
             const _tmpRes = await client.query(`SELECT * FROM data.orders 
                 WHERE status='new' AND free_period_end < (NOW() + interval '${process.env.PERIOD_ORDER_DIFF} hour') LIMIT 20`);
+            console.log(_tmpRes);
             if (_tmpRes.rows.length > 0) {
                 _tmpRes.rows.forEach(async _order => {
                     const tmpResItems = await client.query(`SELECT * FROM data.order_items WHERE order_id='${_order.id}'`);
