@@ -207,8 +207,28 @@ console.log('PROVIDER USER DATA', userData);
                 lastName = fullFbName[1];
             }
             if (!user) {
-console.log('KAKOGO HUYA');
-                const query = `
+console.log('USER ROLE ID', parseInt(userData.roleId));
+            let query;
+            if (parseInt(userData.roleId) === 1) {
+                console.log('Role 1')
+                query = `
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, first_name, last_name, role_id)
+                    VALUES
+                    (
+                        '${userData.email ? userData.email : userData.id}',
+                        'facebook',
+                        '${userData.id}',
+                        '${userData.accessToken}',
+                        '${firstName}',
+                        '${lastName}',
+                        '${userData.roleId}'
+                    )
+                    ;
+                `;
+
+            } else {
+                console.log('Role 2')
+                query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, last_name, role_id, auth_provider_accounts)
                     VALUES
                     (
@@ -224,15 +244,13 @@ console.log('KAKOGO HUYA');
                     )
                     ;
                 `;
-                // console.log(query);
+            }
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
                 if (parseInt(userData.roleId) === 2) {
                     // get user stores
                     try {
-console.log('ADD SCENARIOS');
-console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${userData.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                         // add to user default chatbot scenarios
                         // buy+item+color+size+quantity
                         // buy+item+size+color+quantity
@@ -246,8 +264,8 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                         // buy+item
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty (1)', 'buy+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty (1)', 'buy+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+size+color')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config with qty', 'buy+item+color+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config without qty', 'buy+item+color')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config with qty', 'buy+item+size+quantity')`);
@@ -257,8 +275,8 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
 
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty (1)', 'sold+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty (1)', 'sold+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+size+color')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config with qty', 'sold+item+color+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config without qty', 'sold+item+color')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config with qty', 'sold+item+size+quantity')`);
@@ -268,8 +286,8 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
 
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty (1)', 'vendu+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty (1)', 'vendu+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+size+color')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config with qty', 'vendu+item+color+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config without qty', 'vendu+item+color')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config with qty', 'vendu+item+size+quantity')`);

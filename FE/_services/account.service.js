@@ -73,9 +73,32 @@ async function getAccountData(authResponse) {
         // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
         scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,business_management'
     };
+    if (parseInt(authResponse.roleId) === 1) {
+        console.log('AUTH RESPONSE', authResponse);
+        axios
+            .get(
+                `https://graph.facebook.com/v21.0/me?fields=id,name,email&access_token=${authResponse.accessToken}`,
+                loginOptions
+            )
+            .then((response) => {
+                const { data } = response;
+                console.log(authResponse);
+                if (data.error) {
+                    store.dispatch(setErrorToastAction('Could no autherntificate'));
+                }
+                // console.log('AUTH RESPONCE HERE', authResponse.roleId);
+                data.accessToken = authResponse.accessToken;
+                data.roleId = 1;
+                data.callbackUrl = `${window.location.origin}/${
+                    authResponse.locale === 'fr' ? '' : 'en/'
+                }dashboard`;
+                store.dispatch(showLoaderAction(true));
+                signIn('credentials_sdkfacebook', data);
+            });
+    }
     axios
         .get(
-            `https://graph.facebook.com/v20.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
+            `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
             loginOptions
         )
         .then((response) => {
