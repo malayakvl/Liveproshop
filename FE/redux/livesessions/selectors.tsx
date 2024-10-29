@@ -12,6 +12,14 @@ export const paginatedItemsSelector = createSelector(
     rootSelector,
     (livesessions: State.Livesessions): any => livesessions.items
 );
+export const longTokenErrorSelector = createSelector(
+    rootSelector,
+    (livesessions: State.Livesessions): any => livesessions.longTokenError
+);
+export const longTokenExpireSelector = createSelector(
+    rootSelector,
+    (livesessions: State.Livesessions): any => livesessions.expireTokenAt
+);
 export const itemsCountSelector = createSelector(
     rootSelector,
     (livesessions: State.Livesessions): number => livesessions.count

@@ -17,6 +17,7 @@ const initialState: {
     showPopup: boolean;
     itemScenarios: Livesessions.DataScenario[];
     selectedStoreId: number | null;
+    longToken: string | null;
 } = {
     isFetched: false,
     loading: false,
@@ -33,7 +34,8 @@ const initialState: {
     },
     showPopup: false,
     itemScenarios: [],
-    selectedStoreId: null
+    selectedStoreId: null,
+    longToken: null
 };
 
 const ACTION_HANDLERS: any = {

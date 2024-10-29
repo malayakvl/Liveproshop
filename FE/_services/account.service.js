@@ -19,29 +19,7 @@ export const accountService = {
 };
 
 async function syncFB() {
-    // login with facebook then authenticate with the API to get a JWT auth token
-    // const { authResponse } = await new Promise(window.FB.login);
-    // console.log('public_profile,email,pages_show_list');
-    // FB.login(
-    //     function (response) {
-    //         // handle the response
-    //     },
-    //     {
-    //         scope: 'public_profile,email,pages_show_list,publish_video,pages_messaging'
-    //     }
-    // );
     const { authResponse } = await new Promise(
-        // window.FB.login(
-        //     function (response) {
-        //         // handle the response
-        //         console.log('!!!!!!!', response.authResponse);
-        //         store.dispatch(syncFbAction(response.authResponse));
-        //         return response;
-        //     },
-        //     {
-        //         scope: 'public_profile,email,pages_show_list,publish_video,pages_messaging'
-        //     }
-        // )
         window.FB.login(
             function (response) {
                 // handle the response
@@ -68,23 +46,6 @@ async function registerFB(paramData, commentId) {
     // login with facebook then authenticate with the API to get a JWT auth token
     // const { authResponse } = await new Promise(window.FB.login);
     const { authResponse } = await new Promise(window.FB.login);
-    // login and add stores
-    // const loginOptions = {
-    //     scope: 'publish_video,manage_pages,pages_show_list,pages_messaging'
-    // };
-    // const { authResponse } = await new Promise((resolve, reject) => {
-    //     window.FB.login(
-    //         (response) => {
-    //             // handle the response
-    //             if (response.authResponse) {
-    //                 resolve(response);
-    //             } else {
-    //                 reject(response);
-    //             }
-    //         },
-    //         { scope: 'email,pages_show_list,pages_messaging,publish_video' }
-    //     );
-    // });
     authResponse.roleId = roleId;
     authResponse.locale = locale;
     authResponse.forFree = forFree;
@@ -98,19 +59,6 @@ async function registerFB(paramData, commentId) {
 async function loginFB() {
     // login with facebook then authenticate with the API to get a JWT auth token
     const { authResponse } = await new Promise(window.FB.login);
-    // const loginOptions = {
-    //     scope: 'publish_video,manage_pages,pages_show_list,pages_messaging'
-    // };
-    // const { authResponse } = await new Promise((resolve, reject) => {
-    //     window.FB.login((response) => {
-    //         // handle the response
-    //         if (response.authResponse) {
-    //             resolve(response);
-    //         } else {
-    //             reject(response);
-    //         }
-    //     }, loginOptions);
-    // });
     console.log('AUTH RESPONSE LOGIN', authResponse);
     if (authResponse) {
         store.dispatch(showLoaderAction(true));
@@ -121,20 +69,36 @@ async function loginFB() {
 }
 
 async function getAccountData(authResponse) {
-    // console.log(
-    //     'SEND RESPONCSE TO THIS URL',
-    //     `https://graph.facebook.com/v17.0/me?fields=name,accounts&access_token=${authResponse.accessToken}`
-    // );
-    // const loginOptions = {
-    //     scope: 'pages_show_list,pages_messaging,pages_manage_metadata,pages_read_user_content'
-    // };
     const loginOptions = {
         // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
         scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,business_management'
     };
+    if (parseInt(authResponse.roleId) === 1) {
+        console.log('AUTH RESPONSE', authResponse);
+        axios
+            .get(
+                `https://graph.facebook.com/v21.0/me?fields=id,name,email&access_token=${authResponse.accessToken}`,
+                loginOptions
+            )
+            .then((response) => {
+                const { data } = response;
+                console.log(authResponse);
+                if (data.error) {
+                    store.dispatch(setErrorToastAction('Could no autherntificate'));
+                }
+                // console.log('AUTH RESPONCE HERE', authResponse.roleId);
+                data.accessToken = authResponse.accessToken;
+                data.roleId = 1;
+                data.callbackUrl = `${window.location.origin}/${
+                    authResponse.locale === 'fr' ? '' : 'en/'
+                }dashboard`;
+                store.dispatch(showLoaderAction(true));
+                signIn('credentials_sdkfacebook', data);
+            });
+    }
     axios
         .get(
-            `https://graph.facebook.com/v20.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
+            `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
             loginOptions
         )
         .then((response) => {

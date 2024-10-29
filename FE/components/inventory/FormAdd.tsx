@@ -425,10 +425,6 @@ function ProductFormAdd({
                         // @ts-ignore
                         formData.append('publishCheckbox', 0);
                     }
-                    // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // // @ts-ignore
-                    // formData.append('publishCheckbox', dataPublish);
-
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
                     formData.append('configurations', JSON.stringify(dataVariants));
@@ -641,7 +637,7 @@ function ProductFormAdd({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3, 4, 5, 6, 7].map(
+                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(
                                                                     (num: number) => (
                                                                         <Fragment
                                                                             key={`${size.id}_${num}`}>
