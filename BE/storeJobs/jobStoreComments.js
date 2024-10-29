@@ -37,6 +37,7 @@ async function startProcess() {
                 //
                 //         })
                 // }
+                console.log()
                 await axios
                     .post(`${apiUrl}/api/add-live-messages?sessionId=${sessionsData[1]}`, results)
                     .then(() => {

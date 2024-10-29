@@ -37,7 +37,19 @@ class ChatbotMessageController {
             return res.status(401).json({success: false, error: data.error});
         }
     }
-    
+    async addMessagesTest(req, res) {
+        const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId);
+        if (!data.error) {
+            const dateStr = data.dateComment;
+            // Convert to Unix timestamp (in seconds)
+            const unixTimestamp = Math.floor(new Date(dateStr).getTime() / 1000);
+
+            return res.status(200).json({unixTimestamp: unixTimestamp});
+        } else {
+            return res.status(401).json({success: false, error: data.error});
+        }
+    }
+
     async parseMessages(req, res) {
         await chatbotMessageModel.parseMessages(req.query.sessionId);
         // if (!data.error) {

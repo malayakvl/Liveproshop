@@ -637,7 +637,7 @@ function ProductFormAdd({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3, 4, 5, 6, 7].map(
+                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(
                                                                     (num: number) => (
                                                                         <Fragment
                                                                             key={`${size.id}_${num}`}>

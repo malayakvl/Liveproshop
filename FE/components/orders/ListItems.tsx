@@ -166,13 +166,13 @@ const ListItems: React.FC<any> = ({ items, orderId, status, expireAt }) => {
                                 </td>
                                 <td>
                                     <div
-                                        className="rounded-full w-3 h-3 inline-block mr-1"
+                                        className="rounded-full w-3 h-3 inline-block ml-[5px] mt-[7px]"
                                         style={{
                                             backgroundColor: `${item.color_code}`
                                         }}
                                     />
                                 </td>
-                                <td className="whitespace-nowrap">{item.size_name}</td>
+                                <td className="whitespace-nowrap" style={{ textAlign: 'center' }}>{item.size_name}</td>
                                 <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                                 <td>{formatCurrency(item.price)}</td>
                             </tr>

@@ -811,6 +811,15 @@ console.log('RESULT RESPONSE', longToken);
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
         // console.log(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
         //                     FROM data.seller_settings WHERE user_id=${userId};`);
+        const scenariosResNew = await client.query(`SELECT id FROM data.chatbot_scenarios WHERE user_id = ${userId} ORDER BY id`);
+        let scenarioIds = '';
+        scenariosResNew.rows.forEach(_res => {
+            scenarioIds += _res.id+',';
+            console.log(_res.id);
+        });
+
+        console.log(scenarioIds.substring(0, scenarioIds.length - 1));
+
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
         let intervalDuration;
@@ -851,9 +860,13 @@ console.log('RESULT RESPONSE', longToken);
         //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
         //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
         //         );`;
+        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+        //         );`;
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+                    '{${scenarioIds.substring(0, scenarioIds.length - 1)}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
                 );`;
         try {
             await client.query(query);

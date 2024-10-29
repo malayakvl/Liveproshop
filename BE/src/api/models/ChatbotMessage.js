@@ -85,7 +85,207 @@ console.log(commentQuery);
             client.release();
         }
     }
-    
+
+    async _pResult(qPredparser, message) {
+        const performedData = [];
+        let msgData;
+        let _performMsg;
+        if (qPredparser.rows.length > 0) {
+console.log('Result1', qPredparser.rows);
+            qPredparser.rows.forEach(_message => {
+                if (_message.status) {
+                    msgData = _message.message.split(' ');
+                    _performMsg =  msgData[0]+' '+msgData[1]+' '+msgData[2]+' '+'s'+msgData[3];
+                    performedData.push({
+                        created_time: message.created_time,
+                        from: message.from,
+                        message: _message.message,
+                        id: message.id
+                    });
+                }
+            })
+        }
+
+        return performedData;
+    }
+
+    async performMessages(data) {
+        const client = await pool.connect();
+        let msgData;
+        let qPredparser;
+        let _predparsedMessage;
+        let _pQuery;
+        let i = 0;
+        let performedData = [];
+        await Promise.all(data.map(async (_message) => {
+            msgData = _message.message.split(' ');
+console.log('msgData',msgData);
+            if (msgData[3]) {
+                console.log('Full config', msgData[3]);
+                if (msgData[3] >= 1 && msgData[3] <= 9) {
+                    // replace number size to numbers with letter
+                    _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2]+' '+'s'+msgData[3];
+                    _pQuery = `// SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2597,2596,2603]));`;
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2597,2596,2587,2586,2607,2606]));`;
+// console.log('_pQuery', _pQuery);
+                    qPredparser = await client.query(_pQuery);
+                    const _x = await this._pResult(qPredparser, _message);
+// console.log('_x', _x);
+                    performedData.push(_x[0])
+                }
+            } else if (msgData[2]) {
+                if (msgData[2] >= 1 && msgData[2] <= 9) {
+                    // replace number size to numbers with letter
+                    _predparsedMessage = msgData[0]+' '+msgData[1]+' '+'s'+msgData[2];
+console.log('_predparsedMessage', _predparsedMessage)
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2597,2596,2587,2586,2607,2606,2602,2603]));`;
+console.log('_pQuery', _pQuery)
+                    qPredparser = await client.query(_pQuery);
+                    const _x = await this._pResult(qPredparser, _message);
+                    performedData.push(_x[0])
+                } else {
+                    console.log('GGGGGGG');
+                }
+            } else if (msgData[1] && !msgData[2]) {
+                // simple product
+                _predparsedMessage = msgData[0]+' '+msgData[1] + ' 1';
+console.log('123', _predparsedMessage);
+                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2604]));`;
+console.log('_pQuery', _pQuery)
+                qPredparser = await client.query(_pQuery);
+                const _x = await this._pResult(qPredparser, _message);
+                performedData.push(_x[0])
+            }
+            // const contents = await fs.readFile(file, 'utf8')
+        }));
+        // data.forEach(async _message => {
+        //     msgData = _message.message.split(' ');
+        //     if (msgData[3]) {
+        //         console.log('Full config', msgData[3]);
+        //         if (msgData[3] >= 1 && msgData[3] <= 9) {
+        //             // replace number size to numbers with letter
+        //             _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2]+' '+'s'+msgData[3];
+        //             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2597,2596]));`;
+        //             qPredparser = await client.query(_pQuery);
+        //             const _x = await this._pResult(qPredparser, _message);
+        //         }
+        //     }
+        //     i++;
+        // });
+console.log('Perform data', performedData)
+        return performedData;
+    }
+
+    async addMessagesTest(sessionId) {
+        const client = await pool.connect();
+        const data = [
+            {
+                "created_time": "2024-10-28T16:25:12+0000",
+                "from": {
+                    "name": "Kyryl Proshop",
+                    "id": "6681200108589867"
+                },
+                "message": "sold 194 red 9",
+                "id": "1149695475472325_563802062787510"
+            },
+            {
+                "created_time": "2024-10-28T16:25:12+0000",
+                "from": {
+                    "name": "Kyryl Proshop",
+                    "id": "6681200108589867"
+                },
+                "message": "sold 193 7",
+                "id": "1249695475472325_563802062787512"
+            },
+            {
+                "created_time": "2024-10-28T16:25:12+0000",
+                "from": {
+                    "name": "Kyryl Proshop",
+                    "id": "6681200108589867"
+                },
+                "message": "sold 190 red",
+                "id": "5549695475472325_563802062787512"
+            },
+            {
+                "created_time": "2024-10-28T16:25:12+0000",
+                "from": {
+                    "name": "Kyryl Proshop",
+                    "id": "6681200108589867"
+                },
+                "message": "sold 182 red 6",
+                "id": "1549695475472325_563802062787510"
+            },
+            {
+                "created_time": "2024-10-28T16:25:12+0000",
+                "from": {
+                    "name": "Kyryl Proshop",
+                    "id": "6681200108589867"
+                },
+                "message": "sold 195",
+                "id": "2249795475472325_563802062787510"
+            }
+        ];
+        let msgData;
+        let qPredparser;
+        let _predparsedMessage;
+        let _pQuery;
+        let i = 0;
+        const updatedData = await this.performMessages(data);
+
+console.log('AAAA', updatedData);
+        const commentQuery1 = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(updatedData).replaceAll("'", '')}');`;
+console.log('Comment query TUT');
+console.log(commentQuery1);
+        await client.query(commentQuery1);
+        // console.log('Updated data', data);
+        const items = [];
+        const error = null;
+
+        return {
+            items,
+            error
+        };
+        // exit;
+        const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
+        console.log('Comment query');
+        console.log(commentQuery);
+        try {
+            await client.query(commentQuery);
+            const items = [];
+            const error = null;
+
+            return {
+                items,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: commentQuery }
+                );
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'error insering message'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
     async parseMessages(sessionId) {
         const client = await pool.connect();
         try {
