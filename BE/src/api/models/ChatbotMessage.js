@@ -104,10 +104,17 @@ console.log(commentQuery);
         let _pQuery;
         let performedData = [];
         let updMessage;
+        let lng = 'en';
+        if (msgData[0] === 'vendu') {
+            lng = 'fr';
+        }
         if (product.configured) {
             if (product.nosize && !product.nocolor) {
                 _predparsedMessage = msgData[0]+' '+msgData[1]+' s'+msgData[2];
-                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2603,2602]));`;
+                if (msgData[0] === 'sold')
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2603,2602]));`;
+                else
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2613,2612]));`;
                 await client.query(_pQuery);
                 updMessage = {
                     created_time: fullMessage.created_time,
@@ -119,7 +126,11 @@ console.log(commentQuery);
                 await client.query(insertMsg);
             } else if (!product.nosize && product.nocolor) {
                 _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2];
-                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2601,2600]));`;
+                if (msgData[0] === 'sold')
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2601,2600]));`;
+                else
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2613,2612]));`;
+console.log(_pQuery);
                 await client.query(_pQuery);
                 updMessage = {
                     created_time: fullMessage.created_time,
@@ -134,7 +145,10 @@ console.log(commentQuery);
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' s'+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
                 else
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' '+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
-                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2596]));`;
+                if (msgData[0] === 'sold')
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2596]));`;
+                else if (msgData[0] === 'vendu')
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2606]));`;
                 await client.query(_pQuery);
                 updMessage = {
                     created_time: fullMessage.created_time,
@@ -144,9 +158,11 @@ console.log(commentQuery);
                 }
                 const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
                 await client.query(insertMsg);
+console.log(insertMsg);
             }
         } else {
             let _qty = 1;
+console.log('TUT');
             if (product.selectedColors.length > 0 && product.selectedSizes.length === 0) {
                 if (parseInt(msgData[2])) {
                     _qty = parseInt(msgData[2]);
@@ -155,9 +171,8 @@ console.log(commentQuery);
                     _qty = parseInt(msgData[3]);
                 }
                 _predparsedMessage = msgData[0]+' '+msgData[1]+' '+product.selectedColors[0].name + ' '+_qty;
-                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2596]));`;
+                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2596,2601]));`;
             } else if (product.selectedColors.length === 0 && product.selectedSizes.length > 0) {
-                let _prodSize = product.selectedSizes[0].name;
                 if (parseInt(msgData[2])) {
                     _qty = parseInt(msgData[2]);
                 }
@@ -168,27 +183,62 @@ console.log(commentQuery);
                     _qty = parseInt(msgData[2]);
                 }
                 _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
-                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2604]));`;
+                _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2604,2614]));`;
             } else {
                 _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
                 _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2605]));`;
             }
-            await client.query(_pQuery);
-            updMessage = {
-                created_time: fullMessage.created_time,
-                from: fullMessage.from,
-                message: _predparsedMessage,
-                id: fullMessage.id
+console.log(_pQuery);
+// console.log(product);exit;
+            const tmpParsedData = await client.query(_pQuery);
+            if (tmpParsedData.rows.length > 0) {
+                tmpParsedData.rows.forEach(async _row => {
+                    if (_row.status) {
+                        updMessage = {
+                            created_time: fullMessage.created_time,
+                            from: fullMessage.from,
+                            message: _predparsedMessage,
+                            id: fullMessage.id,
+                            parcer_status: null,
+                            parcer_data: null
+                        }
+                        const _tmpJsonData = _row.results_json;
+                        let tColor, tSize, tColorId, tSizeId;
+                        tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
+                        tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
+                        if (lng === 'fr') {
+                            if (product.selectedColors[0].translations) {
+                                tColor = product.selectedColors[0].translations[0].fr.name;
+                            }
+                            if (product.selectedSizes[0].translations) {
+                                tSize = product.selectedSizes[0].translations[0].fr.name;
+                            }
+                        }
+                        tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
+                        tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
+// console.log('LNG', lng);
+// exit;
+
+                        _tmpJsonData.color = tColor;
+                        _tmpJsonData.color_id = tColorId;
+                        _tmpJsonData.size = tSize;
+                        _tmpJsonData.size_id = tSizeId;
+
+                        updMessage.parcer_status = true;
+                        updMessage.parcer_data = _tmpJsonData;
+
+                        const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
+console.log(insertMsg);
+                        await client.query(insertMsg);
+                    }
+                })
             }
-            const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
-            await client.query(insertMsg);
         }
 
         return performedData;
     }
 
     async performMessage(data, sessionId) {
-        const client = await pool.connect();
         const msgData = data.message.split(' ');
         const promisesProduct = [];
         const promisesParser = [];
@@ -207,60 +257,69 @@ console.log(commentQuery);
     async addMessagesTest(sessionId) {
         const client = await pool.connect();
         const data = [
+            // {
+            //     "created_time": "2024-10-28T16:25:12+0000",
+            //     "from": {
+            //         "name": "Kyryl Proshop",
+            //         "id": "6681200108589867"
+            //     },
+            //     // "message": "sold 194 red 9",
+            //     // "id": "1155690075472325_563802062787510"
+            //     "message": "vendu 194 rouge 9",
+            //     "id": "1155695475472325_563802062787510"
+            // },
+            // {
+            //     "created_time": "2024-10-28T16:25:12+0000",
+            //     "from": {
+            //         "name": "Kyryl Proshop",
+            //         "id": "6681200108589867"
+            //     },
+            //     // "message": "sold 193 7",
+            //     // "id": "1249698875474425_563802062787512"
+            //     "message": "vendu 193 7",
+            //     "id": "1249698875552325_563802062787512"
+            // },
+            // {
+            //     "created_time": "2024-10-28T16:25:12+0000",
+            //     "from": {
+            //         "name": "Kyryl Proshop",
+            //         "id": "6681200108589867"
+            //     },
+            //     // "message": "sold 190 red 3",
+            //     // "id": "5549095475472325_563802062787512"
+            //     "message": "vendu 190 rouge 3",
+            //     "id": "5549090075472325_563802062787512"
+            // },
+
+            // SIMPLE MESSAGES
             {
                 "created_time": "2024-10-28T16:25:12+0000",
                 "from": {
                     "name": "Kyryl Proshop",
                     "id": "6681200108589867"
                 },
-                "message": "sold 194 red 9",
-                "id": "1149695475472325_563802062787510"
-            },
-            {
-                "created_time": "2024-10-28T16:25:12+0000",
-                "from": {
-                    "name": "Kyryl Proshop",
-                    "id": "6681200108589867"
-                },
-                "message": "sold 193 7",
-                "id": "1249695475472325_563802062787512"
-            },
-            {
-                "created_time": "2024-10-28T16:25:12+0000",
-                "from": {
-                    "name": "Kyryl Proshop",
-                    "id": "6681200108589867"
-                },
-                "message": "sold 190 red 3",
-                "id": "5549695475472325_563802062787512"
-            },
-            {
-                "created_time": "2024-10-28T16:25:12+0000",
-                "from": {
-                    "name": "Kyryl Proshop",
-                    "id": "6681200108589867"
-                },
-                "message": "sold 198",
+                // "message": "sold 198",
+                "message": "vendu 198",
                 "id": "1119695475472325_563802062787510"
             },
-            {
-                "created_time": "2024-10-28T16:25:12+0000",
-                "from": {
-                    "name": "Kyryl Proshop",
-                    "id": "6681200108589867"
-                },
-                "message": "sold 195",
-                "id": "2249695475472325_563802062787510"
-            },
-            {
-                "created_time": "2024-10-28T16:25:12+0000",
-                "from": {
-                    "name": "Kyryl Proshop",
-                    "id": "6681200108589867"
-                },
-                "message": "sold 196 3",
-                "id": "3349795475472325_563802062787510"
-            }
+            // {
+            //     "created_time": "2024-10-28T16:25:12+0000",
+            //     "from": {
+            //         "name": "Kyryl Proshop",
+            //         "id": "6681200108589867"
+            //     },
+            //     "message": "sold 195",
+            //     "id": "2249695475472325_563802062787510"
+            // },
+            // {
+            //     "created_time": "2024-10-28T16:25:12+0000",
+            //     "from": {
+            //         "name": "Kyryl Proshop",
+            //         "id": "6681200108589867"
+            //     },
+            //     "message": "sold 196 3",
+            //     "id": "3349795475472325_563802062787510"
+            // },
         ];
         const tPromises = [];
         data.forEach(_data => {

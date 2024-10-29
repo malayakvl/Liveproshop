@@ -205,7 +205,6 @@ function ProductForm({
             setSelectedSizes(selectedOption);
         } else {
             const _sizes: any = selectedSizes;
-            // setSelectedSizes([]);
             if (!_sizes.find((v: any) => v.value === selectedOption.value)) {
                 setSelectedSizes([...selectedSizes, selectedOption]);
             }
@@ -277,6 +276,9 @@ function ProductForm({
                     : Yup.string()
         })
     });
+
+console.log('TUT', selectedColors);
+
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -403,10 +405,11 @@ function ProductForm({
                 } else {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    const tColor = selectedColors?.value || null;
+                    const tColor = selectedColors[0]?.value || selectedColors?.value || null;
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    const tSize = selectedSizes?.value || null;
+                    // const tSize = selectedSizes[0]?.value || null;
+                    const tSize = selectedSizes[0]?.value || selectedSizes?.value || null;
                     dataVariants.push({
                         price: values['price'],
                         qty: values['quantity'],
