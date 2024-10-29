@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface Props {
     style: string | null;
@@ -34,6 +34,14 @@ const InputText: React.FC<Props> = ({
     const handleFocus = (e: any) => {
         e.target.select();
     };
+
+    useEffect(() => {
+        if (props.values[name]) {
+            if (typeof props.values[name] === 'object') {
+                props.values[name] = props.values[name].toString().replaceAll(',', '');
+            }
+        }
+    }, [props.values[name]]);
 
     return (
         <div className={`mb-4 ${style}`}>

@@ -191,7 +191,7 @@ export default new class ShippingController {
 
         const result = await shippingModel.fetchThreshold(req.user.id);
         const resultPeriod = await shippingModel.fetchShippingPeriod(req.user.id)
-console.log('Result', result);
+// console.log('Result', result);
         if (!result) {
             return res.status(200).json({ threshold: '' })
         }

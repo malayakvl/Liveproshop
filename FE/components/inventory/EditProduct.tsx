@@ -50,9 +50,12 @@ const EditProduct: React.FC<PropsProduct> = ({ locale }) => {
                     } else if (conf.color_id && !conf.size_id) {
                         index = `${_colors.find((v: any) => v.value === conf.color_id).label}_none`;
                     }
-                    productData.product[`configurePrice_${index}`] = configuration.price;
-                    productData.product[`configureQty_${index}`] = configuration.quantity;
-                    productData.product[`configureSKU_${index}`] = configuration.sku || '';
+                    if (index) {
+                        const _tmpIndex = index.replace('.', '_');
+                        productData.product[`configurePrice_${_tmpIndex}`] = configuration.price;
+                        productData.product[`configureQty_${_tmpIndex}`] = configuration.quantity;
+                        productData.product[`configureSKU_${_tmpIndex}`] = configuration.sku || '';
+                    }
                 });
             }
             setDataFetched(true);

@@ -114,17 +114,18 @@ function ProductFormAdd({
     const [isBusy, setIsBusy] = useState(false);
     const [showSizeTable, setShowSizeTable] = useState(false);
     const [errorConfigured, setErrorConfigured] = useState<any[]>([]);
-    const [dataPublish, setDataPublish] = useState(publish);
-    const [formValues, setFormValues] = useState({});
     const [active, setActive] = useState(false);
     const [x, setX] = useState(true);
-    // const { setFieldValue }: any = useFormikContext();
+    const [showError, setShowError] = useState(false);
+    const dataVariants: {
+        price: string | null;
+        qty: string | null;
+        sku: string;
+        color_id: number | null;
+        size_id: number | null;
+    }[] = [];
 
-    // console.log('FORM VALUES', formValues);
-
-    // const formRef = useRef<FormikProps>();
     const formRef = React.useRef<FormikProps<any>>(null);
-    const [publishTmp, setPublishTmp] = useState<boolean>(false);
 
     const onDelete = useCallback(
         (tagIndex: number) => {
@@ -168,7 +169,7 @@ function ProductFormAdd({
     const handleChangeColor = (selectedOption: any) => {
         const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
-        if (selectedOption.length > 0) {
+        if (selectedOption) {
             selectedOption.forEach(function (_color: any) {
                 selectedSizes.forEach(function (_size: any) {
                     formRef.current?.setFieldValue(
@@ -271,7 +272,7 @@ function ProductFormAdd({
                     : Yup.string()
         })
     });
-
+    console.log('Show error', showError);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -289,22 +290,118 @@ function ProductFormAdd({
                 setErrorConfigured([]);
                 // let tmpError: string[] = [];
                 if (values['configured']) {
-                    selectedColors.forEach((_color: any) => {
-                        selectedSizes.forEach((_size: any) => {
-                            if (
-                                !values[`configurePrice_${_color['label']}_${_size['label']}`] ||
-                                !values[`configureQty_${_color['label']}_${_size['label']}`]
-                            ) {
-                                errorConfig = true;
-                                tmpError.push(`error_${_color['label']}_${_size['label']}`);
-                            }
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tmpVariant = document.getElementById('props_variants').textContent;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    let tmpValues: any[] = [];
+                    if (tmpVariant) {
+                        tmpValues = JSON.parse(tmpVariant);
+                    }
+                    if (selectedColors.length > 0 && selectedSizes.length > 0) {
+                        selectedColors.forEach((_color: any) => {
+                            selectedSizes.forEach((_size: any) => {
+                                const _tmpSizeLabel = _size['label'].replace('.', '_');
+                                let tPrice = '';
+                                let tQty = '';
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                tPrice = document.getElementById(
+                                    `tconfigurePrice_${_color['label']}_${_tmpSizeLabel}`
+                                ).textContent;
+                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                // @ts-ignore
+                                tQty = document.getElementById(
+                                    `tconfigureQty_${_color['label']}_${_tmpSizeLabel}`
+                                ).textContent;
+                                if (tmpValues.length > 0) {
+                                    tmpValues.forEach((_value: any) => {
+                                        if (
+                                            _value.color_id == _color['label'] &&
+                                            _value.size_id.replace('.', '_')
+                                        ) {
+                                            tPrice = _value.price;
+                                            tQty = _value.qty;
+                                        }
+                                    });
+                                }
+                                dataVariants.push({
+                                    price: tPrice,
+                                    qty: tQty,
+                                    sku: '',
+                                    color_id: _color['value'],
+                                    size_id: _size['value']
+                                });
+                                if (!tPrice || !tQty) {
+                                    errorConfig = true;
+                                    tmpError.push(`error_${_color['label']}_${_size['label']}`);
+                                }
+                            });
                         });
+                    }
+                    if (selectedColors.length > 0 && selectedSizes.length == 0) {
+                        selectedColors.forEach((_color: any) => {
+                            let tPrice = '';
+                            let tQty = '';
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tPrice = document.getElementById(
+                                `tconfigurePrice_${_color['label']}_none`
+                            ).textContent;
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tQty = document.getElementById(
+                                `tconfigureQty_${_color['label']}_none`
+                            ).textContent;
+                            dataVariants.push({
+                                price: tPrice,
+                                qty: tQty,
+                                sku: '',
+                                color_id: _color['value'],
+                                size_id: null
+                            });
+                        });
+                    }
+                    if (selectedColors.length == 0 && selectedSizes.length > 0) {
+                        selectedSizes.forEach((_size: any) => {
+                            let tPrice = '';
+                            let tQty = '';
+                            const _tmpSizeLabel = _size['label'].replace('.', '_');
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tPrice = document.getElementById(
+                                `tconfigurePrice_none_${_tmpSizeLabel}`
+                            ).textContent;
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            tQty = document.getElementById(
+                                `tconfigureQty_none_${_tmpSizeLabel}`
+                            ).textContent;
+                            dataVariants.push({
+                                price: tPrice,
+                                qty: tQty,
+                                sku: '',
+                                color_id: null,
+                                size_id: _size['value']
+                            });
+                        });
+                    }
+                } else {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tColor = selectedColors?.value || null;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    const tSize = selectedSizes?.value || null;
+                    dataVariants.push({
+                        price: values['price'],
+                        qty: values['quantity'],
+                        sku: values['sku'],
+                        color_id: tColor,
+                        size_id: tSize
                     });
                 }
-                if (tmpError.length > 0) {
-                    setErrorConfigured(tmpError);
-                }
-                // console.log('Error Config', errorConfig);
 
                 if (!isIdent && !errorConfig) {
                     const formData = new FormData();
@@ -328,16 +425,9 @@ function ProductFormAdd({
                         // @ts-ignore
                         formData.append('publishCheckbox', 0);
                     }
-                    // // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // // @ts-ignore
-                    // formData.append('publishCheckbox', dataPublish);
-
                     formData.append('description', '');
                     formData.append('tags', JSON.stringify(tags));
-                    formData.append(
-                        'configurations',
-                        JSON.stringify(prepareConfigValues(values, selectedColors, selectedSizes))
-                    );
+                    formData.append('configurations', JSON.stringify(dataVariants));
                     formData.append('materials', JSON.stringify(selectedMaterials));
                     formData.append('colors', JSON.stringify(selectedColors));
                     formData.append('sizes', JSON.stringify(selectedSizes));
@@ -352,7 +442,6 @@ function ProductFormAdd({
                             formData.append('photos[]', file);
                         });
                     }
-                    console.log('FORM DATA', formData);
                     dispatch(updateProductAction(formData, values.id));
                 }
             }}>
@@ -363,11 +452,6 @@ function ProductFormAdd({
                     setSelectedSizes([]);
                     return handleChange(e);
                 };
-                // const onChangeStatusPublish = (e: any) => {
-                //     props.values['isPublish'] = !props.values['isPublish'];
-                //     setDataPublish(!props.values['isPublish']);
-                //     return handleChange(e);
-                // };
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
                 return (
@@ -418,13 +502,6 @@ function ProductFormAdd({
                                     )}
                                 </div>
 
-                                {/*<InputSwitcher*/}
-                                {/*    label={'Active'}*/}
-                                {/*    name={'active'}*/}
-                                {/*    style={null}*/}
-                                {/*    props={props}*/}
-                                {/*    onChange={props.handleChange}*/}
-                                {/*/>*/}
                                 <InputSwitcher
                                     label={'Configured'}
                                     name={'configured'}
@@ -493,6 +570,49 @@ function ProductFormAdd({
                                     </>
                                 )}
                                 <div className="mb-4">
+                                    <label className="control-label">{t('Material')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory'}
+                                            options={prepareAdditionalDropdown(
+                                                additionalProps.materials,
+                                                locale
+                                            )}
+                                            value={selectedMaterials}
+                                            onChange={handleChangeMaterials}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="mb-4">
+                                    <label className="control-label">{t('Color')}</label>
+                                    <div className="relative">
+                                        <em className="input-tips">{t('Select one')}</em>
+                                        <Select
+                                            isMulti={props.values.configured}
+                                            isClearable={true}
+                                            className={'form-control-dropdown'}
+                                            classNamePrefix={'inventory-color'}
+                                            options={prepareAdditionalColorDropdown(
+                                                additionalProps.colors,
+                                                locale
+                                            )}
+                                            value={selectedColors}
+                                            styles={colourStyles}
+                                            onChange={handleChangeColor}
+                                        />
+                                        {props.errors['color'] &&
+                                            selectedColors.length === 0 &&
+                                            selectedSizes.length === 0 && (
+                                                <div className="error-el">
+                                                    {props.errors['color']}
+                                                </div>
+                                            )}
+                                    </div>
+                                </div>
+                                <div className="mb-4">
                                     <label className="control-label">{t('Size')}</label>
                                     <div className="relative">
                                         <em
@@ -517,7 +637,7 @@ function ProductFormAdd({
                                                     {additionalProps.sizesTable.map(
                                                         (size: any, index: number) => (
                                                             <tr key={index}>
-                                                                {[1, 2, 3, 4, 5, 6, 7].map(
+                                                                {[1, 2, 3, 4, 5, 6, 7, 8].map(
                                                                     (num: number) => (
                                                                         <Fragment
                                                                             key={`${size.id}_${num}`}>
@@ -572,49 +692,6 @@ function ProductFormAdd({
                                             )}
                                     </div>
                                 </div>
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Material')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory'}
-                                            options={prepareAdditionalDropdown(
-                                                additionalProps.materials,
-                                                locale
-                                            )}
-                                            value={selectedMaterials}
-                                            onChange={handleChangeMaterials}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="mb-4">
-                                    <label className="control-label">{t('Color')}</label>
-                                    <div className="relative">
-                                        <em className="input-tips">{t('Select one')}</em>
-                                        <Select
-                                            isMulti={props.values.configured}
-                                            isClearable={true}
-                                            className={'form-control-dropdown'}
-                                            classNamePrefix={'inventory-color'}
-                                            options={prepareAdditionalColorDropdown(
-                                                additionalProps.colors,
-                                                locale
-                                            )}
-                                            value={selectedColors}
-                                            styles={colourStyles}
-                                            onChange={handleChangeColor}
-                                        />
-                                        {props.errors['color'] &&
-                                            selectedColors.length === 0 &&
-                                            selectedSizes.length === 0 && (
-                                                <div className="error-el">
-                                                    {props.errors['color']}
-                                                </div>
-                                            )}
-                                    </div>
-                                </div>
 
                                 {props.values.configured && (
                                     <>
@@ -630,41 +707,30 @@ function ProductFormAdd({
                                 )}
                                 <div className="mb-4">
                                     <label className="control-label">{t('Active')}</label>
-                                    {/*<div className="radio">*/}
-                                    {/*    <label>*/}
-                                    {/*        <input*/}
-                                    {/*            type="radio"*/}
-                                    {/*            value="option1"*/}
-                                    {/*            onClick={() => {*/}
-                                    {/*                setActive(!productData.product.publish);*/}
-                                    {/*            }}*/}
-                                    {/*            checked={productData.product.publish}*/}
-                                    {/*        />*/}
-                                    {/*    </label>*/}
-                                    {/*</div>*/}
                                     <input type="checkbox" checked={x} onChange={() => setX(!x)} />
                                     {/*<input type="checkbox" checked={x} onChange={soldCheckbox}/>*/}
                                 </div>
-                                {/*<div className="mb-4">*/}
-                                {/*    <label className="control-label">*/}
-                                {/*    {t('Active')}*/}
-                                {/*    </label>*/}
-                                {/*    <input*/}
-                                {/*        type="checkbox"*/}
-                                {/*        checked={!dataPublish}*/}
-                                {/*        onChange={(el) => {*/}
-                                {/*            setDataPublish(!el.target.checked);*/}
-                                {/*            setActive(!el.target.checked);*/}
-                                {/*            console.log('handle change checkbox', active);*/}
-                                {/*        }}*/}
-                                {/*    />*/}
-                                {/*</div>*/}
 
                                 <button type="submit" className="gradient-btn">
                                     {props.values.id ? t('Update Product') : t('Add a Product')}
                                 </button>
                             </div>
                         </div>
+                        <section className={showError ? `modal` : 'hidden'}>
+                            <article className="modal-content p-lg-4">
+                                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                <div
+                                    className="varianModalClose"
+                                    onClick={() => setShowError(false)}>
+                                    X
+                                </div>
+                                <main className="modal-mainContents">
+                                    <p className="p-3 ">
+                                        {t('You need to chose at least one colour and size')}
+                                    </p>
+                                </main>
+                            </article>
+                        </section>
                     </form>
                 );
             }}

@@ -210,6 +210,34 @@ html {
 .modal-period {
   @apply md:max-w-[500px];
 }
+.textLikeInput {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  background-color: white;
+  background-color: -moz-field;
+  font: -moz-field;
+  font: -webkit-small-control;
+  margin-top: 5px;
+  width: 100px;
+  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgba(207, 216, 220, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
+  padding: 0.625rem;
+  font-size: 14px;
+  line-height: 28px;
+  letter-spacing: 0.004em;
+  height: 45px;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgba(79, 91, 132, var(--tw-text-opacity));
+}
+.new-delete {
+  top: 35px !important;
+}
 
 @import "components/sidebar-header";
 @import "components/header";

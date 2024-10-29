@@ -207,8 +207,28 @@ console.log('PROVIDER USER DATA', userData);
                 lastName = fullFbName[1];
             }
             if (!user) {
-console.log('KAKOGO HUYA');
-                const query = `
+console.log('USER ROLE ID', parseInt(userData.roleId));
+            let query;
+            if (parseInt(userData.roleId) === 1) {
+                console.log('Role 1')
+                query = `
+                    INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, first_name, last_name, role_id)
+                    VALUES
+                    (
+                        '${userData.email ? userData.email : userData.id}',
+                        'facebook',
+                        '${userData.id}',
+                        '${userData.accessToken}',
+                        '${firstName}',
+                        '${lastName}',
+                        '${userData.roleId}'
+                    )
+                    ;
+                `;
+
+            } else {
+                console.log('Role 2')
+                query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, last_name, role_id, auth_provider_accounts)
                     VALUES
                     (
@@ -224,15 +244,13 @@ console.log('KAKOGO HUYA');
                     )
                     ;
                 `;
-                // console.log(query);
+            }
                 const res = await client.query(query);
                 user = res ? await this.findUserByProviderId(userData.id) : null;
 
                 if (parseInt(userData.roleId) === 2) {
                     // get user stores
                     try {
-console.log('ADD SCENARIOS');
-console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${userData.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                         // add to user default chatbot scenarios
                         // buy+item+color+size+quantity
                         // buy+item+size+color+quantity
@@ -246,35 +264,35 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                         // buy+item
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty (1)', 'buy+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty (1)', 'buy+item+size+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config with qty', 'buy+item+color+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config with qty', 'buy+item+color+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config without qty', 'buy+item+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config with qty', 'buy+item+size+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config with qty', 'buy+item+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config without qty', 'buy+item+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config with qty', 'buy+item+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config with qty', 'buy+item+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config without qty', 'buy+item')`);
 
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty (1)', 'sold+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty (1)', 'sold+item+size+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config with qty', 'sold+item+color+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config with qty', 'sold+item+color+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config without qty', 'sold+item+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config with qty', 'sold+item+size+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config with qty', 'sold+item+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config without qty', 'sold+item+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config with qty', 'sold+item+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config with qty', 'sold+item+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config without qty', 'sold+item')`);
 
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty (1)', 'vendu+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty (1)', 'vendu+item+size+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config with qty', 'vendu+item+color+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config with qty', 'vendu+item+color+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config without qty', 'vendu+item+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config with qty', 'vendu+item+size+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config with qty', 'vendu+item+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config without qty', 'vendu+item+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config with qty', 'vendu+item+qty')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config with qty', 'vendu+item+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config without qty', 'vendu+item')`);
 
                         if (userData.accessToken) {
@@ -481,6 +499,10 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                 });
             });
             user = await this.findUserByProviderId(userData.userID);
+            // const providerQuery = await client.query(`SELECT `)
+            const accountId = userData.userID;
+            console.log('PROVIDER LOGIN', accountId);
+
             if (parseInt(user.role_id) === 2) {
                 // get user stores
                 try {
@@ -495,11 +517,11 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
 
                                 return responseLongToken.data.access_token
                             });
-                        const accountId = userData.userID;
+                        const accountId = user.auth_provider_id;
 
                         await axios
                             .get(
-                                `https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
+                                `https://graph.facebook.com/v20.0/me?fields=id,email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
                             )
                             .then(async (responsePages) => {
 
@@ -508,15 +530,16 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                 } else {
                                     const storesList = responsePages.data.accounts.data;
                                     const businessesList = responsePages.data?.businesses?.data || [];
-                                    const userFbId = userData.id;
+                                    const userFbId = responsePages.data.id;
+                                    await client.query(`DELETE FROM data.user_stores WHERE account_id='${userFbId}'`);
                                     storesList.forEach(async (store) => {
-                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
+                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                         if (queryStore.rows.length === 0) {
                                             await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, picture, synchronized)
                                                     VALUES
                                                     (
-                                                        '${userData.userID}',
+                                                        '${userFbId}',
                                                         '${store.id}',
                                                         '${store.access_token}',
                                                         '${store.name}',
@@ -526,24 +549,24 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                                     );`
                                             );
                                         } else {
-                                            await  client.query(`
-                                                    UPDATE data.user_stores SET 
-                                                     access_token='${store.access_token}', 
+                                            const queryUpdStore =
+                                                `UPDATE data.user_stores SET
+                                                     access_token='${store.access_token}',
                                                      name='${store.name}'
-                                                    WHERE user_id = '${user.id}';`
-                                            );
+                                                    WHERE user_id = '${user.id}';`;
+                                            await client.query(queryUpdStore);
                                         }
                                     })
 
                                     businessesList.map(async (business) => {
-                                        const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userData.id}'
+                                        const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}'
                                             AND business_id='${business.id}'`);
                                         if (queryBusiness.rows.length === 0) {
                                             await  client.query(`
                                                     INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
                                                     VALUES
                                                     (
-                                                        '${userData.id}',
+                                                        '${userFbId}',
                                                         '${business.id}',
                                                         '${business.name}',
                                                         '${user.id}'
@@ -562,18 +585,18 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                                     if (responseBusinessesPages.data.error) {
                                                         store.dispatch(setErrorToastAction('Could no getting stores list'));
                                                     } else {
-                                                        const storesList = responseBusinessesPages.data;
-                                                        const userFbId = userData.id;
+                                                        const storeBusinessList = responseBusinessesPages.data;
+                                                        const userFbId = userData.userID;
                                                         // getting picture for store
                                                         let storePicture = '';
-                                                        storesList.data.forEach(async (store) => {
-                                                            const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${accountId}' AND store_id='${store.id}'`);
+                                                        storeBusinessList.data.forEach(async (store) => {
+                                                            const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
                                                             if (queryStore.rows.length === 0) {
                                                                 await  client.query(`
                                                             INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
                                                             VALUES
                                                             (
-                                                                '${accountId}',
+                                                                '${userFbId}',
                                                                 '${store.id}',
                                                                 '${store.access_token}',
                                                                 '${store.name}',
@@ -593,7 +616,7 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
                                                                 fan_count='${store.fan_count}',
                                                                 synchronized=true,
                                                                 is_business=true
-                                                            WHERE account_id='${accountId}' AND store_id='${store.id}';`
+                                                            WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                                                 );
                                                             }
                                                         })
@@ -1611,7 +1634,6 @@ console.log(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES
             const user = await this.findUserByEmailOnly(userData.email);
             await client.query(`UPDATE data.users SET selected_locale='${userData.locale}' WHERE id=${user.id}`)
             user.selected_locale = userData.locale;
-console.log('CREATE SUBSCRIPTION');
 
             if (user) {
                 user.subscription = null;
@@ -1630,33 +1652,33 @@ console.log('CREATE SUBSCRIPTION');
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+color+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty (1)', 'buy+item+size+color+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty (1)', 'buy+item+size+color')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config with qty', 'buy+item+color+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config with qty', 'buy+item+color+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config without qty', 'buy+item+color')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config with qty', 'buy+item+size+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config with qty', 'buy+item+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config without qty', 'buy+item+size')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config with qty', 'buy+item+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config with qty', 'buy+item+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config without qty', 'buy+item')`);
 
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+color+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty (1)', 'sold+item+size+color+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty (1)', 'sold+item+size+color')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config with qty', 'sold+item+color+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config with qty', 'sold+item+color+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config without qty', 'sold+item+color')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config with qty', 'sold+item+size+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config with qty', 'sold+item+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config without qty', 'sold+item+size')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config with qty', 'sold+item+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config with qty', 'sold+item+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config without qty', 'sold+item')`);
 
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+color+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+color+size')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty (1)', 'vendu+item+size+color+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty (1)', 'vendu+item+size+color')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config with qty', 'vendu+item+color+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config with qty', 'vendu+item+color+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config without qty', 'vendu+item+color')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config with qty', 'vendu+item+size+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config with qty', 'vendu+item+size+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config without qty', 'vendu+item+size')`);
-                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config with qty', 'vendu+item+qty')`);
+                await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config with qty', 'vendu+item+quantity')`);
                 await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config without qty', 'vendu+item')`);
 
                 delete user.salt;
@@ -1992,7 +2014,7 @@ console.log('CREATE SUBSCRIPTION');
                        WHERE id=${userData.id}
                         `;
         const userFbId = data.userID;
-
+console.log('USER TOKEN', data.accessToken);
         // getting long live token
         const longToken = await axios
             .get(
@@ -2003,8 +2025,10 @@ console.log('CREATE SUBSCRIPTION');
                 await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
 
                 return responseLongToken.data.access_token
+            }).catch(e => {
+                return  e.response.data.error.message
             });
-
+console.log('LONG TOKEN RESPONSE', longToken);
         try {
             if (data.accessToken) {
                 await axios
@@ -2016,6 +2040,8 @@ console.log('CREATE SUBSCRIPTION');
                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                         } else {
                             const storesList = responsePages.data;
+console.log('STORES LIST', storesList)
+
                             // getting picture for store
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
@@ -2037,13 +2063,19 @@ console.log('CREATE SUBSCRIPTION');
                                                     );`
                                     );
                                 } else {
+                                    // const periodStartNew =  new Date();
+                                    // const timestampStartNew = periodStartNew.getTime();
+                                    // const ts = moment().format('YYYY-MM-DD HH:mm:ss').unix();
+                                    // const m = moment.unix(ts);
+                                    //
                                     await  client.query(`
                                                     UPDATE data.user_stores SET
                                                         access_token='${store.access_token}',
                                                         name='${store.name}',
                                                         picture='${store.picture.data.url}',
                                                         fan_count='${store.fan_count}',
-                                                        synchronized=true
+                                                        synchronized=true,
+                                                        updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                     WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                     );
                                 }
@@ -2065,7 +2097,7 @@ console.log('CREATE SUBSCRIPTION');
                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                         } else {
                             const businessesList = responseBusinesses.data;
-console.log((businessesList.businesses.data));
+console.log('BUSINESS LIST', businessesList.businesses.data)
                             businessesList.businesses.data.map(async (business) => {
                                 console.log(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}' 
                                     AND business_id='${business.id}'`);
@@ -2125,7 +2157,8 @@ console.log((businessesList.businesses.data));
                                                                 picture='${store.picture.data.url}',
                                                                 fan_count='${store.fan_count}',
                                                                 synchronized=true,
-                                                                is_business=true
+                                                                is_business=true,
+                                                                updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                             WHERE account_id='${userFbId}' AND store_id='${store.id}';`
                                                         );
                                                     }
@@ -2639,7 +2672,6 @@ console.log((businessesList.businesses.data));
             const dbSubscriptionInfo = await client.query(`SELECT * from data.subscriptions WHERE user_id=${user.id}`);
             const customerId = dbSubscriptionInfo.rows[0].customer_id;
             const oldSubscriptionId = dbSubscriptionInfo.rows[0].customer_id;
-console.log('BROKEN 2')
             // REFUNDING METHANIZM
             // const periodStart =  new Date();
             // const timestampStart = periodStart.getTime();
@@ -2670,15 +2702,6 @@ console.log('BROKEN 2')
 
             // const amountRemaining = upcomingInvoice.amount_remaining;
             if (refundAmount > 0 && paymentIntent) {
-                // refund payement
-                // try {
-                //     await stripe.refunds.create({
-                //         payment_intent: paymentIntent,
-                //         amount: refundAmount,
-                //     });
-                // } catch (e) {
-                //     console.log(e.message);
-                // }
                 try {
                     const cancelSubscription = await stripe.subscriptions.cancel(oldSubscriptionId);
                 } catch (e) {
@@ -2694,7 +2717,6 @@ console.log('BROKEN 2')
                 };
                 try {
                     const subscriptionNew = await stripe.subscriptions.create(subscriptionObject);
-// console.log("NEW SUBSCRIPTION", subscriptionNew);
 
                     // update subscription DB
                     const dbPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE stripe_id='${planId}'`);
@@ -2840,6 +2862,10 @@ console.log('BROKEN 2')
             if (data.free_shipping_status) {
                 free_shipping_timer = `${data.free_shipping_timer || 0} hour${data.free_shipping_timer > 1 ? 's' : ''}`;
             }
+            const subscriptionPlan = await client.query(`SELECT plan_id FROM data.subscriptions WHERE user_id='${userId}'`);
+            let percent = 3;
+            if (subscriptionPlan.rows[0].plan_id === 1)
+                percent = 5;
 
             const intervalDuration = `${data.order_timer || 0} ${data.type === 'h'? 'hour' : data.type === 'd' ? 'day' : 'minute'}${data.order_timer > 1 ? 's' : ''}`;
             const query = `INSERT INTO data.seller_settings(user_id, order_timer, free_shipping_timer, free_shipping_status, multisafe_api_key)
@@ -2849,7 +2875,7 @@ console.log('BROKEN 2')
                     free_shipping_status = EXCLUDED.free_shipping_status,
                     multisafe_api_key = EXCLUDED.multisafe_api_key;`;
             await client.query(query, [userId, intervalDuration, free_shipping_timer, !!data.free_shipping_status, data.multisafe_api_key]);
-
+            await client.query(`UPDATE data.seller_settings SET transaction_percent='${percent}' WHERE user_id='${userId}'`);
             return { success: true };
 
         } catch (e) {
@@ -2949,60 +2975,9 @@ console.log('BROKEN 2')
                                 await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
                             })
                         }
-                        // if (file.indexOf('policy111') > 0) {
-                        //     console.log('need update policy')
-                        //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                        //         if (err) throw err
-                        //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
-                        //         console.log(`${dirUpload}/${file}`)
-                        //         console.log('to')
-                        //         console.log(`${dirNewUpload}/${file}`)
-                        //     })
-                        // }
                     });
                 }
-                // files.forEach(async file => {
-                //     let indexOfFirstPolicy = file.indexOf('policy');
-                //     let indexOfFirstTerms = file.indexOf('terms');
-                //     let indexOfFirstDelivery = file.indexOf('delivery');
-                //     let indexOfFirstReturn = file.indexOf('return');
-                //     if (indexOfFirstPolicy === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET privacy_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     if (indexOfFirstTerms === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET terms_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     if (indexOfFirstDelivery === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET delivery_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     if (indexOfFirstReturn === 0) {
-                //         fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //             if (err) throw err
-                //             await client.query(`UPDATE data.seller_settings SET return_doc='${file}' WHERE user_id='${userId}'`)
-                //         })
-                //     }
-                //     // if (file.indexOf('policy111') > 0) {
-                //     //     console.log('need update policy')
-                //     //     fs.rename(`${dirUpload}/${file}`, `${dirNewUpload}/${file}`, async function (err) {
-                //     //         if (err) throw err
-                //     //         // await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
-                //     //         console.log(`${dirUpload}/${file}`)
-                //     //         console.log('to')
-                //     //         console.log(`${dirNewUpload}/${file}`)
-                //     //     })
-                //     // }
-                // });
             });
-            // const fs = require('fs');
 
             const _settings = await client.query(`SELECT * FROM data.seller_settings WHERE user_id='${userId}'`);
             if (_settings.rows[0].tmp_privacy_doc) {
@@ -3346,7 +3321,6 @@ console.log('BROKEN 2')
             }
             if (dataFiles.length > 0) {
                 const promisesDocs = [];
-                console.log('here');
                 dataFiles.forEach(doc => {
                     console.log("DOC", doc);
                     // promisesDocs.push(this.copyFiles(sourceDir, dirUpload, doc));

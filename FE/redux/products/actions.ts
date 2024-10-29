@@ -43,6 +43,7 @@ export const updateProductAction: any = createAction(
                     dispatch(
                         setSuccessToastAction(`Product has been ${isNew ? 'updated' : 'created'}`)
                     );
+                    // window.location.reload();
                     dispatch(fetchAdditionalAction());
                     dispatch(fetchProductsAction());
                     dispatch(showLoaderAction(false));
@@ -132,6 +133,7 @@ export const fetchProductAction: any = createAction(
             if (res.status) {
                 dispatch(showLoaderAction(false));
             }
+            console.log('DATA SERVER', res.data.product);
             return {
                 product: res.data.product
             };

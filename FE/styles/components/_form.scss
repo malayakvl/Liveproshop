@@ -1,7 +1,7 @@
 .form-control {
   box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
   @apply bg-white w-full rounded-lg p-2.5 text-base text-gray-350
-    font-medium border-gray-180 border placeholder-gray-180;
+    font-medium border-gray-180 border placeholder-gray-180 md:text-sm;
 
   &:active,
   &:focus,
@@ -21,11 +21,11 @@
 }
 
 .form-control-disabled {
-  @apply text-gray-450 bg-gray-100 font-bold border-gray-180 w-full rounded-lg text-base p-2.5;
+  @apply text-gray-450 bg-gray-100 font-bold border-gray-180 w-full rounded-lg text-base p-2.5 md:text-sm;
 }
 
 .form-control-icon-disabled {
-  @apply pl-9 text-gray-450 bg-gray-100 font-bold border-gray-180 w-full rounded-lg text-sm p-2.5;
+  @apply pl-9 text-gray-450 bg-gray-100 font-bold border-gray-180 w-full rounded-lg text-base p-2.5 md:text-sm;
 }
 
 .form-control-dropdown {
@@ -34,7 +34,7 @@
     font-size: 12px !important;
     font-weight: bold !important;
     //min-width: 0 !important;
-    @apply text-base;
+    @apply text-base md:text-sm;
   }
   .inventory__menu {
     font-size: 12px !important;
@@ -118,7 +118,7 @@
 
 .form-control-icon {
   @apply bg-white w-full rounded-lg p-2.5 pl-9 text-base text-gray-350
-    font-medium border-gray-180 border placeholder-gray-180 pr-[35px];
+    font-medium border-gray-180 border placeholder-gray-180 pr-[35px] md:text-sm;
 
   &:active,
   &:focus,

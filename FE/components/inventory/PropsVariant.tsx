@@ -12,53 +12,70 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     const price = props.values[`configurePrice_${checkedVariant}`];
     const qty = props.values[`configureQty_${checkedVariant}`];
     const [newCheckedVariant, setNewCheckedVariat] = useState('');
+    const dataConfiguration = [];
     // let tmpVariants: any[] = [];
 
     const setupIdent = (variants: any[]) => {
-        console.log('New checked varian', newCheckedVariant);
-        // const price = 10;
-        // const qty = props.values[`configureQty_${newCheckedVariant}`];
-        // const qty = 10;
-        if (colors.length === 0) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const tPrice = document.getElementById(
+            `tconfigurePrice_${newCheckedVariant.replace('.', '_')}`
+        ).textContent;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const tQty = document.getElementById(
+            `tconfigureQty_${newCheckedVariant.replace('.', '_')}`
+        ).textContent;
+        console.log('COLORS', colors);
+        console.log('SIZES', sizes);
+        if (colors.length === 0 && sizes.length === 0) {
             setShowError(true);
         } else {
+            let textPrice: string | number;
             if (newCheckedVariant) {
-                // variants.forEach((attr: any) => {
-                //     console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
-                //     props.values[`configurePrice_${attr.color}_${attr.size}`] = 10;
-                //     props.values[`configureQty_${attr.color}_${attr.size}`] = 15;
-                // });
+                const fieldName = `tconfigurePrice_${newCheckedVariant.replace('.', '_')}`;
+                const dataVariantsTmp: {
+                    price: string | null;
+                    qty: string | null;
+                    sku: string;
+                    color_id: any;
+                    size_id: any;
+                }[] = [];
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                // textPrice = parseFloat(document.getElementById(fieldName).textContent);
+                // const priceText = document.getElementById(`tconfigurePrice`);
+                variants.forEach((attr: any) => {
+                    // console.log('filed price name', `configurePrice_${attr.color}_${attr.size}`);
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    document.getElementById(
+                        `tconfigurePrice_${attr.color}_${attr.size.replace('.', '_')}`
+                    ).textContent = tPrice;
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    document.getElementById(
+                        `tconfigureQty_${attr.color}_${attr.size.replace('.', '_')}`
+                    ).textContent = tQty;
+                    props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
+                    props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
+                    dataVariantsTmp.push({
+                        price: tPrice,
+                        qty: tQty,
+                        sku: '',
+                        color_id: attr.color,
+                        size_id: attr.size
+                    });
+                });
+                console.log(dataVariantsTmp);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                document.getElementById('props_variants').textContent =
+                    JSON.stringify(dataVariantsTmp);
             }
-            replacePrices(variants, price, qty);
-            // variants.forEach((attr: any) => {
-            //     console.log('field price name', `configurePrice_${attr.color}_${attr.size}`);
-            //     props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
-            //     props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
-            // });
-            // props.values[`configureQty_Yellow_42`] = 50;
         }
-        // props.values['configurePrice_Yellow_42'] = 55;
-        replacePrices(variants, price, qty);
         dispatch(setIdentAction(false));
     };
-
-    const replacePrices = (variants: any[], price: number, qty: number) => {
-        variants.forEach((attr: any) => {
-            props.values[`configurePrice_${attr.color}_${attr.size}`] = price;
-            props.values[`configureQty_${attr.color}_${attr.size}`] = qty;
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            document.getElementById(`configurePrice_${attr.color}_${attr.size}`).value = price
-                ? price
-                : '';
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            document.getElementById(`configureQty_${attr.color}_${attr.size}`).value = qty
-                ? qty
-                : '';
-        });
-    };
-    // console.log('Variant', tmpVariants);
 
     dispatch(setIdentAction(false));
 
@@ -111,10 +128,10 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     3) Click the "Replace all values with selected" button and these values will be applied to all product variations`}
                                         className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
                                         onClick={() => {
+                                            setupIdent(attrs);
                                             setTimeout(() => {
                                                 setupIdent(attrs);
-                                            }, 100);
-                                            // setupIdent(attrs);
+                                            }, 50);
                                         }}>
                                         <span>{t('Replace all values with selected')}</span>
                                     </a>
@@ -127,6 +144,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                         className="float-left action-dublicate action cursor-pointer bg-green-250 text-white"
                                         onClick={() => {
                                             setupIdent(attrs);
+                                            setTimeout(() => {
+                                                setupIdent(attrs);
+                                            }, 50);
                                         }}>
                                         <span>{t('Replace all values with selected')}</span>
                                     </a>
@@ -165,45 +185,163 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     </span>
                                 </td>
                                 <td className="flex flex-wrap justify-between">
-                                    <InputText
-                                        icon={null}
-                                        label={t('Price')}
-                                        name={`configurePrice_${attr.color}_${attr.size}`}
-                                        placeholder={'Price'}
-                                        style={'w-[100px]'}
-                                        props={props}
-                                        tips={null}
-                                    />
-                                    <InputText
-                                        icon={null}
-                                        label={t('Quantity')}
-                                        name={`configureQty_${attr.color}_${attr.size}`}
-                                        placeholder={'Quantity'}
-                                        style={'w-[100px]'}
-                                        props={props}
-                                        tips={null}
-                                    />
+                                    <div className="relative">
+                                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                        <label className="control-label">{t('Price')}</label>
+                                        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+                                        <div
+                                            className={`textLikeInput`}
+                                            id={`tconfigurePrice_${attr.color}_${attr.size.replace(
+                                                '.',
+                                                '_'
+                                            )}`}
+                                            onBlur={(e) => {
+                                                let textPriceFieldUpValue = '';
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                textPriceFieldUpValue = document.getElementById(
+                                                    `tconfigurePrice_${
+                                                        attr.color
+                                                    }_${attr.size.replace('.', '_')}`
+                                                ).textContent;
+                                                props.setFieldValue(
+                                                    `configurePrice_${
+                                                        attr.color
+                                                    }_${attr.size.replace('.', '_')}`,
+                                                    textPriceFieldUpValue
+                                                );
+
+                                                console.log('Value field', textPriceFieldUpValue);
+                                            }}
+                                            contentEditable>
+                                            {
+                                                props.values[
+                                                    `configurePrice_${
+                                                        attr.color
+                                                    }_${attr.size.replace('.', '_')}`
+                                                ]
+                                            }
+                                        </div>
+                                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                        <div
+                                            className="input-close cursor-pointer new-delete"
+                                            onClick={() => {
+                                                console.log('TUT');
+                                                props.values[
+                                                    `configurePrice_${
+                                                        attr.color
+                                                    }_${attr.size.replace('.', '_')}`
+                                                ] = '';
+                                                props.setFieldValue(
+                                                    `configurePrice_${
+                                                        attr.color
+                                                    }_${attr.size.replace('.', '_')}`,
+                                                    ''
+                                                );
+                                            }}
+                                        />
+                                        <div className="hidden">
+                                            <InputText
+                                                icon={null}
+                                                label={t('Price')}
+                                                name={`configurePrice_${
+                                                    attr.color
+                                                }_${attr.size.replace('.', '_')}`}
+                                                placeholder={'Price'}
+                                                style={'w-[100px]'}
+                                                props={props}
+                                                tips={null}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="relative">
+                                        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+                                        <label className="control-label">{t('Quantity')}</label>
+                                        <div
+                                            className={`textLikeInput`}
+                                            id={`tconfigureQty_${attr.color}_${attr.size.replace(
+                                                '.',
+                                                '_'
+                                            )}`}
+                                            onBlur={(e) => {
+                                                let textQtyFieldUpValue = '';
+                                                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                                                // @ts-ignore
+                                                textQtyFieldUpValue = document.getElementById(
+                                                    `tconfigurePrice_${
+                                                        attr.color
+                                                    }_${attr.size.replace('.', '_')}`
+                                                ).textContent;
+                                                props.setFieldValue(
+                                                    `configurePrice_${
+                                                        attr.color
+                                                    }_${attr.size.replace('.', '_')}`,
+                                                    textQtyFieldUpValue
+                                                );
+
+                                                console.log('Value field', textQtyFieldUpValue);
+                                            }}
+                                            contentEditable>
+                                            {
+                                                props.values[
+                                                    `configureQty_${attr.color}_${attr.size.replace(
+                                                        '.',
+                                                        '_'
+                                                    )}`
+                                                ]
+                                            }
+                                        </div>
+                                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                                        <div
+                                            className="input-close cursor-pointer new-delete"
+                                            onClick={() => {
+                                                props.setFieldValue(
+                                                    `configureQty_${attr.color}_${attr.size.replace(
+                                                        '.',
+                                                        '_'
+                                                    )}`,
+                                                    ''
+                                                );
+                                            }}
+                                        />
+                                        <div className="hidden">
+                                            <InputText
+                                                icon={null}
+                                                label={t('Quantity')}
+                                                name={`configureQty_${
+                                                    attr.color
+                                                }_${attr.size.replace('.', '_')}`}
+                                                placeholder={'Quantity'}
+                                                style={'w-[100px]'}
+                                                props={props}
+                                                tips={null}
+                                            />
+                                        </div>
+                                    </div>
                                     <InputText
                                         icon={null}
                                         label={t('SKU')}
-                                        name={`configureSKU_${attr.color}_${attr.size}`}
+                                        name={`configureSKU_${attr.color}_${attr.size.replace(
+                                            '.',
+                                            '_'
+                                        )}`}
                                         placeholder={'SKU'}
                                         style={'w-full max-w-[170px]'}
                                         props={props}
                                         tips={null}
                                     />
                                     <div className="relative w-full">
-                                        {!props[`configurePrice_${attr.color}_${attr.size}`] && (
-                                            <span
-                                                className="config-error"
-                                                id={`error_${attr.color}_${attr.size}`}>
-                                                {!props.values[
-                                                    `configurePrice_${attr.color}_${attr.size}`
-                                                ] && props.isSubmitting
-                                                    ? 'Price, Quantity are mandatory fields'
-                                                    : ''}
-                                            </span>
-                                        )}
+                                        {/*{!props[`configurePrice_${attr.color}_${attr.size}`] && (*/}
+                                        {/*    <span*/}
+                                        {/*        className="config-error"*/}
+                                        {/*        id={`error_${attr.color}_${attr.size}`}>*/}
+                                        {/*        {!props.values[*/}
+                                        {/*            `configurePrice_${attr.color}_${attr.size}`*/}
+                                        {/*            ] && props.isSubmitting*/}
+                                        {/*            ? 'Price, Quantity are mandatory fields'*/}
+                                        {/*            : ''}*/}
+                                        {/*    </span>*/}
+                                        {/*)}*/}
                                         {errors.length > 0 && (
                                             <span className="config-error">
                                                 {errors.find(
@@ -220,6 +358,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                             </tr>
                         ))}
                     </tbody>
+                    <tfoot>
+                        <div id="props_variants" className="hidden" />
+                    </tfoot>
                 </table>
             )}
             <section className={showError ? `modal` : 'hidden'}>
@@ -229,7 +370,9 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                         X
                     </div>
                     <main className="modal-mainContents">
-                        <p className="p-3 ">{t('You need to chose at least one colour')}</p>
+                        <p className="p-3 ">
+                            {t('You need to chose at least one colour and size')}
+                        </p>
                     </main>
                 </article>
             </section>

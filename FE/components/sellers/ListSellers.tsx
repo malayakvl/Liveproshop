@@ -180,25 +180,6 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                                         </>
                                     )}
                                 </Disclosure>
-                                {/* <div className="flex">
-                                    <div>
-                                        <Image
-                                            src={
-                                                item.photo
-                                                    ? baseApiUrl + item.photo
-                                                    : userProfileImg
-                                            }
-                                            width={24}
-                                            height={24}
-                                            className="rounded-full  "
-                                            alt=""
-                                        />
-                                    </div>
-                                    <span className="pl-3">
-                                        {item.first_name} {item.last_name}
-                                        <span className="block text-blue-350">{item.email}</span>
-                                    </span>
-                                </div> */}
                             </td>
                             <td>
                                 <span
@@ -227,9 +208,6 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                                     {t('View history')}
                                 </span>
                             </td>
-                            {/* <td>{item.phone}</td>
-                            <td>{parseTranslation(item.country_json, 'name', locale)}</td>
-                            <td>{item.full_address?.slice(0, -2)}</td> */}
                             <td>{item.total_sessions}</td>
                             <td>{item.total_orders}</td>
                             <td>{item.total_buyers}</td>
@@ -246,7 +224,7 @@ const ListSellers: React.FC<{ locale: string }> = ({ locale }) => {
                                     </>
                                 )}
                             </td>
-                            <td style={{ fontSize: '12px' }}>
+                            <td style={{ fontSize: '12px', width: '140px' }}>
                                 <span
                                     className="cursor-pointer gradient-btn-small"
                                     role="presentation"

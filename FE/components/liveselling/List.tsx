@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { itemsCountSelector, paginatedItemsSelector } from '../../redux/livesessions/selectors';
+import {
+    itemsCountSelector,
+    longTokenErrorSelector,
+    paginatedItemsSelector
+} from '../../redux/livesessions/selectors';
 import { PaginationType } from '../../constants';
 import { DataTable } from '../_common';
 import { fetchItemsAction } from '../../redux/livesessions';
@@ -8,18 +12,18 @@ import { removeItemAction, stopSessionAction } from '../../redux/livesessions/ac
 import moment from 'moment';
 import { useTranslations } from 'next-intl';
 import { itemSelector } from '../../redux/settings/selectors';
-import Link from 'next/link';
 
 const ListMessages: React.FC = () => {
     const dispatch = useDispatch();
     const items = useSelector(paginatedItemsSelector);
+    const longTokenErrorMsg = useSelector(longTokenErrorSelector);
     const count = useSelector(itemsCountSelector);
     const settingsValues = useSelector(itemSelector);
 
     const t = useTranslations();
 
     const [closedSessions, setClosedSession] = useState<number[]>([]);
-    const [showAlert, setShowAlert] = useState(true);
+    // const [showAlert, setShowAlert] = useState(true);
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);

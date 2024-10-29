@@ -1,6 +1,8 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import moment from 'moment';
+import store from "./Store.js";
+import axios from "axios";
 
 class Livesession {
     async getUserScenarios (userId) {
@@ -287,7 +289,7 @@ class Livesession {
                             AND (ls.job_closed IS NULL)
                             AND event_date_end = '${moment().format('YYYY-MM-DD')}'
                             AND event_time_end <= '${moment().add(3, 'hours').format('HH:mm:ss')}'`;
-        console.log(queryStr);
+        // console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
@@ -542,8 +544,79 @@ class Livesession {
         }
     }
 
-    async getAll (page, perPage = 20, userId, reqOffset = null) {
-        console.log('here');
+//     async getAll (page, perPage = 20, userId, reqOffset = null) {
+//         const client = await pool.connect();
+//         try {
+//             const _total = await client.query(
+//                 `SELECT * FROM common__tools._select_total_from_table_by_where('data', 'live_sessions', 'id', 'user_id = ''${userId}''');`
+//             );
+//             const size = _total.rows[0].total;
+//             let offset;
+//             if (reqOffset) {
+//                 offset = reqOffset;
+//             } else {
+//                 offset = (Number(page) - 1) * Number(perPage);
+//             }
+// //             const storesQuery = `SELECT * FROM data.user_stores WHERE user_id='${userId}' ORDER BY fan_count DESC limit ${perPage} OFFSET ${offset}`;
+// //             const resStores = await client.query(storesQuery);
+// // console.log('USER', user);
+// //             const userData = user;
+// //             const longToken = await axios
+// //                 .get(
+// //                     `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${userData.auth_provider_access_token}`
+// //                 )
+// //                 .then(async (responseLongToken) => {
+// //                     console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+// //                     // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+// //
+// //                     return responseLongToken.data.access_token
+// //                 });
+//
+//             if (resStores.rows.length > 0) {
+//                 resStores.rows.forEach(_store => {
+//                     console.log('STORE', _store);
+//                 })
+//             }
+//
+//
+//             // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
+//             const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name
+//                     FROM data.live_sessions
+//                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+//                     WHERE data.live_sessions.user_id='${userId}'
+//                 ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
+//             // console.log(productQuery);
+//             const res = await client.query(productQuery);
+//             const items = res.rows.length > 0 ? res.rows : [];
+//             const error = null;
+//
+//             return {
+//                 items,
+//                 size,
+//                 error
+//             };
+//         } catch (e) {
+//             if (process.env.NODE_ENV === 'development') {
+//                 logger.log(
+//                     'error',
+//                     'Model error (Products getAll)1:',
+//                     { message: e.message }
+//                 );
+//             }
+//             const products = null;
+//             const error = {
+//                 code: 500,
+//                 message: 'Error get list of users'
+//             };
+//             return {
+//                 products,
+//                 error
+//             };
+//         } finally {
+//             client.release();
+//         }
+//     }
+    async getAll (page, perPage = 20, userId, reqOffset = null, queryFilter = null, user = null) {
         const client = await pool.connect();
         try {
             const _total = await client.query(
@@ -556,22 +629,127 @@ class Livesession {
             } else {
                 offset = (Number(page) - 1) * Number(perPage);
             }
-            
+            const storesQuery = `SELECT * FROM data.user_stores WHERE user_id='${userId}' ORDER BY fan_count DESC limit ${perPage} OFFSET ${offset}`;
+            const resStores = await client.query(storesQuery);
+            let longToken;
+            let expiteLongTokenAt;
+            let expiteAccessLongTokenAt;
+            // if (resStores.rows.length > 0) {
+// console.log('STORES LENGTH', resStores.rows.length)
+console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
+// console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.auth_provider_access_token}`);
+//                 longToken = await axios
+//                     .get(
+//                         `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
+//                     )
+//                     .then(async (responseLongToken) => {
+//                         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+//                         // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+//
+//                         return {result: responseLongToken.data};
+//                     }).catch(e => {
+//                         console.log('ERROR', e.response.data.error.message)
+//                         return  {error: e.response.data.error.message}
+//                     })
+            longToken = await axios
+                .get(
+                    `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
+                )
+                .then(async (responseLongToken) => {
+                    console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+                    // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+
+                    return {result: responseLongToken.data};
+                }).catch(e => {
+                    console.log('ERROR', e.response.data.error.message)
+                    return  {error: e.response.data.error.message}
+                })
+console.log('RESULT RESPONSE', longToken);
+                let longTokenExpire;
+                if (!longToken.error) {
+                    // get app access token
+                    const appAccessToken = await axios
+                        .get(
+                            `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`
+                        )
+                        .then(async (responseLongToken) => {
+                            return {appToken: responseLongToken.data.access_token};
+                        }).catch(e => {
+                            return {error: e.response.data.error.message};
+                            // return  e.response.data.error.message
+                        })
+                    console.log('APP TOKEN DATA', appAccessToken);
+
+
+                    longTokenExpire = await axios
+                        .get(
+                            `https://graph.facebook.com/debug_token?input_token=${longToken.result.access_token}&access_token=${appAccessToken.appToken}`
+                        )
+                        .then(async (responseLongToken) => {
+                            console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                            return {result: responseLongToken.data};
+                        }).catch(e => {
+                            return  {error: e.response.data.error.message}
+                        })
+                    // console.log('LONG TOKEN EXPIRE', longTokenExpire)
+                    if (!longTokenExpire.error) {
+                        console.log('data_access_expires_at', longTokenExpire.result.data.data_access_expires_at);
+                        expiteLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
+                    }
+                }  else {
+                    // get date expired
+                    // user.auth_provider_access_token
+                    const appAccessToken = await axios
+                        .get(
+                            `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`
+                        )
+                        .then(async (responseLongToken) => {
+                            return {appToken: responseLongToken.data.access_token};
+                        }).catch(e => {
+                            return {error: e.response.data.error.message};
+                            // return  e.response.data.error.message
+                        });
+                    console.log('APP TOKEN DATA', appAccessToken);
+
+
+                    longTokenExpire = await axios
+                        .get(
+                            `https://graph.facebook.com/debug_token?input_token=${user.auth_provider_access_token}&access_token=${appAccessToken.appToken}`
+                        )
+                        .then(async (responseLongToken) => {
+                            console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                            return {result: responseLongToken.data};
+                        }).catch(e => {
+                            return  {error: e.response.data.error.message}
+                        })
+                    // console.log('LONG TOKEN EXPIRE', longTokenExpire)
+                    if (!longTokenExpire.error) {
+                        expiteLongTokenAt = moment.unix(longTokenExpire.result.data.expires_at).format("DD-MM-YYYY HH:mm:ss");
+                        expiteAccessLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
+                        console.log('EXPIRED', expiteLongTokenAt);
+                        console.log('EXPIRED', expiteAccessLongTokenAt);
+                    }
+                }
+            // }
+
+
             // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name 
-FROM data.live_sessions 
-LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
-WHERE data.live_sessions.user_id='${userId}'
+                    FROM data.live_sessions 
+                    LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
+                    WHERE data.live_sessions.user_id='${userId}'
                 ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             // console.log(productQuery);
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
-        
+
             return {
                 items,
                 size,
-                error
+                error,
+                longToken,
+                expiteLongTokenAt,
             };
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
@@ -633,6 +811,15 @@ WHERE data.live_sessions.user_id='${userId}'
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
         // console.log(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
         //                     FROM data.seller_settings WHERE user_id=${userId};`);
+        const scenariosResNew = await client.query(`SELECT id FROM data.chatbot_scenarios WHERE user_id = ${userId} ORDER BY id`);
+        let scenarioIds = '';
+        scenariosResNew.rows.forEach(_res => {
+            scenarioIds += _res.id+',';
+            console.log(_res.id);
+        });
+
+        console.log(scenarioIds.substring(0, scenarioIds.length - 1));
+
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
         let intervalDuration;
@@ -673,9 +860,13 @@ WHERE data.live_sessions.user_id='${userId}'
         //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
         //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
         //         );`;
+        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+        //         );`;
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+                    '{${scenarioIds.substring(0, scenarioIds.length - 1)}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
                 );`;
         try {
             await client.query(query);

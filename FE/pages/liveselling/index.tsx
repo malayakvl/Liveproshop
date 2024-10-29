@@ -13,6 +13,10 @@ import { userSelector } from '../../redux/user/selectors';
 import { fetchFormAction } from '../../redux/settings';
 import { itemSelector } from '../../redux/settings/selectors';
 import moment from 'moment';
+import {
+    longTokenErrorSelector,
+    longTokenExpireSelector
+} from '../../redux/livesessions/selectors';
 
 export default function Index({ session, locale }: { session: any; locale: string }) {
     if (!session) return <></>;
@@ -21,6 +25,9 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const user = useSelector(userSelector);
     const settingsValues = useSelector(itemSelector);
     const [showErrorBlock, setShowErrorBlock] = useState(false);
+    const longTokenError = useSelector(longTokenErrorSelector);
+    const longTokenExpire = useSelector(longTokenExpireSelector);
+    const longTokenErrorMsg = useSelector(longTokenErrorSelector);
 
     const fbSync = () => {
         accountService.syncFB();
@@ -31,7 +38,6 @@ export default function Index({ session, locale }: { session: any; locale: strin
     }, []);
 
     useEffect(() => {
-        console.log('Settings Value', settingsValues);
         if (settingsValues.user_id) {
             setShowErrorBlock(true);
         }
@@ -53,10 +59,24 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             <span>{t('Sync account')}</span>
                         </button>
                     </div>
-                    <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
-                        {t('Expire in')}{' '}
-                        {moment(user.auth_provider_expiration_time).format('D-MM-Y H:m')}
-                    </div>
+                    {!longTokenError && (
+                        <div className="pl-3 font-bold text-[14px] text-green-250 inline-block mt-4">
+                            {t('Expire in')} {longTokenExpire}
+                        </div>
+                    )}
+                    {longTokenError && (
+                        <div className="pl-3 font-bold text-[14px] text-orange-450 inline-block mt-4">
+                            {t('Token has expired')} {longTokenExpire}
+                        </div>
+                    )}
+                    <div className="clear-both"></div>
+                    {longTokenErrorMsg && (
+                        <div className="alert-danger clear-both mb-4 mt-4">
+                            {t(
+                                'Your Facebook token is expired or invalid, please resynchronize with your Facebook account'
+                            )}
+                        </div>
+                    )}
                     <div className="clear-both" />
                 </div>
                 <div style={{ display: !showErrorBlock ? 'none' : 'block' }}>
