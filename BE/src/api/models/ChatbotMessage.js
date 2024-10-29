@@ -274,44 +274,40 @@ console.log(commentQuery);
             items,
             error
         };
-        // exit;
-        // const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
-        // console.log('Comment query');
-        // console.log(commentQuery);
-        try {
-            // await client.query(commentQuery);
-            const items = [];
-            const error = null;
-
-            return {
-                items,
-                error
-            };
-        } catch (e) {
-            if (process.env.NODE_ENV === 'development') {
-                logger.log(
-                    'error',
-                    'Model error (chatbot messages addMessages):',
-                    { message: commentQuery }
-                );
-                logger.log(
-                    'error',
-                    'Query:',
-                    { message: e.message }
-                );
-            }
-            const items = null;
-            const error = {
-                code: 500,
-                message: 'error insering message'
-            };
-            return {
-                items,
-                error
-            };
-        } finally {
-            client.release();
-        }
+        // try {
+        //     // await client.query(commentQuery);
+        //     const items = [];
+        //     const error = null;
+        //
+        //     return {
+        //         items,
+        //         error
+        //     };
+        // } catch (e) {
+        //     if (process.env.NODE_ENV === 'development') {
+        //         logger.log(
+        //             'error',
+        //             'Model error (chatbot messages addMessages):',
+        //             { message: commentQuery }
+        //         );
+        //         logger.log(
+        //             'error',
+        //             'Query:',
+        //             { message: e.message }
+        //         );
+        //     }
+        //     const items = null;
+        //     const error = {
+        //         code: 500,
+        //         message: 'error insering message'
+        //     };
+        //     return {
+        //         items,
+        //         error
+        //     };
+        // } finally {
+        //     client.release();
+        // }
     }
 
 
