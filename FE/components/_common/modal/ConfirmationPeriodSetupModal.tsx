@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+    changePeriodFreeShippingSelector,
     deletePeriodPopupSelector,
     modalConfirmationPeriodSetupMetaSelector,
     setupPeriodSelector
@@ -23,9 +24,15 @@ const ConfirmationPeriodSetupModal: React.FC = () => {
     const [meta, setMeta] = useState<Layouts.ModalConfirmPeriodMeta | null>(null);
     const periodSetup = useSelector(setupPeriodSelector);
     const t = useTranslations();
+    const changePeriodActive = useSelector(changePeriodFreeShippingSelector);
 
-    const {
-        title = `${
+    let newTitle;
+    if (changePeriodActive) {
+        newTitle = `${t(
+            'The new shipping windows will desactivate the current one, are you sure you want to set a new period?'
+        )}`;
+    } else {
+        newTitle = `${
             t('Do you want to set the period from ') +
             '' +
             moment(periodSetup?.startDate).format('DD/MM/YYYY') +
@@ -37,11 +44,9 @@ const ConfirmationPeriodSetupModal: React.FC = () => {
             periodSetup?.endTime +
             ' ' +
             t(' for free shipping?')
-        }`,
-        submitButtonProps,
-        onConfirm,
-        onCancel
-    } = meta || ({} as any);
+        }`;
+    }
+    const { title = newTitle, submitButtonProps, onConfirm, onCancel } = meta || ({} as any);
 
     useEffect(() => {
         if (inputMeta) {

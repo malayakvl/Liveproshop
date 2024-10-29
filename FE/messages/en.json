@@ -683,4 +683,6 @@
   "of": "of",
   "You need to chose at least one colour and size": "You need to chose at least one colour and size",
   "Your Facebook token is expired or invalid, please resynchronize with your Facebook account": "Your Facebook token is expired or invalid, please resynchronize with your Facebook account"
+  "You need to chose at least one colour": "You need to chose at least one colour",
+  "The new shipping windows will desactivate the current one, are you sure you want to set a new period?": "The new shipping windows will desactivate the current one, are you sure you want to set a new period?"
 }

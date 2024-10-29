@@ -78,6 +78,10 @@ export const deletePeriodSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): any => layouts.deletePeriod
 );
+export const changePeriodFreeShippingSelector = createSelector(
+    rootSelector,
+    (layouts: State.Layouts): any => layouts.changeFreeShippingPeriod
+);
 export const setupPeriodSelector = createSelector(
     rootSelector,
     (layouts: State.Layouts): any => layouts.setupPeriod
