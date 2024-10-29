@@ -102,9 +102,7 @@ console.log(commentQuery);
         const client = await pool.connect();
         let _predparsedMessage;
         let _pQuery;
-        let qPredparser;
         let performedData = [];
-        let insertMsg;
         let updMessage;
         if (product.configured) {
             if (product.nosize && !product.nocolor) {
