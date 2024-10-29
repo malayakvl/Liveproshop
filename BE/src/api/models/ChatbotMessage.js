@@ -246,7 +246,7 @@ console.log('MESSAGE', fullMessage);
         if (product.nosize && !product.nocolor) {
             _predparsedMessage = msgData[0]+' '+msgData[1]+' s'+msgData[2];
             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2603,2602]));`;
-            qPredparser = await client.query(_pQuery);
+            await client.query(_pQuery);
             updMessage = {
                 created_time: fullMessage.created_time,
                 from: fullMessage.from,
@@ -262,7 +262,7 @@ console.log('MESSAGE', fullMessage);
         } else if (!product.nosize && product.nocolor) {
             _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2];
             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2601,2600]));`;
-            qPredparser = await client.query(_pQuery);
+            await client.query(_pQuery);
             updMessage = {
                 created_time: fullMessage.created_time,
                 from: fullMessage.from,
@@ -278,10 +278,10 @@ console.log('MESSAGE', fullMessage);
                 _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' s'+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
             else
                 _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' '+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
-console.log('FULL CONFIG', _predparsedMessage);
+// console.log('FULL CONFIG', _predparsedMessage);
             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2596]));`;
-console.log(_pQuery);
-            qPredparser = await client.query(_pQuery);
+// console.log(_pQuery);
+            await client.query(_pQuery);
             updMessage = {
                 created_time: fullMessage.created_time,
                 from: fullMessage.from,
