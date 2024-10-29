@@ -427,6 +427,93 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
         });
     }
 
+    async fetchSimpleProduct (id) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`SELECT * FROM data.products WHERE id=${id}`);
+            if (res.rows.length) {
+                res.rows[0].selectedColors = [];
+                res.rows[0].selectedSizes = [];
+                res.rows[0].selectedMaterials = [];
+                const resConfigs = await client.query(`SELECT * FROM data.product_configurations WHERE product_id=${id}`);
+                res.rows[0].isPublish = res.rows[0].publish;
+                // build configured options
+                if (resConfigs.rows.length > 0) {
+                    const colors = [];
+                    const sizes = [];
+                    resConfigs.rows.forEach(config => {
+                        if (config.configuration.color_id) {
+                            colors.push(config.configuration.color_id);
+                        }
+                        if (config.configuration.size_id) {
+                            sizes.push(config.configuration.size_id);
+                        }
+                    });
+                    let selectedColorsData = [];
+                    if (colors.length > 0) {
+                        const queryColors = `SELECT table_translation FROM common__tools._get_translation('data', 'product_colors', 'id', 'name, code', ' id IN (${colors.join(',')})');`;
+                        const resColor = await client.query(queryColors);
+                        selectedColorsData = resColor.rows[0].table_translation;
+                    }
+                    let selectedSizesData = [];
+                    if (sizes.length > 0) {
+                        const querySizes = `SELECT table_translation FROM common__tools._get_translation('data', 'product_sizes', 'id', 'name', ' id IN (${sizes.join(',')})');`;
+                        const resSize = await client.query(querySizes);
+                        selectedSizesData = resSize.rows[0].table_translation;
+                    }
+                    let selectedMaterialsData = [];
+                    if (res.rows[0].material_id) {
+                        const queryMaterials = `SELECT table_translation FROM common__tools._get_translation('data', 'product_materials', 'id', 'name', ' id=${res.rows[0].material_id}');`;
+                        const resMaterial = await client.query(queryMaterials);
+                        selectedMaterialsData = resMaterial.rows[0].table_translation;
+                    }
+                    if (!res.rows[0].configured) {
+                        res.rows[0].sku = resConfigs.rows[0].sku;
+                        res.rows[0].price = resConfigs.rows[0].price;
+                        res.rows[0].quantity = resConfigs.rows[0].quantity;
+                    }
+
+                    let selectedTagsData = [];
+                    if (res.rows[0].tags) {
+                        if (res.rows[0].tags.length > 0) {
+                            const queryTags = `SELECT table_translation FROM common__tools._get_translation('data', 'hashtags', 'id', 'name', ' id IN (${res.rows[0].tags.join(',')})');`;
+                            const resTags = await client.query(queryTags);
+                            selectedTagsData = resTags.rows[0].table_translation;
+                        }
+                    }
+                    res.rows[0].selectedColors = selectedColorsData;
+                    res.rows[0].selectedSizes = selectedSizesData;
+                    res.rows[0].selectedMaterials = selectedMaterialsData;
+                    res.rows[0].selectedTags = selectedTagsData;
+                }
+                // res.rows[0].configured = resConfigs.rows.length > 0;
+                return { product: res.rows[0], configurations: resConfigs.rows };
+            } else {
+                return { success: false, error: { code: 404, message: 'Product Not found' } };
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Product fetch one product):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
     async fetchProduct (id, userId) {
         const client = await pool.connect();
         try {
