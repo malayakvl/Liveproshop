@@ -7,9 +7,9 @@ import productModel from "./Product.js";
 class ChatbotMessage {
     async messagesSinceDate(sessionId) {
         const client = await pool.connect();
-        const commentQuery = `SELECT created_time FROM data.live_sessions_messages WHERE live_sessions_id = '${sessionId}' 
-            ORDER BY created_at DESC LIMIT 1;`;
-// console.log('Comment Query', commentQuery);
+        const commentQuery = `SELECT lates_comment_time AS created_time 
+            FROM data.live_sessions WHERE id = '${sessionId}';`;
+console.log('Comment Query', commentQuery);
         try {
             const resQuery = await client.query(commentQuery);
             const dateComment = resQuery.rows.length > 0 ? resQuery.rows[0].created_time : null;
@@ -67,12 +67,11 @@ class ChatbotMessage {
                     parcer_data: null
                 }
                 if (product.nosize && !product.nocolor) {
-                    console.log('TUT NO COLOR');
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' s'+msgData[2];
                     if (msgData[0] === 'sold')
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2603,2602]));`;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6291,6290]));`;
                     else
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2613,2612]));`;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6300,6301]));`;
                     const tmpParsedData = await client.query(_pQuery);
                     if (tmpParsedData.rows.length > 0) {
                         tmpParsedData.rows.forEach(async _row => {
@@ -101,9 +100,9 @@ class ChatbotMessage {
                 } else if (!product.nosize && product.nocolor) {
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2];
                     if (msgData[0] === 'sold')
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2601,2600]));`;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6293,6292]));`;
                     else
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2613,2612]));`;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6303,6302]));`;
                     const tmpParsedData = await client.query(_pQuery);
                     if (tmpParsedData.rows.length > 0) {
                         tmpParsedData.rows.forEach(async _row => {
@@ -129,15 +128,16 @@ class ChatbotMessage {
                     }
                     const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
                     await client.query(insertMsg);
-                } else if (product.nosize && product.nocolor) {
+                } else if (!product.nosize && !product.nocolor) {
                     if (msgData[3] >= 1 && msgData[3] <= 10)
                         _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' s'+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
                     else
                         _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' '+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
                     if (msgData[0] === 'sold')
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2596]));`;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6287,6302]));`;
                     else if (msgData[0] === 'vendu')
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2606]));`;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6297,6292]));`;
+
                     const tmpParsedData = await client.query(_pQuery);
                     if (tmpParsedData.rows.length > 0) {
                         tmpParsedData.rows.forEach(async _row => {
@@ -164,6 +164,8 @@ class ChatbotMessage {
                     const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
                     console.log('insertMsg', insertMsg);
                     await client.query(insertMsg);
+                } else {
+// console.log('HUETA');exit;
                 }
             } else {
                 let _qty = 1;
@@ -175,23 +177,24 @@ class ChatbotMessage {
                         _qty = parseInt(msgData[3]);
                     }
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+product.selectedColors[0].name + ' '+_qty;
-                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2596,2601,2606,2611]));`;
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6291,6296,6301]));`;
                 } else if (product.selectedColors.length === 0 && product.selectedSizes.length > 0) {
                     if (parseInt(msgData[2])) {
                         _qty = parseInt(msgData[2]);
                     }
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+product.selectedSizes[0].name + ' '+_qty;
-                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2602,2612]));`;
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6292,6302]));`;
                 } else if (product.selectedColors.length > 0 && product.selectedSizes.length > 0) {
                     if (msgData[2]) {
                         _qty = parseInt(msgData[2]);
                     }
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
-                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[2604,2614]));`;
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6294,6304]));`;
                 } else {
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
-                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[5167,2615]));`;
+                    _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6295,6305]));`;
                 }
+console.log(_pQuery);
                 const tmpParsedData = await client.query(_pQuery);
                 if (tmpParsedData.rows.length > 0) {
                     tmpParsedData.rows.forEach(async _row => {
@@ -246,7 +249,6 @@ class ChatbotMessage {
             const promisesProduct = [];
             const promisesParser = [];
             // update time for latest comment
-console.log(`UPDATE data.live_sessions SET lates_comment_time='${data.created_time}' WHERE id='${sessionId}'`);
             await client.query(`UPDATE data.live_sessions SET lates_comment_time='${data.created_time}' WHERE id='${sessionId}'`);
 
             if (msgData[1]) {
@@ -255,8 +257,8 @@ console.log(`UPDATE data.live_sessions SET lates_comment_time='${data.created_ti
                 if (_productRes.length > 0) {
                     const _product = _productRes[0];
                     promisesParser.push(this._performMessage(_product, msgData, data.message, sessionId, data));
+                    await Promise.all(promisesParser);
                 }
-                await Promise.all(promisesParser);
             }
 
             return {success: true};

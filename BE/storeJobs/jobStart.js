@@ -20,6 +20,7 @@ async function startProcess() {
     console.log(queryStr);
     await axios(`${apiUrl}/api/fetch-store-session-for-start`)
         .then( (response) => {
+console.log(response.data.result);
             response.data.result.forEach(async session => {
                 // console.log('LiveVideo started:', session);
                 shell.exec(`pm2 start jobStoreEvent.js --name "jobStoreEvent ${session.id}" -- sessionId=${session.id} accessToken=${session.auth_provider_access_token} providerId=${session.auth_provider_id}`, function(code, output) {
