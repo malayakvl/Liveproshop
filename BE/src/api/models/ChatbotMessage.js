@@ -240,21 +240,52 @@ class ChatbotMessage {
     }
 
     async performMessage(data, sessionId) {
-        const msgData = data.message.split(' ');
-        const promisesProduct = [];
-        const promisesParser = [];
-        if (msgData[1]) {
-console.log('product id', msgData);
-            promisesProduct.push(this._findProductData(msgData[1]));
-            const _productRes = await Promise.all(promisesProduct);
-            if (_productRes.length > 0) {
-                const _product = _productRes[0];
-                promisesParser.push(this._performMessage(_product, msgData, data.message, sessionId, data));
-            }
-            await Promise.all(promisesParser);
-        }
+        const client = await pool.connect();
+        try {
+            const msgData = data.message.split(' ');
+            const promisesProduct = [];
+            const promisesParser = [];
+            // update time for latest comment
+console.log(`UPDATE data.live_sessions SET lates_comment_time='${data.created_time}' WHERE id='${sessionId}'`);
+            await client.query(`UPDATE data.live_sessions SET lates_comment_time='${data.created_time}' WHERE id='${sessionId}'`);
 
-        return {success: true};
+            if (msgData[1]) {
+                promisesProduct.push(this._findProductData(msgData[1]));
+                const _productRes = await Promise.all(promisesProduct);
+                if (_productRes.length > 0) {
+                    const _product = _productRes[0];
+                    promisesParser.push(this._performMessage(_product, msgData, data.message, sessionId, data));
+                }
+                await Promise.all(promisesParser);
+            }
+
+            return {success: true};
+
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: e.message }
+                );
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'error insering message'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
     }
 
     async addMessagesTest(sessionId) {
@@ -449,14 +480,12 @@ console.log('product id', msgData);
 
     async _findProductData(productId) {
         const client = await pool.connect();
-console.log('TRY TO FIND PRODUCT');
         // const _tProduct = await client.query(`SELECT nosize, nocolor, configured  FROM data.products WHERE id=${productId}`);
         // if (!_tProduct.rows[0].configured) {
         //     const _xx = await productModel.fetchSimpleProduct(productId);
         //     return _xx.product;
         // }
         const _xx = await productModel.fetchSimpleProduct(productId);
-console.log('PRODUCT', _xx.product);
         return _xx.product;
 
         return _tProduct.rows[0];

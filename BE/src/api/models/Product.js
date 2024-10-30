@@ -873,8 +873,8 @@ console.log('SQL CONFIGURATION', SQL);
 
     async updateStatus (dataProduct, userId) {
         const client = await pool.connect();
-        console.log(`UPDATE data.products
-                    SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`)
+        // console.log(`UPDATE data.products
+        //             SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`)
         const _resProd = await client.query(`UPDATE data.products
                     SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`);
     }
