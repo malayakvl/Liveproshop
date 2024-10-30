@@ -62,6 +62,8 @@ apiRoutes.route('/get-order-expired').get(OrderController.getOrderExpiredClear);
 apiRoutes.route('/get-order-clear-free-period').get(OrderController.getOrderFreePeriodClear);
 apiRoutes.route('/clear-free-period-job').get(ShippingController.clearShippingPeriodJob);
 
+apiRoutes.route('/add-live-messages-test').post(ChatbotMessageController.addMessagesTest);
+
 
 apiRoutes.route('/remove-sessions-order').get(OrderController.removeSessionsOrders);
 apiRoutes.route('/retunr-configured-wrong-parsed').get(OrderController.returnWrongParsedConfigured);
@@ -83,7 +85,6 @@ apiRoutes.route('/update-session-status').get(LivesessionController.updateSessio
 apiRoutes.route('/fetch-launch-stop-sessions').get(LivesessionController.getLaunchForStop);
 apiRoutes.route('/get-live-messages-since').get(ChatbotMessageController.getSinceDate);
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
-apiRoutes.route('/add-live-messages-test').post(ChatbotMessageController.addMessagesTest);
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);

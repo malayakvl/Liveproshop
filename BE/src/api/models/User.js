@@ -307,6 +307,7 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                                 });
 
                             // userData.accessToken
+console.log(`https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`);
                             await axios
                                 .get(
                                     `https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
@@ -323,7 +324,7 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
 
 // console.log('RESPONSE DATA', JSON.stringify(responsePages.data));
 // console.log('STORE LIST', JSON.stringify(storesList));
-// console.log('BUSINESS LIST', JSON.stringify(businessesList));
+console.log('BUSINESS LIST', JSON.stringify(businessesList));
 
                                         storesList.forEach(async (store) => {
                                             const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
@@ -350,10 +351,6 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                                                 );
                                             }
                                         });
-
-                                        // businessesList.map(async (business) => {
-                                        //     console.log('BUSINESS', business);
-                                        // });
 
                                         businessesList.map(async (business) => {
                                             const queryBusiness = await client.query(
