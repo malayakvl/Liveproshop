@@ -37,12 +37,13 @@ async function syncFB() {
 
 async function registerFB(paramData, commentId) {
     const infoParam = paramData.split('_');
+    console.log(infoParam);
     // const roleId = infoParam[0] ? infoParam[0] : 2;
-    const roleId = infoParam[0] ? infoParam[0] : 1;
+    const roleId = infoParam[0] ? infoParam[0] : 2;
     // const commentId = infoParam[0] ? infoParam[0] : 2;
     const locale = infoParam[1];
     const forFree = infoParam[2];
-    console.log('Register FB SDK');
+    console.log('Register FB SDK', roleId);
     // login with facebook then authenticate with the API to get a JWT auth token
     // const { authResponse } = await new Promise(window.FB.login);
     const { authResponse } = await new Promise(window.FB.login);
@@ -73,8 +74,8 @@ async function getAccountData(authResponse) {
         // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
         scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,business_management'
     };
+    console.log('AUTH RESPONSE', authResponse);
     if (parseInt(authResponse.roleId) === 1) {
-        console.log('AUTH RESPONSE', authResponse);
         axios
             .get(
                 `https://graph.facebook.com/v21.0/me?fields=id,name,email&access_token=${authResponse.accessToken}`,
@@ -95,39 +96,67 @@ async function getAccountData(authResponse) {
                 store.dispatch(showLoaderAction(true));
                 signIn('credentials_sdkfacebook', data);
             });
-    }
-    axios
-        .get(
-            `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
-            loginOptions
-        )
-        .then((response) => {
-            const { data } = response;
-            if (data.error) {
-                store.dispatch(setErrorToastAction('Could no autherntificate'));
-            }
-            // console.log('AUTH RESPONCE HERE', authResponse.roleId);
-            data.accessToken = authResponse.accessToken;
-            data.expirationTime = authResponse.data_access_expiration_time;
-            if (authResponse.email) {
-                data.email = authResponse.email;
-            }
-            if (parseInt(authResponse.roleId) === 1) {
-                data.callbackUrl = `${window.location.origin}/${
-                    authResponse.locale === 'fr' ? '' : 'en/'
-                }dashboard`;
-            } else {
+    } else {
+        console.log(
+            `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`
+        );
+        axios
+            .get(
+                `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
+                loginOptions
+            )
+            .then((response) => {
+                const { data } = response;
+                console.log(authResponse);
+                if (data.error) {
+                    store.dispatch(setErrorToastAction('Could no autherntificate'));
+                }
+                // console.log('AUTH RESPONCE HERE', authResponse.roleId);
+                data.accessToken = authResponse.accessToken;
+                data.expirationTime = authResponse.data_access_expiration_time;
+                data.roleId = 2;
                 data.callbackUrl = `${window.location.origin}/${
                     authResponse.locale === 'fr' ? '' : 'en/'
                 }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
-            }
-            data.roleId = authResponse.roleId ? authResponse.roleId : 2;
-            data.forFree = authResponse.forFree;
-            data.userAccounts = JSON.stringify(data.accounts);
-            data.userBusiness = JSON.stringify(data.businesses);
-            store.dispatch(showLoaderAction(true));
-            signIn('credentials_sdkfacebook', data);
-        });
+                data.forFree = authResponse.forFree;
+                data.userAccounts = JSON.stringify(data.accounts);
+                data.userBusiness = JSON.stringify(data.businesses);
+                store.dispatch(showLoaderAction(true));
+                signIn('credentials_sdkfacebook', data);
+            });
+    }
+    // axios
+    //     .get(
+    //         `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
+    //         loginOptions
+    //     )
+    //     .then((response) => {
+    //         const { data } = response;
+    //         if (data.error) {
+    //             store.dispatch(setErrorToastAction('Could no autherntificate'));
+    //         }
+    //         // console.log('AUTH RESPONCE HERE', authResponse.roleId);
+    //         data.accessToken = authResponse.accessToken;
+    //         data.expirationTime = authResponse.data_access_expiration_time;
+    //         if (authResponse.email) {
+    //             data.email = authResponse.email;
+    //         }
+    //         if (parseInt(authResponse.roleId) === 1) {
+    //             data.callbackUrl = `${window.location.origin}/${
+    //                 authResponse.locale === 'fr' ? '' : 'en/'
+    //             }dashboard`;
+    //         } else {
+    //             data.callbackUrl = `${window.location.origin}/${
+    //                 authResponse.locale === 'fr' ? '' : 'en/'
+    //             }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
+    //         }
+    //         data.roleId = authResponse.roleId ? authResponse.roleId : 2;
+    //         data.forFree = authResponse.forFree;
+    //         data.userAccounts = JSON.stringify(data.accounts);
+    //         data.userBusiness = JSON.stringify(data.businesses);
+    //         store.dispatch(showLoaderAction(true));
+    //         signIn('credentials_sdkfacebook', data);
+    //     });
 }
 
 function logout() {

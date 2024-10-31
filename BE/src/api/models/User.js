@@ -207,7 +207,6 @@ console.log('PROVIDER USER DATA', userData);
                 lastName = fullFbName[1];
             }
             if (!user) {
-console.log('USER ROLE ID', parseInt(userData.roleId));
             let query;
             if (parseInt(userData.roleId) === 1) {
                 console.log('Role 1')
@@ -225,7 +224,6 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                     )
                     ;
                 `;
-
             } else {
                 console.log('Role 2')
                 query = `

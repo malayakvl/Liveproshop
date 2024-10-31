@@ -235,7 +235,7 @@ class Livesession {
                     access_token,
                     auth_provider_expiration_time,
                     auth_provider_expires_in
-                FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+                FROM data.get_live_sessions_store_scheduled('${moment().add(3, 'hours').format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
