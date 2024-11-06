@@ -156,6 +156,7 @@ class OrderController {
     }
 
     async createOrders (req, res) {
+// console.log('CREATE ORDERS FOR SESSION', req.query.sessionId);
         await orderModel.createOrders(req.query.sessionId);
         // if (!data.error) {
         //     return res.status(200).json({success: true});

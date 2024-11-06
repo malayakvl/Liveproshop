@@ -37,6 +37,7 @@ const OrderSummary = () => {
         () => shippingMethods?.filter((item) => item.id === +shippingMethodId)[0],
         [shippingMethodId]
     );
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
 
     const recalculateTotal = (dataOrder: any) => {
         let totalOrder = 0;
@@ -153,10 +154,22 @@ const OrderSummary = () => {
                                     {product.name}
                                 </div>
                                 <div className="product-size">
-                                    {t('checkout_color')}:{' '}
-                                    <span className="font-bold">{product.color_name}</span>,{' '}
-                                    {t('checkout_size')}:{' '}
-                                    <span className="font-bold">{product.size_name}</span>
+                                    {product.color_name && (
+                                        <span>
+                                            {t('checkout_color')}:{' '}
+                                            <span className="font-bold">{product.color_name}</span>,{' '}
+                                        </span>
+                                    )}
+                                    {product.size_name && (
+                                        <span>
+                                            {t('checkout_size')}:{' '}
+                                            <span className="font-bold">
+                                                {performedSizes.includes(product.size_name)
+                                                    ? product.size_name.replace('s', '')
+                                                    : product.size_name}
+                                            </span>
+                                        </span>
+                                    )}
                                 </div>
                                 {product.description && (
                                     <div

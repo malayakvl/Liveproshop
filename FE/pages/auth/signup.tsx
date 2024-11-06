@@ -176,7 +176,6 @@ export default function Signup({ locale }: { locale: string }) {
     };
 
     function openTab(url: string) {
-        alert(1);
         navigator.clipboard.writeText('https://liveproshop.com');
         // dispatch(openBrowserActions());
         // let command;

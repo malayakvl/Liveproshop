@@ -1582,7 +1582,8 @@ console.log(ordersQuery);
                 const pEnd = moment(freePeriodEnd);
                 const pNow = moment();
                 if (pNow > pEnd) {
-                    console.log('DELETE FROM settings period');
+                    // console.log('DELETE FROM settings period');
+                    // await client.query(`UPDATE data.seller_settings SET free_shipping_from=null, free_shipping_to=null WHERE `)
                 } else {
                     _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
                     await client.query(`UPDATE data.orders

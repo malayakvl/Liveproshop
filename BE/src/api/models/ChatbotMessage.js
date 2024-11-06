@@ -342,41 +342,47 @@ console.log('MSG', _message)
         }
 // console.log('fullMessage', fullMessage.message);
         await client.query(`UPDATE data.live_sessions SET lates_comment_time='${fullMessage.created_time}' WHERE id='${sessionId}'`);
-
+        // fullMessage.from = {
+        //     name: "Kyryl Proshop",
+        //     id: "6681200108589867"
+        // }
         const product = await this._findProductData(msgData[1]);
+        updMessage = {
+            created_time: fullMessage.created_time,
+            from: fullMessage.from,
+            message: null,
+            id: fullMessage.id,
+            parcer_status: null,
+            parcer_data: null
+        }
         if (product) {
-            updMessage = {
-                created_time: fullMessage.created_time,
-                from: fullMessage.from,
-                message: null,
-                id: fullMessage.id,
-                parcer_status: null,
-                parcer_data: null
-            }
-
             if (product.configured) {
+                let tColor, tSize, tColorId, tSizeId;
+                if (msgData[0] === 'sold') {
+                    tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
+                    tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
+                    tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
+                    tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
+                } else {
+                    tColor = product.selectedColors[0] ? product.selectedColors[0].translations[0].fr.name : null;
+                    tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
+                    tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
+                    tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
+                }
                 if (product.nosize && !product.nocolor) {
-// console.log('NO SIZE, COLOR');
                     const _qty = msgData[3] ? msgData[3] : 1;
                     // NO SIZE WITH COLOR
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' '+_qty;
-console.log('_predparsedMessage', _predparsedMessage);
                     if (msgData[0] === 'sold')
                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6291,6290]));`;
                     else
                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6300,6301]));`;
-console.log('_pQuery', _pQuery);
 
                     const tmpParsedData = await client.query(_pQuery);
                     if (tmpParsedData.rows.length > 0) {
                         const _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === true);
                         if (_parsedMsg) {
                             const _tmpJsonData = _parsedMsg.results_json;
-                            let tColor, tSize, tColorId, tSizeId;
-                            tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
-                            tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
-                            tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
-                            tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
 
                             _tmpJsonData.color = tColor;
                             _tmpJsonData.color_id = tColorId;
@@ -388,31 +394,23 @@ console.log('_pQuery', _pQuery);
                             updMessage.message = _predparsedMessage;
                             updMessage.parcer_status = true;
                             updMessage.parcer_data = _tmpJsonData;
-console.log('updMessage', updMessage);
                         }
                     }
                 } else if (!product.nosize && product.nocolor) {
                     const _qty = msgData[3] ? msgData[3] : 1;
                     // NO COLOR WITH SIZE
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' s'+msgData[2]+(msgData[3] ? ' '+msgData[3] : ' 1');
-// console.log('_predparsedMessage', _predparsedMessage);
                     if (msgData[0] === 'sold')
                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6293,6302]));`;
                     else
                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6303,6302]));`;
-
-// console.log(_pQuery);
+console.log(_pQuery);
                     const tmpParsedData = await client.query(_pQuery);
                     if (tmpParsedData.rows.length > 0) {
                         const _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === true);
-// console.log('PARSED RESULTS', _parsedMsg);
+console.log('_parsedMsg', _parsedMsg);
                         if (_parsedMsg) {
                             const _tmpJsonData = _parsedMsg.results_json;
-                            let tColor, tSize, tColorId, tSizeId;
-                            tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
-                            tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
-                            tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
-                            tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
 
                             _tmpJsonData.color = tColor;
                             _tmpJsonData.color_id = tColorId;
@@ -424,43 +422,69 @@ console.log('updMessage', updMessage);
                             updMessage.message = _predparsedMessage;
                             updMessage.parcer_status = true;
                             updMessage.parcer_data = _tmpJsonData;
+
+                            // const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
+                            // await client.query(insertMsg);
                         }
                     }
 
                 } else if (!product.nosize && !product.nocolor) {
-// console.log('MSG', fullMessage.message);
-                    _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2];
+                    const _qty = msgData[4] ? msgData[4] : 1;
+                    _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' s'+msgData[3] +' '+_qty;
+                    let tmpParsedData;let _parsedMsg;
+                    // parsre scenario (buy/sold/vendu)+item+size+color+quantity
                     if (msgData[0] === 'sold')
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6291,6290]));`;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6276,6277,6286,6287]));`;
                     else
-                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6300,6301]));`;
-// console.log('_pQuery');
-// console.log(_pQuery);
-                    const tmpParsedData = await client.query(_pQuery);
-                    const _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === true);
-                    if (_parsedMsg) {
-                        const _tmpJsonData = _parsedMsg.results_json;
-                        let tColor, tSize, tColorId, tSizeId;
-                        tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
-                        tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
-                        tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
-                        tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
+                        _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6296,6297]));`;
+                    tmpParsedData = await client.query(_pQuery);
+                    let findByScenario = 0;
+                    if (tmpParsedData.rows.length > 0) {
+                        _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === true);
+                        if (_parsedMsg) {
+                            const _tmpJsonData = _parsedMsg.results_json;
 
-                        _tmpJsonData.color = tColor;
-                        _tmpJsonData.color_id = tColorId;
-                        _tmpJsonData.size = tSize;
-                        _tmpJsonData.size_id = tSizeId;
+                            _tmpJsonData.color = tColor;
+                            _tmpJsonData.color_id = tColorId;
+                            _tmpJsonData.size = tSize;
+                            _tmpJsonData.size_id = tSizeId;
+                            _tmpJsonData.qty = parseInt(_qty);
+                            _tmpJsonData.quantity = parseInt(_qty);
 
-                        updMessage.message = _predparsedMessage;
-                        updMessage.parcer_status = true;
-                        updMessage.parcer_data = _tmpJsonData;
+                            updMessage.message = _predparsedMessage;
+                            updMessage.parcer_status = true;
+                            updMessage.parcer_data = _tmpJsonData;
+                            findByScenario = 1;
+                        }
                     }
-console.log('updMessage', updMessage);
-                    const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
-                    await client.query(insertMsg);
+                    if (findByScenario !== 1) {
+                        _predparsedMessage = msgData[0]+' '+msgData[1]+' s'+msgData[2] + ' '+msgData[3] +' '+_qty;
+                        if (msgData[0] === 'sold')
+                            _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6278,6279,6288,6289]));`;
+                        else
+                            _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6298,6299]));`;
+
+                        tmpParsedData = await client.query(_pQuery);
+                        if (tmpParsedData.rows.length > 0) {
+                            _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === true);
+                            if (_parsedMsg) {
+                                const _tmpJsonData = _parsedMsg.results_json;
+
+                                _tmpJsonData.color = tColor;
+                                _tmpJsonData.color_id = tColorId;
+                                _tmpJsonData.size = tSize;
+                                _tmpJsonData.size_id = tSizeId;
+                                _tmpJsonData.qty = parseInt(_qty);
+                                _tmpJsonData.quantity = parseInt(_qty);
+
+                                updMessage.message = _predparsedMessage;
+                                updMessage.parcer_status = true;
+                                updMessage.parcer_data = _tmpJsonData;
+                            }
+                        }
+                    }
                 }
             } else {
-// console.log('SIMPLE PRODUCT');
                 let _qty = 1;
                 if (product.selectedColors.length > 0 && product.selectedSizes.length === 0) {
                     if (parseInt(msgData[2])) {
@@ -482,13 +506,11 @@ console.log('updMessage', updMessage);
                         _qty = parseInt(msgData[2]);
                     }
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
-                    _pQuery = `// SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6294,6304]));`;
                     _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6294,6304]));`;
                 } else {
                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
                     _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6295,6305]));`;
                 }
-console.log(_pQuery);
                 const tmpParsedData = await client.query(_pQuery);
                 if (tmpParsedData.rows.length > 0) {
                     const _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === true);
@@ -525,215 +547,10 @@ console.log('updMessage', updMessage);
                 await client.query(insertMsg);
 
             }
+        } else {
+            const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
+            await client.query(insertMsg);
         }
-//         if (product) {
-//             if (product.configured) {
-//                 updMessage = {
-//                     created_time: fullMessage.created_time,
-//                     from: fullMessage.from,
-//                     message: null,
-//                     id: fullMessage.id,
-//                     parcer_status: null,
-//                     parcer_data: null
-//                 }
-//                 // config colog no size
-//                 if (product.nosize && !product.nocolor) {
-//                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2];
-//                     if (msgData[0] === 'sold')
-//                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6291,6290]));`;
-//                     else
-//                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6300,6301]));`;
-// // console.log('_pQuery');
-// // console.log(_pQuery);
-//                     const tmpParsedData = await client.query(_pQuery);
-//                     if (tmpParsedData.rows.length > 0) {
-//                         tmpParsedData.rows.forEach(async _row => {
-//                             if (_row.status) {
-//                                 const _tmpJsonData = _row.results_json;
-//                                 let tColor, tSize, tColorId, tSizeId;
-//                                 tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
-//                                 tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
-//                                 tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
-//                                 tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
-//
-//                                 _tmpJsonData.color = tColor;
-//                                 _tmpJsonData.color_id = tColorId;
-//                                 _tmpJsonData.size = tSize;
-//                                 _tmpJsonData.size_id = tSizeId;
-//
-//                                 updMessage.message = _predparsedMessage;
-//                                 updMessage.parcer_status = true;
-//                                 updMessage.parcer_data = _tmpJsonData;
-//                             } else {
-// // console.log('NOT FIND REQ CONFIG');
-//                             }
-//                         });
-//                     }
-// // console.log('updMessage', updMessage);
-//                     const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
-//                     await client.query(insertMsg);
-//                 } else if (!product.nosize && product.nocolor) {
-//                     _predparsedMessage = msgData[0]+' '+msgData[1]+' s'+msgData[2];
-//                     if (msgData[0] === 'sold')
-//                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6293,6302]));`;
-//                     else
-//                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6303,6302]));`;
-//                     const tmpParsedData = await client.query(_pQuery);
-//                     if (tmpParsedData.rows.length > 0) {
-//                         tmpParsedData.rows.forEach(async _row => {
-//                             if (_row.status) {
-//                                 const _tmpJsonData = _row.results_json;
-//                                 let tColor, tSize, tColorId, tSizeId;
-//                                 tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
-//                                 tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
-//                                 tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
-//                                 tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
-//
-//                                 _tmpJsonData.color = tColor;
-//                                 _tmpJsonData.color_id = tColorId;
-//                                 _tmpJsonData.size = tSize;
-//                                 _tmpJsonData.size_id = tSizeId;
-//
-//                                 updMessage.message = _predparsedMessage;
-//                                 updMessage.parcer_status = true;
-//                                 updMessage.parcer_data = _tmpJsonData;
-//                             }
-//                         });
-//                     }
-// // console.log('updMessage', updMessage);
-//                     const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
-//                     await client.query(insertMsg);
-//                 } else if (!product.nosize && !product.nocolor) {
-//                     if (msgData[3] >= 1 && msgData[3] <= 10)
-//                         _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' s'+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
-//                     else
-//                         _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2] + ' '+msgData[3] + (msgData[4] ? ' '+msgData[3] : ' 1');
-//                     if (msgData[0] === 'sold')
-//                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6288]));`;
-//                     else if (msgData[0] === 'vendu')
-//                         _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6296,6298]));`;
-//
-//                     const tmpParsedData = await client.query(_pQuery);
-//                     if (tmpParsedData.rows.length > 0) {
-//                         tmpParsedData.rows.forEach(async _row => {
-//                             if (_row.status) {
-//                                 const _tmpJsonData = _row.results_json;
-//                                 let tColor, tSize, tColorId, tSizeId;
-//                                 tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
-//                                 tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
-//                                 tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
-//                                 tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
-//
-//                                 _tmpJsonData.color = tColor;
-//                                 _tmpJsonData.color_id = tColorId;
-//                                 _tmpJsonData.size = tSize;
-//                                 _tmpJsonData.size_id = tSizeId;
-//
-//                                 updMessage.message = _predparsedMessage;
-//                                 updMessage.parcer_status = true;
-//                                 updMessage.parcer_data = _tmpJsonData;
-//                             }
-//                         });
-//                     }
-// // console.log('updMessage', updMessage);
-//                     const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
-// // console.log('insertMsg', insertMsg);
-//                     await client.query(insertMsg);
-//                 }
-//             } else {
-//                 let _qty = 1;
-// console.log(product)
-//                 if (product.selectedColors.length > 0 && product.selectedSizes.length === 0) {
-//                     if (parseInt(msgData[2])) {
-//                         _qty = parseInt(msgData[2]);
-//                     }
-//                     if (parseInt(msgData[3])) {
-//                         _qty = parseInt(msgData[3]);
-//                     }
-//                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+product.selectedColors[0].name + ' '+_qty;
-//                     _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6291,6296,6301]));`;
-//                 } else if (product.selectedColors.length === 0 && product.selectedSizes.length > 0) {
-//                     if (parseInt(msgData[2])) {
-//                         _qty = parseInt(msgData[2]);
-//                     }
-//                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+product.selectedSizes[0].name + ' '+_qty;
-//                     _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6292,6302]));`;
-//                 } else if (product.selectedColors.length > 0 && product.selectedSizes.length > 0) {
-//                     if (msgData[2]) {
-//                         _qty = parseInt(msgData[2]);
-//                     }
-//                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
-//                     _pQuery = `// SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6294,6304]));`;
-//                     _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6294,6304]));`;
-//                 } else {
-//                     _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_qty;
-//                     _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6295,6305]));`;
-//                 }
-// // console.log(_pQuery);
-//                 const tmpParsedData = await client.query(_pQuery);
-//                 if (tmpParsedData.rows.length > 0) {
-//                     tmpParsedData.rows.forEach(async _row => {
-//                         if (_row.status) {
-//                             updMessage = {
-//                                 created_time: fullMessage.created_time,
-//                                 from: fullMessage.from,
-//                                 message: _predparsedMessage,
-//                                 id: fullMessage.id,
-//                                 parcer_status: null,
-//                                 parcer_data: null
-//                             }
-//                             const _tmpJsonData = _row.results_json;
-//                             let tColor, tSize, tColorId, tSizeId;
-//                             tColor = product.selectedColors[0] ? product.selectedColors[0].name : null;
-//                             tSize = product.selectedSizes[0] ? product.selectedSizes[0].name : null;
-//                             if (lng === 'fr') {
-//                                 if (product.selectedColors.length) {
-//                                     if (product.selectedColors[0].translations) {
-//                                         tColor = product.selectedColors[0].translations[0].fr.name;
-//                                     }
-//                                 }
-//                             }
-//                             tColorId = product.selectedColors[0] ? product.selectedColors[0].id : null;
-//                             tSizeId = product.selectedSizes[0] ? product.selectedSizes[0].id : null;
-//                             _tmpJsonData.color = tColor;
-//                             _tmpJsonData.color_id = tColorId;
-//                             _tmpJsonData.size = tSize;
-//                             _tmpJsonData.size_id = tSizeId;
-//
-//                             updMessage.parcer_status = true;
-//                             updMessage.parcer_data = _tmpJsonData;
-//
-//                             const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
-// // console.log('INSERT MSG', insertMsg);
-//                             await client.query(insertMsg);
-//                         }
-//                     })
-//                 }
-//             }
-//
-//             // return performedData;
-//         } else {
-// console.log('NOT FIND PRODUCT', _message)
-//             updMessage = {
-//                 created_time: fullMessage.created_time,
-//                 from: fullMessage.from,
-//                 message: _message,
-//                 id: fullMessage.id,
-//                 parcer_status: false,
-//                 parcer_data: null
-//             }
-//             if (msgData[0] === 'sold')
-//                 _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6291,6296,6301,6292,6302,6294,6304,6295,6305,6286,6288,6296,6298]));`;
-//             else if (msgData[0] === 'vendu')
-//                 _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6291,6296,6301,6292,6302,6294,6304,6295,6305,6286,6288,6296,6298]));`;
-//
-//             const tmpParsedData = await client.query(_pQuery);
-//             updMessage.parcer_data =  tmpParsedData.rows[0];
-//             const insertMsg = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '[${JSON.stringify(updMessage).replaceAll("'", '')}]');`;
-//             await client.query(insertMsg);
-//
-//             return performedData;
-//         }
 
         return performedData;
 
@@ -1134,6 +951,7 @@ console.log('updMessage', updMessage);
                     (lsm.parcer_status = FALSE AND lsm.reply_sended IS NULL AND (lsm.message LIKE '%vendu%' OR lsm.message LIKE '%sold%'))) 
                     AND ls.id='${sessionId}'
                     ORDER BY lsm.created_at DESC LIMIT 50`;
+// console.log(productQueryNew);
             const res = await client.query(productQueryNew);
 
 

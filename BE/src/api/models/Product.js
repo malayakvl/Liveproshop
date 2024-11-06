@@ -278,15 +278,31 @@ class Product {
                         tags = '{${productTags}}',
                         material_id = ${dataProduct.material_id},
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
-                        publish = ${publish}
+                        publish = ${publish},
+                        nocolor = null,
+                        nosize = null
                      WHERE id=${_resProd.rows[0].id};`;
+console.log(queryUpdate)
                 await client.query(queryUpdate);
+                // if (!dataProduct.selectedColors?.length) {
+                //     await client.query(`UPDATE data.products SET nocolor=true WHERE id=${_resProd.rows[0].id};`);
+                // }
+                // if (!dataProduct.selectedSizes?.length) {
+                //     await client.query(`UPDATE data.products SET nosize=true WHERE id=${_resProd.rows[0].id};`);
+                // }
+
                 const configs = JSON.parse(dataProduct.configurations);
 
                 await client.query(`DELETE FROM data.product_configurations WHERE product_id=${_resProd.rows[0].id}`);
                 if (configs) {
                     const promisesQueriesNew = [];
                     configs.forEach((_config, index) => {
+                        if (!_config.size_id) {
+                            promisesQueriesNew.push(this.setNoSize(_resProd.rows[0].id));
+                        }
+                        if (!_config.color_id) {
+                            promisesQueriesNew.push(this.setNoColor(_resProd.rows[0].id));
+                        }
                         promisesQueriesNew.push(this.addConfigurationNew(_resProd.rows[0].id, _config));
                     });
                     await Promise.all(promisesQueries);
@@ -304,6 +320,43 @@ class Product {
             } else {
                 return { success: false };
             }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async setNoSize (productId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.products SET nosize=true WHERE id=${productId};`);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async setNoColor (productId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.products SET nocolor=true WHERE id=${productId};`);
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -337,9 +390,7 @@ class Product {
                     ${dataProduct.material_id},
                     ${userId}
                 ) RETURNING id;`;
-// console.log(queryInsert)
             const resProduct = await client.query(queryInsert);
-            
             const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${resProduct.rows[0].id}`;
             const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/products/${resProduct.rows[0].id}`;
@@ -370,12 +421,31 @@ class Product {
             // update configuration
 console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
             const configs = JSON.parse(dataProduct.configurations);
+            // console.log(JSON.parse(dataProduct.colors));exit;
+            // if (!JSON.parse(dataProduct.colors).length?.length) {
+            //     await client.query(`UPDATE data.products SET nocolor=true WHERE id=${resProduct.rows[0].id};`);
+            // }
+            // if (!JSON.parse(dataProduct.sizes).length?.length) {
+            //     await client.query(`UPDATE data.products SET nosize=true WHERE id=${resProduct.rows[0].id};`);
+            // }
+            let noColor;let noSize;
             if (configs) {
                 const promisesQueriesNew = [];
                 configs.forEach((_config, index) => {
+                    if (!_config.size_id) {
+                        promisesQueriesNew.push(this.setNoSize(resProduct.rows[0].id));
+                    }
+                    if (!_config.color_id) {
+                        promisesQueriesNew.push(this.setNoColor(resProduct.rows[0].id));
+                    }
                     promisesQueriesNew.push(this.addConfigurationNew(resProduct.rows[0].id, _config));
                 });
                 await Promise.all(promisesQueries);
+// console.log('NO SIZE', noSize);
+//                 if (noColor)
+//                     await client.query(`UPDATE data.products SET nosize=true WHERE id=${resProduct.rows[0].id};`);
+//                 if (noSize)
+//                     await client.query(`UPDATE data.products SET nosize=true WHERE id=${resProduct.rows[0].id};`);
                 // const promisesQueries = [];
                 // configs.forEach((configuration, index) => {
                 //     console.log('SINGLE CONFIG', configuration);

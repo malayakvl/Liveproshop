@@ -10,7 +10,7 @@ class ChatbotMessageController {
      */
     async getSinceDate(req, res) {
         const data = await chatbotMessageModel.messagesSinceDate(req.query.sessionId);
-        // console.log('SINCE DATA', data)
+// console.log('SINCE DATA', data)
         if (!data.error) {
             return res.status(200).json({success: true, unixTimestamp: data.dateComment});
         } else {
@@ -38,7 +38,7 @@ class ChatbotMessageController {
         }
     }
     async addMessagesTest(req, res) {
-        const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId);
+        const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId, req.body);
         if (!data.error) {
             const dateStr = data.dateComment;
             // Convert to Unix timestamp (in seconds)

@@ -8,6 +8,8 @@ import { OrderCounter } from './index';
 
 const ListLiveItems: React.FC<any> = ({ items, expireAt }) => {
     const t = useTranslations();
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
+
     return (
         <>
             <div className="md:hidden mt-[20px]">
@@ -83,7 +85,13 @@ const ListLiveItems: React.FC<any> = ({ items, expireAt }) => {
                                                     }}
                                                 />
                                             </td>
-                                            <td className="whitespace-nowrap">{item.size_name}</td>
+                                            <td
+                                                className="whitespace-nowrap"
+                                                style={{ textAlign: 'center' }}>
+                                                {performedSizes.includes(item.size_name)
+                                                    ? item.size_name.replace('s', '')
+                                                    : item.size_name}
+                                            </td>
                                             <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                                             <td>{formatCurrency(item.price)}</td>
                                         </tr>
@@ -167,7 +175,7 @@ const ListLiveItems: React.FC<any> = ({ items, expireAt }) => {
                                         />
                                     )}
                                 </td>
-                                <td>
+                                <td style={{ textAlign: 'center' }}>
                                     <div
                                         className="rounded-full w-3 h-3 inline-block mr-1"
                                         style={{
@@ -175,7 +183,12 @@ const ListLiveItems: React.FC<any> = ({ items, expireAt }) => {
                                         }}
                                     />
                                 </td>
-                                <td className="whitespace-nowrap">{item.size_name}</td>
+                                <td className="whitespace-nowrap" style={{ textAlign: 'center' }}>
+                                    {' '}
+                                    {performedSizes.includes(item.size_name)
+                                        ? item.size_name.replace('s', '')
+                                        : item.size_name}
+                                </td>
                                 <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                                 <td>{formatCurrency(item.price)}</td>
                             </tr>

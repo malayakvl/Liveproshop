@@ -42,6 +42,7 @@ const ListProducts: React.FC<any> = () => {
     const checkedIds = useSelector(checkedIdsSelector);
     const switchAllHeader = useSelector(switchHeaderSelector);
     const [showMoreConfigs, setShowMoreConfigs] = useState<any>({});
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
 
     const [filterOpen, setFilterOpen] = useState(false);
     const { filters }: Layouts.Pagination = useSelector(
@@ -147,7 +148,9 @@ const ListProducts: React.FC<any> = () => {
                                         {config.configuration.map((_config: any) => (
                                             <tr key={_config.size_name}>
                                                 <td style={{ textAlign: 'center', width: '70px' }}>
-                                                    {_config.size_name}
+                                                    {performedSizes.includes(_config.size_name)
+                                                        ? _config.size_name.replace('s', '')
+                                                        : _config.size_name}
                                                 </td>
                                                 <td style={{ textAlign: 'center', width: '100px' }}>
                                                     {_config.quantity}

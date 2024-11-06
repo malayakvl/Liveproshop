@@ -104,6 +104,7 @@ function ProductForm({
     const searchTagSuggestions = useSelector(tagSuggestionsSelector);
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
 
     const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
@@ -678,11 +679,29 @@ function ProductForm({
                                                                                                 .configured
                                                                                         )
                                                                                     }>
-                                                                                    {
+                                                                                    {performedSizes.includes(
                                                                                         size[
                                                                                             `name_${num}`
                                                                                         ]
-                                                                                    }
+                                                                                    )
+                                                                                        ? size[
+                                                                                              `name_${num}`
+                                                                                          ].replace(
+                                                                                              's',
+                                                                                              ''
+                                                                                          )
+                                                                                        : size[
+                                                                                              `name_${num}`
+                                                                                          ]}
+                                                                                    {/*{size[*/}
+                                                                                    {/*    `name_${num}`*/}
+                                                                                    {/*].includes(*/}
+                                                                                    {/*    performesSizes*/}
+                                                                                    {/*)*/}
+                                                                                    {/*    ? '!'*/}
+                                                                                    {/*    : size[*/}
+                                                                                    {/*          `name_${num}`*/}
+                                                                                    {/*      ]}*/}
                                                                                 </td>
                                                                             )}
                                                                             {!size[

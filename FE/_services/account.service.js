@@ -6,9 +6,6 @@ import { setErrorToastAction } from '../redux/layouts';
 import { signIn } from 'next-auth/client';
 import { showLoaderAction } from '../redux/layouts/actions';
 
-// import { history } from '_helpers';
-
-// const baseUrl = `${process.env.REACT_APP_API_URL}/accounts`;
 const accountSubject = new BehaviorSubject(null);
 
 export const accountService = {
@@ -31,21 +28,17 @@ async function syncFB() {
             }
         )
     );
-    console.log('AUTH RESPONCE', authResponse);
+    // console.log('AUTH RESPONCE', authResponse);
     store.dispatch(syncFbAction(authResponse));
 }
 
 async function registerFB(paramData, commentId) {
     const infoParam = paramData.split('_');
-    console.log(infoParam);
-    // const roleId = infoParam[0] ? infoParam[0] : 2;
-    const roleId = infoParam[0] ? infoParam[0] : 2;
-    // const commentId = infoParam[0] ? infoParam[0] : 2;
+    const roleId = infoParam[0] ? infoParam[0] : 1;
     const locale = infoParam[1];
     const forFree = infoParam[2];
-    console.log('Register FB SDK', roleId);
+    // console.log('Register FB SDK', roleId);
     // login with facebook then authenticate with the API to get a JWT auth token
-    // const { authResponse } = await new Promise(window.FB.login);
     const { authResponse } = await new Promise(window.FB.login);
     authResponse.roleId = roleId;
     authResponse.locale = locale;
@@ -60,7 +53,7 @@ async function registerFB(paramData, commentId) {
 async function loginFB() {
     // login with facebook then authenticate with the API to get a JWT auth token
     const { authResponse } = await new Promise(window.FB.login);
-    console.log('AUTH RESPONSE LOGIN', authResponse);
+    // console.log('AUTH RESPONSE LOGIN', authResponse);
     if (authResponse) {
         store.dispatch(showLoaderAction(true));
         signIn('credentials_sdkfacebook_login', authResponse);
@@ -72,10 +65,10 @@ async function loginFB() {
 async function getAccountData(authResponse) {
     const loginOptions = {
         // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
-        scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,business_management'
+        scope: 'email,pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content'
     };
-    console.log('AUTH RESPONSE', authResponse);
     if (parseInt(authResponse.roleId) === 1) {
+        console.log('AUTH RESPONSE', authResponse);
         axios
             .get(
                 `https://graph.facebook.com/v21.0/me?fields=id,name,email&access_token=${authResponse.accessToken}`,
@@ -96,67 +89,39 @@ async function getAccountData(authResponse) {
                 store.dispatch(showLoaderAction(true));
                 signIn('credentials_sdkfacebook', data);
             });
-    } else {
-        console.log(
-            `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`
-        );
-        axios
-            .get(
-                `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
-                loginOptions
-            )
-            .then((response) => {
-                const { data } = response;
-                console.log(authResponse);
-                if (data.error) {
-                    store.dispatch(setErrorToastAction('Could no autherntificate'));
-                }
-                // console.log('AUTH RESPONCE HERE', authResponse.roleId);
-                data.accessToken = authResponse.accessToken;
-                data.expirationTime = authResponse.data_access_expiration_time;
-                data.roleId = 2;
+    }
+    axios
+        .get(
+            `https://graph.facebook.com/v21.0/me?fields=name,email,accounts&access_token=${authResponse.accessToken}`,
+            loginOptions
+        )
+        .then((response) => {
+            const { data } = response;
+            if (data.error) {
+                store.dispatch(setErrorToastAction('Could no autherntificate'));
+            }
+            // console.log('AUTH RESPONCE HERE', authResponse.roleId);
+            data.accessToken = authResponse.accessToken;
+            data.expirationTime = authResponse.data_access_expiration_time;
+            if (authResponse.email) {
+                data.email = authResponse.email;
+            }
+            if (parseInt(authResponse.roleId) === 1) {
+                data.callbackUrl = `${window.location.origin}/${
+                    authResponse.locale === 'fr' ? '' : 'en/'
+                }dashboard`;
+            } else {
                 data.callbackUrl = `${window.location.origin}/${
                     authResponse.locale === 'fr' ? '' : 'en/'
                 }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
-                data.forFree = authResponse.forFree;
-                data.userAccounts = JSON.stringify(data.accounts);
-                data.userBusiness = JSON.stringify(data.businesses);
-                store.dispatch(showLoaderAction(true));
-                signIn('credentials_sdkfacebook', data);
-            });
-    }
-    // axios
-    //     .get(
-    //         `https://graph.facebook.com/v21.0/me?fields=name,email,accounts,businesses&access_token=${authResponse.accessToken}`,
-    //         loginOptions
-    //     )
-    //     .then((response) => {
-    //         const { data } = response;
-    //         if (data.error) {
-    //             store.dispatch(setErrorToastAction('Could no autherntificate'));
-    //         }
-    //         // console.log('AUTH RESPONCE HERE', authResponse.roleId);
-    //         data.accessToken = authResponse.accessToken;
-    //         data.expirationTime = authResponse.data_access_expiration_time;
-    //         if (authResponse.email) {
-    //             data.email = authResponse.email;
-    //         }
-    //         if (parseInt(authResponse.roleId) === 1) {
-    //             data.callbackUrl = `${window.location.origin}/${
-    //                 authResponse.locale === 'fr' ? '' : 'en/'
-    //             }dashboard`;
-    //         } else {
-    //             data.callbackUrl = `${window.location.origin}/${
-    //                 authResponse.locale === 'fr' ? '' : 'en/'
-    //             }${parseInt(authResponse.forFree) === 1 ? 'dashboard' : 'pricing'}`;
-    //         }
-    //         data.roleId = authResponse.roleId ? authResponse.roleId : 2;
-    //         data.forFree = authResponse.forFree;
-    //         data.userAccounts = JSON.stringify(data.accounts);
-    //         data.userBusiness = JSON.stringify(data.businesses);
-    //         store.dispatch(showLoaderAction(true));
-    //         signIn('credentials_sdkfacebook', data);
-    //     });
+            }
+            data.roleId = authResponse.roleId ? authResponse.roleId : 2;
+            data.forFree = authResponse.forFree;
+            data.userAccounts = JSON.stringify(data.accounts);
+            data.userBusiness = JSON.stringify(data.businesses);
+            store.dispatch(showLoaderAction(true));
+            signIn('credentials_sdkfacebook', data);
+        });
 }
 
 function logout() {
@@ -175,5 +140,3 @@ function stopAuthenticateTimer() {
     // cancel timer for re-authenticating with the api
     clearTimeout(authenticateTimeout);
 }
-
-// curl -i -X GET "https://graph.facebook.com/2763630843946760/accounts?access_token=EAArS9KI0vagBO46CIW5SZCe2ZCHRAyxmvNEcwZC4GMJCEmYuoZCGxmCcv7hNA5QP9zDQ6EbYPjKTaGSdP5e1J7fkXwM3w1sjzHXnTBDJpkEdeQ06qf42svmCgubo6ZBgKWiXAZA5i32ZAIUpcKfZCWGaZC2sNGCS92RgtHqi2ZCoOtuQyNx3tigaN60aPp8Rm8jwXvFxvLCeixZBlbs8Ka2dsM2Uopg6ecZD"
