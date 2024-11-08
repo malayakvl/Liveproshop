@@ -37,8 +37,9 @@ class ChatbotMessageController {
             return res.status(401).json({success: false, error: data.error});
         }
     }
-    async addMessagesTest(req, res) {
-        const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId, req.body);
+
+    async addMessagesNew(req, res) {
+        const data = await chatbotMessageModel.addMessagesNew(req.query.sessionId, req.body);
         if (!data.error) {
             const dateStr = data.dateComment;
             // Convert to Unix timestamp (in seconds)
@@ -48,6 +49,26 @@ class ChatbotMessageController {
         } else {
             return res.status(401).json({success: false, error: data.error});
         }
+    }
+    async addMessagesTest(req, res) {
+        const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId, req.body);
+console.log('DATA', data);
+        if (!data.error) {
+            const dateStr = data.dateComment;
+            // Convert to Unix timestamp (in seconds)
+            const unixTimestamp = Math.floor(new Date(dateStr).getTime() / 1000);
+
+            return res.status(200).json({unixTimestamp: unixTimestamp});
+        } else {
+console.log('TUT')
+            return res.status(401).json({success: false, error: data.error});
+        }
+    }
+
+    async transformMessages(req, res) {
+        await chatbotMessageModel.transformMessages(req.query.sessionId);
+
+        return res.status(200).json({success: true, message: 'transform messages'});
     }
 
     async parseMessages(req, res) {

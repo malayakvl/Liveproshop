@@ -84,9 +84,12 @@ apiRoutes.route('/update-store_session-status').get(LivesessionController.update
 apiRoutes.route('/update-session-status').get(LivesessionController.updateSessionStatusFB);
 apiRoutes.route('/fetch-launch-stop-sessions').get(LivesessionController.getLaunchForStop);
 apiRoutes.route('/get-live-messages-since').get(ChatbotMessageController.getSinceDate);
-// apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
+apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessagesTest);
+apiRoutes.route('/add-live-messages-test').post(ChatbotMessageController.addMessagesTest);
+apiRoutes.route('/add-live-messages-new').post(ChatbotMessageController.addMessagesNew);
 
+apiRoutes.route('/transform-live-messages').get(ChatbotMessageController.transformMessages);
 apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);

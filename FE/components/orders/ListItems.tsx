@@ -9,7 +9,6 @@ import { OrderCounter } from '../liveorders';
 const ListItems: React.FC<any> = ({ items, orderId, status, expireAt }) => {
     const t = useTranslations();
 
-    console.log(expireAt);
     return (
         <>
             <div className="md:hidden mt-[20px] flex">

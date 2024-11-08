@@ -574,7 +574,7 @@ console.log('GET PAGES AND ACCESS TOKEN FOR LIVE VIDEO API');
                                         // get pages
                                         await axios
                                             .get(
-                                                `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${userData.accessToken}`
+                                                `https://graph.facebook.com/v21.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${userData.accessToken}`
                                             )
                                             .then(async (responseBusinessesPages) => {
                                                 if (responseBusinessesPages.data.error) {
@@ -2016,7 +2016,7 @@ console.log('USER TOKEN', data.accessToken);
         // getting long live token
         const longToken = await axios
             .get(
-                `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`
+                `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`
             )
             .then(async (responseLongToken) => {
                 console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
@@ -2031,7 +2031,7 @@ console.log('LONG TOKEN RESPONSE', longToken);
             if (data.accessToken) {
                 await axios
                     .get(
-                        `https://graph.facebook.com/v20.0/me/accounts?fields=picture{url},name,fan_count,access_token&access_token=${longToken}`
+                        `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${longToken}`
                     )
                     .then(async (responsePages) => {
                         if (responsePages.data.error) {
@@ -2043,10 +2043,11 @@ console.log('STORES LIST', storesList)
                             // getting picture for store
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
-                                // const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                if (queryStore.rows.length === 0) {
-                                    await  client.query(`
+                                if (store.is_published) {
+                                    // const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                    const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                    if (queryStore.rows.length === 0) {
+                                        await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
                                                     VALUES
                                                     (
@@ -2059,14 +2060,14 @@ console.log('STORES LIST', storesList)
                                                         true,
                                                         '${store.picture.data.url}'
                                                     );`
-                                    );
-                                } else {
-                                    // const periodStartNew =  new Date();
-                                    // const timestampStartNew = periodStartNew.getTime();
-                                    // const ts = moment().format('YYYY-MM-DD HH:mm:ss').unix();
-                                    // const m = moment.unix(ts);
-                                    //
-                                    await  client.query(`
+                                        );
+                                    } else {
+                                        // const periodStartNew =  new Date();
+                                        // const timestampStartNew = periodStartNew.getTime();
+                                        // const ts = moment().format('YYYY-MM-DD HH:mm:ss').unix();
+                                        // const m = moment.unix(ts);
+                                        //
+                                        await  client.query(`
                                                     UPDATE data.user_stores SET
                                                         access_token='${store.access_token}',
                                                         name='${store.name}',
@@ -2075,7 +2076,8 @@ console.log('STORES LIST', storesList)
                                                         synchronized=true,
                                                         updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                     WHERE account_id='${userFbId}' AND store_id='${store.id}';`
-                                    );
+                                        );
+                                    }
                                 }
                             })
                         }
@@ -2088,7 +2090,7 @@ console.log('STORES LIST', storesList)
                     });
                 await axios
                     .get(
-                        `https://graph.facebook.com/v20.0/me?fields=businesses&access_token=${longToken}`
+                        `https://graph.facebook.com/v21.0/me?fields=businesses&access_token=${longToken}`
                     )
                     .then(async (responseBusinesses) => {
                         if (responseBusinesses.data.error) {
@@ -2116,13 +2118,12 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                 // get pages
                                 await axios
                                     .get(
-                                        `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`
+                                        `https://graph.facebook.com/v21.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count,is_published&access_token=${longToken}`
                                     )
                                     .then(async (responseBusinessesPages) => {
                                         if (responseBusinessesPages.data.error) {
                                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                                         } else {
-// console.log('Owned pages', JSON.stringify(responseBusinessesPages.data));
                                             if (responseBusinessesPages.data.error) {
                                                 store.dispatch(setErrorToastAction('Could no getting stores list'));
                                             } else {
@@ -2130,9 +2131,10 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                                 // getting picture for store
                                                 let storePicture = '';
                                                 storesList.data.forEach(async (store) => {
-                                                    const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                                    if (queryStore.rows.length === 0) {
-                                                        await  client.query(`
+                                                    if (store.is_published) {
+                                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                                        if (queryStore.rows.length === 0) {
+                                                            await  client.query(`
                                                             INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
                                                             VALUES
                                                             (
@@ -2146,9 +2148,9 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                                                 '${store.picture.data.url}',
                                                                 true
                                                             );`
-                                                        );
-                                                    } else {
-                                                        await  client.query(`
+                                                            );
+                                                        } else {
+                                                            await  client.query(`
                                                             UPDATE data.user_stores SET
                                                                 access_token='${store.access_token}',
                                                                 name='${store.name}',
@@ -2158,7 +2160,8 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                                                 is_business=true,
                                                                 updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                             WHERE account_id='${userFbId}' AND store_id='${store.id}';`
-                                                        );
+                                                            );
+                                                        }
                                                     }
                                                 })
                                             }

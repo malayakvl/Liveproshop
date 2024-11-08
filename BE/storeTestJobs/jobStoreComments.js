@@ -8,8 +8,9 @@ const testSessionData = 67;
 const tokenData = args[4].split('=');
 const videoData = args[2].split('=');
 async function startProcess() {
+console.log('Start script');
     try {
-console.log('TUT 1');
+console.log('Start getting comment');
         const sinceParams = await axios.get(`${apiUrl}/api/get-live-messages-since?sessionId=${testSessionData}`)
             .then(async function (response) {
                 const sinceDate = response.data.unixTimestamp;
@@ -29,26 +30,36 @@ console.log('unixTimestamp', unixTimestamp);
             urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&since=${unixTimestamp}&order=chronological&access_token=${tokenData[1]}`;
         }
 console.log('URL', urlComment);
-        const result = await axios.get(urlComment)
-            .then(async function (response) {
-                const results = response.data.data;
+        try {
+            const result = await axios.get(urlComment)
+                .then(async function (response) {
+                    const results = response.data.data;
 console.log('Incoming Comments', results);
-                try {
                     await axios
-                        .post(`${apiUrl}/api/add-live-messages-test?sessionId=${testSessionData}`, results)
+                        .post(`${apiUrl}/api/add-live-messages-new?sessionId=${testSessionData}`, results)
                         .then(() => {
                         }).catch(function (_error) {
                             console.log(_error.message);
                         });
-                } catch (e) {
-                    console.log('Error add messages to db')
-                }
-            })
-            .catch(function (error) {
-                console.log("error on get comment under video", error.message);
-            });
+                    // try {
+                    //     await axios
+                    //         .post(`${apiUrl}/api/add-live-messages-test?sessionId=${testSessionData}`, results)
+                    //         .then(() => {
+                    //         }).catch(function (_error) {
+                    //             console.log(_error.message);
+                    //         });
+                    // } catch (e) {
+                    //     console.log('Error add messages to db')
+                    // }
+                })
+                .catch(function (error) {
+                    console.log("error on get comment under video", error.message);
+                });
+        } catch (e) {
+            console.log('Error get comment');
+        }
     } catch (e) {
-        console.log(e.message);
+        console.log('TUT ERROR 1', e.message);
     }
 }
 

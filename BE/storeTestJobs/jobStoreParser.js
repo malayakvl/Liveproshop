@@ -9,16 +9,16 @@ const testSessionData = 67;
 async function sessionLaunche() {
     console.log(`Parse messages for session ${sessionsData[1]}`);
     // start parsing messages
-    // axios(`${apiUrl}/api/parse-live-messages?sessionId=${sessionsData[1]}`)
-    //     .then((response) => {
-    //         console.log('Response Data:', response.data.message);
-    //     });
+    axios(`${apiUrl}/api/transform-live-messages?sessionId=${sessionsData[1]}`)
+        .then((response) => {
+            console.log('Response Data:', response.data.message);
+        });
 
     // start creating orders
-    axios(`${apiUrl}/api/create-orders?sessionId=${testSessionData}`)
-        .then((response) => {
-            console.log(response.data.message);
-        });
+    // axios(`${apiUrl}/api/create-orders?sessionId=${testSessionData}`)
+    //     .then((response) => {
+    //         console.log(response.data.message);
+    //     });
 
 }
 
