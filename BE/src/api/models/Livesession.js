@@ -616,6 +616,25 @@ class Livesession {
 //             client.release();
 //         }
 //     }
+    async getUserPages(user) {
+        console.log('USER TOKEN', user.long_live_access_token);
+        // getting long live token
+        // const longToken = await axios
+        //     .get(
+        //         `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`
+        //     )
+        //     .then(async (responseLongToken) => {
+        //         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+        //         await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
+        //
+        //         return responseLongToken.data.access_token
+        //     }).catch(e => {
+        //         return  e.response.data.error.message
+        //     });
+        // console.log('LONG TOKEN RESPONSE', longToken);
+        return {success: true}
+    }
+
     async getAll (page, perPage = 20, userId, reqOffset = null, queryFilter = null, user = null) {
         const client = await pool.connect();
         try {
@@ -653,7 +672,7 @@ console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
 //                     })
             longToken = await axios
                 .get(
-                    `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
+                    `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
                 )
                 .then(async (responseLongToken) => {
                     console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
@@ -678,7 +697,7 @@ console.log('RESULT RESPONSE', longToken);
                             return {error: e.response.data.error.message};
                             // return  e.response.data.error.message
                         })
-                    console.log('APP TOKEN DATA', appAccessToken);
+// console.log('APP TOKEN DATA', appAccessToken);
 
 
                     longTokenExpire = await axios
@@ -709,7 +728,7 @@ console.log('RESULT RESPONSE', longToken);
                             return {error: e.response.data.error.message};
                             // return  e.response.data.error.message
                         });
-                    console.log('APP TOKEN DATA', appAccessToken);
+// console.log('APP TOKEN DATA', appAccessToken);
 
 
                     longTokenExpire = await axios
@@ -726,14 +745,22 @@ console.log('RESULT RESPONSE', longToken);
                     if (!longTokenExpire.error) {
                         expiteLongTokenAt = moment.unix(longTokenExpire.result.data.expires_at).format("DD-MM-YYYY HH:mm:ss");
                         expiteAccessLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
-                        console.log('EXPIRED', expiteLongTokenAt);
-                        console.log('EXPIRED', expiteAccessLongTokenAt);
+                        // console.log('EXPIRED', expiteLongTokenAt);
+                        // console.log('EXPIRED', expiteAccessLongTokenAt);
                     }
                 }
             // }
+console.log('LONG LIVE TOKEN SABRINA', user.long_live_access_token);
+console.log('TRY TO GET USER ACCOUNTS FOR SABRINA');
+            await axios
+                .get(
+                    `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${user.long_live_access_token}`
+                )
+                .then(async (responsePages) => {
+console.log('PAGES', responsePages.data);
+                });
 
-
-            // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
+                    // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name 
                     FROM data.live_sessions 
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id

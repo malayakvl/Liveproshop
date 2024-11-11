@@ -13,6 +13,7 @@ class LivesessionController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
+        // const tmpPages = await livesessionModel.getUserPages(req.user);
 
         const data = await livesessionModel.getAll(1, limit, req.user.id, offset, queryFilter, req.user);
         if (!data.error) {

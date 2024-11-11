@@ -22,6 +22,9 @@ export default function Index({ session, locale }: { session: any; locale: strin
     const fbSync = () => {
         accountService.syncFB();
     };
+    const fbSyncTest = () => {
+        accountService.syncFBTest();
+    };
 
     // useEffect(() => {
     //     if (user?.id) {
@@ -43,6 +46,9 @@ export default function Index({ session, locale }: { session: any; locale: strin
                     <div className="float-left text-right">
                         <button className="btn-sync-fb" onClick={() => fbSync()}>
                             <span>{t('Sync account')}</span>
+                        </button>
+                        <button className="btn-sync-fb" onClick={() => fbSyncTest()}>
+                            <span>{t('Get pages without fb')}</span>
                         </button>
                         <span className="inline-block ml-3 text-green-250 font-bold">
                             Expire in{' '}

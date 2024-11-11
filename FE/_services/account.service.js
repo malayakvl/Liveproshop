@@ -12,6 +12,7 @@ export const accountService = {
     loginFB,
     logout,
     syncFB,
+    syncFBTest,
     registerFB
 };
 
@@ -30,6 +31,10 @@ async function syncFB() {
     );
     // console.log('AUTH RESPONCE', authResponse);
     store.dispatch(syncFbAction(authResponse));
+}
+async function syncFBTest() {
+    console.log('HERE syncFBTest');
+    // store.dispatch(syncFbAction(authResponse));
 }
 
 async function registerFB(paramData, commentId) {
