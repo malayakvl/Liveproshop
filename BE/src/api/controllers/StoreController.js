@@ -22,7 +22,7 @@ class StoreController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
-        const data = await sessionModel.getAllSabrinas(1, limit, req.user, false, offset, queryFilter, column, sort);
+        const data = await sessionModel.getAllSabrinas(1, limit, req.user, false, offset, queryFilter, req.user);
 
         if (!data.error) {
             return res.status(200).json({ items: data.items, count: data.size });

@@ -801,7 +801,9 @@ console.log('PAGES', responsePages.data);
     }
 
 
-    async getAllSabrinas (page, perPage = 20, userId, reqOffset = null, queryFilter = null, user = null) {
+    async getAllSabrinas (page, perPage = 20, user, reqOffset = null, queryFilter = null) {
+        console.log('USER', user);
+        const userId = user.id;
         const client = await pool.connect();
         try {
             const _total = await client.query(
@@ -819,7 +821,6 @@ console.log('PAGES', responsePages.data);
             let longToken;
             let expiteLongTokenAt;
             let expiteAccessLongTokenAt;
-            console.log('SABRINA LONG TOKEN', user.long_live_access_token);
             longToken = await axios
                 .get(
                     `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
@@ -908,6 +909,9 @@ console.log('data_access_expires_at', longTokenExpire.result.data.data_access_ex
                     console.log('PAGES', responsePages.data);
                 });
 console.log('SABRINAS PAGES DATA', pagesData);
+            if (pagesData.data?.length) {
+
+            }
             // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name 
                     FROM data.live_sessions 
