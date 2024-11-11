@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 import axios from 'axios';
 import store from '../app/store';
-import { syncFbAction } from '../redux/user/actions';
+import { syncFbAction, syncFbSabrinasAction } from '../redux/user/actions';
 import { setErrorToastAction } from '../redux/layouts';
 import { signIn } from 'next-auth/client';
 import { showLoaderAction } from '../redux/layouts/actions';
@@ -25,7 +25,8 @@ async function syncFB() {
                 return response;
             },
             {
-                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts,business_management'
+                // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts,business_management'
+                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
             }
         )
     );
@@ -33,8 +34,7 @@ async function syncFB() {
     store.dispatch(syncFbAction(authResponse));
 }
 async function syncFBTest() {
-    console.log('HERE syncFBTest');
-    // store.dispatch(syncFbAction(authResponse));
+    store.dispatch(syncFbSabrinasAction());
 }
 
 async function registerFB(paramData, commentId) {

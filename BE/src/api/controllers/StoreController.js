@@ -1,4 +1,5 @@
 import storeModel from '../models/Store.js';
+import sessionModel from '../models/Livesession.js';
 import multer from 'multer';
 import fs from 'fs';
 
@@ -9,6 +10,20 @@ class StoreController {
             return res.status(401).json('Access deny');
         }
         const data = await storeModel.getAll(1, limit, req.user.id, false, offset, queryFilter, column, sort);
+        if (!data.error) {
+            return res.status(200).json({ items: data.items, count: data.size });
+        } else {
+            return res.status(401).json({ error: 'Something wend wrong' });
+        }
+    }
+
+    async fetchSabrinasData (req, res) {
+        const { limit, offset, queryFilter, column, sort } = req.query;
+        if (!req.user) {
+            return res.status(401).json('Access deny');
+        }
+        const data = await sessionModel.getAllSabrinas(1, limit, req.user, false, offset, queryFilter, column, sort);
+
         if (!data.error) {
             return res.status(200).json({ items: data.items, count: data.size });
         } else {

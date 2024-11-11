@@ -151,6 +151,8 @@ apiRoutes.route('/fetch-notifications').get(NotificationController.fetchData);
 apiRoutes.route('/count-notice').get(NotificationController.fetchNew);
 apiRoutes.route('/new-notice').get(NotificationController.fetchLatest);
 
+apiRoutes.route('/fetch-sabrinas-stores').get(StoreController.fetchSabrinasData);
+
 apiRoutes.route('/fetch-stores').get(StoreController.fetchData);
 apiRoutes.route('/product').post(ProductController.addProduct);
 apiRoutes.route('/products/fetch-additional').get(ProductController.fetchAdditional);
