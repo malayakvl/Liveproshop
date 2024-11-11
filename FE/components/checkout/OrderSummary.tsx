@@ -44,19 +44,19 @@ const OrderSummary = () => {
         if (dataOrder.total_amount > 0) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            totalOrder += parseInt(order.total_amount);
+            totalOrder += parseFloat(order.total_amount);
         } else {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            totalOrder += parseInt(order.order_amount * 1.2);
+            totalOrder += parseFloat(order.order_amount * 1.2);
         }
         if (selectedShippingMethod?.price) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            totalOrder += parseInt(selectedShippingMethod.price);
+            totalOrder += parseFloat(selectedShippingMethod.price);
         }
         if (dataOrder.refund_amount > 0) {
-            totalOrder = totalOrder - parseInt(dataOrder.refund_amount);
+            totalOrder = totalOrder - parseFloat(dataOrder.refund_amount);
         }
         return formatCurrency(totalOrder);
     };

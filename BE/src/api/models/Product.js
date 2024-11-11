@@ -689,7 +689,7 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
                 offset = (Number(page) - 1) * Number(perPage);
             }
             const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-console.log(productQuery);
+// console.log(productQuery);
             // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];

@@ -4,10 +4,10 @@ const args = process.argv;
 const apiUrl = process.env.API_URL;
 
 const sessionsData = args[2].split('=');
-const testSessionData = 67;
+const testSessionData = 68;
 
 async function sessionLaunche() {
-    console.log(`Parse messages for session ${sessionsData[1]}`);
+    // console.log(`Parse messages for session ${sessionsData[1]}`);
     // start parsing messages
     axios(`${apiUrl}/api/transform-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
@@ -15,10 +15,10 @@ async function sessionLaunche() {
         });
 
     // start creating orders
-    // axios(`${apiUrl}/api/create-orders?sessionId=${testSessionData}`)
-    //     .then((response) => {
-    //         console.log(response.data.message);
-    //     });
+    axios(`${apiUrl}/api/create-orders?sessionId=${testSessionData}`)
+        .then((response) => {
+            console.log(response.data.message);
+        });
 
 }
 

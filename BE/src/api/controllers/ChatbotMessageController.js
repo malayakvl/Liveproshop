@@ -66,7 +66,11 @@ console.log('TUT')
     }
 
     async transformMessages(req, res) {
-        await chatbotMessageModel.transformMessages(req.query.sessionId);
+        try {
+            await chatbotMessageModel.transformMessages(req.query.sessionId);
+        } catch (e) {
+
+        }
 
         return res.status(200).json({success: true, message: 'transform messages'});
     }

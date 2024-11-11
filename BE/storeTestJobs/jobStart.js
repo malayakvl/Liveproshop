@@ -13,19 +13,19 @@ async function startProcess() {
     const tokenTest = 'EAArS9KI0vagBO62n1djEhWYZB5rgRFw0juywHPg4VEmJKHS0nlLcyan2htojTNjrH5fEMScC8xo8Got4krkldiNYJKnf8hU8ebI9DCDbE7Mz81g6yoWbFR4AZAeJIAmCV6BZAdeTBiL1ZCiE9lKYCTEU7Hi4r4n19m4ooIIbt5XDFbrabqb2ZAtPHJOKLooQZD';
     const storeTestId = '134773596380836';
     const sessionTestId = 750;
-    const sessionLocalTestId = 67;
-    const videoTestId = '122183384036041438';
+    const sessionLocalTestId = 68;
+    const videoTestId = '122183790596041438';
 
     shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionTestId}" -- videoId=${videoTestId} sessionId=${sessionTestId} accessToken=${tokenTest} `, function(code, output) {
     });
-    //
-    // shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
-    // });
 
-    // shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
-    //     console.log('Exit code:', code);
-    //     console.log('Program output:', output);
-    // });
+    shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
+    });
+
+    shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
+        console.log('Exit code:', code);
+        console.log('Program output:', output);
+    });
 
     setTimeout(() => {
         shell.exec(`pm2 delete jobStart.js`, function(code, output) {

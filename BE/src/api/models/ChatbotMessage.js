@@ -328,11 +328,17 @@ console.log('MSG', _message)
         }
     }
     async transformMessages(sessionId) {
+        if (parseInt(sessionId) === 750) sessionId = 68;
         const client = await pool.connect();
+        const updNotValidMsgs = `UPDATE data.live_sessions_messages SET parcer_status = false and transform_status = false 
+                                        WHERE live_sessions_id='${sessionId}' AND 
+                                            message NOT LIKE '%sold%' AND message NOT LIKE '%vendu%' 
+                                            AND (parcer_status IS NULL AND transform_status IS NULL); `;
+// console.log(updNotValidMsgs);
+        await client.query(updNotValidMsgs);
         const messagesData = await client.query(`SELECT * FROM data.live_sessions_messages WHERE
-            live_sessions_id='67' AND transform_status IS NULL 
+            live_sessions_id='${sessionId}' AND transform_status IS NULL AND parcer_status IS NULL 
             ORDER BY created_at LIMIT 50 `);
-// console.log(messagesData.rows);
         const tPromises = [];
         if (messagesData.rows.length > 0) {
             messagesData.rows.forEach(row => {
@@ -349,23 +355,28 @@ console.log('MSG', _message)
 
     async _transformMessage(fullMessage, sessionId) {
         const client = await pool.connect();
-// console.log(fullMessage);
+        fullMessage.from = {
+            name: "Test without param",
+            id: "88888888"
+        }
         const msgData = fullMessage.message.split(' ');
+console.log('msgData', msgData)
         const performedSizes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-        let _predparsedMessage, _pQuery, updMsgQuery;
-// console.log(fullMessage);
-// exit;
+        let _predparsedMessage, _pQuery, updMsgQuery, simpleWithoutAnyParam;
         if (msgData[0] !== 'sold' && msgData[0] !== 'vendu') {
-            await client.query(`UPDATE data.live_sessions_messages SET parcer_status = false, transform_status = false WHERE
-                message_id = '${fullMessage.message_id}'`)
+            // await client.query(`UPDATE data.live_sessions_messages SET
+            //         parcer_status = false,
+            //         transform_status = false
+            //     WHERE
+            //         message_id = '${fullMessage.message_id}'`)
             // console.log(fullMessage.message, fullMessage.message_id);
         } else {
             const product  = await productModel.fetchSimpleProduct(msgData[1].trim());
+// console.log('111', product.product);
+// exit;
             if (product.product) {
                 if (product.product.configured) {
                     // CONFIGURED PRODUCT
-// console.log(product.product);
-// exit;
                     // Set color and size
                     if (!product.product.nocolor && !product.product.nosize) {
                         const _qty = msgData[4] ? msgData[4] : 1;
@@ -417,6 +428,7 @@ console.log('MSG', _message)
                         else {
                             _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[2]  +' '+_qty;
                         }
+// console.log(_predparsedMessage);exit;
                         if (msgData[0].trim() === 'sold')
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6292]));`;
                         else
@@ -427,6 +439,8 @@ console.log('MSG', _message)
                     if (_parsedMsg) {
                         updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
+                                from_id = '88888888',
+                                from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = true,
                                 parcer_data = '${JSON.stringify(_parsedMsg.results_json)}' 
@@ -435,12 +449,15 @@ console.log('MSG', _message)
                         updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
                                 transform_status = true,
+                                from_id = '88888888',
+                                from_name = 'NoFrom Param',
                                 parcer_status = false,  
                                 parcer_data = '${JSON.stringify(_parsedMsg.results_json)}' 
                                 WHERE message_id='${fullMessage.message_id}'`)
                     }
                     await client.query(updMsgQuery);
                 } else {
+console.log('simple product');
                    // SIMPLE PRODUCT
                     let _qty = 1;
                     if (product.product.selectedColors.length > 0 && product.product.selectedSizes.length === 0) {
@@ -458,13 +475,12 @@ console.log('MSG', _message)
                         }
 // console.log(msgData);
                         _predparsedMessage = msgData[0]+' '+msgData[1]+' '+(msgData[2] ? msgData[2] : product.product.selectedColors[0].name) + ' '+_qty;
-// console.log('_predparsedMessage', _predparsedMessage);
-// exit;
+console.log('_predparsedMessage', _predparsedMessage);
+exit;
                         if (msgData[0].trim() === 'sold')
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6290]));`;
                         else
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6302]));`;
-// console.log(_pQuery);exit;
                     } else if (product.product.selectedColors.length === 0 && product.product.selectedSizes.length > 0) {
                         if (parseInt(msgData[3])) {
                             _qty = parseInt(msgData[3]);
@@ -479,6 +495,7 @@ console.log('MSG', _message)
                                 _size = msgData[2];
                             }
                         }
+console.log('111');
                         _predparsedMessage = msgData[0]+' '+msgData[1]+' '+(_size ? _size : product.product.selectedSizes[0].name) + ' '+_qty;
                         if (msgData[0].trim() === 'sold')
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6292]));`;
@@ -519,29 +536,61 @@ console.log('MSG', _message)
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6292]));`;
                         else
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6302,6302]));`;
+                    } else if (product.product.selectedColors.length === 0 && product.product.selectedSizes.length === 0) {
+                        _predparsedMessage = msgData[0]+' '+msgData[1]+  ' '+_qty;
+                        simpleWithoutAnyParam = true;
+                        if (msgData[0].trim() === 'sold')
+                            _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6292]));`;
+                        else
+                            _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6302,6302]));`;
                     }
 
                     const tmpParsedData = await client.query(_pQuery);
                     let _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === true);
+// console.log(_parsedMsg);exit;
                     if (_parsedMsg) {
                         updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
+                                from_id = '88888888',
+                                from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = true,
                                 parcer_data = '${JSON.stringify(_parsedMsg.results_json)}' 
                                 WHERE message_id='${fullMessage.message_id}'`)
                     } else {
-                        _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === false);
-                        updMsgQuery = (`UPDATE data.live_sessions_messages SET
+                        if (simpleWithoutAnyParam) {
+console.log('Quantity', _qty);
+                            // {"status":true,"sold":true,"item":216,"color":"red","color_id":1,"size":"s2","size_id":101,"quantity":1}
+                            updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
+                                from_id = '88888888',
+                                from_name = 'NoFrom Param',
+                                transform_status = true,
+                                parcer_status = true,  
+                                parcer_data = '${JSON.stringify({"status" : true, "vendu" : true, "item" : product.product.id, "quantity" : _qty})}' 
+                                WHERE message_id='${fullMessage.message_id}'`);
+                        } else {
+                            updMsgQuery = (`UPDATE data.live_sessions_messages SET
+                                message = '${_predparsedMessage}',
+                                from_id = '88888888',
+                                from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = false,  
-                                parcer_data = '${JSON.stringify(_parsedMsg.results_json)}' 
-                                WHERE message_id='${fullMessage.message_id}'`)
+                                parcer_data = '${JSON.stringify({"status" : false, "vendu" : null, "item" : null, "quantity" : null})}' 
+                                WHERE message_id='${fullMessage.message_id}'`);
+                        }
+                        // _parsedMsg = tmpParsedData.rows.find((_row) => _row.status === false);
                     }
+console.log(updMsgQuery);
                     await client.query(updMsgQuery);
                 }
 
+            } else {
+                updMsgQuery = (`UPDATE data.live_sessions_messages SET
+                                transform_status = false,
+                                parcer_status = false,  
+                                WHERE message_id='${fullMessage.message_id}'`);
+                await client.query(updMsgQuery);
             }
         }
     }
@@ -789,6 +838,7 @@ console.log('updMessage', updMessage);
         }
 
         const productQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data).replaceAll("'", '')}');`;
+console.log(productQuery);
         try {
             await client.query(productQuery);
             const items = [];

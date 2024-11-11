@@ -4,7 +4,7 @@ import axios from "axios";
 const apiUrl = process.env.API_URL;
 const args = process.argv;
 const sessionsData = args[3].split('=');
-const testSessionData = 67;
+const testSessionData = 68;
 const tokenData = args[4].split('=');
 const videoData = args[2].split('=');
 async function startProcess() {
