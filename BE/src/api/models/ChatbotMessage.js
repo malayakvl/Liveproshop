@@ -328,14 +328,14 @@ console.log('MSG', _message)
         }
     }
     async transformMessages(sessionId) {
-console.log('Session Id', sessionId)
+// console.log('Session Id', sessionId)
         // if (parseInt(sessionId) === 750) sessionId = 68;
         const client = await pool.connect();
         const updNotValidMsgs = `UPDATE data.live_sessions_messages SET parcer_status = false and transform_status = false 
                                         WHERE live_sessions_id='${sessionId}' AND 
                                             message NOT LIKE '%sold%' AND message NOT LIKE '%vendu%' 
                                             AND (parcer_status IS NULL AND transform_status IS NULL); `;
-console.log(updNotValidMsgs);
+// console.log(updNotValidMsgs);
         await client.query(updNotValidMsgs);
         const messagesData = await client.query(`SELECT * FROM data.live_sessions_messages WHERE
             live_sessions_id='${sessionId}' AND transform_status IS NULL AND parcer_status IS NULL 
@@ -358,20 +358,20 @@ console.log(updNotValidMsgs);
         const client = await pool.connect();
         fullMessage.from = {
             name: "Test without param",
-            id: "88888888"
+            id: Math.floor(Date.now() / 1000)
         }
         const msgData = fullMessage.message.split(' ');
         let fParserData;
 
-        console.log('msgData', msgData)
+// console.log('msgData', msgData)
         const performedSizes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
         let _predparsedMessage, _pQuery, updMsgQuery, simpleWithoutAnyParam;
         if (msgData[0] !== 'sold' && msgData[0] !== 'vendu') {
-            // await client.query(`UPDATE data.live_sessions_messages SET
-            //         parcer_status = false,
-            //         transform_status = false
-            //     WHERE
-            //         message_id = '${fullMessage.message_id}'`)
+            await client.query(`UPDATE data.live_sessions_messages SET
+                    parcer_status = false,
+                    transform_status = false
+                WHERE
+                    message_id = '${fullMessage.message_id}'`)
             // console.log(fullMessage.message, fullMessage.message_id);
         } else {
             const product  = await productModel.fetchSimpleProduct(msgData[1].trim());
@@ -440,7 +440,7 @@ console.log(updNotValidMsgs);
                     if (_parsedMsg) {
                         updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
-                                from_id = '88888888',
+                                from_id = '${Math.floor(Date.now() / 1000)}',
                                 from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = true,
@@ -450,7 +450,7 @@ console.log(updNotValidMsgs);
                         updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
                                 transform_status = true,
-                                from_id = '88888888',
+                                from_id = '${Math.floor(Date.now() / 1000)}',
                                 from_name = 'NoFrom Param',
                                 parcer_status = false,  
                                 parcer_data = '${JSON.stringify(_parsedMsg.results_json)}' 
@@ -461,28 +461,26 @@ console.log(updNotValidMsgs);
                    // SIMPLE PRODUCT
                     let _qty = 1;
                     if (product.product.selectedColors.length > 0 && product.product.selectedSizes.length === 0) {
-                        if (parseInt(msgData[2])) {
-                            _qty = parseInt(msgData[2]);
+                        let _color;
+                        // sold 246 black 2
+                        // sold 246 black
+                        // sold 246
+                        if (msgData.length > 2) {
+                            _color = msgData[2];
+                            _qty = msgData[3] ? msgData[3] : 1;
+                        } else {
+                            _qty = 1;
+                            _color = product.product.selectedColors[0].name;
                         }
-                        if (parseInt(msgData[3])) {
-                            _qty = parseInt(msgData[3]);
-                        }
-                        if (performedSizes.includes(msgData[3])) {
-                            _predparsedMessage = msgData[0]+' '+msgData[1]+' s'+msgData[3]  +' '+_qty;
-                        }
-                        else {
-                            _predparsedMessage = msgData[0]+' '+msgData[1]+' '+msgData[3]  +' '+_qty;
-                        }
-// console.log(msgData);
-                        _predparsedMessage = msgData[0]+' '+msgData[1]+' '+(msgData[2] ? msgData[2] : product.product.selectedColors[0].name) + ' '+_qty;
+                        _predparsedMessage = msgData[0]+' '+msgData[1]+' '+_color  +' '+_qty;
+console.log('_predparsedMessage', _predparsedMessage);
 console.log('SIMPLE JUST COLOR', _predparsedMessage);
-// exit;
                         if (msgData[0].trim() === 'sold')
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6290]));`;
                         else
-                            _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6302]));`;
+                            _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6300]));`;
                     } else if (product.product.selectedColors.length === 0 && product.product.selectedSizes.length > 0) {
-                        let _size;let _sizeId;
+                        let _size;
                         if (msgData.length === 4) {
                             _qty = msgData[3];
                             _size = performedSizes.includes(msgData[2]) ? 's'+msgData[2] : msgData[2];
@@ -497,18 +495,12 @@ console.log('SIMPLE JUST COLOR', _predparsedMessage);
                         } else {
                             _qty = 1;
                             _size = product.product.selectedSizes[0].name;
-
                         }
                         _predparsedMessage = msgData[0]+' '+msgData[1]+' '+(_size ? _size : product.product.selectedSizes[0].name) + ' '+_qty;
-// console.log('SIZE NAME', product.product.selectedSizes[0].name);
-// console.log('SIZE LENGTH', msgData.length);
-// console.log('_predparsed', _predparsedMessage);
-// exit;
                         if (msgData[0].trim() === 'sold')
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6292]));`;
                         else
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6302]));`;
-console.log('SIMPLE JUST SIZE', _predparsedMessage);
                     } else if (product.product.selectedColors.length > 0 && product.product.selectedSizes.length > 0) {
                         let _msgSize, _msgColor;
                         const _pColor = product.product.selectedColors[0].name;
@@ -540,8 +532,6 @@ console.log('SIMPLE JUST SIZE', _predparsedMessage);
                         } else {
                             _predparsedMessage = msgData[0]+' '+msgData[1]+' '+ _pColor + ' '+_pSize +  ' '+_qty;
                         }
-console.log('SIMPLE SIZE/COLOR', _predparsedMessage);
-
                         if (msgData[0].trim() === 'sold')
                             _pQuery = `SELECT * FROM data.chatbot_parcer('${_predparsedMessage}', data.get_chatbot_scenarios_keywords_regular(ARRAY[6286,6292]));`;
                         else
@@ -560,7 +550,7 @@ console.log('SIMPLE SIZE/COLOR', _predparsedMessage);
                     if (_parsedMsg) {
                         updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
-                                from_id = '88888888',
+                                from_id = '${Math.floor(Date.now() / 1000)}',
                                 from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = true,
@@ -572,7 +562,7 @@ console.log('SIMPLE SIZE/COLOR', _predparsedMessage);
                             // {"status":true,"sold":true,"item":216,"color":"red","color_id":1,"size":"s2","size_id":101,"quantity":1}
                             updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${_predparsedMessage}',
-                                from_id = '88888888',
+                                from_id = '${Math.floor(Date.now() / 1000)}',
                                 from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = true,  
@@ -587,7 +577,7 @@ console.log('SIMPLE SIZE/COLOR', _predparsedMessage);
 
                             updMsgQuery = (`UPDATE data.live_sessions_messages SET
                                 message = '${fullMessage.message}',
-                                from_id = '88888888',
+                                from_id = '${Math.floor(Date.now() / 1000)}',
                                 from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = true,  
@@ -607,7 +597,7 @@ console.log('SIMPLE SIZE/COLOR', _predparsedMessage);
 
                 updMsgQuery = `UPDATE data.live_sessions_messages SET
                                 message = '${fullMessage.message}',
-                                from_id = '88888888',
+                                from_id = '${Math.floor(Date.now() / 1000)}',
                                 from_name = 'NoFrom Param',
                                 transform_status = true,
                                 parcer_status = true,  
