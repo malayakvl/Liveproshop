@@ -25,8 +25,7 @@ async function syncFB() {
                 return response;
             },
             {
-                // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts,business_management'
-                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts'
+                scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,pages_manage_posts,business_management'
             }
         )
     );

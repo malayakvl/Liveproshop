@@ -8,9 +8,9 @@ const testSessionData = 68;
 const tokenData = args[4].split('=');
 const videoData = args[2].split('=');
 async function startProcess() {
-console.log('Start script');
+// console.log('Start script');
     try {
-console.log('Start getting comment');
+// console.log('Start getting comment');
         const sinceParams = await axios.get(`${apiUrl}/api/get-live-messages-since?sessionId=${testSessionData}`)
             .then(async function (response) {
                 const sinceDate = response.data.unixTimestamp;

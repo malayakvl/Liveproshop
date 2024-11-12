@@ -50,8 +50,6 @@ class Store {
     async getAllSabrinas (page, perPage = 20, user, reqOffset = null) {
         const client = await pool.connect();
 
-
-
         try {
             const _total = await client.query(
                 `SELECT * FROM common__tools._select_total_from_table_by_where('data', 'user_stores', 'id', 'user_id = ''${userId}''');`

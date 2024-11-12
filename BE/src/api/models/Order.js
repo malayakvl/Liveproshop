@@ -308,6 +308,7 @@ class Order {
         const client = await pool.connect();
         try {
             const productQuery = `SELECT * FROM data.set_orders_from_live_sessions_messages(${sessionId}, 100);`;
+console.log(productQuery);
             await client.query(productQuery);
             const items = [];
             const error = null;

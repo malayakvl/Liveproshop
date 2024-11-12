@@ -67,6 +67,10 @@ async function startProcess() {
                     console.log('Exit code:', code);
                     console.log('Program output:', output);
                 });
+                shell.exec(`pm2 start jobStoreOrder.js --name "jobStoreOrder ${session.id}" -- sessionId=${session.id}`, function(code, output) {
+                    console.log('Exit code:', code);
+                    console.log('Program output:', output);
+                });
             })
         });
 }

@@ -10,7 +10,6 @@ class ChatbotMessageController {
      */
     async getSinceDate(req, res) {
         const data = await chatbotMessageModel.messagesSinceDate(req.query.sessionId);
-// console.log('SINCE DATA', data)
         if (!data.error) {
             return res.status(200).json({success: true, unixTimestamp: data.dateComment});
         } else {

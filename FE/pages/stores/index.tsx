@@ -48,7 +48,7 @@ export default function Index({ session, locale }: { session: any; locale: strin
                             <span>{t('Sync account')}</span>
                         </button>
                         <button className="btn-sync-fb" onClick={() => fbSyncTest()}>
-                            <span>{t('Get pages without fb')}</span>
+                            <span>{t('Sync account test')}</span>
                         </button>
                         <span className="inline-block ml-3 text-green-250 font-bold">
                             Expire in{' '}

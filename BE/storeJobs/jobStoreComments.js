@@ -29,17 +29,9 @@ async function startProcess() {
         await axios.get(urlComment)
             .then(async function (response) {
                 const results = response.data.data;
-                console.log('Incoming Comments', response.data.data);
-                // if (response.data.data[0].from) {
-                //     console.log('User ID', response.data.data[0].id)
-                //     await axios(`${apiUrl}/api/check-user-to-stores?messageId=${response.data.data[0].id}&fromId=${response.data.data[0].from}&storeId=70`)
-                //         .then((response) => {
-                //
-                //         })
-                // }
-                console.log()
+console.log('Incoming Comments', response.data.data);
                 await axios
-                    .post(`${apiUrl}/api/add-live-messages?sessionId=${sessionsData[1]}`, results)
+                    .post(`${apiUrl}/api/add-live-messages-new?sessionId=${sessionsData[1]}`, results)
                     .then(() => {
                     }).catch(function (_error) {
                         console.log(_error.message);

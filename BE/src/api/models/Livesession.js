@@ -675,7 +675,7 @@ console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
                     `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
                 )
                 .then(async (responseLongToken) => {
-                    console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
+// console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
                     // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
 
                     return {result: responseLongToken.data};
@@ -683,7 +683,7 @@ console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
                     console.log('ERROR', e.response.data.error.message)
                     return  {error: e.response.data.error.message}
                 })
-console.log('RESULT RESPONSE', longToken);
+// console.log('RESULT RESPONSE', longToken);
                 let longTokenExpire;
                 if (!longToken.error) {
                     // get app access token
@@ -705,7 +705,7 @@ console.log('RESULT RESPONSE', longToken);
                             `https://graph.facebook.com/debug_token?input_token=${longToken.result.access_token}&access_token=${appAccessToken.appToken}`
                         )
                         .then(async (responseLongToken) => {
-                            console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                            // console.log("LONG TOKEN DEBUG", responseLongToken.data);
                             return {result: responseLongToken.data};
                         }).catch(e => {
                             return  {error: e.response.data.error.message}
@@ -802,7 +802,6 @@ console.log('PAGES', responsePages.data);
 
 
     async getAllSabrinas (page, perPage = 20, user, reqOffset = null, queryFilter = null) {
-        console.log('USER', user);
         const userId = user.id;
         const client = await pool.connect();
         try {
@@ -834,7 +833,6 @@ console.log('PAGES', responsePages.data);
                     console.log('ERROR', e.response.data.error.message)
                     return  {error: e.response.data.error.message}
                 })
-console.log('RESULT RESPONSE', longToken);
             let longTokenExpire;
             if (!longToken.error) {
                 // get app access token
@@ -848,22 +846,19 @@ console.log('RESULT RESPONSE', longToken);
                         return {error: e.response.data.error.message};
                         // return  e.response.data.error.message
                     })
-// console.log('APP TOKEN DATA', appAccessToken);
-
 
                 longTokenExpire = await axios
                     .get(
                         `https://graph.facebook.com/debug_token?input_token=${longToken.result.access_token}&access_token=${appAccessToken.appToken}`
                     )
                     .then(async (responseLongToken) => {
-                        console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                        // console.log("LONG TOKEN DEBUG", responseLongToken.data);
                         return {result: responseLongToken.data};
                     }).catch(e => {
                         return  {error: e.response.data.error.message}
                     })
                 // console.log('LONG TOKEN EXPIRE', longTokenExpire)
                 if (!longTokenExpire.error) {
-console.log('data_access_expires_at', longTokenExpire.result.data.data_access_expires_at);
                     expiteLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
                 }
             }  else {
@@ -879,15 +874,13 @@ console.log('data_access_expires_at', longTokenExpire.result.data.data_access_ex
                         return {error: e.response.data.error.message};
                         // return  e.response.data.error.message
                     });
-// console.log('APP TOKEN DATA', appAccessToken);
-
 
                 longTokenExpire = await axios
                     .get(
                         `https://graph.facebook.com/debug_token?input_token=${user.auth_provider_access_token}&access_token=${appAccessToken.appToken}`
                     )
                     .then(async (responseLongToken) => {
-                        console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                        // console.log("LONG TOKEN DEBUG", responseLongToken.data);
                         return {result: responseLongToken.data};
                     }).catch(e => {
                         return  {error: e.response.data.error.message}
@@ -896,21 +889,60 @@ console.log('data_access_expires_at', longTokenExpire.result.data.data_access_ex
                 if (!longTokenExpire.error) {
                     expiteLongTokenAt = moment.unix(longTokenExpire.result.data.expires_at).format("DD-MM-YYYY HH:mm:ss");
                     expiteAccessLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
-                    // console.log('EXPIRED', expiteLongTokenAt);
-                    // console.log('EXPIRED', expiteAccessLongTokenAt);
                 }
             }
             // }
+            const providerData = await client.query(`SELECT auth_provider_id FROm data.users  WHERE id='${user.id}'`);
             const pagesData = await axios
                 .get(
                     `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${user.long_live_access_token}`
                 )
                 .then(async (responsePages) => {
-                    console.log('PAGES', responsePages.data);
+                    return responsePages.data;
                 });
-console.log('SABRINAS PAGES DATA', pagesData);
-            if (pagesData.data?.length) {
+            const userFbId = providerData.rows[0].auth_provider_id;
+            if (pagesData.data.length > 0) {
+                let storePicture = '';
+                pagesData.data.forEach(async (store) => {
+                    const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}' AND user_id=${user.id}`);
+                    if (queryStore.rows.length === 0) {
+                        await  client.query(`
+                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
+                                                    VALUES
+                                                    (
+                                                        '${userFbId}',
+                                                        '${store.id}',
+                                                        '${store.access_token}',
+                                                        '${store.name}',
+                                                        '${user.id}',
+                                                        '${store.fan_count}',
+                                                        true,
+                                                        '${store.picture.data.url}'
+                                                    );`
+                        );
+                    } else {
+console.log(`
+                                                    UPDATE data.user_stores SET
+                                                        access_token='${store.access_token}',
+                                                        name='${store.name}',
+                                                        picture='${store.picture.data.url}',
+                                                        fan_count='${store.fan_count}',
+                                                        synchronized=true,
+                                                        updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
+                                                    WHERE account_id='${userFbId}' AND store_id='${store.id}';`);
+                        await  client.query(`
+                                                    UPDATE data.user_stores SET
+                                                        access_token='${store.access_token}',
+                                                        name='${store.name}',
+                                                        picture='${store.picture.data.url}',
+                                                        fan_count='${store.fan_count}',
+                                                        synchronized=true,
+                                                        updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
+                                                    WHERE account_id='${userFbId}' AND store_id='${store.id}';`
+                        );
+                    }
 
+                })
             }
             // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name 
