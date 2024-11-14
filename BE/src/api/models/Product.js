@@ -731,7 +731,6 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
                             '${config.sku || '' }',
                             '${JSON.stringify({color_id: config.color_id, size_id: config.size_id})}'
                         )`;
-console.log('SQL CONFIGURATION', SQL);
         const client = await pool.connect();
         try {
             await client.query(SQL);
@@ -761,7 +760,6 @@ console.log('CONFIG', config);
                             '${configData.sku || '' }',
                             '${JSON.stringify({color_id: configData.color_id, size_id: configData.size_id})}'
                         )`;
-console.log('SQL CONFIGURATION', SQL);
         const client = await pool.connect();
         try {
             await client.query(SQL);

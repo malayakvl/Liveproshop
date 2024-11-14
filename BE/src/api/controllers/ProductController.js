@@ -73,7 +73,6 @@ class ProductController {
                 return res.status(500).json(err);
             }
             const dataProduct = req.body;
-console.log('DATA PRODUCT', dataProduct);
             const publish = req.body.isPublish
             const photos = [];
             // console.log(dataProduct);

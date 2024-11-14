@@ -174,7 +174,7 @@ function ProductForm({
     const handleChangeColor = (selectedOption: any) => {
         const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
-        if (selectedOption.length > 0) {
+        if (selectedOption?.length > 0) {
             selectedOption.forEach(function (_color: any) {
                 selectedSizes.forEach(function (_size: any) {
                     formRef.current?.setFieldValue(
@@ -403,11 +403,11 @@ function ProductForm({
                 } else {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    const tColor = selectedColors[0]?.value || selectedColors?.value || null;
+                    const tColor = selectedColors?.value || selectedColors?.value || null;
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     // const tSize = selectedSizes[0]?.value || null;
-                    const tSize = selectedSizes[0]?.value || selectedSizes?.value || null;
+                    const tSize = selectedSizes?.value || selectedSizes?.value || null;
                     dataVariants.push({
                         price: values['price'],
                         qty: values['quantity'],

@@ -37,8 +37,21 @@ class ChatbotMessageController {
         }
     }
 
+    async predparseMessage(messages) {
+        for await (const message of messages) {
+            console.log('MESSAGE', message);
+        }
+    }
+
     async addMessagesNew(req, res) {
         const data = await chatbotMessageModel.addMessagesNew(req.query.sessionId, req.body);
+        // await chatbotMessageModel.updateNoValidMessages();
+
+//         for await (const fullMessage of req.body) {
+// console.log('INCOMING MESSAGE', fullMessage);
+//             await chatbotMessageModel._transformMessage(fullMessage, req.query.sessionId);
+//         }
+
         if (!data.error) {
             const dateStr = data.dateComment;
             // Convert to Unix timestamp (in seconds)

@@ -1030,7 +1030,7 @@ console.log(`
             console.log(_res.id);
         });
 
-        console.log(scenarioIds.substring(0, scenarioIds.length - 1));
+        // console.log(scenarioIds.substring(0, scenarioIds.length - 1));
 
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
@@ -1076,9 +1076,14 @@ console.log(`
         //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
         //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
         //         );`;
+        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             '{${scenarioIds.substring(0, scenarioIds.length - 1)}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+        //         );`;
+        // const scenarioIdsNew =  {6286,6296,6288,6298,6290,6300,6292,6302,6294,6304];
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{${scenarioIds.substring(0, scenarioIds.length - 1)}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+                    '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
                 );`;
         try {
             await client.query(query);
