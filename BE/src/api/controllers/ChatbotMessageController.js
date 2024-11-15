@@ -44,8 +44,19 @@ class ChatbotMessageController {
     }
 
     async addMessagesNew(req, res) {
+        // for await (const fullMessage of req.body) {
+        //     console.log('INCOMING MESSAGE', fullMessage);
+        //     await chatbotMessageModel._transformMessage(fullMessage, req.query.sessionId);
+        // }
         const data = await chatbotMessageModel.addMessagesNew(req.query.sessionId, req.body);
+        await chatbotMessageModel.updateNoValidMessages(req.query.sessionId);
+
         // await chatbotMessageModel.updateNoValidMessages();
+//         const addedMsgs = req.body;
+//         addedMsgs.forEach(async message => {
+// console.log('MES', message);
+//             await chatbotMessageModel._transformMessageNew(message, req.query.sessionId);
+//         })
 
 //         for await (const fullMessage of req.body) {
 // console.log('INCOMING MESSAGE', fullMessage);
@@ -64,7 +75,7 @@ class ChatbotMessageController {
     }
     async addMessagesTest(req, res) {
         const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId, req.body);
-console.log('DATA', data);
+// console.log('DATA', data);
         if (!data.error) {
             const dateStr = data.dateComment;
             // Convert to Unix timestamp (in seconds)
@@ -72,7 +83,7 @@ console.log('DATA', data);
 
             return res.status(200).json({unixTimestamp: unixTimestamp});
         } else {
-console.log('TUT')
+// console.log('TUT')
             return res.status(401).json({success: false, error: data.error});
         }
     }

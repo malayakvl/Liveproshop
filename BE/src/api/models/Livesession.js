@@ -750,14 +750,14 @@ console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
                     }
                 }
             // }
-console.log('LONG LIVE TOKEN SABRINA', user.long_live_access_token);
-console.log('TRY TO GET USER ACCOUNTS FOR SABRINA');
+// console.log('LONG LIVE TOKEN SABRINA', user.long_live_access_token);
+// console.log('TRY TO GET USER ACCOUNTS FOR SABRINA');
             await axios
                 .get(
                     `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${user.long_live_access_token}`
                 )
                 .then(async (responsePages) => {
-console.log('PAGES', responsePages.data);
+// console.log('PAGES', responsePages.data);
                 });
 
                     // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;

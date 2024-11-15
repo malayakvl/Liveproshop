@@ -14,16 +14,16 @@ async function startProcess() {
     const storeTestId = '134773596380836';
     const sessionTestId = 68;
     const sessionLocalTestId = 68;
-    const videoTestId = '122184054758041438';
+    const videoTestId = '122184380186041438';
 
     shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionTestId}" -- videoId=${videoTestId} sessionId=${sessionTestId} accessToken=${tokenTest} `, function(code, output) {
     });
     shell.exec(`pm2 start jobStorePreParser.js --name "jobStorePreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
     });
-    shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
-    });
-    shell.exec(`pm2 start jobStoreOrder.js --name "jobStoreOrder ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
-    });
+    // shell.exec(`pm2 start jobStorePostParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
+    // });
+    // shell.exec(`pm2 start jobStoreOrder.js --name "jobStoreOrder ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
+    // });
 
     // shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
     // });

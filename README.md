@@ -74,7 +74,7 @@ Desition - add .babelrc
 ### Starting major fb task from storeJobs folder
 
 ```bash
-pm2 start jobStart.js
+pm2 start jobParcerStart.js
 pm2 start jobEnd.js
 ```
 
