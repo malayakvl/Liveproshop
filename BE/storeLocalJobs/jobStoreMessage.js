@@ -7,27 +7,26 @@ const apiUrl = process.env.API_URL;
 const sessionsData = args[2].split('=');
 const storeData = args[3].split('=');
 const tokenData = args[4].split('=');
-const testTokenData = 'EAArS9KI0vagBO6skB2xYWPj9QvkEUHlNIJ2dOqlbGSIMAlpYndHrP4DmuZCxSkLISbU7pHYRSZBIIANiYZATUtKh99fH84VkZAvhv1snJZB8ggMrwTckJEeHUzeAZCc4riV1dtuf3aQEdH0OmDOKNDHgQk3XtWwy3j9DyFTNAeq66LLFlx60odu0g2bQ0xTZAcZD';
+const testTokenData = 'EAArS9KI0vagBO8AzX0MjQrsA0VQKEElvP1wrIPfFIiFKz74NBEZBxKAwR1MrWZBs3ebggZBkNaXVjZBZCPkxvhJE5jZBBwPs5zq4gGHSJqEP6uW540hpMd4UC6V6XWisZC8E0OEHl9oaUE0dJw1wGOr87th0wiXBtqeE8DZCeboZBzlDZCtjPSsy9K1gWH5mJRwV4ZD';
+// const testTokenData = 'EAArS9KI0vagBO3P4e9VXZC2sAEJAQTowOw3bJmZAg6JalyiQiNoG2nx9z08bDohLdFzCq3PwX2ZAXQiuqyddBRV9wKuAUpAZB25nXZBzKLwNgCYxdtpmFaaax7Qs0ZA0JD0ilZAQ5fNwOHGZAIPVU1WyZBt3jLsaNJdzFZB5bjo9da8HhZAOZAzlTHzmZBr18JJZBbgeSYZBw6Fb26WITyC6rcc8DsYUAh2DIBOdbT8ZAeqZA5F4ZD';
 
 async function sessionLaunche() {
     // start parsing messages
-    console.log(sessionsData[1]);
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
-            console.log(response.data.data)
             response.data.data.forEach(async message => {
                 if (message.message_id) {
                     const orderMessageId = message.message_id;
                     const orderFrom = message.message_id;
                     const x = message.parcer_data;
-                    let lng = 'fr';
+                    let lng = message.lng;
                     // console.log(`Reply/Message comment ${message.message_id}: ${message.from_id}`);
                     // console.log(`In period: ${message.in_period === null ? 'no free period': 'free period'}`);
                     // if (message.from_id && orderFrom && message.parcer_status === true) {
                     if (orderFrom && message.parcer_status === true) {
-                        if (message.parcer_data.hasOwnProperty("sold")) {
-                            lng = 'en';
-                        }
+                        // if (message.parcer_data.hasOwnProperty("sold")) {
+                        //     lng = 'en';
+                        // }
                         let typeTimer = message.order_timer.days ? 'd' : message.order_timer.hours ? 'h' : 'm';
                         let orderTimer = message.order_timer.hours ?? message.order_timer.days ?? message.order_timer.minutes;
                         let freeShippingTimer = '';
@@ -128,10 +127,6 @@ async function sessionLaunche() {
                                         console.log(e);
                                     });
                             }
-                            // console.log("comment_id", orderFrom);
-                            // console.log("msgText", msgText);
-                            // console.log("token", tokenData[1]);
-                            // exit;
                             responceResultMessage =  await axios.post(
                                 `https://graph.facebook.com/v21.0/me/messages`,
                                 '',

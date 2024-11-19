@@ -7,7 +7,7 @@ const sessionsData = args[2].split('=');
 const testSessionData = 68;
 
 async function sessionLaunche() {
-    console.log('RUN PARCER SCRIPT');
+console.log('RUN PARCER SCRIPT');
 
     axios(`${apiUrl}/api/parse-live-messages?sessionId=${testSessionData}`)
         .then((response) => {

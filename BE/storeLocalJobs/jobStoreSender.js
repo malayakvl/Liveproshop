@@ -11,7 +11,7 @@ const apiUrl = process.env.API_URL;
 // ***************************************************************************
 async function startProcess() {
     console.log('Getting list of active live comments under sessions for launche process');
-    await axios(`${apiUrl}/api/fetch-active-sessions-sender`)
+    await axios(`${apiUrl}/api/fetch-active-sessions`)
         .then( (response) => {
             console.log(response.data.result);
 

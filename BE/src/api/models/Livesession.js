@@ -475,8 +475,13 @@ class Livesession {
                 FROM data.live_sessions
                 LEFT JOIN data.users u ON u.id = user_id
                 LEFT JOIN data.user_stores us ON us.id = data.live_sessions.store_id
-                WHERE video_id IS NULL AND launched IS NOT NULL`
+                WHERE video_id IS NOT NULL AND launched IS NOT NULL`
         );
+console.log(`SELECT data.live_sessions.*, us.access_token, us.store_id, us.account_id
+                FROM data.live_sessions
+                LEFT JOIN data.users u ON u.id = user_id
+                LEFT JOIN data.user_stores us ON us.id = data.live_sessions.store_id
+                WHERE video_id IS NOT NULL AND launched IS NOT NULL`);
         try {
             const error = null;
             const result = query.rows.length > 0 ? query.rows : [];
@@ -1083,7 +1088,7 @@ console.log(`
         // const scenarioIdsNew =  {6286,6296,6288,6298,6290,6300,6292,6302,6294,6304];
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+                    '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6305}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
                 );`;
         try {
             await client.query(query);

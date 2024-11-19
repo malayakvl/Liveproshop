@@ -24,12 +24,15 @@ async function startProcess() {
             // Convert to Unix timestamp (in seconds)
             const unixTimestamp = Math.floor(new Date(dateStr).getTime() / 1000);
 
-            urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&since=${unixTimestamp}&access_token=${tokenData[1]}`;
+            urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&access_token=${tokenData[1]}`;
         }
+// console.log(`https://graph.facebook.com/v21.0/122184562124041438/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&access_token=EAArS9KI0vagBO2n48wfmwMMiV2aA5xKZCRZC5yYPKo4GXJh2KYpsR2OV2QXFsm0sJAUC0Hp3vw2vDOUByjSbHKUZBOOnZBsoxTTaaFaqL7y5DbSmLu0dL28WXSkR8XenQDWGvbZAFUQPKmjZC2YqnaMViAhZCRBhAZAujizY9rlIWpSyWbjNZAo9gK8MZAJIwS5ycZD`)
+// console.log(urlComment);
+// exit;
         await axios.get(urlComment)
             .then(async function (response) {
                 const results = response.data.data;
-console.log('Incoming Comments', response.data.data);
+console.log('Incoming Comments', response.data?.data);
                 await axios
                     .post(`${apiUrl}/api/add-live-messages-new?sessionId=${sessionsData[1]}`, results)
                     .then(() => {

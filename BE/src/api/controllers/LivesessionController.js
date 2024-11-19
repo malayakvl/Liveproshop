@@ -174,6 +174,16 @@ class LivesessionController {
         }
     }
 
+    async getActiveSessionsSenderLocal (req, res) {
+        // const data = await livesessionModel.getAllActive();
+        const data = await livesessionModel.getAllStoreActiveSender();
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ result: [], error: data.error });
+        }
+    }
+
     async getActiveSessionsSender (req, res) {
         // const data = await livesessionModel.getAllActive();
         const data = await livesessionModel.getAllStoreActiveSender();

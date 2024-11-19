@@ -47,10 +47,7 @@ apiRoutes.route('/fetch-store-session-for-end').get(LivesessionController.getSto
 apiRoutes.route('/update-closed-session').get(LivesessionController.updateClosedSession);
 apiRoutes.route('/fetch-store-active-sessions').get(LivesessionController.getActiveSessions);
 apiRoutes.route('/update-parsed-message').get(LivesessionController.updateReplyedMessage);
-apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
-apiRoutes.route('/fetch-active-sessions-sender').get(LivesessionController.getActiveSessionsSender);
 apiRoutes.route('/launched-session/:id').get(LivesessionController.launchedSession);
-apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
 apiRoutes.route('/update-live-messages').get(LivesessionController.updateLiveMessage);
 apiRoutes.route('/check-wait-status').get(LivesessionController.checkOrderWaitStatus);
 apiRoutes.route('/run-waiting-job').get(OrderController.waitingJobOrders);
@@ -83,15 +80,26 @@ apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSes
 apiRoutes.route('/update-store_session-status').get(LivesessionController.updateStoreSessionStatusFB);
 apiRoutes.route('/update-session-status').get(LivesessionController.updateSessionStatusFB);
 apiRoutes.route('/fetch-launch-stop-sessions').get(LivesessionController.getLaunchForStop);
-apiRoutes.route('/get-live-messages-since').get(ChatbotMessageController.getSinceDate);
 apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessages);
 // apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessagesTest);
 apiRoutes.route('/add-live-messages-test').post(ChatbotMessageController.addMessagesTest);
-apiRoutes.route('/add-live-messages-new').post(ChatbotMessageController.addMessagesNew);
 
-apiRoutes.route('/transform-live-messages').get(ChatbotMessageController.transformMessages);
-apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
+apiRoutes.route('/get-live-messages-comments-param').get(ChatbotMessageController.getLiveCommentsParamsUrl);
+apiRoutes.route('/add-live-messages-new').post(ChatbotMessageController.addMessagesNew);
+apiRoutes.route('/transform-live-messages-cnt').get(ChatbotMessageController.transformLiveCommentsCnt);
+apiRoutes.route('/transform-live-messages').get(ChatbotMessageController.transformLiveComments);
+apiRoutes.route('/transform-live-messages-id').get(ChatbotMessageController.transformLiveCommentsById);
+apiRoutes.route('/transform-notparsed-messages').get(ChatbotMessageController.notParsedMessage);
+apiRoutes.route('/fetch-active-sessions-sender-local').get(LivesessionController.getActiveSessionsSenderLocal);
+apiRoutes.route('/fetch-active-sessions').get(LivesessionController.getActiveSessions);
+apiRoutes.route('/fetch-active-sessions-sender').get(LivesessionController.getActiveSessionsSender);
+apiRoutes.route('/reply-live-messages').get(LivesessionController.sendReplyToParsedMessage);
 apiRoutes.route('/create-orders').get(OrderController.createOrders);
+apiRoutes.route('/get-messages-for-transform').get(OrderController.createOrders);
+apiRoutes.route('/parse-live-messages').get(ChatbotMessageController.parseMessages);
+apiRoutes.route('/fetch-product/:id').get(ProductController.fetchProduct);
+
+
 apiRoutes.route('/orders/remove-item-order').get(OrderController.removeOrderItem);
 apiRoutes.route('/orders/minus-item-order').get(OrderController.minusOrderItem);
 apiRoutes.route('/order/get-config-qty').get(OrderController.getProductConfigQty);

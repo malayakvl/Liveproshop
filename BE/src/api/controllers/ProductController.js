@@ -115,6 +115,15 @@ class ProductController {
         }
     }
 
+    // async fetchProductParser (req, res) {
+    //     const data = await productModel.fetchProduct(req.params.id, req.user.id);
+    //     if (!data.error) {
+    //         return res.status(200).json({ product: data });
+    //     } else {
+    //         return res.status(401).json({ error: 'Access deny' });
+    //     }
+    // }
+
     async fetchProduct (req, res) {
         if (!req.user) {
             return res.status(401).json('Access deny');

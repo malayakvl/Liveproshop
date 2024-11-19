@@ -28,7 +28,7 @@ async function startProcess() {
     //                     shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
     //                     });
     //
-    //                     shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
+    //                     shell.exec(`pm2 start _jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
     //                         console.log('Exit code:', code);
     //                         console.log('Program output:', output);
     //                     });
