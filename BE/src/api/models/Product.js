@@ -677,6 +677,8 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
     async fetchProduct (id, userId) {
         const client = await pool.connect();
         try {
+// console.log('Prod ID:', id);
+// exit;
             const res = await client.query(`SELECT * FROM data.products WHERE user_id=${userId} AND id=${id}`);
             if (res.rows.length) {
                 res.rows[0].selectedColors = [];

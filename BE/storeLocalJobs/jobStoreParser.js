@@ -9,7 +9,7 @@ const sessionsData = args[2].split('=');
 async function sessionLaunche() {
     console.log(`Parse messages for session ${sessionsData[1]}`);
     // start parsing messages
-    axios(`${apiUrl}/api/parse-live-messages?sessionId=70`)
+    axios(`${apiUrl}/api/parse-live-messages?sessionId=72`)
         .then((response) => {
             console.log('Response Data:', response.data.message);
         });

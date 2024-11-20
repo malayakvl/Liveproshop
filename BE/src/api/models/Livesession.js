@@ -467,7 +467,7 @@ class Livesession {
             client.release();
         }
     }
-
+    // https://graph.facebook.com/v21.0/134773596380836/live_videos?broadcast_status=["LIVE"]&fields=broadcast_start_time,id,title&access_token=EAArS9KI0vagBO5GDNQqlislTFs1Wv2nbSPLtLQZBMZAoLMpdayCZClAZBWqROW0nl4VDCluCz9YZAPG4mBOO3fqliCvbiZAh7f4BWWIZAYIoc1jkgUF2fQEqm8xE9B2Y1ooBsuv4qZCRyM5WBSUydZBB2jU4eKFXVoufwqPBxvPYWsB4xqzhj6TThyursMZCsA4LUZD
     async getAllStoreActive () {
         const client = await pool.connect();
         const query = await client.query(
@@ -475,13 +475,13 @@ class Livesession {
                 FROM data.live_sessions
                 LEFT JOIN data.users u ON u.id = user_id
                 LEFT JOIN data.user_stores us ON us.id = data.live_sessions.store_id
-                WHERE video_id IS NOT NULL AND launched IS NOT NULL`
+                WHERE video_id IS NULL AND launched IS NOT NULL`
         );
-console.log(`SELECT data.live_sessions.*, us.access_token, us.store_id, us.account_id
-                FROM data.live_sessions
-                LEFT JOIN data.users u ON u.id = user_id
-                LEFT JOIN data.user_stores us ON us.id = data.live_sessions.store_id
-                WHERE video_id IS NOT NULL AND launched IS NOT NULL`);
+// console.log(`SELECT data.live_sessions.*, us.access_token, us.store_id, us.account_id
+//                 FROM data.live_sessions
+//                 LEFT JOIN data.users u ON u.id = user_id
+//                 LEFT JOIN data.user_stores us ON us.id = data.live_sessions.store_id
+//                 WHERE video_id IS NOT NULL AND launched IS NOT NULL`);
         try {
             const error = null;
             const result = query.rows.length > 0 ? query.rows : [];
@@ -646,6 +646,7 @@ console.log(`SELECT data.live_sessions.*, us.access_token, us.store_id, us.accou
             const _total = await client.query(
                 `SELECT * FROM common__tools._select_total_from_table_by_where('data', 'live_sessions', 'id', 'user_id = ''${userId}''');`
             );
+
             const size = _total.rows[0].total;
             let offset;
             if (reqOffset) {
@@ -658,23 +659,6 @@ console.log(`SELECT data.live_sessions.*, us.access_token, us.store_id, us.accou
             let longToken;
             let expiteLongTokenAt;
             let expiteAccessLongTokenAt;
-            // if (resStores.rows.length > 0) {
-// console.log('STORES LENGTH', resStores.rows.length)
-console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
-// console.log(`https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.auth_provider_access_token}`);
-//                 longToken = await axios
-//                     .get(
-//                         `https://graph.facebook.com/v20.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
-//                     )
-//                     .then(async (responseLongToken) => {
-//                         console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
-//                         // await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
-//
-//                         return {result: responseLongToken.data};
-//                     }).catch(e => {
-//                         console.log('ERROR', e.response.data.error.message)
-//                         return  {error: e.response.data.error.message}
-//                     })
             longToken = await axios
                 .get(
                     `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${user.long_live_access_token}`
@@ -741,7 +725,7 @@ console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
                             `https://graph.facebook.com/debug_token?input_token=${user.auth_provider_access_token}&access_token=${appAccessToken.appToken}`
                         )
                         .then(async (responseLongToken) => {
-                            console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                            // console.log("LONG TOKEN DEBUG", responseLongToken.data);
                             return {result: responseLongToken.data};
                         }).catch(e => {
                             return  {error: e.response.data.error.message}
@@ -755,8 +739,6 @@ console.log('USER LONG LIVE TOKEN', user.long_live_access_token);
                     }
                 }
             // }
-// console.log('LONG LIVE TOKEN SABRINA', user.long_live_access_token);
-// console.log('TRY TO GET USER ACCOUNTS FOR SABRINA');
             await axios
                 .get(
                     `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${user.long_live_access_token}`
@@ -1085,10 +1067,10 @@ console.log(`
         //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
         //             '{${scenarioIds.substring(0, scenarioIds.length - 1)}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
         //         );`;
-        // const scenarioIdsNew =  {6286,6296,6288,6298,6290,6300,6292,6302,6294,6304];
+        // const scenarioIdsNew =  {6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6295,6305};
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6305}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+                    '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6291,6301,6305}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
                 );`;
         try {
             await client.query(query);

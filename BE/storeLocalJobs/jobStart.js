@@ -12,18 +12,18 @@ async function startProcess() {
     // const tokenTest = 'EAArS9KI0vagBO6skB2xYWPj9QvkEUHlNIJ2dOqlbGSIMAlpYndHrP4DmuZCxSkLISbU7pHYRSZBIIANiYZATUtKh99fH84VkZAvhv1snJZB8ggMrwTckJEeHUzeAZCc4riV1dtuf3aQEdH0OmDOKNDHgQk3XtWwy3j9DyFTNAeq66LLFlx60odu0g2bQ0xTZAcZD';
     const tokenTest = 'EAArS9KI0vagBO2n48wfmwMMiV2aA5xKZCRZC5yYPKo4GXJh2KYpsR2OV2QXFsm0sJAUC0Hp3vw2vDOUByjSbHKUZBOOnZBsoxTTaaFaqL7y5DbSmLu0dL28WXSkR8XenQDWGvbZAFUQPKmjZC2YqnaMViAhZCRBhAZAujizY9rlIWpSyWbjNZAo9gK8MZAJIwS5ycZD';
     const storeTestId = '134773596380836';
-    const sessionTestId = 70;
-    const sessionLocalTestId = 70;
-    const videoTestId = '122184562124041438';
+    const sessionTestId = 71;
+    const sessionLocalTestId = 71;
+    const videoTestId = '122184895934041438';
 
     // shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
     // });
 
-    // shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionTestId}" -- videoId=${videoTestId} sessionId=${sessionTestId} accessToken=${tokenTest} `, function(code, output) {
-    // });
+    shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionTestId}" -- videoId=${videoTestId} sessionId=${sessionTestId} accessToken=${tokenTest} `, function(code, output) {
+    });
 
-    // shell.exec(`pm2 start jobStoreOrder.js --name "jobStoreOrder ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
-    // });
+    shell.exec(`pm2 start jobStoreOrder.js --name "jobStoreOrder ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
+    });
 
     // shell.exec(`pm2 start jobStorePreParser.js --name "jobStorePreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
     // });

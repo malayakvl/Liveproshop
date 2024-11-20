@@ -4,7 +4,7 @@ const args = process.argv;
 const apiUrl = process.env.API_URL;
 
 const sessionsData = args[2].split('=');
-const testSessionData = 70;
+const testSessionData = 72;
 
 async function sessionLaunche() {
     console.log('RUN ORDER SCRIPT');

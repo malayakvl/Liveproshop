@@ -1306,13 +1306,28 @@ console.log('updMessage', updMessage);
         if (data?.paging?.next) {
             await client.query(`UPDATE data.live_sessions SET url_api_next='${data.paging.next}' WHERE id='${sessionId}'`);
         }
-        const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(data.data).replaceAll("'", '')}');`;
+console.log('COMENTS DATA', data)
+const withFromComments = []
+        if (data?.length > 0) {
+            data.forEach(async _comment => {
+                if (!_comment.from) {
+                    const commId = _comment.id.split('_')
+                    _comment.from = {
+                        name: "NO FROM PARAM",
+                        id: commId[1]
+                    }
+                    withFromComments.push(_comment)
+                }
+            })
+        }
+console.log('COMENTS DATA', withFromComments)
+        const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(withFromComments).replaceAll("'", '')}');`;
 
         const msgIds = [];
         try {
 
             await client.query(commentQuery);
-            await chatbotMessageModel.updateNoValidMessages(sessionId);
+            // await chatbotMessageModel.updateNoValidMessages(sessionId);
             // shell.exec(`pm2 start ../BE/storeLocalJobs/jobStorePreParserModel.js --name "jobStorePreParser ${sessionId}" -- sessionId=${sessionId} ids=${JSON.stringify([])}`, function(code, output) {
             // });
             const items = [];
@@ -1527,8 +1542,7 @@ console.log('MESSAGES', messagesData);
         const client = await pool.connect();
         try {
             const parcerQuery = `SELECT * FROM data.set_live_sessions_messages_parcer_data(${sessionId}, 100);`;
-console.log('PARCER QUERY', parcerQuery);
-// exit;
+// console.log('PARCER QUERY', parcerQuery);
             await client.query(parcerQuery);
             const items = [];
             const error = null;
