@@ -84,7 +84,7 @@ apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessagesN
 // apiRoutes.route('/add-live-messages').post(ChatbotMessageController.addMessagesTest);
 apiRoutes.route('/add-live-messages-test').post(ChatbotMessageController.addMessagesTest);
 
-// apiRoutes.route('/get-live-messages-comments-param').get(ChatbotMessageController.getLiveCommentsParamsUrl);
+apiRoutes.route('/get-live-messages-comments-param').get(ChatbotMessageController.getLiveCommentsParamsUrl);
 apiRoutes.route('/add-live-messages-new').post(ChatbotMessageController.addMessagesNew);
 apiRoutes.route('/transform-live-messages-cnt').get(ChatbotMessageController.transformLiveCommentsCnt);
 // apiRoutes.route('/transform-live-messages').get(ChatbotMessageController.transformLiveComments);

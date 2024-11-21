@@ -12,7 +12,7 @@ class ChatbotMessageController {
     async getLiveCommentsParamsUrl(req, res) {
         const data = await chatbotMessageModel.getLiveCommentsParams(req.query.sessionId);
         if (!data.error) {
-            return res.status(200).json({success: true, data: data});
+            return res.status(200).json({success: true, nextUrl: data.dateComment});
         } else {
             return res.status(401).json({success: false, error: data.error});
         }

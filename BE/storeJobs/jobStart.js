@@ -10,13 +10,13 @@ const apiUrl = process.env.API_URL;
 // ***************************************************************************
 async function startProcess() {
     // console.log(`Get list started events: ${apiUrl}/api/fetch-store-session-for-start`);
-    const queryStr = `SELECT
-                    id,
-                    store_id,
-                    access_token,
-                    auth_provider_expiration_time,
-                    auth_provider_expires_in
-                FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(2, 'hours').format('HH:mm:ss')}');`;
+    // const queryStr = `SELECT
+    //                 id,
+    //                 store_id,
+    //                 access_token,
+    //                 auth_provider_expiration_time,
+    //                 auth_provider_expires_in
+    //             FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(2, 'hours').format('HH:mm:ss')}');`;
     // console.log(queryStr);
     await axios(`${apiUrl}/api/fetch-store-session-for-start`)
         .then( (response) => {

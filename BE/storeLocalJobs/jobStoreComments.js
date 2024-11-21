@@ -30,6 +30,7 @@ async function startProcess() {
                 console.log("error on get comment under video", error.message);
             });
         let urlComment;
+console.log()
         if (commentParams.data.dateComment) {
             urlComment = commentParams.data.dateComment;
         } else {

@@ -200,7 +200,7 @@ class User {
                     if(err) console.log('error', err);
                 });
             });
-console.log('PROVIDER USER DATA', userData);
+// console.log('PROVIDER USER DATA', userData);
             const firstName = fullFbName[0];
             let lastName = '';
             if (fullFbName.length > 1) {
@@ -209,7 +209,7 @@ console.log('PROVIDER USER DATA', userData);
             if (!user) {
             let query;
             if (parseInt(userData.roleId) === 1) {
-                console.log('Role 1')
+// console.log('Role 1')
                 query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, first_name, last_name, role_id)
                     VALUES
@@ -225,7 +225,7 @@ console.log('PROVIDER USER DATA', userData);
                     ;
                 `;
             } else {
-                console.log('Role 2')
+// console.log('Role 2')
                 query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, last_name, role_id, auth_provider_accounts)
                     VALUES
@@ -308,7 +308,7 @@ console.log('PROVIDER USER DATA', userData);
 // console.log(`https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`);
                             await axios
                                 .get(
-                                    `https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
+                                    `https://graph.facebook.com/v21.0/me?fields=email,accounts{id,name,access_token,picture{url},is_published},businesses&access_token=${longToken}`
                                 )
                                 .then(async (responsePages) => {
                                     // console.log("RESPONCE", responsePages.data.accounts.data);
@@ -322,12 +322,13 @@ console.log('PROVIDER USER DATA', userData);
 
 // console.log('RESPONSE DATA', JSON.stringify(responsePages.data));
 // console.log('STORE LIST', JSON.stringify(storesList));
-console.log('BUSINESS LIST', JSON.stringify(businessesList));
+// console.log('BUSINESS LIST', JSON.stringify(businessesList));
 
                                         storesList.forEach(async (store) => {
                                             const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
-                                            if (queryStore.rows.length === 0) {
-                                                await  client.query(`
+                                            if (store.is_published) {
+                                                if (queryStore.rows.length === 0) {
+                                                    await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, picture, synchronized)
                                                     VALUES
                                                     (
@@ -339,15 +340,17 @@ console.log('BUSINESS LIST', JSON.stringify(businessesList));
                                                         '${store.picture.data.url}',
                                                         true
                                                     );`
-                                                );
-                                            } else {
-                                                await  client.query(`
+                                                    );
+                                                } else {
+                                                    await  client.query(`
                                                     UPDATE data.user_stores SET 
                                                      access_token='${store.access_token}', 
                                                      name='${store.name}'
                                                     WHERE user_id = '${user.id}';`
-                                                );
+                                                    );
+                                                }
                                             }
+
                                         });
 
                                         businessesList.map(async (business) => {
@@ -368,11 +371,11 @@ console.log('BUSINESS LIST', JSON.stringify(businessesList));
                                             }
                                             // get pages
                                             // userData.accessToken
-console.log('GETTING BUSINESS OWNED PAGES');
-console.log(`https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`);
+// console.log('GETTING BUSINESS OWNED PAGES');
+// console.log(`https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`);
                                             await axios
                                                 .get(
-                                                    `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`
+                                                    `https://graph.facebook.com/v21.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`
                                                 )
                                                 .then(async (responseBusinessesPages) => {
                                                     if (responseBusinessesPages.data.error) {
@@ -382,7 +385,7 @@ console.log(`https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=
                                                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                                                         } else {
                                                             const storesList = responseBusinessesPages.data;
-console.log('GET PAGES AND ACCESS TOKEN FOR LIVE VIDEO API');
+// console.log('GET PAGES AND ACCESS TOKEN FOR LIVE VIDEO API');
                                                             // getting picture for store
                                                             let storePicture = '';
                                                             storesList.data.forEach(async (store) => {
@@ -499,7 +502,7 @@ console.log('GET PAGES AND ACCESS TOKEN FOR LIVE VIDEO API');
             user = await this.findUserByProviderId(userData.userID);
             // const providerQuery = await client.query(`SELECT `)
             const accountId = userData.userID;
-console.log('PROVIDER LOGIN HERE', accountId);
+// console.log('PROVIDER LOGIN HERE', accountId);
 
             if (parseInt(user.role_id) === 2) {
                 // get user stores
@@ -882,6 +885,16 @@ console.log('PAGES', pagesData);
                     // we don't have any subscription in stripe
                     let customerId;
                     // create stripe customer
+//                     var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+//                     const isValid = emailRegex.test(userData.user.email);
+//                     let stripeEmail = userData.user.email;
+//                     if (!isValid) {
+//                         stripeEmail = userData.user.email;
+//                     } else {
+//                         stripeEmail = userData.user.email+'@stripefake.com';
+//                     }
+// console.log('Stripe EMAIL', stripeEmail);
+// exit;
                     const customer = await stripe.customers.create({
                         email: userData.user.email,
                         name: `${userData.user.first_name} ${userData.user.last_name}`
@@ -982,10 +995,17 @@ console.log('PAGES', pagesData);
                             userData.user.customer_id = null;
                         }
                     }
+                    const emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+                    const isValid = emailRegex.test(userData.user.email);
+                    let stripeEmail = userData.user.email;
+                    if (!isValid) {
+                        stripeEmail = userData.user.email+'@fbemail.com';
+                    }
+console.log('STRIPE EMAIL', stripeEmail);
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
                         const customer = await stripe.customers.create({
-                            email: userData.user.email,
+                            email: stripeEmail,
                             name: `${userData.user.first_name} ${userData.user.last_name}`
                         });
                         customerId = customer.id;
@@ -1047,7 +1067,7 @@ console.log('PAGES', pagesData);
     async createExistUserSubscription(userData) {
         const client = await pool.connect();
         try {
-// console.log('createExistUserSubscription');
+console.log('createExistUserSubscription');
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
             if (resPlan.rows.length) {
@@ -1062,10 +1082,18 @@ console.log('PAGES', pagesData);
                     if (uncompleteSubscr.rows.length > 0) {
                         userData.user.customer_id = uncompleteSubscr.rows[0].customer_id;
                     }
+                    var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+                    const isValid = emailRegex.test(userData.user.email);
+                    let stripeEmail = userData.user.email;
+                    if (!isValid) {
+                        stripeEmail = userData.user.email;
+                    }
+                    if (userData.user.email)
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
                         const customer = await stripe.customers.create({
-                            email: userData.user.email,
+                            // email: userData.user.email,
+                            email: stripeEmail,
                             name: `${userData.user.first_name} ${userData.user.last_name}`
                         });
                         customerId = customer.id;
@@ -2352,6 +2380,7 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
     }
 
     async addPaymentMethodBySubscription(data) {
+console.log('addPaymentMethodBySubscription');
         const client = await pool.connect();
         try {
             const expPeriod = data.card_expire_date.split('/');

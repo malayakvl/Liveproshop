@@ -75,10 +75,18 @@ class PaymentPlanController {
         const { items } = req.body;
         // console.log('ITEMS', items);
         // console.log('AMOUNT', calculateOrderAmount(items));
+        // const paymentIntent = await stripe.paymentIntents.create({
+        //     amount: calculateOrderAmount(items),
+        //     currency: "eur",
+        //     automatic_payment_methods: {
+        //         enabled: true,
+        //     }
+        // });
     
         const paymentIntent = await stripe.paymentIntents.create({
             amount: calculateOrderAmount(items),
             currency: "eur",
+            statement_descriptor_suffix: process.env.STRIPE_API_DESCRIPTOR,
             automatic_payment_methods: {
                 enabled: true,
             }

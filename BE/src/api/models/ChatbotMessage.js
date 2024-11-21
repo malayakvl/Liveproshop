@@ -10,11 +10,11 @@ import {setTimeout} from "timers/promises";
 class ChatbotMessage {
     async getLiveCommentsParams(sessionId) {
         const client = await pool.connect();
-        const commentQuery = `SELECT lates_comment_time, url_api_next AS created_time 
+        const commentQuery = `SELECT lates_comment_time, url_api_next
             FROM data.live_sessions WHERE id = '${sessionId}';`;
         try {
             const resQuery = await client.query(commentQuery);
-            const dateComment = resQuery.rows.length > 0 ? resQuery.rows[0].created_time : null;
+            const dateComment = resQuery.rows.length > 0 ? resQuery.rows[0].url_api_next : null;
             const urlNext = resQuery.rows.length > 0 ? resQuery.rows[0].url_api_next : null;
             const error = null;
 
@@ -1306,21 +1306,20 @@ console.log('updMessage', updMessage);
         if (data?.paging?.next) {
             await client.query(`UPDATE data.live_sessions SET url_api_next='${data.paging.next}' WHERE id='${sessionId}'`);
         }
-console.log('COMENTS DATA', data)
-const withFromComments = []
-        if (data?.length > 0) {
-            data.forEach(async _comment => {
+        const withFromComments = []
+        if (data?.data?.length > 0) {
+            data.data.forEach(async _comment => {
                 if (!_comment.from) {
                     const commId = _comment.id.split('_')
                     _comment.from = {
                         name: "NO FROM PARAM",
                         id: commId[1]
                     }
-                    withFromComments.push(_comment)
                 }
+                withFromComments.push(_comment);
             })
         }
-console.log('COMENTS DATA', withFromComments)
+// console.log('COMENTS DATA', withFromComments)
         const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(withFromComments).replaceAll("'", '')}');`;
 
         const msgIds = [];
@@ -1725,7 +1724,7 @@ console.log('MESSAGES', messagesData);
                     (lsm.parcer_status = FALSE AND lsm.reply_sended IS NULL AND (lsm.message LIKE '%vendu%' OR lsm.message LIKE '%sold%'))) 
                     AND ls.id='${sessionId}'
                     ORDER BY lsm.created_at DESC LIMIT 50`;
-console.log(productQueryNew);
+// console.log(productQueryNew);
             const res = await client.query(productQueryNew);
 
 
