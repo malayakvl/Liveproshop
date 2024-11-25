@@ -1026,17 +1026,6 @@ class Livesession {
 
     async create (userId, data) {
         const client = await pool.connect();
-        const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
-        // console.log(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
-        //                     FROM data.seller_settings WHERE user_id=${userId};`);
-        // const scenariosResNew = await client.query(`SELECT id FROM data.chatbot_scenarios WHERE user_id = ${userId} ORDER BY id`);
-        // let scenarioIds = '';
-        // scenariosResNew.rows.forEach(_res => {
-        //     scenarioIds += _res.id+',';
-        // });
-
-        // console.log(scenarioIds.substring(0, scenarioIds.length - 1));
-
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
         let intervalDuration;
