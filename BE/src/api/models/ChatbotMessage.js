@@ -1301,6 +1301,113 @@ console.log('updMessage', updMessage);
 
     }
 
+    async addMessagesNewParser(sessionId, data) {
+        const client = await pool.connect();
+        if (data?.paging?.next) {
+            await client.query(`UPDATE data.live_sessions SET url_api_next='${data.paging.next}' WHERE id='${sessionId}'`);
+        }
+        const withFromComments = [];
+        const arrIds = [];
+        let confProductIds = [];
+        let confProductFullConfIds = [];
+        if (data?.data?.length > 0) {
+// console.log(data.data)
+            data.data.forEach(async _comment => {
+                let commentData = _comment.message.split(' ');
+                // console.log(_comment.message)
+                if (parseInt(commentData[1]) > 0) {
+                    arrIds.push(commentData[1]);
+                }
+            });
+console.log(confProductIds);
+            if (arrIds.length > 0) {
+                const pQuery = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
+                    AND (nocolor IS NOT NULL OR nosize IS NOT NULL)
+                    AND id IN (${arrIds.join(',')})`;
+                const confProdIdsRes = await client.query(pQuery);
+                if (confProdIdsRes.rows[0].conf_ids) {
+                    confProductIds = confProdIdsRes.rows[0].conf_ids;
+                }
+                const pQueryFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
+                    AND (nocolor IS NULL AND nosize IS NULL)
+                    AND id IN (${arrIds.join(',')})`;
+                const confProdFullIdsRes = await client.query(pQueryFull);
+                if (confProdFullIdsRes.rows[0].conf_ids) {
+                    confProductFullConfIds = confProdFullIdsRes.rows[0].conf_ids;
+                }
+            }
+console.log('confProductIds', confProductIds);
+console.log('confProductFullConfIds', confProductFullConfIds);
+            data.data.forEach(async _comment => {
+                let commentData = _comment.message.split(' ');
+                let newMsg = '';
+                if (confProductIds.includes(parseInt(commentData[1]))) {
+                    newMsg = _comment.message + ' 1';
+                    _comment.configured = true;
+                } else if (confProductFullConfIds.includes(parseInt(commentData[1]))) {
+                    newMsg = _comment.message + ' 1';
+                    _comment.configured_full = true;
+                }
+                else {
+                    newMsg = _comment.message + ' 1';
+                    _comment.no_config = true;
+                }
+                // setup from parameters
+                if (!_comment.from) {
+                    const commId = _comment.id.split('_')
+                    _comment.from = {
+                        name: "NO FROM PARAM",
+                        id: commId[1]
+                    }
+                }
+                _comment.message = newMsg;
+                withFromComments.push(_comment);
+            })
+        }
+console.log(withFromComments);
+        const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(withFromComments).replaceAll("'", '')}');`;
+console.log(commentQuery);
+        const msgIds = [];
+        try {
+
+            await client.query(commentQuery);
+            // await chatbotMessageModel.updateNoValidMessages(sessionId);
+            // shell.exec(`pm2 start ../BE/storeLocalJobs/jobStorePreParserModel.js --name "jobStorePreParser ${sessionId}" -- sessionId=${sessionId} ids=${JSON.stringify([])}`, function(code, output) {
+            // });
+            const items = [];
+            const error = null;
+
+            return {
+                items,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: commentQuery }
+                );
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'error insering message'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
     async addMessagesNew(sessionId, data) {
         const client = await pool.connect();
         if (data?.paging?.next) {
@@ -1536,11 +1643,56 @@ console.log('MESSAGES', messagesData);
         return _tProduct.rows[0];
     }
 
+    async parseMessagesNew(sessionId) {
+        const client = await pool.connect();
+        try {
+console.log('HERE', sessionId);
+            const parcerQuerySimple = `SELECT * FROM data.set_live_sessions_messages_parcer_simple_data(${sessionId}, 100);`;
+            const parcerQueryPartConf = `SELECT * FROM data.set_live_sessions_messages_parcer_partconf_data(${sessionId}, 100);`;
+            const parcerQueryFullConf = `SELECT * FROM data.set_live_sessions_messages_parcer_fullconf_data(${sessionId}, 100);`;
+console.log('===SIMPLE PROD PARCER===')
+console.log(parcerQuerySimple)
+console.log('===SIMPLE PROD PART PARCER===')
+console.log(parcerQueryPartConf)
+console.log('===SIMPLE PROD FULL PARCER===')
+console.log(parcerQueryFullConf)
+            await client.query(parcerQuerySimple);
+            await client.query(parcerQueryPartConf);
+            await client.query(parcerQueryFullConf);
+            const items = [];
+            const error = null;
+
+            return {
+                items,
+                error
+            };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'add live messages'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
 
     async parseMessages(sessionId) {
         const client = await pool.connect();
         try {
             const parcerQuery = `SELECT * FROM data.set_live_sessions_messages_parcer_data(${sessionId}, 100);`;
+            const parcerQueryConf = `SELECT * FROM data.set_live_sessions_messages_parcer_config_data(${sessionId}, 100);`;
 // console.log('PARCER QUERY', parcerQuery);
             await client.query(parcerQuery);
             const items = [];

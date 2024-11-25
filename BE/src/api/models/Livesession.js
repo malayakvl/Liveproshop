@@ -12,7 +12,7 @@ class Livesession {
             const res = await client.query(productQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const error = null;
-    
+
             return {
                 items,
                 error
@@ -38,7 +38,7 @@ class Livesession {
             client.release();
         }
     }
-    
+
     async getAllInAir () {
         const client = await pool.connect();
         try {
@@ -118,7 +118,7 @@ class Livesession {
             client.release();
         }
     }
-    
+
     async updateSessionStatusFB(sessionId, videoId) {
         const client = await pool.connect();
         const queryStr = `UPDATE data.live_sessions SET status='live', video_id='${videoId}' WHERE id=${sessionId}`;
@@ -186,14 +186,24 @@ class Livesession {
 
     async getSessionsForStart () {
         const client = await pool.connect();
+        console.log('KAKOGO HERA')
+        // const queryStr = `SELECT
+        //             id,
+        //             user_id,
+        //             auth_provider_id,
+        //             auth_provider_access_token,
+        //             auth_provider_expiration_time,
+        //             auth_provider_expires_in
+        //         FROM data.get_live_sessions_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().format('HH:mm:ss')}');`;
         const queryStr = `SELECT
                     id,
-                    user_id,
-                    auth_provider_id,
-                    auth_provider_access_token,
+                    store_id,
+                    access_token,
                     auth_provider_expiration_time,
                     auth_provider_expires_in
-                FROM data.get_live_sessions_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().format('HH:mm:ss')}');`;
+                FROM data.get_live_sessions_store_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(2, 'hours').format('HH:mm:ss')}');`;
+        console.log(queryStr);
+        exit;
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
@@ -229,13 +239,22 @@ class Livesession {
 
     async getStoreSessionsForStart() {
         const client = await pool.connect();
+        // const queryStr = `SELECT
+        //             id,
+        //             store_id,
+        //             access_token,
+        //             auth_provider_expiration_time,
+        //             auth_provider_expires_in
+        //         FROM data.get_live_sessions_store_scheduled('${moment().add(-3, 'hours').format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
         const queryStr = `SELECT
                     id,
-                    store_id,
-                    access_token,
+                    user_id,
+                    auth_provider_id,
+                    auth_provider_access_token,
                     auth_provider_expiration_time,
                     auth_provider_expires_in
-                FROM data.get_live_sessions_store_scheduled('${moment().add(-3, 'hours').format('YYYY-MM-DD')}', '${moment().add(3, 'hours').format('HH:mm:ss')}');`;
+                FROM data.get_live_sessions_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(2, 'hours').format('HH:mm:ss')}');`;
+        // console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
@@ -394,7 +413,7 @@ class Livesession {
             client.release();
         }
     }
-    
+
     async launchedForStopSession() {
         const client = await pool.connect();
         try {
@@ -426,8 +445,8 @@ class Livesession {
             client.release();
         }
     }
-    
-    
+
+
     async getAllActive () {
         const client = await pool.connect();
         const query = await client.query(
@@ -673,71 +692,71 @@ class Livesession {
                     return  {error: e.response.data.error.message}
                 })
 // console.log('RESULT RESPONSE', longToken);
-                let longTokenExpire;
-                if (!longToken.error) {
-                    // get app access token
-                    const appAccessToken = await axios
-                        .get(
-                            `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`
-                        )
-                        .then(async (responseLongToken) => {
-                            return {appToken: responseLongToken.data.access_token};
-                        }).catch(e => {
-                            return {error: e.response.data.error.message};
-                            // return  e.response.data.error.message
-                        })
+            let longTokenExpire;
+            if (!longToken.error) {
+                // get app access token
+                const appAccessToken = await axios
+                    .get(
+                        `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`
+                    )
+                    .then(async (responseLongToken) => {
+                        return {appToken: responseLongToken.data.access_token};
+                    }).catch(e => {
+                        return {error: e.response.data.error.message};
+                        // return  e.response.data.error.message
+                    })
 // console.log('APP TOKEN DATA', appAccessToken);
 
 
-                    longTokenExpire = await axios
-                        .get(
-                            `https://graph.facebook.com/debug_token?input_token=${longToken.result.access_token}&access_token=${appAccessToken.appToken}`
-                        )
-                        .then(async (responseLongToken) => {
-                            // console.log("LONG TOKEN DEBUG", responseLongToken.data);
-                            return {result: responseLongToken.data};
-                        }).catch(e => {
-                            return  {error: e.response.data.error.message}
-                        })
-                    // console.log('LONG TOKEN EXPIRE', longTokenExpire)
-                    if (!longTokenExpire.error) {
-                        console.log('data_access_expires_at', longTokenExpire.result.data.data_access_expires_at);
-                        expiteLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
-                    }
-                }  else {
-                    // get date expired
-                    // user.auth_provider_access_token
-                    const appAccessToken = await axios
-                        .get(
-                            `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`
-                        )
-                        .then(async (responseLongToken) => {
-                            return {appToken: responseLongToken.data.access_token};
-                        }).catch(e => {
-                            return {error: e.response.data.error.message};
-                            // return  e.response.data.error.message
-                        });
-// console.log('APP TOKEN DATA', appAccessToken);
-
-
-                    longTokenExpire = await axios
-                        .get(
-                            `https://graph.facebook.com/debug_token?input_token=${user.auth_provider_access_token}&access_token=${appAccessToken.appToken}`
-                        )
-                        .then(async (responseLongToken) => {
-                            // console.log("LONG TOKEN DEBUG", responseLongToken.data);
-                            return {result: responseLongToken.data};
-                        }).catch(e => {
-                            return  {error: e.response.data.error.message}
-                        })
-                    // console.log('LONG TOKEN EXPIRE', longTokenExpire)
-                    if (!longTokenExpire.error) {
-                        expiteLongTokenAt = moment.unix(longTokenExpire.result.data.expires_at).format("DD-MM-YYYY HH:mm:ss");
-                        expiteAccessLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
-                        // console.log('EXPIRED', expiteLongTokenAt);
-                        // console.log('EXPIRED', expiteAccessLongTokenAt);
-                    }
+                longTokenExpire = await axios
+                    .get(
+                        `https://graph.facebook.com/debug_token?input_token=${longToken.result.access_token}&access_token=${appAccessToken.appToken}`
+                    )
+                    .then(async (responseLongToken) => {
+                        // console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                        return {result: responseLongToken.data};
+                    }).catch(e => {
+                        return  {error: e.response.data.error.message}
+                    })
+                // console.log('LONG TOKEN EXPIRE', longTokenExpire)
+                if (!longTokenExpire.error) {
+                    console.log('data_access_expires_at', longTokenExpire.result.data.data_access_expires_at);
+                    expiteLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
                 }
+            }  else {
+                // get date expired
+                // user.auth_provider_access_token
+                const appAccessToken = await axios
+                    .get(
+                        `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`
+                    )
+                    .then(async (responseLongToken) => {
+                        return {appToken: responseLongToken.data.access_token};
+                    }).catch(e => {
+                        return {error: e.response.data.error.message};
+                        // return  e.response.data.error.message
+                    });
+// console.log('APP TOKEN DATA', appAccessToken);
+
+
+                longTokenExpire = await axios
+                    .get(
+                        `https://graph.facebook.com/debug_token?input_token=${user.auth_provider_access_token}&access_token=${appAccessToken.appToken}`
+                    )
+                    .then(async (responseLongToken) => {
+                        // console.log("LONG TOKEN DEBUG", responseLongToken.data);
+                        return {result: responseLongToken.data};
+                    }).catch(e => {
+                        return  {error: e.response.data.error.message}
+                    })
+                // console.log('LONG TOKEN EXPIRE', longTokenExpire)
+                if (!longTokenExpire.error) {
+                    expiteLongTokenAt = moment.unix(longTokenExpire.result.data.expires_at).format("DD-MM-YYYY HH:mm:ss");
+                    expiteAccessLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
+                    // console.log('EXPIRED', expiteLongTokenAt);
+                    // console.log('EXPIRED', expiteAccessLongTokenAt);
+                }
+            }
             // }
             await axios
                 .get(
@@ -747,7 +766,7 @@ class Livesession {
 // console.log('PAGES', responsePages.data);
                 });
 
-                    // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
+            // const productQuery = `SELECT * FROM data.live_sessions WHERE user_id='${userId}' ORDER BY event_date DESC, event_time DESC limit ${perPage} OFFSET ${offset}`;
             const productQuery = `SELECT data.live_sessions.*, data.user_stores.name AS store_name 
                     FROM data.live_sessions 
                     LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id
@@ -908,7 +927,7 @@ class Livesession {
                                                     );`
                         );
                     } else {
-console.log(`
+                        console.log(`
                                                     UPDATE data.user_stores SET
                                                         access_token='${store.access_token}',
                                                         name='${store.name}',
@@ -1004,7 +1023,7 @@ console.log(`
             client.release();
         }
     }
-    
+
     async create (userId, data) {
         const client = await pool.connect();
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
@@ -1054,7 +1073,7 @@ console.log(`
         } else {
             intervalDuration = `${timeValue} day${timeValue > 1 ? 's' : ''}`;
         }
-        
+
         // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
         //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
         //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
@@ -1097,7 +1116,7 @@ console.log(`
             client.release();
         }
     }
-    
+
     async update (userId, data) {
         const client = await pool.connect();
         try {
@@ -1137,7 +1156,7 @@ console.log(`
             client.release();
         }
     }
-    
+
     async bulkDelete (rowIds, userId) {
         const client = await pool.connect();
         try {
@@ -1163,7 +1182,7 @@ console.log(`
         await client.query(`DELETE from data.live_sessions WHERE id='${id}'`);
         return true;
     }
-    
+
     async changeActive(itemId, userId) {
         const client = await pool.connect();
         try {
@@ -1182,7 +1201,7 @@ console.log(`
             client.release();
         }
     }
-    
+
     async changeAllActive(status, userId) {
         const client = await pool.connect();
         try {

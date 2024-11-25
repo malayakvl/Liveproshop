@@ -4,12 +4,12 @@ const args = process.argv;
 const apiUrl = process.env.API_URL;
 
 const sessionsData = args[2].split('=');
-const testSessionData = 68;
+const testSessionData = 73;
 
 async function sessionLaunche() {
     console.log('RUN PARCER SCRIPT');
 
-    axios(`${apiUrl}/api/parse-live-messages?sessionId=${testSessionData}`)
+    axios(`${apiUrl}/api/parse-live-messages-new?sessionId=${testSessionData}`)
         .then((response) => {
             // console.log('Response Data:', response.data.message);
         });

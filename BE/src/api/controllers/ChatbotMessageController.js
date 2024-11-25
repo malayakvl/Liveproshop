@@ -54,6 +54,16 @@ class ChatbotMessageController {
             return res.status(401).json({success: false, error: data.error});
         }
     }
+    async addMessagesNewParser(req, res) {
+        const data = await chatbotMessageModel.addMessagesNewParser(req.query.sessionId, req.body);
+        const msgIds = [];
+
+        if (!data.error) {
+            return res.status(200).json({unixTimestamp: null});
+        } else {
+            return res.status(401).json({success: false, error: data.error});
+        }
+    }
     async addMessagesTest(req, res) {
         const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId, req.body);
 // console.log('DATA', data);
@@ -124,6 +134,16 @@ console.log('Error here:', e)
 
     async parseMessages(req, res) {
         await chatbotMessageModel.parseMessages(req.query.sessionId);
+        // if (!data.error) {
+        //     return res.status(200).json({success: true});
+        // } else {
+        //     return res.status(401).json({success: false, error: 'Something wend wrong'});
+        // }
+        return res.status(200).json({success: true, message: 'parsing messages'});
+    }
+
+    async parseMessagesNew(req, res) {
+        await chatbotMessageModel.parseMessagesNew(req.query.sessionId);
         // if (!data.error) {
         //     return res.status(200).json({success: true});
         // } else {
