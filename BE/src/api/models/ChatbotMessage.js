@@ -1308,10 +1308,10 @@ console.log('updMessage', updMessage);
         }
         const withFromComments = [];
         const arrIds = [];
-        let confProductIds = [];
+        let confProductColorConfigIds = [];
+        let confProductSizeConfigIds = [];
         let confProductFullConfIds = [];
         if (data?.data?.length > 0) {
-// console.log(data.data)
             data.data.forEach(async _comment => {
                 let commentData = _comment.message.split(' ');
                 // console.log(_comment.message)
@@ -1319,15 +1319,24 @@ console.log('updMessage', updMessage);
                     arrIds.push(commentData[1]);
                 }
             });
-console.log(confProductIds);
             if (arrIds.length > 0) {
-                const pQuery = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
-                    AND (nocolor IS NOT NULL OR nosize IS NOT NULL)
+                // config just color
+                const pQueryColorFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
+                    AND (nocolor IS NULL AND nosize IS NOT NULL)
                     AND id IN (${arrIds.join(',')})`;
-                const confProdIdsRes = await client.query(pQuery);
-                if (confProdIdsRes.rows[0].conf_ids) {
-                    confProductIds = confProdIdsRes.rows[0].conf_ids;
+                const confColorProdIdsRes = await client.query(pQueryColorFull);
+                if (confColorProdIdsRes.rows[0].conf_ids) {
+                    confProductColorConfigIds = confColorProdIdsRes.rows[0].conf_ids;
                 }
+                // config just size
+                const pQuerySizeFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
+                    AND (nosize IS NULL AND nocolor IS NOT NULL)
+                    AND id IN (${arrIds.join(',')})`;
+                const confSizeProdIdsRes = await client.query(pQuerySizeFull);
+                if (confSizeProdIdsRes.rows[0].conf_ids) {
+                    confProductSizeConfigIds = confSizeProdIdsRes.rows[0].conf_ids;
+                }
+                // full config
                 const pQueryFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
                     AND (nocolor IS NULL AND nosize IS NULL)
                     AND id IN (${arrIds.join(',')})`;
@@ -1336,15 +1345,19 @@ console.log(confProductIds);
                     confProductFullConfIds = confProdFullIdsRes.rows[0].conf_ids;
                 }
             }
-console.log('confProductIds', confProductIds);
+console.log('confProductColorConfigIds', confProductColorConfigIds);
+console.log('confProductSizeConfigIds', confProductSizeConfigIds);
 console.log('confProductFullConfIds', confProductFullConfIds);
             data.data.forEach(async _comment => {
                 let commentData = _comment.message.split(' ');
                 let newMsg = '';
-                if (confProductIds.includes(parseInt(commentData[1]))) {
+                if (confProductColorConfigIds.includes(parseInt(commentData[1]))) {
                     newMsg = _comment.message + ' 1';
-                    _comment.configured = true;
-                } else if (confProductFullConfIds.includes(parseInt(commentData[1]))) {
+                    _comment.configured_color = true;
+                } else if (confProductSizeConfigIds.includes(parseInt(commentData[1]))) {
+                    newMsg = _comment.message + ' 1';
+                    _comment.configured_size = true;
+                }  else if (confProductFullConfIds.includes(parseInt(commentData[1]))) {
                     newMsg = _comment.message + ' 1';
                     _comment.configured_full = true;
                 }
@@ -1364,9 +1377,10 @@ console.log('confProductFullConfIds', confProductFullConfIds);
                 withFromComments.push(_comment);
             })
         }
-console.log(withFromComments);
+// console.log(withFromComments);
+// exit;
         const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(withFromComments).replaceAll("'", '')}');`;
-console.log(commentQuery);
+// console.log(commentQuery);
         const msgIds = [];
         try {
 
@@ -1648,16 +1662,20 @@ console.log('MESSAGES', messagesData);
         try {
 console.log('HERE', sessionId);
             const parcerQuerySimple = `SELECT * FROM data.set_live_sessions_messages_parcer_simple_data(${sessionId}, 100);`;
-            const parcerQueryPartConf = `SELECT * FROM data.set_live_sessions_messages_parcer_partconf_data(${sessionId}, 100);`;
+            const parcerQueryPartColorConf = `SELECT * FROM data.set_live_sessions_messages_parcer_colorconf_data(${sessionId}, 100);`;
+            const parcerQueryPartSizeConf = `SELECT * FROM data.set_live_sessions_messages_parcer_sizeconf_data(${sessionId}, 100);`;
             const parcerQueryFullConf = `SELECT * FROM data.set_live_sessions_messages_parcer_fullconf_data(${sessionId}, 100);`;
 console.log('===SIMPLE PROD PARCER===')
 console.log(parcerQuerySimple)
-console.log('===SIMPLE PROD PART PARCER===')
-console.log(parcerQueryPartConf)
+console.log('===SIMPLE PROD PART COLOR PARCER===')
+console.log(parcerQueryPartColorConf)
+console.log('===SIMPLE PROD PART SIZE PARCER===')
+console.log(parcerQueryPartSizeConf)
 console.log('===SIMPLE PROD FULL PARCER===')
 console.log(parcerQueryFullConf)
             await client.query(parcerQuerySimple);
-            await client.query(parcerQueryPartConf);
+            await client.query(parcerQueryPartColorConf);
+            await client.query(parcerQueryPartSizeConf);
             await client.query(parcerQueryFullConf);
             const items = [];
             const error = null;
