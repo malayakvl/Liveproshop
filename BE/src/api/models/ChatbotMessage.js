@@ -1311,6 +1311,8 @@ console.log('updMessage', updMessage);
         let confProductColorConfigIds = [];
         let confProductSizeConfigIds = [];
         let confProductFullConfIds = [];
+        const usrSessionQ = `SELECT user_id FROM data.live_sessions WHERE id=${sessionId}`;
+        const usrRes = await client.query(usrSessionQ);
         if (data?.data?.length > 0) {
             data.data.forEach(async _comment => {
                 let commentData = _comment.message.split(' ');
@@ -1323,6 +1325,7 @@ console.log('updMessage', updMessage);
                 // config just color
                 const pQueryColorFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
                     AND (nocolor IS NULL AND nosize IS NOT NULL)
+                    AND user_id='${usrRes.rows[0].user_id}'
                     AND id IN (${arrIds.join(',')})`;
                 const confColorProdIdsRes = await client.query(pQueryColorFull);
                 if (confColorProdIdsRes.rows[0].conf_ids) {
@@ -1331,6 +1334,7 @@ console.log('updMessage', updMessage);
                 // config just size
                 const pQuerySizeFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
                     AND (nosize IS NULL AND nocolor IS NOT NULL)
+                    AND user_id='${usrRes.rows[0].user_id}'
                     AND id IN (${arrIds.join(',')})`;
                 const confSizeProdIdsRes = await client.query(pQuerySizeFull);
                 if (confSizeProdIdsRes.rows[0].conf_ids) {
@@ -1339,6 +1343,7 @@ console.log('updMessage', updMessage);
                 // full config
                 const pQueryFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
                     AND (nocolor IS NULL AND nosize IS NULL)
+                    AND user_id='${usrRes.rows[0].user_id}'
                     AND id IN (${arrIds.join(',')})`;
                 const confProdFullIdsRes = await client.query(pQueryFull);
                 if (confProdFullIdsRes.rows[0].conf_ids) {
