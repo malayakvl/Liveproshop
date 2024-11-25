@@ -1076,20 +1076,13 @@ class Livesession {
 
         // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
         //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${intervalDuration}', '${data.storeId}'
+        //             '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6291,6301,6305}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
         //         );`;
-        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
-        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
-        //         );`;
-        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
-        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-        //             '{${scenarioIds.substring(0, scenarioIds.length - 1)}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
-        //         );`;
-        // const scenarioIdsNew =  {6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6295,6305};
-        const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
+        const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, status, order_timer, store_id,
+                scenarios, scenarios_colorconf, scenarios_sizeconf, scenarios_fullconf)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-                    '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6291,6301,6305}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
+                    'scheduled', '${_intervalDuration}', '${data.storeId}',
+                    '{6294,6304}', '{6290,6300}', '{6292,6302}', '{6286,6288,6296,6298}'
                 );`;
         try {
             await client.query(query);
