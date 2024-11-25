@@ -88,7 +88,7 @@ async function sessionLaunche() {
                         let responceResultMessage;
                         if (statusWaitItem) {
                             responceResultMessage =  await axios.post(
-                                `https://graph.facebook.com/v18.0/me/messages`,
+                                `https://graph.facebook.com/v21.0/me/messages`,
                                 '',
                                 {
                                     params: {

@@ -104,6 +104,7 @@ function ProductForm({
     const searchTagSuggestions = useSelector(tagSuggestionsSelector);
     const uploadedFiles = useSelector(uploadedFilesSelector);
     const isIdent = useSelector(getIdentSelector);
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
 
     const [editorContent, setEditorContent] = useState('');
     const [selectedColors, setSelectedColors] = useState([]);
@@ -173,7 +174,7 @@ function ProductForm({
     const handleChangeColor = (selectedOption: any) => {
         const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
-        if (selectedOption.length > 0) {
+        if (selectedOption?.length > 0) {
             selectedOption.forEach(function (_color: any) {
                 selectedSizes.forEach(function (_size: any) {
                     formRef.current?.setFieldValue(
@@ -205,7 +206,6 @@ function ProductForm({
             setSelectedSizes(selectedOption);
         } else {
             const _sizes: any = selectedSizes;
-            // setSelectedSizes([]);
             if (!_sizes.find((v: any) => v.value === selectedOption.value)) {
                 setSelectedSizes([...selectedSizes, selectedOption]);
             }
@@ -403,10 +403,11 @@ function ProductForm({
                 } else {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    const tColor = selectedColors?.value || null;
+                    const tColor = selectedColors?.value || selectedColors?.value || null;
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    const tSize = selectedSizes?.value || null;
+                    // const tSize = selectedSizes[0]?.value || null;
+                    const tSize = selectedSizes?.value || selectedSizes?.value || null;
                     dataVariants.push({
                         price: values['price'],
                         qty: values['quantity'],
@@ -678,11 +679,29 @@ function ProductForm({
                                                                                                 .configured
                                                                                         )
                                                                                     }>
-                                                                                    {
+                                                                                    {performedSizes.includes(
                                                                                         size[
                                                                                             `name_${num}`
                                                                                         ]
-                                                                                    }
+                                                                                    )
+                                                                                        ? size[
+                                                                                              `name_${num}`
+                                                                                          ].replace(
+                                                                                              's',
+                                                                                              ''
+                                                                                          )
+                                                                                        : size[
+                                                                                              `name_${num}`
+                                                                                          ]}
+                                                                                    {/*{size[*/}
+                                                                                    {/*    `name_${num}`*/}
+                                                                                    {/*].includes(*/}
+                                                                                    {/*    performesSizes*/}
+                                                                                    {/*)*/}
+                                                                                    {/*    ? '!'*/}
+                                                                                    {/*    : size[*/}
+                                                                                    {/*          `name_${num}`*/}
+                                                                                    {/*      ]}*/}
                                                                                 </td>
                                                                             )}
                                                                             {!size[

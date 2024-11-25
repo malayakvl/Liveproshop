@@ -3,15 +3,15 @@ import pool from './api/models/connect.js';
 import shell from "shelljs";
 
 const appRoute = Router();
-appRoute.get(/.*$/, function (req, res, next) {
-    pool.query('SELECT 1 + 1  AS solution', (error) => {
-        if (error) {
-            res.render('pages/db-connect', { title: 'No _DB connection' });
-        } else {
-            next();
-        }
-    });
-});
+// appRoute.get(/.*$/, function (req, res, next) {
+//     pool.query('SELECT 1 + 1  AS solution', (error) => {
+//         if (error) {
+//             res.render('pages/db-connect', { title: 'No _DB connection' });
+//         } else {
+//             next();
+//         }
+//     });
+// });
 // here automatically start jobs for project
 if (parseFloat(process.env.START_ON_SERVER) === 1) {
     shell.exec(`pm2 start ./storeJobs/jobClearOrders.js --name "jobClearOrders"`, function(code, output) {
@@ -26,7 +26,7 @@ if (parseFloat(process.env.START_ON_SERVER) === 1) {
         console.log('Exit code:', code);
         console.log('Program output:', output);
     });
-    // shell.exec(`pm2 start ./storeJobs/jobStart.js --name "jobStart"`, function(code, output) {
+    // shell.exec(`pm2 start ./storeJobs/jobParcerStart.js --name "jobStart"`, function(code, output) {
     //     console.log('Exit code:', code);
     //     console.log('Program output:', output);
     // });

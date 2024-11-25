@@ -9,7 +9,7 @@ const RenderSizes: React.FC<any> = ({
     clearSizeHandler
 }) => {
     const t = useTranslations();
-
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
     // useEffect(() => {
     //     console.log('Sizes', sizes.value);
     //     console.log('Configured', configured);
@@ -30,7 +30,11 @@ const RenderSizes: React.FC<any> = ({
                             className="react-tags__selected-tag"
                             onClick={() => removeSizeHandler(size.value)}
                             title="Click to remove">
-                            <span className="react-tags__selected-tag-name">{size.label}</span>
+                            <span className="react-tags__selected-tag-name">
+                                {performedSizes.includes(size.label)
+                                    ? size.label.replace('s', '')
+                                    : size.label}
+                            </span>
                         </button>
                     ))}
                 </>

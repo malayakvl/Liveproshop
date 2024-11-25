@@ -8,38 +8,27 @@ const tokenData = args[4].split('=');
 const videoData = args[2].split('=');
 async function startProcess() {
     try {
-        const sinceParams = await axios.get(`${apiUrl}/api/get-live-messages-since?sessionId=${sessionsData[1]}`)
+        const sinceParams = await axios.get(`${apiUrl}/api/get-live-messages-comments-param?sessionId=${sessionsData[1]}`)
             .then(async function (response) {
-                const sinceDate = response.data.unixTimestamp;
-                console.log('Since', sinceDate);
-                return sinceDate;
+                const sinceDate = response.data.dateComment;
+                return response.data.nextUrl;
             })
             .catch(function (error) {
                 console.log("error on get comment under video", error.message);
             });
-        console.log('SINCE PARAMS FOR COMMENTS', sinceParams);
-        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&access_token=${tokenData[1]}`;
-        if (sinceParams) {
-            const dateStr = sinceParams;
-            // Convert to Unix timestamp (in seconds)
-            const unixTimestamp = Math.floor(new Date(dateStr).getTime() / 1000);
+console.log('SINCE', sinceParams);
 
-            urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&since=${unixTimestamp}&access_token=${tokenData[1]}`;
+        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,message,can_comment,created_time&limit=100&order=chronological&access_token=${tokenData[1]}`;
+        if (sinceParams) {
+            urlComment = urlComment;
         }
+
+        // urlComment = 'https://graph.facebook.com/v21.0/960764652744449/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&access_token=EAArS9KI0vagBOZC8TWnq88hDab2k5Hebfn3PDNRZAjDMqG1BeF8HSxELECtkvmeZBJ9J6Pg5ZB0YFlg2acjxVzkksOiVQmA4cUD9eLN5QeeeyZBDYXO2PkkJK93BotLR3GCFDsRip7DgoTK7eHoVPZCR6T9PnrP98GsdjxXUV4Swca0iDAE0nYgki9ysqkbQOYT744HoEIDxMkPQZDZD&pretty=1&after=QVFIUjJQNzZARQkNYQ0YxQ1g5TlJYbnFGSnhPQ3VuNXpaT185NktMdlBOeXFMUVY0eXdLZAzRITm1yOExTYW1aazZALWlB4ODhTbEVqM2RHQnVNOTlwcFVXUEtR';
         await axios.get(urlComment)
             .then(async function (response) {
-                const results = response.data.data;
-                console.log('Incoming Comments', response.data.data);
-                // if (response.data.data[0].from) {
-                //     console.log('User ID', response.data.data[0].id)
-                //     await axios(`${apiUrl}/api/check-user-to-stores?messageId=${response.data.data[0].id}&fromId=${response.data.data[0].from}&storeId=70`)
-                //         .then((response) => {
-                //
-                //         })
-                // }
-                console.log()
+                const results = response.data;
                 await axios
-                    .post(`${apiUrl}/api/add-live-messages?sessionId=${sessionsData[1]}`, results)
+                    .post(`${apiUrl}/api/add-live-messages-new?sessionId=${sessionsData[1]}`, results)
                     .then(() => {
                     }).catch(function (_error) {
                         console.log(_error.message);

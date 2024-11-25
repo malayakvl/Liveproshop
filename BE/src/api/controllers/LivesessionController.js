@@ -13,6 +13,7 @@ class LivesessionController {
         if (!req.user) {
             return res.status(401).json('Access deny');
         }
+        // const tmpPages = await livesessionModel.getUserPages(req.user);
 
         const data = await livesessionModel.getAll(1, limit, req.user.id, offset, queryFilter, req.user);
         if (!data.error) {
@@ -166,6 +167,16 @@ class LivesessionController {
     async getActiveSessions (req, res) {
         // const data = await livesessionModel.getAllActive();
         const data = await livesessionModel.getAllStoreActive();
+        if (!data.error) {
+            return res.status(200).json({ result: data.result, error: data.error });
+        } else {
+            return res.status(401).json({ result: [], error: data.error });
+        }
+    }
+
+    async getActiveSessionsSenderLocal (req, res) {
+        // const data = await livesessionModel.getAllActive();
+        const data = await livesessionModel.getAllStoreActiveSender();
         if (!data.error) {
             return res.status(200).json({ result: data.result, error: data.error });
         } else {

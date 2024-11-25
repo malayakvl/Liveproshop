@@ -117,6 +117,7 @@ function ProductFormAdd({
     const [active, setActive] = useState(false);
     const [x, setX] = useState(true);
     const [showError, setShowError] = useState(false);
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
     const dataVariants: {
         price: string | null;
         qty: string | null;
@@ -169,7 +170,7 @@ function ProductFormAdd({
     const handleChangeColor = (selectedOption: any) => {
         const formValues = formRef?.current?.values;
         setSelectedColors(selectedOption);
-        if (selectedOption) {
+        if (selectedOption?.length) {
             selectedOption.forEach(function (_color: any) {
                 selectedSizes.forEach(function (_size: any) {
                     formRef.current?.setFieldValue(
@@ -662,11 +663,20 @@ function ProductFormAdd({
                                                                                                 .configured
                                                                                         )
                                                                                     }>
-                                                                                    {
+                                                                                    {performedSizes.includes(
                                                                                         size[
                                                                                             `name_${num}`
                                                                                         ]
-                                                                                    }
+                                                                                    )
+                                                                                        ? size[
+                                                                                              `name_${num}`
+                                                                                          ].replace(
+                                                                                              's',
+                                                                                              ''
+                                                                                          )
+                                                                                        : size[
+                                                                                              `name_${num}`
+                                                                                          ]}
                                                                                 </td>
                                                                             )}
                                                                             {!size[

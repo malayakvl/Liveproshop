@@ -12,7 +12,8 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
     const price = props.values[`configurePrice_${checkedVariant}`];
     const qty = props.values[`configureQty_${checkedVariant}`];
     const [newCheckedVariant, setNewCheckedVariat] = useState('');
-    const dataConfiguration = [];
+    // const dataConfiguration = [];
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
     // let tmpVariants: any[] = [];
 
     const setupIdent = (variants: any[]) => {
@@ -171,7 +172,11 @@ const RenderVariant: React.FC<any> = ({ colors, sizes, props, additional, errors
                                     />
                                 </td>
                                 <td className="sm:whitespace-nowrap" style={{ paddingTop: 2 }}>
-                                    {attr.size !== 'none' ? attr.size : ''}
+                                    {attr.size !== 'none'
+                                        ? performedSizes.includes(attr.size)
+                                            ? attr.size.replace('s', '')
+                                            : attr.size
+                                        : ''}
                                     {attr.color !== 'none' && attr.size !== 'none' ? ' / ' : ''}
                                     <span
                                         style={{
