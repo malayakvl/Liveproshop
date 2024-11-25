@@ -73,7 +73,6 @@ class ProductController {
                 return res.status(500).json(err);
             }
             const dataProduct = req.body;
-console.log('DATA PRODUCT', dataProduct);
             const publish = req.body.isPublish
             const photos = [];
             // console.log(dataProduct);
@@ -115,6 +114,15 @@ console.log('DATA PRODUCT', dataProduct);
             return res.status(401).json({ error: 'Something wend wrong' });
         }
     }
+
+    // async fetchProductParser (req, res) {
+    //     const data = await productModel.fetchProduct(req.params.id, req.user.id);
+    //     if (!data.error) {
+    //         return res.status(200).json({ product: data });
+    //     } else {
+    //         return res.status(401).json({ error: 'Access deny' });
+    //     }
+    // }
 
     async fetchProduct (req, res) {
         if (!req.user) {

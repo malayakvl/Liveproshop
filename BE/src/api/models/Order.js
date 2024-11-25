@@ -308,6 +308,7 @@ class Order {
         const client = await pool.connect();
         try {
             const productQuery = `SELECT * FROM data.set_orders_from_live_sessions_messages(${sessionId}, 100);`;
+// console.log(productQuery);
             await client.query(productQuery);
             const items = [];
             const error = null;
@@ -968,7 +969,7 @@ console.log(ordersQuery);
             }
             const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-console.log(ordersQuery);
+// console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             const items = res.rows.length > 0 ? res.rows : [];
             const _items = res.rows.length > 0 ? res.rows : [];
@@ -1582,7 +1583,8 @@ console.log(ordersQuery);
                 const pEnd = moment(freePeriodEnd);
                 const pNow = moment();
                 if (pNow > pEnd) {
-                    console.log('DELETE FROM settings period');
+                    // console.log('DELETE FROM settings period');
+                    // await client.query(`UPDATE data.seller_settings SET free_shipping_from=null, free_shipping_to=null WHERE `)
                 } else {
                     _endPeriod = `${moment(freePeriodEnd).format('YYYY-MM-DD')} ${moment(freePeriodEnd).format('HH:mm:ss')}`;
                     await client.query(`UPDATE data.orders

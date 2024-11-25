@@ -37,25 +37,26 @@ const OrderSummary = () => {
         () => shippingMethods?.filter((item) => item.id === +shippingMethodId)[0],
         [shippingMethodId]
     );
+    const performedSizes = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'];
 
     const recalculateTotal = (dataOrder: any) => {
         let totalOrder = 0;
         if (dataOrder.total_amount > 0) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            totalOrder += parseInt(order.total_amount);
+            totalOrder += parseFloat(order.total_amount);
         } else {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            totalOrder += parseInt(order.order_amount * 1.2);
+            totalOrder += parseFloat(order.order_amount * 1.2);
         }
         if (selectedShippingMethod?.price) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
-            totalOrder += parseInt(selectedShippingMethod.price);
+            totalOrder += parseFloat(selectedShippingMethod.price);
         }
         if (dataOrder.refund_amount > 0) {
-            totalOrder = totalOrder - parseInt(dataOrder.refund_amount);
+            totalOrder = totalOrder - parseFloat(dataOrder.refund_amount);
         }
         return formatCurrency(totalOrder);
     };
@@ -153,10 +154,22 @@ const OrderSummary = () => {
                                     {product.name}
                                 </div>
                                 <div className="product-size">
-                                    {t('checkout_color')}:{' '}
-                                    <span className="font-bold">{product.color_name}</span>,{' '}
-                                    {t('checkout_size')}:{' '}
-                                    <span className="font-bold">{product.size_name}</span>
+                                    {product.color_name && (
+                                        <span>
+                                            {t('checkout_color')}:{' '}
+                                            <span className="font-bold">{product.color_name}</span>,{' '}
+                                        </span>
+                                    )}
+                                    {product.size_name && (
+                                        <span>
+                                            {t('checkout_size')}:{' '}
+                                            <span className="font-bold">
+                                                {performedSizes.includes(product.size_name)
+                                                    ? product.size_name.replace('s', '')
+                                                    : product.size_name}
+                                            </span>
+                                        </span>
+                                    )}
                                 </div>
                                 {product.description && (
                                     <div

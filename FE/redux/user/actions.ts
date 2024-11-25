@@ -62,6 +62,32 @@ export const syncFbAction: any = createAction(
         }
 );
 
+export const syncFbSabrinasAction: any = createAction(
+    'user/SYNC_FB_SABRINAS',
+    async () =>
+        (dispatch: Type.Dispatch, getState: () => State.Root): Promise<void> => {
+            const state = getState();
+            dispatch(showLoaderAction(true));
+            // return axios.get(`${baseUrl}/get-test-pages`)
+            return axios
+                .get(`${baseUrl}/fetch-sabrinas-stores`, {
+                    headers: {
+                        ...authHeader(state.user.user.email)
+                    }
+                })
+                .then(async () => {
+                    dispatch(setSuccessToastAction(`Sync success`));
+                    dispatch(showLoaderAction(false));
+                    window.location.reload();
+                })
+                .catch((e) => {
+                    dispatch(setErrorToastAction(`Sync fail`));
+                    dispatch(showLoaderAction(false));
+                    console.log(e.message);
+                });
+        }
+);
+
 export const createUserFromSubscriptionAction: any = createAction(
     'user/SUBSCRIPTION',
     async (data: any, planId: number, type: string | null, forFree: string | null) =>

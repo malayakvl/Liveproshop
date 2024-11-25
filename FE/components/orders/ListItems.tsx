@@ -9,7 +9,6 @@ import { OrderCounter } from '../liveorders';
 const ListItems: React.FC<any> = ({ items, orderId, status, expireAt }) => {
     const t = useTranslations();
 
-    console.log(expireAt);
     return (
         <>
             <div className="md:hidden mt-[20px] flex">
@@ -172,7 +171,9 @@ const ListItems: React.FC<any> = ({ items, orderId, status, expireAt }) => {
                                         }}
                                     />
                                 </td>
-                                <td className="whitespace-nowrap" style={{ textAlign: 'center' }}>{item.size_name}</td>
+                                <td className="whitespace-nowrap" style={{ textAlign: 'center' }}>
+                                    {item.size_name ? item.size_name.replace('s', '') : ''}
+                                </td>
                                 <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                                 <td>{formatCurrency(item.price)}</td>
                             </tr>

@@ -106,7 +106,7 @@ export const googleDeepLinkSelector = createSelector(
 );
 export const prevOrderAmountSelector = createSelector(
     rootSelector,
-    (orders: State.Orders): any => orders.prevOrderAmount
+    (orders: State.Orders): any => orders.prevOrderAmount || 0
 );
 export const timerOrderAmountSelector = createSelector(
     rootSelector,

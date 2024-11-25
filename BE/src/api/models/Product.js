@@ -278,15 +278,31 @@ class Product {
                         tags = '{${productTags}}',
                         material_id = ${dataProduct.material_id},
                         configured = ${dataProduct.configured ? dataProduct.configured : true},
-                        publish = ${publish}
+                        publish = ${publish},
+                        nocolor = null,
+                        nosize = null
                      WHERE id=${_resProd.rows[0].id};`;
+console.log(queryUpdate)
                 await client.query(queryUpdate);
+                // if (!dataProduct.selectedColors?.length) {
+                //     await client.query(`UPDATE data.products SET nocolor=true WHERE id=${_resProd.rows[0].id};`);
+                // }
+                // if (!dataProduct.selectedSizes?.length) {
+                //     await client.query(`UPDATE data.products SET nosize=true WHERE id=${_resProd.rows[0].id};`);
+                // }
+
                 const configs = JSON.parse(dataProduct.configurations);
 
                 await client.query(`DELETE FROM data.product_configurations WHERE product_id=${_resProd.rows[0].id}`);
                 if (configs) {
                     const promisesQueriesNew = [];
                     configs.forEach((_config, index) => {
+                        if (!_config.size_id) {
+                            promisesQueriesNew.push(this.setNoSize(_resProd.rows[0].id));
+                        }
+                        if (!_config.color_id) {
+                            promisesQueriesNew.push(this.setNoColor(_resProd.rows[0].id));
+                        }
                         promisesQueriesNew.push(this.addConfigurationNew(_resProd.rows[0].id, _config));
                     });
                     await Promise.all(promisesQueries);
@@ -304,6 +320,43 @@ class Product {
             } else {
                 return { success: false };
             }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+    async setNoSize (productId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.products SET nosize=true WHERE id=${productId};`);
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error:',
+                    { message: e.message }
+                );
+            }
+            return { success: false, error: { code: 404, message: 'Addresses Not found' } };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async setNoColor (productId) {
+        const client = await pool.connect();
+        try {
+            await client.query(`UPDATE data.products SET nocolor=true WHERE id=${productId};`);
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -337,9 +390,7 @@ class Product {
                     ${dataProduct.material_id},
                     ${userId}
                 ) RETURNING id;`;
-// console.log(queryInsert)
             const resProduct = await client.query(queryInsert);
-            
             const sourceDir = `${process.env.DOWNLOAD_FOLDER}/tmp`;
             const dirUpload = `${process.env.DOWNLOAD_FOLDER}/products/${resProduct.rows[0].id}`;
             const dirDBUpload = `${process.env.DB_DOWNLOAD_FOLDER}/products/${resProduct.rows[0].id}`;
@@ -370,12 +421,31 @@ class Product {
             // update configuration
 console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
             const configs = JSON.parse(dataProduct.configurations);
+            // console.log(JSON.parse(dataProduct.colors));exit;
+            // if (!JSON.parse(dataProduct.colors).length?.length) {
+            //     await client.query(`UPDATE data.products SET nocolor=true WHERE id=${resProduct.rows[0].id};`);
+            // }
+            // if (!JSON.parse(dataProduct.sizes).length?.length) {
+            //     await client.query(`UPDATE data.products SET nosize=true WHERE id=${resProduct.rows[0].id};`);
+            // }
+            let noColor;let noSize;
             if (configs) {
                 const promisesQueriesNew = [];
                 configs.forEach((_config, index) => {
+                    if (!_config.size_id) {
+                        promisesQueriesNew.push(this.setNoSize(resProduct.rows[0].id));
+                    }
+                    if (!_config.color_id) {
+                        promisesQueriesNew.push(this.setNoColor(resProduct.rows[0].id));
+                    }
                     promisesQueriesNew.push(this.addConfigurationNew(resProduct.rows[0].id, _config));
                 });
                 await Promise.all(promisesQueries);
+// console.log('NO SIZE', noSize);
+//                 if (noColor)
+//                     await client.query(`UPDATE data.products SET nosize=true WHERE id=${resProduct.rows[0].id};`);
+//                 if (noSize)
+//                     await client.query(`UPDATE data.products SET nosize=true WHERE id=${resProduct.rows[0].id};`);
                 // const promisesQueries = [];
                 // configs.forEach((configuration, index) => {
                 //     console.log('SINGLE CONFIG', configuration);
@@ -427,9 +497,188 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
         });
     }
 
+    async fetchSimpleProduct (id) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`SELECT * FROM data.products WHERE id=${id}`);
+            if (res.rows.length) {
+                res.rows[0].selectedColors = [];
+                res.rows[0].selectedSizes = [];
+                res.rows[0].selectedMaterials = [];
+                const resConfigs = await client.query(`SELECT * FROM data.product_configurations WHERE product_id=${id}`);
+                res.rows[0].isPublish = res.rows[0].publish;
+                // build configured options
+                if (resConfigs.rows.length > 0) {
+                    const colors = [];
+                    const sizes = [];
+                    resConfigs.rows.forEach(config => {
+                        if (config.configuration.color_id) {
+                            colors.push(config.configuration.color_id);
+                        }
+                        if (config.configuration.size_id) {
+                            sizes.push(config.configuration.size_id);
+                        }
+                    });
+                    let selectedColorsData = [];
+                    if (colors.length > 0) {
+                        const queryColors = `SELECT table_translation FROM common__tools._get_translation('data', 'product_colors', 'id', 'name, code', ' id IN (${colors.join(',')})');`;
+                        const resColor = await client.query(queryColors);
+                        selectedColorsData = resColor.rows[0].table_translation;
+                    }
+                    let selectedSizesData = [];
+                    if (sizes.length > 0) {
+                        const querySizes = `SELECT table_translation FROM common__tools._get_translation('data', 'product_sizes', 'id', 'name', ' id IN (${sizes.join(',')})');`;
+                        const resSize = await client.query(querySizes);
+                        selectedSizesData = resSize.rows[0].table_translation;
+                    }
+                    let selectedMaterialsData = [];
+                    if (res.rows[0].material_id) {
+                        const queryMaterials = `SELECT table_translation FROM common__tools._get_translation('data', 'product_materials', 'id', 'name', ' id=${res.rows[0].material_id}');`;
+                        const resMaterial = await client.query(queryMaterials);
+                        selectedMaterialsData = resMaterial.rows[0].table_translation;
+                    }
+                    if (!res.rows[0].configured) {
+                        res.rows[0].sku = resConfigs.rows[0].sku;
+                        res.rows[0].price = resConfigs.rows[0].price;
+                        res.rows[0].quantity = resConfigs.rows[0].quantity;
+                    }
+
+                    let selectedTagsData = [];
+                    if (res.rows[0].tags) {
+                        if (res.rows[0].tags.length > 0) {
+                            const queryTags = `SELECT table_translation FROM common__tools._get_translation('data', 'hashtags', 'id', 'name', ' id IN (${res.rows[0].tags.join(',')})');`;
+                            const resTags = await client.query(queryTags);
+                            selectedTagsData = resTags.rows[0].table_translation;
+                        }
+                    }
+                    res.rows[0].selectedColors = selectedColorsData;
+                    res.rows[0].selectedSizes = selectedSizesData;
+                    res.rows[0].selectedMaterials = selectedMaterialsData;
+                    res.rows[0].selectedTags = selectedTagsData;
+                }
+// console.log(res.rows[0])
+                // res.rows[0].configured = resConfigs.rows.length > 0;
+                return { product: res.rows[0], configurations: resConfigs.rows };
+            } else {
+                return { success: false, error: { code: 404, message: 'Product Not found' } };
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Product fetch one product):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async fetchProductWithoutUser (id) {
+        const client = await pool.connect();
+        try {
+            const res = await client.query(`SELECT * FROM data.products WHERE id=${id}`);
+            if (id === 219) {
+                console.log(res.rows[0]);exit;
+            }
+            if (res.rows.length) {
+                res.rows[0].selectedColors = [];
+                res.rows[0].selectedSizes = [];
+                res.rows[0].selectedMaterials = [];
+                const resConfigs = await client.query(`SELECT * FROM data.product_configurations WHERE product_id=${id}`);
+                res.rows[0].isPublish = res.rows[0].publish;
+                // build configured options
+                if (resConfigs.rows.length > 0) {
+                    const colors = [];
+                    const sizes = [];
+                    resConfigs.rows.forEach(config => {
+                        if (config.configuration.color_id) {
+                            colors.push(config.configuration.color_id);
+                        }
+                        if (config.configuration.size_id) {
+                            sizes.push(config.configuration.size_id);
+                        }
+                    });
+                    let selectedColorsData = [];
+                    if (colors.length > 0) {
+                        const queryColors = `SELECT table_translation FROM common__tools._get_translation('data', 'product_colors', 'id', 'name, code', ' id IN (${colors.join(',')})');`;
+                        const resColor = await client.query(queryColors);
+                        selectedColorsData = resColor.rows[0].table_translation;
+                    }
+                    let selectedSizesData = [];
+                    if (sizes.length > 0) {
+                        const querySizes = `SELECT table_translation FROM common__tools._get_translation('data', 'product_sizes', 'id', 'name', ' id IN (${sizes.join(',')})');`;
+                        const resSize = await client.query(querySizes);
+                        selectedSizesData = resSize.rows[0].table_translation;
+                    }
+                    let selectedMaterialsData = [];
+                    if (res.rows[0].material_id) {
+                        const queryMaterials = `SELECT table_translation FROM common__tools._get_translation('data', 'product_materials', 'id', 'name', ' id=${res.rows[0].material_id}');`;
+                        const resMaterial = await client.query(queryMaterials);
+                        selectedMaterialsData = resMaterial.rows[0].table_translation;
+                    }
+                    if (!res.rows[0].configured) {
+                        res.rows[0].sku = resConfigs.rows[0].sku;
+                        res.rows[0].price = resConfigs.rows[0].price;
+                        res.rows[0].quantity = resConfigs.rows[0].quantity;
+                    }
+
+                    let selectedTagsData = [];
+                    if (res.rows[0].tags) {
+                        if (res.rows[0].tags.length > 0) {
+                            const queryTags = `SELECT table_translation FROM common__tools._get_translation('data', 'hashtags', 'id', 'name', ' id IN (${res.rows[0].tags.join(',')})');`;
+                            const resTags = await client.query(queryTags);
+                            selectedTagsData = resTags.rows[0].table_translation;
+                        }
+                    }
+                    res.rows[0].selectedColors = selectedColorsData;
+                    res.rows[0].selectedSizes = selectedSizesData;
+                    res.rows[0].selectedMaterials = selectedMaterialsData;
+                    res.rows[0].selectedTags = selectedTagsData;
+                }
+                // res.rows[0].configured = resConfigs.rows.length > 0;
+                return { product: res.rows[0], configurations: resConfigs.rows };
+            } else {
+                return { success: false, error: { code: 404, message: 'Product Not found' } };
+            }
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (Product fetch one product):',
+                    { message: e.message }
+                );
+            }
+            const products = null;
+            const error = {
+                code: 500,
+                message: 'Error get list of users'
+            };
+            return {
+                products,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
     async fetchProduct (id, userId) {
         const client = await pool.connect();
         try {
+// console.log('Prod ID:', id);
+// exit;
             const res = await client.query(`SELECT * FROM data.products WHERE user_id=${userId} AND id=${id}`);
             if (res.rows.length) {
                 res.rows[0].selectedColors = [];
@@ -532,7 +781,7 @@ console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
                 offset = (Number(page) - 1) * Number(perPage);
             }
             const productQuery = `SELECT * FROM data.get_products(${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`;
-console.log(productQuery);
+// console.log(productQuery);
             // const res = await client.query(`SELECT * FROM data.get_all_products(${perPage}, ${offset}, 'user_id=''${userId}'' ')`);
             const res = await client.query(productQuery);
             const products = res.rows.length > 0 ? res.rows : [];
@@ -574,7 +823,6 @@ console.log(productQuery);
                             '${config.sku || '' }',
                             '${JSON.stringify({color_id: config.color_id, size_id: config.size_id})}'
                         )`;
-console.log('SQL CONFIGURATION', SQL);
         const client = await pool.connect();
         try {
             await client.query(SQL);
@@ -594,8 +842,8 @@ console.log('SQL CONFIGURATION', SQL);
     }
 
     async addConfiguration (productId, config, configData) {
-console.log('PRODUCT ID', productId);
-console.log('CONFIG', config);
+// console.log('PRODUCT ID', productId);
+// console.log('CONFIG', config);
         const SQL = `INSERT INTO data.product_configurations (product_id, price, quantity, sku, configuration)
                         VALUES (
                             ${productId},
@@ -604,7 +852,6 @@ console.log('CONFIG', config);
                             '${configData.sku || '' }',
                             '${JSON.stringify({color_id: configData.color_id, size_id: configData.size_id})}'
                         )`;
-console.log('SQL CONFIGURATION', SQL);
         const client = await pool.connect();
         try {
             await client.query(SQL);
@@ -786,8 +1033,8 @@ console.log('SQL CONFIGURATION', SQL);
 
     async updateStatus (dataProduct, userId) {
         const client = await pool.connect();
-        console.log(`UPDATE data.products
-                    SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`)
+        // console.log(`UPDATE data.products
+        //             SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`)
         const _resProd = await client.query(`UPDATE data.products
                     SET publish = false WHERE id=${dataProduct.id} AND user_id=${userId}`);
     }

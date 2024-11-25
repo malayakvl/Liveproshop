@@ -200,17 +200,16 @@ class User {
                     if(err) console.log('error', err);
                 });
             });
-console.log('PROVIDER USER DATA', userData);
+// console.log('PROVIDER USER DATA', userData);
             const firstName = fullFbName[0];
             let lastName = '';
             if (fullFbName.length > 1) {
                 lastName = fullFbName[1];
             }
             if (!user) {
-console.log('USER ROLE ID', parseInt(userData.roleId));
             let query;
             if (parseInt(userData.roleId) === 1) {
-                console.log('Role 1')
+// console.log('Role 1')
                 query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, first_name, last_name, role_id)
                     VALUES
@@ -225,9 +224,8 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                     )
                     ;
                 `;
-
             } else {
-                console.log('Role 2')
+// console.log('Role 2')
                 query = `
                     INSERT INTO data.users (email, auth_provider_name, auth_provider_id, auth_provider_access_token, auth_provider_expiration_time, first_name, last_name, role_id, auth_provider_accounts)
                     VALUES
@@ -264,41 +262,41 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                         // buy+item
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty', 'buy+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty', 'buy+item+size+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config with qty', 'buy+item+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config with qty (1)', 'buy+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item full config without qty (1)', 'buy+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config with qty', 'buy+item+color+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item color config without qty', 'buy+item+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config with qty', 'buy+item+size+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config with qty', 'buy+item+size+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy item size config without qty', 'buy+item+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config with qty', 'buy+item+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config with qty', 'buy+item+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Buy simple product without config without qty', 'buy+item')`);
 
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty', 'sold+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty', 'sold+item+size+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config with qty', 'sold+item+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config with qty (1)', 'sold+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item full config without qty (1)', 'sold+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config with qty', 'sold+item+color+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item color config without qty', 'sold+item+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config with qty', 'sold+item+size+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config with qty', 'sold+item+size+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold item size config without qty', 'sold+item+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config with qty', 'sold+item+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config with qty', 'sold+item+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Sold simple product without config without qty', 'sold+item')`);
 
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+color+size+quantity')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+color+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty', 'vendu+item+size+color+quantity')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty', 'vendu+item+size+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config with qty', 'vendu+item+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config with qty (1)', 'vendu+item+size+color+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item full config without qty (1)', 'vendu+item+size+color')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config with qty', 'vendu+item+color+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item color config without qty', 'vendu+item+color')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config with qty', 'vendu+item+size+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config with qty', 'vendu+item+size+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu item size config without qty', 'vendu+item+size')`);
-                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config with qty', 'vendu+item+quantity')`);
+                        await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config with qty', 'vendu+item+qty')`);
                         await client.query(`INSERT INTO data.chatbot_scenarios (user_id, name, keywords) VALUES (${user.id}, 'Vendu simple product without config without qty', 'vendu+item')`);
 
                         if (userData.accessToken) {
                             const longToken = await axios
                                 .get(
-                                    `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${userData.accessToken}`
+                                    `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${userData.accessToken}`
                                 )
                                 .then(async (responseLongToken) => {
                                     await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${userData.id}`);
@@ -307,9 +305,10 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                                 });
 
                             // userData.accessToken
+// console.log(`https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`);
                             await axios
                                 .get(
-                                    `https://graph.facebook.com/v20.0/me?fields=email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
+                                    `https://graph.facebook.com/v21.0/me?fields=email,accounts{id,name,access_token,picture{url},is_published},businesses&access_token=${longToken}`
                                 )
                                 .then(async (responsePages) => {
                                     // console.log("RESPONCE", responsePages.data.accounts.data);
@@ -327,8 +326,9 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
 
                                         storesList.forEach(async (store) => {
                                             const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userData.id}' AND store_id='${store.id}'`);
-                                            if (queryStore.rows.length === 0) {
-                                                await  client.query(`
+                                            if (store.is_published) {
+                                                if (queryStore.rows.length === 0) {
+                                                    await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, picture, synchronized)
                                                     VALUES
                                                     (
@@ -340,20 +340,18 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                                                         '${store.picture.data.url}',
                                                         true
                                                     );`
-                                                );
-                                            } else {
-                                                await  client.query(`
+                                                    );
+                                                } else {
+                                                    await  client.query(`
                                                     UPDATE data.user_stores SET 
                                                      access_token='${store.access_token}', 
                                                      name='${store.name}'
                                                     WHERE user_id = '${user.id}';`
-                                                );
+                                                    );
+                                                }
                                             }
-                                        });
 
-                                        // businessesList.map(async (business) => {
-                                        //     console.log('BUSINESS', business);
-                                        // });
+                                        });
 
                                         businessesList.map(async (business) => {
                                             const queryBusiness = await client.query(
@@ -373,9 +371,11 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                                             }
                                             // get pages
                                             // userData.accessToken
+// console.log('GETTING BUSINESS OWNED PAGES');
+// console.log(`https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`);
                                             await axios
                                                 .get(
-                                                    `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`
+                                                    `https://graph.facebook.com/v21.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`
                                                 )
                                                 .then(async (responseBusinessesPages) => {
                                                     if (responseBusinessesPages.data.error) {
@@ -385,6 +385,7 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                                                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                                                         } else {
                                                             const storesList = responseBusinessesPages.data;
+// console.log('GET PAGES AND ACCESS TOKEN FOR LIVE VIDEO API');
                                                             // getting picture for store
                                                             let storePicture = '';
                                                             storesList.data.forEach(async (store) => {
@@ -501,7 +502,7 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
             user = await this.findUserByProviderId(userData.userID);
             // const providerQuery = await client.query(`SELECT `)
             const accountId = userData.userID;
-            console.log('PROVIDER LOGIN', accountId);
+// console.log('PROVIDER LOGIN HERE', accountId);
 
             if (parseInt(user.role_id) === 2) {
                 // get user stores
@@ -510,33 +511,33 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                         // get long live token
                         const longToken = await axios
                             .get(
-                                `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${userData.accessToken}`
+                                `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${userData.accessToken}`
                             )
                             .then(async (responseLongToken) => {
                                 await client.query(`UPDATE data.users SET long_live_access_token='${responseLongToken.data.access_token}' WHERE id=${user.id}`);
 
                                 return responseLongToken.data.access_token
                             });
-                        const accountId = user.auth_provider_id;
-
-                        await axios
+                        const userAccQueryRes = await client.query(`SELECT auth_provider_id FROM data.users WHERE id='${user.id}'`);
+                        const accountId = userAccQueryRes.rows.length ? userAccQueryRes.rows[0].auth_provider_id : user.auth_provider_id;
+console.log('USER PROVIDER ID', user.auth_provider_id);
+console.log('LONG TOKEN', longToken);
+                        const pagesData = await axios
                             .get(
-                                `https://graph.facebook.com/v20.0/me?fields=id,email,accounts{id,name,access_token,picture{url}},businesses&access_token=${longToken}`
+                                `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${longToken}`
                             )
                             .then(async (responsePages) => {
-
-                                if (responsePages.data.error) {
-                                    store.dispatch(setErrorToastAction('Could no getting stores list'));
-                                } else {
-                                    const storesList = responsePages.data.accounts.data;
-                                    const businessesList = responsePages.data?.businesses?.data || [];
-                                    const userFbId = responsePages.data.id;
-                                    await client.query(`DELETE FROM data.user_stores WHERE account_id='${userFbId}'`);
-                                    storesList.forEach(async (store) => {
-                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                        if (queryStore.rows.length === 0) {
-                                            await  client.query(`
-                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, picture, synchronized)
+                                return responsePages.data;
+                            });
+console.log('PAGES', pagesData);
+                        const userFbId = user.auth_provider_id ? user.auth_provider_id : accountId;
+                        if (pagesData.data.length > 0) {
+                            let storePicture = '';
+                            pagesData.data.forEach(async (store) => {
+                                const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}' AND user_id=${user.id}`);
+                                if (queryStore.rows.length === 0) {
+                                    await  client.query(`
+                                                    INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
                                                     VALUES
                                                     (
                                                         '${userFbId}',
@@ -544,93 +545,149 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                                                         '${store.access_token}',
                                                         '${store.name}',
                                                         '${user.id}',
-                                                        '${store.picture.data.url}',
-                                                        true
+                                                        '${store.fan_count}',
+                                                        true,
+                                                        '${store.picture.data.url}'
                                                     );`
-                                            );
-                                        } else {
-                                            const queryUpdStore =
-                                                `UPDATE data.user_stores SET
-                                                     access_token='${store.access_token}',
-                                                     name='${store.name}'
-                                                    WHERE user_id = '${user.id}';`;
-                                            await client.query(queryUpdStore);
-                                        }
-                                    })
+                                    );
+                                } else {
+                                    console.log(`
+                                                    UPDATE data.user_stores SET
+                                                        access_token='${store.access_token}',
+                                                        name='${store.name}',
+                                                        picture='${store.picture.data.url}',
+                                                        fan_count='${store.fan_count}',
+                                                        synchronized=true,
+                                                        updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
+                                                    WHERE account_id='${userFbId}' AND store_id='${store.id}';`);
+                                    await  client.query(`
+                                                    UPDATE data.user_stores SET
+                                                        access_token='${store.access_token}',
+                                                        name='${store.name}',
+                                                        picture='${store.picture.data.url}',
+                                                        fan_count='${store.fan_count}',
+                                                        synchronized=true,
+                                                        updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
+                                                    WHERE account_id='${userFbId}' AND store_id='${store.id}';`
+                                    );
+                                }
 
-                                    businessesList.map(async (business) => {
-                                        const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}'
-                                            AND business_id='${business.id}'`);
-                                        if (queryBusiness.rows.length === 0) {
-                                            await  client.query(`
-                                                    INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
-                                                    VALUES
-                                                    (
-                                                        '${userFbId}',
-                                                        '${business.id}',
-                                                        '${business.name}',
-                                                        '${user.id}'
-                                                    );`
-                                            );
-                                        }
-                                        // get pages
-                                        await axios
-                                            .get(
-                                                `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${userData.accessToken}`
-                                            )
-                                            .then(async (responseBusinessesPages) => {
-                                                if (responseBusinessesPages.data.error) {
-                                                    store.dispatch(setErrorToastAction('Could no getting stores list'));
-                                                } else {
-                                                    if (responseBusinessesPages.data.error) {
-                                                        store.dispatch(setErrorToastAction('Could no getting stores list'));
-                                                    } else {
-                                                        const storeBusinessList = responseBusinessesPages.data;
-                                                        const userFbId = userData.userID;
-                                                        // getting picture for store
-                                                        let storePicture = '';
-                                                        storeBusinessList.data.forEach(async (store) => {
-                                                            const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                                            if (queryStore.rows.length === 0) {
-                                                                await  client.query(`
-                                                            INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
-                                                            VALUES
-                                                            (
-                                                                '${userFbId}',
-                                                                '${store.id}',
-                                                                '${store.access_token}',
-                                                                '${store.name}',
-                                                                '${user.id}',
-                                                                '${store.fan_count}',
-                                                                true,
-                                                                '${store.picture.data.url}',
-                                                                true
-                                                            );`
-                                                                );
-                                                            } else {
-                                                                await  client.query(`
-                                                            UPDATE data.user_stores SET
-                                                                access_token='${store.access_token}',
-                                                                name='${store.name}',
-                                                                picture='${store.picture.data.url}',
-                                                                fan_count='${store.fan_count}',
-                                                                synchronized=true,
-                                                                is_business=true
-                                                            WHERE account_id='${userFbId}' AND store_id='${store.id}';`
-                                                                );
-                                                            }
-                                                        })
-                                                    }
-                                                }
-                                            });
-                                    })
-                                }
-                                const { data } = responsePages;
-                                // console.log("Users account connected pages", dataPages);
-                                if (data.error) {
-                                    store.dispatch(setErrorToastAction('Could no getting stores list'));
-                                }
-                            });
+                            })
+                        }
+
+//                         await axios
+//                             .get(
+//                                 `https://graph.facebook.com/v21.0/me?fields=id,email,accounts{id,name,access_token,picture{url}},is_published,businesses&access_token=${longToken}`
+//                             )
+//                             .then(async (responsePages) => {
+//
+//                                 if (responsePages.data.error) {
+//                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
+//                                 } else {
+//                                     const storesList = responsePages.data.accounts.data;
+//                                     const businessesList = responsePages.data?.businesses?.data || [];
+//                                     const userFbId = responsePages.data.id;
+//                                     await client.query(`DELETE FROM data.user_stores WHERE account_id='${userFbId}'`);
+//                                     storesList.forEach(async (store) => {
+//                                         const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+//                                         if (queryStore.rows.length === 0) {
+//                                             await  client.query(`
+//                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, picture, synchronized)
+//                                                     VALUES
+//                                                     (
+//                                                         '${userFbId}',
+//                                                         '${store.id}',
+//                                                         '${store.access_token}',
+//                                                         '${store.name}',
+//                                                         '${user.id}',
+//                                                         '${store.picture.data.url}',
+//                                                         true
+//                                                     );`
+//                                             );
+//                                         } else {
+//                                             const queryUpdStore =
+//                                                 `UPDATE data.user_stores SET
+//                                                      access_token='${store.access_token}',
+//                                                      name='${store.name}'
+//                                                     WHERE user_id = '${user.id}';`;
+//                                             await client.query(queryUpdStore);
+//                                         }
+//                                     })
+// console.log('BUSINESSES LIST', businessesList)
+//
+//                                     // businessesList.map(async (business) => {
+//                                     //     const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}'
+//                                     //         AND business_id='${business.id}'`);
+//                                     //     if (queryBusiness.rows.length === 0) {
+//                                     //         await  client.query(`
+//                                     //                 INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
+//                                     //                 VALUES
+//                                     //                 (
+//                                     //                     '${userFbId}',
+//                                     //                     '${business.id}',
+//                                     //                     '${business.name}',
+//                                     //                     '${user.id}'
+//                                     //                 );`
+//                                     //         );
+//                                     //     }
+//                                     //     // get pages
+//                                     //     await axios
+//                                     //         .get(
+//                                     //             `https://graph.facebook.com/v21.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${userData.accessToken}`
+//                                     //         )
+//                                     //         .then(async (responseBusinessesPages) => {
+//                                     //             if (responseBusinessesPages.data.error) {
+//                                     //                 store.dispatch(setErrorToastAction('Could no getting stores list'));
+//                                     //             } else {
+//                                     //                 if (responseBusinessesPages.data.error) {
+//                                     //                     store.dispatch(setErrorToastAction('Could no getting stores list'));
+//                                     //                 } else {
+//                                     //                     const storeBusinessList = responseBusinessesPages.data;
+//                                     //                     const userFbId = userData.userID;
+//                                     //                     // getting picture for store
+//                                     //                     let storePicture = '';
+//                                     //                     storeBusinessList.data.forEach(async (store) => {
+//                                     //                         const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+//                                     //                         if (queryStore.rows.length === 0) {
+//                                     //                             await  client.query(`
+//                                     //                         INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
+//                                     //                         VALUES
+//                                     //                         (
+//                                     //                             '${userFbId}',
+//                                     //                             '${store.id}',
+//                                     //                             '${store.access_token}',
+//                                     //                             '${store.name}',
+//                                     //                             '${user.id}',
+//                                     //                             '${store.fan_count}',
+//                                     //                             true,
+//                                     //                             '${store.picture.data.url}',
+//                                     //                             true
+//                                     //                         );`
+//                                     //                             );
+//                                     //                         } else {
+//                                     //                             await  client.query(`
+//                                     //                         UPDATE data.user_stores SET
+//                                     //                             access_token='${store.access_token}',
+//                                     //                             name='${store.name}',
+//                                     //                             picture='${store.picture.data.url}',
+//                                     //                             fan_count='${store.fan_count}',
+//                                     //                             synchronized=true,
+//                                     //                             is_business=true
+//                                     //                         WHERE account_id='${userFbId}' AND store_id='${store.id}';`
+//                                     //                             );
+//                                     //                         }
+//                                     //                     })
+//                                     //                 }
+//                                     //             }
+//                                     //         });
+//                                     // })
+//                                 }
+//                                 const { data } = responsePages;
+//                                 // console.log("Users account connected pages", dataPages);
+//                                 if (data.error) {
+//                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
+//                                 }
+//                             });
                     }
                 } catch (e) {
                     console.log(e.message);
@@ -828,6 +885,16 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                     // we don't have any subscription in stripe
                     let customerId;
                     // create stripe customer
+//                     var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+//                     const isValid = emailRegex.test(userData.user.email);
+//                     let stripeEmail = userData.user.email;
+//                     if (!isValid) {
+//                         stripeEmail = userData.user.email;
+//                     } else {
+//                         stripeEmail = userData.user.email+'@stripefake.com';
+//                     }
+// console.log('Stripe EMAIL', stripeEmail);
+// exit;
                     const customer = await stripe.customers.create({
                         email: userData.user.email,
                         name: `${userData.user.first_name} ${userData.user.last_name}`
@@ -928,10 +995,17 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                             userData.user.customer_id = null;
                         }
                     }
+                    const emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+                    const isValid = emailRegex.test(userData.user.email);
+                    let stripeEmail = userData.user.email;
+                    if (!isValid) {
+                        stripeEmail = userData.user.email+'@fbemail.com';
+                    }
+console.log('STRIPE EMAIL', stripeEmail);
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
                         const customer = await stripe.customers.create({
-                            email: userData.user.email,
+                            email: stripeEmail,
                             name: `${userData.user.first_name} ${userData.user.last_name}`
                         });
                         customerId = customer.id;
@@ -993,7 +1067,7 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
     async createExistUserSubscription(userData) {
         const client = await pool.connect();
         try {
-// console.log('createExistUserSubscription');
+console.log('createExistUserSubscription');
             const resPlan = await client.query(`SELECT * FROM data.subscription_plans WHERE id = '${userData.planId}'`);
             // const resSettings = await client.query('SELECT * FROM data.system_settings WHERE id=1');
             if (resPlan.rows.length) {
@@ -1008,10 +1082,18 @@ console.log('USER ROLE ID', parseInt(userData.roleId));
                     if (uncompleteSubscr.rows.length > 0) {
                         userData.user.customer_id = uncompleteSubscr.rows[0].customer_id;
                     }
+                    var emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+                    const isValid = emailRegex.test(userData.user.email);
+                    let stripeEmail = userData.user.email;
+                    if (!isValid) {
+                        stripeEmail = userData.user.email;
+                    }
+                    if (userData.user.email)
                     // check customer id from stripe
                     if (!userData.user.customer_id) {
                         const customer = await stripe.customers.create({
-                            email: userData.user.email,
+                            // email: userData.user.email,
+                            email: stripeEmail,
                             name: `${userData.user.first_name} ${userData.user.last_name}`
                         });
                         customerId = customer.id;
@@ -2018,7 +2100,7 @@ console.log('USER TOKEN', data.accessToken);
         // getting long live token
         const longToken = await axios
             .get(
-                `https://graph.facebook.com/v18.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`
+                `https://graph.facebook.com/v21.0/oauth/access_token?grant_type=fb_exchange_token&client_id=${process.env.FACEBOOK_APP_ID}&client_secret=${process.env.FACEBOOK_APP_SECRET}&fb_exchange_token=${data.accessToken}`
             )
             .then(async (responseLongToken) => {
                 console.log("LONG LIVE TOKEN RESPONSE", responseLongToken.data);
@@ -2033,7 +2115,7 @@ console.log('LONG TOKEN RESPONSE', longToken);
             if (data.accessToken) {
                 await axios
                     .get(
-                        `https://graph.facebook.com/v20.0/me/accounts?fields=picture{url},name,fan_count,access_token&access_token=${longToken}`
+                        `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${longToken}`
                     )
                     .then(async (responsePages) => {
                         if (responsePages.data.error) {
@@ -2045,10 +2127,11 @@ console.log('STORES LIST', storesList)
                             // getting picture for store
                             let storePicture = '';
                             storesList.data.forEach(async (store) => {
-                                // const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                if (queryStore.rows.length === 0) {
-                                    await  client.query(`
+                                if (store.is_published) {
+                                    // const queryUpdate = await client.query(`UPDATE data.user_stores SET synchronized = false WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                    const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                    if (queryStore.rows.length === 0) {
+                                        await  client.query(`
                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture)
                                                     VALUES
                                                     (
@@ -2061,14 +2144,14 @@ console.log('STORES LIST', storesList)
                                                         true,
                                                         '${store.picture.data.url}'
                                                     );`
-                                    );
-                                } else {
-                                    // const periodStartNew =  new Date();
-                                    // const timestampStartNew = periodStartNew.getTime();
-                                    // const ts = moment().format('YYYY-MM-DD HH:mm:ss').unix();
-                                    // const m = moment.unix(ts);
-                                    //
-                                    await  client.query(`
+                                        );
+                                    } else {
+                                        // const periodStartNew =  new Date();
+                                        // const timestampStartNew = periodStartNew.getTime();
+                                        // const ts = moment().format('YYYY-MM-DD HH:mm:ss').unix();
+                                        // const m = moment.unix(ts);
+                                        //
+                                        await  client.query(`
                                                     UPDATE data.user_stores SET
                                                         access_token='${store.access_token}',
                                                         name='${store.name}',
@@ -2077,7 +2160,8 @@ console.log('STORES LIST', storesList)
                                                         synchronized=true,
                                                         updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                     WHERE account_id='${userFbId}' AND store_id='${store.id}';`
-                                    );
+                                        );
+                                    }
                                 }
                             })
                         }
@@ -2090,7 +2174,7 @@ console.log('STORES LIST', storesList)
                     });
                 await axios
                     .get(
-                        `https://graph.facebook.com/v20.0/me?fields=businesses&access_token=${longToken}`
+                        `https://graph.facebook.com/v21.0/me?fields=businesses&access_token=${longToken}`
                     )
                     .then(async (responseBusinesses) => {
                         if (responseBusinesses.data.error) {
@@ -2118,13 +2202,12 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                 // get pages
                                 await axios
                                     .get(
-                                        `https://graph.facebook.com/v20.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${longToken}`
+                                        `https://graph.facebook.com/v21.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count,is_published&access_token=${longToken}`
                                     )
                                     .then(async (responseBusinessesPages) => {
                                         if (responseBusinessesPages.data.error) {
                                             store.dispatch(setErrorToastAction('Could no getting stores list'));
                                         } else {
-// console.log('Owned pages', JSON.stringify(responseBusinessesPages.data));
                                             if (responseBusinessesPages.data.error) {
                                                 store.dispatch(setErrorToastAction('Could no getting stores list'));
                                             } else {
@@ -2132,9 +2215,10 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                                 // getting picture for store
                                                 let storePicture = '';
                                                 storesList.data.forEach(async (store) => {
-                                                    const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-                                                    if (queryStore.rows.length === 0) {
-                                                        await  client.query(`
+                                                    if (store.is_published) {
+                                                        const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
+                                                        if (queryStore.rows.length === 0) {
+                                                            await  client.query(`
                                                             INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
                                                             VALUES
                                                             (
@@ -2148,9 +2232,9 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                                                 '${store.picture.data.url}',
                                                                 true
                                                             );`
-                                                        );
-                                                    } else {
-                                                        await  client.query(`
+                                                            );
+                                                        } else {
+                                                            await  client.query(`
                                                             UPDATE data.user_stores SET
                                                                 access_token='${store.access_token}',
                                                                 name='${store.name}',
@@ -2160,7 +2244,8 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
                                                                 is_business=true,
                                                                 updated_at='${moment().add(`3`, 'hours').format('YYYY-MM-DD HH:mm:ss')}'
                                                             WHERE account_id='${userFbId}' AND store_id='${store.id}';`
-                                                        );
+                                                            );
+                                                        }
                                                     }
                                                 })
                                             }
@@ -2295,6 +2380,7 @@ console.log('BUSINESS LIST', businessesList.businesses.data)
     }
 
     async addPaymentMethodBySubscription(data) {
+console.log('addPaymentMethodBySubscription');
         const client = await pool.connect();
         try {
             const expPeriod = data.card_expire_date.split('/');
