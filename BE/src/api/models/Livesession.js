@@ -720,7 +720,7 @@ class Livesession {
                     })
                 // console.log('LONG TOKEN EXPIRE', longTokenExpire)
                 if (!longTokenExpire.error) {
-                    console.log('data_access_expires_at', longTokenExpire.result.data.data_access_expires_at);
+// console.log('data_access_expires_at', longTokenExpire.result.data.data_access_expires_at);
                     expiteLongTokenAt = moment.unix(longTokenExpire.result.data.data_access_expires_at).format("DD-MM-YYYY HH:mm:ss");
                 }
             }  else {
@@ -1029,12 +1029,11 @@ class Livesession {
         const scenariosRes = await client.query(`SELECT ARRAY_AGG(id) AS ids FROM data.chatbot_scenarios WHERE user_id = ${userId}`);
         // console.log(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
         //                     FROM data.seller_settings WHERE user_id=${userId};`);
-        const scenariosResNew = await client.query(`SELECT id FROM data.chatbot_scenarios WHERE user_id = ${userId} ORDER BY id`);
-        let scenarioIds = '';
-        scenariosResNew.rows.forEach(_res => {
-            scenarioIds += _res.id+',';
-            console.log(_res.id);
-        });
+        // const scenariosResNew = await client.query(`SELECT id FROM data.chatbot_scenarios WHERE user_id = ${userId} ORDER BY id`);
+        // let scenarioIds = '';
+        // scenariosResNew.rows.forEach(_res => {
+        //     scenarioIds += _res.id+',';
+        // });
 
         // console.log(scenarioIds.substring(0, scenarioIds.length - 1));
 
