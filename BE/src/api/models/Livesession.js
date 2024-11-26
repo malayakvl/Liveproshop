@@ -3,6 +3,7 @@ import { logger } from '../../common/logger.js';
 import moment from 'moment';
 import store from "./Store.js";
 import axios from "axios";
+import fs from "fs";
 
 class Livesession {
     async getUserScenarios (userId) {
@@ -254,7 +255,7 @@ class Livesession {
                     auth_provider_expiration_time,
                     auth_provider_expires_in
                 FROM data.get_live_sessions_scheduled('${moment().format('YYYY-MM-DD')}', '${moment().add(2, 'hours').format('HH:mm:ss')}');`;
-        // console.log(queryStr);
+        console.log(queryStr);
         try {
             const query = await client.query(queryStr);
             const result = query.rows.length > 0 ? query.rows : [];
@@ -1024,7 +1025,7 @@ class Livesession {
         }
     }
 
-    async create (userId, data) {
+    async create (userId, data, userData) {
         const client = await pool.connect();
         const settings = await client.query(`SELECT order_timer, free_shipping_timer, free_shipping_status, user_id
                             FROM data.seller_settings WHERE user_id=${userId};`);
@@ -1051,35 +1052,40 @@ class Livesession {
         } else {
             _intervalDuration = `${_timeValue} minute${timeValue > 1 ? 's' : ''}`;
         }
-        // console.log( `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
-        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-        //             '{${scenariosRes.rows[0].ids}}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
-        //         );`)
 
         if (type === 'h') {
             intervalDuration = `${timeValue} hour${timeValue > 1 ? 's' : ''}`;
         } else {
             intervalDuration = `${timeValue} day${timeValue > 1 ? 's' : ''}`;
         }
-
-        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, scenarios, status, order_timer, store_id)
-        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
-        //             '{6286,6296,6288,6298,6290,6300,6292,6302,6294,6304,6295,6291,6301,6305}', 'scheduled', '${_intervalDuration}', '${data.storeId}'
-        //         );`;
         const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, status, order_timer, store_id,
                 scenarios, scenarios_colorconf, scenarios_sizeconf, scenarios_fullconf)
                 VALUES (${userId}, '${data.event_date}', '${data.event_time}',
                     'scheduled', '${_intervalDuration}', '${data.storeId}',
                     '{6294,6304}', '{6290,6300}', '{6292,6302}', '{6286,6288,6296,6298}'
-                );`;
+                ) RETURNING id;`;
         try {
-            await client.query(query);
-            return { success: true };
+            const resInsert = await client.query(query);
+            // create log file
+            if (resInsert.rows.length > 0) {
+                let txtLog = `[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================Schedule session\n`
+                txtLog += `Schedule session ${resInsert.rows[0].id} by user ${userData.first_name} [${userData.id}]\n`;
+                txtLog += `Session ID: ${resInsert.rows[0].id}, Store: ${data.storeId}\n`
+                txtLog += `Session Time: ${data.event_date}, ${data.event_time}\n`
+                txtLog += `At ${moment().format("DD-MM-YYYY, HH:mm:ss")}\n`
+                txtLog += `[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================END Schedule session\n`
+                fs.writeFile(`/var/www/BE/session_logs/${resInsert.rows[0].id}.log`, txtLog, function (err) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log("The file was saved!");
+                });
+            }
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
-                    'Model error (Chatbot update):',
+                    'Model error (Session create log file):',
                     { message: e.message }
                 );
             }
@@ -1096,6 +1102,36 @@ class Livesession {
         } finally {
             client.release();
         }
+        // const query =  `INSERT INTO data.live_sessions (user_id, event_date, event_time, status, order_timer, store_id,
+        //         scenarios, scenarios_colorconf, scenarios_sizeconf, scenarios_fullconf)
+        //         VALUES (${userId}, '${data.event_date}', '${data.event_time}',
+        //             'scheduled', '${_intervalDuration}', '${data.storeId}',
+        //             '{6294,6304}', '{6290,6300}', '{6292,6302}', '{6286,6288,6296,6298}'
+        //         );`;
+        // try {
+        //     await client.query(query);
+        //     return { success: true };
+        // } catch (e) {
+        //     if (process.env.NODE_ENV === 'development') {
+        //         logger.log(
+        //             'error',
+        //             'Model error (Chatbot update):',
+        //             { message: e.message }
+        //         );
+        //     }
+        //     const item = null;
+        //     const error = {
+        //         code: 500,
+        //         message: 'Error update chatbot_scenarios'
+        //     };
+        //     return {
+        //         success: false,
+        //         error,
+        //         item
+        //     };
+        // } finally {
+        //     client.release();
+        // }
     }
 
     async update (userId, data) {
@@ -1157,9 +1193,15 @@ class Livesession {
         }
     }
 
-    async deleteRecord(id) {
+    async deleteRecord(id, userData) {
         const client = await pool.connect();
         // console.log(`DELETE from data.live_sessions WHERE id='${id}'`);
+        let txtLog = `\n[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================Delete session\n`
+        txtLog += `Delete session ${id} by user ${userData.first_name} [${userData.id}]\n`;
+        txtLog += `[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================END Delete session\n`;
+        fs.appendFile(`/var/www/BE/session_logs/${id}.log`, txtLog, (err) => {
+            if(err) throw err;
+        });
         await client.query(`DELETE from data.live_sessions WHERE id='${id}'`);
         return true;
     }
