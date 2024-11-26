@@ -1,7 +1,7 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
 import moment from 'moment';
-import store from "./Store.js";
+// import store from "./Store.js";
 import axios from "axios";
 import fs from "fs";
 
@@ -75,20 +75,18 @@ class Livesession {
     async stopSession(itemId, userId) {
         const client = await pool.connect();
         try {
-            // const currDateTime = new Date();
-            // const currTime = currDateTime.getHours()+':'+currDateTime.getMinutes()+':'+currDateTime.getSeconds();
-            // const currDate = currDateTime.getFullYear()+'-'+currDateTime.getMonth()+'-'+currDateTime.getUTCDay();
-            // console.log(moment().format("YYYY-MM-DD"));
             const durationQuery = await client.query(`SELECT * FROM data.live_sessions WHERE id='${itemId}' AND user_id=${userId}`);
             let endPeriod;
             endPeriod = moment().add(0, 'minutes');
-            // if (durationQuery.rows[0].order_timer.minutes) {
-            //     endPeriod = moment().add(durationQuery.rows[0].order_timer.minutes, 'minutes');
-            // } else if (durationQuery.rows[0].order_timer.hours) {
-            //     endPeriod = moment().add(durationQuery.rows[0].order_timer.hours, 'hours');
-            // } else {
-            //     endPeriod = moment().add(durationQuery.rows[0].order_timer.days, 'days');
-            // }
+
+            let txtLog;
+            txtLog = `\n[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================Stop session\n`
+            txtLog += `Stop session throw admin area\n`;
+            txtLog += `[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================END Stop session\n`
+            fs.appendFile(`/var/www/BE/session_logs/${itemId}.log`, txtLog, (err) => {
+                if(err) throw err;
+            });
+
             const query = await client.query(
                 `UPDATE data.live_sessions SET status='closed',
                     event_time_end = '${endPeriod.format("HH:mm:ss")}', event_date_end='${endPeriod.format("YYYY-MM-DD")}' WHERE id=${itemId} AND user_id=${userId}`
