@@ -1185,7 +1185,7 @@ console.log(ordersQuery);
                 }
             }
 
-// console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
 // console.log('File exist need to copy')
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
@@ -1217,7 +1217,7 @@ console.log(ordersQuery);
                     fs.mkdirSync(`${dirUploadForCreate}/${locale}/download`);
                 }
             }
-// console.log('HERE CHECK ROWS', res.rows.length);
+console.log('GENERATE PDF');
             if (res.rows.length > 0) {
                 // get buyer information
                 const addressRes = await client.query(`SELECT data.addresses.*, data.users.company_name, data.users.phone
@@ -1226,20 +1226,45 @@ console.log(ordersQuery);
                 const buyerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].buyer_id}'`);
 
                 const sellerData = await client.query(`SELECT * FROM data.users WHERE id='${res.rows[0].seller_id}'`);
-
+                const sellerApiData = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${res.rows[0].seller_id}`);
                 // console.log(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const historyStatusRes = await client.query(`SELECT * FROM data.order_statuses WHERE order_id='${res.rows[0].id}' AND status='${typeInvoice !== 'refund' ? 'payed' : 'canceled'}'`);
                 const orderNuberForMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}`;
+// console.log(`${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}`);
+// console.log('API key', sellerApiData.rows[0].multisafe_api_key);
                 const multiOrderPaymentData = await axios
-                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
+                    .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${sellerApiData.rows[0].multisafe_api_key}`, {}, {
                         headers: { 'Content-Type': 'application/json' }
                     })
                     .then(async (res) => {
-                        // console.log('PAYMENT METHODS', res.data.data);
+                        // console.log('DATA SABRINA', res.data);
                         return {'success': true, paymentData: res.data.data}
                     }).catch(error => {
+                        console.log(error.message)
                         return {error: error.message}
                     });
+
+                // const multiOrderPaymentData = await axios
+                //     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
+                //         headers: { 'Content-Type': 'application/json' }
+                //     })
+                //     .then(async (res) => {
+                //         // console.log('PAYMENT METHODS', res.data.data);
+                //         return {'success': true, paymentData: res.data.data}
+                //     }).catch(error => {
+                //         return {error: error.message}
+                //     });
+                // const multiOrderPaymentData = await axios
+                //     .get(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${res.rows[0].id}?api_key=${process.env.MULTISAFE_API_KEY}`, {}, {
+                //         headers: { 'Content-Type': 'application/json' }
+                //     })
+                //     .then(async (res) => {
+                //         // console.log('PAYMENT METHODS', res.data.data);
+                //         return {'success': true, paymentData: res.data.data}
+                //     }).catch(error => {
+                //         console.log(error)
+                //         return {error: error.message}
+                //     });
                 const refundAmount = parseFloat(res.rows[0].refund_amount);
                 const coutryRes = await client.query(`SELECT nicename FROM data.countries WHERE id='${res.rows[0].country_id}'`);
                 // console.log(buyerData.rows[0].first_name + (buyerData.rows[0].last_name ? " "+buyerData.rows[0].last_name : ''));
