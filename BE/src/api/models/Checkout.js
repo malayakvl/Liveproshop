@@ -192,36 +192,37 @@ class Checkout {
         let shippingMethods = null;
         let error = null;
         try {
-            // const orderQuerySeller = `SELECT data.live_sessions.user_id as seller_id FROM data.orders
-            //     LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
-            //     WHERE data.orders.id=${orderId}`;
-            // const sellerRes = await client.query(orderQuerySeller);
-            // const sellerId = sellerRes.rows[0].seller_id;
-            // let isFreePeriodActive = false;
-            // let shippingFree = false;
-            // let prevOrderAmount = 0;
-            // const sellerSettingsRes = await client.query(`SELECT free_shipping_from, free_shipping_to FROM data.seller_settings WHERE user_id=${sellerId}`);
-            // if (sellerSettingsRes.rows.length) {
-            //     if (sellerSettingsRes.rows[0].free_shipping_from) {
-            //         const dateFrom = moment(sellerSettingsRes.rows[0].free_shipping_from);
-            //         const dateTo = moment(sellerSettingsRes.rows[0].free_shipping_to);
-            //         const now = moment();
-            //         if (now >= dateFrom && now <= dateTo) {
-            //             isFreePeriodActive = true;
-            //         }
-            //     }
-            // }
+            const orderQuerySeller = `SELECT data.live_sessions.user_id as seller_id FROM data.orders
+                LEFT JOIN data.live_sessions ON data.live_sessions.id = data.orders.live_sessions_id
+                WHERE data.orders.id=${orderId}`;
+            const sellerRes = await client.query(orderQuerySeller);
+            const sellerId = sellerRes.rows[0].seller_id;
+            let isFreePeriodActive = false;
+            let shippingFree = false;
+            let prevOrderAmount = 0;
+            const sellerSettingsRes = await client.query(`SELECT free_shipping_from, free_shipping_to FROM data.seller_settings WHERE user_id=${sellerId}`);
+            if (sellerSettingsRes.rows.length) {
+                if (sellerSettingsRes.rows[0].free_shipping_from) {
+                    const dateFrom = moment(sellerSettingsRes.rows[0].free_shipping_from);
+                    const dateTo = moment(sellerSettingsRes.rows[0].free_shipping_to);
+                    const now = moment();
+                    if (now >= dateFrom && now <= dateTo) {
+                        isFreePeriodActive = true;
+                    }
+                }
+            }
             // free shipping period active, get prev order amount
-            // const resultThreshold = await shippingModel.fetchThreshold(sellerId);
-            // if (isFreePeriodActive) {
-            //     const totalOrderQuery = `SELECT SUM(order_amount) as total_amount FROM data.orders
-            //         WHERE user_id=${userId} AND status='payed'`;
-            //     const resTotalAmount = await client.query(totalOrderQuery);
-            //     prevOrderAmount = parseInt(resTotalAmount.rows[0].total_amount);
-            //     if (resultThreshold.threshold <= prevOrderAmount) {
-            //         shippingFree = true;
-            //     }
-            // }
+            const resultThreshold = await shippingModel.fetchThreshold(sellerId);
+            if (isFreePeriodActive) {
+                const totalOrderQuery = `SELECT SUM(order_amount) as total_amount FROM data.orders
+                    WHERE user_id=${userId} AND status='payed'`;
+                const resTotalAmount = await client.query(totalOrderQuery);
+                prevOrderAmount = parseInt(resTotalAmount.rows[0].total_amount);
+                if (resultThreshold.threshold <= prevOrderAmount) {
+                    shippingFree = true;
+                }
+            }
+console.log('shippingFree', shippingFree);
             shippingMethods = [];
             let query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
             const res = await client.query(query, [orderId, countryId]);

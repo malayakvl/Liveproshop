@@ -1385,7 +1385,7 @@ console.log('confProductFullConfIds', confProductFullConfIds);
 // console.log(withFromComments);
 // exit;
         const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(withFromComments).replaceAll("'", '')}');`;
-// console.log(commentQuery);
+console.log(commentQuery);
         const msgIds = [];
         try {
 
