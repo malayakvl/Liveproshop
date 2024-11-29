@@ -51,18 +51,19 @@ class ChatbotMessageController {
         if (!data.error) {
             return res.status(200).json({unixTimestamp: null});
         } else {
-            return res.status(401).json({success: false, error: data.error});
+            return res.status(401).json({success: false, error: null});
         }
     }
     async addMessagesNewParser(req, res) {
         const data = await chatbotMessageModel.addMessagesNewParser(req.query.sessionId, req.body);
         const msgIds = [];
 
-        if (!data.error) {
-            return res.status(200).json({unixTimestamp: null});
-        } else {
-            return res.status(401).json({success: false, error: data.error});
-        }
+        return res.status(200).json({unixTimestamp: null});
+        // if (!data.error) {
+        //     return res.status(200).json({unixTimestamp: null});
+        // } else {
+        //     return res.status(401).json({success: false, error: data.error});
+        // }
     }
     async addMessagesTest(req, res) {
         const data = await chatbotMessageModel.addMessagesTest(req.query.sessionId, req.body);

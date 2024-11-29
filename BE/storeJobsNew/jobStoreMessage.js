@@ -23,14 +23,6 @@ console.log(response.data.data)
                     console.log(`In period: ${message.in_period === null ? 'no free period': 'free period'}`);
                     // if (message.from_id && orderFrom && message.parcer_status === true) {
                     if (orderFrom && message.parcer_status === true) {
-                        // if (message.real_from_id) {
-                        //     await axios(`${apiUrl}/api/check-user-to-stores?messageId=${message.message_id}&fromId=${message.real_from_id}&storeId=${message.store_id}`)
-                        //         .then((response) => {
-                        //
-                        //         }).catch((e) => {
-                        //             // console.log('error sending reply message', e,error.error.message);
-                        //         });
-                        // }
                         if (message.parcer_data.hasOwnProperty("sold")) {
                             lng = 'en';
                         }
