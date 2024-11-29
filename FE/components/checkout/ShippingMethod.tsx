@@ -47,7 +47,7 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
         <div className={className}>
             <div className="">
                 <div className="text-2xl font-bold text-gray-350 mb-6">
-                    {title} SH M ID{address.shipping_id}
+                    {title}
                 </div>
                 <div role="group" aria-labelledby="shipping-method-radio-group">
                     {shippingMethods.map((shippingMethod) => (
