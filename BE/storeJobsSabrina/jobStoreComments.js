@@ -17,20 +17,20 @@ async function startProcess() {
             .catch(function (error) {
                 console.log("error on get comment under video", error.message);
             });
-// console.log('SINCE', sinceParams);
+console.log('SINCE', sinceParams);
+console.log('SESSION ID', sessionsData[1]);
 
-        let urlComment = `https://graph.facebook.com/v21.0/960764652744449/comments?fields=id,from,message,can_comment,created_time&limit=200&order=chronological&access_token=${tokenData[1]}`;
+        let urlComment = `https://graph.facebook.com/v21.0/965685342252380/comments?fields=id,from,message,can_comment,created_time&limit=50&order=chronological&access_token=${tokenData[1]}`;
         if (sinceParams) {
             urlComment = sinceParams;
         }
         // urlComment = `https://graph.facebook.com/v21.0/960764652744449/comments?fields=id,from,message,can_comment,created_time&order=chronological&limit=200&access_token=EAArS9KI0vagBOZC8TWnq88hDab2k5Hebfn3PDNRZAjDMqG1BeF8HSxELECtkvmeZBJ9J6Pg5ZB0YFlg2acjxVzkksOiVQmA4cUD9eLN5QeeeyZBDYXO2PkkJK93BotLR3GCFDsRip7DgoTK7eHoVPZCR6T9PnrP98GsdjxXUV4Swca0iDAE0nYgki9ysqkbQOYT744HoEIDxMkPQZDZD&pretty=1&limit=200&after=QVFIUjJQNzZARQkNYQ0YxQ1g5TlJYbnFGSnhPQ3VuNXpaT185NktMdlBOeXFMUVY0eXdLZAzRITm1yOExTYW1aazZALWlB4ODhTbEVqM2RHQnVNOTlwcFVXUEtR`;
-
         await axios.get(urlComment)
             .then(async function (response) {
                 const results = response.data;
-console.log('Start Add Comments');
+
                 await axios
-                    .post(`${apiUrl}/api/add-live-messages-new?sessionId=${sessionsData[1]}`, results)
+                    .post(`${apiUrl}/api/add-live-messages-new-parser?sessionId=${sessionsData[1]}`, results)
                     .then((res) => {
                         console.log('End Add Comments')
                     }).catch(function (_error) {
@@ -46,4 +46,4 @@ console.log('Start Add Comments');
 }
 
 
-setTimeout(await startProcess, 10000);
+setTimeout(await startProcess, 5000);

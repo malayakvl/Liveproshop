@@ -12,10 +12,19 @@ const apiUrl = process.env.API_URL;
 async function startProcess() {
     console.log('Getting list of active live video sessions for launche process');
 
-    // const tokenTest = 'EAArS9KI0vagBO2pRUCBZBmXrLwMR5mqs7lNOWYDZCI4H9QwM0iIV81vvxbYdejqsAZAR2zpARfSZB9ZBbNNZAzylUtOzBJipHMNoYYOA2rTZCxmCX4MKWO4o4O1aTiZBN133ZCYZBHZABZCfhpOjbOttUZA8ZB4flOUZB8pyRjMCk12rkZCHxL4SgS89r74GQCms57aCgZB4ZD';
-    // const storeTestId = '134773596380836';
-    // const sessionTestId = 724;
-    // const videoTestId = '122181598088041438'
+    const tokenTest = 'EAArS9KI0vagBOZC8TWnq88hDab2k5Hebfn3PDNRZAjDMqG1BeF8HSxELECtkvmeZBJ9J6Pg5ZB0YFlg2acjxVzkksOiVQmA4cUD9eLN5QeeeyZBDYXO2PkkJK93BotLR3GCFDsRip7DgoTK7eHoVPZCR6T9PnrP98GsdjxXUV4Swca0iDAE0nYgki9ysqkbQOYT744HoEIDxMkPQZDZD';
+    const storeTestId = '134773596380836';
+    const sessionTestId = 942;
+    const videoTestId = '965685342252380'
+
+    shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionTestId}" -- videoId=${videoTestId} sessionId=${sessionTestId} accessToken=${tokenTest} `, function(code, output) {
+    });
+    // setTimeout(() => {
+    //     shell.exec(`pm2 delete "jobStoreVideos ${sessionTestId}"`, function(code, output) {
+    //     });
+    // }, 5000);
+
+
     // await axios.get(`https://graph.facebook.com/v21.0/${storeTestId}/live_videos?broadcast_status=["VOD"]&fields=broadcast_start_time,id,title,description&access_token=${tokenTest}`)
     //     .then(async function (response) {
     //         const results = response.data.data;
@@ -25,13 +34,13 @@ async function startProcess() {
     //                     shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionTestId}" -- videoId=${videoTestId} sessionId=${sessionTestId} accessToken=${tokenTest} `, function(code, output) {
     //                     });
     //
-    //                     shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
-    //                     });
-    //
-    //                     shell.exec(`pm2 start _jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
-    //                         console.log('Exit code:', code);
-    //                         console.log('Program output:', output);
-    //                     });
+    //                     // shell.exec(`pm2 start _jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
+    //                     // });
+    //                     //
+    //                     // shell.exec(`pm2 start _jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
+    //                     //     console.log('Exit code:', code);
+    //                     //     console.log('Program output:', output);
+    //                     // });
     //
     //                     // kill process
     //                     // setTimeout(() => {
@@ -50,30 +59,30 @@ async function startProcess() {
 
 
 
-    await axios(`${apiUrl}/api/fetch-active-sessions`)
-        .then( (response) => {
-            response.data.result.forEach(async session => {
-                // get list of live videos for store
-                shell.exec(`pm2 start jobStoreVideos.js --name "jobStoreVideos ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
-                    console.log('Exit code:', code);
-                    console.log('Program output:', output);
-                });
-                shell.exec(`pm2 start jobStorePreParser.js --name "jobStorePreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
-                });
-                // shell.exec(`pm2 start jobStoreVideosNew.js --name "jobStoreVideosNew ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
-                //     console.log('Exit code:', code);
-                //     console.log('Program output:', output);
-                // });
-
-                shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${session.id}" -- sessionId=${session.id}`, function(code, output) {
-                    // console.log('Exit code:', code);
-                    // console.log('Program output:', output);
-                });
-                shell.exec(`pm2 start jobStoreOrder.js --name "jobStoreOrder ${session.id}" -- sessionId=${session.id}`, function(code, output) {
-                    // console.log('Exit code:', code);
-                    // console.log('Program output:', output);
-                });
-            })
-        });
+    // await axios(`${apiUrl}/api/fetch-active-sessions`)
+    //     .then( (response) => {
+    //         response.data.result.forEach(async session => {
+    //             // get list of live videos for store
+    //             shell.exec(`pm2 start jobStoreVideos.js --name "jobStoreVideos ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
+    //                 console.log('Exit code:', code);
+    //                 console.log('Program output:', output);
+    //             });
+    //             shell.exec(`pm2 start jobStorePreParser.js --name "jobStorePreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {
+    //             });
+    //             // shell.exec(`pm2 start jobStoreVideosNew.js --name "jobStoreVideosNew ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
+    //             //     console.log('Exit code:', code);
+    //             //     console.log('Program output:', output);
+    //             // });
+    //
+    //             shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${session.id}" -- sessionId=${session.id}`, function(code, output) {
+    //                 // console.log('Exit code:', code);
+    //                 // console.log('Program output:', output);
+    //             });
+    //             shell.exec(`pm2 start _jobStoreOrder.js --name "jobStoreOrder ${session.id}" -- sessionId=${session.id}`, function(code, output) {
+    //                 // console.log('Exit code:', code);
+    //                 // console.log('Program output:', output);
+    //             });
+    //         })
+    //     });
 }
 setTimeout(await startProcess, 10000);
