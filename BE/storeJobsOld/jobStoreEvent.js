@@ -25,7 +25,7 @@ async function startProcess() {
     //                     shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionTestId}" -- videoId=${videoTestId} sessionId=${sessionTestId} accessToken=${tokenTest} `, function(code, output) {
     //                     });
     //
-    //                     shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
+    //                     shell.exec(`pm2 start _jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
     //                     });
     //
     //                     shell.exec(`pm2 start _jobStoreParser.js --name "jobStoreParser ${sessionTestId}" -- sessionId=${sessionTestId}`, function(code, output) {

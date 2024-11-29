@@ -13,10 +13,7 @@ async function startProcess() {
     console.log('Getting list of active live comments under sessions for launche process');
     await axios(`${apiUrl}/api/fetch-active-sessions-sender`)
         .then( (response) => {
-            console.log(response.data.result);
-
             response.data.result.forEach(async session => {
-                console.log(session);
                 shell.exec(`pm2 start jobStoreMessage.js --name "jobStoreMessage ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_token=${session.access_token}`, function(code, output) {
                     console.log('Exit code Sender:', code);
                     console.log('Program output:', output);

@@ -5,15 +5,14 @@ import slugify from "slugify";
 const args = process.argv;
 const apiUrl = process.env.API_URL;
 const sessionsData = args[2].split('=');
-const storeData = args[3].split('=');
-const tokenData = args[4].split('=');
 
+console.log('RUN MESSAGES FOR SESSION ID', sessionsData[1])
 
 async function sessionLaunche() {
     // start parsing messages
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
-            console.log(response.data.data)
+console.log(response.data.data)
             response.data.data.forEach(async message => {
                 if (message.message_id) {
                     const orderMessageId = message.message_id;

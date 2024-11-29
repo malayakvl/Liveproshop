@@ -32,7 +32,7 @@ async function startProcess() {
                 shell.exec(`pm2 delete "jobStoreParser ${session.id}"`, function(code, output) {
                 });
 
-                // shell.exec(`pm2 start jobStoreClearOrders.js --name "jobStoreClearOrders ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
+                // shell.exec(`pm2 start _jobStoreClearOrders.js --name "jobStoreClearOrders ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
                 //     console.log('Exit code:', code);
                 //     console.log('Program output:', output);
                 // });

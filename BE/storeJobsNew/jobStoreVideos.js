@@ -38,7 +38,7 @@ async function startProcess() {
                             // txtLog += `Live Video ID ${results[i].id}\n`;
                             // txtLog += `Live Video ID ${results[i].id}\n`;
                             // txtLog += `pm2 start jobStoreComments.js\n`;
-                            // txtLog += `pm2 start jobStoreSender.js\n`;
+                            // txtLog += `pm2 start _jobStoreSender.js\n`;
                             // fs.appendFile(`/var/www/BE/session_logs/${session.id}.log`, txtLog, (err) => {
                             //     if(err) throw err;
                             // });
@@ -56,8 +56,8 @@ async function startProcess() {
                             shell.exec(`pm2 start jobStoreComments.js --name "jobStoreComments ${sessionsData[1]}" -- videoId=${results[i].id} sessionId=${sessionsData[1]} accessToken=${tokenData[1]} `, function(code, output) {
                             });
 
-                            shell.exec(`pm2 start jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
-                            });
+                            // shell.exec(`pm2 start _jobStoreSender.js --name "jobStoreSender"   `, function(code, output) {
+                            // });
 
                             // kill process
                             setTimeout(() => {

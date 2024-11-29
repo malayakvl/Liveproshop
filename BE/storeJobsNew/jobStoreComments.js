@@ -18,7 +18,7 @@ async function startProcess() {
             });
 console.log('SINCE', sinceParams);
 
-        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,message,can_comment,created_time&limit=100&order=chronological&access_token=${tokenData[1]}`;
+        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,message,can_comment,created_time&limit=30&order=chronological&access_token=${tokenData[1]}`;
         if (sinceParams) {
             urlComment = sinceParams;
         }
