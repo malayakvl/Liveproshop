@@ -26,14 +26,16 @@ async function startProcess() {
                 });
                 // get list of live videos for store
                 shell.exec(`pm2 start jobStoreVideos.js --name "jobStoreVideos ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
-                    console.log('Exit code:', code);
-                    console.log('Program output:', output);
                 });
 
+                // run parser script
                 shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${session.id}" -- sessionId=${session.id}`, function(code, output) {
-                    console.log('Exit code:', code);
-                    console.log('Program output:', output);
                 });
+
+                // run message script
+                shell.exec(`pm2 start jobStoreMessage.js --name "jobStoreMessage ${session.id}" -- sessionId=${session.id}`, function(code, output) {
+                });
+
             })
         });
 }
