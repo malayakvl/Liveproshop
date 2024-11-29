@@ -40,13 +40,25 @@ async function sessionLaunche() {
                         let cTypeTimer;
                         switch (typeTimer) {
                             case 'd':
-                                cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'days' : 'day') : (orderTimer > 1 ? 'Jours' : 'Jour');
+                                if (lng === 'en')
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'days' : 'day');
+                                else
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'Jours' : 'Jour');
+                                // cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'days' : 'day') : (orderTimer > 1 ? 'Jours' : 'Jour');
                                 break;
                             case 'h':
-                                cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'hours' : 'hour') : (orderTimer > 1 ? 'heures' : 'heure');
+                                if (lng === 'en')
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'hours' : 'hour');
+                                else
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'heures' : 'heure');
+                                // cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'hours' : 'hour') : (orderTimer > 1 ? 'heures' : 'heure');
                                 break;
                             case 'm':
-                                cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'minutes' : 'minute') : (orderTimer > 1 ? 'Minutes' : 'minute');
+                                if (lng === 'en')
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'minutes' : 'minute');
+                                else
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'Minutes' : 'minute');
+                                // cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'minutes' : 'minute') : (orderTimer > 1 ? 'Minutes' : 'minute');
                                 break;
                         }
 
