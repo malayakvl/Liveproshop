@@ -19,7 +19,6 @@ import { fetchShippingMethodsByCountryCheckoutAction } from '../../redux/checkou
 const ShippingMethod = ({ title, className }: { title: string; className: string }) => {
     const { setFieldValue }: any = useFormikContext();
     const user = useSelector(userSelector);
-    // console.log(user);
     const order = useSelector(orderCheckoutSelector) || {};
     const dispatch = useDispatch();
 
@@ -36,14 +35,20 @@ const ShippingMethod = ({ title, className }: { title: string; className: string
 
     useEffect(() => {
         if (shippingMethods.length > 0) {
-            setFieldValue('shippingMethodId', String(shippingMethods[0]?.id ?? ''), false);
+            setFieldValue(
+                'shippingMethodId',
+                String(address.shipping_id || shippingMethods[0]?.id),
+                false
+            );
         }
     }, [shippingMethods]);
 
     return !shippingMethods.length ? null : (
         <div className={className}>
             <div className="">
-                <div className="text-2xl font-bold text-gray-350 mb-6">{title}</div>
+                <div className="text-2xl font-bold text-gray-350 mb-6">
+                    {title} SH M ID{address.shipping_id}
+                </div>
                 <div role="group" aria-labelledby="shipping-method-radio-group">
                     {shippingMethods.map((shippingMethod) => (
                         <Field

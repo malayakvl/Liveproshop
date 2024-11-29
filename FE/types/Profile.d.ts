@@ -21,7 +21,8 @@ declare namespace Profile {
         address: Address;
         created_at: any;
         updated_at: any;
-        profilePhoto: anny;
+        profilePhoto: any;
+        shipping_id: number | null;
     }
 
     interface Address {
@@ -36,5 +37,7 @@ declare namespace Profile {
         address_line_2: string | null;
         created_at: any;
         updated_at: any;
+        phone: string | null;
+        shipping_id: number | null;
     }
 }

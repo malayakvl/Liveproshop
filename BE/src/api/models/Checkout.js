@@ -386,12 +386,15 @@ console.log(e.message)
                                         WHERE order_number='${data.orderNumber}' AND user_id='${user.id}'`);
                 const bAddressRes = await client.query(`SELECT * FROM data.addresses WHERE user_id='${user.id}'`);
                 if (bAddressRes.rows.length === 0) {
-
                     const queryAddress = `INSERT INTO data.addresses (
-                        user_id, country_id, state, post_code, city, address_line_1, address_type) VALUES (
+                        user_id, country_id, state, post_code, city, address_line_1, address_type, shipping_id) VALUES (
                         '${user.id}', '${data.country_id}', '${data.state ? data.state : ''}',
                         '${data.post_code}', '${data.city}', 
-                        '${data.address_line_1 ?  data.address_line_1 : data.shipping_address}', 'home address')`;
+                        '${data.address_line_1 ?  data.address_line_1 : data.shipping_address}', 'home address', '${data.shippingMethodId}')`;
+                    await client.query(queryAddress);
+                } else {
+                    const queryAddress = `UPDATE data.addresses SET shipping_id='${data.shippingMethodId}'
+                        WHERE user_id=${user.id}`;
                     await client.query(queryAddress);
                 }
                 const orderNumberMultisafe = `${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}`
