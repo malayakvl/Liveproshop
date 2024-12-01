@@ -6,7 +6,7 @@ import moment from 'moment';
 import shippingModel from "./Shipping.js";
 import orderModel from "./Order.js";
 import { confirmOrderPaymentEmail } from "../sender/templates.js";
-import {sendMail} from "../lib/sendMail.js";
+import { sendMail } from "../lib/sendMail.js";
 
 class Checkout {
 
@@ -222,7 +222,7 @@ class Checkout {
                     shippingFree = true;
                 }
             }
-console.log('shippingFree', shippingFree);
+// console.log('shippingFree', shippingFree);
             shippingMethods = [];
             let query = 'SELECT id, name, price, image, status FROM data.get_shipping_by_country($1, $2) ORDER BY price ASC';
             const res = await client.query(query, [orderId, countryId]);
@@ -263,9 +263,14 @@ console.log('shippingFree', shippingFree);
                 FROM data.live_sessions 
                 LEFT JOIN data.user_stores ON data.user_stores.id = data.live_sessions.store_id`);
             const storeName = sellerData.rows[0].store_name;
-            const sellerId = sellerData.rows[0].user_id;
+            const liveSessionId = orderRes.rows[0].live_sessions_id;
+            const sellerDataInfo = await client.query(`SELECT user_id FROM data.live_sessions WHERE id='${liveSessionId}'`);
+            const sellerId = sellerDataInfo.rows[0].user_id;
+console.log('Here get payed info and generate pdf');
+console.log('Seller ID', sellerId);
             const sellerApiData = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${sellerId}`);
-
+console.log('sellerApiData', sellerApiData.rows[0])
+console.log(`${process.env.MULTISAFEPAY_URL}/orders/${process.env.MULTISAFE_ORDER_PREFIX}-${orderRes.rows[0].id}?api_key=${sellerApiData.rows[0].multisafe_api_key}`);
             if (orderRes.rows.length) {
                 if (data.type === 'redirect') {
                     await client.query(`UPDATE data.orders SET status='payed' WHERE id=${orderRes.rows[0].id}`);
