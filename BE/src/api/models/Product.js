@@ -419,7 +419,7 @@ console.log(queryUpdate)
             }
     
             // update configuration
-console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
+// console.log('PRODUCT CONFIGURATION', dataProduct.configurations);
             const configs = JSON.parse(dataProduct.configurations);
             // console.log(JSON.parse(dataProduct.colors));exit;
             // if (!JSON.parse(dataProduct.colors).length?.length) {

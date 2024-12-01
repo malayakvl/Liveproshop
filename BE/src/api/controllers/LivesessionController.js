@@ -48,9 +48,7 @@ class LivesessionController {
     }
 
     async removeItem(req, res){
-        console.log(req.params.id);
-
-        const data = await livesessionModel.deleteRecord(req.params.id);
+        const data = await livesessionModel.deleteRecord(req.params.id, req.user);
         // if (!data.error) {
         //     return res.status(200).json({ items: data.items, count: data.size });
         // } else {
@@ -267,7 +265,7 @@ class LivesessionController {
         if (req.body.id) {
             await livesessionModel.update(req.user.id, req.body);
         } else {
-            await livesessionModel.create(req.user.id, req.body);
+            await livesessionModel.create(req.user.id, req.body, req.user);
         }
         return res.status(200).json({ success: true });
     }
