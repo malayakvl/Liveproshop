@@ -1301,7 +1301,7 @@ console.log('updMessage', updMessage);
 
     }
 
-    async addMessagesNewParser(sessionId, data) {
+    async addMessagesNewParserOld(sessionId, data) {
         const client = await pool.connect();
         if (data?.paging?.next) {
             await client.query(`UPDATE data.live_sessions SET url_api_next='${data.paging.next}' WHERE id='${sessionId}'`);
@@ -1311,7 +1311,24 @@ console.log('updMessage', updMessage);
         let confProductColorConfigIds = [];
         let confProductSizeConfigIds = [];
         let confProductFullConfIds = [];
+        const usrSessionQ = `SELECT user_id FROM data.live_sessions WHERE id=${sessionId}`;
+        const usrRes = await client.query(usrSessionQ);
         if (data?.data?.length > 0) {
+            const filteredMessages = data.data.filter(x => ((x.message.toLowerCase().match(/(sold|vendu)\s[0-9]/g))));
+console.log('FILTERED:', filteredMessages);
+            if (filteredMessages.length === 0) {
+                return {error: null};
+            } else {
+                filteredMessages.forEach(async _comment => {
+                    let commentData = _comment.message.split(' ');
+                    // console.log(_comment.message)
+                    if (parseInt(commentData[1]) > 0) {
+                        arrIds.push(commentData[1]);
+                    }
+                })
+console.log('product IDS', arrIds);exit;
+                return {error: null};
+            }
             data.data.forEach(async _comment => {
                 let commentData = _comment.message.split(' ');
                 // console.log(_comment.message)
@@ -1323,6 +1340,7 @@ console.log('updMessage', updMessage);
                 // config just color
                 const pQueryColorFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
                     AND (nocolor IS NULL AND nosize IS NOT NULL)
+                    AND user_id='${usrRes.rows[0].user_id}'
                     AND id IN (${arrIds.join(',')})`;
                 const confColorProdIdsRes = await client.query(pQueryColorFull);
                 if (confColorProdIdsRes.rows[0].conf_ids) {
@@ -1331,6 +1349,7 @@ console.log('updMessage', updMessage);
                 // config just size
                 const pQuerySizeFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
                     AND (nosize IS NULL AND nocolor IS NOT NULL)
+                    AND user_id='${usrRes.rows[0].user_id}'
                     AND id IN (${arrIds.join(',')})`;
                 const confSizeProdIdsRes = await client.query(pQuerySizeFull);
                 if (confSizeProdIdsRes.rows[0].conf_ids) {
@@ -1339,48 +1358,51 @@ console.log('updMessage', updMessage);
                 // full config
                 const pQueryFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
                     AND (nocolor IS NULL AND nosize IS NULL)
+                    AND user_id='${usrRes.rows[0].user_id}'
                     AND id IN (${arrIds.join(',')})`;
                 const confProdFullIdsRes = await client.query(pQueryFull);
                 if (confProdFullIdsRes.rows[0].conf_ids) {
                     confProductFullConfIds = confProdFullIdsRes.rows[0].conf_ids;
                 }
             }
-console.log('confProductColorConfigIds', confProductColorConfigIds);
-console.log('confProductSizeConfigIds', confProductSizeConfigIds);
-console.log('confProductFullConfIds', confProductFullConfIds);
-            data.data.forEach(async _comment => {
-                let commentData = _comment.message.split(' ');
-                let newMsg = '';
-                if (confProductColorConfigIds.includes(parseInt(commentData[1]))) {
-                    newMsg = _comment.message + ' 1';
-                    _comment.configured_color = true;
-                } else if (confProductSizeConfigIds.includes(parseInt(commentData[1]))) {
-                    newMsg = _comment.message + ' 1';
-                    _comment.configured_size = true;
-                }  else if (confProductFullConfIds.includes(parseInt(commentData[1]))) {
-                    newMsg = _comment.message + ' 1';
-                    _comment.configured_full = true;
-                }
-                else {
-                    newMsg = _comment.message + ' 1';
-                    _comment.no_config = true;
-                }
-                // setup from parameters
-                if (!_comment.from) {
-                    const commId = _comment.id.split('_')
-                    _comment.from = {
-                        name: "NO FROM PARAM",
-                        id: commId[1]
-                    }
-                }
-                _comment.message = newMsg;
-                withFromComments.push(_comment);
-            })
-        }
-// console.log(withFromComments);
+// console.log('confProductColorConfigIds', confProductColorConfigIds);
+// console.log('confProductSizeConfigIds', confProductSizeConfigIds);
+// console.log('confProductFullConfIds', confProductFullConfIds);
 // exit;
+            // data.data.forEach(async _comment => {
+            //     let commentData = _comment.message.split(' ');
+            //     let newMsg = '';
+            //     if (confProductColorConfigIds.includes(parseInt(commentData[1]))) {
+            //         newMsg = _comment.message + ' 1';
+            //         _comment.configured_color = true;
+            //     } else if (confProductSizeConfigIds.includes(parseInt(commentData[1]))) {
+            //         newMsg = _comment.message + ' 1';
+            //         _comment.configured_size = true;
+            //     }  else if (confProductFullConfIds.includes(parseInt(commentData[1]))) {
+            //         newMsg = _comment.message + ' 1';
+            //         _comment.configured_full = true;
+            //     }
+            //     else {
+            //         newMsg = _comment.message + ' 1';
+            //         _comment.no_config = true;
+            //     }
+            //     // setup from parameters
+            //     if (!_comment.from) {
+            //         const commId = _comment.id.split('_')
+            //         _comment.from = {
+            //             name: "NO FROM PARAM",
+            //             id: commId[1]
+            //         }
+            //     }
+            //     _comment.message = newMsg;
+            //     withFromComments.push(_comment);
+            // })
+        }
+        if (withFromComments.length === 0) {
+            return;
+        }
         const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(withFromComments).replaceAll("'", '')}');`;
-// console.log(commentQuery);
+console.log(commentQuery);
         const msgIds = [];
         try {
 
@@ -1395,6 +1417,129 @@ console.log('confProductFullConfIds', confProductFullConfIds);
                 items,
                 error
             };
+        } catch (e) {
+            if (process.env.NODE_ENV === 'development') {
+                logger.log(
+                    'error',
+                    'Model error (chatbot messages addMessages):',
+                    { message: commentQuery }
+                );
+                logger.log(
+                    'error',
+                    'Query:',
+                    { message: e.message }
+                );
+            }
+            const items = null;
+            const error = {
+                code: 500,
+                message: 'error insering message'
+            };
+            return {
+                items,
+                error
+            };
+        } finally {
+            client.release();
+        }
+    }
+
+
+    async addMessagesNewParser(sessionId, data) {
+        const client = await pool.connect();
+        try {
+            if (data?.paging?.next) {
+                await client.query(`UPDATE data.live_sessions SET url_api_next='${data.paging.next}' WHERE id='${sessionId}'`);
+            }
+            const withFromComments = [];
+            const arrIds = [];
+            let confProductColorConfigIds = [];
+            let confProductSizeConfigIds = [];
+            let confProductFullConfIds = [];
+            const usrSessionQ = `SELECT user_id FROM data.live_sessions WHERE id=${sessionId}`;
+            const usrRes = await client.query(usrSessionQ);
+            if (data?.data?.length > 0) {
+                const filteredMessages = data.data.filter(x => ((x.message.toLowerCase().match(/(sold|vendu)\s[0-9]/g))));
+                if (filteredMessages?.length > 0) {
+// console.log('Filter', filteredMessages);exit;
+                    filteredMessages.forEach(async _comment => {
+                        let commentData = _comment.message.split(' ');
+                        if (parseInt(commentData[1]) > 0) {
+                            arrIds.push(commentData[1]);
+                        }
+                    });
+// console.log('arrIds', arrIds);
+                    if (arrIds.length > 0) {
+                        // config just color
+                        const pQueryColorFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
+                            AND (nocolor IS NULL AND nosize IS NOT NULL)
+                            AND id IN (${arrIds.join(',')})`;
+
+                        const confColorProdIdsRes = await client.query(pQueryColorFull);
+                        if (confColorProdIdsRes.rows[0].conf_ids) {
+                            confProductColorConfigIds = confColorProdIdsRes.rows[0].conf_ids;
+                        }
+                        // config just size
+                        const pQuerySizeFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
+                            AND (nosize IS NULL AND nocolor IS NOT NULL)
+                            AND user_id='${usrRes.rows[0].user_id}'
+                            AND id IN (${arrIds.join(',')})`;
+                        const confSizeProdIdsRes = await client.query(pQuerySizeFull);
+                        if (confSizeProdIdsRes.rows[0].conf_ids) {
+                            confProductSizeConfigIds = confSizeProdIdsRes.rows[0].conf_ids;
+                        }
+                        // full config
+                        const pQueryFull = `SELECT ARRAY_AGG(id) AS conf_ids FROM data.products WHERE configured = true 
+                            AND (nocolor IS NULL AND nosize IS NULL)
+                            AND user_id='${usrRes.rows[0].user_id}'
+                            AND id IN (${arrIds.join(',')})`;
+                        const confProdFullIdsRes = await client.query(pQueryFull);
+                        if (confProdFullIdsRes.rows[0].conf_ids) {
+                            confProductFullConfIds = confProdFullIdsRes.rows[0].conf_ids;
+                        }
+                        filteredMessages.forEach(async _comment => {
+                            let commentData = _comment.message.split(' ');
+                            let newMsg = '';
+                            if (confProductColorConfigIds.includes(parseInt(commentData[1]))) {
+                                newMsg = _comment.message + ' 1';
+                                _comment.configured_color = true;
+                            } else if (confProductSizeConfigIds.includes(parseInt(commentData[1]))) {
+                                newMsg = _comment.message + ' 1';
+                                _comment.configured_size = true;
+                            }  else if (confProductFullConfIds.includes(parseInt(commentData[1]))) {
+                                newMsg = _comment.message + ' 1';
+                                _comment.configured_full = true;
+                            }
+                            else {
+                                newMsg = _comment.message + ' 1';
+                                _comment.no_config = true;
+                            }
+                            // setup from parameters
+                            if (!_comment.from) {
+                                const commId = _comment.id.split('_')
+                                _comment.from = {
+                                    name: "NO FROM PARAM",
+                                    id: commId[1]
+                                }
+                            }
+                            _comment.message = newMsg;
+                            withFromComments.push(_comment);
+                        })
+console.log(withFromComments);
+                        const commentQuery = `SELECT * FROM data.set_live_sessions_store_messages(${sessionId}, '${JSON.stringify(withFromComments).replaceAll("'", '')}');`;
+                        await client.query(commentQuery);
+
+                        const items = [];
+                        const error = null;
+
+                        return {
+                            items,
+                            error
+                        };
+                    }
+
+                }
+            }
         } catch (e) {
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
@@ -1883,7 +2028,7 @@ console.log(parcerQueryFullConf)
                     p.publish AS active_product, p.configured, us.id AS store_id,
                     lsm.real_from_id, lsm.message_id, dss.free_shipping_from, dss.free_shipping_to,
                     (lsm.created_at BETWEEN dss.free_shipping_from AND dss.free_shipping_to) AS in_period,
-                    dss.free_shipping_to
+                    dss.free_shipping_to, us.access_token
                     FROM data.live_sessions_messages lsm
                     LEFT JOIN data.products p ON (p.id = (lsm.parcer_data->>'item')::integer)
                     LEFT JOIN data.live_sessions ls ON lsm.live_sessions_id = ls.id

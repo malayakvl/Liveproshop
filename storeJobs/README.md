@@ -18,7 +18,7 @@ pm2 start jobStoreEvent.js
 Запускаем джобу которая занимается рассилкой сообщений пользователю если его месседж бил распарсен
 
 ```
-pm2 start jobStoreSender.js
+pm2 start _jobStoreSender.js
 ```
 
 Curl рабочий пример

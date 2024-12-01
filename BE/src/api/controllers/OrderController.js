@@ -172,7 +172,7 @@ class OrderController {
     }
 
     async removeUnpayedOrder (req, res) {
-        console.log(req.query)
+        // console.log(req.query)
         if (req.query.fromJob === 1) {
             const data = await orderModel.removeUnpayedSessionOrder(req.query.sessionId);
         }

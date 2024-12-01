@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import axios from "axios";
 import shell from 'shelljs';
+import moment from 'moment';
+import fs from "fs";
 
 const apiUrl = process.env.API_URL;
 
@@ -14,16 +16,26 @@ async function startProcess() {
     await axios(`${apiUrl}/api/fetch-active-sessions`)
         .then( (response) => {
             response.data.result.forEach(async session => {
+                let txtLog = `\n[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================Start Session Job\n`
+                txtLog += `Session ID: ${session.id}\n`;
+                txtLog += `pm2 start jobStoreVideos.js\n`;
+                txtLog += `pm2 start jobStoreParser.js\n`;
+                txtLog += `[${moment().format("DD-MM-YYYY, HH:mm:ss")}]=================END Start Session Job\n`;
+                fs.appendFile(`/var/www/BE/session_logs/${session.id}.log`, txtLog, (err) => {
+                    if(err) throw err;
+                });
                 // get list of live videos for store
                 shell.exec(`pm2 start jobStoreVideos.js --name "jobStoreVideos ${session.id}" -- sessionId=${session.id} storeData=${session.store_id} access_toked=${session.access_token}`, function(code, output) {
-                    console.log('Exit code:', code);
-                    console.log('Program output:', output);
                 });
 
+                // run parser script
                 shell.exec(`pm2 start jobStoreParser.js --name "jobStoreParser ${session.id}" -- sessionId=${session.id}`, function(code, output) {
-                    console.log('Exit code:', code);
-                    console.log('Program output:', output);
                 });
+
+                // run message script
+                shell.exec(`pm2 start jobStoreMessage.js --name "jobStoreMessage ${session.id}" -- sessionId=${session.id}`, function(code, output) {
+                });
+
             })
         });
 }

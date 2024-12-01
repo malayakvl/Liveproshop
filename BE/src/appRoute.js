@@ -26,6 +26,8 @@ if (parseFloat(process.env.START_ON_SERVER) === 1) {
         console.log('Exit code:', code);
         console.log('Program output:', output);
     });
+
+
     // shell.exec(`pm2 start ./storeJobs/jobParcerStart.js --name "jobStart"`, function(code, output) {
     //     console.log('Exit code:', code);
     //     console.log('Program output:', output);

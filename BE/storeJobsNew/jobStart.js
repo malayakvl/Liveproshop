@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import axios from "axios";
 import shell from 'shelljs';
-import moment from "moment/moment.js";
+import moment from 'moment/moment.js';
 
 const apiUrl = process.env.API_URL;
 

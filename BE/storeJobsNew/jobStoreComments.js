@@ -18,9 +18,9 @@ async function startProcess() {
             });
 console.log('SINCE', sinceParams);
 
-        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,message,can_comment,created_time&limit=100&order=chronological&access_token=${tokenData[1]}`;
+        let urlComment = `https://graph.facebook.com/v21.0/${videoData[1]}/comments?fields=id,from,message,can_comment,created_time&limit=30&order=chronological&access_token=${tokenData[1]}`;
         if (sinceParams) {
-            urlComment = urlComment;
+            urlComment = sinceParams;
         }
 
         // urlComment = 'https://graph.facebook.com/v21.0/960764652744449/comments?fields=id,from,comments,message,can_comment,created_time&limit=100&order=chronological&access_token=EAArS9KI0vagBOZC8TWnq88hDab2k5Hebfn3PDNRZAjDMqG1BeF8HSxELECtkvmeZBJ9J6Pg5ZB0YFlg2acjxVzkksOiVQmA4cUD9eLN5QeeeyZBDYXO2PkkJK93BotLR3GCFDsRip7DgoTK7eHoVPZCR6T9PnrP98GsdjxXUV4Swca0iDAE0nYgki9ysqkbQOYT744HoEIDxMkPQZDZD&pretty=1&after=QVFIUjJQNzZARQkNYQ0YxQ1g5TlJYbnFGSnhPQ3VuNXpaT185NktMdlBOeXFMUVY0eXdLZAzRITm1yOExTYW1aazZALWlB4ODhTbEVqM2RHQnVNOTlwcFVXUEtR';

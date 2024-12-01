@@ -5,32 +5,18 @@ import slugify from "slugify";
 const args = process.argv;
 const apiUrl = process.env.API_URL;
 const sessionsData = args[2].split('=');
-const storeData = args[3].split('=');
-const tokenData = args[4].split('=');
-
-
+console.log(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`);
 async function sessionLaunche() {
     // start parsing messages
     await axios(`${apiUrl}/api/reply-live-messages?sessionId=${sessionsData[1]}`)
         .then((response) => {
-            console.log(response.data.data)
             response.data.data.forEach(async message => {
                 if (message.message_id) {
-                    const orderMessageId = message.message_id;
                     const orderFrom = message.message_id;
-                    const x = message.parcer_data;
+                    const accessToken = message.access_token;
                     let lng = 'fr';
-                    console.log(`Reply/Message comment ${message.message_id}: ${message.from_id}`);
-                    console.log(`In period: ${message.in_period === null ? 'no free period': 'free period'}`);
+
                     if (message.from_id && orderFrom && message.parcer_status === true) {
-                        // if (message.real_from_id) {
-                        //     await axios(`${apiUrl}/api/check-user-to-stores?messageId=${message.message_id}&fromId=${message.real_from_id}&storeId=${message.store_id}`)
-                        //         .then((response) => {
-                        //
-                        //         }).catch((e) => {
-                        //             // console.log('error sending reply message', e,error.error.message);
-                        //         });
-                        // }
                         if (message.parcer_data.hasOwnProperty("sold")) {
                             lng = 'en';
                         }
@@ -50,6 +36,31 @@ async function sessionLaunche() {
                             locale: 'vi',      // language code of the locale to use
                             trim: true         // trim leading and trailing replacement chars, defaults to `true`
                         })
+                        // d 5
+                        let cTypeTimer;
+                        switch (typeTimer) {
+                            case 'd':
+                                if (lng === 'en')
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'days' : 'day');
+                                else
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'Jours' : 'Jour');
+                                // cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'days' : 'day') : (orderTimer > 1 ? 'Jours' : 'Jour');
+                                break;
+                            case 'h':
+                                if (lng === 'en')
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'hours' : 'hour');
+                                else
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'heures' : 'heure');
+                                // cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'hours' : 'hour') : (orderTimer > 1 ? 'heures' : 'heure');
+                                break;
+                            case 'm':
+                                if (lng === 'en')
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'minutes' : 'minute');
+                                else
+                                    cTypeTimer = orderTimer + ' ' + (orderTimer > 1 ? 'Minutes' : 'minute');
+                                // cTypeTimer = lng === 'en' ? orderTimer+' '+(orderTimer > 1 ? 'minutes' : 'minute') : (orderTimer > 1 ? 'Minutes' : 'minute');
+                                break;
+                        }
 
                         // before send message check order status about wait
                         const statusWaitItem = await axios(`${apiUrl}/api/check-wait-status?comment_id=${message.message_id}`)
@@ -64,16 +75,13 @@ async function sessionLaunche() {
                                 msgTextFr = `Nous sommes désolés, mais le produit ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} n'est plus disponible.\n\nPour être rajouté(e) sur la liste d’attente et être averti(e) dès qu’il sera à nouveau disponible, CLIQUEZ sur le bouton suivant. CONFIRMER `;
                             } else {
                                 if (message.in_period === null) {
-                                    msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale`;
-                                    msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente`;
+                                    msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${cTypeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale`;
+                                    msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${cTypeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente`;
                                 } else {
-                                    msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
-                                    msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
+                                    msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${cTypeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
+                                    msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/fb-order/${slgStoreName}?comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${cTypeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
                                 }
                             }
-                            // we can parce message and find product
-                            // msgText = `Congrats! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantity ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} has been added to your cart!\n\nhttps://liveproshop.com/en/auth/signup?storeName=ahead_fashion&comment_id=${orderFrom}\n\nATTENTION: The reservation of your product is only valid for ${orderTimer} ${typeTimer}\n\nCheck the timer, because once the time is up, your products will be automatically put back on sale\n\nPLUS! If you order several times in the next few days, you will only be charged for shipping once! And from ${message.threshold} €, shipping is free!`;
-                            // msgTextFr = `Bravo! ${message.product_name} #${message.parcer_data.item} ${message.parcer_data.color ? message.parcer_data.color : ''} ${message.parcer_data.size ? message.parcer_data.size : ''} quantité ${message.parcer_data.quantity ? message.parcer_data.quantity : 1} a été ajouté(e) à votre panier !\n\nhttps://liveproshop.com/auth/signup?storeName=ahead_fashion&comment_id=${orderFrom}\n\nATTENTION : La réservation de votre produit est valable uniquement durant ${orderTimer} ${typeTimer}\n\nVérifiez le minuteur, car une fois le temps écoulé, vos produits seront automatiquement remis à la vente\n\nEN PLUS! Si vous commandez plusieurs fois dans les prochains jours, on vous facture les frais de port qu’une seule fois ! Et à partir de ${message.threshold} €, ils sont offerts!`;
                         } else {
                             // we parce messege but not found product
                             if (statusWaitItem) {
@@ -84,7 +92,6 @@ async function sessionLaunche() {
                                 msgTextFr = `Désolés, nous n'avons pas pu trouver le mot clé (référence / taille / couleur / etc.) que vous demandiez.\n\nVoici quelques exemples de commentaires corrects:\n\nVENDU 14 vert\n\nVENDU 169 M\n\nVENDU 35 beige M\n\nMerci de vérifier que vous avez correctement tapé le mot-clé.`;
                             }
                         }
-
                         let responceResultMessage;
                         if (statusWaitItem) {
                             responceResultMessage =  await axios.post(
@@ -135,13 +142,13 @@ async function sessionLaunche() {
                                     });
                             }
                             responceResultMessage =  await axios.post(
-                                `https://graph.facebook.com/v18.0/me/messages`,
+                                `https://graph.facebook.com/v21.0/me/messages`,
                                 '',
                                 {
                                     params: {
                                         "recipient": {"comment_id": `${orderFrom}`},
                                         "message": {"text": `${lng === 'en' ? msgText : msgTextFr}`},
-                                        "access_token":`${tokenData[1]}`
+                                        "access_token":`${accessToken}`
                                     }
                                 }
                             )
@@ -153,8 +160,6 @@ async function sessionLaunche() {
                                     return false;
                                 });
                         }
-                        console.log("Respionce send result", responceResultMessage.data);
-
 
                         if (responceResultMessage.data?.recipient_id) {
                             await axios.get(
@@ -167,9 +172,9 @@ async function sessionLaunche() {
                                     console.log(e);
                                 });
                         }
-                        if (responceResultMessage.data.recipient_id) {
-                            console.log("AAAA", responceResultMessage.data.recipient_id);
-                        }
+                        // if (responceResultMessage.data.recipient_id) {
+                        //     console.log("AAAA", responceResultMessage.data.recipient_id);
+                        // }
                     } else {
                         console.log('not parsed here ')
                         let string = message.message;
