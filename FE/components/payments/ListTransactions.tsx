@@ -31,7 +31,6 @@ const ListTransactions: React.FC<Props> = ({ locale }) => {
     const achiveName = useSelector(achiveNameSelector);
     const achiveRefname = useRef(null);
 
-console.log(items);
     const sendRequest = useCallback(() => {
         return dispatch(fetchItemsAction());
     }, [dispatch]);

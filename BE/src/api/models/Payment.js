@@ -1,5 +1,6 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import axios from "axios";
 
 class Payment {
     async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
@@ -106,13 +107,22 @@ console.log(ordersQuery);
         let error = null;
 
         try {
-            const query = 'SELECT fields_json FROM data.get_payments_to_users($1)';
-            const res = await client.query(query, [userId]);
-            
-            methods = res.rows?.[0]?.fields_json?.length > 0 ? res.rows[0].fields_json : [];
+            const sellerApiData = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${userId}`);
+            const multiMethods = await axios
+                .get(`${process.env.MULTISAFEPAY_URL}/payment-methods?api_key=${sellerApiData.rows[0].multisafe_api_key}`, {}, {
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(async (res) => {
+                    // console.log('DATA SABRINA', res.data);
+                    return {'success': true, paymentData: res.data.data}
+                }).catch(error => {
+                    console.log(error.message)
+                    return {error: error.message}
+                });
+
+            return { success: true, paymentData: multiMethods.paymentData }
 
         } catch (e) {
-
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -124,10 +134,6 @@ console.log(ordersQuery);
                 code: 500,
                 message: 'Error get list of payment methods'
             };
-
-        } finally {
-            client.release();
-            return { methods, error };
         }
     }
 

@@ -39,7 +39,7 @@ class PaymentController {
             return res.status(401).json('Access deny');
         } else {
             const methods = await paymentModel.fetchMethods(req.user.id);
-            return res.status(200).json(methods);
+            return res.status(200).json(methods?.paymentData ? methods?.paymentData : []);
         }
     }
 

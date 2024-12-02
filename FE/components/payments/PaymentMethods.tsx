@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMethodsAction, submitMethodsStatusesAction } from '../../redux/payments/actions';
 import { methodsSelector } from '../../redux/payments/selectors';
@@ -29,33 +29,32 @@ const PaymentMethods: React.FC = () => {
     }, [paymentMethods]);
 
     return (
-        <div className="text-sm text-gray-500 mt-12 min-w-max">
+        <div className="text-sm text-gray-500 mt-4 min-w-max">
             {paymentMethods?.map((paymentMethod) => (
                 <div key={paymentMethod.payment_id} className="flex space-x-2 items-center mb-2">
                     <div className="flex-none h-auto mr-2">
-                        <img
-                            width="46"
-                            height="32"
-                            src={`/images/payments/${paymentMethod.short_name}.svg`}
-                            className="text-orange-450"
-                            alt={paymentMethod.name}
-                        />
+                        {paymentMethod?.name && (
+                            <div
+                                className={`pyment-method-icon ${paymentMethod?.name
+                                    .replace(' ', '')
+                                    .toLowerCase()}`}></div>
+                        )}
                     </div>
                     <div className="flex-grow h-auto">{paymentMethod.name}</div>
-                    <div className="flex-none text-right">
-                        <label className="flex items-center cursor-pointer relative text-size">
-                            <input
-                                type="checkbox"
-                                className="sr-only"
-                                checked={paymentMethod.status}
-                                onChange={() => {
-                                    paymentMethod.status = !paymentMethod.status;
-                                    setPaymentMethods([...paymentMethods]);
-                                }}
-                            />
-                            <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600 w-11 h-6 shadow-inner" />
-                        </label>
-                    </div>
+                    {/*<div className="flex-none text-right">*/}
+                    {/*    <label className="flex items-center cursor-pointer relative text-size">*/}
+                    {/*        <input*/}
+                    {/*            type="checkbox"*/}
+                    {/*            className="sr-only"*/}
+                    {/*            checked={paymentMethod.status}*/}
+                    {/*            onChange={() => {*/}
+                    {/*                paymentMethod.status = !paymentMethod.status;*/}
+                    {/*                setPaymentMethods([...paymentMethods]);*/}
+                    {/*            }}*/}
+                    {/*        />*/}
+                    {/*        <div className="toggle-bg bg-gray-200 border border-gray-200 rounded-full dark:bg-gray-700 dark:border-gray-600 w-11 h-6 shadow-inner" />*/}
+                    {/*    </label>*/}
+                    {/*</div>*/}
                 </div>
             ))}
 
