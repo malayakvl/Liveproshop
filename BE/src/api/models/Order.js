@@ -2105,7 +2105,14 @@ console.log('Here', emptyWaitRes.rows[0].id);
                                 `INSERT INTO data.user2pages (from_id, user_id, store_id) VALUES 
                             ('${fromQueryRes.rows[0].from_id}', '${userId}', '${fromQueryRes.rows[0].store_id}')
                             `;
-
+                            await client.query(insertQueryConnect)
+                        }
+console.log(fromQueryRes.rows[0].from_id, fromQueryRes.rows[0].from_name);
+                        if (fromQueryRes.rows[0].from_id && fromQueryRes.rows[0].from_name !== 'EMPTY_FROM') {
+                            const insertQueryConnect =
+                                `INSERT INTO data.user2pages (from_id, user_id, store_id) VALUES 
+                            ('${fromQueryRes.rows[0].from_id}', '${userId}', '${fromQueryRes.rows[0].store_id}')
+                            `;
                             await client.query(insertQueryConnect)
                         }
                     }

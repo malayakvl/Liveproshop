@@ -1518,7 +1518,7 @@ console.log(commentQuery);
                             if (!_comment.from) {
                                 const commId = _comment.id.split('_')
                                 _comment.from = {
-                                    name: "NO FROM PARAM",
+                                    name: "EMPTY_FROM",
                                     id: commId[1]
                                 }
                             }
