@@ -23,7 +23,6 @@ class PaymentController {
 
     async fetchItem(req, res) {
         const { orderNumber, limit, offset, queryFilter, column, sort } = req.query;
-        console.log("BBBB")
         // const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');

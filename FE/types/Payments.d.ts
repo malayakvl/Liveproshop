@@ -25,6 +25,7 @@ declare namespace Payments {
         payment_id: number | null;
         payment_name: string;
         payment_short_name: string;
+        payment_method: any;
         // order_amount: number;
         // discount_amount: number;
         // shipping_amount: number;
@@ -60,6 +61,9 @@ declare namespace Payments {
         payment_id: number | null;
         payment_short_name: string;
         order_amount: number;
+        country_id: number;
+        shipping_name: string | null;
+        shipping_address: string | null;
         // discount_amount: number;
         shipping_amount: number;
         total_amount: number;
@@ -74,8 +78,8 @@ declare namespace Payments {
         buyer_email: string;
         flag_name: string | null;
         shipping_image: string | null;
-        shipping_address: string;
         order_items: any;
+        payment_method: any;
         // user_id: number;
         // user_name: string;
         // photo: string;

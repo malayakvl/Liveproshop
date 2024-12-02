@@ -26,11 +26,7 @@ class Payment {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             // console.log('_filters =', _filters);
-            const ordersQuery = `SELECT id,
-                                    payment_id, payment_name, payment_short_name,
-                                    total_amount, order_number,
-                                    buyer_first_name, buyer_photo,
-                                    created_at, updated_at
+            const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`; // 'orders.created_at DESC'
             // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
@@ -70,20 +66,15 @@ class Payment {
         let item = null;
         let error = null;
         try {
-            console.log("AAAAA FILTER", queryFilter);
             const filter = JSON.stringify({
                 status: ["payed"],
                 seller_id: userId,
                 order_number: orderNumber,
             });
 
-            const ordersQuery = `SELECT id, order_items,
-                                    payment_id, payment_name, payment_short_name,
-                                    total_amount, order_number, order_amount, shipping_amount,
-                                    buyer_first_name, buyer_photo, buyer_email,
-                                    flag_name, shipping_image, shipping_address,
-                                    created_at
+            const ordersQuery = `SELECT *
                                 FROM data.get_orders (1, 0, '${filter}');`;
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             item = res.rows.length > 0 ? res.rows[0] : [];
 

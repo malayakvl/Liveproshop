@@ -172,7 +172,7 @@ async function generateInvoiceTable(doc, invoice, locale, ivoiceType) {
             generateTableRow(
                 doc,
                 position,
-                item.name+` ${t["color"]}: ${item.color_name} ${t['size']}: ${item.size_name}`,
+                item.name+` ${item.color_name ? t["color"]+': '+ item.color_name : ''} ${item.size_name ? t['size']+': '+item.size_name : ''}`,
                 item.description,
                 formatCurrency(item.price),
                 item.quantity,
@@ -1185,7 +1185,7 @@ console.log(ordersQuery);
                 }
             }
 
-console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
+// console.log(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`);
             if (fs.existsSync(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)) {
 // console.log('File exist need to copy')
                 const base64 = await pdf2base64(`${process.env.DOWNLOAD_FOLDER}/orders/${userId}/${locale}/${type === 'download' ? 'invoices/' : ''}${typeInvoice !== 'refund' ? 'invoice' : 'refund'}_${res.rows[0].order_number}_${locale}.pdf`)
