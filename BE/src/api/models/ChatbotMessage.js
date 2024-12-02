@@ -1805,19 +1805,19 @@ console.log('MESSAGES', messagesData);
     async parseMessagesNew(sessionId) {
         const client = await pool.connect();
         try {
-console.log('HERE', sessionId);
+// console.log('HERE', sessionId);
             const parcerQuerySimple = `SELECT * FROM data.set_live_sessions_messages_parcer_simple_data(${sessionId}, 100);`;
             const parcerQueryPartColorConf = `SELECT * FROM data.set_live_sessions_messages_parcer_colorconf_data(${sessionId}, 100);`;
             const parcerQueryPartSizeConf = `SELECT * FROM data.set_live_sessions_messages_parcer_sizeconf_data(${sessionId}, 100);`;
             const parcerQueryFullConf = `SELECT * FROM data.set_live_sessions_messages_parcer_fullconf_data(${sessionId}, 100);`;
-console.log('===SIMPLE PROD PARCER===')
-console.log(parcerQuerySimple)
-console.log('===SIMPLE PROD PART COLOR PARCER===')
-console.log(parcerQueryPartColorConf)
-console.log('===SIMPLE PROD PART SIZE PARCER===')
-console.log(parcerQueryPartSizeConf)
-console.log('===SIMPLE PROD FULL PARCER===')
-console.log(parcerQueryFullConf)
+// console.log('===SIMPLE PROD PARCER===')
+// console.log(parcerQuerySimple)
+// console.log('===SIMPLE PROD PART COLOR PARCER===')
+// console.log(parcerQueryPartColorConf)
+// console.log('===SIMPLE PROD PART SIZE PARCER===')
+// console.log(parcerQueryPartSizeConf)
+// console.log('===SIMPLE PROD FULL PARCER===')
+// console.log(parcerQueryFullConf)
             await client.query(parcerQuerySimple);
             await client.query(parcerQueryPartColorConf);
             await client.query(parcerQueryPartSizeConf);

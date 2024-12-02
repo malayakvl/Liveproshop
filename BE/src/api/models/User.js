@@ -520,8 +520,8 @@ class User {
                             });
                         const userAccQueryRes = await client.query(`SELECT auth_provider_id FROM data.users WHERE id='${user.id}'`);
                         const accountId = userAccQueryRes.rows.length ? userAccQueryRes.rows[0].auth_provider_id : user.auth_provider_id;
-console.log('USER PROVIDER ID', user.auth_provider_id);
-console.log('LONG TOKEN', longToken);
+// console.log('USER PROVIDER ID', user.auth_provider_id);
+// console.log('LONG TOKEN', longToken);
                         const pagesData = await axios
                             .get(
                                 `https://graph.facebook.com/v21.0/me/accounts?fields=picture{url},name,fan_count,is_published,access_token&access_token=${longToken}`
@@ -529,7 +529,7 @@ console.log('LONG TOKEN', longToken);
                             .then(async (responsePages) => {
                                 return responsePages.data;
                             });
-console.log('PAGES', pagesData);
+// console.log('PAGES', pagesData);
                         const userFbId = user.auth_provider_id ? user.auth_provider_id : accountId;
                         if (pagesData.data.length > 0) {
                             let storePicture = '';
@@ -574,120 +574,6 @@ console.log('PAGES', pagesData);
 
                             })
                         }
-
-//                         await axios
-//                             .get(
-//                                 `https://graph.facebook.com/v21.0/me?fields=id,email,accounts{id,name,access_token,picture{url}},is_published,businesses&access_token=${longToken}`
-//                             )
-//                             .then(async (responsePages) => {
-//
-//                                 if (responsePages.data.error) {
-//                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
-//                                 } else {
-//                                     const storesList = responsePages.data.accounts.data;
-//                                     const businessesList = responsePages.data?.businesses?.data || [];
-//                                     const userFbId = responsePages.data.id;
-//                                     await client.query(`DELETE FROM data.user_stores WHERE account_id='${userFbId}'`);
-//                                     storesList.forEach(async (store) => {
-//                                         const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-//                                         if (queryStore.rows.length === 0) {
-//                                             await  client.query(`
-//                                                     INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, picture, synchronized)
-//                                                     VALUES
-//                                                     (
-//                                                         '${userFbId}',
-//                                                         '${store.id}',
-//                                                         '${store.access_token}',
-//                                                         '${store.name}',
-//                                                         '${user.id}',
-//                                                         '${store.picture.data.url}',
-//                                                         true
-//                                                     );`
-//                                             );
-//                                         } else {
-//                                             const queryUpdStore =
-//                                                 `UPDATE data.user_stores SET
-//                                                      access_token='${store.access_token}',
-//                                                      name='${store.name}'
-//                                                     WHERE user_id = '${user.id}';`;
-//                                             await client.query(queryUpdStore);
-//                                         }
-//                                     })
-// console.log('BUSINESSES LIST', businessesList)
-//
-//                                     // businessesList.map(async (business) => {
-//                                     //     const queryBusiness = await client.query(`SELECT * FROM data.user_businesses WHERE account_id='${userFbId}'
-//                                     //         AND business_id='${business.id}'`);
-//                                     //     if (queryBusiness.rows.length === 0) {
-//                                     //         await  client.query(`
-//                                     //                 INSERT INTO data.user_businesses (account_id, business_id, name, user_id)
-//                                     //                 VALUES
-//                                     //                 (
-//                                     //                     '${userFbId}',
-//                                     //                     '${business.id}',
-//                                     //                     '${business.name}',
-//                                     //                     '${user.id}'
-//                                     //                 );`
-//                                     //         );
-//                                     //     }
-//                                     //     // get pages
-//                                     //     await axios
-//                                     //         .get(
-//                                     //             `https://graph.facebook.com/v21.0/${business.id}/owned_pages?fields=access_token,picture{url},name,fan_count&access_token=${userData.accessToken}`
-//                                     //         )
-//                                     //         .then(async (responseBusinessesPages) => {
-//                                     //             if (responseBusinessesPages.data.error) {
-//                                     //                 store.dispatch(setErrorToastAction('Could no getting stores list'));
-//                                     //             } else {
-//                                     //                 if (responseBusinessesPages.data.error) {
-//                                     //                     store.dispatch(setErrorToastAction('Could no getting stores list'));
-//                                     //                 } else {
-//                                     //                     const storeBusinessList = responseBusinessesPages.data;
-//                                     //                     const userFbId = userData.userID;
-//                                     //                     // getting picture for store
-//                                     //                     let storePicture = '';
-//                                     //                     storeBusinessList.data.forEach(async (store) => {
-//                                     //                         const queryStore = await client.query(`SELECT * FROM data.user_stores WHERE account_id='${userFbId}' AND store_id='${store.id}'`);
-//                                     //                         if (queryStore.rows.length === 0) {
-//                                     //                             await  client.query(`
-//                                     //                         INSERT INTO data.user_stores (account_id, store_id, access_token, name, user_id, fan_count, synchronized, picture, is_business)
-//                                     //                         VALUES
-//                                     //                         (
-//                                     //                             '${userFbId}',
-//                                     //                             '${store.id}',
-//                                     //                             '${store.access_token}',
-//                                     //                             '${store.name}',
-//                                     //                             '${user.id}',
-//                                     //                             '${store.fan_count}',
-//                                     //                             true,
-//                                     //                             '${store.picture.data.url}',
-//                                     //                             true
-//                                     //                         );`
-//                                     //                             );
-//                                     //                         } else {
-//                                     //                             await  client.query(`
-//                                     //                         UPDATE data.user_stores SET
-//                                     //                             access_token='${store.access_token}',
-//                                     //                             name='${store.name}',
-//                                     //                             picture='${store.picture.data.url}',
-//                                     //                             fan_count='${store.fan_count}',
-//                                     //                             synchronized=true,
-//                                     //                             is_business=true
-//                                     //                         WHERE account_id='${userFbId}' AND store_id='${store.id}';`
-//                                     //                             );
-//                                     //                         }
-//                                     //                     })
-//                                     //                 }
-//                                     //             }
-//                                     //         });
-//                                     // })
-//                                 }
-//                                 const { data } = responsePages;
-//                                 // console.log("Users account connected pages", dataPages);
-//                                 if (data.error) {
-//                                     store.dispatch(setErrorToastAction('Could no getting stores list'));
-//                                 }
-//                             });
                     }
                 } catch (e) {
                     console.log(e.message);
