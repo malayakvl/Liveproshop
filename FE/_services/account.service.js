@@ -68,8 +68,8 @@ async function loginFB() {
 
 async function getAccountData(authResponse) {
     const loginOptions = {
-        // scope: 'pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,read_insights'
-        scope: 'email,pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content'
+        // scope: 'email,pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content'
+        scope: 'public_profile,email,pages_show_list,pages_messaging,pages_read_engagement,pages_read_user_content,business_management,pages_show_list'
     };
     if (parseInt(authResponse.roleId) === 1) {
         console.log('AUTH RESPONSE', authResponse);
