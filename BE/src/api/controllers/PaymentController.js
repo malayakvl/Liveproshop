@@ -23,7 +23,6 @@ class PaymentController {
 
     async fetchItem(req, res) {
         const { orderNumber, limit, offset, queryFilter, column, sort } = req.query;
-        console.log("BBBB")
         // const { limit, offset, queryFilter, column, sort } = req.query;
         if (!req.user) {
             return res.status(401).json('Access deny');
@@ -40,7 +39,7 @@ class PaymentController {
             return res.status(401).json('Access deny');
         } else {
             const methods = await paymentModel.fetchMethods(req.user.id);
-            return res.status(200).json(methods);
+            return res.status(200).json(methods?.paymentData ? methods?.paymentData : []);
         }
     }
 

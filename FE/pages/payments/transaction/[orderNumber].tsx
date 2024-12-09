@@ -4,7 +4,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getSession } from 'next-auth/client';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import Link from 'next/link';
 import {
     PaymentInfo,
@@ -13,7 +12,7 @@ import {
 } from '../../../components/payments';
 import { fetchItemAction } from '../../../redux/payments';
 import { itemSelector } from '../../../redux/payments/selectors';
-import { clearBase64Action } from '../../../redux/orders/actions';
+import { clearBase64Action } from '../../../redux/orders';
 import { singleDowloadFileSelector } from '../../../redux/orders/selectors';
 
 export default function Payments({ session, locale }: { session: any; locale: string }) {
@@ -57,28 +56,12 @@ export default function Payments({ session, locale }: { session: any; locale: st
                         <div>
                             <div className="float-left mr-2">
                                 <Link href={`/payments`}>
-                                    <a className="view-back">{t('Back')}</a>
+                                    <a className="view-back">{t('Go Back')}</a>
                                 </Link>
                             </div>
                             <div className="float-left">{t('Transaction details')}</div>
                         </div>
 
-                        {/*<a*/}
-                        {/*    href={`/api/download-invoice/${orderNumber}?lang=${locale}`}*/}
-                        {/*    className="gradient-btn mt-4 md:mt-0 flex px-5 py-3 rounded-lg text-base max-w-max align-middle border shadow-lg"*/}
-                        {/*    rel="noreferrer">*/}
-                        {/*    <Image width="20" height="18" src={'/images/download.svg'} />*/}
-                        {/*    <span className="pl-4 pt-px">{t('Download Invoice')}</span>*/}
-                        {/*</a>*/}
-                        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                        {/*<a*/}
-                        {/*    onClick={() => dispatch(singleDownloadAction(orderNumber, locale))}*/}
-                        {/*    href="javascript:;"*/}
-                        {/*    className="gradient-btn"*/}
-                        {/*    rel="noreferrer">*/}
-                        {/*    /!*<Image width="20" height="18" src={'/images/download.svg'} />*!/*/}
-                        {/*    <span className="   pt-px">{t('Download Invoice')}</span>*/}
-                        {/*</a>*/}
                         <Link href={`/orders/${orderNumber}?locale=${locale}&backroute=payment`}>
                             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
                             <span
@@ -90,13 +73,13 @@ export default function Payments({ session, locale }: { session: any; locale: st
                     </div>
 
                     <div className="overflow-x-scroll flex w-full">
-                        <div className="w-1/2 text-center hidden xl:block">
-                            <Image
-                                width="280"
-                                height="237"
-                                src={'/images/card-american-express.svg'}
-                            />
-                        </div>
+                        {/*<div className="w-1/2 text-center hidden xl:block">*/}
+                        {/*    <Image*/}
+                        {/*        width="280"*/}
+                        {/*        height="237"*/}
+                        {/*        src={'/images/card-american-express.svg'}*/}
+                        {/*    />*/}
+                        {/*</div>*/}
                         <TransactionDetailsPanel item={item} />
                     </div>
 

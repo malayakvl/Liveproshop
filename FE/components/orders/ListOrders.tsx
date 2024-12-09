@@ -174,7 +174,6 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                 <div className="mb-5">
                     <FilterValues />
                 </div>
-
                 <div className="md:hidden">
                     <DataList
                         paginationType={PaginationType.ORDERS}
@@ -519,6 +518,12 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                                 ? ''
                                                 : 'order-number'
                                         }`}>
+                                        {user.role_id === 3 && (
+                                            <Link
+                                                href={`/orders/${item.order_number}?locale=${locale}`}>
+                                                <a>{item.order_number}</a>
+                                            </Link>
+                                        )}
                                         {user.role_id === 2 && !item.status_waiting && (
                                             <>
                                                 <Link
@@ -548,6 +553,19 @@ const ListOrders: React.FC<Props> = ({ locale }) => {
                                         )}
                                     </td>
                                     <td className="order-status">
+                                        {user.role_id == 3 && item.status === 'payed' && (
+                                            <div className="flex flex-row items-center justify-center">
+                                                {!item.status_waiting ? (
+                                                    <span className={`order-status ${item.status}`}>
+                                                        {t(item.status)}
+                                                    </span>
+                                                ) : (
+                                                    <span className={`order-status waiting`}>
+                                                        {t('waiting')}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                         {user.role_id == 1 && item.status === 'payed' && (
                                             <div className="flex flex-row items-center justify-center">
                                                 {!item.status_waiting ? (

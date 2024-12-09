@@ -3,24 +3,25 @@ import Image from 'next/image';
 import moment from 'moment';
 import { baseApiUrl } from '../../constants';
 import { formatCurrency } from '../../lib/functions';
+import { useTranslations } from 'next-intl';
+import React from 'react';
 
 const userProfileImg =
     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80';
 
 const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = ({ item }) => {
-    // const t = useTranslations();
-
+    const t = useTranslations();
     return (
         <div className="flex flex-col min-w-[35rem] min-h-max mb-4 font-bold text-gray-350 text-lg p-6 rounded-md shadow-inner bg-gray-100 w-full xl:w-auto">
             <div className="text-gray-350 flex justify-between">
                 <div className=" text-1xl">
-                    Date
+                    {t('Date')}
                     <span className="ml-4 font-normal text-blue-400">
                         {moment(item?.created_at).format('DD/MM/YYYY')}
                     </span>
                 </div>
                 <div className="mt-3 text-xs text-green-400 bg-green-100 border border-green-400 rounded-lg py-0 px-2">
-                    Paid
+                    {t('payed')}
                 </div>
             </div>
 
@@ -46,6 +47,9 @@ const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = (
 
             <div className="flex w-full text-center">
                 <div className="w-16">
+                    <Image width="14" height="12" src={'/images/icon-tbl-card.svg'} />
+                </div>
+                <div className="w-16">
                     <Image width="14" height="12" src={'/images/icon-shipping.svg'} />
                 </div>
                 <div className="w-16 mr-6">
@@ -57,8 +61,14 @@ const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = (
             </div>
             <div className="flex w-full text-center">
                 <div className="w-16">
+                    {item?.payment_method && (
+                        <div
+                            className={`pyment-method-icon ${item.payment_method.toLowerCase()}`}></div>
+                    )}
+                </div>
+                <div className="w-16">
                     <Image
-                        width="34"
+                        width="24"
                         height="24"
                         src={
                             item?.shipping_image
@@ -67,14 +77,8 @@ const TransactionDetailsPanel: React.FC<{ item: Payments.DataItemDetailed }> = (
                         }
                     />
                 </div>
-                <div className="w-16 mr-6">
-                    <Image
-                        width="34"
-                        height="24"
-                        src={`/images/flags/${item?.flag_name?.toLowerCase()}.svg`}
-                    />
-                </div>
-                <div className="text-base">{item?.shipping_address}</div>
+                <div className="w-16 mr-6">{item?.flag_name}</div>
+                <div className="text-[12px]">{item?.shipping_address}</div>
             </div>
         </div>
     );

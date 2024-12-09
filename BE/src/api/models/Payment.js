@@ -1,5 +1,6 @@
 import pool from './connect.js';
 import { logger } from '../../common/logger.js';
+import axios from "axios";
 
 class Payment {
     async fetchItems (page, perPage = 20, user, isRead = false, reqOffset = null, filters, column, sort) {
@@ -26,11 +27,7 @@ class Payment {
                 offset = (Number(page) - 1) * Number(perPage);
             }
             // console.log('_filters =', _filters);
-            const ordersQuery = `SELECT id,
-                                    payment_id, payment_name, payment_short_name,
-                                    total_amount, order_number,
-                                    buyer_first_name, buyer_photo,
-                                    created_at, updated_at
+            const ordersQuery = `SELECT *
                                 FROM data.get_orders (${perPage}, ${offset}, '${JSON.stringify(_filters)}', '${column} ${sort}');`; // 'orders.created_at DESC'
             // console.log(ordersQuery);
             const res = await client.query(ordersQuery);
@@ -70,20 +67,15 @@ class Payment {
         let item = null;
         let error = null;
         try {
-            console.log("AAAAA FILTER", queryFilter);
             const filter = JSON.stringify({
                 status: ["payed"],
                 seller_id: userId,
                 order_number: orderNumber,
             });
 
-            const ordersQuery = `SELECT id, order_items,
-                                    payment_id, payment_name, payment_short_name,
-                                    total_amount, order_number, order_amount, shipping_amount,
-                                    buyer_first_name, buyer_photo, buyer_email,
-                                    flag_name, shipping_image, shipping_address,
-                                    created_at
+            const ordersQuery = `SELECT *
                                 FROM data.get_orders (1, 0, '${filter}');`;
+console.log(ordersQuery);
             const res = await client.query(ordersQuery);
             item = res.rows.length > 0 ? res.rows[0] : [];
 
@@ -115,13 +107,22 @@ class Payment {
         let error = null;
 
         try {
-            const query = 'SELECT fields_json FROM data.get_payments_to_users($1)';
-            const res = await client.query(query, [userId]);
-            
-            methods = res.rows?.[0]?.fields_json?.length > 0 ? res.rows[0].fields_json : [];
+            const sellerApiData = await client.query(`SELECT * FROM data.seller_settings WHERE user_id=${userId}`);
+            const multiMethods = await axios
+                .get(`${process.env.MULTISAFEPAY_URL}/payment-methods?api_key=${sellerApiData.rows[0].multisafe_api_key}`, {}, {
+                    headers: { 'Content-Type': 'application/json' }
+                })
+                .then(async (res) => {
+                    // console.log('DATA SABRINA', res.data);
+                    return {'success': true, paymentData: res.data.data}
+                }).catch(error => {
+                    console.log(error.message)
+                    return {error: error.message}
+                });
+
+            return { success: true, paymentData: multiMethods.paymentData }
 
         } catch (e) {
-
             if (process.env.NODE_ENV === 'development') {
                 logger.log(
                     'error',
@@ -133,10 +134,6 @@ class Payment {
                 code: 500,
                 message: 'Error get list of payment methods'
             };
-
-        } finally {
-            client.release();
-            return { methods, error };
         }
     }
 

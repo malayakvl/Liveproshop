@@ -109,15 +109,10 @@ const ListTransactions: React.FC<Props> = ({ locale }) => {
                         </td>
                         <td className="text-center">
                             <div className="text-center">
-                                <img
-                                    width={46}
-                                    height={32}
-                                    src={`/images/payments/${
-                                        item.payment_short_name || 'chargebee'
-                                    }.svg`}
-                                    // layout="fixed"
-                                    alt={item.payment_name}
-                                />
+                                {item?.payment_method && (
+                                    <div
+                                        className={`pyment-method-icon ${item.payment_method.toLowerCase()}`}></div>
+                                )}
                             </div>
                         </td>
                         <td>

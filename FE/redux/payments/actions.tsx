@@ -117,7 +117,7 @@ export const fetchMethodsAction: any = createAction(
                 })
                 .then((res: any) => {
                     return {
-                        methods: res.data.methods
+                        methods: res.data
                     };
                 });
         }
