@@ -2030,7 +2030,7 @@ console.log('This block !orderNumber')
 console.log(`SELECT * FROM data.orders 
                         WHERE status='new' AND user_id='${userId}' 
                         AND total_amount > 0 ORDER BY created_at DESC`)
-console.log('Exist non payed TUT', existNonPayed.rows.length);
+// console.log('Exist non payed TUT', existNonPayed.rows.length);
                     if (existNonPayed.rows.length > 0) {
                         orderId = existNonPayed.rows[0].id;
                         orderNumber = existNonPayed.rows[0].order_number;
@@ -2045,7 +2045,7 @@ console.log('Exist non payed TUT', existNonPayed.rows.length);
                             const emptyWaitRes = await client.query(
                                 `SELECT id, order_number, user_id, updated_at,
                                     live_sessions_id FROM data.orders WHERE user_id='${tmpUserId}'`);
-console.log('Here', emptyWaitRes.rows[0].id);
+// console.log('Here', emptyWaitRes.rows[0].id);
                             orderId = emptyWaitRes.rows[0].id;
 
                             orderNumber = emptyWaitRes.rows[0].order_number;
@@ -2226,9 +2226,12 @@ console.log('Here', emptyWaitRes.rows[0].id);
                         WHERE order_id='${res.rows[0].order_id}'
                         LIMIT 1`;
                     const fromQueryRes = await client.query(fromQuery);
+console.log('find the user in our system associated with the "from" parameter from the message.');
                     const connQeryUserStoreQuery = `SELECT * FROM data.user2pages WHERE 
                         from_id='${fromQueryRes.rows[0].from_id}' AND user_id='${userId}' AND 
                         store_id='${fromQueryRes.rows[0].store_id}'`;
+console.log(connQeryUserStoreQuery);
+console.log('Attach new item to exist non payed user order');
                     const connQeryUserStoreQueryRes = await client.query(connQeryUserStoreQuery);
                     if (connQeryUserStoreQueryRes.rows.length === 0) {
                         // if (fromQueryRes.rows[0].real_from_id) {
@@ -2238,7 +2241,7 @@ console.log('Here', emptyWaitRes.rows[0].id);
                         //     `;
                         //     await client.query(insertQueryConnect)
                         // }
-console.log(fromQueryRes.rows[0].from_id, fromQueryRes.rows[0].from_name);
+// console.log(fromQueryRes.rows[0].from_id, fromQueryRes.rows[0].from_name);
                         if (fromQueryRes.rows[0].from_id && fromQueryRes.rows[0].from_name !== 'EMPTY_FROM') {
                             const insertQueryConnect =
                                 `INSERT INTO data.user2pages (from_id, user_id, store_id) VALUES 
