@@ -87,7 +87,6 @@ function Profile() {
 
     let SubmitSchema;
     if (user.role_id == 2) {
-        console.log('TUT');
         SubmitSchema = Yup.object().shape({
             // email: Yup.string()
             //     .trim(t('Cannot include leading and trailing spaces'))
@@ -241,7 +240,7 @@ function Profile() {
                                     />
                                 </div>
                                 <InputText
-                                    disabled={validateEmail(props.values['email_real'])}
+                                    // disabled={validateEmail(props.values['email_real'])}
                                     icon={'f-email'}
                                     label={null}
                                     name={'email_real'}
